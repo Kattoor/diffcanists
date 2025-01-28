@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -368,7 +369,7 @@ public class ZGame
     }
     if (this.ieKillWait != null)
       this.ieKillWait = (IEnumerator<float>) null;
-    Resources.UnloadUnusedAssets();
+    UnityEngine.Resources.UnloadUnusedAssets();
   }
 
   public void init_Client(ServerState.Busy busy = ServerState.Busy.Not_started)
@@ -5345,7 +5346,7 @@ label_161:
         HUD.FindFullBooks(game);
         game.isReplay = false;
         Client.NameOrReplay = game.CurrentPlayer().name;
-        HUD.instance.buttonShowSpells.transform.GetChild(0).GetComponent<UIOnHover>().Interactable(true);
+        HUD.instance.buttonShowSpells.transform.GetChild(0).GetComponent<TMP_Text>().SetText("Dev Console", true);
         HUD.instance.FindPlayer();
         game.serverUpdate = Timing.RunCoroutine(game.FixedUpdate(), Segment.Update);
         HUD.instance.buttonHideChat.gameObject.SetActive(false);
@@ -6143,7 +6144,7 @@ label_161:
     }
     foreach (KeyValuePair<int, ZMyCollider> keyValuePair in this.helper.colliderID)
       keyValuePair.Value.Initialize(keyValuePair.Value.position, this.world);
-    Resources.UnloadUnusedAssets();
+    UnityEngine.Resources.UnloadUnusedAssets();
     HUD.instance.FindPlayer();
     HUD.instance.SetupStartPanel();
     int index1 = 0;

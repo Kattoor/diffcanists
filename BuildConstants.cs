@@ -3,8 +3,8 @@ using System;
 
 public static class BuildConstants
 {
-  public static readonly DateTime buildDate = new DateTime(638573880471584715L);
-  public const string version = "1.0.0.7";
+  public static readonly DateTime buildDate = new DateTime(638574630459825575L);
+  public const string version = "1.0.0.5";
   public const BuildConstants.ReleaseType releaseType = BuildConstants.ReleaseType.NewReleaseType;
   public const BuildConstants.Platform platform = BuildConstants.Platform.PC;
   public const BuildConstants.Architecture architecture = BuildConstants.Architecture.Windows_x64;

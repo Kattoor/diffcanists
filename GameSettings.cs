@@ -10,7 +10,7 @@ public class GameSettings
   public int gameModes = 1073808464;
   public int gameModes2 = 2097152;
   public int gameModes4 = 32768;
-  public byte elementalLevel = 3;
+  public byte elementalLevel = 5;
   public ushort startHealth = 250;
   public byte armageddonTurn = 10;
   public byte countdownDelay = 5;

@@ -2702,7 +2702,7 @@ label_7:
     if (num2 >= c.game.map.Width)
       num2 = c.game.map.Width - 1;
     if (num4 >= c.game.map.Height)
-      num4 = c.game.map.Height;
+      num4 = c.game.map.Height - 1;
     int num5 = 0;
     if (dmgOverride == -1)
     {
@@ -3030,12 +3030,6 @@ label_7:
     {
       t.Health = c.parent.towerHealth[(int) t.type];
       c.parent.towerHealth[(int) t.type] = 0;
-      if (t.Health > t.MaxHealth)
-        t.Health = t.MaxHealth;
-    }
-    else if (c.parent.lastTowerCast > -1 && c.parent.lastTowerCast > c.parent.localTurn - 5 && theSpell.MaxUses <= 0)
-    {
-      t.MaxHealth -= t.MaxHealth * ((6 - (c.parent.localTurn - c.parent.lastTowerCast)) * 10) / 100;
       if (t.Health > t.MaxHealth)
         t.Health = t.MaxHealth;
     }
@@ -3410,7 +3404,6 @@ label_7:
             creature.spells.Clear();
           if ((ZComponent) c != (object) null && amountOverrideIndex == -1 | stillSync)
             ZSpell.SyncSpellsWithParent(c.parent.first(), creature, false);
-          ZSpell.ApplyEffectors(game, creature, target, amountOverrideIndex, theSpell, c, false);
           if ((ZComponent) c != (object) null && c.waterWalking)
             creature.waterWalking = true;
           creature.team = c.team;
@@ -3421,6 +3414,7 @@ label_7:
           else
             c.game._uncontrolledPlayer.controlled.Add(creature);
           zcreatureList.Add(creature);
+          ZSpell.ApplyEffectors(game, creature, target, amountOverrideIndex, theSpell, c, false);
           if (creature.FullArcane && (ZComponent) c != (object) null && !c.FullArcane)
           {
             creature.FullArcane = false;
@@ -9492,9 +9486,11 @@ label_37:
             if (spellSlot1.UsedUses > 0)
               spellSlot1.SetUses = spellSlot1.UsedUses - 1;
             if (c.tower.type == TowerType.Sand)
+            {
               c.parent.towerHealth[(int) c.tower.type] = c.tower.Health;
-            if (c.game.isServer && !c.game.isClient)
-              c.game.SendTowerHealth(c, (int) c.tower.type, c.tower.Health);
+              if (c.game.isServer && !c.game.isClient)
+                c.game.SendTowerHealth(c, (int) c.tower.type, c.tower.Health);
+            }
           }
           c.DestroyTower(false);
           break;

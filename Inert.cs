@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 public class Inert : MonoBehaviour
 {
-  public static string Version = "v7.3";
+  public static string Version = "v7.4";
   public static int _Version = 62;
   public static int mask_Jar = 262144;
   public static int mask_ButterflyJar = 2097152;
@@ -687,10 +687,34 @@ public class Inert : MonoBehaviour
             creature.spells.Insert(index1, spellSlot);
           }
         }
-        else if (creature.spells[index1].spell.spellEnum == SpellEnum.Arcane_Energiser && !creature.HasSpell(SpellEnum.Arcane_Arrow))
+        else if (creature.spells[index1].spell.spellEnum == SpellEnum.Arcane_Energiser)
         {
-          SpellSlot spellSlot = new SpellSlot(Inert.Instance.spells["Arcane Arrow"]);
-          creature.spells.Insert(index1, spellSlot);
+          if (!creature.HasSpell(SpellEnum.Arcane_Arrow))
+          {
+            SpellSlot spellSlot = new SpellSlot(Inert.Instance.spells["Arcane Arrow"]);
+            creature.spells.Insert(index1, spellSlot);
+          }
+        }
+        else if (creature.spells[index1].spell.spellEnum == SpellEnum.Sandbag)
+        {
+          bool flag = false;
+          foreach (SpellSlot spell in creature.spells)
+          {
+            if (spell.spell.type == CastType.Tower)
+            {
+              flag = true;
+              break;
+            }
+          }
+          if (!flag)
+          {
+            Spell fromSpell = Inert.Instance._towers[creature.game.RandomInt(0, Inert.Instance._towers.Length)].FromSpell;
+            if ((UnityEngine.Object) fromSpell != (UnityEngine.Object) null)
+            {
+              SpellSlot spellSlot = new SpellSlot(fromSpell);
+              creature.spells.Insert(index1, spellSlot);
+            }
+          }
         }
       }
     }

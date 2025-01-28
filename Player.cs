@@ -1037,7 +1037,7 @@ label_1:
 
   internal bool IsMeterUnLocked()
   {
-    if (!MyInput.GetMouseButton(0) && !MyInput.GetMouseButtonUp(0))
+    if (HUD.UseTouchControls || !MyInput.GetMouseButton(0) && !MyInput.GetMouseButtonUp(0))
       return true;
     return !this.LockMeter && !this.extendedShot;
   }
@@ -1229,10 +1229,13 @@ label_1:
           this.CenterCamera();
         if (Client.game.isReplay || Client.game.resyncing || (UnityEngine.Object) HUD.instance == (UnityEngine.Object) null)
           return;
-        if (this.extendedShot && !hardInput.GetKey("Extended Shot") && (!MyInput.GetMouseButton(0) && !MyInput.GetMouseButtonUp(0)))
-          this.ToggleExtendedShot(false);
-        else if (!this.extendedShot && hardInput.GetKeyDown("Extended Shot") && (!MyInput.GetMouseButton(0) && !MyInput.GetMouseButtonUp(0)))
-          this.ToggleExtendedShot(true);
+        if (!HUD.instance.panelControls.activeInHierarchy)
+        {
+          if (this.extendedShot && !hardInput.GetKey("Extended Shot") && (!MyInput.GetMouseButton(0) && !MyInput.GetMouseButtonUp(0)))
+            this.ToggleExtendedShot(false);
+          else if (!this.extendedShot && hardInput.GetKeyDown("Extended Shot") && (!MyInput.GetMouseButton(0) && !MyInput.GetMouseButtonUp(0)))
+            this.ToggleExtendedShot(true);
+        }
         if ((int) Client.game.serverState.playersTurn != Client.curGameID || Client.game.ongoing.NumberOfSlowUpdateCoroutines > 0 || Client.game.serverState.busy != ServerState.Busy.No)
         {
           if ((int) Client.game.serverState.playersTurn == Client.curGameID && (Client.game.serverState.busy == ServerState.Busy.No || Client.game.serverState.busy == ServerState.Busy.Moving))

@@ -131,7 +131,8 @@ public static class GameSerializer
     x.MinionMaster = reader.ReadBoolean();
     x.BombMaster = reader.ReadBoolean();
     x.spellsCast = JsonConvert.DeserializeObject<Dictionary<SpellEnum, SpellsCast>>(reader.ReadString());
-    Inert.SetClientColor(x, (int) x.id);
+    if (x.id < (byte) 26)
+      Inert.SetClientColor(x, (int) x.id);
     for (int index = 0; index < x.familiarLevels.Length; ++index)
       x.familiarLevels[index] = reader.ReadInt32();
   }

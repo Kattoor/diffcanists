@@ -28,19 +28,19 @@ public class StartUp : MonoBehaviour
   {
     try
     {
-      string persistentDataPath = SaveFolder.persistentDataPath;
-      string sourceDir = Application.persistentDataPath.Replace("Arcanists", "Arcanists 2").Replace("ArcaneGamingLtd", "DefaultCompany");
-      if (Global.GetPrefBool("checkdirswitch2", false) || !Directory.Exists(persistentDataPath) || (!Directory.Exists(sourceDir + "/SavedSpells") || Directory.GetFiles(persistentDataPath + "/SavedSpells").Length != 0))
+      string persistentDataPath1 = SaveFolder.persistentDataPath;
+      string persistentDataPath2 = Application.persistentDataPath;
+      if (Global.GetPrefBool("checkdirswitch3", false) && !string.Equals(persistentDataPath2, persistentDataPath1) && (Directory.GetFiles(persistentDataPath1 + "/SavedSpells").Length < 10 && Directory.GetFiles(persistentDataPath2 + "/SavedSpells").Length != 0))
       {
-        if (!Directory.Exists(sourceDir + "/SavedSpells") || Directory.Exists(Application.persistentDataPath + "/SavedSpells"))
-          return;
-        StartUp.CopyDirectory(sourceDir, persistentDataPath);
+        StartUp.CopyDirectory(persistentDataPath2, persistentDataPath1);
+        Global.SetPrefBool("checkdirswitch3", true);
+        Debug.Log((object) "Transferring saved outfits/spells into steam cloud save");
       }
       else
       {
-        Global.SetPrefBool("checkdirswitch2", true);
+        Global.SetPrefBool("checkdirswitch3", true);
         Debug.Log((object) "Transferring saved outfits/spells into steam cloud save");
-        StartUp.CopyDirectory(sourceDir, persistentDataPath);
+        StartUp.CopyDirectory(persistentDataPath2, persistentDataPath1);
       }
     }
     catch (Exception ex)

@@ -2429,7 +2429,7 @@ label_46:
             p.controlled[0].AddLevel5Spell(new SpellSlot(Inert.GetSpell(SpellEnum.Summon_Sand_Mite)), b00k);
           if (p.GetLevel(b00k) == 5)
           {
-            p.controlled[0].AddLevel5Spell(new SpellSlot(Inert.GetSpell(SpellEnum.Sands_of_Time)), b00k);
+            p.controlled[0].AddLevel5Spell(new SpellSlot(Inert.GetSpell(SpellEnum.Sand_Trap)), b00k);
             break;
           }
           break;

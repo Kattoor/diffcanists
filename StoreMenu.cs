@@ -32,6 +32,7 @@ public class StoreMenu : MonoBehaviour
       this.txtTomatoes.transform.parent.gameObject.SetActive(true);
     }
     this.startedFromSteam.gameObject.SetActive(!SteamManager.startedFromSteam);
+    this.testServer.gameObject.SetActive(false);
   }
 
   private void OnDestroy()

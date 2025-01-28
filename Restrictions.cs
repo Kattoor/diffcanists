@@ -36,7 +36,7 @@ public class Restrictions
       if (spells[index] < byte.MaxValue && !this.availableSpells[(int) spells[index]])
         return true;
     }
-    return this.elementals != -1;
+    return false;
   }
 
   public bool CheckRestricted(int i)

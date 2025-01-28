@@ -145,7 +145,7 @@ public static class Descriptions
     },
     {
       "Sands",
-      "Crab\n(drains 20 health per cast)\nLearn the spells Entomb, Summon Sand Mite, and Sands of Time at levels 1, 3, and 5. For each familiar level create more sand with a wider area of effect and sand structures will also be more durable."
+      "Crab\n(drains 20 health per cast)\nLearn the spells Entomb, Summon Sand Mite, and Sand Trap at levels 1, 3, and 5. For each familiar level create more sand with a wider area of effect and sand structures will also be more durable."
     }
   };
   private static Dictionary<string, string> deathMessages = new Dictionary<string, string>()
@@ -2423,11 +2423,11 @@ public static class Descriptions
     },
     {
       "Monolith",
-      "Structure: 50 health\n{0}\nSpawns up to 15 health orbs each turn which can be picked up by anyone. Can only have one built at a time and will not spawn more then 20 orbs in the general area, so make sure to pick them up each turn. Can only have one at a time and it cannot be built in terrain."
+      "Structure: 50 health\n{0}\nSpawns up to 15 health orbs each turn which can be picked up by anyone. Will not spawn more then 20 orbs in the general area, so make sure to pick them up each turn. Can only have one monolith built at a time and it cannot be built in terrain."
     },
     {
       "Pyramid",
-      "Structure: 75 health\n{0}\nAttacks the closest enemy with a beam of energy dealing up to 25 damage a turn. Can only have one built at a time and it must be built in terrain."
+      "Structure: 75 health\n{0}\nAttacks the closest enemy with a beam of energy dealing up to 25 damage a turn. Can only have one pyramid built at a time and it must be built in terrain."
     },
     {
       "Sandbag",
@@ -2439,7 +2439,7 @@ public static class Descriptions
     },
     {
       "Summon Wyrm",
-      "Arcane Minion: 25 health\n{0}\nCannot move, but has the spell Burrow which will not end your turn if it was use the previous turn. Also has the spells Spit and Consume."
+      "Arcane Minion: 25 health\n{0}\nCannot move, but has the spell Burrow which will not end. Also has the spells Spit and Consume."
     },
     {
       "Sand Trap",

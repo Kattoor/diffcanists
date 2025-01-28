@@ -42,7 +42,7 @@ public static class Descriptions
     },
     {
       "Seas",
-      "Sea spells focus on diverse attacks from above, below and summoning armies of minions"
+      "Sea spells focus on diverse attacks from above and below, and summoning armies of minions"
     },
     {
       "Cogs",
@@ -54,7 +54,7 @@ public static class Descriptions
     },
     {
       "Seasons",
-      "Seasons spells focus on area deniability and constant attacks from above."
+      "Seasons spells focus on area denial and constant attacks from above."
     },
     {
       "Illusion",
@@ -93,7 +93,7 @@ public static class Descriptions
     },
     {
       "Frost",
-      "Frost Sprite\n(drains 20 health per cast)\nYour minions' jumping abilities are also buffed for each active level and lets you all skid on water. Each level adds an extra use of Ice Shield. Frost Arrow can deal up to 5 more damage per level. Holding space will make you jump further (minions always do). Learn the spell :\"Frost Leap\" which increases in distance per level allowing you to move quickly around the map."
+      "Frost Sprite\n(drains 20 health per cast)\nYour minions' jumping abilities are also buffed for each active level and lets you all skid on water. Each level adds an extra use of Ice Shield. Frost Arrow can deal up to 5 more damage per level. Holding space will make you jump further (minions always do). Learn the spell Frost Leap which increases in distance per level allowing you to move quickly around the map."
     },
     {
       "Underdark",
@@ -105,7 +105,7 @@ public static class Descriptions
     },
     {
       "Nature",
-      "Fungus\n(drains 20 health per cast)\nIncreases the effects of Vine and Thorn Bombs and also lets your Elves fire larger volleys of arrows and Vine bridge's max distance increases.\nAt level 5: Learn the spell Forestation - "
+      "Fungus\n(drains 20 health per cast)\nIncreases the effects of Vine and Thorn Bombs and also lets your Elves fire larger volleys of arrows and Vine bridge's max distance increases.\nAt level 5: Learn the spell Forestation."
     },
     {
       "Seas",
@@ -117,19 +117,19 @@ public static class Descriptions
     },
     {
       "Holiday",
-      "Ho! Ho! Ho!\n(drains 20 health per cast)\nBecome Santa, Eat Cookies, Grow in size, weigh more, long jump further, and be merry....Increases all Holiday use spells Max uses. Snowmen get 5 more max health.\nAt level 5: Learn the spell Gift of Giving. Reindeer get 1 use of Santa's Magic (each). "
+      "Ho! Ho! Ho!\n(drains 20 health per cast)\nBecome Santa, Eat Cookies, Grow in size, weigh more, long jump further, and be merry....Increases all Holiday use spells' max uses. Snowmen get 5 more max health.\nAt level 5: Learn the spell Gift of Giving. Reindeer get 1 use of Santa's Magic (each)."
     },
     {
       "Seasons",
-      "Tranquility\n(drains 20 health per cast)\nLearn the spell: Butterfly Jar. Each level of Harmony gives an extra cast of Life Dew, makes Breeze last longer, causes more Autumn Leaves to fall, The Four Seasons lasts an extra turn before needing to be cast again or forever at level 5, and Snowmen get 5 more max health per level."
+      "Tranquility\n(drains 20 health per cast)\nLearn the spell Butterfly Jar. Each level of Tranquility gives an extra cast of Life Dew, makes Breeze last longer, causes more Autumn Leaves to fall, The Four Seasons lasts an extra turn before needing to be cast again or forever at level 5, and Snowmen get 5 more max health per level."
     },
     {
       "Illusion",
-      "Allusion\n(drains 20 health per cast)\nWho needs health, just give it away! (to a hurt ally/minion) Highest missing health takes priority. Learn the Spell: Blink. Makes you significantly smaller.\nAt level 5: Duplicates have no expiration and spawn with 75% health - Vortex is buffed."
+      "Allusion\n(drains 20 health per cast)\nWho needs health, just give it away! (to a hurt ally/minion) Highest missing health takes priority. Learn the Spell Blink. Makes you significantly smaller.\nAt level 5: Duplicates have no expiration and spawn with 75% health - Vortex is buffed."
     },
     {
       "Blood",
-      "Lifeless\n(drains 20 health per cast)\nIn order of level required: Each Level applies a stack of bleed to all Ball/Bolt/Bomb blood spells (stacks do not stack with each other but can refresh the duration). Learn the spell: Blood Craze. Infections through contact last a minimum of your familiar level and cannot be spread to you. Resurrected minions start with more health. Level 3: Blood Mist. Level 5: Blood Pact - Barrage of Bones recharges one turn faster."
+      "Lifeless\n(drains 20 health per cast)\nIn order of level required: Each Level applies a stack of bleed to all Ball/Bolt/Bomb blood spells (stacks do not stack with each other but can refresh the duration). Learn the spell Blood Craze. Infections through contact last a minimum of your familiar level and cannot be spread to you. Resurrected minions start with more health. Level 3: Blood Mist. Level 5: Blood Pact - Barrage of Bones recharges one turn faster."
     },
     {
       "Druidism",
@@ -137,7 +137,7 @@ public static class Descriptions
     },
     {
       "Cosmos",
-      "Gravitation\n(drains 20 health per cast)\nAt level 1 Learn the spell: Gravity Well. Each level makes you weigh slightly more, making you more resistant to knockback. Lessens the affect of the Gravity debuff. Increases the digging capabilities of Collision Course and Shooting Stars. Increases Supernova's potential damage."
+      "Gravitation\n(drains 20 health per cast)\nAt level 1 Learn the spell Gravity Well. Each level makes you weigh slightly more, making you more resistant to knockback. Lessens the affect of the Gravity debuff. Increases the digging capabilities of Collision Course and Shooting Stars. Increases Supernova's potential damage."
     }
   };
   private static Dictionary<string, string> deathMessages = new Dictionary<string, string>()
@@ -1157,6 +1157,14 @@ public static class Descriptions
     {
       "Gravity Well",
       "{0} sunk into {1}'s gravity well."
+    },
+    {
+      "Rising Lava",
+      "{0} burned up in rising lava."
+    },
+    {
+      "Dense Fog",
+      "{0} couldn't see in the dense fog."
     }
   };
   private static Dictionary<string, string> spellDescriptions = new Dictionary<string, string>()
@@ -1427,7 +1435,7 @@ public static class Descriptions
     },
     {
       "Death Bomb",
-      "Bomb: 35-55 death damage\n{0}\nLike all death damage, this attack will turn anything it kills into a zombies under your control. It also leaves an aura of decay in its wake."
+      "Bomb: 35-55 death damage\n{0}\nLike all death damage, this attack will turn anything it kills into a zombie under your control. It also leaves an aura of decay in its wake."
     },
     {
       "Summon Swarm",
@@ -1435,7 +1443,7 @@ public static class Descriptions
     },
     {
       "Summon Dark Knight",
-      "Minion: 100 health\n{0}\nThe mighty dark knight can carve through solid rock with his axe, dealing insane amounts of damage on the way. He can also mount creatures, making up for this lack of jumping ability."
+      "Minion: 100 health\n{0}\nThe mighty dark knight can carve through solid rock with his axe, dealing insane amounts of damage on the way. He can also mount creatures, making up for his lack of jumping ability."
     },
     {
       "Raise Dead",
@@ -1487,7 +1495,7 @@ public static class Descriptions
     },
     {
       "Forest Seed",
-      "Targeted:\n{0}\nCreates a magical 75 hitpoint tree at the targeted location, which blocks projectiles and absorbs damage. Loses 15 hitpoints at the start of each of your turns. The tree cannot be created where existing units stand. Can be used on the first turn if the time limit is less then 20 seconds."
+      "Targeted:\n{0}\nCreates a magical 75 hitpoint tree at the targeted location, which blocks projectiles and absorbs damage. Loses 15 hitpoints at the start of each of your turns. The tree cannot be created where existing units stand. Can be used on the first turn if the time limit is less than 20 seconds."
     },
     {
       "Summon Pixies",
@@ -1811,7 +1819,7 @@ public static class Descriptions
     },
     {
       "Life Dew",
-      "Targeted: up to 40 damage/heal\n{0}\nIf the target is an ally they will be refreshed, however a foe will get a terrible surprise. Bee's can sacrifice themselves to increase the potency by 15 (max of 2 bees can do this per life dew)."
+      "Targeted: up to 40 damage/heal\n{0}\nIf the target is an ally they will be refreshed, however a foe will get a terrible surprise. Bees can sacrifice themselves to increase the potency by 15 (max of 2 bees can do this per life dew)."
     },
     {
       "Acorn",
@@ -1823,7 +1831,7 @@ public static class Descriptions
     },
     {
       "Morning Sun",
-      "Targeted: up to 30 damage per turn\n{0}\nThe sun is able to break through the upper atmosphere with great intensity damaging any enemy, in its path with its three beams of pur3 awesomeness. Lasts five turns."
+      "Targeted: up to 30 damage per turn\n{0}\nThe sun is able to break through the upper atmosphere with great intensity damaging any enemy in its path with its three beams of pur3 awesomeness. Lasts five turns."
     },
     {
       "Exploding Pinecone",
@@ -1843,11 +1851,11 @@ public static class Descriptions
     },
     {
       "Tree House",
-      "Tower: 75 health\n{0}\nCreates leaves every turn. Shake it up for some extra fun."
+      "Tower: 75 health\n{0}\nCreates leaves every turn. Starts the rotation of Seasons (Spring/Summer/Autumn/Winter). Shake it up for some extra fun."
     },
     {
       "The Four Seasons",
-      "Targeted:\n{0}\nCauses the Seasons to begin rotating (indefinitely) and unleash the power of the elements across the map for the next four turns depending on the active season, you'll be quizzed at the end of the game, so get your cue cards out."
+      "Targeted:\n{0}\nStarts the rotation of Seasons (Spring/Summer/Autumn/Winter) and unleashes the power of the elements across the map for the next four turns depending on the active season. You'll be quizzed at the end of the game, so get your cue cards out."
     },
     {
       "Summon Dryad",
@@ -1939,7 +1947,7 @@ public static class Descriptions
     },
     {
       "Blood Bath",
-      "Bomb: 20-100 damage\n{0}\nSoak the terrain in blood and horrify you opponents, stunning them for the next turn."
+      "Bomb: 20-100 damage\n{0}\nSoak the terrain in blood and horrify your opponents, stunning them for the next turn."
     },
     {
       "Curse of Disabling",
@@ -1947,11 +1955,11 @@ public static class Descriptions
     },
     {
       "Summon Blood Bank",
-      "Arcane Minion: 25\n{0}\nA small fleshy minion that while alive all attacks from the player and their minions heal for 20%  of the damage dealt. Any damage the blood bank takes is given to the caster as health if not pacted."
+      "Arcane Minion: 25\n{0}\nA small fleshy minion that makes all attacks from the player and their minions heal for 20% of the damage dealt. Any damage the blood bank takes is given to the caster as health if not pacted."
     },
     {
       "Summon Gargoyle",
-      "Minion: flying; 50 health\n{0}\nCan turn into stone without ending your turn: to regenerate/increase max health by 25 up to 100. Can cast Blood Lust."
+      "Minion: flying; 50 health\n{0}\nCan turn into stone without ending your turn to regenerate/increase max health by 25, up to 100. Can cast Blood Lust."
     },
     {
       "Blood Craze",
@@ -1967,7 +1975,7 @@ public static class Descriptions
     },
     {
       "Blood Pact",
-      "Targeted:\n{0}\nEqualize health with the target if you both have more then 25 health each. If this targets an ally any damage taken hence forth is shared equally between you. (Shields and towers do not count towards your hitpoints)."
+      "Targeted:\n{0}\nEqualize health with the target if you both have more than 25 health each. If this targets an ally any damage taken henceforth is shared equally between you. (Shields and towers do not count towards your hitpoints)."
     },
     {
       "Summon Dark Totem",
@@ -2043,7 +2051,7 @@ public static class Descriptions
     },
     {
       "Gift of Giving",
-      "Personal:\n{0}\nTo give is better then to receive... So give yourself two things, that oughta make up for it - Does not end your turn."
+      "Personal:\n{0}\nTo give is better than to receive... So give yourself two things, that oughta make up for it - Does not end your turn."
     },
     {
       "Forestation",
@@ -2055,7 +2063,7 @@ public static class Descriptions
     },
     {
       "The ol' swaparoo",
-      "Target:\n{0}\nSwap places with a target or just  move yourself over a short distance."
+      "Target:\n{0}\nSwap places with a target or just move yourself over a short distance."
     },
     {
       "Whistling Winds",
@@ -2151,7 +2159,7 @@ public static class Descriptions
     },
     {
       "Time Dilation",
-      "Personal:\n{0}\nNeed more time? well stop reading this description and use the spell already! Adds 5 seconds to your current turn per your Cogs familiar level."
+      "Personal:\n{0}\nNeed more time? Well stop reading this description and use the spell already! Adds 5 seconds to your current turn per your Cogs familiar level."
     },
     {
       "Healing Spores",
@@ -2159,7 +2167,7 @@ public static class Descriptions
     },
     {
       "Harmony",
-      "Personal:\n{0}\nAt the end of your turn, until your next turn, you and your minions share all damage taken (The primary target takes 50% of that damage unless that damage is less then the total minions that are under the effect of harmony, in which case its shared amongst the healthiest). This spell does not end your turn."
+      "Personal:\n{0}\nAt the end of your turn, until your next turn, you and your minions share all damage taken (The primary target takes 50% of that damage unless that damage is less than the total minions that are under the effect of harmony, in which case it's shared amongst the healthiest). This spell does not end your turn."
     },
     {
       "Enchanted Axes",
@@ -2167,15 +2175,15 @@ public static class Descriptions
     },
     {
       "Summon Will o' the Wisp",
-      "Arcane Minion: 25 health\n{0}\nHas the spells: Spirit Walk and Spirit Link."
+      "Arcane Minion: 25 health\n{0}\nHas the spells Spirit Walk and Spirit Link."
     },
     {
       "Verdant Javelin",
-      "Ball: {1} damage\n{0}\nDamage scales up quickly based off distance traveled. Missing will leave the javelin in the terrain, allowing the caster to pick it back up and try again. Will be destroyed if it takes damage. Every time the javelin is cast: its bonus damage is increased by 7 unless it misses and fails to travel far enough to reach its max potential damage."
+      "Ball: {1} damage\n{0}\nDamage scales up quickly based off of distance traveled. Missing will leave the javelin in the terrain, allowing the caster to pick it back up and try again. Will be destroyed if it takes damage. Every time the javelin is cast: its bonus damage is increased by 7 unless it misses and fails to travel far enough to reach its max potential damage."
     },
     {
       "Prickly Barrier",
-      "Targeted: 30 damage\n{0}\nThis will damage anyone foolish enough to get to close. Will spread each turn, but all your barrier's snares share the same damage source. The snare will only last 4 turns."
+      "Targeted: 30 damage\n{0}\nThis will damage anyone foolish enough to get too close. Will spread each turn, but all your barrier's snares share the same damage source. The snare will only last 4 turns."
     },
     {
       "Bear Claw",
@@ -2191,7 +2199,7 @@ public static class Descriptions
     },
     {
       "Summon Tiger",
-      "Minion: 75 health\n{0}\nHas the spells: Stalk and pounce."
+      "Minion: 75 health\n{0}\nHas the spells Stalk and pounce."
     },
     {
       "Compete!",
@@ -2203,7 +2211,7 @@ public static class Descriptions
     },
     {
       "Bear Form",
-      "Personal:\n{0}\nTransform into a bear for the next 2 turns giving you the spells Rampage, Swipe and the passive 'Provoke' allowing you to deal bonus damage for each percentage of health you are missing.. Restricts you to Druidism and Arcane spellbooks."
+      "Personal:\n{0}\nTransform into a bear for the next 2 turns giving you the spells Rampage, Swipe and the passive 'Provoke' allowing you to deal bonus damage for each percentage of health you are missing. Restricts you to Druidism and Arcane spellbooks."
     },
     {
       "Rampage",
@@ -2279,7 +2287,7 @@ public static class Descriptions
     },
     {
       "Black Hole",
-      "Targeted:\n{0}\nStays until moved or the caster is destroyed. Pulls spells and units alike into its center. Units that fall into the center will sunk unless they are an allied unit and an active wormhole is on the battle field they will instead be sent through the wormhole. Spells and Towers are destroyed."
+      "Targeted:\n{0}\nStays until moved or the caster is destroyed. Pulls spells and units alike into its center. Units that fall into the center will be sunk unless they are an allied unit and an active wormhole is on the battle field then they will instead be sent through the wormhole. Spells and Towers are destroyed."
     },
     {
       "Supernova",
@@ -2315,7 +2323,7 @@ public static class Descriptions
     },
     {
       "Blood Clot",
-      "Bolt: up to 60 damage\n{0}\nA great way to restrict your enemies movements is by clogging everything up."
+      "Bolt: up to 60 damage\n{0}\nA great way to restrict your enemies' movements is by clogging everything up."
     },
     {
       "Death and Decay",

@@ -63,7 +63,7 @@ public static class Client
   public static string identifier = "";
   public static string NameOrReplay = "";
   public static string currentIP = "";
-  public static string serverIP = "18.218.134.19";
+  public static string serverIP = "45.92.39.181";
   public static string serverURL = "play.arcanists2.com";
   public static byte[] cryp = (byte[]) null;
   public static int port = 43594;
@@ -394,6 +394,7 @@ public static class Client
 
   public static void ReConnectToServer(Client.JoinLocation lobby = Client.JoinLocation.Mainmenu)
   {
+    Client._accounts.Clear();
     Client.joinLobby = lobby;
     Client.Init();
     Client.Disconnect(false);
@@ -1295,7 +1296,6 @@ public static class Client
     Client._games.Clear();
     Client._ratedSearches.Clear();
     Client._NEWratedSearches.Clear();
-    Client._accounts.Clear();
     int goToLobby = reader.ReadInt32();
     int num1 = reader.ReadInt32();
     for (int index = 0; index < num1; ++index)
@@ -1352,7 +1352,7 @@ public static class Client
         if (!string.IsNullOrEmpty(serverJoinMsg))
           ChatBox.Instance?.NewChatMsg("", serverJoinMsg, (Color) ColorScheme.GetColor(Global.ColorAnnoucement), "[Annoucement]", ChatOrigination.System, ContentType.STRING, (object) null);
         Account account = Client.GetAccount(Client.Name, false);
-        if (!account.accountType.IsMuted() || account.discord != 0UL || !Client.firstChatOnly)
+        if (!account.accountType.IsMuted() || account.discord != 0UL || (!string.IsNullOrEmpty(account.steamKey) || !Client.firstChatOnly))
           return;
         Client.firstChatOnly = false;
         ChatBox.Instance?.NewChatMsg("", "Verify your account to talk... and join the discord! (Right-Click for options)", (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen), "[Discord]", ChatOrigination.System, ContentType.STRING, (object) null);
@@ -2807,9 +2807,7 @@ public static class Client
 
   public static void AskOverheadEmoji(int index)
   {
-    if (Client.MyAccount.discord == 0UL)
-      ChatBox.Instance?.NewChatMsg("Verify your discord ID to enable using Emoji.", (Color) ColorScheme.GetColor(Global.ColorSystem));
-    else if (Client.MyAccount.accountType.IsMuted())
+    if (Client.MyAccount.accountType.IsMuted())
     {
       ChatBox.Instance?.NewChatMsg("Looks like you're muted, try to behave yourself next time.", (Color) ColorScheme.GetColor(Global.ColorSystem));
     }

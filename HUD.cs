@@ -756,14 +756,33 @@ public class HUD : UIBehaviour
   public void ShowSpellsPopup()
   {
     if (Client.game.isSandbox)
-      return;
-    this.ClickReturnToGame();
-    if ((UnityEngine.Object) SpellLobbyChange.Instance != (UnityEngine.Object) null)
-      SpellLobbyChange.Instance.ClickCancel();
-    else if ((UnityEngine.Object) Player.Instance != (UnityEngine.Object) null && Player.Instance.person != null && Player.Instance.person.settingsPlayer != null)
-      SpellLobbyChange.Create(Player.Instance.person.settingsPlayer, (Action<SettingsPlayer>) (set => {}), false, false, true);
+    {
+      if (!((UnityEngine.Object) Player.Instance != (UnityEngine.Object) null) || Client.game.isTutorial && !Client.allowtutorialDebugging)
+        return;
+      if ((UnityEngine.Object) ChatBox.Instance == (UnityEngine.Object) null)
+      {
+        Controller.Instance.ShowChatBox(false);
+        ChatBox.Instance?.NewChatMsg("", "Welcome to the dev console", (Color) ColorScheme.GetColor(Global.ColorTeamText), "", ChatOrigination.System, ContentType.STRING, (object) null);
+        Player.Instance.Hide_All();
+        Player.Instance.Show_All();
+      }
+      else
+      {
+        Controller.Instance.DestroyChatBox();
+        Player.Instance.Hide_All();
+        Player.Instance.Show_All();
+      }
+    }
     else
-      SpellLobbyChange.Create(Client.settingsPlayer, (Action<SettingsPlayer>) (set => Client.AskToChangeSpells(set)), false, true, true);
+    {
+      this.ClickReturnToGame();
+      if ((UnityEngine.Object) SpellLobbyChange.Instance != (UnityEngine.Object) null)
+        SpellLobbyChange.Instance.ClickCancel();
+      else if ((UnityEngine.Object) Player.Instance != (UnityEngine.Object) null && Player.Instance.person != null && Player.Instance.person.settingsPlayer != null)
+        SpellLobbyChange.Create(Player.Instance.person.settingsPlayer, (Action<SettingsPlayer>) (set => {}), false, false, true);
+      else
+        SpellLobbyChange.Create(Client.settingsPlayer, (Action<SettingsPlayer>) (set => Client.AskToChangeSpells(set)), false, true, true);
+    }
   }
 
   public void ShowOutfitPopup()
@@ -947,8 +966,8 @@ public class HUD : UIBehaviour
     }
     if (this.game != null)
       this.txtGameOptions.text = this.game.gameFacts.ToString(this.game, true);
-    if (this.game.isSpectator || this.game.isSandbox)
-      HUD.instance.buttonShowSpells.GetComponent<UIOnHover>().Interactable(false);
+    if (this.game.isSandbox)
+      HUD.instance.buttonShowSpells.transform.GetChild(0).GetComponent<TMP_Text>().SetText("Dev Console", true);
     if (this.game.isReplay)
       this.buttonOverheadEmoji.SetActive(false);
     this._ToggleSpellBgIcons(Global.GetPrefBool("newspellicons", true));

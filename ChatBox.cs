@@ -164,7 +164,7 @@ public class ChatBox : UIBehaviour
     ChatBox.showDate = Global.GetPrefBool("prefshowdate", true);
     ChatBox.showFade = PlayerPrefs.GetInt("prefshowfade", 2);
     ChatBox.showIcons = Global.GetPrefBool("prefshowicons", true);
-    this.discordButton.SetActive(Client.MyAccount.discord == 0UL && Client.isConnected);
+    this.discordButton.SetActive(Client.MyAccount.discord == 0UL && Client.MyAccount.accountType.IsMuted() && Client.isConnected);
   }
 
   public void ToggleEmojiSelector()

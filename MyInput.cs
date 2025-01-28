@@ -34,7 +34,7 @@ public static class MyInput
     int num = PlayerPrefs.GetInt("prefusecontroller", 0);
     if (num == 0 || num == 1)
     {
-      if (Input.GetJoystickNames().Length != 0)
+      if (num == 1)
       {
         Controller.Instance.keysKeyboard.ChangeSetup(hardManager.SetupType.Controller);
         if (num != 0)

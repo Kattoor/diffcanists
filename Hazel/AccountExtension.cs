@@ -8,6 +8,7 @@ namespace Hazel
   {
     public static AccountType[] _IconOrder = new AccountType[31]
     {
+      AccountType.Mod,
       AccountType.Owner,
       AccountType.Developer,
       AccountType.Game_Director,
@@ -17,7 +18,6 @@ namespace Hazel
       AccountType.Website_Director,
       AccountType.Tournament_Director,
       AccountType.Head_of_Moderation,
-      AccountType.Mod,
       AccountType.Perm_Muted,
       AccountType.Muted,
       AccountType.Contributor,

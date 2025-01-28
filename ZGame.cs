@@ -5345,7 +5345,7 @@ label_161:
         HUD.FindFullBooks(game);
         game.isReplay = false;
         Client.NameOrReplay = game.CurrentPlayer().name;
-        HUD.instance.buttonShowSpells.GetComponent<UIOnHover>().Interactable(true);
+        HUD.instance.buttonShowSpells.transform.GetChild(0).GetComponent<UIOnHover>().Interactable(true);
         HUD.instance.FindPlayer();
         game.serverUpdate = Timing.RunCoroutine(game.FixedUpdate(), Segment.Update);
         HUD.instance.buttonHideChat.gameObject.SetActive(false);

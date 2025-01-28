@@ -90,53 +90,68 @@ public class LocalServerConn : Catalogue
     }
   }
 
-  private IEnumerator FindServers()
+  private IEnumerator FindServers(bool secure = true)
   {
     LocalServerConn localServerConn1 = this;
-    using (UnityWebRequest webRequest = UnityWebRequest.Get("https://secure.arcanists2.com/ServerList.json"))
+    string uri = secure ? "https://secure.arcanists2.com/ServerList.json" : "http://play.arcanists2.com/ServerList.json";
+    bool success = false;
+    try
     {
-      yield return (object) webRequest.SendWebRequest();
-      if (webRequest.isNetworkError)
+      using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
       {
-        UnityEngine.Debug.Log((object) ("Error: " + webRequest.error));
-      }
-      else
-      {
-        KnownServersList knownServersList = JsonConvert.DeserializeObject<KnownServersList>(webRequest.downloadHandler.text);
-        Server.serverList = knownServersList;
-        if (knownServersList.servers.Count > 1)
+        yield return (object) webRequest.SendWebRequest();
+        if (webRequest.isNetworkError)
         {
-          localServerConn1.panelServers.SetActive(true);
-          foreach (KnownServers server in knownServersList.servers)
+          UnityEngine.Debug.Log((object) ("Error: " + webRequest.error));
+        }
+        else
+        {
+          KnownServersList knownServersList = JsonConvert.DeserializeObject<KnownServersList>(webRequest.downloadHandler.text);
+          Server.serverList = knownServersList;
+          bool flag = false;
+          if (knownServersList.servers.Count > 1)
           {
-            LocalServerConn localServerConn = localServerConn1;
-            PfabServerButton g = UnityEngine.Object.Instantiate<PfabServerButton>(localServerConn1.pfabServer, (Transform) localServerConn1.serverContainer);
-            g.gameObject.SetActive(true);
-            g.txtName.text = server.name + " (" + server.location + ")";
-            g.Ping(server.ip);
-            KnownServers b = server;
-            g.uibutton.onClick.AddListener((UnityAction) (() =>
+            localServerConn1.panelServers.SetActive(true);
+            foreach (KnownServers server in knownServersList.servers)
             {
-              foreach (PfabServerButton serverButton in localServerConn.serverButtons)
-                serverButton.uibutton.AlwaysOn = false;
-              g.uibutton.AlwaysOn = true;
-              localServerConn.SelectServer(b);
-            }));
-            localServerConn1.serverButtons.Add(g);
-            if (string.Equals(server.ip, PlayerPrefs.GetString("prefserver", knownServersList.servers[0].ip)))
-            {
-              localServerConn1.txtCurServer.text = "Server: " + server.name + " (" + server.location + ")";
-              g.uibutton.AlwaysOn = true;
+              LocalServerConn localServerConn = localServerConn1;
+              PfabServerButton g = UnityEngine.Object.Instantiate<PfabServerButton>(localServerConn1.pfabServer, (Transform) localServerConn1.serverContainer);
+              g.gameObject.SetActive(true);
+              g.txtName.text = server.name + " (" + server.location + ")";
+              g.Ping(server.ip);
+              KnownServers b = server;
+              g.uibutton.onClick.AddListener((UnityAction) (() =>
+              {
+                foreach (PfabServerButton serverButton in localServerConn.serverButtons)
+                  serverButton.uibutton.AlwaysOn = false;
+                g.uibutton.AlwaysOn = true;
+                localServerConn.SelectServer(b);
+              }));
+              localServerConn1.serverButtons.Add(g);
+              if (string.Equals(server.ip, PlayerPrefs.GetString("prefserver", knownServersList.servers[0].ip)))
+              {
+                PlayerPrefs.SetString("prefserver", server.ip);
+                localServerConn1.txtCurServer.text = "Server: " + server.name + " (" + server.location + ")";
+                g.uibutton.AlwaysOn = true;
+                flag = true;
+              }
             }
           }
-        }
-        else if (knownServersList.servers.Count > 0)
-        {
-          KnownServers server = knownServersList.servers[0];
-          localServerConn1.txtCurServer.text = "Server: " + server.name + " (" + server.location + ")";
-          PlayerPrefs.SetString("prefserver", knownServersList.servers[0].ip);
+          if (knownServersList.servers.Count > 0 && !flag)
+          {
+            KnownServers server = knownServersList.servers[0];
+            localServerConn1.txtCurServer.text = "Server: " + server.name + " (" + server.location + ")";
+            PlayerPrefs.SetString("prefserver", knownServersList.servers[0].ip);
+          }
         }
       }
+      success = true;
+    }
+    finally
+    {
+      LocalServerConn localServerConn2 = this;
+      if (!success & secure)
+        localServerConn2.StartCoroutine(localServerConn2.FindServers(false));
     }
   }
 
@@ -156,7 +171,7 @@ public class LocalServerConn : Catalogue
     this.toggleOrb.onClick.AddListener(new UnityAction(this.ToggleOrb));
     Dispatcher dispatcher = UnityThreadHelper.Dispatcher;
     Global.persistentDataPath = Application.persistentDataPath;
-    this.StartCoroutine(this.FindServers());
+    this.StartCoroutine(this.FindServers(true));
   }
 
   [ContextMenu("Play replay")]
@@ -495,6 +510,7 @@ public class LocalServerConn : Catalogue
 
   public void ClickChangePassword()
   {
+    LocalServerConn.authenticationMethod = AuthenticationMethod.Arcanists;
     string text1 = this.inputNamePasswordChange.text;
     string text2 = this.inputOrigonalPasswordChange.text;
     string text3 = this.inputPasswordPasswordChange.text;
@@ -520,6 +536,7 @@ public class LocalServerConn : Catalogue
 
   public void ClickCreateAccount()
   {
+    LocalServerConn.authenticationMethod = AuthenticationMethod.Arcanists;
     string text1 = this.inputNameCreation.text;
     string text2 = this.inputPasswordCreation.text;
     string text3 = this.inputPassVerifyCreation.text;

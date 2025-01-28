@@ -1144,22 +1144,6 @@ label_1:
       }
       if (Client.game.isSandbox && (!Client.game.isTutorial || Client.allowtutorialDebugging))
       {
-        if (Input.GetKeyDown(KeyCode.F8))
-        {
-          if ((UnityEngine.Object) ChatBox.Instance == (UnityEngine.Object) null)
-          {
-            Controller.Instance.ShowChatBox(false);
-            ChatBox.Instance?.NewChatMsg("", "Welcome to the dev console", (Color) ColorScheme.GetColor(Global.ColorTeamText), "", ChatOrigination.System, ContentType.STRING, (object) null);
-            this.Hide_All();
-            this.Show_All();
-          }
-          else
-          {
-            Controller.Instance.DestroyChatBox();
-            this.Hide_All();
-            this.Show_All();
-          }
-        }
         if ((UnityEngine.Object) ChatBox.Instance != (UnityEngine.Object) null && ChatBox.Instance.Active && ChatBox.Instance.chatInput.enabled && (!Client.game.isTutorial || !Client.allowtutorialDebugging))
           return;
         if (this.summoniningDummy)

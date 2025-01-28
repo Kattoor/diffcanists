@@ -10,9 +10,9 @@ public class RatedContainer
 
   public void IncreaseDiff()
   {
-    if (this.diff >= 1000)
+    if (this.diff >= 600)
       return;
-    this.diff += 200;
+    this.diff += 20;
   }
 
   public void AddDefault()

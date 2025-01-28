@@ -882,7 +882,7 @@ public class Server : MonoBehaviour
           {
             if (c.player.account.accountType.IsMuted() && !Server.allowUnverifiedUsersToTalk && !connection.player.account.accountType.IsModPlus() || c.player.account.accountType.has(AccountType.Perm_Muted))
             {
-              if (c.player.account.discord == 0UL)
+              if (c.player.account.AccountNotLinked())
               {
                 Server.ReturnServerMsg(c, "Verify your discord ID to enable talking. Or use quickchat <sprite name=\"Emoji2_1352\">.");
                 return;
@@ -901,7 +901,7 @@ public class Server : MonoBehaviour
           SmallAccount smallAccount;
           if (Server._smallAccounts.TryGetValue(key, out smallAccount) && (c.player.account.accountType.IsMuted() && !Server.allowUnverifiedUsersToTalk && !smallAccount.accountType.IsModPlus() || c.player.account.accountType.has(AccountType.Perm_Muted)))
           {
-            if (c.player.account.discord == 0UL)
+            if (c.player.account.AccountNotLinked())
             {
               Server.ReturnServerMsg(c, "Verify your discord ID to enable talking. Or use quickchat <sprite name=\"Emoji2_1352\">.");
               return;
@@ -1110,7 +1110,7 @@ public class Server : MonoBehaviour
         acc.miniGameChat = chatSetting;
         break;
     }
-    acc.ToFileUnimportant();
+    acc.ToFile();
   }
 
   public static void ChangeFriendsList(Account c, myBinaryReader reader, byte[] bytes)
@@ -1238,9 +1238,9 @@ public class Server : MonoBehaviour
                     GameFacts gameFacts = (GameFacts) null;
                     if (Server._games.TryGetValue(key1, out gameFacts))
                     {
-                      if (gameFacts.GetRatedMode() && (c.player.account.discord == 0UL || c.player.account[0].rating < (short) 1000))
+                      if (gameFacts.GetRatedMode() && (c.player.account.AccountNotLinked() || c.player.account[0].rating < (short) 1000))
                       {
-                        if (c.player.account.discord == 0UL)
+                        if (c.player.account.AccountNotLinked())
                         {
                           Server.ReturnServerMsg(c, "Verify your discord ID to play rated games.");
                           break;
@@ -2138,7 +2138,7 @@ public class Server : MonoBehaviour
                   case 67:
                     if (myBinaryReader.ReadBoolean())
                     {
-                      if (connection.player.account.discord == 0UL)
+                      if (connection.player.account.AccountNotLinked())
                       {
                         Server.ReturnServerMsg(connection, "Verify your discord ID to play rated games.");
                         return;
@@ -3015,11 +3015,13 @@ public class Server : MonoBehaviour
       {
         try
         {
+          Server._ratedQueue.Remove(c);
+          Server.OnStoppedSearching(c);
           if (c.player.activeConnection == c)
           {
             if (c.player.inBoat)
               Server.RemoveFromBoat(c);
-            if (c.player.location != Location.Ingame)
+            if (c.player.location != Location.Ingame || c.player.gameNumber == -1)
             {
               Server.MovePlayer(c, Location.Disconnecting);
             }

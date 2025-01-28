@@ -438,7 +438,7 @@ public class SpellLobbyChange : MonoBehaviour
       if (this.viewingExtraSpells != BookOf.Nothing)
         this.textError.text = "Click to view the regular spellbook";
       else
-        this.textError.text = "<br><color=#0093FF>Right-Click to see this books familiar spells</color>";
+        this.textError.text = "<br><color=#0093FF>Right-Click to see this book's familiar spells</color>";
     }
   }
 
@@ -454,7 +454,7 @@ public class SpellLobbyChange : MonoBehaviour
     else if (this.viewingExtraSpells != BookOf.Nothing)
       this.textError.text = "Click to view the regular spellbook";
     else
-      this.textError.text = "Left-Click to equip all available spells<br><color=#0093FF>Right-Click to see this books familiar spells</color>";
+      this.textError.text = "Left-Click to equip all available spells<br><color=#0093FF>Right-Click to see this book's familiar spells</color>";
   }
 
   public void ClickRestrictions()

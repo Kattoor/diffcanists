@@ -859,7 +859,7 @@ public class Account
   }
 
   [JsonProperty("x")]
-  public short version { get; set; } = 10030;
+  public short version { get; set; } = 10032;
 
   [JsonProperty("y")]
   public BitBools tutorials { get; set; } = new BitBools();
@@ -920,6 +920,16 @@ public class Account
 
   [JsonProperty("as")]
   public SerializedActiveItem activeItems { get; set; } = new SerializedActiveItem();
+
+  public bool AccountLinked()
+  {
+    return this.discord != 0UL || !string.IsNullOrEmpty(this.steamKey);
+  }
+
+  public bool AccountNotLinked()
+  {
+    return !this.AccountLinked();
+  }
 
   public NewGamesPlayed GetGamesPlayed(ZGame.GameType f)
   {

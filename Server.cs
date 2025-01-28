@@ -22,7 +22,7 @@ public class Server : MonoBehaviour
   public static bool CompressMap = true;
   public static string discordLink = "https://discord.gg/PNnYxsc";
   public static string wikiLink = "https://arcanists.fandom.com/wiki/Arcanists_Wiki";
-  public static string websiteLink = "https://www.arcanists2.com/";
+  public static string websiteLink = "https://www.arcanists.com/";
   public static int raidMode = 1;
   public static int chatMode = 0;
   public static int vpn_block = 88;
@@ -1179,6 +1179,11 @@ public class Server : MonoBehaviour
                         Server.ReturnServerMsg(c, "Looks like you're banned from rated games :(");
                         break;
                       }
+                      if (gameFacts.GetRatedMode() && c.player.account.prestige == (byte) 0 && (c.player.account.totalWands < 150 && c.player.account.totalRatedGames < 20))
+                      {
+                        Server.ReturnServerMsg(c, "You need to play more unrated games before you can play rated games.");
+                        return;
+                      }
                       if (gameFacts.status == (byte) 0 && gameFacts.connections.Count < (int) gameFacts.customPlayerCount && c.player.location == Location.Lobby && (!gameFacts.connections[0].player.account.ignored.Contains(c.player.account.name) || gameFacts.invitedPlayers.Contains(c.player.account.name)) && (gameFacts.GetInviteMode() == InviteEnum.Open || gameFacts.invitedPlayers.Contains(c.player.account.name) || gameFacts.GetInviteMode() == InviteEnum.Clan && gameFacts.connections.Count > 0 && string.Equals(gameFacts.connections[0].player.account.clan, c.player.account.clan) || (gameFacts.GetInviteMode() == InviteEnum.Friends && (gameFacts.connections.Count == 0 || gameFacts.connections[0].player.account.friends.Contains(c.player.account.name)) || gameFacts.GetInviteMode() == InviteEnum.Similar_Rating && gameFacts.connections.Count > 0 && Mathf.Abs((int) gameFacts.connections[0].player.account.similarRating - (int) c.player.account.similarRating) <= 500)))
                       {
                         c.player.gameNumber = key1;
@@ -1296,16 +1301,16 @@ public class Server : MonoBehaviour
                       Server.ReturnServerMsg(c, "Cannot change spells while finding opponents");
                       return;
                     }
-                    SettingsPlayer b1 = new SettingsPlayer();
-                    b1.Deserialize(myBinaryReader);
-                    c.player.settingsPlayer.CopySpells(b1, false);
+                    SettingsPlayer b = new SettingsPlayer();
+                    b.Deserialize(myBinaryReader);
+                    c.player.settingsPlayer.CopySpells(b, false);
                     c.player.settingsPlayer.VerifySpells();
                     c.player.settingsPlayer.ReseralizeSpells(c);
                     break;
                   case 45:
-                    SettingsPlayer b2 = new SettingsPlayer();
-                    b2.Deserialize(myBinaryReader);
-                    c.player.settingsPlayer.CopyOutfit(b2);
+                    SettingsPlayer settingsPlayer = new SettingsPlayer();
+                    settingsPlayer.Deserialize(myBinaryReader);
+                    c.player.settingsPlayer.CopyOutfit(c.player.account.extraStuff.outfitLocked ? SettingsPlayer.DefaultOutfit : settingsPlayer);
                     c.player.settingsPlayer.VerifyOutfit(c.player.account.cosmetics, c.player.account);
                     c.SendBytes(args.Bytes, SendOption.None);
                     break;
@@ -1839,16 +1844,16 @@ public class Server : MonoBehaviour
                     }
                     break;
                   case 44:
-                    SettingsPlayer b1 = new SettingsPlayer();
-                    b1.Deserialize(myBinaryReader);
-                    c.player.settingsPlayer.CopySpells(b1, false);
+                    SettingsPlayer b = new SettingsPlayer();
+                    b.Deserialize(myBinaryReader);
+                    c.player.settingsPlayer.CopySpells(b, false);
                     c.player.settingsPlayer.VerifySpells();
                     c.player.settingsPlayer.ReseralizeSpells(c);
                     break;
                   case 45:
-                    SettingsPlayer b2 = new SettingsPlayer();
-                    b2.Deserialize(myBinaryReader);
-                    c.player.settingsPlayer.CopyOutfit(b2);
+                    SettingsPlayer settingsPlayer = new SettingsPlayer();
+                    settingsPlayer.Deserialize(myBinaryReader);
+                    c.player.settingsPlayer.CopyOutfit(c.player.account.extraStuff.outfitLocked ? SettingsPlayer.DefaultOutfit : settingsPlayer);
                     c.player.settingsPlayer.VerifyOutfit(c.player.account.cosmetics, c.player.account);
                     c.SendBytes(args.Bytes, SendOption.None);
                     break;
@@ -2149,17 +2154,17 @@ public class Server : MonoBehaviour
                       Server.ReturnServerMsg(connection, "Cannot change spells while finding opponents");
                       return;
                     }
-                    SettingsPlayer b1 = new SettingsPlayer();
-                    b1.Deserialize(myBinaryReader);
-                    connection.player.settingsPlayer.CopySpells(b1, false);
+                    SettingsPlayer b = new SettingsPlayer();
+                    b.Deserialize(myBinaryReader);
+                    connection.player.settingsPlayer.CopySpells(b, false);
                     Prestige.VerifySpells(connection.player.account, connection.player.settingsPlayer.spells, ref connection.player.settingsPlayer._spells.fullBook);
                     connection.player.settingsPlayer.VerifySpells();
                     connection.player.settingsPlayer.ReseralizeSpells(connection);
                     break;
                   case 45:
-                    SettingsPlayer b2 = new SettingsPlayer();
-                    b2.Deserialize(myBinaryReader);
-                    connection.player.settingsPlayer.CopyOutfit(b2);
+                    SettingsPlayer settingsPlayer = new SettingsPlayer();
+                    settingsPlayer.Deserialize(myBinaryReader);
+                    connection.player.settingsPlayer.CopyOutfit(connection.player.account.extraStuff.outfitLocked ? SettingsPlayer.DefaultOutfit : settingsPlayer);
                     connection.player.settingsPlayer.VerifyOutfit(connection.player.account.cosmetics, connection.player.account);
                     connection.SendBytes(args.Bytes, SendOption.None);
                     break;
@@ -2593,7 +2598,7 @@ public class Server : MonoBehaviour
       SpellsOnly spellsOnly1 = new SpellsOnly();
       spellsOnly1.Copy(gg.connections[index1].player.settingsPlayer);
       settingsPlayer1.FakeCopySpells(gg.connections[index1].player.settingsPlayer);
-      settingsPlayer1.CopyOutfit(gg.connections[index1].player.settingsPlayer);
+      settingsPlayer1.CopyOutfit(gg.connections[index1].player.account.extraStuff.outfitLocked ? SettingsPlayer.DefaultOutfit : gg.connections[index1].player.settingsPlayer);
       gg.settingsPlayer.Add(settingsPlayer1);
       gg.realSpells.Add(spellsOnly1);
       gg.accounts.Add(gg.connections[index1].player.account);
@@ -2609,13 +2614,13 @@ public class Server : MonoBehaviour
           {
             spellsOnly2.Copy(gg.connections[index1].player.multiSettingsPlayer[index2]);
             settingsPlayer2.FakeCopySpells(gg.connections[index1].player.multiSettingsPlayer[index2]);
-            settingsPlayer2.CopyOutfit(gg.connections[index1].player.multiSettingsPlayer[index2]);
+            settingsPlayer2.CopyOutfit(gg.connections[index1].player.account.extraStuff.outfitLocked ? SettingsPlayer.DefaultOutfit : gg.connections[index1].player.multiSettingsPlayer[index2]);
           }
           else
           {
             spellsOnly2.Copy(gg.connections[index1].player.settingsPlayer);
             settingsPlayer2.FakeCopySpells(gg.connections[index1].player.settingsPlayer);
-            settingsPlayer2.CopyOutfit(gg.connections[index1].player.settingsPlayer);
+            settingsPlayer2.CopyOutfit(gg.connections[index1].player.account.extraStuff.outfitLocked ? SettingsPlayer.DefaultOutfit : gg.connections[index1].player.settingsPlayer);
           }
           gg.settingsPlayer.Add(settingsPlayer2);
           gg.realSpells.Add(spellsOnly2);

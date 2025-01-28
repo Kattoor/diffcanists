@@ -412,7 +412,7 @@ public static class Armageddon
 
   private static void GhostlyHalls(ZPerson p)
   {
-    if ((p.localTurn - p.game.armageddonTurn) % 3 != 0 || ZComponent.IsNull((ZComponent) p.first()) || p.GetMaxMinions() <= p.GetMinionCount())
+    if ((p.localTurn - p.game.armageddonTurn) % 3 != 0 || ZComponent.IsNull((ZComponent) p.first()))
       return;
     ZCreature duplicate = ZSpell.CreateDuplicate(p.first(), p.first(), new MyLocation(p.game.RandomInt(50, p.game.map.Width - 50), p.game.RandomInt(50, p.game.map.Height - 50)), true);
     if (ZComponent.IsNull((ZComponent) duplicate))
@@ -432,6 +432,7 @@ public static class Armageddon
     duplicate.spells.Add(new SpellSlot(Inert.GetSpell(SpellEnum.Arcane_Flash)));
     duplicate.spells.Add(new SpellSlot(Inert.GetSpell(SpellEnum.Arcane_Sigil)));
     duplicate.controllable = false;
+    duplicate.parent?.panelPlayer?.SetSummons(duplicate.parent);
     duplicate.effectors.Add(new ZEffector()
     {
       game = p.game,
@@ -440,7 +441,7 @@ public static class Armageddon
       MaxTurnsAlive = -1,
       whoSummoned = duplicate
     });
-    ZSpell.FireApparition(duplicate, true, false);
+    ZSpell.FireApparition(duplicate, false, false);
     p.map.ServerBitBlt(13, (int) duplicate.position.x, (int) duplicate.position.y, true, true);
     ZSpell.ApplyExplosionForce(SpellEnum.Duplication, duplicate.world, duplicate.position, 0, Curve.None, 10, 75, (FixedInt) 0, DamageType.None, duplicate, duplicate.game.turn, Curve.Generic, (ISpellBridge) null, (ZCreature) null);
     if (!duplicate.game.isClient)

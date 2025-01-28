@@ -39,7 +39,7 @@ public class KnownServersList
 
   public static async Task<KnownServersList> GetServerList()
   {
-    using (UnityWebRequest webRequest = UnityWebRequest.Get("https://secure.arcanists2.com/ServerList.json"))
+    using (UnityWebRequest webRequest = UnityWebRequest.Get("https://secure.arcanists.com/ServerList.json"))
     {
       try
       {

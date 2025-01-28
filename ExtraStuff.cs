@@ -31,7 +31,7 @@ public class ExtraStuff
     if (!(obj is ExtraStuff))
       return base.Equals(obj);
     ExtraStuff extraStuff = obj as ExtraStuff;
-    return this.spellbookWinningStreak_Maps == extraStuff.spellbookWinningStreak_Maps && this.spellbookWinningStreak == extraStuff.spellbookWinningStreak && Global.CompareByteArrays(this.lastSpellBook, extraStuff.lastSpellBook);
+    return this.spellbookWinningStreak_Maps == extraStuff.spellbookWinningStreak_Maps && this.spellbookWinningStreak == extraStuff.spellbookWinningStreak && (Global.CompareByteArrays(this.lastSpellBook, extraStuff.lastSpellBook) && this.outfitLocked == extraStuff.outfitLocked);
   }
 
   public override int GetHashCode()
@@ -98,4 +98,7 @@ public class ExtraStuff
         this._lastSpellBook = value;
     }
   }
+
+  [JsonProperty("d")]
+  public bool outfitLocked { get; set; }
 }

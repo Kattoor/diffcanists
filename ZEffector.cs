@@ -617,6 +617,7 @@ public class ZEffector : ZComponent
           this.infector.isMindControlled = false;
           this.infector.SwitchTeams(this.whoSummoned.parent, false);
           this.infector.game.NextTurn(this.infector);
+          this.infector.game.NextTurn2(this.infector);
         }
       }
       else if (this.type == EffectorType.WaterWalking)
@@ -1167,6 +1168,10 @@ public class ZEffector : ZComponent
           break;
         case EffectorType.AutumnLeaves:
           this.VisualUpdate();
+          ZCreature c = this.map.PhysicsCollideCreatureCircle(this.whoSummoned, (int) this.collider.position.x, (int) this.collider.position.y, this.collider.radius, Inert.mask_movement_NoEffector | Inert.mask_Phantom);
+          if (!((ZComponent) c != (object) null))
+            break;
+          this.EffectCreature(c, true);
           break;
         case EffectorType.Grove_Renewal:
           this.active = false;
@@ -1374,7 +1379,7 @@ public class ZEffector : ZComponent
           int y5 = (int) this.position.y;
           for (int index = 0; index < 100; ++index)
           {
-            if (num7 >= 15 || ZComponent.IsNull((ZComponent) this.whoSummoned) || (this.whoSummoned.parent == null || (ZComponent) this.whoSummoned.parent.first() == (object) null))
+            if (num7 >= this.variable || ZComponent.IsNull((ZComponent) this.whoSummoned) || (this.whoSummoned.parent == null || (ZComponent) this.whoSummoned.parent.first() == (object) null))
               return;
             int num8 = this.game.RandomInt(-75, 75);
             int num9 = y5 + this.game.RandomInt(-91, 91);
@@ -1400,7 +1405,8 @@ public class ZEffector : ZComponent
             this.SetNull();
             break;
           }
-          ZSpell.FirePyramidStrike(Inert.GetSpell(SpellEnum.Pyramid_Strike), this.whoSummoned);
+          for (int index = 0; index < this.variable; ++index)
+            ZSpell.FirePyramidStrike(Inert.GetSpell(SpellEnum.Pyramid_Strike), this.whoSummoned);
           break;
         case EffectorType.Sand_Mite_Embeded:
           this.active = false;

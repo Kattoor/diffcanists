@@ -2351,8 +2351,6 @@ label_49:
         }
         if (dt == DamageType.Sand)
         {
-          if ((this.spellEnum == SpellEnum.Monolith || this.spellEnum == SpellEnum.Pyramid) && ((ZComponent) enemy != (object) null && enemy.parent == this.parent))
-            return 0;
           if (this.curSandTurn != this.game.everIncreasingVariable)
           {
             this.curSandTurn = this.game.everIncreasingVariable;
@@ -2383,16 +2381,16 @@ label_49:
                 {
                   ZPerson parent = this.parent;
                   if ((parent != null ? (!parent.yourTurn ? 1 : 0) : 0) == 0 && this.game.serverState.busy != ServerState.Busy.No && (this.game.serverState.busy != ServerState.Busy.Moving && this.game.serverState.busy != ServerState.Busy.Moving_NoCountdown) && this.game.serverState.busy != ServerState.Busy.Between_Turns)
-                    goto label_170;
+                    goto label_168;
                 }
                 if (TurnCreated < this.turnProtectionShieldCast)
-                  goto label_170;
+                  goto label_168;
               }
               else
-                goto label_170;
+                goto label_168;
             }
             this.OnStunned();
-label_170:
+label_168:
             this.UpdateHealthTxt();
             enemy?.achievementParent?.awards.DealtDamge(enemy, this, damage, hitBySpell, spellRef);
             return 0;
@@ -3332,7 +3330,7 @@ label_4:
       }
       if (state == ZCreature.DKMoveState.Walk)
       {
-        a = ((FixedInt.Create(360) - (Inert.AngleOfVelocity(MyLocation.down) - FixedInt.Create(90))) * FixedInt.ThreeSixtyBy1 * zcreature.zb.Count - zcreature.radius).ToInt();
+        a = ((FixedInt.Create(360) - (Inert.AngleOfVelocity(walkvelocity) - FixedInt.Create(90))) * FixedInt.ThreeSixtyBy1 * zcreature.zb.Count - zcreature.radius).ToInt();
         if (a < 0)
           a += zcreature.zb.Count;
         state = ZCreature.DKMoveState.Jump;

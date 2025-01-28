@@ -303,7 +303,7 @@ label_4:
                 if (zspellLeaf.velocity.y > 0)
                 {
                   zspellLeaf.velocity.y = (FixedInt) -5;
-                  goto label_53;
+                  goto label_54;
                 }
                 else
                 {
@@ -334,7 +334,7 @@ label_4:
                   }
                 }
               }
-              else
+              else if (zspellLeaf.effector.active)
               {
                 ZCreature zcreature = zspellLeaf.map.PhysicsCollideCreature(zspellLeaf.toCollideCheck, num2 + zspellLeaf.zb[index2].x, num3 + zspellLeaf.zb[index2].y, 0);
                 if ((ZComponent) zcreature != (object) null && typeof (ZCreatureThorn) != zcreature.GetType() && zcreature.type != CreatureType.Tree)
@@ -359,7 +359,7 @@ label_4:
                 else if (zspellLeaf.velocity.y > 0)
                 {
                   zspellLeaf.velocity.y = (FixedInt) -5;
-                  goto label_53;
+                  goto label_54;
                 }
                 else
                 {
@@ -394,7 +394,7 @@ label_4:
         }
       }
       zspellLeaf.position = zspellLeaf.position + zspellLeaf.velocity;
-label_53:
+label_54:
       if (zspellLeaf.position.y < zspellLeaf.radius)
       {
         zspellLeaf.moving = (IEnumerator<float>) null;

@@ -16,13 +16,13 @@ namespace Hazel.Websocket
     private CancellationTokenSource cancellation;
     private Uri uri;
 
-    public event Action Connected;
+    public event System.Action Connected;
 
-    public event Action<byte[]> ReceivedData;
+    public event System.Action<byte[]> ReceivedData;
 
-    public event Action Disconnected;
+    public event System.Action Disconnected;
 
-    public event Action<Exception> ReceivedError;
+    public event System.Action<Exception> ReceivedError;
 
     public bool Connecting { get; set; }
 
@@ -39,7 +39,7 @@ namespace Hazel.Websocket
       {
         client.uri = uri;
         client.Connecting = true;
-        await Task.Run(new Action(client.\u003CConnect\u003Eb__25_0));
+        await Task.Run(new System.Action(client.\u003CConnect\u003Eb__25_0));
       }
     }
 
@@ -62,7 +62,7 @@ namespace Hazel.Websocket
           CancellationToken token = client.cancellation.Token;
           client.IsConnected = true;
           client.Connecting = false;
-          UnityThreadHelper.Dispatcher.Dispatch2(new Action(client.\u003CRunThread\u003Eb__26_1));
+          UnityThreadHelper.Dispatcher.Dispatch2(new System.Action(client.\u003CRunThread\u003Eb__26_1));
           await client.ReceiveLoop(client.webSocket, token);
         }
       }
@@ -76,7 +76,7 @@ namespace Hazel.Websocket
       finally
       {
         client.Disconnect();
-        UnityThreadHelper.Dispatcher.Dispatch2(new Action(client.\u003CRunThread\u003Eb__26_0));
+        UnityThreadHelper.Dispatcher.Dispatch2(new System.Action(client.\u003CRunThread\u003Eb__26_0));
       }
     }
 
@@ -84,9 +84,9 @@ namespace Hazel.Websocket
     {
       if (this.ReceivedError == null)
         return;
-      UnityThreadHelper.Dispatcher.Dispatch2((Action) (() =>
+      UnityThreadHelper.Dispatcher.Dispatch2((System.Action) (() =>
       {
-        Action<Exception> receivedError = this.ReceivedError;
+        System.Action<Exception> receivedError = this.ReceivedError;
         if (receivedError == null)
           return;
         receivedError(ex);
@@ -108,9 +108,9 @@ namespace Hazel.Websocket
           {
             try
             {
-              UnityThreadHelper.Dispatcher.Dispatch2((Action) (() =>
+              UnityThreadHelper.Dispatcher.Dispatch2((System.Action) (() =>
               {
-                Action<byte[]> receivedData = client.ReceivedData;
+                System.Action<byte[]> receivedData = client.ReceivedData;
                 if (receivedData == null)
                   return;
                 receivedData(data);
@@ -149,7 +149,7 @@ label_8:;
         count += result.Count;
       }
       byte[] numArray = new byte[count];
-      Buffer.BlockCopy((Array) buffer, 0, (Array) numArray, 0, count);
+      System.Buffer.BlockCopy((Array) buffer, 0, (Array) numArray, 0, count);
       return numArray;
     }
 

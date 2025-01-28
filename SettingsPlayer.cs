@@ -22,6 +22,7 @@ public class SettingsPlayer
     (byte) 100,
     byte.MaxValue
   };
+  public static readonly SettingsPlayer DefaultOutfit = new SettingsPlayer();
   public static byte Achievement_GameOutfit = byte.MaxValue;
   public static ulong id_sno = 628590527973163009;
   public static int sno_body = 65;

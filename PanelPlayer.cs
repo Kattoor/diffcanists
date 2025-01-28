@@ -337,7 +337,7 @@ public class PanelPlayer : MonoBehaviour
 
   public void SetSummons(ZPerson p)
   {
-    int num1 = p.controlled.Count - 1;
+    int num1 = p.GetMinionCount() - 1;
     int num2 = 4 + (p.GetLevel(BookOf.Arcane) + 1) / 2 - p.stolenMinions.Count;
     if (num1 <= 0 && num2 >= 4)
       this.summonObj.SetActive(false);

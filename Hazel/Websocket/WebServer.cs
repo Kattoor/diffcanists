@@ -25,11 +25,11 @@ namespace Hazel.Websocket
     public bool _secure;
     public WebServer.SslConfiguration _sslConfig;
 
-    public event Action<WebConnectionOld> Connected;
+    public event System.Action<WebConnectionOld> Connected;
 
-    public event Action<WebConnectionOld> Disconnected;
+    public event System.Action<WebConnectionOld> Disconnected;
 
-    public event Action<int, Exception> ReceivedError;
+    public event System.Action<int, Exception> ReceivedError;
 
     public static int NextConnectionId()
     {
@@ -71,7 +71,7 @@ namespace Hazel.Websocket
       }
       catch (Exception ex)
       {
-        Action<int, Exception> receivedError = this.ReceivedError;
+        System.Action<int, Exception> receivedError = this.ReceivedError;
         if (receivedError == null)
           return;
         receivedError(0, ex);
@@ -106,7 +106,7 @@ namespace Hazel.Websocket
       }
       catch (Exception ex)
       {
-        Action<int, Exception> receivedError = webServer.ReceivedError;
+        System.Action<int, Exception> receivedError = webServer.ReceivedError;
         if (receivedError == null)
           return;
         receivedError(0, ex);
@@ -120,7 +120,7 @@ namespace Hazel.Websocket
         }
         catch (Exception ex)
         {
-          Action<int, Exception> receivedError = webServer.ReceivedError;
+          System.Action<int, Exception> receivedError = webServer.ReceivedError;
           if (receivedError != null)
             receivedError(0, ex);
         }
@@ -147,7 +147,7 @@ namespace Hazel.Websocket
       byte[] buffer = new byte[262144];
       try
       {
-        Action<WebConnectionOld> connected = this.Connected;
+        System.Action<WebConnectionOld> connected = this.Connected;
         if (connected != null)
           connected(con);
         while (true)
@@ -165,7 +165,7 @@ namespace Hazel.Websocket
               }
               catch (Exception ex)
               {
-                Action<int, Exception> receivedError = this.ReceivedError;
+                System.Action<int, Exception> receivedError = this.ReceivedError;
                 if (receivedError != null)
                   receivedError(connectionId, ex);
               }
@@ -181,7 +181,7 @@ label_2:;
       }
       catch (Exception ex)
       {
-        Action<int, Exception> receivedError = this.ReceivedError;
+        System.Action<int, Exception> receivedError = this.ReceivedError;
         if (receivedError == null)
           return;
         receivedError(connectionId, ex);
@@ -190,7 +190,7 @@ label_2:;
       {
         con.Connected = false;
         this.clients.Remove(connectionId);
-        Action<WebConnectionOld> disconnected = this.Disconnected;
+        System.Action<WebConnectionOld> disconnected = this.Disconnected;
         if (disconnected != null)
           disconnected(con);
       }
@@ -209,7 +209,7 @@ label_2:;
         if (count >= 262144)
         {
           await webSocket.CloseAsync(WebSocketCloseStatus.MessageTooBig, string.Format("Maximum message size: {0} bytes.", (object) 262144), CancellationToken.None);
-          Action<int, Exception> receivedError = this.ReceivedError;
+          System.Action<int, Exception> receivedError = this.ReceivedError;
           if (receivedError != null)
             receivedError(connectionId, (Exception) new WebSocketException(WebSocketError.HeaderError));
           return new byte[0];
@@ -218,7 +218,7 @@ label_2:;
         count += result.Count;
       }
       byte[] numArray = new byte[count];
-      Buffer.BlockCopy((Array) buffer, 0, (Array) numArray, 0, count);
+      System.Buffer.BlockCopy((Array) buffer, 0, (Array) numArray, 0, count);
       return numArray;
     }
 
@@ -250,7 +250,7 @@ label_2:;
         {
           if (this.clients.ContainsKey(connectionId))
           {
-            Action<int, Exception> receivedError = this.ReceivedError;
+            System.Action<int, Exception> receivedError = this.ReceivedError;
             if (receivedError != null)
               receivedError(connectionId, ex);
           }
@@ -259,7 +259,7 @@ label_2:;
       }
       else
       {
-        Action<int, Exception> receivedError = this.ReceivedError;
+        System.Action<int, Exception> receivedError = this.ReceivedError;
         if (receivedError == null)
           return;
         receivedError(connectionId, (Exception) new SocketException(10057));
@@ -280,7 +280,7 @@ label_2:;
       {
         if (this.clients.ContainsKey(client.id))
         {
-          Action<int, Exception> receivedError = this.ReceivedError;
+          System.Action<int, Exception> receivedError = this.ReceivedError;
           if (receivedError != null)
             receivedError(client.id, ex);
         }
@@ -296,7 +296,7 @@ label_2:;
       webConnectionOld.Connected = false;
       this.clients.Remove(connectionId);
       webConnectionOld.socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);
-      Action<WebConnectionOld> disconnected = this.Disconnected;
+      System.Action<WebConnectionOld> disconnected = this.Disconnected;
       if (disconnected != null)
         disconnected(webConnectionOld);
       return true;

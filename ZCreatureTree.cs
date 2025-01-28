@@ -633,6 +633,8 @@ public class ZCreatureTree : ZCreature
       return 0;
     if (dt == DamageType.Sand)
     {
+      if (this.baseTree.isStructure && (ZComponent) enemy != (object) null && enemy.parent == this.parent)
+        return 0;
       if (this.curSandTurn != this.game.everIncreasingVariable)
       {
         this.curSandTurn = this.game.everIncreasingVariable;

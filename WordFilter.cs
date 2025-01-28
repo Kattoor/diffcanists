@@ -53,7 +53,7 @@ public static class WordFilter
     },
     {
       "#website",
-      "<link=\"" + Server.websiteLink + "\"><u>Arcanists 2</u></link>"
+      "<link=\"" + Server.websiteLink + "\"><u>Arcanists</u></link>"
     },
     {
       "#wiki",

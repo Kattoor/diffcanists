@@ -930,11 +930,24 @@ public class ClientResources : MonoBehaviour
         GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(Inert.Instance._characterRightHand[(int) s.indexRightHand].archObject, c.rightArm.transform.position + new Vector3(0.0f, 0.0f), Quaternion.identity, c.rightArm.transform);
         p.archMageStaffs.Add(gameObject);
       }
+      else if (s.indexRightHand == (byte) 200)
+      {
+        GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(Inert.Instance._characterRightHand[(int) s.indexRightHand].archObject, c.rightArm.transform.position + new Vector3(0.0f, 0.0f), Quaternion.identity, c.rightArm.transform);
+        AnimateRepeat component = gameObject.GetComponent<AnimateRepeat>();
+        ClientResources.ChangeSprites(c.rightArm, component, component.sprites, s, Outfit.RightHand);
+        component.deleteOnDestroy = true;
+        p.archMageStaffs.Add(gameObject);
+      }
     }
     if (s.indexHead == (byte) 110)
     {
       GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(Inert.Instance._characterHeads[(int) s.indexHead].archObject, c.head.transform.position + new Vector3(0.0f, 0.0f), Quaternion.identity, c.head.transform);
       p.archMageStaffs.Add(gameObject);
+    }
+    else if (s.indexHead == (byte) 119)
+    {
+      Sprite[] sprites = Inert.Instance._characterHeads[(int) s.indexHead].archObject.GetComponent<AnimateRepeat>().sprites;
+      c.head.sprite = s.coloring.Texture(sprites[(int) s.indexMouth % sprites.Length], Outfit.Head);
     }
     if (s.indexBeard == (byte) 98 || s.indexBeard2 == (byte) 98 || s.indexBeard3 == (byte) 98)
     {

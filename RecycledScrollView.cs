@@ -270,7 +270,7 @@ public class RecycledScrollView : MonoBehaviour
       this._chatScrollbar.verticalNormalizedPosition = 0.0f;
       this.Render();
     }
-    if (!((UnityEngine.Object) HUD.instance != (UnityEngine.Object) null) || ChatBox.Instance.Active)
+    if (!((UnityEngine.Object) HUD.instance != (UnityEngine.Object) null) || !((UnityEngine.Object) ChatBox.Instance != (UnityEngine.Object) null) || ChatBox.Instance.Active)
       return;
     switch (ChatBox.showFade)
     {
@@ -306,7 +306,7 @@ public class RecycledScrollView : MonoBehaviour
     contain.obj = obj;
     contain.msg = string.IsNullOrEmpty(name) || contentType != ContentType.STRING ? msg : name + ": " + msg;
     this.Add(contain);
-    if (!((UnityEngine.Object) HUD.instance != (UnityEngine.Object) null) || ChatBox.Instance.Active)
+    if (!((UnityEngine.Object) HUD.instance != (UnityEngine.Object) null) || !((UnityEngine.Object) ChatBox.Instance != (UnityEngine.Object) null) || ChatBox.Instance.Active)
       return;
     switch (ChatBox.showFade)
     {

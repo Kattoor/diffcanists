@@ -862,7 +862,7 @@ label_57:
       p.waterMultipler = 1;
     if (p.inactiveTurns < 3 || !this.isServer || this.isClient)
       return;
-    this.Resign(p, false);
+    this.Resign(p, true);
   }
 
   public void Resign(ZPerson p, bool force)
@@ -1341,6 +1341,8 @@ label_46:
     }
     for (int index = 0; index < this.tempList.Count; ++index)
       this.NextTurn(this.tempList[index]);
+    for (int index = 0; index < this.tempList.Count; ++index)
+      this.NextTurn2(this.tempList[index]);
     for (int index = this.globalEffectors.Count - 1; index >= 0; --index)
     {
       if (ZComponent.IsNull((ZComponent) this.globalEffectors[index]) || this.globalEffectors[index].dead || ZComponent.IsNull((ZComponent) this.globalEffectors[index].whoSummoned) && p.controlled.Count > 0 && this.globalEffectors[index].KillsHost())
@@ -1388,6 +1390,41 @@ label_46:
     if (this.resigned.Count <= 0)
       return;
     this.RemoveResigned();
+  }
+
+  public void NextTurn2(ZCreature x)
+  {
+    if (ZComponent.IsNull((ZComponent) x) || x.isDead)
+      return;
+    int count = x.effectors.Count;
+    for (int index = 0; index < count && index < x.effectors.Count; ++index)
+    {
+      if (ZComponent.IsNull((ZComponent) x.effectors[index]) || x.effectors[index].dead)
+      {
+        x.effectors.RemoveAt(index);
+        --index;
+        --count;
+      }
+      else
+      {
+        ZEffector effector = x.effectors[index];
+        x.effectors[index].TurnPassed(index, false, false);
+        if (ZComponent.IsNull((ZComponent) effector))
+        {
+          if (index < x.effectors.Count && (ZComponent) x.effectors[index] == (object) effector)
+            x.effectors.RemoveAt(index);
+          --index;
+          --count;
+        }
+      }
+    }
+    for (int index = x.destroyableEffectors.Count - 1; index >= 0; --index)
+    {
+      if (ZComponent.IsNull((ZComponent) x.destroyableEffectors[index]))
+        x.destroyableEffectors.RemoveAt(index);
+      else
+        x.destroyableEffectors[index].TurnPassed(index, true, false);
+    }
   }
 
   public void NextTurn(ZCreature x)
@@ -1484,35 +1521,6 @@ label_46:
       if (x.health > x.maxHealth)
         x.health = x.maxHealth;
       x.OnNextTurn();
-    }
-    int count = x.effectors.Count;
-    for (int index = 0; index < count && index < x.effectors.Count; ++index)
-    {
-      if (ZComponent.IsNull((ZComponent) x.effectors[index]) || x.effectors[index].dead)
-      {
-        x.effectors.RemoveAt(index);
-        --index;
-        --count;
-      }
-      else
-      {
-        ZEffector effector = x.effectors[index];
-        x.effectors[index].TurnPassed(index, false, false);
-        if (ZComponent.IsNull((ZComponent) effector))
-        {
-          if (index < x.effectors.Count && (ZComponent) x.effectors[index] == (object) effector)
-            x.effectors.RemoveAt(index);
-          --index;
-          --count;
-        }
-      }
-    }
-    for (int index = x.destroyableEffectors.Count - 1; index >= 0; --index)
-    {
-      if (ZComponent.IsNull((ZComponent) x.destroyableEffectors[index]))
-        x.destroyableEffectors.RemoveAt(index);
-      else
-        x.destroyableEffectors[index].TurnPassed(index, true, false);
     }
     if (x.halfHealing > 0)
       --x.halfHealing;
@@ -1840,7 +1848,7 @@ label_46:
             {
               try
               {
-                int index2 = zgame.GetTeam(zgame.players[(int) zgame.serverState.playersTurn].team).FindIndex(new Predicate<ZPerson>(zgame.\u003CBidUpdate\u003Eb__195_1));
+                int index2 = zgame.GetTeam(zgame.players[(int) zgame.serverState.playersTurn].team).FindIndex(new Predicate<ZPerson>(zgame.\u003CBidUpdate\u003Eb__196_1));
                 if (index2 > 0)
                 {
                   for (int index3 = 0; index3 < zgame.teamIndex.Length; ++index3)
@@ -2712,8 +2720,11 @@ label_46:
   {
     if (this.serverState.busy == ServerState.Busy.Ended)
       return;
+    Debug.LogError((object) err);
     if (this.isSpectator)
       HUD.instance?.OnSpectatorShouldResync(err);
+    if (this.isSandbox && this.serverState.busy == ServerState.Busy.Waiting_For_Server_Reply)
+      this.serverState.busy = ServerState.Busy.No;
     if (this.isMulti && this.GetTeam(p.team).Count > 0)
       p = this.GetTeam(p.team)[0];
     if (!p.Connected && this.isServer)
@@ -5191,7 +5202,7 @@ label_158:
                 this.SendAllMessage(b);
                 break;
               case 197:
-                if (!p.account.cosmetics.achievements[(int) SettingsPlayer.Achievement_GameOutfit] || !p.yourTurn || p.timesOutfitChanged >= 10)
+                if (p.account.extraStuff.outfitLocked || !p.account.cosmetics.achievements[(int) SettingsPlayer.Achievement_GameOutfit] || (!p.yourTurn || p.timesOutfitChanged >= 10))
                   break;
                 SettingsPlayer settingsPlayer3 = new SettingsPlayer();
                 settingsPlayer3.Deserialize(myBinaryReader);
@@ -5627,7 +5638,7 @@ label_158:
     bool nextTurn = false;
     game.replayPastTimeLine = 0;
     HUD.instance.replayTimeline.MaxSize = game.timelineList.Count;
-    HUD.instance.replayTimeline._bar.onValueChanged.AddListener(new UnityAction<float>(game.\u003CPushReplay\u003Eb__262_0));
+    HUD.instance.replayTimeline._bar.onValueChanged.AddListener(new UnityAction<float>(game.\u003CPushReplay\u003Eb__263_0));
     game.replayPaused = false;
     Time.timeScale = 1f;
     ChatBox.Instance?.NewChatMsg("", "Press F2 to take control right away", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
@@ -5653,6 +5664,10 @@ label_158:
       }
       else if (!game.resyncing && (Input.GetKey(KeyCode.F4) && game.timeline[game.curReplayIndex][0] == (byte) 220 || (Input.GetKeyDown(KeyCode.F2) || Input.GetKey(KeyCode.F3) & nextTurn)))
       {
+        game.random = new IsaacCipher(new int[1]
+        {
+          new System.Random().Next()
+        });
         game.isSpectator = false;
         game.isSandbox = true;
         game.isServer = true;
@@ -5685,6 +5700,7 @@ label_158:
         HUD.instance.FindPlayer();
         game.serverUpdate = Timing.RunCoroutine(game.FixedUpdate(), Segment.Update);
         HUD.instance.buttonHideChat.gameObject.SetActive(false);
+        game.SetControlReady();
         Controller instance = Controller.Instance;
         if (instance == null)
         {
@@ -5755,6 +5771,14 @@ label_158:
       if (!ChatBox.Instance.Active)
         ChatBox.Instance.SetActive(true);
     }
+  }
+
+  public void SetControlReady()
+  {
+    this.random = new IsaacCipher(new int[1]
+    {
+      new System.Random().Next()
+    });
   }
 
   public void init_Resync(bool force = false)

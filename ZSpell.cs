@@ -2920,7 +2920,7 @@ label_7:
 
   public static void FireFlight(Spell theSpell, ZCreature c, bool shiningPower = false)
   {
-    if (c.shiningPower || c.phantom)
+    if (c.shiningPower || c.phantom || (ZComponent) c.tower != (object) null)
       return;
     c.flightSpell = theSpell.spellEnum;
     c.tempFlight = theSpell.spellEnum == SpellEnum.Whistling_Winds || theSpell.spellEnum == SpellEnum.Vampire_Bat;
@@ -3024,6 +3024,8 @@ label_7:
     FixedInt rot_z,
     FixedInt power)
   {
+    if (c.flying)
+      return;
     if ((ZComponent) c.tower != (object) null)
       c.DestroyTower(false);
     if (c.game.isClient && !c.game.resyncing)
@@ -7658,26 +7660,39 @@ label_37:
   {
     if (cre.isPawn)
       cre = cre.parent.first();
-    ZCreature creature1 = ZCreatureCreate.CreateCreature(cre.parent, theSpell.toSummon.GetComponent<Creature>(), target.ToSinglePrecision(), Quaternion.identity, cre.game.GetMapTransform(), true);
-    creature1.game = cre.game;
-    creature1.position = target;
-    creature1.team = cre.team;
-    ZEffector auraOfDecay = creature1.auraOfDecay;
-    auraOfDecay.game = creature1.game;
+    ZEffector zeffector = cre.effectors.Find((Predicate<ZEffector>) (z => z.type == (theSpell.spellEnum == SpellEnum.Monolith ? EffectorType.Monolith : EffectorType.Pyramid)));
+    ZCreature c = (ZComponent) zeffector != (object) null ? zeffector.collider.creature : ZCreatureCreate.CreateCreature(cre.parent, theSpell.toSummon.GetComponent<Creature>(), target.ToSinglePrecision(), Quaternion.identity, cre.game.GetMapTransform(), true);
+    MyLocation position = c.position;
+    c.game = cre.game;
+    c.position = target;
+    c.team = cre.team;
+    ZEffector auraOfDecay = c.auraOfDecay;
+    auraOfDecay.game = c.game;
     auraOfDecay.active = false;
-    auraOfDecay.whoSummoned = creature1;
-    auraOfDecay.collider = creature1.collider;
+    auraOfDecay.whoSummoned = c;
+    auraOfDecay.collider = c.collider;
     auraOfDecay.collider.world = auraOfDecay.world;
     auraOfDecay.collider.Initialize(target, cre.game.world);
-    auraOfDecay.collider.creature = creature1;
-    creature1.parent = cre.parent;
-    auraOfDecay.variable = cre.parent.localTurn;
-    cre.effectors.Add(auraOfDecay);
-    if (theSpell.book == BookOf.Sands)
+    auraOfDecay.collider.creature = c;
+    c.parent = cre.parent;
+    if ((ZComponent) zeffector == (object) null)
+      cre.effectors.Add(auraOfDecay);
+    else if (c.game.isClient && (UnityEngine.Object) HUD.instance != (UnityEngine.Object) null)
+      HUD.instance.textSpellCasted.text = HUD.instance.textSpellCasted.text.Replace("Constructing", "Upgrading");
+    if (theSpell.book == BookOf.Sands && (ZComponent) zeffector == (object) null)
     {
-      creature1.health += cre.familiarLevelSand;
-      creature1.maxHealth += cre.familiarLevelSand;
+      c.health += cre.familiarLevelSand;
+      c.maxHealth += cre.familiarLevelSand;
     }
+    else if ((ZComponent) zeffector != (object) null)
+    {
+      c.game.CreatureMoveSurroundings(position, c.radius, c.collider, false);
+      c.health = c.maxHealth;
+    }
+    if (theSpell.spellEnum == SpellEnum.Monolith)
+      auraOfDecay.variable += auraOfDecay.variable < 10 ? 15 : 10;
+    else if (theSpell.spellEnum == SpellEnum.Pyramid)
+      ++auraOfDecay.variable;
     List<ZMyCollider> zmyColliderList = cre.game.world.OverlapColliderAll(auraOfDecay.collider, Inert.mask_entity_movement | Inert.mask_Phantom);
     if (zmyColliderList.Count > 0)
     {
@@ -7686,21 +7701,21 @@ label_37:
         if (zmyColliderList[index].gameObjectLayer == 9)
         {
           ZEffector effector = zmyColliderList[index].effector;
-          effector.game = creature1.game;
+          effector.game = c.game;
           if (!ZComponent.IsNull((ZComponent) effector) && effector.active)
-            effector.EffectCreature(creature1, false);
+            effector.EffectCreature(c, false);
         }
         else if (zmyColliderList[index].gameObjectLayer == 8 || zmyColliderList[index].gameObjectLayer == 16)
         {
-          ZCreature creature2 = zmyColliderList[index].creature;
-          if (!ZComponent.IsNull((ZComponent) creature2))
+          ZCreature creature = zmyColliderList[index].creature;
+          if (!ZComponent.IsNull((ZComponent) creature))
           {
-            if (!ZComponent.IsNull((ZComponent) creature2.stormShield) && creature2.stormShield.active)
-              creature2.stormShield.EffectCreature(creature2, false);
-            if (!ZComponent.IsNull((ZComponent) creature2.auraOfDecay) && creature2.auraOfDecay.active)
-              creature2.auraOfDecay.EffectCreature(creature2, false);
-            if (!creature2.isMoving && creature2.ShouldFall(true, false))
-              creature2.Fall(false);
+            if (!ZComponent.IsNull((ZComponent) creature.stormShield) && creature.stormShield.active)
+              creature.stormShield.EffectCreature(creature, false);
+            if (!ZComponent.IsNull((ZComponent) creature.auraOfDecay) && creature.auraOfDecay.active)
+              creature.auraOfDecay.EffectCreature(creature, false);
+            if (!creature.isMoving && creature.ShouldFall(true, false))
+              creature.Fall(false);
           }
           else if ((ZComponent) zmyColliderList[index].spell != (object) null && !zmyColliderList[index].spell.isMoving && zmyColliderList[index].spell.ShouldSpellFall(false))
             zmyColliderList[index].spell.SpellFall();
@@ -7726,8 +7741,8 @@ label_37:
         }
       }
     }
-    creature1.game.CreatureMoveSurroundings(creature1.position, creature1.radius, creature1.collider, false);
-    creature1.game.forceRysncPause = true;
+    c.game.CreatureMoveSurroundings(c.position, c.radius, c.collider, false);
+    c.game.forceRysncPause = true;
   }
 
   public static void FireBlit(Spell theSpell, ZCreature cre, MyLocation target, SpellSlot slot = null)

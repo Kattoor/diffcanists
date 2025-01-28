@@ -41,7 +41,7 @@ public class WebConnection : Connection
   {
   }
 
-  public event Action<Exception> ReceivedError;
+  public event System.Action<Exception> ReceivedError;
 
   public void SetDisconnected()
   {
@@ -61,7 +61,7 @@ public class WebConnection : Connection
       webConnection.State = ConnectionState.Connecting;
       webConnection.stopwatch = new Stopwatch();
       webConnection.stopwatch.Start();
-      await Task.Run(new Action(webConnection.\u003CConnect\u003Eb__15_0));
+      await Task.Run(new System.Action(webConnection.\u003CConnect\u003Eb__15_0));
     }
   }
 
@@ -93,7 +93,7 @@ public class WebConnection : Connection
       {
         CancellationToken token = webConnection.cancellation.Token;
         webConnection.State = ConnectionState.Connected;
-        UnityThreadHelper.Dispatcher.Dispatch2((Action) (() => {}));
+        UnityThreadHelper.Dispatcher.Dispatch2((System.Action) (() => {}));
         await webConnection.ReceiveLoop(webConnection.webSocket, token);
       }
     }
@@ -107,7 +107,7 @@ public class WebConnection : Connection
     finally
     {
       webConnection.Disconnect();
-      UnityThreadHelper.Dispatcher.Dispatch2(new Action(webConnection.\u003CRunThread\u003Eb__17_0));
+      UnityThreadHelper.Dispatcher.Dispatch2(new System.Action(webConnection.\u003CRunThread\u003Eb__17_0));
     }
   }
 
@@ -115,9 +115,9 @@ public class WebConnection : Connection
   {
     if (this.ReceivedError == null)
       return;
-    UnityThreadHelper.Dispatcher.Dispatch2((Action) (() =>
+    UnityThreadHelper.Dispatcher.Dispatch2((System.Action) (() =>
     {
-      Action<Exception> receivedError = this.ReceivedError;
+      System.Action<Exception> receivedError = this.ReceivedError;
       if (receivedError == null)
         return;
       receivedError(ex);
@@ -139,7 +139,7 @@ public class WebConnection : Connection
         {
           try
           {
-            UnityThreadHelper.Dispatcher.Dispatch2((Action) (() => webConnection.InvokeDataReceived(data, SendOption.Reliable)));
+            UnityThreadHelper.Dispatcher.Dispatch2((System.Action) (() => webConnection.InvokeDataReceived(data, SendOption.Reliable)));
           }
           catch (Exception ex)
           {
@@ -174,7 +174,7 @@ label_8:;
       count += result.Count;
     }
     byte[] numArray = new byte[count];
-    Buffer.BlockCopy((Array) buffer, 0, (Array) numArray, 0, count);
+    System.Buffer.BlockCopy((Array) buffer, 0, (Array) numArray, 0, count);
     return numArray;
   }
 

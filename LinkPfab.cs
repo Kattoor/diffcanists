@@ -28,17 +28,17 @@ public class LinkPfab : MonoBehaviour
 
   public void ClickDiscordLink()
   {
-    this.ContextMenu("Arcanists 2 Discord", (Action) (() => Global.OpenURL(Server.discordLink)));
+    this.ContextMenu("Arcanists Discord", (Action) (() => Global.OpenURL(Server.discordLink)));
   }
 
   public void ClicWebsiteLink()
   {
-    this.ContextMenu("Arcanists 2 Website", (Action) (() => Global.OpenURL(Server.websiteLink)));
+    this.ContextMenu("Arcanists Website", (Action) (() => Global.OpenURL(Server.websiteLink)));
   }
 
   public void ClicWikiLink()
   {
-    this.ContextMenu("Arcanists 2 wiki", (Action) (() => Global.OpenURL(Server.wikiLink)));
+    this.ContextMenu("Arcanists wiki", (Action) (() => Global.OpenURL(Server.wikiLink)));
   }
 
   public void ClickRules()

@@ -454,7 +454,7 @@ public class ClickSpell : MonoBehaviour
     {
       if (spell2.bookOf != BookOf.Arcane && spell2.bookOf != BookOf.OverLight && !spell1.isPresent || spell2.type == CastType.Tower)
       {
-        this.spellButtons[i].error = spell2.type == CastType.Tower ? 124 : 102;
+        this.spellButtons[i].error = spell2.type == CastType.Tower ? 140 : 102;
         maxedSummons = true;
         uses = 0;
         num4 = 0;
@@ -577,7 +577,7 @@ public class ClickSpell : MonoBehaviour
       case 134:
         return "Only your Arcanist can cast this spell";
       case 135:
-        return "Cannot cast while trdapped inside a jar";
+        return "Cannot cast while trapped inside a jar";
       case 136:
         return "Already has a similar spell active";
       case 137:
@@ -586,6 +586,8 @@ public class ClickSpell : MonoBehaviour
         return "Can only have one of each structure at a time";
       case 139:
         return "Can only be cast while in a tower";
+      case 140:
+        return "Cannot tower while in Angel form";
       default:
         return "";
     }
@@ -685,51 +687,42 @@ label_44:
             return 3;
           return !((ZComponent) c.rider != (object) null) ? 126 : 125;
         }
+        if (s == SpellEnum.Faiere_Jump && (ZComponent) c.tower != (object) null)
+          return 1;
         if (s == SpellEnum.Protection_Shield && c.shield >= 150 && !c.game.originalSpellsOnly)
           return 131;
         if (s == SpellEnum.Retribution && c.retribution > 0)
           return 132;
-        switch (s)
+        if (s == SpellEnum.Sandbag)
         {
-          case SpellEnum.Monolith:
-            if ((ZComponent) c.effectors.Find((Predicate<ZEffector>) (z => z.type == EffectorType.Monolith)) != (object) null)
-              return 138;
-            break;
-          case SpellEnum.Sandbag:
-            if ((ZComponent) c.tower == (object) null && c.GetSpellSlot(SpellEnum.Sand_Castle) == null)
-              return 139;
-            break;
-          case SpellEnum.Pyramid:
-            if ((ZComponent) c.effectors.Find((Predicate<ZEffector>) (z => z.type == EffectorType.Pyramid)) != (object) null)
-              return 138;
-            break;
-          default:
-            if (theSpell.MaxMinionCount > 0)
+          if ((ZComponent) c.tower == (object) null && c.GetSpellSlot(SpellEnum.Sand_Castle) == null)
+            return 139;
+          break;
+        }
+        if (theSpell.MaxMinionCount > 0)
+        {
+          int num = 0;
+          using (List<ZCreature>.Enumerator enumerator = c.parent.controlled.GetEnumerator())
+          {
+            while (enumerator.MoveNext())
             {
-              int num = 0;
-              using (List<ZCreature>.Enumerator enumerator = c.parent.controlled.GetEnumerator())
+              ZCreature current = enumerator.Current;
+              if ((ZComponent) current != (object) null && current.spellEnum == s)
               {
-                while (enumerator.MoveNext())
-                {
-                  ZCreature current = enumerator.Current;
-                  if ((ZComponent) current != (object) null && current.spellEnum == s)
-                  {
-                    ++num;
-                    if (num >= theSpell.MaxMinionCount)
-                      return 133;
-                  }
-                }
-                break;
+                ++num;
+                if (num >= theSpell.MaxMinionCount)
+                  return 133;
               }
             }
-            else
-            {
-              if (s == SpellEnum.Storm_Shield && (ZComponent) c.stormShield != (object) null && c.stormShield.MaxTurnsAlive > 1000)
-                return 136;
-              break;
-            }
+            break;
+          }
         }
-        break;
+        else
+        {
+          if (s == SpellEnum.Storm_Shield && (ZComponent) c.stormShield != (object) null && c.stormShield.MaxTurnsAlive > 1000)
+            return 136;
+          break;
+        }
     }
     return 0;
   }

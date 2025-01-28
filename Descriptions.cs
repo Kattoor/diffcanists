@@ -2427,11 +2427,11 @@ public static class Descriptions
     },
     {
       "Monolith",
-      "Structure: 50 health\n{0}\nSpawns up to 15 health orbs each turn which can be picked up by anyone. Will not spawn more then 20 orbs in the general area, so make sure to pick them up each turn. Can only have one monolith built at a time and it cannot be built in terrain."
+      "Structure: 50 health\n{0}\nSpawns up to 15 health orbs each turn which can be picked up by anyone. Will not spawn more then 20 orbs in the general area, so make sure to pick them up each turn. Can only have one monolith built at a time. If you cast it again it will move the existing one and make it stronger. Cannot be built in terrain."
     },
     {
       "Pyramid",
-      "Structure: 75 health\n{0}\nAttacks the closest enemy with a beam of energy dealing up to 25 damage a turn. Can only have one pyramid built at a time and it must be built in terrain."
+      "Structure: 75 health\n{0}\nAttacks the closest enemy with a beam of energy dealing up to 25 damage a turn. Can only have one pyramid built at a time. If you cast it again it will move the existing one, heal it to full health and make it stronger. It must be built in terrain."
     },
     {
       "Sandbag",

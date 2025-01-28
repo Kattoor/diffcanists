@@ -1,17 +1,11 @@
 
 using HardShellStudios.InputManager;
 using UnityEngine;
-using UnityEngine.InputSystem.LowLevel;
 
 public static class MyInput
 {
   public static float cameraSpeed = 1f;
   public static float mouseSpeed = 1f;
-  private static (KeyCode key, MouseButton button)[] MouseKeys = new (KeyCode, MouseButton)[2]
-  {
-    (KeyCode.Joystick1Button0, MouseButton.Left),
-    (KeyCode.Joystick1Button1, MouseButton.Right)
-  };
   public const string prefCameraSpeed = "prefcameraspeed";
   public const string prefMouseSpeed = "prefmousespeed";
 
@@ -69,12 +63,5 @@ public static class MyInput
 
   public static void LoopControllerMouseEvents()
   {
-    for (int index = 0; index < MyInput.MouseKeys.Length; ++index)
-    {
-      if (Input.GetKeyDown(MyInput.MouseKeys[index].key))
-        SimulateMouse.Press(MyInput.MouseKeys[index].button);
-      if (Input.GetKeyUp(MyInput.MouseKeys[index].key))
-        SimulateMouse.Release(MyInput.MouseKeys[index].button);
-    }
   }
 }

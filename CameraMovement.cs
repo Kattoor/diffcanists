@@ -5,7 +5,6 @@ using MovementEffects;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 
 public class CameraMovement : MonoBehaviour
 {
@@ -224,11 +223,6 @@ public class CameraMovement : MonoBehaviour
 
   private void Update()
   {
-    float x = Input.GetAxis("Horizontal") * 10f;
-    float y = Input.GetAxis("Vertical") * 10f;
-    if ((double) x == 0.0 && (double) y == 0.0)
-      return;
-    Mouse.current.WarpCursorPosition((Vector2) (Input.mousePosition + new Vector3(x, y) * MyInput.mouseSpeed * Time.deltaTime * 100f));
   }
 
   public void LateUpdate()

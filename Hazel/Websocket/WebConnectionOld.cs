@@ -1,5 +1,4 @@
 
-using System;
 using System.Net.WebSockets;
 
 namespace Hazel.Websocket
@@ -14,7 +13,7 @@ namespace Hazel.Websocket
     public int id;
     public int messagesReceived;
 
-    public event Action<WebConnectionOld, byte[]> ReceivedData;
+    public event System.Action<WebConnectionOld, byte[]> ReceivedData;
 
     public WebConnectionOld(WebSocket ws, string e, int id)
     {
@@ -26,7 +25,7 @@ namespace Hazel.Websocket
 
     public void DataReceived(byte[] b)
     {
-      Action<WebConnectionOld, byte[]> receivedData = this.ReceivedData;
+      System.Action<WebConnectionOld, byte[]> receivedData = this.ReceivedData;
       if (receivedData == null)
         return;
       receivedData(this, b);

@@ -34,7 +34,7 @@ public class WebListener : ConnectionListener
     throw new NotImplementedException();
   }
 
-  public event Action<int, Exception> ReceivedError;
+  public event System.Action<int, Exception> ReceivedError;
 
   public static int NextConnectionId()
   {
@@ -79,7 +79,7 @@ public class WebListener : ConnectionListener
     }
     catch (Exception ex)
     {
-      Action<int, Exception> receivedError = w.ReceivedError;
+      System.Action<int, Exception> receivedError = w.ReceivedError;
       if (receivedError == null)
         return;
       receivedError(0, ex);
@@ -108,7 +108,7 @@ public class WebListener : ConnectionListener
     }
     catch (Exception ex)
     {
-      Action<int, Exception> receivedError = this.ReceivedError;
+      System.Action<int, Exception> receivedError = this.ReceivedError;
       if (receivedError == null)
         return;
       receivedError(0, ex);
@@ -122,7 +122,7 @@ public class WebListener : ConnectionListener
       }
       catch (Exception ex)
       {
-        Action<int, Exception> receivedError = this.ReceivedError;
+        System.Action<int, Exception> receivedError = this.ReceivedError;
         if (receivedError != null)
           receivedError(0, ex);
       }
@@ -155,7 +155,7 @@ public class WebListener : ConnectionListener
             }
             catch (Exception ex)
             {
-              Action<int, Exception> receivedError = webListener.ReceivedError;
+              System.Action<int, Exception> receivedError = webListener.ReceivedError;
               if (receivedError != null)
                 receivedError(connectionId, ex);
             }
@@ -171,7 +171,7 @@ label_2:;
     }
     catch (Exception ex)
     {
-      Action<int, Exception> receivedError = webListener.ReceivedError;
+      System.Action<int, Exception> receivedError = webListener.ReceivedError;
       if (receivedError == null)
         return;
       receivedError(connectionId, ex);
@@ -198,7 +198,7 @@ label_2:;
       if (count >= 1048576)
       {
         await webSocket.CloseAsync(WebSocketCloseStatus.MessageTooBig, string.Format("Maximum message size: {0} bytes.", (object) 1048576), CancellationToken.None);
-        Action<int, Exception> receivedError = this.ReceivedError;
+        System.Action<int, Exception> receivedError = this.ReceivedError;
         if (receivedError != null)
           receivedError(connectionId, (Exception) new WebSocketException(WebSocketError.HeaderError));
         return new byte[0];
@@ -207,7 +207,7 @@ label_2:;
       count += result.Count;
     }
     byte[] numArray = new byte[count];
-    Buffer.BlockCopy((Array) buffer, 0, (Array) numArray, 0, count);
+    System.Buffer.BlockCopy((Array) buffer, 0, (Array) numArray, 0, count);
     return numArray;
   }
 
@@ -239,7 +239,7 @@ label_2:;
       {
         if (this.clients.ContainsKey(connectionId))
         {
-          Action<int, Exception> receivedError = this.ReceivedError;
+          System.Action<int, Exception> receivedError = this.ReceivedError;
           if (receivedError != null)
             receivedError(connectionId, ex);
         }
@@ -248,7 +248,7 @@ label_2:;
     }
     else
     {
-      Action<int, Exception> receivedError = this.ReceivedError;
+      System.Action<int, Exception> receivedError = this.ReceivedError;
       if (receivedError == null)
         return;
       receivedError(connectionId, (Exception) new SocketException(10057));
@@ -269,7 +269,7 @@ label_2:;
     {
       if (this.clients.ContainsKey(client.id))
       {
-        Action<int, Exception> receivedError = this.ReceivedError;
+        System.Action<int, Exception> receivedError = this.ReceivedError;
         if (receivedError != null)
           receivedError(client.id, ex);
       }

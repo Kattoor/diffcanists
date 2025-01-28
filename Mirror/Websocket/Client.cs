@@ -16,13 +16,13 @@ namespace Mirror.Websocket
     private CancellationTokenSource cancellation;
     private Uri uri;
 
-    public event Action Connected;
+    public event System.Action Connected;
 
-    public event Action<byte[]> ReceivedData;
+    public event System.Action<byte[]> ReceivedData;
 
-    public event Action Disconnected;
+    public event System.Action Disconnected;
 
-    public event Action<Exception> ReceivedError;
+    public event System.Action<Exception> ReceivedError;
 
     public bool Connecting { get; set; }
 
@@ -32,7 +32,7 @@ namespace Mirror.Websocket
     {
       if (this.webSocket != null)
       {
-        Action<Exception> receivedError = this.ReceivedError;
+        System.Action<Exception> receivedError = this.ReceivedError;
         if (receivedError == null)
           return;
         receivedError(new Exception("Client already connected"));
@@ -56,7 +56,7 @@ namespace Mirror.Websocket
             CancellationToken token = this.cancellation.Token;
             this.IsConnected = true;
             this.Connecting = false;
-            Action connected = this.Connected;
+            System.Action connected = this.Connected;
             if (connected != null)
               connected();
             await this.ReceiveLoop(this.webSocket, token);
@@ -67,7 +67,7 @@ namespace Mirror.Websocket
         }
         catch (Exception ex)
         {
-          Action<Exception> receivedError = this.ReceivedError;
+          System.Action<Exception> receivedError = this.ReceivedError;
           if (receivedError == null)
             return;
           receivedError(ex);
@@ -75,7 +75,7 @@ namespace Mirror.Websocket
         finally
         {
           this.Disconnect();
-          Action disconnected = this.Disconnected;
+          System.Action disconnected = this.Disconnected;
           if (disconnected != null)
             disconnected();
         }
@@ -95,13 +95,13 @@ namespace Mirror.Websocket
           {
             try
             {
-              Action<byte[]> receivedData = this.ReceivedData;
+              System.Action<byte[]> receivedData = this.ReceivedData;
               if (receivedData != null)
                 receivedData(numArray);
             }
             catch (Exception ex)
             {
-              Action<Exception> receivedError = this.ReceivedError;
+              System.Action<Exception> receivedError = this.ReceivedError;
               if (receivedError != null)
                 receivedError(ex);
             }
@@ -127,7 +127,7 @@ label_9:;
         if (count >= 2097152)
         {
           await webSocket.CloseAsync(WebSocketCloseStatus.MessageTooBig, string.Format("Maximum message size: {0} bytes.", (object) 2097152), CancellationToken.None);
-          Action<Exception> receivedError = this.ReceivedError;
+          System.Action<Exception> receivedError = this.ReceivedError;
           if (receivedError != null)
             receivedError((Exception) new WebSocketException(WebSocketError.HeaderError));
           return new byte[0];
@@ -136,7 +136,7 @@ label_9:;
         count += result.Count;
       }
       byte[] numArray = new byte[count];
-      Buffer.BlockCopy((Array) buffer, 0, (Array) numArray, 0, count);
+      System.Buffer.BlockCopy((Array) buffer, 0, (Array) numArray, 0, count);
       return numArray;
     }
 
@@ -156,7 +156,7 @@ label_9:;
       int num;
       if (num != 0 && this.webSocket == null)
       {
-        Action<Exception> receivedError = this.ReceivedError;
+        System.Action<Exception> receivedError = this.ReceivedError;
         if (receivedError == null)
           return;
         receivedError((Exception) new SocketException(10057));
@@ -170,7 +170,7 @@ label_9:;
         catch (Exception ex)
         {
           this.Disconnect();
-          Action<Exception> receivedError = this.ReceivedError;
+          System.Action<Exception> receivedError = this.ReceivedError;
           if (receivedError == null)
             return;
           receivedError(ex);

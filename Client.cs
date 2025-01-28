@@ -68,7 +68,7 @@ public static class Client
   public static string NameOrReplay = "";
   public static string currentIP = "";
   public static string serverIP = "18.117.245.0";
-  public static string serverURL = "play.arcanists2.com";
+  public static string serverURL = "play.arcanists.com";
   public static byte[] cryp = (byte[]) null;
   public static int port = 43594;
   public static int webPort = 9998;
@@ -471,7 +471,7 @@ public static class Client
   public static Uri IpToHttp(string ip, int port)
   {
     Debug.Log((object) ("URL: " + Application.absoluteURL));
-    return Application.absoluteURL.Contains("https") ? new Uri(string.Format("wss://server.arcanists2.com:{0}", (object) port)) : new Uri(string.Format("ws://{0}:{1}", (object) ip, (object) Client.webPortInsecure));
+    return Application.absoluteURL.Contains("https") ? new Uri(string.Format("wss://server.arcanists.com:{0}", (object) port)) : new Uri(string.Format("ws://{0}:{1}", (object) ip, (object) Client.webPortInsecure));
   }
 
   public static void Disconnected(object sender, DisconnectedEventArgs args)

@@ -108,7 +108,13 @@ public class ZPerson
       if ((ZComponent) this.stolenMinions[index] == (object) null || this.stolenMinions[index].isDead)
         this.stolenMinions.RemoveAt(index);
     }
-    return this.controlled.Count + this.stolenMinions.Count;
+    int count = this.stolenMinions.Count;
+    for (int index = this.controlled.Count - 1; index >= 0; --index)
+    {
+      if ((ZComponent) this.controlled[index] != (object) null && !this.controlled[index].isDead && (this.controlled[index].controllable || this.controlled[index].type == CreatureType.Tiger))
+        ++count;
+    }
+    return count;
   }
 
   public void ReleaseTakenMinion()

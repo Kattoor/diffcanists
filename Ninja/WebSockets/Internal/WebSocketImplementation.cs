@@ -343,8 +343,8 @@ namespace Ninja.WebSockets.Internal
         return new ArraySegment<byte>(bytes1);
       byte[] bytes2 = Encoding.UTF8.GetBytes(statusDescription);
       byte[] array = new byte[bytes1.Length + bytes2.Length];
-      Buffer.BlockCopy((Array) bytes1, 0, (Array) array, 0, bytes1.Length);
-      Buffer.BlockCopy((Array) bytes2, 0, (Array) array, bytes1.Length, bytes2.Length);
+      System.Buffer.BlockCopy((Array) bytes1, 0, (Array) array, 0, bytes1.Length);
+      System.Buffer.BlockCopy((Array) bytes2, 0, (Array) array, bytes1.Length, bytes2.Length);
       return new ArraySegment<byte>(array);
     }
 

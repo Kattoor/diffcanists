@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class Controller : MonoBehaviour
 {
@@ -135,9 +134,9 @@ public class Controller : MonoBehaviour
     if (!this.isActive)
       return;
     Controller.ApplicationFocused = focus;
-    if (focus)
-      MapObjects.Instance?.SetWaves();
-    SimulateMouse.OnApplicationFocus(focus);
+    if (!focus)
+      return;
+    MapObjects.Instance?.SetWaves();
   }
 
   private void OnEnable()
@@ -281,9 +280,6 @@ public class Controller : MonoBehaviour
     if (!this.isActive)
       return;
     MyInput.LoopControllerMouseEvents();
-    Gamepad current = Gamepad.current;
-    if (current != null && current.leftTrigger.wasReleasedThisFrame)
-      Debug.Log((object) "Released left trig");
     this._next += Time.deltaTime * this._RadialSpeed;
     if ((double) this._next > (double) this._cur)
     {
@@ -409,7 +405,7 @@ public class Controller : MonoBehaviour
 
   public void ReopenMenu()
   {
-    if ((UnityEngine.Object) this.openedMenu == (UnityEngine.Object) null)
+    if ((UnityEngine.Object) this.openedMenu == (UnityEngine.Object) null || (UnityEngine.Object) this.openedMenu == (UnityEngine.Object) this.MenuHUD)
       return;
     int num = (UnityEngine.Object) ChatBox.Instance != (UnityEngine.Object) null ? 1 : 0;
     if ((UnityEngine.Object) this.openHandle != (UnityEngine.Object) null)

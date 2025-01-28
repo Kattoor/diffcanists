@@ -304,7 +304,7 @@ public class pfabLobbyGame : MonoBehaviour, IPointerClickHandler, IEventSystemHa
         break;
       case 1:
       case 2:
-        if (g.GetSpectatorMode() || Client.GetAccount(Client.Name, false).accountType.isDev())
+        if (g.GetSpectatorMode() || Client.MyAccount.accountType.isDev())
         {
           this.buttonJoin.gameObject.SetActive(true);
           this.buttonJoin.interactable = true;
@@ -475,7 +475,7 @@ public class pfabLobbyGame : MonoBehaviour, IPointerClickHandler, IEventSystemHa
             }), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
           }
         }
-        if (Client.GetAccount(Client.Name, false).accountType.IsModPlus())
+        if (Client.MyAccount.accountType.IsModPlus())
         {
           myContextMenu.AddSeperator("--------------------------");
           myContextMenu.AddItem("ID: " + (object) this.gameFacts.id, (Action) (() => Global.systemCopyBuffer = this.gameFacts.id.ToString()), (Color) ColorScheme.GetColor(MyContextMenu.ColorBlue));

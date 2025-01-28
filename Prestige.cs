@@ -79,13 +79,11 @@ public static class Prestige
     switch (r.ReadByte())
     {
       case 2:
-        BookOf book = (BookOf) r.ReadInt32();
-        Prestige.Unlock(Client.MyAccount, book, false, false);
+        Prestige.Unlock(Client.MyAccount, (BookOf) r.ReadInt32(), false, false);
         Prestige.RefreshUI();
         break;
       case 3:
-        int i = r.ReadInt32();
-        Prestige.Unlock(Client.MyAccount, i);
+        Prestige.Unlock(Client.MyAccount, r.ReadInt32());
         Prestige.RefreshUI();
         break;
       case 4:
@@ -110,16 +108,12 @@ public static class Prestige
         CharacterCreation.Instance?.txtCoins.SetText(Client.MyAccount.tournamentCoins.ToString(), true);
         break;
       case 10:
-        int index1 = r.ReadInt32();
-        int index2 = r.ReadInt32();
-        Client.MyAccount.cosmetics.array[index1][index2] = true;
+        Client.MyAccount.cosmetics.array[r.ReadInt32()][r.ReadInt32()] = true;
         CharacterCreation.Instance?.RefreshViewing();
         AudioManager.Play(AudioManager.instance.coins);
         break;
       case 12:
-        ArcanistsStore.Which which = (ArcanistsStore.Which) r.ReadInt32();
-        int index3 = r.ReadInt32();
-        Client.MyAccount.storeItems.Set(which, index3);
+        Client.MyAccount.storeItems.Set((ArcanistsStore.Which) r.ReadInt32(), r.ReadInt32());
         if (!((UnityEngine.Object) StoreMenu.Instance != (UnityEngine.Object) null))
           break;
         StoreMenu.Instance.Refresh();

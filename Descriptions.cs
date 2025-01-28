@@ -2657,7 +2657,7 @@ public static class Descriptions
 
   public static string GetBookDescription(BookOf b)
   {
-    if (b == BookOf.Arcane && Client.GetAccount(Client.Name, false).accountType.has(AccountType.Developer | AccountType.Admin | AccountType.Arcane_Monster | AccountType.Game_Director))
+    if (b == BookOf.Arcane && Client.MyAccount.accountType.has(AccountType.Developer | AccountType.Admin | AccountType.Arcane_Monster | AccountType.Game_Director))
       return "Arcane Neutrality:\n(drains 100 health at casting)\nRemoves familiar effects from the game.\n" + Descriptions.bookDesriptions["Arcane"];
     if (b == BookOf.Seasons)
     {

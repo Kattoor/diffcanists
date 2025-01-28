@@ -851,7 +851,7 @@ public class SettingsPlayer
     if (Prefs.charPreview && (Client.game == null || Client.game.isSandbox))
       return;
     if (a == null)
-      a = Client.GetAccount(Client.Name, false);
+      a = Client.MyAccount;
     if (!SettingsPlayer.VerifyOutfit(a, cosmetics, a.accountType, Outfit.Body, (int) this.indexBody))
       this.indexBody = (byte) 0;
     if (!SettingsPlayer.VerifyOutfit(a, cosmetics, a.accountType, Outfit.Head, (int) this.indexHead))
@@ -934,15 +934,15 @@ public class SettingsPlayer
     Achievement achievement = SettingsPlayer.CheckAchievements(type, index);
     if (achievement != Achievement.None && Client.cosmetics.achievements[(int) achievement])
       return 1;
-    Account account = Client.GetAccount(Client.Name, false);
+    Account myAccount = Client.MyAccount;
     AccountType accountType = SettingsPlayer.CheckAccountType(type, index);
-    if ((account.accountType & accountType) != AccountType.None)
+    if ((myAccount.accountType & accountType) != AccountType.None)
       return 1;
     int num1 = SettingsPlayer.CheckPrestige(type, index);
     if (num1 > 0)
-      return (int) account.prestige < num1 ? 0 : 1;
+      return (int) myAccount.prestige < num1 ? 0 : 1;
     int num2 = SettingsPlayer.CheckExperience(type, index);
-    return num2 > 0 ? ((int) account.experience < num2 ? 0 : 1) : (SettingsPlayer.CheckTournament(type, index) > 0 || Inert.Instance.GetOutfit(type)[index].season != Server.ServerSettings.Season.None || (!string.IsNullOrEmpty(Inert.Instance.GetOutfit(type)[index].reason) || accountType != AccountType.None) || achievement != Achievement.None ? 0 : -1);
+    return num2 > 0 ? ((int) myAccount.experience < num2 ? 0 : 1) : (SettingsPlayer.CheckTournament(type, index) > 0 || Inert.Instance.GetOutfit(type)[index].season != Server.ServerSettings.Season.None || (!string.IsNullOrEmpty(Inert.Instance.GetOutfit(type)[index].reason) || accountType != AccountType.None) || achievement != Achievement.None ? 0 : -1);
   }
 
   public static bool IsSeasonal(Outfit type, int index)

@@ -338,7 +338,7 @@ public class MyContextMenu : MonoBehaviour
 
   public void DisplayIconMenu()
   {
-    Account acc = Client.GetAccount(Client.Name, false);
+    Account acc = Client.MyAccount;
     int accountType = (int) acc.accountType;
     if (Client.clan != null)
     {
@@ -622,14 +622,14 @@ public class MyContextMenu : MonoBehaviour
           Global.systemCopyBuffer = acc.oldName;
           ChatBox.Instance.NewChatMsg("", "Copied " + s + "'s previous name to Clipboard", (Color) ColorScheme.GetColor(Global.ColorSystem), s, ChatOrigination.System, ContentType.STRING, (object) null);
         }), (Color) ColorScheme.GetColor(MyContextMenu.ColorBlue));
-      Account account = Client.GetAccount(Client.Name, false);
-      if (acc.discord != 0UL && account.accountType.IsModPlus())
+      Account myAccount = Client.MyAccount;
+      if (acc.discord != 0UL && myAccount.accountType.IsModPlus())
         this.AddItem("Discord ID: " + acc.discord.ToString(), (Action) (() =>
         {
           Global.systemCopyBuffer = acc.discord.ToString();
           ChatBox.Instance.NewChatMsg("", "Copied " + s + "'s discord ID to Clipboard", (Color) ColorScheme.GetColor(Global.ColorSystem), s, ChatOrigination.System, ContentType.STRING, (object) null);
         }), (Color) ColorScheme.GetColor(MyContextMenu.ColorBlue));
-      if (account.accountType.IsModPlus())
+      if (myAccount.accountType.IsModPlus())
       {
         this.AddSeperator("--------------------------");
         if (acc.accountType.IsMuted() && !acc.fake)

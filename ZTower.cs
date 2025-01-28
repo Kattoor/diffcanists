@@ -94,6 +94,7 @@ public class ZTower : ZComponent
     t.Health = reader.ReadInt32();
     t.originX = reader.ReadInt32();
     ZSpell.TowerApplyEffectors(true, t, c);
+    t.OnHealthChanged();
   }
 
   public ZGame game

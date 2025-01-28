@@ -67,7 +67,7 @@ public class ZGame
   public bool AllowMinionSpells = true;
   public bool AllowEnemyDamage = true;
   public List<ZGame.Resurection> lastMinionToDie = new List<ZGame.Resurection>();
-  public Queue<Action> MoveQue = new Queue<Action>();
+  public ZGame.MyQueue MoveQue = new ZGame.MyQueue();
   public HashSet<PastBlits> _pastBlits = new HashSet<PastBlits>();
   public ZPerson _uncontrolledPlayer = new ZPerson()
   {
@@ -443,7 +443,7 @@ public class ZGame
     this.Awake();
     ZPerson zperson = !(bool) (UnityEngine.Object) Player.Instance ? new ZPerson() : Player.Instance.person;
     zperson.name = Client.Name;
-    zperson.account = Client.GetAccount(Client.Name, false);
+    zperson.account = Client.MyAccount;
     TcpConnection tcpConnection = new TcpConnection();
     zperson.connection = (Connection) tcpConnection;
     tcpConnection.player.player = zperson;
@@ -1777,7 +1777,7 @@ label_46:
             {
               try
               {
-                int index2 = zgame.GetTeam(zgame.players[(int) zgame.serverState.playersTurn].team).FindIndex(new Predicate<ZPerson>(zgame.\u003CBidUpdate\u003Eb__190_1));
+                int index2 = zgame.GetTeam(zgame.players[(int) zgame.serverState.playersTurn].team).FindIndex(new Predicate<ZPerson>(zgame.\u003CBidUpdate\u003Eb__192_1));
                 if (index2 > 0)
                 {
                   for (int index3 = 0; index3 < zgame.teamIndex.Length; ++index3)
@@ -1820,9 +1820,9 @@ label_46:
         }
         if (this.MoveQue.Count > 0 && this.ongoing.NumberOfSlowUpdateCoroutines == 0)
         {
-          this.MoveQue.Dequeue()();
+          this.MoveQue.DequeueAndInvoke();
           if (this.MoveQue.Count > 5 && this.ongoing.NumberOfSlowUpdateCoroutines == 0 && this.serverState.busy == ServerState.Busy.No)
-            this.MoveQue.Dequeue()();
+            this.MoveQue.DequeueAndInvoke();
         }
         if (this.serverState.busy == ServerState.Busy.Starting_Turn)
         {
@@ -2000,7 +2000,7 @@ label_46:
         if ((double) this.serverState.turnTime >= (double) this.PlayersMaxTurnTime + (this.isClient ? 0.0 : 3.0))
           this.NextTurn();
         else if (this.MoveQue.Count > 0 && this.ongoing.NumberOfSlowUpdateCoroutines == 0)
-          this.MoveQue.Dequeue()();
+          this.MoveQue.DequeueAndInvoke();
       }
       else if (this.serverState.busy == ServerState.Busy.Starting_Turn && this.ongoing.NumberOfSlowUpdateCoroutines == 0)
       {
@@ -3113,9 +3113,13 @@ label_46:
                     this.MoveQue.Enqueue((Action) (() =>
                     {
                       p.inactiveTurns = 0;
-                      if (!fromServer && !p.yourTurn || p.controlled.Count == 0 || p.localTurn <= 0 && this.First_Turn_Teleport)
-                      {
+                      if (!fromServer && !p.yourTurn || p.localTurn <= 0 && this.First_Turn_Teleport)
                         this.SendResyncMsg(p, "was not your turn - When using familiar", true, (Action) null);
+                      else if (p.controlled.Count == 0)
+                      {
+                        if (fromServer)
+                          return;
+                        this.SendResyncMsg(p, "you seem to be dead :(", true, (Action) null);
                       }
                       else
                       {
@@ -3742,9 +3746,13 @@ label_46:
                     {
                       person8.lastMoveID = moveID;
                       p.inactiveTurns = 0;
-                      if (!fromServer && !p.yourTurn || p.controlled.Count == 0)
-                      {
+                      if (!fromServer && !p.yourTurn)
                         this.SendResyncMsg(p, "was not your turn - When casting a spell", true, (Action) null);
+                      else if (p.controlled.Count == 0)
+                      {
+                        if (fromServer)
+                          return;
+                        this.SendResyncMsg(p, "you seem to be dead :(", true, (Action) null);
                       }
                       else
                       {
@@ -3916,24 +3924,25 @@ label_46:
                                   if ((spell.spellEnum == SpellEnum.Arcane_Gate || spell.spellEnum == SpellEnum.Santas_Magic) && (spellSlot.LastTurnFired > localTurn - 5 && spellSlot.LastTurnFired > -1 || creature.parent.arcaneGateSpellSlot == null) && this.isServer)
                                   {
                                     if (creature.health < 8)
-                                    {
-                                      creature.DoDamage(5, DamageType.None, (ZCreature) null, false);
-                                      this.SendCreatureHealth(creature);
-                                      creature.UpdateHealthTxt();
-                                      if (creature.health <= 0)
+                                      this.MoveQue.Enqueue((Action) (() =>
                                       {
+                                        creature.DoDamage(5, DamageType.None, (ZCreature) null, false);
+                                        this.SendCreatureHealth(creature);
+                                        creature.UpdateHealthTxt();
+                                        if (creature.health > 0)
+                                          return;
                                         this.with_the_fishes = true;
                                         if (this.isClient && Global.GetPrefBool("prefdeathmsg", true))
                                           ChatBox.Instance?.NewChatMsg("", Descriptions.GetDrownMessage(creature), (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System, ContentType.STRING, (object) null);
                                         creature.OnDeath(true);
-                                      }
-                                    }
+                                      }), false);
                                     else
-                                    {
-                                      creature.health = (int) ((FixedInt) creature.health * (FixedInt) 692060L);
-                                      this.SendCreatureHealth(creature);
-                                      creature.UpdateHealthTxt();
-                                    }
+                                      this.MoveQue.Enqueue((Action) (() =>
+                                      {
+                                        creature.health = (int) ((FixedInt) creature.health * (FixedInt) 692060L);
+                                        this.SendCreatureHealth(creature);
+                                        creature.UpdateHealthTxt();
+                                      }), false);
                                   }
                                   spellSlot.SetTurnFired = localTurn;
                                   creature.OnSpellFired(spellSlot);
@@ -4105,8 +4114,8 @@ label_46:
               case 13:
                 this.serverState.busy = ServerState.Busy.Ended;
                 bool[] alive = new bool[this.players.Count];
-                for (int index1 = 0; index1 < this.players.Count; ++index1)
-                  alive[index1] = myBinaryReader.ReadBoolean();
+                for (int index = 0; index < this.players.Count; ++index)
+                  alive[index] = myBinaryReader.ReadBoolean();
                 string msg = myBinaryReader.ReadString();
                 foreach (ZPerson player in this.players)
                   player.gainedWands = myBinaryReader.ReadInt32();
@@ -4148,7 +4157,7 @@ label_46:
                 }));
                 break;
               case 15:
-                int index2 = (int) myBinaryReader.ReadByte();
+                int index3 = (int) myBinaryReader.ReadByte();
                 float num5 = myBinaryReader.ReadSingle();
                 float num6 = myBinaryReader.ReadSingle();
                 if (this.serverState.busy != ServerState.Busy.No && this.serverState.busy != ServerState.Busy.Moving)
@@ -4164,9 +4173,9 @@ label_46:
                 }
                 if ((double) Math.Abs(num5 - this.serverState.turnTime) > 0.5)
                   this.serverState.turnTime = num5;
-                if ((double) num6 >= (double) this.players[index2].countdown)
+                if ((double) num6 >= (double) this.players[index3].countdown)
                   break;
-                this.players[index2].countdown = num6;
+                this.players[index3].countdown = num6;
                 break;
               case 16:
                 this.HandleMap(myBinaryReader);
@@ -4184,7 +4193,7 @@ label_46:
                 this.receivedInitialMsg = true;
                 this.timeline.Clear();
                 int num7 = myBinaryReader.ReadInt32();
-                for (int index1 = 0; index1 < num7; ++index1)
+                for (int index4 = 0; index4 < num7; ++index4)
                   this.timeline.Add(myBinaryReader.ReadBytes());
                 if (this.isSpectator)
                 {
@@ -4196,10 +4205,10 @@ label_46:
                 break;
               case 64:
                 this.receivedInitialMsg = true;
-                int index3 = myBinaryReader.ReadInt32();
+                int index5 = myBinaryReader.ReadInt32();
                 int num8 = myBinaryReader.ReadInt32();
-                this.timeline.RemoveRange(index3, this.timeline.Count - index3);
-                for (int index1 = 0; index1 < num8; ++index1)
+                this.timeline.RemoveRange(index5, this.timeline.Count - index5);
+                for (int index4 = 0; index4 < num8; ++index4)
                   this.timeline.Add(myBinaryReader.ReadBytes());
                 string str1 = myBinaryReader.ReadString();
                 if (!string.IsNullOrEmpty(str1))
@@ -4215,150 +4224,150 @@ label_46:
                       int num3 = myBinaryReader.ReadInt32();
                       if (num3 == this.players.Count)
                       {
-                        for (int index1 = 0; index1 < num3; ++index1)
+                        for (int index4 = 0; index4 < num3; ++index4)
                         {
-                          this.players[index1].yourTurn = myBinaryReader.ReadBoolean();
-                          List<ZCreature> controlled = this.players[index1].controlled;
+                          this.players[index4].yourTurn = myBinaryReader.ReadBoolean();
+                          List<ZCreature> controlled = this.players[index4].controlled;
                           int num4 = myBinaryReader.ReadInt32();
                           if (num4 == controlled.Count)
                           {
-                            for (int index4 = 0; index4 < num4; ++index4)
+                            for (int index6 = 0; index6 < num4; ++index6)
                             {
                               bool flag2 = myBinaryReader.ReadBoolean();
-                              if (flag2 == ((ZComponent) controlled[index4] != (object) null))
+                              if (flag2 == ((ZComponent) controlled[index6] != (object) null))
                               {
                                 if (flag2)
                                 {
-                                  controlled[index4].KillMovement();
+                                  controlled[index6].KillMovement();
                                   MyLocation pos = myBinaryReader.ReadMyLocation();
-                                  controlled[index4].position = pos;
-                                  controlled[index4].collider?.Move(pos);
-                                  controlled[index4].health = myBinaryReader.ReadInt32();
-                                  ZCreature rider = controlled[index4].rider;
-                                  controlled[index4].rider = (ZCreature) null;
-                                  controlled[index4].SetScale(myBinaryReader.ReadSingle());
-                                  controlled[index4].rider = rider;
-                                  controlled[index4].retribution = myBinaryReader.ReadInt32();
+                                  controlled[index6].position = pos;
+                                  controlled[index6].collider?.Move(pos);
+                                  controlled[index6].health = myBinaryReader.ReadInt32();
+                                  ZCreature rider = controlled[index6].rider;
+                                  controlled[index6].rider = (ZCreature) null;
+                                  controlled[index6].SetScale(myBinaryReader.ReadSingle());
+                                  controlled[index6].rider = rider;
+                                  controlled[index6].retribution = myBinaryReader.ReadInt32();
                                   int num9 = myBinaryReader.ReadInt32();
                                   if (num9 > 0)
-                                    controlled[index4].CreateProtectionShield(false);
-                                  controlled[index4].shield = num9;
+                                    controlled[index6].CreateProtectionShield(false);
+                                  controlled[index6].shield = num9;
                                   bool flag3 = myBinaryReader.ReadBoolean();
-                                  controlled[index4].stunned = flag3;
+                                  controlled[index6].stunned = flag3;
                                   if (flag3)
-                                    controlled[index4].OnStunned();
+                                    controlled[index6].OnStunned();
                                   if (myBinaryReader.ReadBoolean())
                                   {
-                                    int index5 = myBinaryReader.ReadInt32();
-                                    int index6 = myBinaryReader.ReadInt32();
-                                    controlled[index4].mount = this.players[index5].controlled[index6];
-                                    controlled[index4].mount.rider = controlled[index4];
+                                    int index7 = myBinaryReader.ReadInt32();
+                                    int index8 = myBinaryReader.ReadInt32();
+                                    controlled[index6].mount = this.players[index7].controlled[index8];
+                                    controlled[index6].mount.rider = controlled[index6];
                                   }
-                                  else if ((ZComponent) controlled[index4].mount != (object) null)
+                                  else if ((ZComponent) controlled[index6].mount != (object) null)
                                   {
-                                    controlled[index4].mount.rider = (ZCreature) null;
-                                    controlled[index4].mount = (ZCreature) null;
+                                    controlled[index6].mount.rider = (ZCreature) null;
+                                    controlled[index6].mount = (ZCreature) null;
                                   }
                                   if (myBinaryReader.ReadBoolean())
                                   {
-                                    controlled[index4].tower.SetPositionResync(myBinaryReader.ReadMyLocation());
-                                    controlled[index4].tower.Health = myBinaryReader.ReadInt32();
+                                    controlled[index6].tower.SetPositionResync(myBinaryReader.ReadMyLocation());
+                                    controlled[index6].tower.Health = myBinaryReader.ReadInt32();
                                   }
                                   int num10 = myBinaryReader.ReadInt32();
-                                  if (controlled[index4].effectors.Count == num10)
+                                  if (controlled[index6].effectors.Count == num10)
                                   {
-                                    for (int index5 = 0; index5 < num10; ++index5)
+                                    for (int index7 = 0; index7 < num10; ++index7)
                                     {
                                       bool flag4 = myBinaryReader.ReadBoolean();
-                                      if (flag4 == ((ZComponent) controlled[index4].effectors[index5] != (object) null))
+                                      if (flag4 == ((ZComponent) controlled[index6].effectors[index7] != (object) null))
                                       {
                                         if (flag4)
                                         {
-                                          controlled[index4].effectors[index5].position = myBinaryReader.ReadMyLocation();
-                                          controlled[index4].effectors[index5].active = myBinaryReader.ReadBoolean();
-                                          controlled[index4].effectors[index5].variable = myBinaryReader.ReadInt32();
-                                          controlled[index4].effectors[index5].VisualUpdate();
+                                          controlled[index6].effectors[index7].position = myBinaryReader.ReadMyLocation();
+                                          controlled[index6].effectors[index7].active = myBinaryReader.ReadBoolean();
+                                          controlled[index6].effectors[index7].variable = myBinaryReader.ReadInt32();
+                                          controlled[index6].effectors[index7].VisualUpdate();
                                         }
                                       }
                                       else
-                                        goto label_164;
+                                        goto label_157;
                                     }
                                     int num11 = myBinaryReader.ReadInt32();
-                                    if (controlled[index4].destroyableEffectors.Count == num11)
+                                    if (controlled[index6].destroyableEffectors.Count == num11)
                                     {
-                                      for (int index5 = 0; index5 < num11; ++index5)
+                                      for (int index7 = 0; index7 < num11; ++index7)
                                       {
                                         bool flag4 = myBinaryReader.ReadBoolean();
-                                        if (flag4 == ((ZComponent) controlled[index4].destroyableEffectors[index5] != (object) null))
+                                        if (flag4 == ((ZComponent) controlled[index6].destroyableEffectors[index7] != (object) null))
                                         {
                                           if (flag4)
                                           {
-                                            controlled[index4].destroyableEffectors[index5].position = myBinaryReader.ReadMyLocation();
-                                            controlled[index4].destroyableEffectors[index5].active = myBinaryReader.ReadBoolean();
-                                            controlled[index4].destroyableEffectors[index5].variable = myBinaryReader.ReadInt32();
-                                            controlled[index4].destroyableEffectors[index5].VisualUpdate();
+                                            controlled[index6].destroyableEffectors[index7].position = myBinaryReader.ReadMyLocation();
+                                            controlled[index6].destroyableEffectors[index7].active = myBinaryReader.ReadBoolean();
+                                            controlled[index6].destroyableEffectors[index7].variable = myBinaryReader.ReadInt32();
+                                            controlled[index6].destroyableEffectors[index7].VisualUpdate();
                                           }
                                         }
                                         else
-                                          goto label_164;
+                                          goto label_157;
                                       }
                                       int num12 = myBinaryReader.ReadInt32();
-                                      if (controlled[index4].followingColliders.Count == num12)
+                                      if (controlled[index6].followingColliders.Count == num12)
                                       {
-                                        for (int index5 = 0; index5 < num12; ++index5)
+                                        for (int index7 = 0; index7 < num12; ++index7)
                                         {
                                           bool flag4 = myBinaryReader.ReadBoolean();
-                                          if (flag4 == ((ZComponent) controlled[index4].followingColliders[index5] != (object) null))
+                                          if (flag4 == ((ZComponent) controlled[index6].followingColliders[index7] != (object) null))
                                           {
                                             if (flag4)
-                                              controlled[index4].followingColliders[index5].Move(myBinaryReader.ReadMyLocation());
-                                            if (flag4 && (ZComponent) controlled[index4].followingColliders[index5].effector != (object) null)
+                                              controlled[index6].followingColliders[index7].Move(myBinaryReader.ReadMyLocation());
+                                            if (flag4 && (ZComponent) controlled[index6].followingColliders[index7].effector != (object) null)
                                             {
-                                              controlled[index4].followingColliders[index5].effector.position = controlled[index4].followingColliders[index5].position;
-                                              controlled[index4].followingColliders[index5].effector.active = myBinaryReader.ReadBoolean();
-                                              controlled[index4].followingColliders[index5].effector.variable = myBinaryReader.ReadInt32();
-                                              controlled[index4].followingColliders[index5].effector.VisualUpdate();
+                                              controlled[index6].followingColliders[index7].effector.position = controlled[index6].followingColliders[index7].position;
+                                              controlled[index6].followingColliders[index7].effector.active = myBinaryReader.ReadBoolean();
+                                              controlled[index6].followingColliders[index7].effector.variable = myBinaryReader.ReadInt32();
+                                              controlled[index6].followingColliders[index7].effector.VisualUpdate();
                                             }
                                           }
                                           else
-                                            goto label_164;
+                                            goto label_157;
                                         }
-                                        controlled[index4].UpdateHealthTxt();
+                                        controlled[index6].UpdateHealthTxt();
                                       }
                                       else
-                                        goto label_164;
+                                        goto label_157;
                                     }
                                     else
-                                      goto label_164;
+                                      goto label_157;
                                   }
                                   else
-                                    goto label_164;
+                                    goto label_157;
                                 }
                               }
                               else
-                                goto label_164;
+                                goto label_157;
                             }
                           }
                           else
-                            goto label_164;
+                            goto label_157;
                         }
                         int num13 = myBinaryReader.ReadInt32();
                         if (this.globalEffectors.Count == num13)
                         {
-                          for (int index1 = 0; index1 < num13; ++index1)
+                          for (int index4 = 0; index4 < num13; ++index4)
                           {
                             bool flag2 = myBinaryReader.ReadBoolean();
-                            if (flag2 == ((ZComponent) this.globalEffectors[index1] != (object) null))
+                            if (flag2 == ((ZComponent) this.globalEffectors[index4] != (object) null))
                             {
                               if (flag2)
                               {
-                                this.globalEffectors[index1].active = myBinaryReader.ReadBoolean();
-                                this.globalEffectors[index1].variable = myBinaryReader.ReadInt32();
-                                this.globalEffectors[index1].VisualUpdate();
+                                this.globalEffectors[index4].active = myBinaryReader.ReadBoolean();
+                                this.globalEffectors[index4].variable = myBinaryReader.ReadInt32();
+                                this.globalEffectors[index4].VisualUpdate();
                               }
                             }
                             else
-                              goto label_164;
+                              goto label_157;
                           }
                           ChatBox.Instance?.NewChatMsg("", "Fast Resync Successful.", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
                           break;
@@ -4371,7 +4380,7 @@ label_46:
                 {
                   Debug.LogError((object) ex);
                 }
-label_164:
+label_157:
                 if (this.isSpectator)
                 {
                   this.resyncing = true;
@@ -4474,14 +4483,14 @@ label_164:
                 this.receivedInitialMsg = true;
                 GameFacts gf = new GameFacts();
                 gf.ManualDeserialize(myBinaryReader, true, true, (byte) 0);
-                int index7 = myBinaryReader.ReadInt32();
+                int index9 = myBinaryReader.ReadInt32();
                 myBinaryReader.ReadInt32();
                 int num14 = myBinaryReader.ReadInt32();
-                if (index7 == 0)
+                if (index9 == 0)
                   this.timeline.Clear();
                 else
-                  this.timeline.RemoveRange(index7, this.timeline.Count - index7);
-                for (int index1 = 0; index1 < num14; ++index1)
+                  this.timeline.RemoveRange(index9, this.timeline.Count - index9);
+                for (int index4 = 0; index4 < num14; ++index4)
                   this.timeline.Add(myBinaryReader.ReadBytes());
                 byte[] data1 = myBinaryReader.ReadBytes();
                 this.init_Deserialize(gf, this.timeline, data1, true);
@@ -4513,13 +4522,13 @@ label_164:
                 ChatBox.Instance.NewChatMsg(str3, msg3, (Color) ColorScheme.GetColor(Global.ColorGameText), str3, ChatOrigination.Game, ContentType.STRING, (object) null);
                 break;
               case 154:
-                int index8 = myBinaryReader.ReadInt32();
+                int index10 = myBinaryReader.ReadInt32();
                 int type = myBinaryReader.ReadInt32();
                 Vector2 pos3 = myBinaryReader.ReadVector2();
-                string name = this.players[index8].name;
+                string name = this.players[index10].name;
                 if (this.resyncing || Client.IsIgnored(name))
                   break;
-                ClientResources.Instance.CreatePing(type, name, this.players[index8].clientColor, pos3);
+                ClientResources.Instance.CreatePing(type, name, this.players[index10].clientColor, pos3);
                 break;
               case 155:
                 Quickchat.Data data2 = Quickchat.Data.Deserialize(myBinaryReader);
@@ -4529,30 +4538,30 @@ label_164:
                 ChatBox.Instance.NewChatMsg(Quickchat.GetDestination(data2.destination) + "<sprite name=\"Emoji2_1352\"> " + data2.name, command, (Color) ((UnityEngine.Object) UnratedMenu.instance != (UnityEngine.Object) null ? ColorScheme.GetColor(Global.ColorGameText) : ColorScheme.GetColor(data2.destination)), data2.name, data2.destination, ContentType.STRING, (object) null);
                 break;
               case 157:
-                int index9 = myBinaryReader.ReadInt32();
-                int index10 = myBinaryReader.ReadInt32();
-                ZCreature zcreature1 = this.players[index9].first();
+                int index11 = myBinaryReader.ReadInt32();
+                int index12 = myBinaryReader.ReadInt32();
+                ZCreature zcreature1 = this.players[index11].first();
                 if (zcreature1 == null)
                   break;
-                zcreature1.clientObj?.OnEmoji(index10, false);
+                zcreature1.clientObj?.OnEmoji(index12, false);
                 break;
               case 187:
-                int index11 = myBinaryReader.ReadInt32();
+                int index13 = myBinaryReader.ReadInt32();
                 int num15 = myBinaryReader.ReadInt32();
-                p.towerHealth[index11] = num15;
+                p.towerHealth[index13] = num15;
                 break;
               case 188:
-                int index = myBinaryReader.ReadInt32();
+                int index1 = myBinaryReader.ReadInt32();
                 int count = myBinaryReader.ReadInt32();
                 bool sync = myBinaryReader.ReadBoolean();
                 List<SpellSlot> ss = new List<SpellSlot>();
-                for (int index1 = 0; index1 < count; ++index1)
+                for (int index4 = 0; index4 < count; ++index4)
                   ss.Add(SpellSlot.Deserialize(p, myBinaryReader));
                 this.MoveQue.Enqueue((Action) (() =>
                 {
-                  if (index >= p.controlled.Count)
+                  if (index1 >= p.controlled.Count)
                     return;
-                  ZCreature sum = p.controlled[index];
+                  ZCreature sum = p.controlled[index1];
                   sum.spells.Clear();
                   for (int index = 0; index < count; ++index)
                     sum.spells.Add(ss[index]);
@@ -4562,17 +4571,20 @@ label_164:
                 }));
                 break;
               case 189:
-                int index12 = myBinaryReader.ReadInt32();
-                int num16 = myBinaryReader.ReadInt32();
-                if (p.controlled.Count <= index12)
-                  break;
-                p.controlled[index12].health = num16;
-                p.controlled[index12].UpdateHealthTxt();
-                if (p.controlled[index12].health > 0)
-                  break;
-                if (this.isClient && Global.GetPrefBool("prefdeathmsg", true))
-                  ChatBox.Instance?.NewChatMsg("", Descriptions.GetDrownMessage(p.controlled[index12]), (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System, ContentType.STRING, (object) null);
-                p.controlled[index12].OnDeath(true);
+                int index2 = myBinaryReader.ReadInt32();
+                int hp = myBinaryReader.ReadInt32();
+                this.MoveQue.Enqueue((Action) (() =>
+                {
+                  if (p.controlled.Count <= index2)
+                    return;
+                  p.controlled[index2].health = hp;
+                  p.controlled[index2].UpdateHealthTxt();
+                  if (p.controlled[index2].health > 0)
+                    return;
+                  if (this.isClient && Global.GetPrefBool("prefdeathmsg", true))
+                    ChatBox.Instance?.NewChatMsg("", Descriptions.GetDrownMessage(p.controlled[index2]), (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System, ContentType.STRING, (object) null);
+                  p.controlled[index2].OnDeath(true);
+                }), false);
                 break;
               case 190:
                 bool fullArcane = p.FullArcane;
@@ -4581,17 +4593,17 @@ label_164:
                 p.MinionMaster = myBinaryReader.ReadBoolean();
                 p.BombMaster = myBinaryReader.ReadBoolean();
                 p.FullArcane = myBinaryReader.ReadBoolean();
-                int num17 = myBinaryReader.ReadInt32();
+                int num16 = myBinaryReader.ReadInt32();
                 bool flag5 = myBinaryReader.ReadBoolean();
                 p.minionBookTitans.Clear();
-                for (int index1 = 0; index1 < num17; ++index1)
+                for (int index4 = 0; index4 < num16; ++index4)
                   p.minionBookTitans.Add(new ZGame.MinionBookTitan()
                   {
                     spell = (SpellEnum) myBinaryReader.ReadInt32(),
                     used = myBinaryReader.ReadBoolean()
                   });
-                int num18 = myBinaryReader.ReadInt32();
-                for (int index1 = 0; index1 < num18; ++index1)
+                int num17 = myBinaryReader.ReadInt32();
+                for (int index4 = 0; index4 < num17; ++index4)
                 {
                   SpellEnum s = (SpellEnum) myBinaryReader.ReadInt32();
                   HUD.instance.uiPlayerCharacters[(int) p.id].AddLevel3(Inert.GetSpell(s));
@@ -4635,18 +4647,18 @@ label_164:
                   break;
                 }
               case 192:
-                for (int index1 = 0; index1 < this.players.Count; ++index1)
-                  this.players[index1].bid = myBinaryReader.ReadInt32();
-                int index13 = myBinaryReader.ReadInt32();
+                for (int index4 = 0; index4 < this.players.Count; ++index4)
+                  this.players[index4].bid = myBinaryReader.ReadInt32();
+                int index14 = myBinaryReader.ReadInt32();
                 if (!this.isTeam && this.players.Count > 2)
                 {
                   this.SortByBidFFA();
                   break;
                 }
-                if (index13 == -1 || !((ZComponent) this.players[index13].first() != (object) null) || this.players[index13].bid <= 0)
+                if (index14 == -1 || !((ZComponent) this.players[index14].first() != (object) null) || this.players[index14].bid <= 0)
                   break;
-                this.players[index13].first().health -= this.players[index13].bid;
-                this.players[index13].first().UpdateHealthTxt();
+                this.players[index14].first().health -= this.players[index14].bid;
+                this.players[index14].first().UpdateHealthTxt();
                 break;
               case 193:
               case 195:
@@ -4824,8 +4836,8 @@ label_164:
                 p.ready = true;
                 if (p.clientResyncing || p.connection == null || (p.connection.player.gameNumber != this.gameFacts.id || p.connection == null) || p.connection.State != ConnectionState.Connected)
                   break;
-                for (int index1 = 0; index1 < this.timeline.Count; ++index1)
-                  p.connection?.SendBytes(this.timeline[index1], SendOption.None);
+                for (int index4 = 0; index4 < this.timeline.Count; ++index4)
+                  p.connection?.SendBytes(this.timeline[index4], SendOption.None);
                 break;
               case 50:
                 myBinaryReader.ReadString();
@@ -4903,8 +4915,8 @@ label_164:
                 p.connection.OnChat("[Game #" + this.gameFacts.id.ToString() + "]" + str8);
                 break;
               case 154:
-                int num19 = myBinaryReader.ReadInt32();
-                if (!this.isTeam || p.connection.player.lastShareMsg + 100L >= p.connection.stopwatch.ElapsedMilliseconds || num19 != (int) p.id)
+                int num18 = myBinaryReader.ReadInt32();
+                if (!this.isTeam || p.connection.player.lastShareMsg + 100L >= p.connection.stopwatch.ElapsedMilliseconds || num18 != (int) p.id)
                   break;
                 p.connection.player.lastShareMsg = p.connection.stopwatch.ElapsedMilliseconds;
                 this.SendTeamMessage(b, p.team);
@@ -4913,9 +4925,9 @@ label_164:
                 Server.ValidateQuickChat(p.connection, myBinaryReader, b, false);
                 break;
               case 157:
-                int index14 = myBinaryReader.ReadInt32();
+                int index15 = myBinaryReader.ReadInt32();
                 myBinaryReader.ReadInt32();
-                if (index14 < 0 || index14 >= this.players.Count)
+                if (index15 < 0 || index15 >= this.players.Count)
                   break;
                 if (p.GetMultiConnection.player.account.AccountNotLinked())
                 {
@@ -4927,7 +4939,7 @@ label_164:
                   Server.ReturnServerMsg(p.GetMultiConnection, "Looks like you're muted, try to behave yourself next time.");
                   break;
                 }
-                ZPerson player1 = this.players[index14];
+                ZPerson player1 = this.players[index15];
                 if ((int) player1.id != (int) p.id && (!this.isMulti || player1.team != p.team))
                   break;
                 this.SendAllMessage(b);
@@ -4935,10 +4947,10 @@ label_164:
               case 192:
                 if (p.bid >= 0)
                   break;
-                byte num20 = myBinaryReader.ReadByte();
-                if ((int) num20 > (int) this.gameFacts.startHealth - 1)
-                  num20 = (byte) ((uint) this.gameFacts.startHealth - 1U);
-                p.bid = (int) num20;
+                byte num19 = myBinaryReader.ReadByte();
+                if ((int) num19 > (int) this.gameFacts.startHealth - 1)
+                  num19 = (byte) ((uint) this.gameFacts.startHealth - 1U);
+                p.bid = (int) num19;
                 break;
               case 193:
               case 195:
@@ -4998,10 +5010,10 @@ label_164:
               case 194:
                 if (!p.CanOfferDraw() || this.serverState.busy == ServerState.Busy.Ended || this.ieKillWait != null)
                   break;
-                int num21 = p.offeringDraw ? 1 : 0;
+                int num20 = p.offeringDraw ? 1 : 0;
                 p.offeringDraw = myBinaryReader.ReadBoolean();
-                int num22 = p.offeringDraw ? 1 : 0;
-                if (num21 == num22)
+                int num21 = p.offeringDraw ? 1 : 0;
+                if (num20 == num21)
                   break;
                 if (this.isMulti)
                 {
@@ -5015,10 +5027,10 @@ label_164:
               case 196:
                 if (this.serverState.busy != ServerState.Busy.Ended)
                   break;
-                int num23 = p.offeringRematch ? 1 : 0;
+                int num22 = p.offeringRematch ? 1 : 0;
                 p.offeringRematch = myBinaryReader.ReadByte() != (byte) 0;
-                int num24 = p.offeringRematch ? 1 : 0;
-                if (num23 == num24)
+                int num23 = p.offeringRematch ? 1 : 0;
+                if (num22 == num23)
                   break;
                 if (this.isMulti)
                 {
@@ -5466,7 +5478,7 @@ label_164:
     bool nextTurn = false;
     game.replayPastTimeLine = 0;
     HUD.instance.replayTimeline.MaxSize = game.timelineList.Count;
-    HUD.instance.replayTimeline._bar.onValueChanged.AddListener(new UnityAction<float>(game.\u003CPushReplay\u003Eb__256_0));
+    HUD.instance.replayTimeline._bar.onValueChanged.AddListener(new UnityAction<float>(game.\u003CPushReplay\u003Eb__258_0));
     game.replayPaused = false;
     Time.timeScale = 1f;
     ChatBox.Instance?.NewChatMsg("", "Press F2 to take control right away", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
@@ -5576,7 +5588,7 @@ label_164:
           game.ongoing.ServerUpdate();
         }
         if (game.MoveQue.Count > 0 && game.ongoing.NumberOfSlowUpdateCoroutines == 0)
-          game.MoveQue.Dequeue()();
+          game.MoveQue.DequeueAndInvoke();
       }
       else
         yield return 0.0f;
@@ -5693,7 +5705,7 @@ label_164:
       this.spectatorOngoing.ServerUpdate();
       this.ongoing.ServerUpdate();
       if (this.MoveQue.Count > 0 && this.ongoing.NumberOfSlowUpdateCoroutines == 0)
-        this.MoveQue.Dequeue()();
+        this.MoveQue.DequeueAndInvoke();
       if (this.forceRysncPause)
       {
         this.forceRysncPause = false;
@@ -6659,6 +6671,75 @@ label_164:
   {
     public SpellEnum spell;
     public bool used;
+  }
+
+  public class MyQueue
+  {
+    public Queue<ZGame.MyAction> queue = new Queue<ZGame.MyAction>();
+
+    public int Count
+    {
+      get
+      {
+        return this.queue.Count;
+      }
+    }
+
+    public void Enqueue(Action a)
+    {
+      this.queue.Enqueue(new ZGame.MyAction(a));
+    }
+
+    public void Enqueue(Action a, bool v)
+    {
+      this.queue.Enqueue(new ZGame.MyAction(a, v));
+    }
+
+    public void DequeueAndInvoke()
+    {
+      do
+      {
+        this.queue.Dequeue().Invoke();
+      }
+      while (this.queue.Count > 0 && !this.queue.Peek().wait);
+    }
+
+    public ZGame.MyAction Dequeue()
+    {
+      return this.queue.Dequeue();
+    }
+
+    public void Clear()
+    {
+      this.queue.Clear();
+    }
+  }
+
+  public class MyAction
+  {
+    public bool wait = true;
+    public Action action;
+
+    public MyAction(Action a)
+    {
+      this.action = a;
+    }
+
+    public MyAction(Action a, bool wait)
+    {
+      this.action = a;
+      this.wait = wait;
+    }
+
+    public void Invoke()
+    {
+      this.action();
+    }
+
+    public static implicit operator ZGame.MyAction(Action v)
+    {
+      return new ZGame.MyAction(v);
+    }
   }
 
   public class TimelineData

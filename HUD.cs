@@ -682,13 +682,14 @@ public class HUD : UIBehaviour
         ZPerson player1 = this.game.players[index];
         if (string.Equals(player1.name, Client.NameOrReplay, StringComparison.OrdinalIgnoreCase))
         {
-          Player player2;
-          Player.Instance = player2 = player1.game.GetMapTransform().gameObject.AddComponent<Player>();
+          Player player2 = player1.game.GetMapTransform().gameObject.AddComponent<Player>();
+          Player.Instance = player2;
           player2.gameObject.tag = "Player";
           Player.Instance.person = player1;
           Player.Instance.selectedCreaturePlayerOffset = index;
           Client.curGameID = index;
-          player2.selected = player1.controlled[0];
+          if (player1.controlled.Count > 0)
+            player2.selected = player1.controlled[0];
           ClickSpell.Instance.SetBGColor(player1.clientColor);
           break;
         }

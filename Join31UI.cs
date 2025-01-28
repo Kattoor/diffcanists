@@ -324,7 +324,7 @@ public class Join31UI : MonoBehaviour, IMiniGameUI
 
   public void Cheat(Join31Board.Cell cell)
   {
-    if (!Client.GetAccount(Client.Name, false).accountType.isDev() || !string.Equals(Client.Name, "pur3 extreme") || !Input.GetKey(KeyCode.LeftControl))
+    if (!Client.MyAccount.accountType.isDev() || !string.Equals(Client.Name, "pur3 extreme") || !Input.GetKey(KeyCode.LeftControl))
       return;
     MyContextMenu myContextMenu = MyContextMenu.Show();
     myContextMenu.AddItem("Pawn", (Action) (() => this.SendCheat(cell, ChessPiece.Pawn)), Color.green);

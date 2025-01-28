@@ -47,6 +47,6 @@ public class OutfitData
 
   public bool IsUnlocked(Account a)
   {
-    return !this.isLocked || a.cosmetics.array[(int) this.outfit][this.index] || a.accountType.has(AccountType.Owner | AccountType.Press_Account) || !this.isLocked && (this.achievement == Achievement.None || a.cosmetics.achievements[(int) this.achievement] || this.prestige > 0 && (int) a.prestige >= this.prestige || (this.accountType != AccountType.None && (this.accountType & a.accountType) != AccountType.None || this.experience > 0 && (int) a.experience >= this.experience));
+    return !this.isLocked || a.cosmetics.array[(int) this.outfit][this.index] || a.accountType.has(AccountType.Owner | AccountType.Press_Account) || (this.achievement != Achievement.None && a.cosmetics.achievements[(int) this.achievement] || this.prestige > 0 && (int) a.prestige >= this.prestige) || (this.accountType != AccountType.None && (this.accountType & a.accountType) != AccountType.None || this.experience > 0 && (int) a.experience >= this.experience);
   }
 }

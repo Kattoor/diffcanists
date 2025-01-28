@@ -375,7 +375,7 @@ public class LobbyMenu : Catalogue
   {
     if (this.viewing != Viewing.Lobby)
       return;
-    Client.GetAccount(Client.Name, false);
+    Account myAccount = Client.MyAccount;
     PrestigeLobbyUI.Rating((TMP_Text) this.txtRating);
     this.txtRateType.text = "Rating";
     if ((UnityEngine.Object) this.txtName != (UnityEngine.Object) null)

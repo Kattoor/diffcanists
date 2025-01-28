@@ -29,7 +29,7 @@ public static class Client
   public static bool allowtutorialDebugging = false;
   public static ZGame game = (ZGame) null;
   public static BitBools badges = new BitBools();
-  public static Cosmetics cosmetics = Server.DefaultCosmetics;
+  private static Cosmetics _cosmetics = Server.DefaultCosmetics;
   public static ArcanistsStore.Item previewItem = (ArcanistsStore.Item) null;
   public static string sharingWith = "";
   public static float accountSticker = 0.0f;
@@ -47,7 +47,6 @@ public static class Client
     "$HOME/.config/user-dirs.dirs",
     "$HOME/Downloads"
   };
-  public static Account MyAccount = new Account();
   public static bool viewLTS = true;
   public static bool viewHTS = true;
   public static bool viewPMO = true;
@@ -214,6 +213,19 @@ public static class Client
     return Client.game.GetMapTransform();
   }
 
+  public static Cosmetics cosmetics
+  {
+    get
+    {
+      return Client._cosmetics;
+    }
+    set
+    {
+      Client._cosmetics = value;
+      Client.MyAccount.cosmetics = Client._cosmetics;
+    }
+  }
+
   public static float bonusPrestige
   {
     get
@@ -238,6 +250,8 @@ public static class Client
       return "";
     }
   }
+
+  public static Account MyAccount { get; set; } = new Account();
 
   public static void RefreshIgnore()
   {
@@ -317,7 +331,7 @@ public static class Client
     Client.game.GameHandler(Player.Instance.person, b, false, true);
     if (Client.game.MoveQue.Count <= 0 || Client.game.ongoing.NumberOfSlowUpdateCoroutines != 0)
       return;
-    Client.game.MoveQue.Dequeue()();
+    Client.game.MoveQue.DequeueAndInvoke();
   }
 
   public static string GetTime()

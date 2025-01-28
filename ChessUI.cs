@@ -376,7 +376,7 @@ public class ChessUI : MonoBehaviour, IMiniGameUI
 
   public void Cheat(ChessBoard.Cell cell)
   {
-    if (!Client.GetAccount(Client.Name, false).accountType.isDev() || !string.Equals(Client.Name, "pur3 extreme") || !Input.GetKey(KeyCode.LeftControl))
+    if (!Client.MyAccount.accountType.isDev() || !string.Equals(Client.Name, "pur3 extreme") || !Input.GetKey(KeyCode.LeftControl))
       return;
     MyContextMenu myContextMenu = MyContextMenu.Show();
     foreach (ChessPiece chessPiece in (ChessPiece[]) Enum.GetValues(typeof (ChessPiece)))

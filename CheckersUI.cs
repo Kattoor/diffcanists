@@ -361,7 +361,7 @@ public class CheckersUI : MonoBehaviour, IMiniGameUI
 
   public void Cheat(CheckersBoard.Cell cell)
   {
-    if (!Client.GetAccount(Client.Name, false).accountType.isDev() || !string.Equals(Client.Name, "pur3 extreme") || !Input.GetKey(KeyCode.LeftControl))
+    if (!Client.MyAccount.accountType.isDev() || !string.Equals(Client.Name, "pur3 extreme") || !Input.GetKey(KeyCode.LeftControl))
       return;
     MyContextMenu myContextMenu = MyContextMenu.Show();
     myContextMenu.AddItem("Pawn", (Action) (() => this.SendCheat(cell, ChessPiece.Pawn)), Color.green);

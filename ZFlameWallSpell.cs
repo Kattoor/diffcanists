@@ -12,6 +12,15 @@ public class ZFlameWallSpell : ZSpell
     }
   }
 
+  public bool IsFriendly(ZCreature c)
+  {
+    if ((ZComponent) c == (object) null)
+      return false;
+    if ((ZComponent) c == (object) this.parent)
+      return true;
+    return (ZComponent) this.parent != (object) null && c.parent == this.parent.parent;
+  }
+
   public override void SetPosition(MyLocation p)
   {
     this.position = p;
@@ -23,7 +32,12 @@ public class ZFlameWallSpell : ZSpell
       return;
     List<ZMyCollider> zmyColliderList = this.world.OverlapCircleAll((Point) p, this.effector2.collider.radius, (ZMyCollider) null, Inert.mask_movement_NoEffector | Inert.mask_Phantom);
     if (zmyColliderList.Count > 1)
-      zmyColliderList.Sort((Comparison<ZMyCollider>) ((a, b) => MyLocation.FastDistance(a.position, this.position) - MyLocation.FastDistance(b.position, this.position)));
+    {
+      if (this.spellEnum == SpellEnum.Prickly_Barrier)
+        zmyColliderList.Sort((Comparison<ZMyCollider>) ((a, b) => MyLocation.Distance(a.position, this.position) + (this.IsFriendly(a.creature) ? 100 : 0) - (MyLocation.Distance(b.position, this.position) + (this.IsFriendly(b.creature) ? 100 : 0))));
+      else
+        zmyColliderList.Sort((Comparison<ZMyCollider>) ((a, b) => MyLocation.Distance(a.position, this.position) - MyLocation.Distance(b.position, this.position)));
+    }
     foreach (ZMyCollider zmyCollider in zmyColliderList)
       this.effector2.EffectCreature((ZComponent) zmyCollider.tower != (object) null ? zmyCollider.tower.creature : zmyCollider.creature, true);
   }

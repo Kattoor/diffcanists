@@ -1719,6 +1719,8 @@ public static class Client
               }));
               break;
             case 36:
+              if (Client.game != null)
+                Controller.Instance.DestroyMap(false, true);
               myBinaryReader.ReadInt32();
               Client.cryp = myBinaryReader.ReadBytes();
               Client._gameFacts.ManualDeserialize(myBinaryReader, true, true, (byte) 0);
@@ -1750,11 +1752,11 @@ public static class Client
                 g6.invitedPlayers.Remove(n3);
               UnityThreadHelper.Dispatcher.Dispatch2((Action) (() =>
               {
-                if ((UnityEngine.Object) LobbyMenu.instance != (UnityEngine.Object) null)
+                if ((UnityEngine.Object) LobbyMenu.instance != (UnityEngine.Object) null || (UnityEngine.Object) HUD.instance != (UnityEngine.Object) null && Client.game != null && Client.game.isSpectator)
                 {
                   if (!string.Equals(n3, Client.Name, StringComparison.OrdinalIgnoreCase))
                     return;
-                  LobbyMenu.instance.RefreshGames();
+                  LobbyMenu.instance?.RefreshGames();
                   if (!v1)
                     return;
                   switch (Client.inviteChat)
@@ -2932,7 +2934,7 @@ public static class Client
         {
         }
       }
-label_203:
+label_206:
       for (; num1 >= 0; --num1)
       {
         if (string.Equals(commands[0], "power", StringComparison.CurrentCultureIgnoreCase))
@@ -3104,10 +3106,10 @@ label_203:
             if (instance != null)
             {
               instance.NewChatMsg("", c.name + " Firing All Spells", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
-              goto label_203;
+              goto label_206;
             }
             else
-              goto label_203;
+              goto label_206;
           }
           else if (string.Equals(commands[i], "quiz", StringComparison.CurrentCultureIgnoreCase))
           {
@@ -3121,10 +3123,10 @@ label_203:
                 if (instance != null)
                 {
                   instance.NewChatMsg("", "Set max quizzes: " + (object) result + "(" + (object) PlayerPrefs.GetInt("quizcorrectcount") + " completed", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
-                  goto label_203;
+                  goto label_206;
                 }
                 else
-                  goto label_203;
+                  goto label_206;
               }
               else
               {
@@ -3132,10 +3134,10 @@ label_203:
                 if (instance != null)
                 {
                   instance.NewChatMsg("", "Max quizzes must be a valid integer." + (object) result, (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
-                  goto label_203;
+                  goto label_206;
                 }
                 else
-                  goto label_203;
+                  goto label_206;
               }
             }
             else
@@ -3144,10 +3146,10 @@ label_203:
               if (instance != null)
               {
                 instance.NewChatMsg("", "Correct Quizzes: " + (object) PlayerPrefs.GetInt("quizcorrectcount") + " out of " + (object) PlayerPrefs.GetInt("quiz_max", 10), (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
-                goto label_203;
+                goto label_206;
               }
               else
-                goto label_203;
+                goto label_206;
             }
           }
           else if (string.Equals(commands[i], "ship", StringComparison.CurrentCultureIgnoreCase))
@@ -3157,10 +3159,10 @@ label_203:
             if (instance != null)
             {
               instance.NewChatMsg("", "Created the spectator ship", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
-              goto label_203;
+              goto label_206;
             }
             else
-              goto label_203;
+              goto label_206;
           }
           else if (string.Equals(commands[i], "fps", StringComparison.CurrentCultureIgnoreCase))
           {
@@ -3170,10 +3172,10 @@ label_203:
             if (instance != null)
             {
               instance.NewChatMsg("", "Before: " + (object) targetFrameRate + " After: " + (object) Application.targetFrameRate, (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
-              goto label_203;
+              goto label_206;
             }
             else
-              goto label_203;
+              goto label_206;
           }
           else if (string.Equals(commands[i], "spawn", StringComparison.CurrentCultureIgnoreCase))
           {
@@ -3185,10 +3187,10 @@ label_203:
               if (instance != null)
               {
                 instance.NewChatMsg("", "Reached Player Limit", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
-                goto label_203;
+                goto label_206;
               }
               else
-                goto label_203;
+                goto label_206;
             }
             else
             {
@@ -3212,10 +3214,10 @@ label_203:
               if (game.players.Count > 8)
               {
                 game.ScalePlayersPanel(false, 1f);
-                goto label_203;
+                goto label_206;
               }
               else
-                goto label_203;
+                goto label_206;
             }
           }
           else if (string.Equals(commands[i], "log", StringComparison.CurrentCultureIgnoreCase))
@@ -3232,7 +3234,7 @@ label_203:
                 if (num3 >= num2)
                   break;
               }
-              goto label_203;
+              goto label_206;
             }
           }
           else
@@ -3258,10 +3260,10 @@ label_203:
               if (instance != null)
               {
                 instance.NewChatMsg("", "Moved to: " + (object) new MyLocation(result, yInt), (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System, ContentType.STRING, (object) null);
-                goto label_203;
+                goto label_206;
               }
               else
-                goto label_203;
+                goto label_206;
             }
             else if (string.Equals(commands[i], "health"))
             {
@@ -3272,15 +3274,18 @@ label_203:
                 if (instance != null)
                 {
                   instance.NewChatMsg("", c.name + " health is: " + (object) c.health, (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System, ContentType.STRING, (object) null);
-                  goto label_203;
+                  goto label_206;
                 }
                 else
-                  goto label_203;
+                  goto label_206;
               }
               else
               {
                 int.TryParse(commands[i + 1], out result);
-                c.health = result;
+                if ((ZComponent) c.tower != (object) null)
+                  c.tower.Health = result;
+                else
+                  c.health = result;
                 c.UpdateHealthTxt();
                 Debug.Log((object) result);
                 if (result <= 0)
@@ -3289,10 +3294,10 @@ label_203:
                 if (instance != null)
                 {
                   instance.NewChatMsg("", c.name + " changed health: " + (object) c.health, (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System, ContentType.STRING, (object) null);
-                  goto label_203;
+                  goto label_206;
                 }
                 else
-                  goto label_203;
+                  goto label_206;
               }
             }
             else if (string.Equals(commands[i], "maxhealth"))
@@ -3304,10 +3309,10 @@ label_203:
                 if (instance != null)
                 {
                   instance.NewChatMsg("", c.name + " max health is: " + (object) c.maxHealth, (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System, ContentType.STRING, (object) null);
-                  goto label_203;
+                  goto label_206;
                 }
                 else
-                  goto label_203;
+                  goto label_206;
               }
               else
               {
@@ -3320,10 +3325,10 @@ label_203:
                 if (instance != null)
                 {
                   instance.NewChatMsg("", c.name + " changed max health: " + (object) c.maxHealth, (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System, ContentType.STRING, (object) null);
-                  goto label_203;
+                  goto label_206;
                 }
                 else
-                  goto label_203;
+                  goto label_206;
               }
             }
             else if (string.Equals(commands[i], "arma", StringComparison.CurrentCultureIgnoreCase))
@@ -3337,10 +3342,10 @@ label_203:
                 if (instance != null)
                 {
                   instance.NewChatMsg("", "Removed any custom Armageddons", (Color) ColorScheme.GetColor(Global.ColorGameText), "", ChatOrigination.System, ContentType.STRING, (object) null);
-                  goto label_203;
+                  goto label_206;
                 }
                 else
-                  goto label_203;
+                  goto label_206;
               }
               else
               {
@@ -3358,10 +3363,10 @@ label_203:
                   if (instance != null)
                   {
                     instance.NewChatMsg("", "Added " + s1.name + " as an Armageddon", (Color) ColorScheme.GetColor(Global.ColorGameText), "", ChatOrigination.System, ContentType.STRING, (object) null);
-                    goto label_203;
+                    goto label_206;
                   }
                   else
-                    goto label_203;
+                    goto label_206;
                 }
                 else
                 {
@@ -3369,10 +3374,10 @@ label_203:
                   if (instance != null)
                   {
                     instance.NewChatMsg("", "Unknown spell: " + commands[i + 1], (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
-                    goto label_203;
+                    goto label_206;
                   }
                   else
-                    goto label_203;
+                    goto label_206;
                 }
               }
             }
@@ -3391,13 +3396,13 @@ label_203:
                 if (instance != null)
                 {
                   instance.NewChatMsg("", "Added the present: " + s1.name, (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
-                  goto label_203;
+                  goto label_206;
                 }
                 else
-                  goto label_203;
+                  goto label_206;
               }
               else
-                goto label_203;
+                goto label_206;
             }
             else if (string.Equals(commands[i], "addAll", StringComparison.CurrentCultureIgnoreCase))
             {
@@ -3422,10 +3427,10 @@ label_203:
               if (instance != null)
               {
                 instance.NewChatMsg("", "Added all spells", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
-                goto label_203;
+                goto label_206;
               }
               else
-                goto label_203;
+                goto label_206;
             }
             else if (string.Equals(commands[i], "chat", StringComparison.CurrentCultureIgnoreCase))
             {
@@ -3434,7 +3439,7 @@ label_203:
                 ++Client.debugLogchat;
                 ChatBox.Instance?.NewChatMsg("", Client.debugLogchat.ToString() + ")", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
               }
-              goto label_203;
+              goto label_206;
             }
             Spell s3;
             if (Inert.Instance.spells.TryGetValue(commands[i], out s3) || Inert.Instance.TryGetSpell(commands[i], out s3))
@@ -3443,7 +3448,7 @@ label_203:
               FixedInt rot_z = !angle.HasValue ? Inert.AngleOfVelocity(new MyLocation((int) worldPoint.x, (int) worldPoint.y) - c.position) : angle.Value;
               MyLocation target = !pos.HasValue ? new MyLocation((int) worldPoint.x, (int) worldPoint.y) : pos.Value;
               ZSpell.FireWhich(s3, c, c.position, rot_z, Client._power, target, new MyLocation(c.position.x, c.position.y + 100), 0, false, (SpellSlot) null, false);
-              goto label_203;
+              goto label_206;
             }
             else
             {

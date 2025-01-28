@@ -1317,145 +1317,8 @@ label_46:
       if (!ZComponent.IsNull((ZComponent) zcreature) && !zcreature.isDead)
         this.tempList.Add(zcreature);
     }
-    for (int index1 = 0; index1 < this.tempList.Count; ++index1)
-    {
-      if (!ZComponent.IsNull((ZComponent) this.tempList[index1]) && !this.tempList[index1].isDead)
-      {
-        ZCreature temp = this.tempList[index1];
-        if (temp.invulnerable > 0)
-          --temp.invulnerable;
-        if (temp.superStunned)
-          temp.superStunned = false;
-        else
-          temp.stunned = false;
-        if ((ZComponent) temp.tower != (object) null)
-          temp.tower.NextTurn();
-        if (temp.shiningPower && temp.health < temp.maxHealth && (!temp.inWater && temp.health < temp.maxHealth))
-        {
-          temp.DoHeal(10, DamageType.None, (ZCreature) null, false);
-          if (temp.health > temp.maxHealth)
-            temp.health = temp.maxHealth;
-        }
-        if (temp.type == CreatureType.Gargoyle && !temp.canMove && (temp.health < 100 || temp.health < temp.maxHealth))
-        {
-          if (temp.maxHealth < 100)
-            temp.maxHealth += 25;
-          temp.DoHeal(25, DamageType.Heal, (ZCreature) null, false);
-          if (temp.health > temp.maxHealth)
-            temp.health = temp.maxHealth;
-        }
-        if (temp.type == CreatureType.Dragon && temp.race == CreatureRace.Arcane && (!temp.FullArcane && temp.health < temp.maxHealth))
-        {
-          temp.DoHeal(25, DamageType.None, (ZCreature) null, false);
-          if (temp.health > temp.maxHealth)
-            temp.health = temp.maxHealth;
-        }
-        else if (temp.type == CreatureType.DragonJr && temp.health < temp.maxHealth)
-        {
-          temp.DoHeal(15, DamageType.None, (ZCreature) null, false);
-          if (temp.health > temp.maxHealth)
-            temp.health = temp.maxHealth;
-        }
-        if (temp.fusion > 0)
-        {
-          if (temp.fusion >= temp.parent.localTurn)
-          {
-            temp.DoHeal(10, DamageType.None, (ZCreature) null, false);
-          }
-          else
-          {
-            temp.fusion = 0;
-            temp.UpdateHealthTxt();
-          }
-        }
-        if (!ZComponent.IsNull((ZComponent) this.dwarfMapEffector) && temp.minerMarket != null && !temp.isMoving)
-        {
-          Spell spell = Inert.GetSpell(SpellEnum.Mine);
-          ZSpell.FireMine(spell, temp, this.dwarfMapEffector.position, -(spell.maxDuration / 2), true);
-        }
-        if (temp.familiar.Has(FamiliarType.OverLight) && temp.familiarLevelOverlight > 0 && temp.shield < 50)
-        {
-          if (ZEffector.InSanctuary(temp.game.world, temp.position))
-          {
-            ZEffector.SpawnVineExplosion(temp.transform.position);
-          }
-          else
-          {
-            temp.CreateProtectionShield(false);
-            temp.shield += temp.familiarLevelOverlight;
-          }
-        }
-        if (temp.familiarLevelSeas > 0 && !temp.isPawn && temp.waterShield < 50)
-        {
-          temp.waterShield += temp.familiarLevelSeas * 5;
-          if (temp.waterShield > 50)
-            temp.waterShield = 50;
-        }
-        if (temp.race == CreatureRace.Undead && temp.isPawn && (temp.type != CreatureType.Gargoyle || temp.canMove))
-        {
-          temp.DoDamage(5, DamageType.None, (ZCreature) null, false);
-          if (temp.health <= 0)
-            temp.health = 1;
-        }
-        else if (temp.type == CreatureType.Vampire && temp.health > 1)
-        {
-          if (temp.InSunlight())
-          {
-            temp.DoDamage(Mathf.Min(temp.health - 1, 10), DamageType.None, (ZCreature) null, false);
-            if (temp.health <= 0)
-              temp.health = 1;
-          }
-        }
-        else if (temp.type == CreatureType.Beehive)
-        {
-          temp.DoHeal(15, DamageType.None, (ZCreature) null, false);
-          if (temp.health > temp.maxHealth)
-            temp.health = temp.maxHealth;
-          temp.OnNextTurn();
-        }
-        int count = temp.effectors.Count;
-        for (int index2 = 0; index2 < count && index2 < temp.effectors.Count; ++index2)
-        {
-          if (ZComponent.IsNull((ZComponent) temp.effectors[index2]) || temp.effectors[index2].dead)
-          {
-            temp.effectors.RemoveAt(index2);
-            --index2;
-            --count;
-          }
-          else
-          {
-            ZEffector effector = temp.effectors[index2];
-            temp.effectors[index2].TurnPassed(index2, false, false);
-            if (ZComponent.IsNull((ZComponent) effector))
-            {
-              if (index2 < temp.effectors.Count && (ZComponent) temp.effectors[index2] == (object) effector)
-                temp.effectors.RemoveAt(index2);
-              --index2;
-              --count;
-            }
-          }
-        }
-        for (int index2 = temp.destroyableEffectors.Count - 1; index2 >= 0; --index2)
-        {
-          if (ZComponent.IsNull((ZComponent) temp.destroyableEffectors[index2]))
-            temp.destroyableEffectors.RemoveAt(index2);
-          else
-            temp.destroyableEffectors[index2].TurnPassed(index2, true, false);
-        }
-        if (temp.halfHealing > 0)
-          --temp.halfHealing;
-        if (temp.bleeding && temp.health > 1)
-        {
-          --temp.bleedCounter;
-          temp.DoDamage(Mathf.Min(temp.health - 1, 10), DamageType.None, (ZCreature) null, false);
-          ZSpell.RandomBlood(temp.game, temp.position);
-        }
-        if ((ZComponent) temp != (object) null && !temp.isDead)
-          temp.UpdateHealthTxt();
-        if (temp.appliedGravity > 0 && !temp.gravitionalPull)
-          temp.RemoveGravity();
-      }
-    }
+    for (int index = 0; index < this.tempList.Count; ++index)
+      this.NextTurn(this.tempList[index]);
     for (int index = this.globalEffectors.Count - 1; index >= 0; --index)
     {
       if (ZComponent.IsNull((ZComponent) this.globalEffectors[index]) || this.globalEffectors[index].dead || ZComponent.IsNull((ZComponent) this.globalEffectors[index].whoSummoned) && p.controlled.Count > 0 && this.globalEffectors[index].KillsHost())
@@ -1503,6 +1366,145 @@ label_46:
     if (this.resigned.Count <= 0)
       return;
     this.RemoveResigned();
+  }
+
+  public void NextTurn(ZCreature x)
+  {
+    if (ZComponent.IsNull((ZComponent) x) || x.isDead)
+      return;
+    if (x.invulnerable > 0)
+      --x.invulnerable;
+    if (x.superStunned)
+      x.superStunned = false;
+    else
+      x.stunned = false;
+    if ((ZComponent) x.tower != (object) null)
+      x.tower.NextTurn();
+    if (x.shiningPower && x.health < x.maxHealth && (!x.inWater && x.health < x.maxHealth))
+    {
+      x.DoHeal(10, DamageType.None, (ZCreature) null, false);
+      if (x.health > x.maxHealth)
+        x.health = x.maxHealth;
+    }
+    if (x.type == CreatureType.Gargoyle && !x.canMove && (x.health < 100 || x.health < x.maxHealth))
+    {
+      if (x.maxHealth < 100)
+        x.maxHealth += 25;
+      x.DoHeal(25, DamageType.Heal, (ZCreature) null, false);
+      if (x.health > x.maxHealth)
+        x.health = x.maxHealth;
+    }
+    if (x.type == CreatureType.Dragon && x.race == CreatureRace.Arcane && (!x.FullArcane && x.health < x.maxHealth))
+    {
+      x.DoHeal(25, DamageType.None, (ZCreature) null, false);
+      if (x.health > x.maxHealth)
+        x.health = x.maxHealth;
+    }
+    else if (x.type == CreatureType.DragonJr && x.health < x.maxHealth)
+    {
+      x.DoHeal(15, DamageType.None, (ZCreature) null, false);
+      if (x.health > x.maxHealth)
+        x.health = x.maxHealth;
+    }
+    if (x.fusion > 0)
+    {
+      if (x.fusion >= x.parent.localTurn)
+      {
+        x.DoHeal(10, DamageType.None, (ZCreature) null, false);
+      }
+      else
+      {
+        x.fusion = 0;
+        x.UpdateHealthTxt();
+      }
+    }
+    if (!ZComponent.IsNull((ZComponent) this.dwarfMapEffector) && x.minerMarket != null && !x.isMoving)
+    {
+      Spell spell = Inert.GetSpell(SpellEnum.Mine);
+      ZSpell.FireMine(spell, x, this.dwarfMapEffector.position, -(spell.maxDuration / 2), true);
+    }
+    if (x.familiar.Has(FamiliarType.OverLight) && x.familiarLevelOverlight > 0 && x.shield < 50)
+    {
+      if (ZEffector.InSanctuary(x.game.world, x.position))
+      {
+        ZEffector.SpawnVineExplosion(x.transform.position);
+      }
+      else
+      {
+        x.CreateProtectionShield(false);
+        x.shield += x.familiarLevelOverlight;
+      }
+    }
+    if (x.familiarLevelSeas > 0 && !x.isPawn && (x.waterShield < 50 && this.AllowExpansion))
+    {
+      x.waterShield += x.familiarLevelSeas * 5;
+      if (x.waterShield > 50)
+        x.waterShield = 50;
+    }
+    if (x.race == CreatureRace.Undead && x.isPawn && (x.type != CreatureType.Gargoyle || x.canMove))
+    {
+      x.DoDamage(5, DamageType.None, (ZCreature) null, false);
+      if (x.health <= 0)
+        x.health = 1;
+    }
+    else if (x.type == CreatureType.Vampire && x.health > 1)
+    {
+      if (x.InSunlight())
+      {
+        x.DoDamage(Mathf.Min(x.health - 1, 10), DamageType.None, (ZCreature) null, false);
+        if (x.health <= 0)
+          x.health = 1;
+      }
+    }
+    else if (x.type == CreatureType.Beehive)
+    {
+      x.DoHeal(15, DamageType.None, (ZCreature) null, false);
+      if (x.health > x.maxHealth)
+        x.health = x.maxHealth;
+      x.OnNextTurn();
+    }
+    int count = x.effectors.Count;
+    for (int index = 0; index < count && index < x.effectors.Count; ++index)
+    {
+      if (ZComponent.IsNull((ZComponent) x.effectors[index]) || x.effectors[index].dead)
+      {
+        x.effectors.RemoveAt(index);
+        --index;
+        --count;
+      }
+      else
+      {
+        ZEffector effector = x.effectors[index];
+        x.effectors[index].TurnPassed(index, false, false);
+        if (ZComponent.IsNull((ZComponent) effector))
+        {
+          if (index < x.effectors.Count && (ZComponent) x.effectors[index] == (object) effector)
+            x.effectors.RemoveAt(index);
+          --index;
+          --count;
+        }
+      }
+    }
+    for (int index = x.destroyableEffectors.Count - 1; index >= 0; --index)
+    {
+      if (ZComponent.IsNull((ZComponent) x.destroyableEffectors[index]))
+        x.destroyableEffectors.RemoveAt(index);
+      else
+        x.destroyableEffectors[index].TurnPassed(index, true, false);
+    }
+    if (x.halfHealing > 0)
+      --x.halfHealing;
+    if (x.bleeding && x.health > 1)
+    {
+      --x.bleedCounter;
+      x.DoDamage(Mathf.Min(x.health - 1, 10), DamageType.None, (ZCreature) null, false);
+      ZSpell.RandomBlood(x.game, x.position);
+    }
+    if ((ZComponent) x != (object) null && !x.isDead)
+      x.UpdateHealthTxt();
+    if (x.appliedGravity <= 0 || x.gravitionalPull)
+      return;
+    x.RemoveGravity();
   }
 
   public void CreatureMoveSurroundings(
@@ -1768,7 +1770,7 @@ label_46:
             {
               try
               {
-                int index2 = zgame.GetTeam(zgame.players[(int) zgame.serverState.playersTurn].team).FindIndex(new Predicate<ZPerson>(zgame.\u003CBidUpdate\u003Eb__189_1));
+                int index2 = zgame.GetTeam(zgame.players[(int) zgame.serverState.playersTurn].team).FindIndex(new Predicate<ZPerson>(zgame.\u003CBidUpdate\u003Eb__190_1));
                 if (index2 > 0)
                 {
                   for (int index3 = 0; index3 < zgame.teamIndex.Length; ++index3)
@@ -2305,7 +2307,8 @@ label_46:
           }
           break;
         case BookOf.Seas:
-          p.first().waterShield += p.first().familiarLevelSeas * 5;
+          if (this.AllowExpansion)
+            p.first().waterShield += p.first().familiarLevelSeas * 5;
           if (p.first().waterShield > 50)
             p.first().waterShield = 50;
           p.first().UpdateHealthTxt();
@@ -3824,7 +3827,7 @@ label_46:
                                 }
                                 if (!creature.inWater)
                                 {
-                                  if (creature.phantom && !spellSlot.isPresent && (spell.bookOf != BookOf.Arcane && spell.bookOf != BookOf.Illusion) && spell.spellEnum != SpellEnum.Spirit_Link)
+                                  if (creature.phantom && !spellSlot.isPresent && (spell.bookOf != BookOf.Arcane && spell.bookOf != BookOf.Illusion) && (spell.spellEnum != SpellEnum.Spirit_Link && spell.spellEnum != SpellEnum.Spirit_Walk))
                                   {
                                     this.SendResyncMsg(p, "spell unavailable when phantom", true, (Action) null);
                                     return;
@@ -3926,6 +3929,7 @@ label_46:
                                     }
                                   }
                                   spellSlot.SetTurnFired = localTurn;
+                                  creature.OnSpellFired(spellSlot);
                                   Inert.Instance.waterGate.SetTurnFired = localTurn;
                                 }
                               }
@@ -3936,10 +3940,16 @@ label_46:
                                 if (!spellSlot.spell.spellEnum.IsFlight() || !creature.flying)
                                 {
                                   if (!spellSlot.EndsTurn || spellSlot.RechargeTime > 0)
+                                  {
                                     spellSlot.SetTurnFired = localTurn;
+                                    creature.OnSpellFired(spellSlot);
+                                  }
                                 }
                                 else
+                                {
                                   spellSlot.SetTurnFired = Mathf.Max(localTurn - 4, spellSlot.LastTurnFired);
+                                  creature.OnSpellFired(spellSlot);
+                                }
                               }
                               if (creature.phantom && creature.spellEnum != SpellEnum.None)
                               {
@@ -5449,7 +5459,7 @@ label_164:
     bool nextTurn = false;
     game.replayPastTimeLine = 0;
     HUD.instance.replayTimeline.MaxSize = game.timelineList.Count;
-    HUD.instance.replayTimeline._bar.onValueChanged.AddListener(new UnityAction<float>(game.\u003CPushReplay\u003Eb__255_0));
+    HUD.instance.replayTimeline._bar.onValueChanged.AddListener(new UnityAction<float>(game.\u003CPushReplay\u003Eb__256_0));
     game.replayPaused = false;
     Time.timeScale = 1f;
     ChatBox.Instance?.NewChatMsg("", "Press F2 to take control right away", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
@@ -5908,6 +5918,7 @@ label_164:
     writer.Write(this.firstOceanFury);
     writer.Write(this.hasArcaneMonster);
     writer.Write(this.numExplosionsAndMovement);
+    writer.Write((int) this.waterType);
     writer.Write(this.AllowMovement);
     writer.Write(this.AllowTerrainDestruction);
     writer.Write(this.AllowInput);
@@ -6071,6 +6082,7 @@ label_164:
     this.firstOceanFury = reader.ReadBoolean();
     this.hasArcaneMonster = reader.ReadBoolean();
     this.numExplosionsAndMovement = reader.ReadInt32();
+    this.waterType = (WaterStyle) reader.ReadInt32();
     this.AllowMovement = reader.ReadBoolean();
     this.AllowTerrainDestruction = reader.ReadBoolean();
     this.AllowInput = reader.ReadBoolean();

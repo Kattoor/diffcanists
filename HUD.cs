@@ -1163,7 +1163,7 @@ public class HUD : UIBehaviour
     ++creature.parent.awards.spellTypesBrought[(int) slot.spell.spellType];
     if (!creature.game.AllowExpansion)
     {
-      if (slot.spell.spellEnum == SpellEnum.Ice_Bomb || slot.spell.spellEnum == SpellEnum.Thorn_Bomb || (slot.spell.spellEnum == SpellEnum.Ice_Shield || slot.spell.spellEnum == SpellEnum.Forest_Seed) || (slot.spell.spellEnum == SpellEnum.Shock_Bomb || slot.spell.spellEnum == SpellEnum.Magma_Bomb || slot.spell.spellEnum == SpellEnum.Summon_Swarm))
+      if (slot.spell.spellEnum == SpellEnum.Ice_Bomb || slot.spell.spellEnum == SpellEnum.Thorn_Bomb || (slot.spell.spellEnum == SpellEnum.Ice_Shield || slot.spell.spellEnum == SpellEnum.Forest_Seed) || (slot.spell.spellEnum == SpellEnum.Shock_Bomb || slot.spell.spellEnum == SpellEnum.Magma_Bomb || (slot.spell.spellEnum == SpellEnum.Summon_Swarm || slot.spell.spellEnum == SpellEnum.Flight)))
       {
         slot.TurnsTillFirstUse = 0;
         if (slot.spell.spellEnum != SpellEnum.Ice_Shield)
@@ -1177,9 +1177,13 @@ public class HUD : UIBehaviour
         slot.RechargeTime = 0;
       }
     }
+    else if (slot.spell.spellEnum == SpellEnum.Forest_Seed && creature.game.MaxTurnTime <= 20)
+    {
+      slot.TurnsTillFirstUse = 0;
+    }
     else
     {
-      if (slot.spell.spellEnum != SpellEnum.Forest_Seed || creature.game.MaxTurnTime > 20)
+      if (slot.spell.spellEnum != SpellEnum.Flight || creature.game.MaxTurnTime > 10)
         return;
       slot.TurnsTillFirstUse = 0;
     }
@@ -2083,7 +2087,7 @@ public class HUD : UIBehaviour
 
   public static void UpdateTimeSounds()
   {
-    if (Client.game.isSandbox || !((UnityEngine.Object) Player.Instance != (UnityEngine.Object) null) || !Player.Instance.person.yourTurn)
+    if (Client.game == null || Client.game.isSandbox || (!((UnityEngine.Object) Player.Instance != (UnityEngine.Object) null) || !Player.Instance.person.yourTurn))
       return;
     AudioManager.Timer(Client.game.PlayersMaxTurnTime - Client.game.serverState.turnTime);
   }

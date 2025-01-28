@@ -14,7 +14,7 @@ public class ZSpellClam : ZSpell
     int bounces = 0;
     if (gotoStatic)
       yield return 0.0f;
-label_44:
+label_46:
     while (!zspellClam.isDead)
     {
       zspellClam.pX = zspellClam.position.x;
@@ -43,7 +43,7 @@ label_44:
         {
           zspellClam.position = new MyLocation(zspellClam.validX, zspellClam.validY);
           yield return 0.0f;
-          goto label_44;
+          goto label_46;
         }
         else
         {
@@ -95,10 +95,10 @@ label_44:
                 if (zspellClam.game.isClient)
                 {
                   zspellClam.gameObject.GetComponent<AnimateRepeat>().enabled = true;
-                  goto label_41;
+                  goto label_43;
                 }
                 else
-                  goto label_41;
+                  goto label_43;
               }
             }
           }
@@ -115,7 +115,12 @@ label_44:
         zspellClam.velocity = MyLocation.zero;
         zspellClam.isMoving = false;
         zspellClam.Splash();
-        zspellClam.OnDeath(true);
+        if (zspellClam.game.AllowExpansion)
+        {
+          zspellClam.OnDeath(true);
+          break;
+        }
+        zspellClam.DestroyDelay();
         break;
       }
       if (zspellClam.addVelocity)
@@ -132,7 +137,7 @@ label_44:
       else if (!zspellClam.affectedByGravity && zspellClam.velocity.y > -10 && zspellClam.maxDuration > 150)
         zspellClam.affectedByGravity = true;
       zspellClam.Wind();
-label_41:
+label_43:
       ++zspellClam.curDuration;
       if (zspellClam.curDuration >= zspellClam.maxDuration)
       {

@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 public class Inert : MonoBehaviour
 {
-  public static string Version = "v7.2b";
+  public static string Version = "v7.3";
   public static int _Version = 62;
   public static int mask_Jar = 262144;
   public static int mask_ButterflyJar = 2097152;
@@ -95,6 +95,7 @@ public class Inert : MonoBehaviour
   public FlowerBallObject flower3;
   public FlowerBallObject flower4;
   public GameObject ducks;
+  public GameObject ducksHalloween;
   public GameObject indicatorOfDecay;
   public GameObject auraOfDecayExplosion;
   public GameObject auraOfArcaneExplosion;
@@ -121,6 +122,11 @@ public class Inert : MonoBehaviour
   public void QuickLink_Inert()
   {
     this.QuickLink_InertExtra();
+  }
+
+  public GameObject GetDucks()
+  {
+    return DateTime.Now.Month == 10 && OptionsMenu.SeasonalThemes ? this.ducksHalloween : this.ducks;
   }
 
   [ContextMenu("Apply Curves")]
@@ -432,7 +438,7 @@ public class Inert : MonoBehaviour
       sum.miniMapBg.color = sum.bg.color;
     if (!((UnityEngine.Object) sum.christmasHat != (UnityEngine.Object) null))
       return;
-    sum.christmasHat.SetActive(DateTime.Now.Month == 12 || sum.parent != null && (sum.parent.ActivateableFamiliar == BookOf.Frost || sum.familiarLevelFrost > 0) && (sum.parent.settingsPlayer.indexHat == (byte) 69 || sum.parent.settingsPlayer.indexHat == (byte) 70));
+    sum.christmasHat.SetActive(OptionsMenu.SeasonalThemes && (DateTime.Now.Month == 12 || sum.parent != null && (sum.parent.ActivateableFamiliar == BookOf.Frost || sum.familiarLevelFrost > 0) && (sum.parent.settingsPlayer.indexHat == (byte) 69 || sum.parent.settingsPlayer.indexHat == (byte) 70)));
   }
 
   public static void AddOverheadCanvas(Creature c)
@@ -605,7 +611,7 @@ public class Inert : MonoBehaviour
     creature.collider.Initialize(pos, p.game.world);
     creature.collider.creature = creature;
     creature.position = pos;
-    sp.indexMouth = (byte) p.game.RandomInt(0, 24);
+    sp.indexMouth = sp.indexHead == (byte) 106 ? (byte) p.game.RandomInt(25, 28) : (byte) p.game.RandomInt(0, 24);
     if (sp._spells.SeasonsIsHoliday)
       p.seasonISHoliday = true;
     Inert.CreateStuff(creature, p, sp, true);

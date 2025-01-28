@@ -73,7 +73,7 @@ public class MyContextMenu : MonoBehaviour
     gameObject.SetActive(true);
   }
 
-  public void AddItem(string n, Action a, Color c)
+  public GameObject AddItem(string n, Action a, Color c)
   {
     GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(this.item, (Transform) this.container);
     gameObject.GetComponent<TextMeshProUGUI>().text = n;
@@ -94,6 +94,7 @@ public class MyContextMenu : MonoBehaviour
       this.Close();
     }));
     gameObject.SetActive(true);
+    return gameObject;
   }
 
   public void AddItem(string n, Action a, Color c, string tooltip)
@@ -520,7 +521,7 @@ public class MyContextMenu : MonoBehaviour
             spectator = (Client.miniGame.players.Count > 1)
           }, false);
         }), (Color) ColorScheme.GetColor(MyContextMenu.ColorClan));
-      if ((UnityEngine.Object) LobbyMenu.instance != (UnityEngine.Object) null && !Client._lobby.ContainsKey(acc.name) && acc.location.Online())
+      if (((UnityEngine.Object) LobbyMenu.instance != (UnityEngine.Object) null || (UnityEngine.Object) HUD.instance != (UnityEngine.Object) null && Client.game != null && Client.game.isSpectator) && (!Client._lobby.ContainsKey(acc.name) && acc.location.Online()))
       {
         bool flag = false;
         for (int index = Client._games.Count - 1; index >= 0; --index)
@@ -532,7 +533,9 @@ public class MyContextMenu : MonoBehaviour
             {
               if (string.Equals(player, acc.name))
               {
-                this.AddItem("Spectate " + s + " game", (Action) (() => Client.AskToSpectate(x.Key)), (Color) ColorScheme.GetColor(MyContextMenu.ColorCyan));
+                GameObject gameObject = this.AddItem("Spectate " + s + " game", (Action) (() => Client.AskToSpectate(x.Key)), (Color) ColorScheme.GetColor(MyContextMenu.ColorCyan));
+                gameObject.GetComponent<UIOnHover>().onEnter.AddListener((UnityAction) (() => MyToolTip.Show(x.Value.ToString((ZGame) null, false), -1f)));
+                gameObject.GetComponent<UIOnHover>().onExit.AddListener((UnityAction) (() => MyToolTip.Close()));
                 this.AddSeperator("--------------------------");
                 flag = true;
                 break;
@@ -545,7 +548,9 @@ public class MyContextMenu : MonoBehaviour
             {
               if (string.Equals(player, acc.name))
               {
-                this.AddItem("Join " + s + " game", (Action) (() => Client.AskTojoinGame(x.Key)), (Color) ColorScheme.GetColor(MyContextMenu.ColorCyan));
+                GameObject gameObject = this.AddItem("Join " + s + " game", (Action) (() => Client.AskTojoinGame(x.Key)), (Color) ColorScheme.GetColor(MyContextMenu.ColorCyan));
+                gameObject.GetComponent<UIOnHover>().onEnter.AddListener((UnityAction) (() => MyToolTip.Show(x.Value.ToString((ZGame) null, false), -1f)));
+                gameObject.GetComponent<UIOnHover>().onExit.AddListener((UnityAction) (() => MyToolTip.Close()));
                 this.AddSeperator("--------------------------");
                 flag = true;
                 break;

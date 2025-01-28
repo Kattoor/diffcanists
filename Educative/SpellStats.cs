@@ -33,6 +33,7 @@ namespace Educative
     public SpellLogic spellLogic;
     public SpellType spellType;
     public TargetType targetType;
+    public SharedCooldown sharedCooldown;
     public EditorFixedInt speedFlying;
     [Header("Explosion")]
     public int damage;

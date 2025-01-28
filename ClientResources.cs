@@ -904,6 +904,24 @@ public class ClientResources : MonoBehaviour
         component.deleteOnDestroy = true;
         p.archMageStaffs.Add(gameObject);
       }
+      else if (s.indexRightHand == (byte) 190)
+      {
+        GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(ClientResources.Instance.ArchmageStaffs[64], c.rightArm.transform.position + new Vector3(0.0f, 0.0f), Quaternion.identity, c.rightArm.transform);
+        p.archMageStaffs.Add(gameObject);
+      }
+      else if (s.indexRightHand == (byte) 191)
+      {
+        GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(ClientResources.Instance.ArchmageStaffs[63], c.rightArm.transform.position + new Vector3(0.25f, 0.0f), Quaternion.identity, c.rightArm.transform);
+        AnimateRepeat component = gameObject.GetComponent<AnimateRepeat>();
+        ClientResources.ChangeSprites((SpriteRenderer) null, component, component.sprites, s, Outfit.RightHand);
+        component.deleteOnDestroy = true;
+        p.archMageStaffs.Add(gameObject);
+      }
+      else if (s.indexRightHand == (byte) 192)
+      {
+        GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(ClientResources.Instance.ArchmageStaffs[65], c.rightArm.transform.position + new Vector3(0.0f, 0.0f), Quaternion.identity, c.rightArm.transform);
+        p.archMageStaffs.Add(gameObject);
+      }
     }
     if (s.indexBeard == (byte) 98 || s.indexBeard2 == (byte) 98 || s.indexBeard3 == (byte) 98)
     {
@@ -1020,6 +1038,23 @@ public class ClientResources : MonoBehaviour
     else if (s.indexLeftHand == (byte) 146)
     {
       GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(ClientResources.Instance.ArchmageStaffs[59], c.leftArm.transform.position + new Vector3(13.66f, -2.15f), Quaternion.identity, c.leftArm.transform);
+      p.archMageStaffs.Add(gameObject);
+    }
+    else if (s.indexLeftHand == (byte) 149)
+    {
+      GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(ClientResources.Instance.ArchmageStaffs[62], c.leftArm.transform.position + new Vector3(7.22f, -3.29f), Quaternion.identity, c.leftArm.transform);
+      ParticleSystem.MainModule main = gameObject.GetComponent<ParticleSystem>().main;
+      Color32 red = s.coloring.colors[2].red;
+      red.a = (byte) 55;
+      main.startColor = new ParticleSystem.MinMaxGradient((Color) red);
+      p.archMageStaffs.Add(gameObject);
+    }
+    else if (s.indexLeftHand == (byte) 151)
+    {
+      GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(ClientResources.Instance.ArchmageStaffs[63], c.leftArm.transform.position + new Vector3(4.25f, 0.0f), Quaternion.identity, c.leftArm.transform);
+      gameObject.GetComponent<SpriteRenderer>().sortingOrder = -18;
+      AnimateRepeat component = gameObject.GetComponent<AnimateRepeat>();
+      ClientResources.ChangeSprites((SpriteRenderer) null, component, component.sprites, s, Outfit.LeftHand);
       p.archMageStaffs.Add(gameObject);
     }
     if (s.animations != null)

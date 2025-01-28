@@ -203,7 +203,7 @@ namespace Educative
         this.creature.stunned = value;
         if (!value || !this.creature.game.isClient)
           return;
-        ParticleDucks component = Object.Instantiate<GameObject>(Inert.Instance.ducks, this.creature.transform.position + new Vector3(0.0f, (float) (this.radius + 15)), Quaternion.Euler(-55f, 0.0f, 0.0f), this.creature.transform).GetComponent<ParticleDucks>();
+        ParticleDucks component = Object.Instantiate<GameObject>(Inert.Instance.GetDucks(), this.creature.transform.position + new Vector3(0.0f, (float) (this.radius + 15)), Quaternion.Euler(-55f, 0.0f, 0.0f), this.creature.transform).GetComponent<ParticleDucks>();
         component.c = this.creature.clientObj;
         this.creature.myducks = component;
       }
@@ -223,7 +223,7 @@ namespace Educative
         this.creature.superStunned = value;
         if (!value || !this.creature.game.isClient)
           return;
-        ParticleDucks component = Object.Instantiate<GameObject>(Inert.Instance.ducks, this.creature.transform.position + new Vector3(0.0f, (float) (this.radius + 15)), Quaternion.Euler(-55f, 0.0f, 0.0f), this.creature.transform).GetComponent<ParticleDucks>();
+        ParticleDucks component = Object.Instantiate<GameObject>(Inert.Instance.GetDucks(), this.creature.transform.position + new Vector3(0.0f, (float) (this.radius + 15)), Quaternion.Euler(-55f, 0.0f, 0.0f), this.creature.transform).GetComponent<ParticleDucks>();
         component.c = this.creature.clientObj;
         this.creature.myducks = component;
         component.SetRed();

@@ -232,6 +232,7 @@ public class ZTower : ZComponent
   {
     if (this.type != TowerType.Sand)
       return;
+    this.creature.parent.towerHealth[12] = Mathf.Clamp(this.Health, 1, 125);
     if (this.Health > 100)
     {
       this.collider.baseCollider = Inert.Instance.cachedBlitColliders[11];
@@ -817,7 +818,7 @@ public class ZTower : ZComponent
                 yield break;
               }
             }
-            else if ((this.type == TowerType.Frost || this.creature.parent.GetLevel(BookOf.Frost) > 0) && (this.position.x >= 0 && this.position.x <= this.map.Width))
+            else if ((this.type == TowerType.Frost || this.creature.parent.GetLevel(BookOf.Frost) > 0) && (this.position.x >= 0 && this.position.x <= this.map.Width) && this.game.waterType == WaterStyle.Water)
             {
               this.map.ServerBitBlt(54, (int) this.position.x, 4, false, true);
               MyLocation position2 = this.position;
@@ -873,7 +874,7 @@ public class ZTower : ZComponent
     }
     else
     {
-      List<Coords> towerLeftPoints = MapGenerator.GetTowerLeftPoints(this.texture);
+      List<Coords> towerLeftPoints = MapGenerator.GetTowerLeftPoints(this.texture, this);
       for (int index = 0; index < towerLeftPoints.Count; ++index)
       {
         if (!this.map.CheckPosition(towerLeftPoints[index].x + (int) this.position.x, towerLeftPoints[index].y + (int) this.position.y + this.firstChildYOffset, this.creature, Inert.mask_entity_movement))
@@ -893,7 +894,7 @@ public class ZTower : ZComponent
     }
     else
     {
-      List<Coords> towerRightPoints = MapGenerator.GetTowerRightPoints(this.texture);
+      List<Coords> towerRightPoints = MapGenerator.GetTowerRightPoints(this.texture, this);
       for (int index = 0; index < towerRightPoints.Count; ++index)
       {
         if (!this.map.CheckPosition(towerRightPoints[index].x + (int) this.position.x, towerRightPoints[index].y + (int) this.position.y + this.firstChildYOffset, this.creature, Inert.mask_entity_movement))
@@ -912,12 +913,10 @@ public class ZTower : ZComponent
   {
     if (this.type != TowerType.Cosmos)
       return false;
-    if ((this.position + new MyLocation(0, -this.CosmosSpeed)).y > this.radius - 20)
-    {
-      this.UpdateFallPoints();
-      this.Check(0, -2);
-    }
-    return true;
+    if (!((this.position + new MyLocation(0, -this.CosmosSpeed)).y > this.radius - 20))
+      return true;
+    this.UpdateFallPoints();
+    return this.Check(0, -2);
   }
 
   public bool TowerMoveUp()
@@ -936,24 +935,22 @@ public class ZTower : ZComponent
   {
     if (this.type != TowerType.Cosmos)
       return false;
-    if ((this.position + new MyLocation(-this.CosmosSpeed, 0)).x > this.radius - 8)
-    {
-      this.fallPoints = MapGenerator.GetTowerLeftPoints(this.texture);
-      this.Check(-2, 0);
-    }
-    return true;
+    if (!((this.position + new MyLocation(-this.CosmosSpeed, 0)).x > this.radius - 8))
+      return true;
+    this.fallPoints = MapGenerator.GetTowerLeftPoints(this.texture, this);
+    bool flag = this.Check(-2, 0);
+    return !flag ? this.Check(-1, 0) : flag;
   }
 
   public bool CosmosMoveRight()
   {
     if (this.type != TowerType.Cosmos)
       return false;
-    if ((this.position + new MyLocation(this.CosmosSpeed, 0)).x < this.map.Width - this.radius + 8)
-    {
-      this.fallPoints = MapGenerator.GetTowerRightPoints(this.texture);
-      this.Check(2, 0);
-    }
-    return true;
+    if (!((this.position + new MyLocation(this.CosmosSpeed, 0)).x < this.map.Width - this.radius + 8))
+      return true;
+    this.fallPoints = MapGenerator.GetTowerRightPoints(this.texture, this);
+    bool flag = this.Check(2, 0);
+    return !flag ? this.Check(1, 0) : flag;
   }
 
   private int CosmosSpeed

@@ -616,6 +616,7 @@ public class ZEffector : ZComponent
         {
           this.infector.isMindControlled = false;
           this.infector.SwitchTeams(this.whoSummoned.parent, false);
+          this.infector.game.NextTurn(this.infector);
         }
       }
       else if (this.type == EffectorType.WaterWalking)
@@ -737,6 +738,8 @@ public class ZEffector : ZComponent
           this.VisualUpdate();
           break;
         case EffectorType.Flame_Wall:
+          if (!this.spell.effector.active)
+            this.active = false;
           this.VisualUpdate();
           break;
         case EffectorType.Flame_WallBase:
@@ -1060,7 +1063,7 @@ public class ZEffector : ZComponent
           }
           List<ZMyCollider> zmyColliderList1 = this.world.OverlapCircleAll((Point) this.collider.position, this.collider.radius, (ZMyCollider) null, Inert.mask_movement_NoEffector | Inert.mask_Phantom);
           if (zmyColliderList1.Count > 1)
-            zmyColliderList1.Sort((Comparison<ZMyCollider>) ((a, b) => MyLocation.Distance(a.position, this.position) - MyLocation.Distance(b.position, this.position)));
+            zmyColliderList1.Sort((Comparison<ZMyCollider>) ((a, b) => MyLocation.Distance(a.position, this.position) + (this.IsFriendly(a.creature) ? 100 : 0) - (MyLocation.Distance(b.position, this.position) + (this.IsFriendly(b.creature) ? 100 : 0))));
           foreach (ZMyCollider zmyCollider in zmyColliderList1)
             this.EffectCreature((ZComponent) zmyCollider.tower != (object) null ? zmyCollider.tower.creature : zmyCollider.creature, true);
           ZFlameWallSpell zflameWallSpell1 = ZSpell.FireFlameWall(Inert.GetSpell(SpellEnum.Prickly_Barrier), this.whoSummoned, new MyLocation((FixedInt) this.game.RandomInt(-150, 150) + this.position.x, (FixedInt) this.game.RandomInt(-150, 150) + this.position.y), (FixedInt) 0, (FixedInt) 0, this.active);
@@ -2201,39 +2204,6 @@ label_5:
     return true;
   }
 
-  public IEnumerator<float> RetroactiveDestroyLeaf(int radius)
-  {
-    MyLocation position = this.position;
-    for (int i = 0; i < 60; ++i)
-      yield return 0.0f;
-    List<ZMyCollider> zmyColliderList = new List<ZMyCollider>();
-    HashSet<ZMyCollider> zmyColliderSet = new HashSet<ZMyCollider>();
-    int index1 = 0;
-    while (this.world != null)
-    {
-      List<ZMyCollider> list = this.world.OverlapCircleAll((Point) position, radius + 50, this.collider, 512);
-      for (int index2 = 0; index2 < list.Count; ++index2)
-      {
-        if ((ZComponent) list[index2] != (object) null && (ZComponent) list[index2].effector != (object) null && ((ZComponent) list[index2].spell != (object) null && list[index2].spell.spellEnum == SpellEnum.Autumn_Leaves) && (list[index2].effector.active && zmyColliderSet.Add(list[index2])))
-        {
-          zmyColliderList.Add(list[index2]);
-          ZSpellLeaf spell = list[index2].spell as ZSpellLeaf;
-          if (!spell.isDead && spell.ShouldSpellFall(false))
-          {
-            IEnumerator<float> enumerator = spell.SpellMove(false, true);
-            while (spell.isMoving && !enumerator.MoveNext())
-              ;
-          }
-        }
-      }
-      this.world.listPool.ReturnList(list);
-      if (index1 >= zmyColliderList.Count || (ZComponent) zmyColliderList[index1] == (object) null)
-        break;
-      position = zmyColliderList[index1].position;
-      ++index1;
-    }
-  }
-
   public IEnumerator<float> RetroactiveDisableLeaf(int radius)
   {
     MyLocation position = this.position;
@@ -2260,6 +2230,15 @@ label_5:
       position = zmyColliderList[index1].position;
       ++index1;
     }
+  }
+
+  public bool IsFriendly(ZCreature c)
+  {
+    if ((ZComponent) c == (object) null)
+      return false;
+    if ((ZComponent) c == (object) this.whoSummoned)
+      return true;
+    return (ZComponent) this.whoSummoned != (object) null && c.parent == this.whoSummoned.parent;
   }
 
   public void EffectCreature(ZCreature c, bool fromTurnStart = false)
@@ -2755,9 +2734,6 @@ label_59:
         if ((ZComponent) c == (object) null || c.type == CreatureType.Tree)
           break;
         this.active = false;
-        ZSpell spell2 = this.spell;
-        spell2.isDead = true;
-        spell2.isNull = true;
         int num;
         if ((ZComponent) this.whoSummoned != (object) null)
         {
@@ -2769,14 +2745,15 @@ label_59:
           num = 1;
         if (num == 0)
         {
-          spell2.damage = 0;
+          this.VisualUpdate();
+          break;
         }
-        else
-        {
-          this.map.ServerBitBlt(5, (int) this.position.x, (int) this.position.y, true, true);
-          this.game.ongoing.RunCoroutine(this.RetroactiveDisableLeaf(this.collider.radius), true);
-          ZSpell.ApplyExplosionForce(SpellEnum.Napalm, this.world, this.collider.position, spell2.damage, spell2.forceOverDistance, spell2.radius, spell2.EXORADIUS, spell2.explisiveForce, spell2.damageType, this.whoSummoned, this.TurnCreated, Curve.Generic, (ISpellBridge) Inert.GetSpell("Napalm"), c);
-        }
+        ZSpell spell2 = this.spell;
+        spell2.isDead = true;
+        spell2.isNull = true;
+        this.map.ServerBitBlt(5, (int) this.position.x, (int) this.position.y, true, true);
+        this.game.ongoing.RunCoroutine(this.RetroactiveDisableLeaf(this.collider.radius), true);
+        ZSpell.ApplyExplosionForce(SpellEnum.Napalm, this.world, this.collider.position, spell2.damage, spell2.forceOverDistance, spell2.radius, spell2.EXORADIUS, spell2.explisiveForce, spell2.damageType, this.whoSummoned, this.TurnCreated, Curve.Generic, (ISpellBridge) Inert.GetSpell("Napalm"), c);
         if (this.game.isClient)
           AudioManager.Play(this.soundClip);
         this.DestroyNoExplosion();
@@ -2824,6 +2801,7 @@ label_59:
         if (!((ZComponent) c != (object) null) || !((ZComponent) c != (object) this.whoSummoned) || c.race == CreatureRace.Effector && c.type != CreatureType.Tree || (ZComponent) this.whoSummoned != (object) null && c.parent.team == this.whoSummoned.parent.team)
           break;
         this.active = false;
+        ChatBox.Instance?.NewChatMsg("", this.whoSummoned.parent.name + " infested " + (c.isPawn ? c.parent.name + "'s " + c.name : c.parent.name) + " with a sand mite.", (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System, ContentType.STRING, (object) null);
         ZEffector zeffector = new ZEffector()
         {
           type = EffectorType.Sand_Mite_Embeded,

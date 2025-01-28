@@ -209,7 +209,7 @@ public class RatedTab : MonoBehaviour
         image.color = new Color(UnityEngine.Random.Range(0.5f, 1f), UnityEngine.Random.Range(0.5f, 1f), UnityEngine.Random.Range(0.5f, 1f), 0.25f);
         image.gameObject.SetActive(true);
       }
-      if (MyInput.GetMouseButtonDown(0))
+      if (MyInput.GetMouseButtonDown(0) || !OptionsMenu.Disco)
         this.closeDisco = true;
       yield return (object) null;
     }
@@ -313,6 +313,8 @@ public class RatedTab : MonoBehaviour
     if (!v)
       return;
     this.StopAllCoroutines();
+    if (!OptionsMenu.Disco)
+      return;
     this.StartCoroutine(this.IEDisco());
   }
 

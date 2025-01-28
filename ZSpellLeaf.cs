@@ -303,7 +303,7 @@ label_4:
                 if (zspellLeaf.velocity.y > 0)
                 {
                   zspellLeaf.velocity.y = (FixedInt) -5;
-                  goto label_54;
+                  goto label_53;
                 }
                 else
                 {
@@ -339,25 +339,27 @@ label_4:
                 ZCreature zcreature = zspellLeaf.map.PhysicsCollideCreature(zspellLeaf.toCollideCheck, num2 + zspellLeaf.zb[index2].x, num3 + zspellLeaf.zb[index2].y, 0);
                 if ((ZComponent) zcreature != (object) null && typeof (ZCreatureThorn) != zcreature.GetType() && zcreature.type != CreatureType.Tree)
                 {
-                  zspellLeaf.velocity.y = (FixedInt) 0;
-                  zspellLeaf.velocity.x = (FixedInt) 0;
-                  zspellLeaf.addedDeathVector = Inert.Velocity(Inert.AngleOfVelocity(zspellLeaf.velocity), zspellLeaf.radius);
-                  zspellLeaf.position = new MyLocation(zspellLeaf.validX, zspellLeaf.validY);
-                  zspellLeaf.moving = (IEnumerator<float>) null;
-                  zspellLeaf.isMoving = false;
-                  zspellLeaf.isNull = true;
-                  zspellLeaf.isDead = true;
                   if (zspellLeaf.Bounces != 0 || !((ZComponent) zspellLeaf.parent != (object) null) || zcreature.team != zspellLeaf.parent.team)
+                  {
+                    zspellLeaf.velocity.y = (FixedInt) 0;
+                    zspellLeaf.velocity.x = (FixedInt) 0;
+                    zspellLeaf.addedDeathVector = Inert.Velocity(Inert.AngleOfVelocity(zspellLeaf.velocity), zspellLeaf.radius);
+                    zspellLeaf.position = new MyLocation(zspellLeaf.validX, zspellLeaf.validY);
+                    zspellLeaf.moving = (IEnumerator<float>) null;
+                    zspellLeaf.isMoving = false;
+                    zspellLeaf.isNull = true;
+                    zspellLeaf.isDead = true;
                     zcreature.ApplyDamage(zspellLeaf.spellEnum, zspellLeaf.damageType, zspellLeaf.damage, zspellLeaf.parent, zspellLeaf.game.turn, (ISpellBridge) zspellLeaf, false);
-                  if ((Object) zspellLeaf.explosion != (Object) null)
-                    zspellLeaf.OnExplosion();
-                  ZComponent.Destroy<GameObject>(zspellLeaf.gameObject);
-                  yield break;
+                    if ((Object) zspellLeaf.explosion != (Object) null)
+                      zspellLeaf.OnExplosion();
+                    ZComponent.Destroy<GameObject>(zspellLeaf.gameObject);
+                    yield break;
+                  }
                 }
                 else if (zspellLeaf.velocity.y > 0)
                 {
                   zspellLeaf.velocity.y = (FixedInt) -5;
-                  goto label_54;
+                  goto label_53;
                 }
                 else
                 {
@@ -392,7 +394,7 @@ label_4:
         }
       }
       zspellLeaf.position = zspellLeaf.position + zspellLeaf.velocity;
-label_54:
+label_53:
       if (zspellLeaf.position.y < zspellLeaf.radius)
       {
         zspellLeaf.moving = (IEnumerator<float>) null;

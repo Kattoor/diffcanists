@@ -156,7 +156,14 @@ public class SettingsPlayer
       new SettingsPlayer.ByAchievement(165, Achievement.Lord_of_Dragons),
       new SettingsPlayer.ByAchievement(166, Achievement.Lord_of_Dragons),
       new SettingsPlayer.ByAchievement(167, Achievement.Sand_Arcanists),
-      new SettingsPlayer.ByAchievement(170, Achievement.Divided_World)
+      new SettingsPlayer.ByAchievement(170, Achievement.Divided_World),
+      new SettingsPlayer.ByAchievement(171, Achievement.Storm_Arcanist),
+      new SettingsPlayer.ByAchievement(172, Achievement.Storm_Arcanist),
+      new SettingsPlayer.ByAchievement(173, Achievement.Overlight_Arcanist),
+      new SettingsPlayer.ByAchievement(174, Achievement.Overlight_Arcanist),
+      new SettingsPlayer.ByAchievement(175, Achievement.Stone_Arcanist),
+      new SettingsPlayer.ByAchievement(176, Achievement.Stone_Arcanist),
+      new SettingsPlayer.ByAchievement(177, Achievement.Frost_Arcanist)
     },
     new List<SettingsPlayer.ByAchievement>()
     {
@@ -173,7 +180,8 @@ public class SettingsPlayer
       new SettingsPlayer.ByAchievement(98, Achievement.Wrath_Wreaker),
       new SettingsPlayer.ByAchievement(99, Achievement.Swift_Arch_Mage),
       new SettingsPlayer.ByAchievement(101, Achievement.Master_Diplomat),
-      new SettingsPlayer.ByAchievement(102, Achievement.Master_of_Sand)
+      new SettingsPlayer.ByAchievement(102, Achievement.Master_of_Sand),
+      new SettingsPlayer.ByAchievement(106, Achievement.Nature_Arcanist)
     },
     new List<SettingsPlayer.ByAchievement>()
     {
@@ -222,7 +230,9 @@ public class SettingsPlayer
       new SettingsPlayer.ByAchievement(143, Achievement.Lively_Arch_Mage),
       new SettingsPlayer.ByAchievement(144, Achievement.With_the_Fishies),
       new SettingsPlayer.ByAchievement(145, Achievement.Turing_Machine),
-      new SettingsPlayer.ByAchievement(146, Achievement.Skimmer)
+      new SettingsPlayer.ByAchievement(146, Achievement.Skimmer),
+      new SettingsPlayer.ByAchievement(150, Achievement.Overlight_Arcanist),
+      new SettingsPlayer.ByAchievement(151, Achievement.Cogs_Arcanist)
     },
     new List<SettingsPlayer.ByAchievement>()
     {
@@ -290,7 +300,10 @@ public class SettingsPlayer
       new SettingsPlayer.ByAchievement(183, Achievement.Master_of_Nature),
       new SettingsPlayer.ByAchievement(184, Achievement.Dust_to_Dust),
       new SettingsPlayer.ByAchievement(185, Achievement.Sand_Arcanists),
-      new SettingsPlayer.ByAchievement(189, Achievement.Divided_World)
+      new SettingsPlayer.ByAchievement(189, Achievement.Divided_World),
+      new SettingsPlayer.ByAchievement(190, Achievement.Overlight_Arcanist),
+      new SettingsPlayer.ByAchievement(191, Achievement.Cogs_Arcanist),
+      new SettingsPlayer.ByAchievement(192, Achievement.Stone_Arcanist)
     },
     new List<SettingsPlayer.ByAchievement>()
     {
@@ -357,7 +370,9 @@ public class SettingsPlayer
       new SettingsPlayer.ByAchievement(181, Achievement.Master_of_Sand),
       new SettingsPlayer.ByAchievement(182, Achievement.Sand_Arcanists),
       new SettingsPlayer.ByAchievement(183, Achievement.Master_of_Sand),
-      new SettingsPlayer.ByAchievement(184, Achievement.Divided_World)
+      new SettingsPlayer.ByAchievement(184, Achievement.Divided_World),
+      new SettingsPlayer.ByAchievement(185, Achievement.Storm_Arcanist),
+      new SettingsPlayer.ByAchievement(186, Achievement.Overlight_Arcanist)
     },
     new List<SettingsPlayer.ByAchievement>()
     {
@@ -376,7 +391,9 @@ public class SettingsPlayer
       new SettingsPlayer.ByAchievement(98, Achievement.Supreme_Arch_Mage),
       new SettingsPlayer.ByAchievement(99, Achievement.Miasma),
       new SettingsPlayer.ByAchievement(100, Achievement.Lord_of_Dragons),
-      new SettingsPlayer.ByAchievement(101, Achievement.Target_Practice)
+      new SettingsPlayer.ByAchievement(101, Achievement.Target_Practice),
+      new SettingsPlayer.ByAchievement(102, Achievement.Frost_Arcanist),
+      new SettingsPlayer.ByAchievement(104, Achievement.Stone_Arcanist)
     }
   };
   public static List<SettingsPlayer.Seasonal> seasonHalloween = new List<SettingsPlayer.Seasonal>()
@@ -455,6 +472,31 @@ public class SettingsPlayer
     {
       index = 166,
       outfit = Outfit.RightHand
+    },
+    new SettingsPlayer.Seasonal()
+    {
+      index = 107,
+      outfit = Outfit.Head
+    },
+    new SettingsPlayer.Seasonal()
+    {
+      index = 108,
+      outfit = Outfit.Head
+    },
+    new SettingsPlayer.Seasonal()
+    {
+      index = 109,
+      outfit = Outfit.Head
+    },
+    new SettingsPlayer.Seasonal()
+    {
+      index = 106,
+      outfit = Outfit.Head
+    },
+    new SettingsPlayer.Seasonal()
+    {
+      index = 103,
+      outfit = Outfit.Beard
     }
   };
   public static List<SettingsPlayer.Seasonal> seasonThanksgiving = new List<SettingsPlayer.Seasonal>()
@@ -1478,7 +1520,7 @@ public class SettingsPlayer
 
   private static bool BeardNoMouth(byte i)
   {
-    return i == (byte) 55 || i == (byte) 72 || (i == (byte) 77 || i == (byte) 53) || (i == (byte) 65 || i == (byte) 69 || (i == (byte) 94 || i == (byte) 99)) || i == (byte) 100 || i == (byte) 101;
+    return i == (byte) 55 || i == (byte) 72 || (i == (byte) 77 || i == (byte) 53) || (i == (byte) 65 || i == (byte) 69 || (i == (byte) 94 || i == (byte) 99)) || (i == (byte) 100 || i == (byte) 101) || i == (byte) 102;
   }
 
   public void VerifyOutfit(Cosmetics cosmetics, Account a = null)

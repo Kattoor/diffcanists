@@ -225,7 +225,7 @@ public class GameFacts
       stringBuilder.Append("Sandbox<br>");
     else
       stringBuilder.Append(RatedFacts.GetGameTypeAsStringLong((int) this.gameType)).Append("<br>");
-    stringBuilder.Append("Map: ").Append(this.status == (byte) 0 ? GameFacts.MapName(this.GetMapMode()) : GameFacts.MapName(this.realMap)).Append("<br>");
+    stringBuilder.Append("Map: ").Append(this.status == (byte) 0 || !linked ? GameFacts.MapName(this.GetMapMode()) : GameFacts.MapName(this.realMap)).Append("<br>");
     List<SpellEnum> customArmageddon = this.settings.customArmageddon;
     if ((customArmageddon != null ? (__nonvirtual (customArmageddon.Count) > 0 ? 1 : 0) : 0) != 0)
     {

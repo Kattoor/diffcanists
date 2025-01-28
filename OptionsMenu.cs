@@ -26,15 +26,43 @@ public class OptionsMenu : Catalogue
   public Toggle toggleColoredNames;
   public Toggle toggleFlashSandbox;
   public Toggle toggleFlashPrestige;
+  [Header("Row 1")]
+  public Toggle toggleSeasonalThemes;
+  public Toggle toggleDisco;
   public Image bigImage;
   [Header("Sound")]
   public UIOnSlider sliderSound;
   public UIOnSlider sliderMusic;
   public UIOnSlider sliderTurnStartVolume;
+  public UIOnSlider sliderTurnEndVolume;
   public UIOnSlider sliderFgColor;
   public UIOnSlider sliderBgColor;
 
   public static OptionsMenu Instance { get; private set; }
+
+  public static bool SeasonalThemes
+  {
+    get
+    {
+      return Global.GetPrefBool("useseasonalthemes", true);
+    }
+    set
+    {
+      Global.SetPrefBool("useseasonalthemes", value);
+    }
+  }
+
+  public static bool Disco
+  {
+    get
+    {
+      return Global.GetPrefBool("disco", true);
+    }
+    set
+    {
+      Global.SetPrefBool("disco", value);
+    }
+  }
 
   private void Awake()
   {
@@ -42,8 +70,10 @@ public class OptionsMenu : Catalogue
     this.sliderSound.SetValue(PlayerPrefs.GetFloat("prefvolsound", 0.5f));
     this.sliderMusic.SetValue(PlayerPrefs.GetFloat("prefvolmusic", 0.5f));
     this.sliderTurnStartVolume.SetValue(PlayerPrefs.GetFloat("prefturnstartvolume", 0.5f));
+    this.sliderTurnEndVolume.SetValue(PlayerPrefs.GetFloat("turnendsound", 1f));
     this.sliderSound.onPointerUp.AddListener((UnityAction<float>) (v => AudioManager.instance.InstancePlay(AudioManager.instance.spellBounce, PlayerPrefs.GetFloat("prefvolsound", 0.5f))));
     this.sliderTurnStartVolume.onPointerUp.AddListener((UnityAction<float>) (v => AudioManager.PlayTurnStart()));
+    this.sliderTurnEndVolume.onPointerUp.AddListener((UnityAction<float>) (v => AudioManager._TestTurnEnd()));
     if (!((UnityEngine.Object) ClientResources.Instance != (UnityEngine.Object) null) || MainMenu.bigIndex <= -1 || (!((UnityEngine.Object) this.bigImage != (UnityEngine.Object) null) || MainMenu.bigIndex >= ClientResources.Instance.MainMenuSprites.Length))
       return;
     this.bigImage.sprite = ClientResources.Instance.MainMenuSprites[MainMenu.bigIndex];
@@ -165,10 +195,20 @@ public class OptionsMenu : Catalogue
       this.toggleFlashSandbox.isOn = Global.GetPrefBool("prefflashsandbox", true);
       this.toggleFlashSandbox.onValueChanged.AddListener((UnityAction<bool>) (v => Global.SetPrefBool("prefflashsandbox", v)));
     }
-    if (!((UnityEngine.Object) this.toggleFlashPrestige != (UnityEngine.Object) null))
+    if ((UnityEngine.Object) this.toggleFlashPrestige != (UnityEngine.Object) null)
+    {
+      this.toggleFlashPrestige.isOn = Global.GetPrefBool("prefflashprestige", true);
+      this.toggleFlashPrestige.onValueChanged.AddListener((UnityAction<bool>) (v => Global.SetPrefBool("prefflashprestige", v)));
+    }
+    if ((UnityEngine.Object) this.toggleSeasonalThemes != (UnityEngine.Object) null)
+    {
+      this.toggleSeasonalThemes.isOn = OptionsMenu.SeasonalThemes;
+      this.toggleSeasonalThemes.onValueChanged.AddListener((UnityAction<bool>) (v => OptionsMenu.SeasonalThemes = v));
+    }
+    if (!((UnityEngine.Object) this.toggleDisco != (UnityEngine.Object) null))
       return;
-    this.toggleFlashPrestige.isOn = Global.GetPrefBool("prefflashprestige", true);
-    this.toggleFlashPrestige.onValueChanged.AddListener((UnityAction<bool>) (v => Global.SetPrefBool("prefflashprestige", v)));
+    this.toggleDisco.isOn = OptionsMenu.Disco;
+    this.toggleDisco.onValueChanged.AddListener((UnityAction<bool>) (v => OptionsMenu.Disco = v));
   }
 
   public static void ShowHUDContextMenu()
@@ -283,6 +323,11 @@ public class OptionsMenu : Catalogue
   public void UpdateVolumeTurnStart(float f)
   {
     PlayerPrefs.SetFloat("prefturnstartvolume", f);
+  }
+
+  public void UpdateVolumeTurnEnd(float f)
+  {
+    PlayerPrefs.SetFloat("turnendsound", f);
   }
 
   public void ClickScreenSize()

@@ -432,7 +432,7 @@ public class ClickSpell : MonoBehaviour
     }
     if (Player.Instance.selected.phantom)
     {
-      if (spell2.bookOf != BookOf.Arcane && spell2.bookOf != BookOf.Illusion && (!spell1.isPresent && spell2.spellEnum != SpellEnum.Spirit_Link))
+      if (spell2.bookOf != BookOf.Arcane && spell2.bookOf != BookOf.Illusion && (!spell1.isPresent && spell2.spellEnum != SpellEnum.Spirit_Link) && spell2.spellEnum != SpellEnum.Spirit_Walk)
       {
         this.spellButtons[i].error = 104;
         maxedSummons = true;
@@ -696,7 +696,7 @@ label_44:
               return 138;
             break;
           case SpellEnum.Sandbag:
-            if ((ZComponent) c.tower == (object) null)
+            if ((ZComponent) c.tower == (object) null && c.GetSpellSlot(SpellEnum.Sand_Castle) == null)
               return 139;
             break;
           case SpellEnum.Pyramid:

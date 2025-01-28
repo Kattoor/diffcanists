@@ -672,7 +672,7 @@ public static class Global
 
   public static void OpenFileLocation(string path)
   {
-    string persistentDataPath = Application.persistentDataPath;
+    string persistentDataPath = SaveFolder.persistentDataPath;
     char directorySeparatorChar = Path.DirectorySeparatorChar;
     string str1 = directorySeparatorChar.ToString();
     string str2 = path;

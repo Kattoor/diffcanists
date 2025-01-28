@@ -68,7 +68,7 @@ public class ConfigurePlayer : MonoBehaviour
     {
       x.mouth.sprite = settingsPlayer.textures?[8] ?? ClientResources.Instance._characterMouths[Mathf.Clamp((int) settingsPlayer.indexMouth, 0, ClientResources.Instance._characterMouths.Length - 1)];
       if (clanOutfit != null && clanOutfit.OutfitNoMouth((int) settingsPlayer.indexHead))
-        x.mouth.sprite = ClientResources.Instance._characterMouths[ClientResources.Instance._characterMouths.Length - 1];
+        x.mouth.sprite = ClientResources.Instance._characterMouths[24];
     }
     ConfigurePlayer.ApplyOutfit(x.head, settingsPlayer.indexHead, ClientResources.Instance._characterHeads, settingsPlayer, Outfit.Head, settingsPlayer.textures?[1] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexHead, Outfit.Head));
     ConfigurePlayer.ApplyOutfit(x.body, settingsPlayer.indexBody, ClientResources.Instance._characterBody, settingsPlayer, Outfit.Body, settingsPlayer.textures?[0] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBody, Outfit.Body));
@@ -94,8 +94,13 @@ public class ConfigurePlayer : MonoBehaviour
     {
       this.spriteMouth.sprite = settingsPlayer.textures?[8] ?? ClientResources.Instance._characterMouths[Mathf.Clamp((int) settingsPlayer.indexMouth, 0, ClientResources.Instance._characterMouths.Length - 1)];
       if (clanOutfit != null && clanOutfit.OutfitNoMouth((int) settingsPlayer.indexHead))
-        this.spriteMouth.sprite = ClientResources.Instance._characterMouths[ClientResources.Instance._characterMouths.Length - 1];
+        this.spriteMouth.sprite = ClientResources.Instance._characterMouths[24];
     }
+    if (settingsPlayer.indexHead == (byte) 106 && settingsPlayer.indexMouth == (byte) 0)
+      settingsPlayer.indexMouth = (byte) 27;
+    else if (settingsPlayer.indexHead != (byte) 106 && settingsPlayer.indexMouth == (byte) 27)
+      settingsPlayer.indexMouth = (byte) 0;
+    this.spriteMouth.sprite = ClientResources.Instance._characterMouths[(int) settingsPlayer.indexMouth];
     this.spriteLeftFoot.sortingOrder = settingsPlayer.indexLeftFoot != (byte) 2 ? -18 : -16;
     this.DestroyCharacterSprites();
     this.ApplyOutfit(this.spriteHead, settingsPlayer.indexHead, ClientResources.Instance._characterHeads, settingsPlayer, Outfit.Head, settingsPlayer.textures?[1] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexHead, Outfit.Head));
@@ -134,7 +139,7 @@ public class ConfigurePlayer : MonoBehaviour
     settingsPlayer.indexRightFoot = settingsPlayer.indexLeftFoot;
     this.spriteLeftFoot.sortingOrder = settingsPlayer.indexLeftFoot != (byte) 2 ? -18 : -16;
     if (clanOutfit != null && clanOutfit.OutfitNoMouth((int) settingsPlayer.indexHead))
-      this.spriteMouth.sprite = ClientResources.Instance._characterMouths[ClientResources.Instance._characterMouths.Length - 1];
+      this.spriteMouth.sprite = ClientResources.Instance._characterMouths[24];
     this.DestroyCharacterSprites();
     this.ModApplyOutfit(destroy, this.spriteHead, settingsPlayer.indexHead, ClientResources.Instance._characterHeads, settingsPlayer, Outfit.Head, colors, settingsPlayer.textures?[1] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexHead, Outfit.Head));
     this.ModApplyOutfit(destroy, this.spriteBody, settingsPlayer.indexBody, ClientResources.Instance._characterBody, settingsPlayer, Outfit.Body, colors, settingsPlayer.textures?[0] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBody, Outfit.Body));
@@ -223,7 +228,7 @@ public class ConfigurePlayer : MonoBehaviour
     ClanOutfit clanOutfit = ClientResources.Instance.GetClanOutfit(Client.GetAccount(name, false).clan);
     settingsPlayer.indexLeftFoot = settingsPlayer.FootIndex();
     settingsPlayer.indexRightFoot = settingsPlayer.indexLeftFoot;
-    p.mouth.sprite = clanOutfit == null || !clanOutfit.OutfitNoMouth((int) settingsPlayer.indexHead) ? ClientResources.Instance._characterMouths[0] : ClientResources.Instance._characterMouths[ClientResources.Instance._characterMouths.Length - 1];
+    p.mouth.sprite = clanOutfit == null || !clanOutfit.OutfitNoMouth((int) settingsPlayer.indexHead) ? ClientResources.Instance._characterMouths[settingsPlayer.indexHead == (byte) 106 ? 27 : 0] : ClientResources.Instance._characterMouths[24];
     p.Cleanup();
     p.disposable = true;
     ConfigurePlayer.ApplyOutfit(p.head, settingsPlayer.indexHead, ClientResources.Instance._characterHeads, settingsPlayer, Outfit.Head, settingsPlayer.textures?[1] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexHead, Outfit.Head));
@@ -386,7 +391,7 @@ public class ConfigurePlayer : MonoBehaviour
     {
       p.mouth.sprite = settingsPlayer.textures?[8] ?? ClientResources.Instance._characterMouths[Mathf.Clamp((int) settingsPlayer.indexMouth, 0, ClientResources.Instance._characterMouths.Length - 1)];
       if (clanOutfit != null && clanOutfit.OutfitNoMouth((int) settingsPlayer.indexHead))
-        p.mouth.sprite = ClientResources.Instance._characterMouths[ClientResources.Instance._characterMouths.Length - 1];
+        p.mouth.sprite = ClientResources.Instance._characterMouths[24];
     }
     Global.DestroySprite(p.head?.sprite);
     Global.DestroySprite(p.beard?.sprite);

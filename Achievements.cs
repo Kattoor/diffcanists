@@ -853,7 +853,7 @@ public class Achievements
     new Achievements.Container()
     {
       name = "Target Practice",
-      description = "Deal over 120 damage with a single javelin",
+      description = "Kill a player while dealing 120 or more damage with a single javelin",
       points = (ushort) 300,
       ratedOnly = true
     }

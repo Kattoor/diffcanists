@@ -1090,7 +1090,7 @@ label_61:
                 spell.addedDeathVector = Inert.Velocity(Inert.AngleOfVelocity(spell.velocity), spell.radius);
                 if (spell.spellEnum != SpellEnum.Disruption)
                 {
-                  if (spell.spellEnum == SpellEnum.Comet)
+                  if (spell.spellEnum == SpellEnum.Comet || spell.EXORADIUS <= 10)
                     spell.position = new MyLocation(xInt, yInt);
                   else
                     spell.position = new MyLocation(xInt, yInt + spell.zb[index2].y);
@@ -1861,18 +1861,6 @@ label_58:
         c.game.globalEffectors[indexInParent].Die(indexInParent, false, true);
         c.game.globalEffectors[indexInParent] = (ZEffector) null;
       }
-    }
-    if (theSpell.spellEnum == SpellEnum.Arcane_Portal)
-    {
-      SpellSlot spellSlot1 = c.GetSpellSlot(SpellEnum.Wormhole);
-      if (spellSlot1 != null)
-        spellSlot1.SetTurnFired = c.parent.localTurn;
-    }
-    else if (theSpell.spellEnum == SpellEnum.Wormhole)
-    {
-      SpellSlot spellSlot1 = c.GetSpellSlot(SpellEnum.Arcane_Portal);
-      if (spellSlot1 != null)
-        spellSlot1.SetTurnFired = c.parent.localTurn;
     }
     MyLocation myLocation = c.OverHeadOffset + c.position;
     if ((ZComponent) c.tower != (object) null && c.tower.type != TowerType.Nature)
@@ -2733,7 +2721,7 @@ label_7:
           break;
       }
     }
-    int num6 = dmgOverride > 0 ? dmgOverride : 10 + Mathf.Min(15, num5 / 64);
+    int num6 = dmgOverride > 0 ? dmgOverride : 15 + Mathf.Min(15, num5 / 64);
     target.y = (FixedInt) (c.map.Height / 2);
     c.game.forceRysncPause = true;
     ZEffector zeffector = ZEffector.Create(c.game, theSpell.toSummon.GetComponent<Effector>(), (Vector3) target.ToSinglePrecision(), Quaternion.identity, c.game.GetMapTransform());
@@ -3086,8 +3074,11 @@ label_7:
         c.beard3.sortingOrder += 9;
         c.hat.sortingOrder += 9;
         c.mouth.sortingOrder += 9;
-        c.leftArm.gameObject.SetActive(false);
-        c.rightArm.gameObject.SetActive(false);
+        if (t.baseTower.type != TowerType.Nature && t.baseTower.type != TowerType.Holiday && t.baseTower.type != TowerType.Wooden)
+        {
+          c.leftArm.gameObject.SetActive(false);
+          c.rightArm.gameObject.SetActive(false);
+        }
       }
       c.UpdateHealthTxt();
     }
@@ -3175,6 +3166,8 @@ label_7:
     bool flag1 = c.game.gameFacts.GetStyle().HasStyle(GameStyle.Random_Spells) || c.parent != null && c.parent.MinionMaster;
     for (int index = sum.spells.Count - 1; index >= 0; --index)
     {
+      if (c.game.originalSpellsOnly && sum.spells[index].spell.spellEnum == SpellEnum.Dive)
+        sum.spells[index].TurnsTillFirstUse = 0;
       if (sum.spells[index].syncWithParent)
       {
         if (sum.spells[index].disabledturn == 1000000)
@@ -5085,13 +5078,13 @@ label_27:
       zflameWallSpell1.effector2.VisualUpdate();
     }
     zflameWallSpell2.SetPosition(target);
-    zflameWallSpell1.SetVelocity(new MyLocation(0, -10));
     if (theSpell.spellEnum == SpellEnum.Prickly_Barrier && c.game.isClient)
     {
       Color clientColor = c.parent.clientColor;
       clientColor.a = 0.2f;
       zflameWallSpell1.transform.GetChild(1).GetComponent<SpriteRenderer>().color = clientColor;
     }
+    zflameWallSpell1.SetVelocity(new MyLocation(0, -10));
     return zflameWallSpell1;
   }
 
@@ -6563,43 +6556,48 @@ label_27:
             cre.game.CreatureMoveSurroundings(position, cre.radius + 5, cre.collider, false);
             cre.CreatureMoveSurroundings();
             cre.CheckEffectorsOnMove();
-            cre.moving.MoveNext();
-            if (num != null && num.Count > 0)
+            if (cre.moving != null)
             {
-              foreach (ZMyCollider zmyCollider in num)
+              cre.moving.MoveNext();
+              if (num != null && num.Count > 0)
               {
-                if (!ZComponent.IsNull((ZComponent) zmyCollider) && (ZComponent) zmyCollider.creature != (object) null)
-                  zmyCollider.creature.MoveToPosition = zmyCollider.creature.position + d;
+                foreach (ZMyCollider zmyCollider in num)
+                {
+                  if (!ZComponent.IsNull((ZComponent) zmyCollider) && (ZComponent) zmyCollider.creature != (object) null)
+                    zmyCollider.creature.MoveToPosition = zmyCollider.creature.position + d;
+                }
               }
-            }
-            if (cre.type == CreatureType.Tree)
-            {
-              Coords[] coordsArray = d.y > 0 ? ZCreatureTree.top_coords : ZCreatureTree.coords;
-              int x = (int) cre.position.x;
-              int y2 = (int) cre.position.y;
-              for (int index = 0; index < coordsArray.Length; ++index)
+              if (cre.type == CreatureType.Tree)
               {
-                if (!cre.map.CheckPositionOnlyEntities(x + coordsArray[index].x, y2 + coordsArray[index].y, cre, Inert.mask_entity_movement))
-                  goto label_36;
+                Coords[] coordsArray = d.y > 0 ? ZCreatureTree.top_coords : ZCreatureTree.coords;
+                int x = (int) cre.position.x;
+                int y2 = (int) cre.position.y;
+                for (int index = 0; index < coordsArray.Length; ++index)
+                {
+                  if (!cre.map.CheckPositionOnlyEntities(x + coordsArray[index].x, y2 + coordsArray[index].y, cre, Inert.mask_entity_movement))
+                    goto label_37;
+                }
               }
+              else
+              {
+                List<Coords> outlineArray = MapGenerator.getOutlineArray(cre.radius);
+                int num1 = ((FixedInt.Create(360) - (Inert.AngleOfVelocity(d) - FixedInt.Create(90))) * FixedInt.ThreeSixtyBy1 * outlineArray.Count - cre.radius).ToInt();
+                for (int index1 = 0; index1 < cre.radius * 2; ++index1)
+                {
+                  int index2 = (index1 + num1) % outlineArray.Count;
+                  if (!cre.map.CheckPositionOnlyEntities((int) cre.position.x + outlineArray[index2].x, (int) cre.position.y + outlineArray[index2].y, cre, Inert.mask_entity_movement))
+                    goto label_37;
+                }
+              }
+              yield return 0.0f;
             }
             else
-            {
-              List<Coords> outlineArray = MapGenerator.getOutlineArray(cre.radius);
-              int num1 = ((FixedInt.Create(360) - (Inert.AngleOfVelocity(d) - FixedInt.Create(90))) * FixedInt.ThreeSixtyBy1 * outlineArray.Count - cre.radius).ToInt();
-              for (int index1 = 0; index1 < cre.radius * 2; ++index1)
-              {
-                int index2 = (index1 + num1) % outlineArray.Count;
-                if (!cre.map.CheckPositionOnlyEntities((int) cre.position.x + outlineArray[index2].x, (int) cre.position.y + outlineArray[index2].y, cre, Inert.mask_entity_movement))
-                  goto label_36;
-              }
-            }
-            yield return 0.0f;
+              break;
           }
           else
             break;
         }
-label_36:
+label_37:
         if ((ZComponent) cre != (object) null)
         {
           cre.moving = (IEnumerator<float>) null;
@@ -8745,7 +8743,7 @@ label_36:
         ZSpell.FireGeneric(theSpell, c, pos, rot_z, power);
         break;
       case SpellEnum.Redo:
-        ZSpell.FireRedo(theSpell, c, false, c.familiarLevelCogs > 0);
+        ZSpell.FireRedo(theSpell, c, false, c.familiarLevelCogs > 0 && c.game.AllowExpansion);
         break;
       case SpellEnum.Banish:
         ZSpell.FireBanish(theSpell, c);
@@ -9384,7 +9382,23 @@ label_36:
       case SpellEnum.Spirit_Walk:
         if (c.type == CreatureType.Wisp)
           ZSpell.ChangeSprites(c, ClientResources.Instance.wispPhantomSprites);
-        ZSpell.FireApparition(c, true, true);
+        if (!c.phantom)
+        {
+          ZSpell.FireApparition(c, true, true);
+          break;
+        }
+        c.phantom = false;
+        c.flying = c.baseCreature.flying;
+        c.collider.gameObjectLayer = 8;
+        c.collider.layer = 256;
+        if (c.ShouldFall(true, false))
+          c.Fall(false);
+        if (!c.game.isClient)
+          break;
+        GameObject gameObject = c.gameObject;
+        if (gameObject == null)
+          break;
+        gameObject.GetComponent<ColorLerp>()?.Kill();
         break;
       case SpellEnum.Retribution:
         c.retribution = 50;
@@ -9456,32 +9470,41 @@ label_36:
         ZSpell.FireStructure(theSpell, c, target);
         break;
       case SpellEnum.Sandbag:
-        if (!((ZComponent) c.tower != (object) null))
-          break;
-        SpellSlot spellSlot1 = c.GetSpellSlot(c.tower.baseTower.FromSpell.spellEnum);
-        if (spellSlot1 != null)
+        if ((ZComponent) c.tower != (object) null)
         {
-          int health = c.tower.Health;
-          if (c.tower.type == TowerType.Sand)
+          SpellSlot spellSlot1 = c.GetSpellSlot(c.tower.baseTower.FromSpell.spellEnum);
+          if (spellSlot1 != null)
           {
-            c.tower.Health += 75;
-            if (c.tower.Health > c.tower.MaxHealth)
-              c.tower.Health = c.tower.MaxHealth;
+            int health = c.tower.Health;
+            if (c.tower.type == TowerType.Sand)
+            {
+              c.tower.Health += 75;
+              if (c.tower.Health > c.tower.MaxHealth)
+                c.tower.Health = c.tower.MaxHealth;
+            }
+            int num4 = health * 100 / c.tower.MaxHealth;
+            if (num4 >= 75)
+              spellSlot1.SetTurnFired = spellSlot1.LastTurnFired - 3;
+            else if (num4 >= 50)
+              spellSlot1.SetTurnFired = spellSlot1.LastTurnFired - 2;
+            else if (num4 >= 25)
+              spellSlot1.SetTurnFired = spellSlot1.LastTurnFired - 1;
+            if (spellSlot1.UsedUses > 0)
+              spellSlot1.SetUses = spellSlot1.UsedUses - 1;
+            if (c.tower.type == TowerType.Sand)
+              c.parent.towerHealth[(int) c.tower.type] = c.tower.Health;
+            if (c.game.isServer && !c.game.isClient)
+              c.game.SendTowerHealth(c, (int) c.tower.type, c.tower.Health);
           }
-          int num4 = health * 100 / c.tower.MaxHealth;
-          if (num4 >= 75)
-            spellSlot1.SetTurnFired = spellSlot1.LastTurnFired - 3;
-          else if (num4 >= 50)
-            spellSlot1.SetTurnFired = spellSlot1.LastTurnFired - 2;
-          else if (num4 >= 25)
-            spellSlot1.SetTurnFired = spellSlot1.LastTurnFired - 1;
-          if (spellSlot1.UsedUses > 0)
-            spellSlot1.SetUses = spellSlot1.UsedUses - 1;
-          c.parent.towerHealth[(int) c.tower.type] = c.tower.Health;
-          if (c.game.isServer && !c.game.isClient)
-            c.game.SendTowerHealth(c, (int) c.tower.type, c.tower.Health);
+          c.DestroyTower(false);
+          break;
         }
-        c.DestroyTower(false);
+        if (c.GetSpellSlot(SpellEnum.Sand_Castle) == null || c.parent.towerHealth[12] == 0)
+          break;
+        c.parent.towerHealth[12] += 50;
+        if (c.parent.towerHealth[12] < 125)
+          break;
+        c.parent.towerHealth[12] = 0;
         break;
       case SpellEnum.Sandy_Shores:
         target.y = (FixedInt) 30;

@@ -85,7 +85,7 @@ public static class Descriptions
     },
     {
       "Flame",
-      "Harpy Flame\n(drains 20 health per cast)\nAt maximum power, your flame spells will do 50% more damage.\nAt Level 5: Learn the spells Fire Wave and Meteor Shower."
+      "Harpy Flame\n(drains 20 health per cast)\nAt maximum power, your flame spells will do 50% more damage.\nAt Level 5: Learn the spell Fire Wave."
     },
     {
       "Stone",
@@ -117,7 +117,7 @@ public static class Descriptions
     },
     {
       "Cogs",
-      "Time Boost:\n(drains 20 health per cast)\nEach level increases your turn time by 6 seconds (or 1/5th your base turn time, whichever is smaller) and grants a use of the spell Time Dilation. At maximum power, you gain 30 extra seconds for your turns (maxes at double your turn time, so only +10 in 10s games).\nAt level 5: Cog Fall has a 3 turn recharge - Clockwork Bomb is guaranteed to explode on your next turn."
+      "Time Boost:\n(drains 20 health per cast)\nRedo now only affects your teammates. Each level increases your turn time by 6 seconds (or 1/5th your base turn time, whichever is smaller) and grants a use of the spell Time Dilation. At maximum power, you gain 30 extra seconds for your turns (maxes at double your turn time, so only +10 in 10s games).\nAt level 5: Cog Fall has a 3 turn recharge - Clockwork Bomb is guaranteed to explode on your next turn."
     },
     {
       "Holiday",
@@ -129,7 +129,7 @@ public static class Descriptions
     },
     {
       "Illusion",
-      "Allusion\n(drains 20 health per cast)\nWho needs health, just give it away! (to a hurt ally/minion) Highest missing health takes priority. Learn the Spell Blink. Makes you significantly smaller.\nAt level 5: Duplicates have no expiration and spawn with 75% health - Vortex is buffed. Glide is available 1 turn sooner per level."
+      "Allusion\n(drains 20 health per cast)\nWho needs health, just give it away! (to a hurt ally/minion) Highest missing health takes priority. Learn the Spell Blink. Makes you significantly smaller.\nAt level 5: Duplicates have no expiration and spawn with 75% health - Vortex is buffed. Glide is available 1 turn."
     },
     {
       "Blood",
@@ -1203,8 +1203,8 @@ public static class Descriptions
       "{0} sprung {1}'s sand trap."
     },
     {
-      "Sand Storm",
-      "{0} did not take shelter during {1}'s sand storm."
+      "Sandstorm",
+      "{0} did not take shelter during {1}'s sandstorm."
     },
     {
       "Summon Sphinx",
@@ -1719,7 +1719,7 @@ public static class Descriptions
     },
     {
       "Redo",
-      "Arena:\n(1 use only for all players combined)\nSend your foes flying through the eddies of time and space with this powerful spell, which resets all Arcanists' spellbooks to how they were at the start of the game. Time for the fun to begin again!"
+      "Arena:\n(1 use only for all players combined)\nSend your foes flying through the eddies of time and space with this powerful spell, which resets all (Your team only if you have the Time Boost familiar active) Arcanists' spellbooks to how they were at the start of the game. Time for the fun to begin again!"
     },
     {
       "Flame Dragon Breath",
@@ -2419,7 +2419,7 @@ public static class Descriptions
     },
     {
       "Burning Sands",
-      "Targeted: 10-25 damage per turn\n{0}\nSets an area spanning the entire height of the map ablaze. Increasing in damage the more sand is in the targeted location."
+      "Targeted: 15-30 damage per turn\n{0}\nSets an area spanning the entire height of the map ablaze. Increasing in damage the more sand is in the targeted location."
     },
     {
       "Monolith",
@@ -2431,11 +2431,11 @@ public static class Descriptions
     },
     {
       "Sandbag",
-      "Personal:\n{0}\nDe-towers you and puts the tower on a cooldown depending on how much health the tower currently has. If used while in a Sand Castle, will heal it up to 75 health (maxes at 125). Otherwise it'll have the same health as when this spell was used."
+      "Personal:\n{0}\nDe-towers you and puts the tower on a cooldown depending on how much health the tower currently has. Increases the health of the next cast of Sand Castle by 75 if used while in a Sand Castle or by 50 if used while not in any tower (Max of 125 health)."
     },
     {
       "Sand Castle",
-      "Tower: 125 health\n(Immune to sand damage; 1 use only)\nLoses 25 health each turn. This cannot destroy the tower. Will not take double damage from any damage source."
+      "Tower: 125 health\n(Immune to sand damage){0}\nLoses 25 health each turn. This cannot destroy the tower. Will not take double damage from any damage source."
     },
     {
       "Summon Wyrm",
@@ -2446,12 +2446,12 @@ public static class Descriptions
       "Targeted: 10 damage\n{0}\nPlaces an invisible trap at the targeted location. Will only trigger against enemies and will always stun the target."
     },
     {
-      "Sand Storm",
+      "Sandstorm",
       "Arena: Directional, 50,000 grains of sand, up to 100 damage\n{0}\nWill come of the direction your arcanist is facing away from and cover the arena in sand."
     },
     {
       "Summon Sphinx",
-      "Soulbound Minion: flying, 125 health\n(Immune to sand damage; 1 use only)\nReflects 33% of the damage taken (minimum of 1 damage reflected) and can mind control other minions until the original owners next turn."
+      "Soulbound Minion: flying, 125 health\n(Immune to sand damage; 1 use only)\nReflects 33% of the damage taken (minimum of 1 damage reflected) and can mind control other minions until the original owners next turn. Can also cast Sands of Time and Pyramid if in the players book."
     },
     {
       "Entomb",
@@ -2475,7 +2475,7 @@ public static class Descriptions
     },
     {
       "Consume",
-      "Targeted: units with hitpoints equal to or lesser then the wyrm\n{0}\nConsume the targeted unit, added its hitpoints to it's own."
+      "Targeted: units with hitpoints equal to or lesser then the wyrm\n{0}\nConsume the targeted unit, adding its hitpoints to it's own."
     },
     {
       "Burrow",
@@ -2483,7 +2483,7 @@ public static class Descriptions
     },
     {
       "Mind Control",
-      "Targeted: enemy units\n{0}\nTake control of the target until it's owners next turn."
+      "Targeted: enemy units\n{0}\nTake control of the target minion until it's owners next turn."
     }
   };
 
@@ -2596,6 +2596,12 @@ public static class Descriptions
           str += "\n";
         str += "Directional";
       }
+      if (slot.spell.runTimeStats.sharedCooldown != SharedCooldown.None)
+      {
+        if (str.Length > 0)
+          str += "\n";
+        str = str + "Shared Cooldown: " + slot.spell.runTimeStats.sharedCooldown.ToString().Replace('_', ' ');
+      }
     }
     else
     {
@@ -2632,6 +2638,12 @@ public static class Descriptions
           str += "\n";
         str += "Directional";
       }
+      if (spell.runTimeStats.sharedCooldown != SharedCooldown.None)
+      {
+        if (str.Length > 0)
+          str += "\n";
+        str = str + "Shared Cooldown: " + spell.runTimeStats.sharedCooldown.ToString().Replace('_', ' ');
+      }
     }
     if (string.Equals(name, "Enchanted Axes"))
       return combined ? (string.Format(s, (object) str, (object) (slot == null || !((UnityEngine.Object) Player.Instance != (UnityEngine.Object) null) || slot.bonusDmg <= 0 ? spell.damage : spell.damage + Mathf.Min((Player.Instance.person.localTurn - slot.bonusDmg) * 2, 30 + Player.Instance.person.familiarLevels[13] * 2))), str) : (string.Format(s, (object) "", (object) (slot == null || !((UnityEngine.Object) Player.Instance != (UnityEngine.Object) null) || slot.bonusDmg <= 0 ? spell.damage : spell.damage + Mathf.Min((Player.Instance.person.localTurn - slot.bonusDmg) * 2, 30 + Player.Instance.person.familiarLevels[13] * 2))), str);
@@ -2639,19 +2651,6 @@ public static class Descriptions
     {
       int num = slot != null ? spell.damage + slot.bonusDmg : spell.damage;
       return combined ? (string.Format(s, (object) str, (object) ((num - num / 2).ToString() + "-" + (object) num)), str) : (string.Format(s, (object) "", (object) ((num - num / 2).ToString() + "-" + (object) num)), str);
-    }
-    if ((UnityEngine.Object) spell != (UnityEngine.Object) null && spell.type == CastType.Tower)
-    {
-      Tower component = spell.toSummon.GetComponent<Tower>();
-      int maxHealth = component.MaxHealth;
-      StringBuilderPlus stringBuilderPlus = new StringBuilderPlus();
-      for (int index = 1; index <= 5; ++index)
-      {
-        stringBuilderPlus.Append(component.MaxHealth - component.MaxHealth * ((6 - index) * 10) / 100);
-        if (index < 5)
-          stringBuilderPlus.Append(", ");
-      }
-      s = s + "\n\nRechargeable Towers that are cast within 4 turns of another tower will reduce their max hitpoints by up to 50%. Starting Hitpoints under this mechanic would be: " + stringBuilderPlus.ToString();
     }
     return combined ? (string.Format(s, (object) str), str) : (string.Format(s, (object) ""), str);
   }

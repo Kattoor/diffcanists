@@ -1306,7 +1306,7 @@ public class Server : MonoBehaviour
                     gf1.connections.Add(c);
                     c.player.gameNumber = gf1.id;
                     Server.MovePlayer(c, Location.LobbyCreateGame);
-                    if (num1 == (byte) 39 && c.player.account[0].rating >= (short) 1000 && c.player.account.discord != 0UL)
+                    if (num1 == (byte) 39 && c.player.account[0].rating >= (short) 1000 && c.player.account.AccountLinked())
                     {
                       gf1.SetRatedMode(true);
                       gf1.SetTeamMode(TeamEnum.Yes);
@@ -1336,33 +1336,28 @@ public class Server : MonoBehaviour
                       }
                       if (gf2.game != null)
                       {
-                        if (!c.player.spectator)
+                        byte[] numArray = new byte[25];
+                        Server.rngCsp.GetBytes(numArray);
+                        c.player.spectator = true;
+                        Server.validSpectator[c.player.account.name] = new ValidSpectator()
                         {
-                          byte[] numArray = new byte[25];
-                          Server.rngCsp.GetBytes(numArray);
-                          c.player.spectator = true;
-                          Server.validSpectator[c.player.account.name] = new ValidSpectator()
+                          gameID = gf2.id,
+                          name = c.player.account.name,
+                          cryp = numArray,
+                          isp = c.EndPoint.ToString().Split(':')[0]
+                        };
+                        using (MemoryStream memoryStream2 = new MemoryStream())
+                        {
+                          using (myBinaryWriter writer = new myBinaryWriter((Stream) memoryStream2))
                           {
-                            gameID = gf2.id,
-                            name = c.player.account.name,
-                            cryp = numArray,
-                            isp = c.EndPoint.ToString().Split(':')[0]
-                          };
-                          using (MemoryStream memoryStream2 = new MemoryStream())
-                          {
-                            using (myBinaryWriter writer = new myBinaryWriter((Stream) memoryStream2))
-                            {
-                              writer.Write((byte) 36);
-                              writer.Write(gf2.id);
-                              writer.Write(numArray);
-                              gf2.ManualSerialize(writer, true);
-                            }
-                            c.SendBytes(memoryStream2.ToArray(), SendOption.None);
-                            break;
+                            writer.Write((byte) 36);
+                            writer.Write(gf2.id);
+                            writer.Write(numArray);
+                            gf2.ManualSerialize(writer, true);
                           }
-                        }
-                        else
+                          c.SendBytes(memoryStream2.ToArray(), SendOption.None);
                           break;
+                        }
                       }
                       else
                         break;

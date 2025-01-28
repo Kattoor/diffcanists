@@ -729,7 +729,7 @@ public class SpellLobbyChange : MonoBehaviour
     {
       int i = Prestige.CanUnlock(Client.MyAccount, this.openBook);
       if (i == 0)
-        MyMessageBox.Create("Buy the book of " + this.openBook.ToStringX() + " with 5 wands?", (Action) (() => Prestige.AskUnlock(this.openBook)), "Ok", "Cancel", (Action) null, (Action) null, (Sprite) null);
+        MyMessageBox.Create("Buy the Book of " + this.openBook.ToStringX() + " with 5 wands?", (Action) (() => Prestige.AskUnlock(this.openBook)), "Ok", "Cancel", (Action) null, (Action) null, (Sprite) null);
       else
         MyToolTip.Show(Prestige.BookErrorCode(i), 5f);
     }

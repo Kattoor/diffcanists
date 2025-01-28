@@ -275,9 +275,15 @@ public class AudioManager : MonoBehaviour
     AudioManager.TurnTimer._lastTime = Mathf.Floor(f - 0.1f);
     if ((double) AudioManager.TurnTimer._lastTime == 0.0 && (Object) AudioManager.instance.sourceTurnEnd.clip != (Object) AudioManager.instance.turnEnd)
       AudioManager.TurnTimer._lastTime = 0.4f;
-    Debug.Log((object) ("Time: " + (object) f));
     AudioManager.instance.sourceTurnEnd.volume = PlayerPrefs.GetFloat("turnendsound", 1f);
     AudioManager.instance.sourceTurnEnd.clip = (double) f <= 0.5 ? AudioManager.instance.turnEnd : AudioManager.instance.turnEndCountdown;
+    AudioManager.instance.sourceTurnEnd.Play();
+  }
+
+  public static void _TestTurnEnd()
+  {
+    AudioManager.instance.sourceTurnEnd.volume = PlayerPrefs.GetFloat("turnendsound", 1f);
+    AudioManager.instance.sourceTurnEnd.clip = AudioManager.instance.turnEndCountdown;
     AudioManager.instance.sourceTurnEnd.Play();
   }
 

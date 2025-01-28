@@ -294,6 +294,7 @@ public static class Armageddon
     if (p.localTurn != p.game.armageddonTurn || p.game.globalEffectors.FindIndex((Predicate<ZEffector>) (a => (ZComponent) a != (object) null && a.type == EffectorType.Rising_Lava)) != -1)
       return;
     ZSpell.FireRisingLava(Inert.Instance.ArmageddonObjects[GameFacts.GetMapIndex(MapEnum.Dark_Fortress)], p.game);
+    ZSpell.FireDenseFog(Inert.GetSpell(SpellEnum.Dense_Fog), p.game);
   }
 
   private static void Jungle(ZPerson p)

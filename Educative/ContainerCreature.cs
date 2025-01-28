@@ -491,7 +491,7 @@ namespace Educative
       if (this.creature.hasDarkDefenses)
         this.creature.DarkDefenses(true);
       this.creature.parent.familiarBook |= (FamiliarType) (1 << index);
-      this.creature.game.CreateFamiliar((BookOf) index, this.creature.parent, true);
+      this.creature.game.CreateFamiliar((BookOf) index, this.creature.parent, true, false);
       if (!this.creature.game.isClient)
         return;
       this.creature.UpdateHealthTxt();

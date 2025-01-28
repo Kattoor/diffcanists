@@ -3,8 +3,8 @@ using System;
 
 public static class BuildConstants
 {
-  public static readonly DateTime buildDate = new DateTime(638680085640810784L);
-  public const string version = "1.0.0.8";
+  public static readonly DateTime buildDate = new DateTime(638680861375035498L);
+  public const string version = "1.0.0.7";
   public const BuildConstants.ReleaseType releaseType = BuildConstants.ReleaseType.NewReleaseType;
   public const BuildConstants.Platform platform = BuildConstants.Platform.PC;
   public const BuildConstants.Architecture architecture = BuildConstants.Architecture.Windows_x64;
@@ -21,8 +21,8 @@ public static class BuildConstants
     None,
     Linux,
     macOS,
-    PC,
     Android,
+    PC,
   }
 
   public enum Architecture
@@ -30,8 +30,8 @@ public static class BuildConstants
     None,
     Linux_x64,
     macOS,
-    Windows_x64,
     Android,
+    Windows_x64,
   }
 
   public enum Distribution

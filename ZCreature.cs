@@ -1766,7 +1766,7 @@ label_22:
         {
           if (i > 0 && cre.health < cre.maxHealth && i < zcreature.parent.controlled.Count)
           {
-            if (zcreature.parent.controlled[i].type == CreatureType.Kraken)
+            if (zcreature.parent.controlled[i].type == CreatureType.Kraken || !zcreature.parent.controlled[i].controllable && zcreature.parent.controlled[i].type != CreatureType.Tiger)
             {
               ++krackenCount;
             }
@@ -1828,7 +1828,7 @@ label_16:
         {
           if (index > 0 && zcreature.health < zcreature.maxHealth)
           {
-            if (this.parent.controlled[index].type == CreatureType.Kraken)
+            if (this.parent.controlled[index].type == CreatureType.Kraken || !this.parent.controlled[index].controllable && this.parent.controlled[index].type != CreatureType.Tiger)
             {
               ++num3;
             }

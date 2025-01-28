@@ -177,11 +177,18 @@ public class StoreMenu : MonoBehaviour
     if (which == ArcanistsStore.Which.SpellSkin)
       MyMessageBox.Create("Buy <#FF0000>" + item.name + "</color> for <#00FFFF>" + (object) item.cost + "</color> crystals?", (Action) (() => Prestige.Ask((byte) 12, (int) which, itemIndex)), "Ok", "Cancel", (Action) null, (Action) null, item.sprite, "Preview", (Action) (() =>
       {
-        Client.previewItem = item;
-        Client._gameFacts = new GameFacts();
-        Client.joinedFrom = Client.JoinLocation.Store;
-        Controller.Instance.InitMap(true, false);
-        DiscordIntergration.Instance?.UpdateActivitySandbox();
+        if ((UnityEngine.Object) MainMenu.Instance == (UnityEngine.Object) null)
+        {
+          MyMessageBox.Create("Sorry, you can only preview skins from the main menu!", (Action) null, "Ok", "Cancel", (Action) null, (Action) null, (Sprite) null, (string) null, (Action) null);
+        }
+        else
+        {
+          Client.previewItem = item;
+          Client._gameFacts = new GameFacts();
+          Client.joinedFrom = Client.JoinLocation.Store;
+          Controller.Instance.InitMap(true, false);
+          DiscordIntergration.Instance?.UpdateActivitySandbox();
+        }
       }));
     else
       MyMessageBox.Create("Buy <#FF0000>" + item.name + "</color> for <#00FFFF>" + (object) item.cost + "</color> crystals?", (Action) (() => Prestige.Ask((byte) 12, (int) which, itemIndex)), "Ok", "Cancel", (Action) null, (Action) null, item.sprite, (string) null, (Action) null);
@@ -196,11 +203,18 @@ public class StoreMenu : MonoBehaviour
       Action onEnd = (Action) (() => Prestige.Ask((byte) 16, (int) which, itemIndex, true));
       MyMessageBox.Create("Preview <#FF0000>" + item.name + "</color>?", onEnd, ok, "Cancel", (Action) null, (Action) null, item.sprite, "Preview", (Action) (() =>
       {
-        Client.previewItem = item;
-        Client._gameFacts = new GameFacts();
-        Client.joinedFrom = Client.JoinLocation.Store;
-        Controller.Instance.InitMap(true, false);
-        DiscordIntergration.Instance?.UpdateActivitySandbox();
+        if ((UnityEngine.Object) MainMenu.Instance == (UnityEngine.Object) null)
+        {
+          MyMessageBox.Create("Sorry, you can only preview skins from the main menu!", (Action) null, "Ok", "Cancel", (Action) null, (Action) null, (Sprite) null, (string) null, (Action) null);
+        }
+        else
+        {
+          Client.previewItem = item;
+          Client._gameFacts = new GameFacts();
+          Client.joinedFrom = Client.JoinLocation.Store;
+          Controller.Instance.InitMap(true, false);
+          DiscordIntergration.Instance?.UpdateActivitySandbox();
+        }
       }));
     }
     else

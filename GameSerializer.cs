@@ -193,7 +193,7 @@ public static class GameSerializer
       return game.helper.Getspell(num2);
     Spell spell = Inert.GetSpell(reader.ReadString());
     MyLocation myLocation = reader.ReadMyLocation();
-    ZSpell z = !((Object) spell != (Object) null) ? new ZSpell() : (!(typeof (FlameWallSpell) == spell.GetType()) ? ZSpell.Create(game, spell, (Vector3) myLocation.ToSinglePrecision(), Quaternion.identity, game.GetMapTransform(), cre) : (ZSpell) ZSpell.Create(game, (FlameWallSpell) spell, (Vector3) myLocation.ToSinglePrecision(), Quaternion.identity, game.GetMapTransform(), cre));
+    ZSpell z = !((Object) spell != (Object) null) ? new ZSpell() : (!(typeof (FlameWallSpell) == spell.GetType()) ? ZSpell.Create(game, spell, (Vector3) myLocation.ToSinglePrecision(), Quaternion.identity, game.GetMapTransform(), cre, true) : (ZSpell) ZSpell.Create(game, (FlameWallSpell) spell, (Vector3) myLocation.ToSinglePrecision(), Quaternion.identity, game.GetMapTransform(), cre, true));
     game.helper.spellID.Add(num2, z);
     z.id = num2;
     z.position = myLocation;

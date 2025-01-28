@@ -466,7 +466,7 @@ public class ZSpell : ZEntity, ISpellBridge
     MyLocation pos,
     Quaternion rot)
   {
-    ZSpell zspell = ZSpell.Create(c.game, spell, (Vector3) pos.ToSinglePrecision(), spell.Rotates ? rot : Quaternion.identity, c.game.GetMapTransform(), c);
+    ZSpell zspell = ZSpell.Create(c.game, spell, (Vector3) pos.ToSinglePrecision(), spell.Rotates ? rot : Quaternion.identity, c.game.GetMapTransform(), c, false);
     zspell.game = c.game;
     zspell.position = pos;
     zspell.parent = c;
@@ -484,7 +484,7 @@ public class ZSpell : ZEntity, ISpellBridge
     bool setVelocity = true,
     bool isChild = false)
   {
-    ZSpell zspell = ZSpell.Create(c.game, spell, (Vector3) pos.ToSinglePrecision(), spell.Rotates ? rot : Quaternion.identity, c.game.GetMapTransform(), c.first());
+    ZSpell zspell = ZSpell.Create(c.game, spell, (Vector3) pos.ToSinglePrecision(), spell.Rotates ? rot : Quaternion.identity, c.game.GetMapTransform(), c.first(), false);
     zspell.game = c.game;
     zspell.position = pos;
     zspell.wasChild = isChild;
@@ -508,7 +508,7 @@ public class ZSpell : ZEntity, ISpellBridge
     bool isChild = false,
     bool follow = true)
   {
-    ZSpell zspell = ZSpell.Create(c.game, spell, (Vector3) pos.ToSinglePrecision(), spell.Rotates ? rot : Quaternion.identity, c.game.GetMapTransform(), c);
+    ZSpell zspell = ZSpell.Create(c.game, spell, (Vector3) pos.ToSinglePrecision(), spell.Rotates ? rot : Quaternion.identity, c.game.GetMapTransform(), c, false);
     zspell.game = c.game;
     zspell.position = pos;
     zspell.wasChild = isChild;
@@ -529,7 +529,7 @@ public class ZSpell : ZEntity, ISpellBridge
     Quaternion rot,
     bool isChild = false)
   {
-    ZSpell zspell = ZSpell.Create(c.game, spell, (Vector3) pos.ToSinglePrecision(), spell.Rotates ? rot : Quaternion.identity, c.game.GetMapTransform(), c);
+    ZSpell zspell = ZSpell.Create(c.game, spell, (Vector3) pos.ToSinglePrecision(), spell.Rotates ? rot : Quaternion.identity, c.game.GetMapTransform(), c, false);
     zspell.game = c.game;
     zspell.position = pos;
     zspell.wasChild = isChild;
@@ -552,7 +552,7 @@ public class ZSpell : ZEntity, ISpellBridge
     bool setVelocity = true,
     bool isChild = false)
   {
-    ZSpell zspell = ZSpell.Create(c.game, spell, (Vector3) pos.ToSinglePrecision(), spell.Rotates ? rot : Quaternion.identity, c.game.GetMapTransform(), c);
+    ZSpell zspell = ZSpell.Create(c.game, spell, (Vector3) pos.ToSinglePrecision(), spell.Rotates ? rot : Quaternion.identity, c.game.GetMapTransform(), c, false);
     zspell.game = c.game;
     zspell.position = pos;
     zspell.wasChild = isChild;
@@ -1399,13 +1399,15 @@ label_58:
     Vector3 position,
     Quaternion q,
     Transform parent,
-    ZCreature cre = null)
+    ZCreature cre = null,
+    bool fromSerialization = false)
   {
     ZSpell zspell = ZSpell.Get(c, game);
     zspell.game = game;
     zspell.id = ++game.nextSpellID;
     zspell.Copy(c, game);
-    zspell.randomNumber = game.RandomInt(0, int.MaxValue);
+    if (!fromSerialization && c.spellEnum != SpellEnum.Tomato && c.spellEnum != SpellEnum.Tomato_Emoji)
+      zspell.randomNumber = game.RandomInt(0, int.MaxValue);
     zspell.SetupClient(c, position, q, parent, cre);
     return zspell;
   }
@@ -1416,13 +1418,15 @@ label_58:
     Vector3 position,
     Quaternion q,
     Transform parent,
-    ZCreature cre)
+    ZCreature cre,
+    bool fromSerialization = false)
   {
     ZFlameWallSpell zflameWallSpell = new ZFlameWallSpell();
     zflameWallSpell.game = game;
     zflameWallSpell.id = ++game.nextSpellID;
     zflameWallSpell.Copy((Spell) c, game);
-    zflameWallSpell.randomNumber = game.RandomInt(0, int.MaxValue);
+    if (!fromSerialization && c.spellEnum != SpellEnum.Tomato && c.spellEnum != SpellEnum.Tomato_Emoji)
+      zflameWallSpell.randomNumber = game.RandomInt(0, int.MaxValue);
     if ((UnityEngine.Object) c.effector2 != (UnityEngine.Object) null)
     {
       zflameWallSpell.effector2 = new ZEffector();
@@ -3813,7 +3817,7 @@ label_7:
     }
     else
     {
-      ZFlameWallSpell zflameWallSpell1 = ZSpell.Create(c.game, theSpell.toSummon.GetComponent<FlameWallSpell>(), new Vector3((float) target.x.ToInt(), (float) c.map.Height), Quaternion.identity, c.game.GetMapTransform(), c);
+      ZFlameWallSpell zflameWallSpell1 = ZSpell.Create(c.game, theSpell.toSummon.GetComponent<FlameWallSpell>(), new Vector3((float) target.x.ToInt(), (float) c.map.Height), Quaternion.identity, c.game.GetMapTransform(), c, false);
       ZEffector effector = zflameWallSpell1.effector;
       effector.game = c.game;
       c.game.naturesWrath = effector;
@@ -3848,7 +3852,7 @@ label_7:
     }
     else
     {
-      ZFlameWallSpell zflameWallSpell = ZSpell.Create(c.game, theSpell.GetComponent<FlameWallSpell>(), (Vector3) target.ToSinglePrecision(), Quaternion.identity, c.game.GetMapTransform(), c);
+      ZFlameWallSpell zflameWallSpell = ZSpell.Create(c.game, theSpell.GetComponent<FlameWallSpell>(), (Vector3) target.ToSinglePrecision(), Quaternion.identity, c.game.GetMapTransform(), c, false);
       ZEffector effector = zflameWallSpell.effector;
       effector.game = game;
       c.game.dwarfMapEffector = effector;
@@ -3878,7 +3882,7 @@ label_7:
     }
     else
     {
-      ZFlameWallSpell zflameWallSpell = ZSpell.Create(c.game, theSpell.GetComponent<FlameWallSpell>(), (Vector3) target.ToSinglePrecision(), Quaternion.identity, c.game.GetMapTransform(), c);
+      ZFlameWallSpell zflameWallSpell = ZSpell.Create(c.game, theSpell.GetComponent<FlameWallSpell>(), (Vector3) target.ToSinglePrecision(), Quaternion.identity, c.game.GetMapTransform(), c, false);
       ZEffector effector = zflameWallSpell.effector;
       effector.game = game;
       c.game.targetEffector = effector;
@@ -5023,7 +5027,7 @@ label_27:
     target.x -= 18;
     for (int index = 0; index < 3; ++index)
     {
-      ZFlameWallSpell zflameWallSpell1 = ZSpell.Create(c.game, theSpell.toSummon.GetComponent<FlameWallSpell>(), new Vector3((float) target.x.ToInt(), (float) c.map.Height), Quaternion.identity, c.game.GetMapTransform(), c);
+      ZFlameWallSpell zflameWallSpell1 = ZSpell.Create(c.game, theSpell.toSummon.GetComponent<FlameWallSpell>(), new Vector3((float) target.x.ToInt(), (float) c.map.Height), Quaternion.identity, c.game.GetMapTransform(), c, false);
       ZEffector effector = zflameWallSpell1.effector;
       c.effectors.Add(effector);
       effector.game = c.game;
@@ -5051,7 +5055,7 @@ label_27:
     FixedInt power,
     bool isActive = true)
   {
-    ZFlameWallSpell zflameWallSpell1 = ZSpell.Create(c.game, theSpell.gameObject.GetComponent<FlameWallSpell>(), (Vector3) target.ToSinglePrecision(), Quaternion.identity, c.game.GetMapTransform(), c);
+    ZFlameWallSpell zflameWallSpell1 = ZSpell.Create(c.game, theSpell.gameObject.GetComponent<FlameWallSpell>(), (Vector3) target.ToSinglePrecision(), Quaternion.identity, c.game.GetMapTransform(), c, false);
     zflameWallSpell1.game = c.game;
     if (theSpell.bookOf == BookOf.Flame)
       ZSpell.UpgradeFullFire(c, (ZSpell) zflameWallSpell1);

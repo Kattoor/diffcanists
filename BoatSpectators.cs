@@ -161,7 +161,7 @@ public class BoatSpectators : MonoBehaviour
 
   public void OnTomato(int id, int tIndex, float angle, float power)
   {
-    if (!this.spectators.TryGetValue(id, out this.cur))
+    if (!this.spectators.TryGetValue(id, out this.cur) || !BoatSpectators.ShouldBeVisible(this.cur.name))
       return;
     if (Client.game.isClient && !Client.game.resyncing)
       AudioManager.Play(HUD.instance.specSpells[tIndex].spell.castClip);
@@ -170,7 +170,7 @@ public class BoatSpectators : MonoBehaviour
 
   public void OnTomatoEmoji(int id, int tIndex, float angle, float power)
   {
-    if (!this.spectators.TryGetValue(id, out this.cur))
+    if (!this.spectators.TryGetValue(id, out this.cur) || !BoatSpectators.ShouldBeVisible(this.cur.name))
       return;
     if (Client.game.isClient && !Client.game.resyncing)
       AudioManager.Play(HUD.instance.specSpells[0].spell.castClip);
@@ -179,7 +179,7 @@ public class BoatSpectators : MonoBehaviour
 
   public void OnEmoji(int id, int emoji)
   {
-    if (!this.spectators.TryGetValue(id, out this.cur))
+    if (!this.spectators.TryGetValue(id, out this.cur) || !BoatSpectators.ShouldBeVisible(this.cur.name))
       return;
     this.cur.obj.GetComponent<Creature>()?.OnEmoji(emoji, true);
   }

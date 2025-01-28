@@ -1098,7 +1098,7 @@ label_1:
       TcpConnection tcpConnection = new TcpConnection();
       tcpConnection.player.player = zperson;
       Client.game.gameFacts.connections.Add((Connection) tcpConnection);
-      HUD.FindFullBooks(Client.game, zperson, (int) zperson.id);
+      HUD.FindFullBooks(Client.game, zperson, (int) zperson.id, false);
     }
     int result = 0;
     if (int.TryParse(HUD.instance.inputDummyHp.text, out result) && result > 0)

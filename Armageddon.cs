@@ -45,6 +45,8 @@ public static class Armageddon
 
   public static int CountCustomArmageddon(ZGame game, SpellEnum spell)
   {
+    if (game == null || game.gameFacts == null || (game.gameFacts.settings == null || game.gameFacts.settings.customArmageddon == null))
+      return 0;
     int num = 0;
     foreach (SpellEnum spellEnum in game.gameFacts.settings.customArmageddon)
     {

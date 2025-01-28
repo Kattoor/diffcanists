@@ -1207,7 +1207,7 @@ public class HUD : UIBehaviour
     foreach (ZPerson player in game.players)
     {
       if ((ZComponent) player.first() != (object) null)
-        HUD.FindFullBooks(game, player, index);
+        HUD.FindFullBooks(game, player, index, game.isReplay);
       if ((ZComponent) player.first() != (object) null)
         player.startingSpells = player.first().spells.Count;
       ++index;
@@ -1249,7 +1249,7 @@ public class HUD : UIBehaviour
     }
   }
 
-  public static void FindFullBooks(ZGame game, ZPerson x, int index)
+  public static void FindFullBooks(ZGame game, ZPerson x, int index, bool fromReplay = false)
   {
     ZCreature zcreature = x.controlled[0];
     int num1 = 0;
@@ -1259,7 +1259,7 @@ public class HUD : UIBehaviour
     BookOf b = zcreature.spells.Count > 9 ? zcreature.spells[9].spell.bookOf : BookOf.Nothing;
     for (int index1 = 0; index1 < zcreature.spells.Count; ++index1)
     {
-      HUD.OnInitSpell(zcreature, zcreature.spells[index1], false);
+      HUD.OnInitSpell(zcreature, zcreature.spells[index1], fromReplay);
       if (zcreature.spells[index1].spell.bookOf == b)
         ++num3;
       if (game.AllowExpansion && zcreature.spells[index1].spell.IsMinionSpell())
@@ -1276,7 +1276,7 @@ public class HUD : UIBehaviour
     {
       x.familiarBook = (FamiliarType) (1 << (int) (b & (BookOf) 31));
       x.ActivateableFamiliar = b;
-      if (game.isClient)
+      if (game.isClient && !fromReplay)
         HUD.ClientChangeElementalStaff(x, b, true);
       if ((UnityEngine.Object) Player.Instance != (UnityEngine.Object) null && Player.Instance.person == x)
       {
@@ -1286,7 +1286,7 @@ public class HUD : UIBehaviour
           HUD.instance.familiarHowTo.SetActive(true);
       }
     }
-    if (num3 == 12 && b == BookOf.Arcane && (game.isSandbox || game.gameFacts.GetAllowArcanePowers()) && (x.account.accountType.has(AccountType.Developer | AccountType.Admin | AccountType.Arcane_Monster | AccountType.Game_Director) && !x.game.isRated))
+    if (num3 == 12 && b == BookOf.Arcane && (game.isSandbox || game.gameFacts.GetAllowArcanePowers()) && (x.account.accountType.has(AccountType.Developer | AccountType.Admin | AccountType.Arcane_Monster | AccountType.Game_Director) && !x.game.isRated && !fromReplay))
       HUD.TransformArcaneMonster(x, zcreature, game, index);
     if (num1 >= 12 && zcreature.game.AllowExpansion)
     {
@@ -1318,7 +1318,7 @@ public class HUD : UIBehaviour
       }
       Spell spell1 = Inert.GetSpell(SpellEnum.Summon_Titan);
       zcreature.spells.Add(new SpellSlot(spell1));
-      HUD.OnInitSpell(zcreature, zcreature.spells[zcreature.spells.Count - 1], false);
+      HUD.OnInitSpell(zcreature, zcreature.spells[zcreature.spells.Count - 1], fromReplay);
       ZFamiliar.CreateMinionMaster(x);
     }
     else if (num2 >= 9)
@@ -1329,7 +1329,7 @@ public class HUD : UIBehaviour
         if (spellsEnum.Value.spellType == SpellType.Bomb && !zcreature.HasSpell(spellsEnum.Value.spellEnum))
         {
           zcreature.spells.Add(new SpellSlot(spellsEnum.Value));
-          HUD.OnInitSpell(zcreature, zcreature.spells[zcreature.spells.Count - 1], false);
+          HUD.OnInitSpell(zcreature, zcreature.spells[zcreature.spells.Count - 1], fromReplay);
         }
       }
       ZFamiliar.CreateBombMaster(x);
@@ -1343,7 +1343,7 @@ public class HUD : UIBehaviour
         if ((UnityEngine.Object) spell != (UnityEngine.Object) null && spell.level <= 3 && !zcreature.HasSpell(s))
         {
           zcreature.spells.Insert(0, new SpellSlot(spell));
-          HUD.OnInitSpell(zcreature, zcreature.spells[0], false);
+          HUD.OnInitSpell(zcreature, zcreature.spells[0], fromReplay);
         }
       }
     }
@@ -1364,7 +1364,7 @@ public class HUD : UIBehaviour
         if (index1 != 0 && spellIndex >= 0)
           zcreature.spells.RemoveAt(spellIndex);
         zcreature.spells.Insert(index3, new SpellSlot(spell));
-        HUD.OnInitSpell(zcreature, zcreature.spells[index3], false);
+        HUD.OnInitSpell(zcreature, zcreature.spells[index3], fromReplay);
         ++index3;
         if (spell.level == 3 && game.isClient)
           HUD.instance.uiPlayerCharacters[(int) zcreature.parent.id].AddLevel3(spell);
@@ -1378,13 +1378,13 @@ public class HUD : UIBehaviour
         for (int index5 = 0; index5 < (game.isSandbox ? 5 : (int) game.gameFacts.elementalLevel); ++index5)
         {
           ++zcreature.parent.familiarLevels[index1];
-          game.CreateFamiliar((BookOf) index1, zcreature.parent, false);
+          game.CreateFamiliar((BookOf) index1, zcreature.parent, false, fromReplay);
         }
       }
-      if (game.isClient)
+      if (game.isClient && !fromReplay)
         HUD.ClientChangeElementalStaff(x, (BookOf) index1, false);
     }
-    if (game.gameFacts.GetStyle().HasStyle(GameStyle.Watchtower) && !game.gameFacts.GetStyle().HasStyle(GameStyle.First_Turn_Teleport))
+    if (game.gameFacts.GetStyle().HasStyle(GameStyle.Watchtower) && !game.gameFacts.GetStyle().HasStyle(GameStyle.First_Turn_Teleport) && !fromReplay)
       ZSpell.FireTower(Inert.Instance.spells["Watchtower"], zcreature, zcreature.position, (FixedInt) 0, (FixedInt) 0);
     if (x.shownLevel3.Count <= 0 && !x.BombMaster && (!x.FullArcane && !x.MinionMaster) && (!x.first().gliding && x.first().radius == 18))
       return;
@@ -1481,9 +1481,9 @@ public class HUD : UIBehaviour
       zcreature.UpdateHealthTxt();
       this.SendUpdateFamiliar();
       if (this.game.MoveQue.Count > 0)
-        this.game.MoveQue.Enqueue((Action) (() => this.game.CreateFamiliar(Player.Instance.person.ActivateableFamiliar, Player.Instance.person, true)));
+        this.game.MoveQue.Enqueue((Action) (() => this.game.CreateFamiliar(Player.Instance.person.ActivateableFamiliar, Player.Instance.person, true, false)));
       else
-        this.game.CreateFamiliar(Player.Instance.person.ActivateableFamiliar, Player.Instance.person, true);
+        this.game.CreateFamiliar(Player.Instance.person.ActivateableFamiliar, Player.Instance.person, true, false);
     }
     if (zcreature.familiarLevelActivateable < 5)
       return;

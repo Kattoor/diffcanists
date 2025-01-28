@@ -10,7 +10,6 @@ using UnityEngine.UI;
 public class SpellLobbyChange : MonoBehaviour
 {
   internal SettingsPlayer settingsPlayer = new SettingsPlayer();
-  internal bool validating = true;
   [NonSerialized]
   internal BookOf viewingExtraSpells = BookOf.Nothing;
   public PrestigeSpellIcon pfabItem;
@@ -51,6 +50,8 @@ public class SpellLobbyChange : MonoBehaviour
   public UIOnHover buttonShare;
   internal BookOf openBook;
   private Action<SettingsPlayer> onEnd;
+  private Action onCancel;
+  internal Validation validating;
   public Image imgHoliday;
   public Image imgSeasons;
   public Sprite spriteHoliday;
@@ -67,8 +68,9 @@ public class SpellLobbyChange : MonoBehaviour
     SettingsPlayer sp = null,
     Action<SettingsPlayer> onEnd = null,
     bool center = false,
-    bool validate = true,
-    bool transparent = false)
+    Validation validate = Validation.Default,
+    bool transparent = false,
+    Action onCancel = null)
   {
     Client.viewSpellLocks = (ViewSpellLocks) PlayerPrefs.GetInt("prefviewinglocked", 1);
     Client.sharingWith = "";
@@ -96,6 +98,7 @@ public class SpellLobbyChange : MonoBehaviour
         }
       }
       SpellLobbyChange.Instance.Init(sp, onEnd);
+      SpellLobbyChange.Instance.onCancel = onCancel;
       if (center)
         SpellLobbyChange.Instance.Center();
       if ((UnityEngine.Object) LobbyMenu.instance != (UnityEngine.Object) null || (UnityEngine.Object) UnratedMenu.instance != (UnityEngine.Object) null)
@@ -378,6 +381,10 @@ public class SpellLobbyChange : MonoBehaviour
   {
     Client.sharingWith = "";
     UnityEngine.Object.Destroy((UnityEngine.Object) this.gameObject);
+    Action onCancel = this.onCancel;
+    if (onCancel == null)
+      return;
+    onCancel();
   }
 
   public void ClickElemental()
@@ -418,7 +425,7 @@ public class SpellLobbyChange : MonoBehaviour
     int num;
     if (this.settingsPlayer.fullBook > (byte) 0)
     {
-      if (!Restrictions.IsElementalRestricted((int) this.settingsPlayer.fullBook - 1))
+      if (!Restrictions.IsElementalRestricted((int) this.settingsPlayer.fullBook - 1, (Restrictions) null))
       {
         if (Client.viewSpellLocks.ViewRestricted())
         {
@@ -758,11 +765,22 @@ public class SpellLobbyChange : MonoBehaviour
 
   public void RefreshList()
   {
-    if (this.validating)
+    if (this.validating == Validation.Default)
     {
       for (int index = 0; index < 16; ++index)
       {
         if (!this.settingsPlayer.CanEquipSpell(index, this.settingsPlayer.spells[index]) && this.settingsPlayer.spells[index] != byte.MaxValue)
+        {
+          this.RemoveSpellSlot(index, false);
+          --index;
+        }
+      }
+    }
+    else if (this.validating == Validation.Level3Only)
+    {
+      for (int index = 0; index < 16; ++index)
+      {
+        if (!this.settingsPlayer.CanEquipSpellLevel3Only(index, this.settingsPlayer.spells[index]) && this.settingsPlayer.spells[index] != byte.MaxValue)
         {
           this.RemoveSpellSlot(index, false);
           --index;

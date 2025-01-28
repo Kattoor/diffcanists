@@ -210,7 +210,7 @@ label_31:
   }
 
   public static IEnumerator<float> SandMove(
-    Spell spell,
+    ISpellBridge spell,
     ZGame game,
     ZCreature parent,
     MyLocation position,
@@ -244,10 +244,10 @@ label_31:
       {
         if (curDuration == 2)
           toCollideCheck = (ZCreature) null;
-        num1 = 0;
-        int x4 = (int) (velocity.x + x1);
-        int y4 = (int) (velocity.y + y1);
-        if ((curDuration > collisionFrame ? (!map.SpellCheckPosition(x4, y4, toCollideCheck, Inert.mask_spell_movement) ? 1 : 0) : (!map.CheckPositionOnlyMap(x4, y4) ? 1 : 0)) != 0)
+        --num1;
+        int x4 = (int) (fixedInt3 + x1);
+        int y4 = (int) (fixedInt4 + y1);
+        if ((curDuration <= collisionFrame || num1 != 0 ? (!map.CheckPositionOnlyMap(x4, y4) ? 1 : 0) : (!map.SpellCheckPosition(x4, y4, toCollideCheck, Inert.mask_spell_movement) ? 1 : 0)) != 0)
         {
           ZCreature zcreature = map.PhysicsCollideCreature(toCollideCheck, x4, y4, 0);
           if ((ZComponent) zcreature != (object) null && typeof (ZCreatureThorn) != zcreature.GetType())
@@ -255,7 +255,7 @@ label_31:
             velocity.y = (FixedInt) 0;
             velocity.x = (FixedInt) 0;
             position = new MyLocation(x2, y2);
-            zcreature.ApplyDamage(spell.spellEnum, spell.damageType, 1, parent, game.turn, (ISpellBridge) spell, false);
+            zcreature.ApplyDamage(spell.GetSpellEnum, spell.GetDamageType, 1, parent, game.turn, spell, false);
             yield break;
           }
           else

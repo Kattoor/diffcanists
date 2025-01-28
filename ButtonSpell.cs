@@ -38,7 +38,7 @@ public class ButtonSpell : MonoBehaviour
       return;
     if (Prestige.IsUnlocked(Client.MyAccount, this.myRealIndex) || !Client.viewSpellLocks.ViewLocked())
     {
-      if (!Restrictions.IsSpellRestricted(this.myRealIndex))
+      if (!Restrictions.IsSpellRestricted(this.myRealIndex, (Restrictions) null))
       {
         if (Client.viewSpellLocks.ViewRestricted())
         {

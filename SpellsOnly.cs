@@ -77,12 +77,13 @@ public class SpellsOnly
       w.Write(this.spells[index]);
   }
 
-  public void Copy(SettingsPlayer b)
+  public SpellsOnly Copy(SettingsPlayer b)
   {
     this.fullBook = b.fullBook;
     this.extraInfo = b.extraInfo;
     for (int index = 0; index < 16; ++index)
       this.spells[index] = b.spells[index];
+    return this;
   }
 
   private void DefaultSpells()

@@ -34,7 +34,7 @@ public class SpellImageList : MonoBehaviour
 
   public void ClickQuickChange()
   {
-    SpellLobbyChange.Create((SettingsPlayer) null, (Action<SettingsPlayer>) null, false, true, false);
+    SpellLobbyChange.Create((SettingsPlayer) null, (Action<SettingsPlayer>) null, false, Validation.Default, false, (Action) null);
   }
 
   public void ClickPrestige()
@@ -66,11 +66,11 @@ public class SpellImageList : MonoBehaviour
       {
         this.spellSlot[index].sprite = !holidayIsSeasons || spells[index] < (byte) 120 || spells[index] >= (byte) 132 ? ClientResources.Instance.icons.GetItem((int) spells[index]).Value : ClientResources.Instance.icons[Inert.Instance.holidaySpells[(int) spells[index] % 12].name];
         this.spellSlot[index].enabled = true;
-        this.restricted[index].gameObject.SetActive(Restrictions.IsSpellRestricted((int) spells[index]));
+        this.restricted[index].gameObject.SetActive(Restrictions.IsSpellRestricted((int) spells[index], (Restrictions) null));
         int spell = (int) spells[index];
         if (Prestige.IsUnlocked(Client.MyAccount, spell) || !Client.viewSpellLocks.ViewLocked() && ((UnityEngine.Object) UnratedMenu.instance == (UnityEngine.Object) null || Client._gameFacts.GetStyle().HasStyle(GameStyle.Sandbox)))
         {
-          if (!Restrictions.IsSpellRestricted(spell))
+          if (!Restrictions.IsSpellRestricted(spell, (Restrictions) null))
           {
             if (Client.viewSpellLocks.ViewRestricted())
             {
@@ -102,7 +102,7 @@ label_6:
     if ((int) fullBook >= ClientResources.Instance.spellBookIcons.Length)
       fullBook = (byte) 0;
     this.elemental.sprite = !(fullBook == (byte) 11 & holidayIsSeasons) ? ClientResources.Instance.spellBookIcons[(int) fullBook] : ClientResources.Instance.spellBookIconHoliday;
-    this.elemental.transform.GetChild(0).gameObject.SetActive(fullBook > (byte) 0 && Restrictions.IsElementalRestricted((int) fullBook - 1));
+    this.elemental.transform.GetChild(0).gameObject.SetActive(fullBook > (byte) 0 && Restrictions.IsElementalRestricted((int) fullBook - 1, (Restrictions) null));
   }
 
   public void ClickElementalIcon()

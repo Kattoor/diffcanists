@@ -13,7 +13,7 @@ public class MultiSelectConfig : MonoBehaviour
     {
       this.settings.CopySpells(s, true);
       this.spells.SetSpells(s);
-    }), false, true, false);
+    }), false, Validation.Default, false, (Action) null);
   }
 
   public void ClickResetSpells()

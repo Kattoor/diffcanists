@@ -21,6 +21,8 @@ public interface ISpellBridge
 
   Spell GetBaseSpell { get; }
 
+  DamageType GetDamageType { get; }
+
   ExplosionCutout GetExplosionCutout { get; }
 
   int maxSandDamage { get; }

@@ -7,7 +7,7 @@ public class SandPool : MonoBehaviour
   private int cachedSubMeshIndex = -1;
   private uint[] args = new uint[5];
   private int killFrames = 100;
-  private IndirectRenderer rend;
+  internal IndirectRenderer rend;
   public SpriteRenderer spriteRenderer;
   public int instanceCount;
   public Mesh instanceMesh;
@@ -81,7 +81,7 @@ public class SandPool : MonoBehaviour
     }
   }
 
-  private void CreateMesh()
+  internal void CreateMesh()
   {
     Sprite sprite = this.spriteRenderer.sprite;
     Mesh mesh = new Mesh();

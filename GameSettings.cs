@@ -19,6 +19,9 @@ public class GameSettings
   public string description = "";
   public byte mapWidth = 100;
   public byte mapHeight = 100;
+  public int bansPerPhase = 5;
+  public int timerPerBanPhase = 20;
+  public int timerPerPickPhase = 60;
   public ZGame.GameType gameType;
   public int gameModes3;
   public short countdownTime;
@@ -30,6 +33,7 @@ public class GameSettings
   public const byte Version = 5;
   public List<SpellEnum> customArmageddon;
   public List<SpellEnum> autoInclude;
+  public int banPhases;
 
   public string FilteredDescription()
   {

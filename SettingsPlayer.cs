@@ -125,6 +125,10 @@ public class SettingsPlayer
     {
       return (BookOf) ((int) this.fullBook - 1);
     }
+    set
+    {
+      this.fullBook = (byte) (value + 1);
+    }
   }
 
   public byte GetOutfitIndex(Outfit o)
@@ -538,6 +542,45 @@ public class SettingsPlayer
       (byte) 14,
       (byte) 15
     };
+  }
+
+  public bool CanEquipSpellLevel3Only(int index, byte spellID)
+  {
+    if (index < 0 || index >= 16 || Inert.Instance._spells.Length <= (int) spellID)
+      return false;
+    for (int index1 = 0; index1 < 16; ++index1)
+    {
+      if ((int) this.spells[index1] == (int) spellID && index != index1)
+        return false;
+    }
+    KeyValuePair<string, Spell> keyValuePair = Inert.Instance.spells.GetItem((int) spellID);
+    Spell spell = keyValuePair.Value;
+    if (spell.level == 1 || spell.level == 2)
+      return true;
+    if (spell.level == 3)
+    {
+      int num = 0;
+      for (int index1 = 0; index1 < index; ++index1)
+      {
+        if ((int) this.spells[index1] < Inert.Instance._spells.Length)
+        {
+          keyValuePair = Inert.Instance.spells.GetItem((int) this.spells[index1]);
+          if (keyValuePair.Value.bookOf == spell.bookOf)
+          {
+            keyValuePair = Inert.Instance.spells.GetItem((int) this.spells[index1]);
+            if (keyValuePair.Value.level < 3)
+            {
+              ++num;
+              if (num >= 5)
+                return true;
+            }
+          }
+        }
+      }
+    }
+    else
+      Debug.LogError((object) ("Unknown Spell Level: " + (object) spell.level));
+    return false;
   }
 
   public bool CanEquipSpell(int index, byte spellID)

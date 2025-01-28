@@ -175,6 +175,7 @@ public class ZGame
   internal int _nextturn;
   public float tickTime;
   private IEnumerator<float> ieKillWait;
+  private BanStage curBanStage;
   private float timeTillStart;
   public int numExplosionsAndMovement;
   private bool rematchSent;
@@ -411,6 +412,11 @@ public class ZGame
     UnityEngine.Resources.UnloadUnusedAssets();
   }
 
+  public void init_BanStage()
+  {
+    SpellLobbyChange.Create(Client.settingsPlayer, (Action<SettingsPlayer>) (set => Client.AskBanStage(set)), false, this.curBanStage == BanStage.Pick ? Validation.Level3Only : Validation.None, true, (Action) (() => this.init_BanStage()));
+  }
+
   public void init_Client(ServerState.Busy busy = ServerState.Busy.Not_started)
   {
     Client.Host = false;
@@ -420,7 +426,13 @@ public class ZGame
       Timing.KillCoroutines(this.serverUpdate);
     this.Awake();
     this.serverState.busy = busy;
-    this.serverUpdate = Timing.RunCoroutine(this.ClientUpdate(), Segment.Update);
+    if (this.gameFacts.settings.banPhases > 0)
+    {
+      this.serverUpdate = Timing.RunCoroutine(this.BanStagesUpdate(), Segment.Update);
+      this.init_BanStage();
+    }
+    else
+      this.serverUpdate = Timing.RunCoroutine(this.ClientUpdate(), Segment.Update);
   }
 
   public void init_sandbox()
@@ -1112,6 +1124,7 @@ label_13:;
     if (this.firstTurn && (int) this.serverState.playersTurn < this.players.Count && !this.isClient)
     {
       this.firstTurn = false;
+      this.ServerPreTurn(this.players[(int) this.serverState.playersTurn]);
       this.SendNextTurn(playersTurn);
       this.SendGameTime();
       this.NextTurn(this.players[(int) this.serverState.playersTurn], true);
@@ -1189,6 +1202,7 @@ label_13:;
 label_46:
       if (this.isOver)
         return;
+      this.ServerPreTurn(this.players[(int) this.serverState.playersTurn]);
       this.SendNextTurn(playersTurn);
       this.SendGameTime();
       if (this.players[(int) this.serverState.playersTurn].ai != null)
@@ -1651,7 +1665,7 @@ label_46:
   {
     for (int index = 0; index < this.players.Count; ++index)
     {
-      if (this.players[index].bidStage == s)
+      if (this.players[index].bannedSpells == null)
         return false;
     }
     return true;
@@ -1664,7 +1678,15 @@ label_46:
       this.SendGameTime();
     if (!this.isClient || !((UnityEngine.Object) HUD.instance != (UnityEngine.Object) null))
       return;
-    HUD.instance.time_txt.text = ((int) this.serverState.turnTime).ToString();
+    TMP_Text timeTxt = HUD.instance.time_txt;
+    string str1 = ((int) this.serverState.turnTime).ToString();
+    string str2;
+    if (this.curBanStage != BanStage.Pick)
+      str2 = "Ban Stage " + (object) (int) (this.curBanStage + 1) + " of " + (object) this.gameFacts.settings.banPhases;
+    else
+      str2 = "Spell Picking Phase";
+    string str3 = str1 + "\n" + str2;
+    timeTxt.text = str3;
   }
 
   private void HandleClientOutOfBanTime()
@@ -1678,7 +1700,47 @@ label_46:
   private IEnumerator<float> BanStagesUpdate()
   {
     this.serverState.turnTime = 60f;
-    while ((double) this.serverState.turnTime > 0.0 || !this.isServer)
+    for (int e = 0; e < this.gameFacts.settings.banPhases; ++e)
+    {
+      while ((double) this.serverState.turnTime > 0.0 || !this.isServer && this.curBanStage == BanStage.Pick)
+      {
+        int num = this.CheckBanStage(BanStage.Stage0) ? 1 : 0;
+        this.HandleBanTime();
+        if (num != 0)
+        {
+          this.HandleClientOutOfBanTime();
+          break;
+        }
+        yield return 0.0f;
+      }
+      if (this.isServer)
+      {
+        using (MemoryStream memoryStream = new MemoryStream())
+        {
+          using (myBinaryWriter w = new myBinaryWriter((Stream) memoryStream))
+          {
+            w.Write((byte) 186);
+            w.Write(e);
+            for (int index1 = 0; index1 < this.players.Count; ++index1)
+            {
+              if (this.players[index1].bannedSpells != null)
+              {
+                for (int index2 = 0; index2 < this.players[index1].bannedSpells.spells.Length; ++index2)
+                  this.gameFacts.restrictions.ToggleSpell((int) this.players[index1].bannedSpells.spells[index2]);
+                this.players[index1].bannedSpells.Serialize(w);
+                this.gameFacts.restrictions.Serialize(w);
+              }
+              else
+                w.Write(0);
+            }
+          }
+          this.SendAllMessage(memoryStream.ToArray());
+        }
+      }
+      for (int index = 0; index < this.players.Count; ++index)
+        this.players[index].bannedSpells = (SpellsOnly) null;
+    }
+    while ((double) this.serverState.turnTime > 0.0 || !this.isServer && this.curBanStage == BanStage.Pick)
     {
       int num = this.CheckBanStage(BanStage.Stage0) ? 1 : 0;
       this.HandleBanTime();
@@ -1693,16 +1755,16 @@ label_46:
     {
       using (MemoryStream memoryStream = new MemoryStream())
       {
-        using (myBinaryWriter myBinaryWriter = new myBinaryWriter((Stream) memoryStream))
+        using (myBinaryWriter w = new myBinaryWriter((Stream) memoryStream))
         {
-          myBinaryWriter.Write((byte) 192);
-          myBinaryWriter.Write(0);
-          int num = -1;
+          w.Write((byte) 186);
+          w.Write(11);
           for (int index = 0; index < this.players.Count; ++index)
           {
-            if (this.players[index].bid > num)
-              num = this.players[index].bid;
-            myBinaryWriter.Write(this.players[index].bid > -1 ? this.players[index].bid : 0);
+            if (this.players[index].bannedSpells != null)
+              this.players[index].bannedSpells.Serialize(w);
+            else
+              w.Write(0);
           }
         }
         this.SendAllMessage(memoryStream.ToArray());
@@ -1778,7 +1840,7 @@ label_46:
             {
               try
               {
-                int index2 = zgame.GetTeam(zgame.players[(int) zgame.serverState.playersTurn].team).FindIndex(new Predicate<ZPerson>(zgame.\u003CBidUpdate\u003Eb__193_1));
+                int index2 = zgame.GetTeam(zgame.players[(int) zgame.serverState.playersTurn].team).FindIndex(new Predicate<ZPerson>(zgame.\u003CBidUpdate\u003Eb__195_1));
                 if (index2 > 0)
                 {
                   for (int index3 = 0; index3 < zgame.teamIndex.Length; ++index3)
@@ -2680,6 +2742,35 @@ label_46:
   public void SendByte(byte m)
   {
     this.SendAllMessage(new byte[1]{ m });
+  }
+
+  public void ServerPreTurn(ZPerson p)
+  {
+    int num = 0;
+    foreach (ZCreature zcreature in p.controlled)
+    {
+      if (zcreature._sandsOfTime.HasValue)
+      {
+        ZEffector zeffector = zcreature.effectors.Find((Predicate<ZEffector>) (z => z.type == EffectorType.Sands_of_Time));
+        if ((ZComponent) zeffector != (object) null)
+        {
+          zeffector.target = zcreature._sandsOfTime.Value;
+          using (MemoryStream memoryStream = new MemoryStream())
+          {
+            using (myBinaryWriter myBinaryWriter = new myBinaryWriter((Stream) memoryStream))
+            {
+              myBinaryWriter.Write((byte) 185);
+              myBinaryWriter.Write(this.serverState.playersTurn);
+              myBinaryWriter.Write(num);
+              myBinaryWriter.Write(zcreature._sandsOfTime.Value);
+            }
+            this.SendAllMessage(memoryStream.ToArray());
+          }
+        }
+        zcreature._sandsOfTime = new MyLocation?();
+      }
+      ++num;
+    }
   }
 
   public void SendNextTurn(int lastPlayersTurn)
@@ -3738,7 +3829,7 @@ label_46:
                     MyLocation target = myBinaryReader.ReadMyLocation();
                     FixedInt power = (FixedInt) myBinaryReader.ReadInt64();
                     bool extended = myBinaryReader.ReadBoolean();
-                    myBinaryReader.ReadInt32();
+                    KeyCode keyPressed = (KeyCode) myBinaryReader.ReadInt32();
                     MyLocation validPos8 = myBinaryReader.ReadMyLocation();
                     MyLocation secTarget = myBinaryReader.ReadMyLocation();
                     power = Mathd.Clamp(power, (FixedInt) 10485L, (FixedInt) 1);
@@ -3915,6 +4006,35 @@ label_46:
                                 {
                                   this.SendResyncMsg(p, "spell could not be fired", true, (Action) null);
                                   return;
+                                }
+                                if (spell.spellEnum == SpellEnum.Sands_of_Time)
+                                {
+                                  using (MemoryStream memoryStream = new MemoryStream())
+                                  {
+                                    using (myBinaryWriter myBinaryWriter = new myBinaryWriter((Stream) memoryStream))
+                                    {
+                                      myBinaryWriter.Write((byte) 220);
+                                      myBinaryWriter.Write(person8.id);
+                                      myBinaryWriter.Write(this.gameFacts.id);
+                                      myBinaryWriter.Write(moveID);
+                                      myBinaryWriter.Write(selectedIndex);
+                                      myBinaryWriter.Write(playerOffset);
+                                      myBinaryWriter.Write((int) spellEnum);
+                                      myBinaryWriter.Write(bonusDmg);
+                                      myBinaryWriter.Write(isPresent);
+                                      myBinaryWriter.Write(endsTurn);
+                                      myBinaryWriter.Write(selectedZSpell);
+                                      myBinaryWriter.WriteFixed(rot_z2);
+                                      myBinaryWriter.Write((double) scaleX7 > 1.0);
+                                      myBinaryWriter.Write(MyLocation.zero);
+                                      myBinaryWriter.WriteFixed(power);
+                                      myBinaryWriter.Write(extended);
+                                      myBinaryWriter.Write((int) keyPressed);
+                                      myBinaryWriter.Write(validPos8);
+                                      myBinaryWriter.Write(secTarget);
+                                    }
+                                    bites8 = memoryStream.ToArray();
+                                  }
                                 }
                                 this.SendAllMessage(bites8);
                               }
@@ -4546,10 +4666,19 @@ label_158:
                   break;
                 zcreature1.clientObj?.OnEmoji(index12, false);
                 break;
-              case 187:
+              case 185:
                 int index13 = myBinaryReader.ReadInt32();
+                MyLocation myLocation = myBinaryReader.ReadMyLocation();
+                p.controlled[index13].effectors.Find((Predicate<ZEffector>) (z => z.type == EffectorType.Sands_of_Time)).target = myLocation;
+                break;
+              case 186:
+                this.curBanStage = (BanStage) myBinaryReader.ReadInt32();
+                this.gameFacts.restrictions = Restrictions.Deserialize(myBinaryReader, (byte) 1);
+                break;
+              case 187:
+                int index14 = myBinaryReader.ReadInt32();
                 int num16 = myBinaryReader.ReadInt32();
-                p.towerHealth[index13] = num16;
+                p.towerHealth[index14] = num16;
                 break;
               case 188:
                 int index1 = myBinaryReader.ReadInt32();
@@ -4650,16 +4779,16 @@ label_158:
               case 192:
                 for (int index4 = 0; index4 < this.players.Count; ++index4)
                   this.players[index4].bid = myBinaryReader.ReadInt32();
-                int index14 = myBinaryReader.ReadInt32();
+                int index15 = myBinaryReader.ReadInt32();
                 if (!this.isTeam && this.players.Count > 2)
                 {
                   this.SortByBidFFA();
                   break;
                 }
-                if (index14 == -1 || !((ZComponent) this.players[index14].first() != (object) null) || this.players[index14].bid <= 0)
+                if (index15 == -1 || !((ZComponent) this.players[index15].first() != (object) null) || this.players[index15].bid <= 0)
                   break;
-                this.players[index14].first().health -= this.players[index14].bid;
-                this.players[index14].first().UpdateHealthTxt();
+                this.players[index15].first().health -= this.players[index15].bid;
+                this.players[index15].first().UpdateHealthTxt();
                 break;
               case 193:
               case 195:
@@ -4927,9 +5056,9 @@ label_158:
                 Server.ValidateQuickChat(p.connection, myBinaryReader, b, false);
                 break;
               case 157:
-                int index15 = myBinaryReader.ReadInt32();
+                int index16 = myBinaryReader.ReadInt32();
                 myBinaryReader.ReadInt32();
-                if (index15 < 0 || index15 >= this.players.Count)
+                if (index16 < 0 || index16 >= this.players.Count)
                   break;
                 if (p.GetMultiConnection.player.account.AccountNotLinked())
                 {
@@ -4941,10 +5070,28 @@ label_158:
                   Server.ReturnServerMsg(p.GetMultiConnection, "Looks like you're muted, try to behave yourself next time.");
                   break;
                 }
-                ZPerson player1 = this.players[index15];
+                ZPerson player1 = this.players[index16];
                 if ((int) player1.id != (int) p.id && (!this.isMulti || player1.team != p.team))
                   break;
                 this.SendAllMessage(b);
+                break;
+              case 186:
+                if (!myBinaryReader.ReadBoolean())
+                {
+                  p.bannedSpells = (SpellsOnly) null;
+                  break;
+                }
+                SpellsOnly b1 = SpellsOnly.Deserialize(myBinaryReader);
+                p.bannedSpells = b1;
+                if (this.curBanStage < BanStage.Pick)
+                  break;
+                SettingsPlayer settingsPlayer2 = new SettingsPlayer();
+                settingsPlayer2.CopySpells(b1);
+                settingsPlayer2.VerifySpells();
+                this.gameFacts.restrictions.CleanseSpells(settingsPlayer2.spells);
+                if (!this.isElementals)
+                  break;
+                settingsPlayer2.Elemental = (BookOf) this.gameFacts.restrictions.CleanseElemental((int) settingsPlayer2.Elemental);
                 break;
               case 192:
                 if (p.bid >= 0)
@@ -5046,9 +5193,9 @@ label_158:
               case 197:
                 if (!p.account.cosmetics.achievements[(int) SettingsPlayer.Achievement_GameOutfit] || !p.yourTurn || p.timesOutfitChanged >= 10)
                   break;
-                SettingsPlayer settingsPlayer2 = new SettingsPlayer();
-                settingsPlayer2.Deserialize(myBinaryReader);
-                settingsPlayer2.VerifyOutfit(p.account.cosmetics, p.account);
+                SettingsPlayer settingsPlayer3 = new SettingsPlayer();
+                settingsPlayer3.Deserialize(myBinaryReader);
+                settingsPlayer3.VerifyOutfit(p.account.cosmetics, p.account);
                 ++p.timesOutfitChanged;
                 using (MemoryStream memoryStream2 = new MemoryStream())
                 {
@@ -5056,7 +5203,7 @@ label_158:
                   {
                     w.Write((byte) 197);
                     w.Write(num2);
-                    settingsPlayer2.Serialize(w);
+                    settingsPlayer3.Serialize(w);
                   }
                   this.SendAllMessage(memoryStream2.ToArray());
                   break;
@@ -5480,7 +5627,7 @@ label_158:
     bool nextTurn = false;
     game.replayPastTimeLine = 0;
     HUD.instance.replayTimeline.MaxSize = game.timelineList.Count;
-    HUD.instance.replayTimeline._bar.onValueChanged.AddListener(new UnityAction<float>(game.\u003CPushReplay\u003Eb__259_0));
+    HUD.instance.replayTimeline._bar.onValueChanged.AddListener(new UnityAction<float>(game.\u003CPushReplay\u003Eb__262_0));
     game.replayPaused = false;
     Time.timeScale = 1f;
     ChatBox.Instance?.NewChatMsg("", "Press F2 to take control right away", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
@@ -6635,7 +6782,10 @@ label_158:
     {
       this.AfterGeneration();
       HUD.FindFullBooks(this);
-      this.serverUpdate = Timing.RunCoroutine(this.FixedUpdate(), Segment.Update);
+      if (this.gameFacts.settings.banPhases > 0)
+        this.serverUpdate = Timing.RunCoroutine(this.BanStagesUpdate(), Segment.Update);
+      else
+        this.serverUpdate = Timing.RunCoroutine(this.FixedUpdate(), Segment.Update);
     });
     string path = Application.streamingAssetsPath + Path.DirectorySeparatorChar.ToString() + "Maps" + Path.DirectorySeparatorChar.ToString();
     if (!Directory.Exists(path))

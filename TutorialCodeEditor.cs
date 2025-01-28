@@ -296,7 +296,7 @@ public class TutorialCodeEditor : MonoBehaviour
       if (set.Elemental != BookOf.Nothing)
         stringBuilder.Append("\n sum.elemental = BookOf.").Append((object) set.Elemental);
       Global.systemCopyBuffer = stringBuilder.ToString();
-    }), true, true, false);
+    }), true, Validation.Default, false, (Action) null);
   }
 
   public void ClickPoint()

@@ -1347,6 +1347,14 @@ label_58:
     }
   }
 
+  public DamageType GetDamageType
+  {
+    get
+    {
+      return this.damageType;
+    }
+  }
+
   public void Copy(Spell c, ZGame game)
   {
     this.baseSpell = c;
@@ -4833,15 +4841,11 @@ label_27:
       for (int z = 0; z < 20; ++z)
         yield return 0.0f;
       if (ZComponent.IsNull((ZComponent) c) || c.health <= 0)
-      {
-        game.firstOceanFury = false;
-        yield break;
-      }
+        break;
     }
-    game.firstOceanFury = false;
   }
 
-  public static IEnumerator<float> IESandStorm(Spell theSpell, ZCreature c)
+  public static IEnumerator<float> IESandStorm(Spell theSpell, ZCreature c, bool first)
   {
     if (!c.game.limitSandStormActive)
     {
@@ -4856,12 +4860,16 @@ label_27:
       ZGame game = c.game;
       if (c.game.isClient)
         SandPool.Create();
-      for (int i = 0; i < 100; ++i)
+      int amount = first ? 25 : 100;
+      int amount2 = 500;
+      ZSpell kablam = ZSpell.BaseFireKablam(theSpell, c, c.position, Quaternion.identity);
+      kablam.maxSandDamage = first ? 25 : 100;
+      for (int i = 0; i < amount; ++i)
       {
-        for (int index = 0; index < 500; ++index)
+        for (int index = 0; index < amount2; ++index)
         {
           MyLocation velocity = Inert.Velocity(rot_z + c.game.RandomInt(-15, 30), c.game.RandomFixedInt((FixedInt) theSpell.speedMin, (FixedInt) theSpell.speedMax));
-          c.game.ongoing.RunSpell(ZSpellSand.SandMove(theSpell, c.game, c, new MyLocation((double) c.transformscale > 0.0 ? game.RandomInt(0, 100) - 100 : game.map.Width + game.RandomInt(0, 100), game.RandomInt(10, game.map.Height)), velocity), true);
+          c.game.ongoing.RunSpell(ZSpellSand.SandMove((ISpellBridge) kablam, c.game, c, new MyLocation((double) c.transformscale > 0.0 ? game.RandomInt(0, 100) - 100 : game.map.Width + game.RandomInt(0, 100), game.RandomInt(10, game.map.Height)), velocity), true);
         }
         for (int z = 0; z < 3; ++z)
           yield return 0.0f;
@@ -4869,6 +4877,7 @@ label_27:
           break;
       }
       game.limitSandStormActive = false;
+      ZComponent.Destroy<GameObject>(kablam.gameObject);
       if ((UnityEngine.Object) p != (UnityEngine.Object) null)
         p.Stop();
     }
@@ -5268,6 +5277,19 @@ label_27:
     c.effectors.Add(zeffector);
     zeffector.active = false;
     zeffector.TurnPassed(c.effectors.Count - 1, false, false);
+  }
+
+  public static void FireSandStorm(Spell theSpell, ZCreature c, bool armageddon = false)
+  {
+    c.effectors.Add(new ZEffector()
+    {
+      game = c.game,
+      whoSummoned = c,
+      fromArmageddon = armageddon,
+      active = false,
+      type = EffectorType.Sandstorm,
+      MaxTurnsAlive = 2
+    });
   }
 
   public static void FireShootingStars(
@@ -5995,7 +6017,7 @@ label_27:
         if (ZComponent.IsNull((ZComponent) c) || c.turnFriendlyDmg == c.game.turn)
           yield break;
         else
-          c.game.ongoing.RunSpell(ZSpellSand.SandMove(theSpell, c.game, c, pos, Inert.Velocity(rot_z + c.game.RandomFixedInt(-angle, angle), c.game.RandomFixedInt((FixedInt) theSpell.speedMin, (FixedInt) theSpell.speedMax) + power + c.game.RandomFixedInt(-2, 2))), true);
+          c.game.ongoing.RunSpell(ZSpellSand.SandMove((ISpellBridge) theSpell, c.game, c, pos, Inert.Velocity(rot_z + c.game.RandomFixedInt(-angle, angle), c.game.RandomFixedInt((FixedInt) theSpell.speedMin, (FixedInt) theSpell.speedMax) + power + c.game.RandomFixedInt(-2, 2))), true);
       }
       while (c.game.ongoing.NumberOfSlowUpdateCoroutines > 10000)
         yield return 0.0f;
@@ -7291,9 +7313,12 @@ label_37:
       SandPool.Create();
     while (game.ongoing.NumberOfSlowUpdateCoroutines >= 10000)
       yield return 0.0f;
-    FixedInt max = (FixedInt) child.speedMax + parent.familiarLevelSand;
+    FixedInt fixedInt = (FixedInt) child.speedMax + parent.familiarLevelSand;
     for (int index = 0; index < amount; ++index)
-      game.ongoing.RunSpell(ZSpellSand.SandMove(main, game, parent, position, Inert.Velocity((FixedInt) 90 - game.RandomFixedInt(-60, 60), game.RandomFixedInt((FixedInt) 8, max))), true);
+    {
+      FixedInt x = game.RandomFixedInt(-60, 60);
+      game.ongoing.RunSpell(ZSpellSand.SandMove((ISpellBridge) main, game, parent, position, Inert.Velocity((FixedInt) 90 - x, game.RandomFixedInt((FixedInt) 8, Mathd.Lerp(fixedInt / 2, fixedInt + fixedInt / 2, (FixedInt) 1 - Mathd.Abs(x) / 60)) - 3)), true);
+    }
   }
 
   public void OnExplosionIceBomb()
@@ -9504,10 +9529,10 @@ label_37:
             c.tower.Health += 75;
             if (c.tower.Health > c.tower.MaxHealth)
               c.tower.Health = c.tower.MaxHealth;
-            c.parent.towerHealth[(int) c.tower.type] = c.tower.Health;
-            if (c.game.isServer && !c.game.isClient)
-              c.game.SendTowerHealth(c, (int) c.tower.type, c.tower.Health);
           }
+          c.parent.towerHealth[(int) c.tower.type] = c.tower.Health;
+          if (c.game.isServer && !c.game.isClient)
+            c.game.SendTowerHealth(c, (int) c.tower.type, c.tower.Health);
           SpellSlot spellSlot1 = c.GetSpellSlot(c.tower.baseTower.FromSpell.spellEnum);
           if (spellSlot1 != null)
           {
@@ -9550,7 +9575,8 @@ label_37:
         ZSpell.FireBurningSands(theSpell, c, target, -1, false);
         break;
       case SpellEnum.Sand_Storm:
-        c.game.ongoing.RunSpell(ZSpell.IESandStorm(theSpell, c), true);
+        c.game.ongoing.RunSpell(ZSpell.IESandStorm(theSpell, c, true), true);
+        ZSpell.FireSandStorm(theSpell, c, fromArmageddon);
         break;
       case SpellEnum.Mind_Control:
         ZCreature c2 = c.map.PhysicsCollideCreature((ZCreature) null, (int) target.x, (int) target.y, Inert.mask_Phantom);
@@ -9605,7 +9631,7 @@ label_37:
         ZEffector zeffector3 = ZSpell.FireEffector(theSpell, c, c.position, rot_z, power, false);
         if (!((ZComponent) zeffector3 != (object) null))
           break;
-        zeffector3.target = target;
+        c._sandsOfTime = new MyLocation?(target);
         zeffector3.VisualUpdate();
         break;
       default:
@@ -9967,7 +9993,7 @@ label_37:
     if (!((ZComponent) c != (object) null) || !c.familiar.Has(FamiliarType.Flame) || (c.familiarLevelFlame <= 0 || s.fromArmageddon))
       return;
     int num = ZSpell.ClampedFlameLevel(c);
-    FixedInt fixedInt = (FixedInt) 1 + (FixedInt) num / FixedInt.Create(10);
+    FixedInt fixedInt = (FixedInt) 1 + (FixedInt) c.familiarLevelFlame / FixedInt.Create(10);
     s.damage = (int) ((FixedInt) s.damage * fixedInt);
     if (s.spellEnum == SpellEnum.Flame_Wall)
       return;
@@ -9981,7 +10007,7 @@ label_37:
     if (!((ZComponent) c != (object) null) || !c.familiar.Has(FamiliarType.Flame) || (c.familiarLevelFlame <= 0 || s.fromArmageddon))
       return;
     int num = ZSpell.ClampedFlameLevel(c);
-    FixedInt fixedInt = (FixedInt) 1 + (FixedInt) num / FixedInt.Create(10);
+    FixedInt fixedInt = (FixedInt) 1 + (FixedInt) c.familiarLevelFlame / FixedInt.Create(10);
     s.damage = (int) ((FixedInt) s.damage * fixedInt);
     for (int index = 0; index < num - 1; ++index)
       s.explosionCutout = ZSpell.NextCutout(s.explosionCutout);

@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 public class Inert : MonoBehaviour
 {
-  public static string Version = "v7.7";
+  public static string Version = "v7.8";
   public static int _Version = 62;
   public static int mask_Jar = 262144;
   public static int mask_ButterflyJar = 2097152;
@@ -20,6 +20,7 @@ public class Inert : MonoBehaviour
   public static int mask_spell_movement = 12544;
   public static int mask_movement_NoEffector = 12544;
   public static int mask_all = Inert.mask_movement_NoEffector | 1024 | 2048 | 512 | 65536 | Inert.mask_Jar;
+  public string achievement = "";
   internal Dictionary<string, Creature> Creatures = new Dictionary<string, Creature>();
   internal Dictionary<string, Tower> Towers = new Dictionary<string, Tower>();
   public OrderedDictionary<string, Spell> spells = new OrderedDictionary<string, Spell>((IEqualityComparer<string>) Server._caseInsensitiveComparer);

@@ -88,4 +88,5 @@ public enum EffectorType
   Sands_of_Time = 83, // 0x00000053
   Sand_Mite = 84, // 0x00000054
   Sand_Mite_Embeded = 85, // 0x00000055
+  Sandstorm = 86, // 0x00000056
 }

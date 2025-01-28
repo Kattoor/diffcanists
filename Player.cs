@@ -2113,6 +2113,10 @@ label_1:
     }
   }
 
+  public static void ReserializeMsgFire()
+  {
+  }
+
   public class AssignableHotkey
   {
     public int slot = -1;

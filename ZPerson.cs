@@ -60,6 +60,7 @@ public class ZPerson
   public ZCreature bloodBank;
   public int timesOutfitChanged;
   public FamiliarType familiarBook;
+  public SpellsOnly bannedSpells;
   public BanStage bidStage;
   public IAI ai;
   public int inactiveTurns;

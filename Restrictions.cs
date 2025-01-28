@@ -39,6 +39,28 @@ public class Restrictions
     return false;
   }
 
+  public bool CleanseSpells(byte[] spells)
+  {
+    for (int index = 0; index < 16; ++index)
+    {
+      if (spells[index] < byte.MaxValue && !this.availableSpells[(int) spells[index]])
+        spells[index] = byte.MaxValue;
+    }
+    return false;
+  }
+
+  public int CleanseElemental(int i)
+  {
+    if ((this.elementals & 1 << i) != 0)
+      return i;
+    for (i = 0; i < 32; ++i)
+    {
+      if ((this.elementals & 1 << i) != 0)
+        return i;
+    }
+    return -1;
+  }
+
   public bool CheckRestricted(int i)
   {
     return i < 0 || i >= 256 || !this.availableSpells[i];
@@ -49,15 +71,19 @@ public class Restrictions
     return (this.elementals & 1 << i) == 0;
   }
 
-  public static bool IsSpellRestricted(int i)
+  public static bool IsSpellRestricted(int i, Restrictions def = null)
   {
     if (i < 0 || i >= 256)
       return true;
+    if (def != null)
+      return def.availableSpells[i];
     return (!Client.viewSpellLocks.ViewRestricted() && !((UnityEngine.Object) RatedMenu.instance != (UnityEngine.Object) null) || (Server._restrictions == null || Server._restrictions.availableSpells[i])) && ((UnityEngine.Object) UnratedMenu.instance != (UnityEngine.Object) null && Client._gameFacts.settings.restrictions != null) && !Client._gameFacts.settings.restrictions.availableSpells[i];
   }
 
-  public static bool IsElementalRestricted(int i)
+  public static bool IsElementalRestricted(int i, Restrictions def = null)
   {
+    if (def != null)
+      return (def.elementals & 1 << i) == 0;
     return (!Client.viewSpellLocks.ViewRestricted() && !((UnityEngine.Object) RatedMenu.instance != (UnityEngine.Object) null) || (Server._restrictions == null || (Server._restrictions.elementals & 1 << i) == 0)) && ((UnityEngine.Object) UnratedMenu.instance != (UnityEngine.Object) null && Client._gameFacts.settings.restrictions != null) && (Client._gameFacts.settings.restrictions.elementals & 1 << i) == 0;
   }
 
@@ -94,6 +120,13 @@ public class Restrictions
   public bool ToggleSpell(int i)
   {
     this.availableSpells[i] = !this.availableSpells[i];
+    PopupRestrictions.Instance.SpellEnabled(i, this.availableSpells[i]);
+    return this.availableSpells[i];
+  }
+
+  public bool ToggleSpell(int i, bool v)
+  {
+    this.availableSpells[i] = v;
     PopupRestrictions.Instance.SpellEnabled(i, this.availableSpells[i]);
     return this.availableSpells[i];
   }

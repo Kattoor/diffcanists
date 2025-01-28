@@ -2563,6 +2563,22 @@ public static class Client
     }
   }
 
+  public static void AskBanStage(SettingsPlayer sp)
+  {
+    using (MemoryStream memoryStream = new MemoryStream())
+    {
+      using (myBinaryWriter w = new myBinaryWriter((Stream) memoryStream))
+      {
+        w.Write((byte) 186);
+        w.Write(Player.Instance.person.id);
+        w.Write(true);
+        new SpellsOnly().Copy(sp).Serialize(w);
+        sp.Serialize(w);
+      }
+      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
+    }
+  }
+
   public static void AskToChangeSpells(SettingsPlayer sp)
   {
     sp.VerifySpells();

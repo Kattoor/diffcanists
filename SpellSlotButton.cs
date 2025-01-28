@@ -16,7 +16,7 @@ public class SpellSlotButton : MonoBehaviour
     this.image.enabled = true;
     if (!((Object) this.restricted != (Object) null))
       return;
-    if ((Object) SpellLobbyChange.Instance != (Object) null && !SpellLobbyChange.Instance.validating)
+    if ((Object) SpellLobbyChange.Instance != (Object) null && SpellLobbyChange.Instance.validating == Validation.None)
     {
       this.restricted.gameObject.SetActive(false);
     }
@@ -24,7 +24,7 @@ public class SpellSlotButton : MonoBehaviour
     {
       GameObject gameObject = this.restricted.gameObject;
       int num;
-      if (!Restrictions.IsSpellRestricted(index))
+      if (!Restrictions.IsSpellRestricted(index, (Restrictions) null))
       {
         if (Client.viewSpellLocks.ViewRestricted())
         {

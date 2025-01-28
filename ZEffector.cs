@@ -1018,7 +1018,7 @@ public class ZEffector : ZComponent
           if (this.turnsAlive == 1 && !ZComponent.IsNull((ZComponent) this.whoSummoned) && this.whoSummoned.parent.GetMaxMinions() > this.whoSummoned.parent.GetMinionCount())
           {
             ZCreature zcreature = ZSpell.FireSummon(Inert.GetSpell("Summon Beehive"), this.game, this.whoSummoned, this.position + new MyLocation(-8, 85), -1, false, (ZPerson) null);
-            if ((ZComponent) zcreature != (object) null && !zcreature.isDead)
+            if ((ZComponent) zcreature != (object) null && !zcreature.isDead && (zcreature.spells.Count > 0 && zcreature.spells[0].spell.spellEnum == SpellEnum.Summon_Bees))
               zcreature.spells[0].SetTurnFired = zcreature.parent.localTurn;
           }
           if (this.turnsAlive < 3)
@@ -1366,7 +1366,7 @@ public class ZEffector : ZComponent
           int num7 = 0;
           for (int index = 0; index < list2.Count; ++index)
           {
-            if ((ZComponent) list2[index].effector != (object) null && list2[index].effector.type == EffectorType.Mana)
+            if ((ZComponent) list2[index] != (object) null && (ZComponent) list2[index].effector != (object) null && list2[index].effector.type == EffectorType.Mana)
               ++num7;
           }
           Spell spell3 = Inert.GetSpell(SpellEnum.Mana);
@@ -1374,13 +1374,17 @@ public class ZEffector : ZComponent
           int y5 = (int) this.position.y;
           for (int index = 0; index < 100; ++index)
           {
-            if (num7 >= 15)
+            if (num7 >= 15 || ZComponent.IsNull((ZComponent) this.whoSummoned) || (this.whoSummoned.parent == null || (ZComponent) this.whoSummoned.parent.first() == (object) null))
               return;
             int num8 = this.game.RandomInt(-75, 75);
-            int num9 = y5 + this.game.RandomInt(-100, 100);
+            int num9 = y5 + this.game.RandomInt(-91, 91);
             int num10 = num8 + (x2 + (num8 > 0 ? 25 : -25));
             if (num9 >= this.game.map.Height)
               num9 -= 100;
+            if (num10 <= 0)
+              num10 += 75;
+            else if (num10 >= this.game.map.Width)
+              num10 -= 75;
             if (this.game.map.CheckPosition(num10, num9, this.whoSummoned, -1))
             {
               ZSpell.SpawnSigil(spell3, this.game, this.whoSummoned.parent.first(), new MyLocation(num10, num9), 4);
@@ -1401,6 +1405,13 @@ public class ZEffector : ZComponent
         case EffectorType.Sand_Mite_Embeded:
           this.active = false;
           this.whoSummoned.ApplyDamage(SpellEnum.Summon_Sand_Mite, DamageType.None, 5, this.whoSummoned, this.TurnCreated, (ISpellBridge) Inert.GetSpell("Summon Sand Mite"), false);
+          break;
+        case EffectorType.Sandstorm:
+          Spell spell4 = Inert.GetSpell(SpellEnum.Sand_Storm);
+          if (this.whoSummoned.game.isClient && !this.whoSummoned.game.resyncing && (!spell4.spellEnum.IsFlight() || !this.whoSummoned.flying))
+            AudioManager.PlayFromSource(spell4.castClip, AudioManager.instance.sourceCastSpell);
+          this.whoSummoned.game.ongoing.RunSpell(ZSpell.IESandStorm(spell4, this.whoSummoned, false), true);
+          this.Die(indexInParent, destroyable, global);
           break;
       }
     }
@@ -1700,14 +1711,14 @@ public class ZEffector : ZComponent
         else
           continue;
       }
-      ZCreature asCreature1 = zentity.asCreature;
-      if ((ZComponent) asCreature1 != (object) null)
+      ZCreature zcreature = zentity.asCreature;
+      if ((ZComponent) zcreature != (object) null)
       {
-        if (!((ZComponent) asCreature1.tower != (object) null))
+        if (!((ZComponent) zcreature.tower != (object) null) || zcreature.tower.type == TowerType.Cosmos && this.type == EffectorType.Wormhole)
         {
-          asCreature1.Demount();
-          if (asCreature1.race == CreatureRace.Effector)
-            ;
+          zcreature.Demount();
+          if (zcreature.race == CreatureRace.Effector)
+            zcreature = (ZCreature) null;
         }
         else
           continue;
@@ -1721,7 +1732,13 @@ public class ZEffector : ZComponent
       flag = true;
       this.active = false;
       this.partner.active = false;
-      zentity.SetPosition(this.partner.position);
+      if ((ZComponent) zcreature != (object) null && (ZComponent) zcreature.tower != (object) null)
+      {
+        zcreature.tower.SetPosition(this.partner.position);
+        zcreature.tower.ShouldFall();
+      }
+      else
+        zentity.SetPosition(this.partner.position);
       zentity.collider?.Move(this.partner.position);
       zentity.validX = zentity.position.x;
       zentity.validY = zentity.position.y;
@@ -1754,7 +1771,7 @@ public class ZEffector : ZComponent
           }
           else
           {
-            if (this.type == EffectorType.Wormhole && asCreature.familiarLevelCosmos < 5 && asCreature.type != CreatureType.Cosmic_Horror)
+            if (this.type == EffectorType.Wormhole && asCreature.familiarLevelCosmos < 5 && (asCreature.type != CreatureType.Cosmic_Horror && (ZComponent) asCreature.tower == (object) null))
             {
               asCreature.CreateGravityObj(false);
               asCreature.appliedGravity = Mathf.Max(asCreature.appliedGravity, asCreature.parent.localTurn + (asCreature.parent.yourTurn ? 1 : 2));
@@ -1777,7 +1794,7 @@ public class ZEffector : ZComponent
     {
       case EffectorType.Portal:
       case EffectorType.Wormhole:
-        List<ZMyCollider> zmyColliderList1 = this.world.OverlapCircleAll((Point) this.position, this.collider.radius, (ZMyCollider) null, 256 | Inert.mask_Phantom);
+        List<ZMyCollider> zmyColliderList1 = this.world.OverlapCircleAll((Point) this.position, this.collider.radius, (ZMyCollider) null, 256 | Inert.mask_Phantom | (this.type == EffectorType.Wormhole ? 8192 : 0));
         List<ZMyCollider> zmyColliderList2 = this.partner.variable == 666 ? new List<ZMyCollider>() : this.world.OverlapCircleAll((Point) this.partner.position, this.collider.radius, (ZMyCollider) null, 256 | Inert.mask_Phantom);
         if (this.turnsAlive == 1 && this.partner.variable != 666)
         {
@@ -1791,7 +1808,7 @@ public class ZEffector : ZComponent
           bounds1.y2 = (int) this.position.y + num2;
           MyCollider.Bounds bounds2 = bounds1;
           ZMyCollider collider1 = this.collider;
-          int layer1 = 256 | Inert.mask_Phantom;
+          int layer1 = 256 | Inert.mask_Phantom | 8192;
           List<ZMyCollider> zmyColliderList3 = world1.OverlapRectangleAll(bounds2, collider1, layer1);
           ZMyWorld world2 = this.world;
           bounds1 = new MyCollider.Bounds();
@@ -1801,16 +1818,16 @@ public class ZEffector : ZComponent
           bounds1.y2 = (int) this.partner.position.y + num1;
           MyCollider.Bounds bounds3 = bounds1;
           ZMyCollider collider2 = this.collider;
-          int layer2 = 256 | Inert.mask_Phantom;
+          int layer2 = 256 | Inert.mask_Phantom | 8192;
           List<ZMyCollider> zmyColliderList4 = world2.OverlapRectangleAll(bounds3, collider2, layer2);
           foreach (ZMyCollider zmyCollider in zmyColliderList3)
           {
-            if (!ZComponent.IsNull((ZComponent) zmyCollider) && (ZComponent) zmyCollider.creature != (object) null && ((ZComponent) zmyCollider.creature.mount == (object) null && !zmyColliderList1.Contains(zmyCollider)))
+            if (!ZComponent.IsNull((ZComponent) zmyCollider) && (ZComponent) zmyCollider.creature != (object) null && ((ZComponent) zmyCollider.creature.mount == (object) null && !zmyColliderList1.Contains(zmyCollider)) && ((ZComponent) zmyCollider.tower == (object) null || zmyCollider.tower.type == TowerType.Cosmos && this.type == EffectorType.Wormhole))
               zmyColliderList1.Add(zmyCollider);
           }
           foreach (ZMyCollider zmyCollider in zmyColliderList4)
           {
-            if (!ZComponent.IsNull((ZComponent) zmyCollider) && (ZComponent) zmyCollider.creature != (object) null && ((ZComponent) zmyCollider.creature.mount == (object) null && !zmyColliderList2.Contains(zmyCollider)))
+            if (!ZComponent.IsNull((ZComponent) zmyCollider) && (ZComponent) zmyCollider.creature != (object) null && ((ZComponent) zmyCollider.creature.mount == (object) null && !zmyColliderList2.Contains(zmyCollider)) && ((ZComponent) zmyCollider.tower == (object) null || zmyCollider.tower.type == TowerType.Cosmos && this.type == EffectorType.Wormhole))
               zmyColliderList2.Add(zmyCollider);
           }
         }
@@ -1819,7 +1836,15 @@ public class ZEffector : ZComponent
           List<ZEntity> colliders1 = new List<ZEntity>((ZComponent) entity != (object) null ? 1 + zmyColliderList1.Count : zmyColliderList1.Count);
           List<ZEntity> colliders2 = new List<ZEntity>((ZComponent) entity != (object) null ? 1 + zmyColliderList1.Count : zmyColliderList1.Count);
           for (int index = 0; index < zmyColliderList1.Count; ++index)
-            colliders1.Add(zmyColliderList1[index].entity);
+          {
+            if ((ZComponent) zmyColliderList1[index].entity == (object) null)
+            {
+              if ((ZComponent) zmyColliderList1[index].tower != (object) null && this.type == EffectorType.Wormhole)
+                colliders1.Add((ZEntity) zmyColliderList1[index].tower?.creature);
+            }
+            else
+              colliders1.Add(zmyColliderList1[index].entity);
+          }
           if ((ZComponent) entity != (object) null && colliders1.FindIndex((Predicate<ZEntity>) (xx => (ZComponent) xx == (object) entity)) == -1)
             colliders1.Add(entity);
           for (int index1 = 0; index1 < zmyColliderList2.Count; ++index1)
@@ -2650,7 +2675,7 @@ label_59:
       case EffectorType.Prickly_Barrier:
         if ((ZComponent) c == (object) null || !this.active || (c.type == CreatureType.Tree || c.race == CreatureRace.Effector))
           break;
-        bool flag1 = (ZComponent) c == (object) this.whoSummoned || (ZComponent) this.whoSummoned != (object) null && c.parent == this.whoSummoned.parent;
+        bool flag1 = (ZComponent) c == (object) this.whoSummoned || (ZComponent) this.whoSummoned != (object) null && c.parent.team == this.whoSummoned.parent.team;
         if (!flag1 && this.variable > -666 && (ZComponent) this.whoSummoned != (object) null)
         {
           foreach (ZEffector effector in this.whoSummoned.effectors)

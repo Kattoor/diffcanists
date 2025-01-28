@@ -1221,6 +1221,10 @@ public static class Descriptions
     {
       "Spit",
       "{0} was disgraced by {1}'s sand wyrm."
+    },
+    {
+      "Retribution",
+      "{0} was punished by {1}'s vengeance."
     }
   };
   private static Dictionary<string, string> spellDescriptions = new Dictionary<string, string>()
@@ -1435,7 +1439,7 @@ public static class Descriptions
     },
     {
       "Ice Bomb",
-      "Bomb: up to 250 damage\n{0}\nThe most destructive bomb spell. This spell will leave enemies chilled to the wand as it explodes in a shattering spray of ice."
+      "Bomb: up to 225 damage\n{0}\nThe most destructive bomb spell. This spell will leave enemies chilled to the wand as it explodes in a shattering spray of ice."
     },
     {
       "Frost Shards",
@@ -2447,7 +2451,7 @@ public static class Descriptions
     },
     {
       "Sandstorm",
-      "Arena: Directional, 50,000 grains of sand, up to 100 damage\n{0}\nWill come of the direction your arcanist is facing away from and cover the arena in sand."
+      "Arena: Directional, 50,000 grains of sand, up to 125 damage (over 2 turns)\n{0}\nWill come of the direction your arcanist is facing away from and cover the arena in sand. Deals up to 25 damage on the first turn and then 100 damage on the next turn."
     },
     {
       "Summon Sphinx",

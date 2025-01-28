@@ -146,6 +146,8 @@ public class ZCreature : ZEntity
   public bool movementFromInput;
   [NonSerialized]
   public bool isMindControlled;
+  [NonSerialized]
+  public MyLocation? _sandsOfTime;
   public bool indicatorOfBurningSands;
   internal int loopCount;
   internal bool glideIsActive;
@@ -1980,7 +1982,7 @@ label_16:
       this.health = this.maxHealth;
     if (this.health < 0)
       this.health = 0;
-    if (this.waterWalking && !this.isPawn && damage > 0)
+    if (this.waterWalking && !this.isPawn && damage > 0 && ((ZComponent) this.tower != (object) null || this.position.y <= this.radius + 1))
     {
       this.waterShield -= damage;
       this.RemoveWaterWalkingIfTemporary();
@@ -2324,6 +2326,8 @@ label_49:
               this.CreateGravityObj(false);
               this.appliedGravity = this.parent.localTurn + 3;
             }
+            if ((ZComponent) enemy == (object) this)
+              return 0;
           }
           else if (this.type != CreatureType.Cosmic_Horror && this.familiarLevelCosmos < 5)
           {
@@ -2347,6 +2351,8 @@ label_49:
         }
         if (dt == DamageType.Sand)
         {
+          if ((this.spellEnum == SpellEnum.Monolith || this.spellEnum == SpellEnum.Pyramid) && ((ZComponent) enemy != (object) null && enemy.parent == this.parent))
+            return 0;
           if (this.curSandTurn != this.game.everIncreasingVariable)
           {
             this.curSandTurn = this.game.everIncreasingVariable;
@@ -2377,16 +2383,16 @@ label_49:
                 {
                   ZPerson parent = this.parent;
                   if ((parent != null ? (!parent.yourTurn ? 1 : 0) : 0) == 0 && this.game.serverState.busy != ServerState.Busy.No && (this.game.serverState.busy != ServerState.Busy.Moving && this.game.serverState.busy != ServerState.Busy.Moving_NoCountdown) && this.game.serverState.busy != ServerState.Busy.Between_Turns)
-                    goto label_166;
+                    goto label_170;
                 }
                 if (TurnCreated < this.turnProtectionShieldCast)
-                  goto label_166;
+                  goto label_170;
               }
               else
-                goto label_166;
+                goto label_170;
             }
             this.OnStunned();
-label_166:
+label_170:
             this.UpdateHealthTxt();
             enemy?.achievementParent?.awards.DealtDamge(enemy, this, damage, hitBySpell, spellRef);
             return 0;
@@ -2442,7 +2448,8 @@ label_166:
         else if (this.type == CreatureType.Kraken && (dt == DamageType.Fire || dt == DamageType.Napalm))
           damage *= 2;
         if (this.type == CreatureType.Sphinx && (ZComponent) enemy != (object) null && !isLoop)
-          enemy.ApplyDamage(SpellEnum.Retribution, DamageType.None, Mathf.Max(1, damage / 3), this, TurnCreated, (ISpellBridge) null, true);
+          enemy.ApplyDamage(SpellEnum.Summon_Sphinx, DamageType.None, Mathf.Max(1, damage / 3), this, TurnCreated, (ISpellBridge) null, true);
+        int health = this.health;
         this.DoDamage(damage, dt, enemy, false);
         if ((ZComponent) enemy != (object) null)
         {
@@ -2484,7 +2491,7 @@ label_166:
           }
           else
           {
-            int num = -this.health;
+            int num = Mathf.Max(0, Mathf.Abs(health - damage));
             this.health = 0;
             this.game.ongoing.RunCoroutine(this.DelayDeathTillNotMoving(dt, enemy, hitBySpell, spellRef), false);
             this.CheckStun(dt, damage);

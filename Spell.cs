@@ -478,4 +478,12 @@ public class Spell : Entity, ISpellBridge
       return this.explosionCutout;
     }
   }
+
+  public DamageType GetDamageType
+  {
+    get
+    {
+      return this.damageType;
+    }
+  }
 }

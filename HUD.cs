@@ -780,9 +780,9 @@ public class HUD : UIBehaviour
       if ((UnityEngine.Object) SpellLobbyChange.Instance != (UnityEngine.Object) null)
         SpellLobbyChange.Instance.ClickCancel();
       else if ((UnityEngine.Object) Player.Instance != (UnityEngine.Object) null && Player.Instance.person != null && Player.Instance.person.settingsPlayer != null)
-        SpellLobbyChange.Create(Player.Instance.person.settingsPlayer, (Action<SettingsPlayer>) (set => {}), false, false, true);
+        SpellLobbyChange.Create(Player.Instance.person.settingsPlayer, (Action<SettingsPlayer>) (set => {}), false, Validation.None, true, (Action) null);
       else
-        SpellLobbyChange.Create(Client.settingsPlayer, (Action<SettingsPlayer>) (set => Client.AskToChangeSpells(set)), false, true, true);
+        SpellLobbyChange.Create(Client.settingsPlayer, (Action<SettingsPlayer>) (set => Client.AskToChangeSpells(set)), false, Validation.Default, true, (Action) null);
     }
   }
 

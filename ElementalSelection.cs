@@ -97,7 +97,7 @@ public class ElementalSelection : MonoBehaviour
         }
 label_19:
         gameObject.GetComponent<Image>().sprite = !(bookOf == BookOf.Seasons & seasonsIsHoliday) ? ClientResources.Instance.spellBookIcons[(int) (bookOf + 1)] : ClientResources.Instance.spellBookIconHoliday;
-        if ((excluded == null || excluded.Length == 0) && Restrictions.IsElementalRestricted(z))
+        if ((excluded == null || excluded.Length == 0) && Restrictions.IsElementalRestricted(z, (Restrictions) null))
           gameObject.transform.GetChild(0).gameObject.SetActive(true);
         gameObject.SetActive(true);
         ++num2;

@@ -66,20 +66,20 @@ public class ConfigurePlayer : MonoBehaviour
     }
     else
     {
-      x.mouth.sprite = settingsPlayer.textures?[8] ?? ClientResources.Instance._characterMouths[Mathf.Clamp((int) settingsPlayer.indexMouth, 0, ClientResources.Instance._characterMouths.Length - 1)];
+      x.mouth.sprite = settingsPlayer.textures?[8] ?? (Sprite) Inert.Instance._characterMouths[Mathf.Clamp((int) settingsPlayer.indexMouth, 0, Inert.Instance._characterMouths.Length - 1)];
       if (clanOutfit != null && clanOutfit.OutfitNoMouth((int) settingsPlayer.indexHead))
-        x.mouth.sprite = ClientResources.Instance._characterMouths[24];
+        x.mouth.sprite = (Sprite) Inert.Instance._characterMouths[24];
     }
-    ConfigurePlayer.ApplyOutfit(x.head, settingsPlayer.indexHead, ClientResources.Instance._characterHeads, settingsPlayer, Outfit.Head, settingsPlayer.textures?[1] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexHead, Outfit.Head));
-    ConfigurePlayer.ApplyOutfit(x.body, settingsPlayer.indexBody, ClientResources.Instance._characterBody, settingsPlayer, Outfit.Body, settingsPlayer.textures?[0] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBody, Outfit.Body));
-    ConfigurePlayer.ApplyOutfit(x.hat, settingsPlayer.indexHat, ClientResources.Instance._characterHats, settingsPlayer, Outfit.Hair, settingsPlayer.textures?[4] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexHat, Outfit.Hair));
-    ConfigurePlayer.ApplyOutfit(x.leftArm, settingsPlayer.indexLeftHand, ClientResources.Instance._characterLeftHand, settingsPlayer, Outfit.LeftHand, settingsPlayer.textures?[2] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexLeftHand, Outfit.LeftHand));
-    ConfigurePlayer.ApplyOutfit(x.rightArm, settingsPlayer.indexRightHand, ClientResources.Instance._characterRightHand, settingsPlayer, Outfit.RightHand, settingsPlayer.textures?[3] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexRightHand, Outfit.RightHand));
-    ConfigurePlayer.ApplyOutfit(x.beard, settingsPlayer.indexBeard, ClientResources.Instance._characterBeards, settingsPlayer, Outfit.Beard, settingsPlayer.textures?[5] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBeard, Outfit.Beard));
-    ConfigurePlayer.ApplyOutfit(x.beard2, settingsPlayer.indexBeard2, ClientResources.Instance._characterBeards, settingsPlayer, Outfit.Beard2, settingsPlayer.textures?[9] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBeard2, Outfit.Beard));
-    ConfigurePlayer.ApplyOutfit(x.beard3, settingsPlayer.indexBeard3, ClientResources.Instance._characterBeards, settingsPlayer, Outfit.Beard3, settingsPlayer.textures?[10] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBeard3, Outfit.Beard));
-    ConfigurePlayer.ApplyOutfit(x.leftFoot, settingsPlayer.indexLeftFoot, ClientResources.Instance._characterLeftFoot, settingsPlayer, Outfit.Body, settingsPlayer.textures?[6] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBody, Outfit.LeftFoot));
-    ConfigurePlayer.ApplyOutfit(x.rightFoot, settingsPlayer.indexRightFoot, ClientResources.Instance._characterRightFoot, settingsPlayer, Outfit.Body, settingsPlayer.textures?[7] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBody, Outfit.RightFoot));
+    ConfigurePlayer.ApplyOutfit(x.head, settingsPlayer.indexHead, Inert.Instance._characterHeads, settingsPlayer, Outfit.Head, settingsPlayer.textures?[1] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexHead, Outfit.Head));
+    ConfigurePlayer.ApplyOutfit(x.body, settingsPlayer.indexBody, Inert.Instance._characterBody, settingsPlayer, Outfit.Body, settingsPlayer.textures?[0] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBody, Outfit.Body));
+    ConfigurePlayer.ApplyOutfit(x.hat, settingsPlayer.indexHat, Inert.Instance._characterHats, settingsPlayer, Outfit.Hair, settingsPlayer.textures?[4] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexHat, Outfit.Hair));
+    ConfigurePlayer.ApplyOutfit(x.leftArm, settingsPlayer.indexLeftHand, Inert.Instance._characterLeftHand, settingsPlayer, Outfit.LeftHand, settingsPlayer.textures?[2] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexLeftHand, Outfit.LeftHand));
+    ConfigurePlayer.ApplyOutfit(x.rightArm, settingsPlayer.indexRightHand, Inert.Instance._characterRightHand, settingsPlayer, Outfit.RightHand, settingsPlayer.textures?[3] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexRightHand, Outfit.RightHand));
+    ConfigurePlayer.ApplyOutfit(x.beard, settingsPlayer.indexBeard, Inert.Instance._characterBeards, settingsPlayer, Outfit.Beard, settingsPlayer.textures?[5] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBeard, Outfit.Beard));
+    ConfigurePlayer.ApplyOutfit(x.beard2, settingsPlayer.indexBeard2, Inert.Instance._characterBeards, settingsPlayer, Outfit.Beard2, settingsPlayer.textures?[9] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBeard2, Outfit.Beard));
+    ConfigurePlayer.ApplyOutfit(x.beard3, settingsPlayer.indexBeard3, Inert.Instance._characterBeards, settingsPlayer, Outfit.Beard3, settingsPlayer.textures?[10] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBeard3, Outfit.Beard));
+    ConfigurePlayer.ApplyOutfit(x.leftFoot, settingsPlayer.indexLeftFoot, Inert.Instance._characterLeftFoot, settingsPlayer, Outfit.Body, settingsPlayer.textures?[6] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBody, Outfit.LeftFoot));
+    ConfigurePlayer.ApplyOutfit(x.rightFoot, settingsPlayer.indexRightFoot, Inert.Instance._characterRightFoot, settingsPlayer, Outfit.Body, settingsPlayer.textures?[7] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBody, Outfit.RightFoot));
   }
 
   public void EquipAll(string name, SettingsPlayer settingsPlayer)
@@ -92,27 +92,27 @@ public class ConfigurePlayer : MonoBehaviour
     }
     else
     {
-      this.spriteMouth.sprite = settingsPlayer.textures?[8] ?? ClientResources.Instance._characterMouths[Mathf.Clamp((int) settingsPlayer.indexMouth, 0, ClientResources.Instance._characterMouths.Length - 1)];
+      this.spriteMouth.sprite = settingsPlayer.textures?[8] ?? (Sprite) Inert.Instance._characterMouths[Mathf.Clamp((int) settingsPlayer.indexMouth, 0, Inert.Instance._characterMouths.Length - 1)];
       if (clanOutfit != null && clanOutfit.OutfitNoMouth((int) settingsPlayer.indexHead))
-        this.spriteMouth.sprite = ClientResources.Instance._characterMouths[24];
+        this.spriteMouth.sprite = (Sprite) Inert.Instance._characterMouths[24];
     }
     if (settingsPlayer.indexHead == (byte) 106 && settingsPlayer.indexMouth == (byte) 0)
       settingsPlayer.indexMouth = (byte) 27;
     else if (settingsPlayer.indexHead != (byte) 106 && settingsPlayer.indexMouth == (byte) 27)
       settingsPlayer.indexMouth = (byte) 0;
-    this.spriteMouth.sprite = ClientResources.Instance._characterMouths[(int) settingsPlayer.indexMouth];
+    this.spriteMouth.sprite = (Sprite) Inert.Instance._characterMouths[(int) settingsPlayer.indexMouth];
     this.spriteLeftFoot.sortingOrder = settingsPlayer.indexLeftFoot != (byte) 2 ? -18 : -16;
     this.DestroyCharacterSprites();
-    this.ApplyOutfit(this.spriteHead, settingsPlayer.indexHead, ClientResources.Instance._characterHeads, settingsPlayer, Outfit.Head, settingsPlayer.textures?[1] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexHead, Outfit.Head));
-    this.ApplyOutfit(this.spriteBody, settingsPlayer.indexBody, ClientResources.Instance._characterBody, settingsPlayer, Outfit.Body, settingsPlayer.textures?[0] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBody, Outfit.Body));
-    this.ApplyOutfit(this.spriteHat, settingsPlayer.indexHat, ClientResources.Instance._characterHats, settingsPlayer, Outfit.Hair, settingsPlayer.textures?[4] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexHat, Outfit.Hair));
-    this.ApplyOutfit(this.spriteLeftHand, settingsPlayer.indexLeftHand, ClientResources.Instance._characterLeftHand, settingsPlayer, Outfit.LeftHand, settingsPlayer.textures?[2] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexLeftHand, Outfit.LeftHand));
-    this.ApplyOutfit(this.spriteRightHand, settingsPlayer.indexRightHand, ClientResources.Instance._characterRightHand, settingsPlayer, Outfit.RightHand, settingsPlayer.textures?[3] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexRightHand, Outfit.RightHand));
-    this.ApplyOutfit(this.spriteBeard, settingsPlayer.indexBeard, ClientResources.Instance._characterBeards, settingsPlayer, Outfit.Beard, settingsPlayer.textures?[5] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBeard, Outfit.Beard));
-    this.ApplyOutfit(this.spriteBeard2, settingsPlayer.indexBeard2, ClientResources.Instance._characterBeards, settingsPlayer, Outfit.Beard2, settingsPlayer.textures?[9] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBeard2, Outfit.Beard));
-    this.ApplyOutfit(this.spriteBeard3, settingsPlayer.indexBeard3, ClientResources.Instance._characterBeards, settingsPlayer, Outfit.Beard3, settingsPlayer.textures?[10] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBeard3, Outfit.Beard));
-    this.ApplyOutfit(this.spriteLeftFoot, settingsPlayer.indexLeftFoot, ClientResources.Instance._characterLeftFoot, settingsPlayer, Outfit.Body, settingsPlayer.textures?[6] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBody, Outfit.LeftFoot));
-    this.ApplyOutfit(this.spriteRightFoot, settingsPlayer.indexRightFoot, ClientResources.Instance._characterRightFoot, settingsPlayer, Outfit.Body, settingsPlayer.textures?[7] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBody, Outfit.RightFoot));
+    this.ApplyOutfit(this.spriteHead, settingsPlayer.indexHead, Inert.Instance._characterHeads, settingsPlayer, Outfit.Head, settingsPlayer.textures?[1] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexHead, Outfit.Head));
+    this.ApplyOutfit(this.spriteBody, settingsPlayer.indexBody, Inert.Instance._characterBody, settingsPlayer, Outfit.Body, settingsPlayer.textures?[0] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBody, Outfit.Body));
+    this.ApplyOutfit(this.spriteHat, settingsPlayer.indexHat, Inert.Instance._characterHats, settingsPlayer, Outfit.Hair, settingsPlayer.textures?[4] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexHat, Outfit.Hair));
+    this.ApplyOutfit(this.spriteLeftHand, settingsPlayer.indexLeftHand, Inert.Instance._characterLeftHand, settingsPlayer, Outfit.LeftHand, settingsPlayer.textures?[2] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexLeftHand, Outfit.LeftHand));
+    this.ApplyOutfit(this.spriteRightHand, settingsPlayer.indexRightHand, Inert.Instance._characterRightHand, settingsPlayer, Outfit.RightHand, settingsPlayer.textures?[3] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexRightHand, Outfit.RightHand));
+    this.ApplyOutfit(this.spriteBeard, settingsPlayer.indexBeard, Inert.Instance._characterBeards, settingsPlayer, Outfit.Beard, settingsPlayer.textures?[5] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBeard, Outfit.Beard));
+    this.ApplyOutfit(this.spriteBeard2, settingsPlayer.indexBeard2, Inert.Instance._characterBeards, settingsPlayer, Outfit.Beard2, settingsPlayer.textures?[9] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBeard2, Outfit.Beard));
+    this.ApplyOutfit(this.spriteBeard3, settingsPlayer.indexBeard3, Inert.Instance._characterBeards, settingsPlayer, Outfit.Beard3, settingsPlayer.textures?[10] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBeard3, Outfit.Beard));
+    this.ApplyOutfit(this.spriteLeftFoot, settingsPlayer.indexLeftFoot, Inert.Instance._characterLeftFoot, settingsPlayer, Outfit.Body, settingsPlayer.textures?[6] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBody, Outfit.LeftFoot));
+    this.ApplyOutfit(this.spriteRightFoot, settingsPlayer.indexRightFoot, Inert.Instance._characterRightFoot, settingsPlayer, Outfit.Body, settingsPlayer.textures?[7] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBody, Outfit.RightFoot));
     this.CheckActive(name, settingsPlayer);
   }
 
@@ -139,20 +139,20 @@ public class ConfigurePlayer : MonoBehaviour
     settingsPlayer.indexRightFoot = settingsPlayer.indexLeftFoot;
     this.spriteLeftFoot.sortingOrder = settingsPlayer.indexLeftFoot != (byte) 2 ? -18 : -16;
     if (clanOutfit != null && clanOutfit.OutfitNoMouth((int) settingsPlayer.indexHead))
-      this.spriteMouth.sprite = ClientResources.Instance._characterMouths[24];
+      this.spriteMouth.sprite = (Sprite) Inert.Instance._characterMouths[24];
     this.DestroyCharacterSprites();
-    this.ModApplyOutfit(destroy, this.spriteHead, settingsPlayer.indexHead, ClientResources.Instance._characterHeads, settingsPlayer, Outfit.Head, colors, settingsPlayer.textures?[1] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexHead, Outfit.Head));
-    this.ModApplyOutfit(destroy, this.spriteBody, settingsPlayer.indexBody, ClientResources.Instance._characterBody, settingsPlayer, Outfit.Body, colors, settingsPlayer.textures?[0] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBody, Outfit.Body));
-    this.ModApplyOutfit(destroy, this.spriteHat, settingsPlayer.indexHat, ClientResources.Instance._characterHats, settingsPlayer, Outfit.Hair, colors, settingsPlayer.textures?[4] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexHat, Outfit.Hair));
+    this.ModApplyOutfit(destroy, this.spriteHead, settingsPlayer.indexHead, Inert.Instance._characterHeads, settingsPlayer, Outfit.Head, colors, settingsPlayer.textures?[1] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexHead, Outfit.Head));
+    this.ModApplyOutfit(destroy, this.spriteBody, settingsPlayer.indexBody, Inert.Instance._characterBody, settingsPlayer, Outfit.Body, colors, settingsPlayer.textures?[0] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBody, Outfit.Body));
+    this.ModApplyOutfit(destroy, this.spriteHat, settingsPlayer.indexHat, Inert.Instance._characterHats, settingsPlayer, Outfit.Hair, colors, settingsPlayer.textures?[4] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexHat, Outfit.Hair));
     if ((UnityEngine.Object) this.spriteLeftHand != (UnityEngine.Object) null && (UnityEngine.Object) this.spriteLeftHand.sprite != (UnityEngine.Object) null && this.spriteLeftHand.sprite.texture.width > 2)
-      this.ModApplyOutfit(destroy, this.spriteLeftHand, settingsPlayer.indexLeftHand, ClientResources.Instance._characterLeftHand, settingsPlayer, Outfit.LeftHand, colors, settingsPlayer.textures?[2] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexLeftHand, Outfit.LeftHand));
+      this.ModApplyOutfit(destroy, this.spriteLeftHand, settingsPlayer.indexLeftHand, Inert.Instance._characterLeftHand, settingsPlayer, Outfit.LeftHand, colors, settingsPlayer.textures?[2] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexLeftHand, Outfit.LeftHand));
     if ((UnityEngine.Object) this.spriteRightHand != (UnityEngine.Object) null && (UnityEngine.Object) this.spriteRightHand.sprite != (UnityEngine.Object) null && this.spriteRightHand.sprite.texture.width > 2)
-      this.ModApplyOutfit(destroy, this.spriteRightHand, settingsPlayer.indexRightHand, ClientResources.Instance._characterRightHand, settingsPlayer, Outfit.RightHand, colors, settingsPlayer.textures?[3] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexRightHand, Outfit.RightHand));
-    this.ModApplyOutfit(destroy, this.spriteBeard, settingsPlayer.indexBeard, ClientResources.Instance._characterBeards, settingsPlayer, Outfit.Beard, colors, settingsPlayer.textures?[5] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBeard, Outfit.Beard));
-    this.ModApplyOutfit(destroy, this.spriteBeard2, settingsPlayer.indexBeard2, ClientResources.Instance._characterBeards, settingsPlayer, Outfit.Beard2, colors, settingsPlayer.textures?[9] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBeard2, Outfit.Beard));
-    this.ModApplyOutfit(destroy, this.spriteBeard3, settingsPlayer.indexBeard3, ClientResources.Instance._characterBeards, settingsPlayer, Outfit.Beard3, colors, settingsPlayer.textures?[10] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBeard3, Outfit.Beard));
-    this.ModApplyOutfit(destroy, this.spriteLeftFoot, settingsPlayer.indexLeftFoot, ClientResources.Instance._characterLeftFoot, settingsPlayer, Outfit.Body, colors, settingsPlayer.textures?[6] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexLeftFoot, Outfit.LeftFoot));
-    this.ModApplyOutfit(destroy, this.spriteRightFoot, settingsPlayer.indexRightFoot, ClientResources.Instance._characterRightFoot, settingsPlayer, Outfit.Body, colors, settingsPlayer.textures?[7] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexRightFoot, Outfit.RightFoot));
+      this.ModApplyOutfit(destroy, this.spriteRightHand, settingsPlayer.indexRightHand, Inert.Instance._characterRightHand, settingsPlayer, Outfit.RightHand, colors, settingsPlayer.textures?[3] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexRightHand, Outfit.RightHand));
+    this.ModApplyOutfit(destroy, this.spriteBeard, settingsPlayer.indexBeard, Inert.Instance._characterBeards, settingsPlayer, Outfit.Beard, colors, settingsPlayer.textures?[5] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBeard, Outfit.Beard));
+    this.ModApplyOutfit(destroy, this.spriteBeard2, settingsPlayer.indexBeard2, Inert.Instance._characterBeards, settingsPlayer, Outfit.Beard2, colors, settingsPlayer.textures?[9] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBeard2, Outfit.Beard));
+    this.ModApplyOutfit(destroy, this.spriteBeard3, settingsPlayer.indexBeard3, Inert.Instance._characterBeards, settingsPlayer, Outfit.Beard3, colors, settingsPlayer.textures?[10] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBeard3, Outfit.Beard));
+    this.ModApplyOutfit(destroy, this.spriteLeftFoot, settingsPlayer.indexLeftFoot, Inert.Instance._characterLeftFoot, settingsPlayer, Outfit.Body, colors, settingsPlayer.textures?[6] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexLeftFoot, Outfit.LeftFoot));
+    this.ModApplyOutfit(destroy, this.spriteRightFoot, settingsPlayer.indexRightFoot, Inert.Instance._characterRightFoot, settingsPlayer, Outfit.Body, colors, settingsPlayer.textures?[7] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexRightFoot, Outfit.RightFoot));
     this.CheckActive(name, settingsPlayer);
     List<GameObject> archMageStaffs = this.GetComponent<Creature>()?.parent?.archMageStaffs;
     if (archMageStaffs == null)
@@ -198,12 +198,12 @@ public class ConfigurePlayer : MonoBehaviour
 
   public static bool BeardInFront(byte b)
   {
-    return b == (byte) 74 || b == (byte) 97;
+    return b == (byte) 74 || b == (byte) 97 || Inert.Instance._characterBeards[(int) b].order > 0;
   }
 
   public static bool BeardInBack(byte b)
   {
-    return b == (byte) 98;
+    return b == (byte) 98 || Inert.Instance._characterBeards[(int) b].order < 0;
   }
 
   public void CheckActive(string name, SettingsPlayer settingsPlayer)
@@ -218,9 +218,9 @@ public class ConfigurePlayer : MonoBehaviour
     this.spriteBeard.enabled = flag;
     this.spriteLeftFoot.enabled = flag;
     this.spriteRightFoot.enabled = flag;
-    this.spriteBeard.sortingOrder = ConfigurePlayer.BeardInFront(settingsPlayer.indexBeard) ? -10 : -13;
-    this.spriteBeard2.sortingOrder = ConfigurePlayer.BeardInFront(settingsPlayer.indexBeard2) ? -11 : -14;
-    this.spriteBeard3.sortingOrder = ConfigurePlayer.BeardInFront(settingsPlayer.indexBeard3) ? -12 : -15;
+    this.spriteBeard.sortingOrder = ConfigurePlayer.BeardInFront(settingsPlayer.indexBeard) ? -10 : (ConfigurePlayer.BeardInBack(settingsPlayer.indexBeard) ? -20 : -13);
+    this.spriteBeard2.sortingOrder = ConfigurePlayer.BeardInFront(settingsPlayer.indexBeard2) ? -11 : (ConfigurePlayer.BeardInBack(settingsPlayer.indexBeard2) ? -21 : -14);
+    this.spriteBeard3.sortingOrder = ConfigurePlayer.BeardInFront(settingsPlayer.indexBeard3) ? -12 : (ConfigurePlayer.BeardInBack(settingsPlayer.indexBeard3) ? -22 : -15);
   }
 
   public static void EquipAll(string name, UIPlayerCharacter p, SettingsPlayer settingsPlayer)
@@ -228,19 +228,19 @@ public class ConfigurePlayer : MonoBehaviour
     ClanOutfit clanOutfit = ClientResources.Instance.GetClanOutfit(Client.GetAccount(name, false).clan);
     settingsPlayer.indexLeftFoot = settingsPlayer.FootIndex();
     settingsPlayer.indexRightFoot = settingsPlayer.indexLeftFoot;
-    p.mouth.sprite = clanOutfit == null || !clanOutfit.OutfitNoMouth((int) settingsPlayer.indexHead) ? ClientResources.Instance._characterMouths[settingsPlayer.indexHead == (byte) 106 ? 27 : 0] : ClientResources.Instance._characterMouths[24];
+    p.mouth.sprite = clanOutfit == null || !clanOutfit.OutfitNoMouth((int) settingsPlayer.indexHead) ? (Sprite) Inert.Instance._characterMouths[settingsPlayer.indexHead == (byte) 106 ? 27 : 0] : (Sprite) Inert.Instance._characterMouths[24];
     p.Cleanup();
     p.disposable = true;
-    ConfigurePlayer.ApplyOutfit(p.head, settingsPlayer.indexHead, ClientResources.Instance._characterHeads, settingsPlayer, Outfit.Head, settingsPlayer.textures?[1] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexHead, Outfit.Head));
-    ConfigurePlayer.ApplyOutfit(p.body, settingsPlayer.indexBody, ClientResources.Instance._characterBody, settingsPlayer, Outfit.Body, settingsPlayer.textures?[0] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBody, Outfit.Body));
-    ConfigurePlayer.ApplyOutfit(p.hat, settingsPlayer.indexHat, ClientResources.Instance._characterHats, settingsPlayer, Outfit.Hair, settingsPlayer.textures?[4] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexHat, Outfit.Hair));
-    ConfigurePlayer.ApplyOutfit(p.leftArm, settingsPlayer.indexLeftHand, ClientResources.Instance._characterLeftHand, settingsPlayer, Outfit.LeftHand, settingsPlayer.textures?[2] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexLeftHand, Outfit.LeftHand));
-    ConfigurePlayer.ApplyOutfit(p.rightArm, settingsPlayer.indexRightHand, ClientResources.Instance._characterRightHand, settingsPlayer, Outfit.RightHand, settingsPlayer.textures?[3] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexRightHand, Outfit.RightHand));
-    ConfigurePlayer.ApplyOutfit(p.beard, settingsPlayer.indexBeard, ClientResources.Instance._characterBeards, settingsPlayer, Outfit.Beard, settingsPlayer.textures?[5] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBeard, Outfit.Beard));
-    ConfigurePlayer.ApplyOutfit(p.beard2, settingsPlayer.indexBeard2, ClientResources.Instance._characterBeards, settingsPlayer, Outfit.Beard2, settingsPlayer.textures?[9] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBeard2, Outfit.Beard));
-    ConfigurePlayer.ApplyOutfit(p.beard3, settingsPlayer.indexBeard3, ClientResources.Instance._characterBeards, settingsPlayer, Outfit.Beard3, settingsPlayer.textures?[10] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBeard3, Outfit.Beard));
-    ConfigurePlayer.ApplyOutfit(p.leftFoot, settingsPlayer.indexLeftFoot, ClientResources.Instance._characterLeftFoot, settingsPlayer, Outfit.Body, settingsPlayer.textures?[6] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBody, Outfit.LeftFoot));
-    ConfigurePlayer.ApplyOutfit(p.rightFoot, settingsPlayer.indexRightFoot, ClientResources.Instance._characterRightFoot, settingsPlayer, Outfit.Body, settingsPlayer.textures?[7] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBody, Outfit.RightFoot));
+    ConfigurePlayer.ApplyOutfit(p.head, settingsPlayer.indexHead, Inert.Instance._characterHeads, settingsPlayer, Outfit.Head, settingsPlayer.textures?[1] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexHead, Outfit.Head));
+    ConfigurePlayer.ApplyOutfit(p.body, settingsPlayer.indexBody, Inert.Instance._characterBody, settingsPlayer, Outfit.Body, settingsPlayer.textures?[0] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBody, Outfit.Body));
+    ConfigurePlayer.ApplyOutfit(p.hat, settingsPlayer.indexHat, Inert.Instance._characterHats, settingsPlayer, Outfit.Hair, settingsPlayer.textures?[4] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexHat, Outfit.Hair));
+    ConfigurePlayer.ApplyOutfit(p.leftArm, settingsPlayer.indexLeftHand, Inert.Instance._characterLeftHand, settingsPlayer, Outfit.LeftHand, settingsPlayer.textures?[2] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexLeftHand, Outfit.LeftHand));
+    ConfigurePlayer.ApplyOutfit(p.rightArm, settingsPlayer.indexRightHand, Inert.Instance._characterRightHand, settingsPlayer, Outfit.RightHand, settingsPlayer.textures?[3] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexRightHand, Outfit.RightHand));
+    ConfigurePlayer.ApplyOutfit(p.beard, settingsPlayer.indexBeard, Inert.Instance._characterBeards, settingsPlayer, Outfit.Beard, settingsPlayer.textures?[5] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBeard, Outfit.Beard));
+    ConfigurePlayer.ApplyOutfit(p.beard2, settingsPlayer.indexBeard2, Inert.Instance._characterBeards, settingsPlayer, Outfit.Beard2, settingsPlayer.textures?[9] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBeard2, Outfit.Beard));
+    ConfigurePlayer.ApplyOutfit(p.beard3, settingsPlayer.indexBeard3, Inert.Instance._characterBeards, settingsPlayer, Outfit.Beard3, settingsPlayer.textures?[10] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBeard3, Outfit.Beard));
+    ConfigurePlayer.ApplyOutfit(p.leftFoot, settingsPlayer.indexLeftFoot, Inert.Instance._characterLeftFoot, settingsPlayer, Outfit.Body, settingsPlayer.textures?[6] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBody, Outfit.LeftFoot));
+    ConfigurePlayer.ApplyOutfit(p.rightFoot, settingsPlayer.indexRightFoot, Inert.Instance._characterRightFoot, settingsPlayer, Outfit.Body, settingsPlayer.textures?[7] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBody, Outfit.RightFoot));
     if ((UnityEngine.Object) p.mouth != (UnityEngine.Object) null)
       p.mouth.enabled = !SettingsPlayer.HeadNoMouth(name, settingsPlayer);
     bool flag = (int) settingsPlayer.indexBody != SettingsPlayer.sno_body2;
@@ -279,7 +279,7 @@ public class ConfigurePlayer : MonoBehaviour
 
   public static Sprite GetSprite(
     byte i,
-    Sprite[] ggs,
+    OutfitDataList ggs,
     SettingsPlayer settingsPlayer,
     Outfit o,
     Sprite texOverride = null)
@@ -288,13 +288,13 @@ public class ConfigurePlayer : MonoBehaviour
       return texOverride;
     if ((int) i >= ggs.Length)
       i = (byte) 0;
-    return ggs[(int) i];
+    return (Sprite) ggs[(int) i];
   }
 
   public void ApplyOutfit(
     SpriteRenderer r,
     byte i,
-    Sprite[] ggs,
+    OutfitDataList ggs,
     SettingsPlayer settingsPlayer,
     Outfit o,
     Sprite texOverride = null)
@@ -311,7 +311,7 @@ public class ConfigurePlayer : MonoBehaviour
     {
       if ((int) i >= ggs.Length)
         i = (byte) 0;
-      r.sprite = settingsPlayer.coloring.Texture(ggs[(int) i], o);
+      r.sprite = settingsPlayer.coloring.Texture((Sprite) ggs[(int) i], o);
       r.gameObject.tag = "RawImage";
     }
   }
@@ -320,7 +320,7 @@ public class ConfigurePlayer : MonoBehaviour
     bool destroy,
     SpriteRenderer r,
     byte i,
-    Sprite[] ggs,
+    OutfitDataList ggs,
     SettingsPlayer settingsPlayer,
     Outfit o,
     Color[] colors,
@@ -338,7 +338,7 @@ public class ConfigurePlayer : MonoBehaviour
     {
       if ((int) i >= ggs.Length)
         i = (byte) 0;
-      r.sprite = Recolor.Texture(ggs[(int) i], colors[0], colors[1], colors[2], colors[3]);
+      r.sprite = Recolor.Texture((Sprite) ggs[(int) i], colors[0], colors[1], colors[2], colors[3]);
       r.gameObject.tag = "RawImage";
     }
   }
@@ -346,7 +346,7 @@ public class ConfigurePlayer : MonoBehaviour
   public static void ApplyOutfit(
     Image r,
     byte i,
-    Sprite[] ggs,
+    OutfitDataList ggs,
     SettingsPlayer settingsPlayer,
     Outfit o,
     Sprite texOverride = null)
@@ -363,7 +363,7 @@ public class ConfigurePlayer : MonoBehaviour
     {
       if ((int) i >= ggs.Length)
         i = (byte) 0;
-      r.sprite = settingsPlayer.coloring.Texture(OutfitButton.GetPreview(ggs[(int) i]), o);
+      r.sprite = settingsPlayer.coloring.Texture(OutfitButton.GetPreview((Sprite) ggs[(int) i]), o);
       r.gameObject.tag = "RawImage";
     }
   }
@@ -389,18 +389,18 @@ public class ConfigurePlayer : MonoBehaviour
     }
     else
     {
-      p.mouth.sprite = settingsPlayer.textures?[8] ?? ClientResources.Instance._characterMouths[Mathf.Clamp((int) settingsPlayer.indexMouth, 0, ClientResources.Instance._characterMouths.Length - 1)];
+      p.mouth.sprite = settingsPlayer.textures?[8] ?? (Sprite) Inert.Instance._characterMouths[Mathf.Clamp((int) settingsPlayer.indexMouth, 0, Inert.Instance._characterMouths.Length - 1)];
       if (clanOutfit != null && clanOutfit.OutfitNoMouth((int) settingsPlayer.indexHead))
-        p.mouth.sprite = ClientResources.Instance._characterMouths[24];
+        p.mouth.sprite = (Sprite) Inert.Instance._characterMouths[24];
     }
     Global.DestroySprite(p.head?.sprite);
     Global.DestroySprite(p.beard?.sprite);
     Global.DestroySprite(p.hat?.sprite);
-    ConfigurePlayer.ApplyOutfit(p.head, settingsPlayer.indexHead, ClientResources.Instance._characterHeads, settingsPlayer, Outfit.Head, settingsPlayer.textures?[1] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexHead, Outfit.Head));
-    ConfigurePlayer.ApplyOutfit(p.hat, settingsPlayer.indexHat, ClientResources.Instance._characterHats, settingsPlayer, Outfit.Hair, settingsPlayer.textures?[4] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexHat, Outfit.Hair));
-    ConfigurePlayer.ApplyOutfit(p.beard, ConfigurePlayer.BeardInBack(settingsPlayer.indexBeard) ? (byte) 0 : settingsPlayer.indexBeard, ClientResources.Instance._characterBeards, settingsPlayer, Outfit.Beard, settingsPlayer.textures?[5] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBeard, Outfit.Beard));
-    ConfigurePlayer.ApplyOutfit(p.beard2, ConfigurePlayer.BeardInBack(settingsPlayer.indexBeard2) ? (byte) 0 : settingsPlayer.indexBeard2, ClientResources.Instance._characterBeards, settingsPlayer, Outfit.Beard2, settingsPlayer.textures?[9] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBeard2, Outfit.Beard));
-    ConfigurePlayer.ApplyOutfit(p.beard3, ConfigurePlayer.BeardInBack(settingsPlayer.indexBeard3) ? (byte) 0 : settingsPlayer.indexBeard3, ClientResources.Instance._characterBeards, settingsPlayer, Outfit.Beard3, settingsPlayer.textures?[10] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBeard3, Outfit.Beard));
+    ConfigurePlayer.ApplyOutfit(p.head, settingsPlayer.indexHead, Inert.Instance._characterHeads, settingsPlayer, Outfit.Head, settingsPlayer.textures?[1] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexHead, Outfit.Head));
+    ConfigurePlayer.ApplyOutfit(p.hat, settingsPlayer.indexHat, Inert.Instance._characterHats, settingsPlayer, Outfit.Hair, settingsPlayer.textures?[4] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexHat, Outfit.Hair));
+    ConfigurePlayer.ApplyOutfit(p.beard, ConfigurePlayer.BeardInBack(settingsPlayer.indexBeard) ? (byte) 0 : settingsPlayer.indexBeard, Inert.Instance._characterBeards, settingsPlayer, Outfit.Beard, settingsPlayer.textures?[5] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBeard, Outfit.Beard));
+    ConfigurePlayer.ApplyOutfit(p.beard2, ConfigurePlayer.BeardInBack(settingsPlayer.indexBeard2) ? (byte) 0 : settingsPlayer.indexBeard2, Inert.Instance._characterBeards, settingsPlayer, Outfit.Beard2, settingsPlayer.textures?[9] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBeard2, Outfit.Beard));
+    ConfigurePlayer.ApplyOutfit(p.beard3, ConfigurePlayer.BeardInBack(settingsPlayer.indexBeard3) ? (byte) 0 : settingsPlayer.indexBeard3, Inert.Instance._characterBeards, settingsPlayer, Outfit.Beard3, settingsPlayer.textures?[10] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexBeard3, Outfit.Beard));
     p.mouth.enabled = !SettingsPlayer.HeadNoMouth(name, settingsPlayer);
   }
 

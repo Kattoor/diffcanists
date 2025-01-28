@@ -2223,7 +2223,7 @@ public static class Descriptions
     },
     {
       "Harmony",
-      "Personal: does not end your turn\n{0}\nAt the end of your turn, until your next turn, you and your minions split all damage taken (The primary target takes 50% of that damage unless that damage is less than the total minions that are under the effect of harmony, in which case it's split amongst the healthiest)."
+      "Personal: does not end your turn\n{0}\nAt the end of your turn, until your next turn, you and your minions share all damage taken. Any rounding errors are applied to the main target. If the split damage is less than one, it will instead be dealt to the healthiest target."
     },
     {
       "Enchanted Axes",
@@ -2395,7 +2395,7 @@ public static class Descriptions
     },
     {
       "Stalk",
-      "Targeted: 25 damage, does not end your turn\n{0}\nDisappear from sight, pouncing on the closest enemy at the start of your next turn."
+      "Targeted: 25 damage, does not end your turn\n{0}\nDisappear from sight, pouncing on the closest enemy at the start of your next turn. If the tiger leaps but misses its target, Stalk's cooldown will be reset."
     },
     {
       "Tomato",
@@ -2411,11 +2411,11 @@ public static class Descriptions
     },
     {
       "Bucket of Sand",
-      "Bomb: 2000 grains of sand, up to 75 damage\n{0}\n Disperses sand in an up and out pattern."
+      "Bomb: 5000 grains of sand, up to 75 damage\n{0}\n Disperses sand in an up and out pattern."
     },
     {
       "Sandy Shores",
-      "Targeted: 50 damage\n{0}\nCreates a beach front on the shore line for a nice vacation home."
+      "Targeted: 2000 grains of sand, up to 50 damage\n{0}\nCreates a beach front on the shore line by first flinging 2,000 grains of sand upwards and then creating a big dune of sand to finish it off."
     },
     {
       "Burning Sands",
@@ -2431,7 +2431,7 @@ public static class Descriptions
     },
     {
       "Sandbag",
-      "Personal:\n{0}\nDe-towers you and puts the tower on a cooldown depending on how much health the tower currently has. Increases the health of the next cast of Sand Castle by 75 if used while in a Sand Castle or by 50 if used while not in any tower (Max of 125 health)."
+      "Personal:\n{0}\nDe-towers you and puts the tower on a reduced cooldown. Increases the health of the next cast of Sand Castle by 75 if used while in a Sand Castle or by 50 if used while not in any tower (Max of 125 health)."
     },
     {
       "Sand Castle",

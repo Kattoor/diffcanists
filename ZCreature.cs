@@ -481,7 +481,7 @@ public class ZCreature : ZEntity
   {
     get
     {
-      return this.familiarLevelStone;
+      return !this.game.gameFacts.GetStyle().HasStyle(GameStyle.Elementals) ? this.familiarLevelStone : Mathf.Min(3, this.familiarLevelStone);
     }
   }
 
@@ -4724,8 +4724,14 @@ label_9:
             {
               int num3 = (int) (fixedInt3 + zcreature.pX) + zcreature.zb[index2].x;
               int num4 = (int) (fixedInt4 + zcreature.pY) + zcreature.zb[index2].y;
-              zcreature.map.ServerBitBlt(zcreature.spellEnum == SpellEnum.Summon_Tiger ? 5 : 36, num3, num4, true, true);
-              ZSpell.ApplyExplosionForce(zcreature.spellEnum, zcreature.world, new MyLocation(num3, num4), damage, Curve.None, zcreature.radius, 15, (FixedInt) 2, DamageType.Sunder, zcreature, zcreature.game.turn, Curve.None, (ISpellBridge) null, (ZCreature) null);
+              zcreature.map.ServerBitBlt(zcreature.spellEnum == SpellEnum.Summon_Tiger ? 0 : 36, num3, num4, true, true);
+              int EXORADIUS = zcreature.spellEnum == SpellEnum.Summon_Tiger ? 45 : 30;
+              if (ZSpell.ApplyExplosionForce(zcreature.spellEnum, zcreature.world, new MyLocation(num3, num4), damage, Curve.None, zcreature.radius, EXORADIUS, (FixedInt) 2, DamageType.Sunder, zcreature, zcreature.game.turn, Curve.None, (ISpellBridge) null, (ZCreature) null) <= 1 && damage == 25)
+              {
+                SpellSlot spellSlot = zcreature.GetSpellSlot(SpellEnum.Stalk);
+                if (spellSlot != null)
+                  spellSlot.SetTurnFired = spellSlot.LastTurnFired - 1;
+              }
               ZComponent.Instantiate<GameObject>(Inert.GetSpell(SpellEnum.Summon_Boar).explosion, new Vector3((float) num3, (float) num4), Quaternion.identity, zcreature.game.GetMapTransform());
               if (zcreature.game.isClient && !zcreature.game.resyncing)
                 AudioManager.PlayFromSource(AudioManager.instance.leapHit, AudioManager.instance.sourceCastSpell);

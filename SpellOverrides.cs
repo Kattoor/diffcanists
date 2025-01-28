@@ -149,7 +149,7 @@ public class SpellOverrides
     if (SpellOverrides.serverObj == null)
     {
       if (File.Exists(SpellOverrides.SERVER_PATH))
-        File.Delete(SpellOverrides.SERVER_PATH);
+        Global.DeleteFile(SpellOverrides.SERVER_PATH);
     }
     else
       SpellOverrides.serverObj.SaveToFile(SpellOverrides.SERVER_PATH);

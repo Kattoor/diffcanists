@@ -39,7 +39,7 @@ public class ReplayMenu : Catalogue
   {
     if ((UnityEngine.Object) this.selectedGameObject == (UnityEngine.Object) null)
       return;
-    File.Delete(this.currentGame);
+    Global.DeleteFile(this.currentGame);
     this.selectedGameObject.gameObject.SetActive(false);
     this.selectedGameObject = (ButtonReplayFile) null;
     this.buttonDelete.Interactable(false);

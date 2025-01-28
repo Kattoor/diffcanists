@@ -218,6 +218,22 @@ public static class Prestige
     }
   }
 
+  public static void Ask(byte msg, int info, int info2, bool boolean)
+  {
+    using (MemoryStream memoryStream = new MemoryStream())
+    {
+      using (myBinaryWriter myBinaryWriter = new myBinaryWriter((Stream) memoryStream))
+      {
+        myBinaryWriter.Write((byte) 96);
+        myBinaryWriter.Write(msg);
+        myBinaryWriter.Write(info);
+        myBinaryWriter.Write(info2);
+        myBinaryWriter.Write(boolean);
+      }
+      Client.connection?.SendBytes(memoryStream.ToArray(), SendOption.None);
+    }
+  }
+
   public static void SendLevel(Connection c)
   {
     using (MemoryStream memoryStream = new MemoryStream())

@@ -941,6 +941,16 @@ public class HUD : UIBehaviour
       this.game.serverUpdate = Timing.RunCoroutine(this.game.FixedUpdate(), Segment.Update);
       if (character.ShouldFall(true, false))
         character.Fall(false);
+      if (Client.joinedFrom == Client.JoinLocation.Store && (UnityEngine.Object) Player.Instance != (UnityEngine.Object) null)
+      {
+        Spell spell = Inert.GetSpell(Client.previewItem.spellEnum);
+        Player.Instance.person.first().spells.Add(new SpellSlot(spell));
+        Player.Instance.person.localTurn = spell.TurnsTillFirstUse;
+        if (spell.IsMinionSpell())
+          Player.Instance.StartSummoningDummy(spell);
+        else
+          Player.Instance.SetFakeSpell(Player.Instance.person.first().spells.Count - 1);
+      }
     }
     if (this.game.isReplay || this.game.isSandbox || this.game.isSpectator)
     {
@@ -1097,7 +1107,7 @@ public class HUD : UIBehaviour
   public void ConfirmResign()
   {
     if (this.game != null && this.game.players.Count > 1 && (!this.game.isMulti || this.game.TEAM_COUNT > 1) && (!this.game.isSandbox && !this.game.isReplay && (!this.game.isSpectator && (UnityEngine.Object) Player.Instance != (UnityEngine.Object) null)) && !Global.GetPrefBool(HUD.doNotShowResign, false))
-      MyMessageBox.Create("Are you sure you want to <b>RESIGN</b>?", (Action) (() => this.SendResign()), "Yes", "No", (Action) null, (Action) (() => Global.SetPrefBool(HUD.doNotShowResign, true)), (Sprite) null);
+      MyMessageBox.Create("Are you sure you want to <b>RESIGN</b>?", (Action) (() => this.SendResign()), "Yes", "No", (Action) null, (Action) (() => Global.SetPrefBool(HUD.doNotShowResign, true)), (Sprite) null, (string) null, (Action) null);
     else
       this.SendResign();
   }
@@ -1105,7 +1115,7 @@ public class HUD : UIBehaviour
   public void ConfirmLeave()
   {
     if (this.game != null && this.game.players.Count > 1 && (!this.game.isMulti || this.game.TEAM_COUNT > 1) && (!this.game.isSandbox && !this.game.isReplay && (!this.game.isSpectator && (UnityEngine.Object) Player.Instance != (UnityEngine.Object) null)) && !Global.GetPrefBool(HUD.doNotShowLeave, false))
-      MyMessageBox.Create("Are you sure you want to<br><b>LEAVE the GAME?</b>", (Action) (() => this.ClickExit()), "Yes", "No", (Action) null, (Action) (() => Global.SetPrefBool(HUD.doNotShowLeave, true)), (Sprite) null);
+      MyMessageBox.Create("Are you sure you want to<br><b>LEAVE the GAME?</b>", (Action) (() => this.ClickExit()), "Yes", "No", (Action) null, (Action) (() => Global.SetPrefBool(HUD.doNotShowLeave, true)), (Sprite) null, (string) null, (Action) null);
     else
       this.ClickExit();
   }
@@ -1113,7 +1123,7 @@ public class HUD : UIBehaviour
   public void ConfirmLeaveSave()
   {
     if (this.game != null && this.game.players.Count > 1 && (!this.game.isMulti || this.game.TEAM_COUNT > 1) && (!this.game.isSandbox && !this.game.isReplay && (!this.game.isSpectator && (UnityEngine.Object) Player.Instance != (UnityEngine.Object) null)) && !Global.GetPrefBool(HUD.doNotShowLeave, false))
-      MyMessageBox.Create("Are you sure you want to save and<br><b>LEAVE the GAME?</b>", (Action) (() => this.ClickSaveExit()), "Yes", "No", (Action) null, (Action) (() => Global.SetPrefBool(HUD.doNotShowLeave, true)), (Sprite) null);
+      MyMessageBox.Create("Are you sure you want to save and<br><b>LEAVE the GAME?</b>", (Action) (() => this.ClickSaveExit()), "Yes", "No", (Action) null, (Action) (() => Global.SetPrefBool(HUD.doNotShowLeave, true)), (Sprite) null, (string) null, (Action) null);
     else
       this.ClickSaveExit();
   }

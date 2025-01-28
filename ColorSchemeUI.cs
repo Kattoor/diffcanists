@@ -732,7 +732,7 @@ public class ColorSchemeUI : MonoBehaviour
     }), (string) null, false)), (Color) ColorScheme.GetColor(MyContextMenu.ColorYellow));
     myContextMenu.AddItem("Delete " + Path.GetFileNameWithoutExtension(s), (Action) (() =>
     {
-      File.Delete(s);
+      Global.DeleteFile(s);
       UnityEngine.Object.Destroy((UnityEngine.Object) gameObject);
     }), (Color) ColorScheme.GetColor(MyContextMenu.ColorRed));
     myContextMenu.Rebuild(false);

@@ -1176,17 +1176,30 @@ public class ZEffector : ZComponent
             List<ZMyCollider> zmyColliderList3 = this.world.OverlapCircleAll(new Point((int) this.position.x + 7, (int) this.position.y - 24), 95, this.collider, Inert.mask_movement_NoEffector | Inert.mask_Phantom);
             for (int index = 0; index < zmyColliderList3.Count; ++index)
             {
+              int? team1;
               if ((ZComponent) zmyColliderList3[index].creature != (object) null)
               {
-                int team1 = zmyColliderList3[index].creature.team;
-                int? team2 = this.whoSummoned?.parent?.team;
-                int valueOrDefault = team2.GetValueOrDefault();
-                if (team1 == valueOrDefault & team2.HasValue)
+                int team2 = zmyColliderList3[index].creature.team;
+                team1 = this.whoSummoned?.parent?.team;
+                int valueOrDefault = team1.GetValueOrDefault();
+                if (team2 == valueOrDefault & team1.HasValue)
                 {
                   zmyColliderList3[index].creature.DoHeal(25, DamageType.None, (ZCreature) null, false);
                   if (zmyColliderList3[index].creature.type == CreatureType.Boar && !zmyColliderList3[index].creature.flying)
+                  {
                     ZSpell.WhenPigsFly(Inert.GetSpell(SpellEnum.When_Pigs_Fly), zmyColliderList3[index].creature);
+                    continue;
+                  }
+                  continue;
                 }
+              }
+              if ((ZComponent) zmyColliderList3[index].tower != (object) null && (ZComponent) zmyColliderList3[index].tower.creature != (object) null)
+              {
+                int team2 = zmyColliderList3[index].tower.creature.team;
+                team1 = this.whoSummoned?.parent?.team;
+                int valueOrDefault = team1.GetValueOrDefault();
+                if (team2 == valueOrDefault & team1.HasValue)
+                  zmyColliderList3[index].tower.creature.DoHeal(25, DamageType.None, (ZCreature) null, false);
               }
             }
             if (this.turnsAlive < this.MaxTurnsAlive - 1 || this.MaxTurnsAlive <= 0)
@@ -1220,7 +1233,7 @@ public class ZEffector : ZComponent
             ZCreature creature = zmyColliderList5[index].creature;
             if ((ZComponent) creature == (object) null && (ZComponent) zmyColliderList5[index].tower != (object) null)
               creature = zmyColliderList5[index].tower.creature;
-            if ((ZComponent) creature != (object) null && creature.parent.team != this.whoSummoned.team)
+            if ((ZComponent) creature != (object) null && creature.parent.team != this.whoSummoned.team && creature.race != CreatureRace.Effector)
             {
               this.whoSummoned.game.ongoing.RunSpell(ZSpell.IEWolfJump(this.whoSummoned.game, this.whoSummoned, creature, -1, 25), true);
               this.Die(indexInParent, destroyable, global);
@@ -1231,16 +1244,16 @@ public class ZEffector : ZComponent
           break;
         case EffectorType.Rising_Lava:
           this.active = false;
-          int variable1 = this.variable;
+          int turnCreated1 = this.TurnCreated;
           int? localTurn1 = this.game.CurrentPlayer()?.localTurn;
           int valueOrDefault1 = localTurn1.GetValueOrDefault();
-          if (variable1 < valueOrDefault1 & localTurn1.HasValue)
+          if (turnCreated1 < valueOrDefault1 & localTurn1.HasValue)
           {
             ZPerson zperson = this.game.CurrentPlayer();
-            this.variable = zperson != null ? zperson.localTurn : 0;
+            this.TurnCreated = zperson != null ? zperson.localTurn : 0;
           }
           int width1 = this.map.Width;
-          int y3 = this.map.Height * this.variable / 75;
+          int y3 = this.map.Height * this.TurnCreated / 75;
           int num2 = this.map.Width / 2;
           int num3 = 0;
           if (this.halved)
@@ -1257,9 +1270,9 @@ public class ZEffector : ZComponent
           for (int index = 0; index < zmyColliderList6.Count; ++index)
           {
             if (zmyColliderList6[index].gameObjectLayer == 13)
-              zmyColliderList6[index].tower.ApplyDamage(SpellEnum.Rising_Lava, DamageType.None, this.variable * 2, (ZCreature) null, this.variable, (ISpellBridge) null);
+              zmyColliderList6[index].tower.ApplyDamage(SpellEnum.Rising_Lava, DamageType.None, this.TurnCreated * 2 * this.variable, (ZCreature) null, this.TurnCreated, (ISpellBridge) null);
             else
-              zmyColliderList6[index].creature?.ApplyDamage(SpellEnum.Rising_Lava, DamageType.None, this.variable, (ZCreature) null, this.variable, (ISpellBridge) null, false);
+              zmyColliderList6[index].creature?.ApplyDamage(SpellEnum.Rising_Lava, DamageType.None, this.TurnCreated * this.variable, (ZCreature) null, this.TurnCreated, (ISpellBridge) null, false);
           }
           this.VisualUpdate();
           break;
@@ -1279,16 +1292,16 @@ public class ZEffector : ZComponent
           break;
         case EffectorType.Dense_Fog:
           this.active = false;
-          int variable2 = this.variable;
+          int turnCreated2 = this.TurnCreated;
           int? localTurn2 = this.game.CurrentPlayer()?.localTurn;
           int valueOrDefault2 = localTurn2.GetValueOrDefault();
-          if (variable2 < valueOrDefault2 & localTurn2.HasValue)
+          if (turnCreated2 < valueOrDefault2 & localTurn2.HasValue)
           {
             ZPerson zperson = this.game.CurrentPlayer();
-            this.variable = zperson != null ? zperson.localTurn : 0;
+            this.TurnCreated = zperson != null ? zperson.localTurn : 0;
           }
           int width2 = this.map.Width;
-          int y4 = this.map.Height * this.variable / 75;
+          int y4 = this.map.Height * this.TurnCreated / 75;
           int num4 = this.map.Width / 2;
           int height1 = this.map.Height;
           if (this.halved)
@@ -1305,9 +1318,9 @@ public class ZEffector : ZComponent
           for (int index = 0; index < zmyColliderList7.Count; ++index)
           {
             if (zmyColliderList7[index].gameObjectLayer == 13)
-              zmyColliderList7[index].tower.ApplyDamage(SpellEnum.Dense_Fog, DamageType.None, this.variable * 2, (ZCreature) null, this.variable, (ISpellBridge) null);
+              zmyColliderList7[index].tower.ApplyDamage(SpellEnum.Dense_Fog, DamageType.None, this.TurnCreated * 2 * this.variable, (ZCreature) null, this.TurnCreated, (ISpellBridge) null);
             else
-              zmyColliderList7[index].creature?.ApplyDamage(SpellEnum.Dense_Fog, DamageType.None, this.variable, (ZCreature) null, this.variable, (ISpellBridge) null, false);
+              zmyColliderList7[index].creature?.ApplyDamage(SpellEnum.Dense_Fog, DamageType.None, this.TurnCreated * this.variable, (ZCreature) null, this.TurnCreated, (ISpellBridge) null, false);
           }
           this.VisualUpdate();
           break;
@@ -1334,9 +1347,9 @@ public class ZEffector : ZComponent
           for (int index = 0; index < zmyColliderList8.Count; ++index)
           {
             if (zmyColliderList8[index].gameObjectLayer == 13)
-              zmyColliderList8[index].tower.ApplyDamage(SpellEnum.Burning_Sands, DamageType.None, this.variable, (ZCreature) null, this.whoSummoned.parent.localTurn - this.turnsAlive, (ISpellBridge) null);
+              zmyColliderList8[index].tower.ApplyDamage(SpellEnum.Burning_Sands, DamageType.None, this.variable, this.whoSummoned, this.whoSummoned.parent.localTurn - this.turnsAlive, (ISpellBridge) null);
             else
-              zmyColliderList8[index].creature?.ApplyDamage(SpellEnum.Burning_Sands, DamageType.None, this.variable, (ZCreature) null, this.whoSummoned.parent.localTurn - this.turnsAlive, (ISpellBridge) null, false);
+              zmyColliderList8[index].creature?.ApplyDamage(SpellEnum.Burning_Sands, DamageType.None, this.variable, this.whoSummoned, this.whoSummoned.parent.localTurn - this.turnsAlive, (ISpellBridge) null, false);
           }
           break;
         case EffectorType.Sandy_Shores:
@@ -3122,7 +3135,7 @@ label_59:
         this.transform.GetComponent<SpriteRenderer>().color = (Color) new Color32(byte.MaxValue, byte.MaxValue, byte.MaxValue, this.active ? byte.MaxValue : (byte) 100);
         break;
       case EffectorType.Rising_Lava:
-        float num1 = (float) (this.map.Height * this.variable / 75);
+        float num1 = (float) (this.map.Height * this.TurnCreated / 75);
         if (this.halved)
           num1 /= 2f;
         this.transform.GetChild(0).GetComponent<SpriteRenderer>().size = new Vector2((float) this.game.map.Width, 64f);
@@ -3131,7 +3144,7 @@ label_59:
         this.transform.GetChild(1).localPosition = new Vector3(this.transform.GetChild(1).localPosition.x, num1 - 64f);
         break;
       case EffectorType.Dense_Fog:
-        float num2 = (float) -(this.map.Height * this.variable / 75);
+        float num2 = (float) -(this.map.Height * this.TurnCreated / 75);
         if (this.halved)
           num2 /= 2f;
         this.transform.GetChild(0).GetComponent<SpriteRenderer>().size = new Vector2((float) this.game.map.Width, 36f);

@@ -226,12 +226,12 @@ public class SpellLobbyChange : MonoBehaviour
     if (Prestige.ReadyToPrestige(Client.MyAccount))
     {
       if (Client.MyAccount.prestige < (byte) 2)
-        MyMessageBox.Create("Clicking 'Prestige' will reset all your spells to Arcane, Flame Levels 1 & 2, Cogs, and a book of your choosing. Set your wands to 50 and increase your prestige level by 1: giving you the next prestige hat and the ability to unlock all of the books.", (Action) (() => this.Prestiging()), "Prestige!", "Cancel", (Action) null, (Action) null, (Sprite) null);
+        MyMessageBox.Create("Clicking 'Prestige' will reset all your spells to Arcane, Flame Levels 1 & 2, Cogs, and a book of your choosing. Set your wands to 50 and increase your prestige level by 1: giving you the next prestige hat and the ability to unlock all of the books.", (Action) (() => this.Prestiging()), "Prestige!", "Cancel", (Action) null, (Action) null, (Sprite) null, (string) null, (Action) null);
       else
-        MyMessageBox.Create("Clicking 'Prestige' will reset all your spells to Arcane, Flame Levels 1 & 2, Cogs, and a book of your choosing. Set your wands to 0 and increase your prestige level by 1: giving you the next prestige hat. You <color=red>CANNOT gain wands in unrated games</color> after the second prestige.", (Action) (() => this.Prestiging()), "Prestige!", "Cancel", (Action) null, (Action) null, (Sprite) null);
+        MyMessageBox.Create("Clicking 'Prestige' will reset all your spells to Arcane, Flame Levels 1 & 2, Cogs, and a book of your choosing. Set your wands to 0 and increase your prestige level by 1: giving you the next prestige hat. You <color=red>CANNOT gain wands in unrated games</color> after the second prestige.", (Action) (() => this.Prestiging()), "Prestige!", "Cancel", (Action) null, (Action) null, (Sprite) null, (string) null, (Action) null);
     }
     else
-      MyMessageBox.Create("Clicking 'Downgrade' will decrease your prestige by 1, remove all wands you currently have and unlock all your spells. ONLY do this if you are stuck and cannot gain wands.", (Action) (() => Prestige.Ask((byte) 5, 0)), "Downgrade...", "Cancel", (Action) null, (Action) null, (Sprite) null);
+      MyMessageBox.Create("Clicking 'Downgrade' will decrease your prestige by 1, remove all wands you currently have and unlock all your spells. ONLY do this if you are stuck and cannot gain wands.", (Action) (() => Prestige.Ask((byte) 5, 0)), "Downgrade...", "Cancel", (Action) null, (Action) null, (Sprite) null, (string) null, (Action) null);
   }
 
   public void Prestiging()
@@ -729,7 +729,7 @@ public class SpellLobbyChange : MonoBehaviour
     {
       int i = Prestige.CanUnlock(Client.MyAccount, this.openBook);
       if (i == 0)
-        MyMessageBox.Create("Buy the Book of " + this.openBook.ToStringX() + " with 5 wands?", (Action) (() => Prestige.AskUnlock(this.openBook)), "Ok", "Cancel", (Action) null, (Action) null, (Sprite) null);
+        MyMessageBox.Create("Buy the Book of " + this.openBook.ToStringX() + " with 5 wands?", (Action) (() => Prestige.AskUnlock(this.openBook)), "Ok", "Cancel", (Action) null, (Action) null, (Sprite) null, (string) null, (Action) null);
       else
         MyToolTip.Show(Prestige.BookErrorCode(i), 5f);
     }

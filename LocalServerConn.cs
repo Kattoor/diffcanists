@@ -95,6 +95,7 @@ public class LocalServerConn : Catalogue
     LocalServerConn localServerConn1 = this;
     string uri = "https://pur3extreme.github.io/ServerList.json";
     bool success = false;
+    PlayerPrefs.SetString("prefserver", Client.serverIP);
     try
     {
       using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
@@ -198,7 +199,7 @@ public class LocalServerConn : Catalogue
 
   public void ResetPassword()
   {
-    Global.OpenURL("https://discord.com/api/oauth2/authorize?response_type=token&client_id=633505532753346580&redirect_uri=http%3A%2F%2F45.92.39.111%3A8080&scope=identify&state=ResetPassword");
+    Global.OpenURL("https://discord.com/api/oauth2/authorize?response_type=token&client_id=633505532753346580&redirect_uri=http%3A%2F%2F" + PlayerPrefs.GetString("prefserver", Client.serverIP) + "%3A8080&scope=identify&state=ResetPassword");
     this.panelReset.SetActive(false);
   }
 

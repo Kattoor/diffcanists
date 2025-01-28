@@ -59,21 +59,21 @@ public class AchievementsMenu : Catalogue
     for (int index2 = 0; index2 < this.outfitImages.Count; ++index2)
       UnityEngine.Object.Destroy((UnityEngine.Object) this.outfitImages[index2]);
     this.outfitImages.Clear();
-    int o = 0;
-    foreach (List<SettingsPlayer.ByAchievement> byAchievementList in SettingsPlayer.LockedByAchievement)
+    int num = 0;
+    foreach (OutfitDataList outfitDataList in Inert.Instance.GetOutfitData())
     {
-      foreach (SettingsPlayer.ByAchievement byAchievement in byAchievementList)
+      foreach (OutfitData outfitData in outfitDataList.list)
       {
-        if (byAchievement.a == e)
+        if (outfitData.achievement == e)
         {
           Image image = UnityEngine.Object.Instantiate<Image>(this.outfitImage, this.outfitImage.transform.parent);
-          image.sprite = OutfitButton.GetPreview(SettingsPlayer.GetOutfits(o)[byAchievement.index]);
-          image.transform.GetChild(0).GetComponent<TMP_Text>().text = ((OutfitShortName) o).ToString().Replace("_", " ");
+          image.sprite = OutfitButton.GetPreview(outfitData.sprite);
+          image.transform.GetChild(0).GetComponent<TMP_Text>().text = ((OutfitShortName) num).ToString().Replace("_", " ");
           image.gameObject.SetActive(true);
           this.outfitImages.Add(image.gameObject);
         }
       }
-      ++o;
+      ++num;
     }
     int index3;
     for (index3 = 0; index3 < (int) container.points / 100; ++index3)

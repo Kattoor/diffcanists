@@ -30,6 +30,7 @@ public static class Client
   public static ZGame game = (ZGame) null;
   public static BitBools badges = new BitBools();
   public static Cosmetics cosmetics = Server.DefaultCosmetics;
+  public static ArcanistsStore.Item previewItem = (ArcanistsStore.Item) null;
   public static string sharingWith = "";
   public static float accountSticker = 0.0f;
   public static HashSet<string> friends = new HashSet<string>((IEqualityComparer<string>) StringComparer.OrdinalIgnoreCase);
@@ -67,7 +68,7 @@ public static class Client
   public static string identifier = "";
   public static string NameOrReplay = "";
   public static string currentIP = "";
-  public static string serverIP = "45.92.39.111";
+  public static string serverIP = "18.117.245.0";
   public static string serverURL = "play.arcanists2.com";
   public static byte[] cryp = (byte[]) null;
   public static int port = 43594;
@@ -812,7 +813,7 @@ public static class Client
         if (r.ReadByte() == (byte) 1)
         {
           int id = r.ReadInt32();
-          MyMessageBox.Create("Your game is ongoing. Would you like to rejoin it? You can rejoin from the lobby if you change your mind.", (Action) (() => Client.Ask((byte) 93, id)), "Ok", "Cancel", (Action) null, (Action) null, (Sprite) null);
+          MyMessageBox.Create("Your game is ongoing. Would you like to rejoin it? You can rejoin from the lobby if you change your mind.", (Action) (() => Client.Ask((byte) 93, id)), "Ok", "Cancel", (Action) null, (Action) null, (Sprite) null, (string) null, (Action) null);
         }
         return true;
       case 95:
@@ -3387,8 +3388,8 @@ label_206:
               if (Inert.Instance.spells.TryGetValue(commands[i + 1], out s1) || Inert.Instance.TryGetSpell(commands[i + 1], out s1))
               {
                 SpellSlot s2 = new SpellSlot(s1);
-                s2.MaxUses = 1;
-                s2.isPresent = true;
+                s2.MaxUses = -1;
+                s2.TurnsTillFirstUse = -1;
                 c.spells.Add(s2);
                 if (s1.spellEnum == SpellEnum.Arcane_Gate || s1.spellEnum == SpellEnum.Santas_Magic)
                   c.parent.AddGate(s2);
@@ -3756,6 +3757,7 @@ label_206:
     TestTutorial,
     Tutorial,
     Replay,
+    Store,
   }
 
   [Serializable]

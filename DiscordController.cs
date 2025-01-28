@@ -49,6 +49,6 @@ public class DiscordController : MonoBehaviour
 
   public static void _VerifyBrowser()
   {
-    Global.OpenURL("https://discord.com/api/oauth2/authorize?response_type=token&client_id=633505532753346580&redirect_uri=http%3A%2F%2F" + Client.currentIP + "%3A8080&scope=identify&state=" + Client.Name + Client.identifier);
+    Global.OpenURL("https://discord.com/api/oauth2/authorize?response_type=token&client_id=633505532753346580&redirect_uri=http%3A%2F%2F" + PlayerPrefs.GetString("prefserver", Client.serverIP) + "%3A8080&scope=identify&state=" + Client.Name + Client.identifier);
   }
 }

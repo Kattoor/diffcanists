@@ -38,19 +38,68 @@ public class StoreObject : MonoBehaviour
   public Sprite spellSprite;
   public Sprite altSpellSprite;
 
+  public static SpellEnum RealEnum(SpellEnum s)
+  {
+    if (s == SpellEnum.Little_Devil)
+      return SpellEnum.Summon_Imps;
+    return s == SpellEnum.Pack_Mentality ? SpellEnum.Summon_Boar : s;
+  }
+
   public static bool OnSummon(Creature c)
   {
+    SpellEnum spellEnum = StoreObject.RealEnum(c.serverObj.spellEnum);
     List<ArcanistsStore.Item> objList = Store.Instance.Get(ArcanistsStore.Which.SpellSkin);
+    List<int> intList = new List<int>();
     try
     {
-      foreach (ActiveItem activeItem in c.parent.account.activeItems.items)
+      if (Client.joinedFrom == Client.JoinLocation.Store && Client.previewItem != null && Client.previewItem.spellEnum == spellEnum)
       {
-        if (activeItem.which == ArcanistsStore.Which.SpellSkin && objList[activeItem.index].spellEnum == c.serverObj.spellEnum)
+        bool flag = Client.previewItem.obj.Setup(c);
+        if (flag)
+          c.activeStoreObject = Client.previewItem.obj;
+        else if (c.race == CreatureRace.Undead && Client.previewItem.obj.SetupUndead(c))
         {
-          int num = objList[activeItem.index].obj.Setup(c) ? 1 : 0;
-          if (num != 0)
+          c.activeStoreObject = Client.previewItem.obj;
+          return true;
+        }
+        return flag;
+      }
+      for (int index = 0; index < c.parent.account.activeItems.items.Count; ++index)
+      {
+        ActiveItem activeItem = c.parent.account.activeItems.items[index];
+        if (activeItem.which == ArcanistsStore.Which.SpellSkin && objList[activeItem.index].spellEnum == spellEnum)
+          intList.Add(index);
+      }
+      if (intList.Count > 0)
+      {
+        int index = c.serverObj.randomNumber % intList.Count;
+        ActiveItem activeItem = c.parent.account.activeItems.items[intList[index]];
+        if (objList[activeItem.index].obj.Setup(c))
+        {
+          c.activeStoreObject = objList[activeItem.index].obj;
+          return true;
+        }
+        if (c.race == CreatureRace.Undead && objList[activeItem.index].obj.SetupUndead(c))
+        {
+          c.activeStoreObject = objList[activeItem.index].obj;
+          return true;
+        }
+      }
+      foreach (int index in intList)
+      {
+        ActiveItem activeItem = c.parent.account.activeItems.items[index];
+        if (activeItem.which == ArcanistsStore.Which.SpellSkin && objList[activeItem.index].spellEnum == spellEnum)
+        {
+          if (objList[activeItem.index].obj.Setup(c))
+          {
             c.activeStoreObject = objList[activeItem.index].obj;
-          return num != 0;
+            return true;
+          }
+          if (c.race == CreatureRace.Undead && objList[activeItem.index].obj.SetupUndead(c))
+          {
+            c.activeStoreObject = objList[activeItem.index].obj;
+            return true;
+          }
         }
       }
     }
@@ -63,17 +112,41 @@ public class StoreObject : MonoBehaviour
 
   public static bool OnUndead(Creature c, SpellEnum spellEnum)
   {
+    SpellEnum spellEnum1 = StoreObject.RealEnum(spellEnum);
     List<ArcanistsStore.Item> objList = Store.Instance.Get(ArcanistsStore.Which.SpellSkin);
+    List<int> intList = new List<int>();
     try
     {
-      foreach (ActiveItem activeItem in c.parent.account.activeItems.items)
+      if (Client.joinedFrom == Client.JoinLocation.Store && Client.previewItem != null && Client.previewItem.spellEnum == spellEnum1)
       {
-        if (activeItem.which == ArcanistsStore.Which.SpellSkin && objList[activeItem.index].spellEnum == spellEnum)
+        int num = Client.previewItem.obj.SetupUndead(c) ? 1 : 0;
+        if (num != 0)
+          c.activeStoreObject = Client.previewItem.obj;
+        return num != 0;
+      }
+      for (int index = 0; index < c.parent.account.activeItems.items.Count; ++index)
+      {
+        ActiveItem activeItem = c.parent.account.activeItems.items[index];
+        if (activeItem.which == ArcanistsStore.Which.SpellSkin && objList[activeItem.index].spellEnum == spellEnum1)
+          intList.Add(index);
+      }
+      if (intList.Count > 0)
+      {
+        int index = c.serverObj.randomNumber % intList.Count;
+        ActiveItem activeItem = c.parent.account.activeItems.items[intList[index]];
+        if (objList[activeItem.index].obj.SetupUndead(c))
         {
-          int num = objList[activeItem.index].obj.SetupUndead(c) ? 1 : 0;
-          if (num != 0)
-            c.activeStoreObject = objList[activeItem.index].obj;
-          return num != 0;
+          c.activeStoreObject = objList[activeItem.index].obj;
+          return true;
+        }
+      }
+      foreach (int index in intList)
+      {
+        ActiveItem activeItem = c.parent.account.activeItems.items[index];
+        if (objList[activeItem.index].obj.SetupUndead(c))
+        {
+          c.activeStoreObject = objList[activeItem.index].obj;
+          return true;
         }
       }
     }
@@ -89,15 +162,26 @@ public class StoreObject : MonoBehaviour
     if ((ZComponent) cre == (object) null || cre.parent == null)
       return false;
     List<ArcanistsStore.Item> objList = Store.Instance.Get(ArcanistsStore.Which.SpellSkin);
+    List<int> intList = new List<int>();
     try
     {
-      foreach (ActiveItem activeItem in cre.parent.account.activeItems.items)
+      if (Client.joinedFrom == Client.JoinLocation.Store && Client.previewItem != null && Client.previewItem.spellEnum == c.spellEnum)
       {
+        Client.previewItem.obj.Setup(c, alt);
+        return true;
+      }
+      for (int index = 0; index < cre.parent.account.activeItems.items.Count; ++index)
+      {
+        ActiveItem activeItem = cre.parent.account.activeItems.items[index];
         if (activeItem.which == ArcanistsStore.Which.SpellSkin && objList[activeItem.index].spellEnum == c.spellEnum)
-        {
-          objList[activeItem.index].obj.Setup(c, alt);
-          return true;
-        }
+          intList.Add(index);
+      }
+      if (intList.Count > 0)
+      {
+        int index = c.randomNumber % intList.Count;
+        ActiveItem activeItem = cre.parent.account.activeItems.items[intList[index]];
+        objList[activeItem.index].obj.Setup(c, alt);
+        return true;
       }
     }
     catch (Exception ex)

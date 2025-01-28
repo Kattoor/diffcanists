@@ -4,6 +4,7 @@ using Hazel;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Bson;
 using SevenZip.Compression.LZMA;
+using Steamworks;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -345,6 +346,28 @@ public static class Global
     catch (Exception ex)
     {
       UnityEngine.Debug.LogError((object) (((UnityEngine.Object) s.texture != (UnityEngine.Object) null ? (object) s.texture.name : (object) s.name).ToString() + " >>> " + (object) ex));
+    }
+  }
+
+  public static void DeleteFile(string s)
+  {
+    try
+    {
+      s.Substring(SaveFolder.persistentDataPath.Length);
+      SteamRemoteStorage.FileDelete(s);
+      return;
+    }
+    catch (Exception ex)
+    {
+      UnityEngine.Debug.Log((object) ex.ToString());
+    }
+    try
+    {
+      File.Delete(s);
+    }
+    catch (Exception ex)
+    {
+      UnityEngine.Debug.Log((object) ex.ToString());
     }
   }
 

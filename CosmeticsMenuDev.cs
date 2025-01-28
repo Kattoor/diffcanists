@@ -193,48 +193,49 @@ public class CosmeticsMenuDev : MonoBehaviour
   {
     this.container.DestroyChildern();
     this.arrayIndex = e;
-    Sprite[] sprites = (Sprite[]) null;
+    OutfitDataList sprites = (OutfitDataList) null;
+    Sprite[] sprites2 = (Sprite[]) null;
     int num = -1;
     bool spells = false;
     switch (e)
     {
       case 0:
-        sprites = ClientResources.Instance._characterBody;
+        sprites = Inert.Instance._characterBody;
         break;
       case 1:
-        sprites = ClientResources.Instance._characterHeads;
+        sprites = Inert.Instance._characterHeads;
         break;
       case 2:
-        sprites = ClientResources.Instance._characterLeftHand;
+        sprites = Inert.Instance._characterLeftHand;
         break;
       case 3:
-        sprites = ClientResources.Instance._characterRightHand;
+        sprites = Inert.Instance._characterRightHand;
         break;
       case 4:
-        sprites = ClientResources.Instance._characterHats;
+        sprites = Inert.Instance._characterHats;
         break;
       case 5:
-        sprites = ClientResources.Instance._characterBeards;
+        sprites = Inert.Instance._characterBeards;
         break;
       case 6:
-        sprites = ClientResources.Instance._spellicons;
+        sprites2 = ClientResources.Instance._spellicons;
         num = (int) (RandomExtensions.LastBook() + 1) * 12;
         spells = true;
         break;
       case 7:
-        sprites = ClientResources.Instance._achievementIcons.ToArray();
+        sprites2 = ClientResources.Instance._achievementIcons.ToArray();
         break;
       default:
         Debug.LogError((object) ("Invalid index " + (object) e));
         return;
     }
     if (num < 0)
-      num = sprites.Length;
+      num = sprites != null ? sprites.Length : sprites2.Length;
     for (int index = 0; index < num; ++index)
     {
       RectTransform rectTransform = Object.Instantiate<RectTransform>(this.pfabItem, (Transform) this.container);
       rectTransform.anchoredPosition = new Vector2((float) (index % 30 * 33 + 5), (float) (index / 30 * -33 - 5));
-      rectTransform.GetComponent<Image>().sprite = sprites[index];
+      rectTransform.GetComponent<Image>().sprite = sprites != null ? (Sprite) sprites[index] : sprites2[index];
       rectTransform.gameObject.SetActive(true);
       UIOnHover u = rectTransform.GetComponent<UIOnHover>();
       byte y = (byte) index;
@@ -245,7 +246,7 @@ public class CosmeticsMenuDev : MonoBehaviour
         u.AlwaysOn = spells ? !flag : flag;
         this.DisplayUpdated();
       }));
-      u.onEnter.AddListener((UnityAction) (() => MyToolTip.Show(sprites[(int) y].name, -1f)));
+      u.onEnter.AddListener((UnityAction) (() => MyToolTip.Show(sprites != null ? sprites[(int) y].name : sprites2[(int) y].name, -1f)));
       u.onExit.AddListener((UnityAction) (() => MyToolTip.Close()));
       u.AlwaysOn = spells ? !this.cosmetics.array[this.arrayIndex][(int) y] : this.cosmetics.array[this.arrayIndex][(int) y];
     }

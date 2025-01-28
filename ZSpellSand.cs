@@ -255,7 +255,7 @@ label_31:
             velocity.y = (FixedInt) 0;
             velocity.x = (FixedInt) 0;
             position = new MyLocation(x2, y2);
-            zcreature.ApplyDamage(spell.spellEnum, spell.damageType, spell.damage, parent, game.turn, (ISpellBridge) spell, false);
+            zcreature.ApplyDamage(spell.spellEnum, spell.damageType, 1, parent, game.turn, (ISpellBridge) spell, false);
             yield break;
           }
           else

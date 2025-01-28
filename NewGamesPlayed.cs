@@ -111,22 +111,22 @@ public class NewGamesPlayed
 
   public float GetWinPercent()
   {
-    return this.totalRatedGames <= 0 ? 0.0f : (float) ((double) this.ratedGamesWon / (double) this.totalRatedGames * 100.0);
+    return this.totalRatedGames <= 0 ? 0.0f : (float) ((double) this.ratedGamesWon / (double) this.totalRatedGames * 10000.0);
   }
 
   public float GetDrawPercent()
   {
-    return this.totalRatedGames <= 0 ? 0.0f : (float) ((double) this.draws / (double) this.totalRatedGames * 100.0);
+    return this.totalRatedGames <= 0 ? 0.0f : (float) ((double) this.draws / (double) this.totalRatedGames * 10000.0);
   }
 
   public float GetLossPercent()
   {
-    return this.totalRatedGames <= 0 ? 0.0f : (float) ((double) (this.totalRatedGames - this.ratedGamesWon - this.draws) / (double) this.totalRatedGames * 100.0);
+    return this.totalRatedGames <= 0 ? 0.0f : (float) ((double) (this.totalRatedGames - this.ratedGamesWon - this.draws) / (double) this.totalRatedGames * 10000.0);
   }
 
   public int GetFirstTurnWinPercentage()
   {
-    return (int) ((double) this.gamesWentFirstWon / (double) this.gamesWentFirst * 100.0);
+    return (int) ((double) this.gamesWentFirstWon / (double) this.gamesWentFirst * 10000.0);
   }
 
   public void Update(

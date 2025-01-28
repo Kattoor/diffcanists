@@ -43,6 +43,17 @@ public static class Armageddon
     return zcreatureList.Count <= 0 ? (ZCreature) null : zcreatureList[p.game.RandomInt(0, zcreatureList.Count)];
   }
 
+  public static int CountCustomArmageddon(ZGame game, SpellEnum spell)
+  {
+    int num = 0;
+    foreach (SpellEnum spellEnum in game.gameFacts.settings.customArmageddon)
+    {
+      if (spellEnum == spell)
+        ++num;
+    }
+    return num;
+  }
+
   public static void CustomArmageddon(ZPerson p)
   {
     if (p.game.customArmageddon == null)
@@ -195,7 +206,7 @@ public static class Armageddon
 
   private static void Desert(ZPerson p)
   {
-    if (p.localTurn % 2 != 0 && p.localTurn <= 20)
+    if ((p.localTurn > 20 || p.localTurn % 4 != 0) && (p.localTurn <= 20 || p.localTurn > 40 || p.localTurn % 3 != 0) && (p.localTurn <= 40 || p.localTurn % 2 != 0))
       return;
     int xInt = p.game.RandomInt(100, Mathf.Min(p.map.Width - 100, Mathf.Max(1, p.localTurn - p.game.armageddonTurn) * 100));
     if (p.game.RandomInt(0, 10) >= 5)

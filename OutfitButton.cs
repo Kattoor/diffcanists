@@ -1,6 +1,5 @@
 
 using Hazel;
-using System;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -60,48 +59,36 @@ public class OutfitButton : MonoBehaviour
       CharacterCreation.Instance.outfitHoverObj.gameObject.SetActive(true);
     }
     Outfit viewing = CharacterCreation.GetViewing(CharacterCreation.Instance.viewing);
-    if (viewing >= Outfit.LeftFoot || !CharacterCreation.Instance.optionNoTooltips.isOn || SettingsPlayer.CheckAlwaysUnlocked(viewing, this.index))
+    OutfitData outfitData = Inert.Instance.GetOutfit(viewing)[this.index];
+    if (viewing >= Outfit.LeftFoot || !CharacterCreation.Instance.optionNoTooltips.isOn || !outfitData.isLocked)
       return;
-    Achievement achievement = SettingsPlayer.CheckAchievements(viewing, (int) (byte) this.index);
-    if (achievement != Achievement.None)
+    if (outfitData.achievement != Achievement.None)
+      MyToolTip.Show("Achievement required: <#00FFFF>" + Achievements.list[(int) outfitData.achievement].name + this.ExtraHoverInfo(), -1f);
+    else if (outfitData.accountType != AccountType.None)
+      MyToolTip.Show("Account role required: <#FF0000>" + outfitData.accountType.GetFirstFlags().Replace("_", " ") + this.ExtraHoverInfo(), -1f);
+    else if (outfitData.prestige > 0)
+      MyToolTip.Show(string.Format("Prestige: <#00FF00>{0}</color>", (object) outfitData.prestige) + this.ExtraHoverInfo(), -1f);
+    else if (outfitData.experience > 0)
+      MyToolTip.Show(string.Format("Experience Level: <#00FF00>{0}</color>", (object) outfitData.experience) + this.ExtraHoverInfo(), -1f);
+    else if (outfitData.tournament > 0)
+      MyToolTip.Show(string.Format("<sprite name=\"tcoin\"> Tournament Coins: <#00FF00>{0}</color>", (object) outfitData.tournament) + this.ExtraHoverInfo(), -1f);
+    else if (outfitData.season == Server.ServerSettings.Season.Halloween)
+      MyToolTip.Show("Seasonal login reward: <#FF8A00>Halloween</color>" + this.ExtraHoverInfo(), -1f);
+    else if (outfitData.season == Server.ServerSettings.Season.Thanksgiving)
+      MyToolTip.Show("Seasonal login reward: <#874400>Thanksgiving</color>" + this.ExtraHoverInfo(), -1f);
+    else if (outfitData.season == Server.ServerSettings.Season.Easter)
+      MyToolTip.Show("Seasonal login reward: <#4444FF>Easter</color>" + this.ExtraHoverInfo(), -1f);
+    else if (outfitData.season == Server.ServerSettings.Season.Christmas)
+      MyToolTip.Show("Seasonal login reward: <#44FF00>Christmas</color>" + this.ExtraHoverInfo(), -1f);
+    else if (!string.IsNullOrEmpty(Inert.Instance.GetOutfit(viewing)[this.index].reason))
     {
-      MyToolTip.Show("Achievement required: <#00FFFF>" + Achievements.list[(int) achievement].name + this.ExtraHoverInfo(), -1f);
+      MyToolTip.Show("Reward: " + Inert.Instance.GetOutfit(viewing)[this.index].reason + this.ExtraHoverInfo(), -1f);
     }
     else
     {
-      AccountType accountType = SettingsPlayer.CheckAccountType(viewing, this.index);
-      if (accountType != AccountType.None)
-      {
-        MyToolTip.Show("Account role required: <#FF0000>" + accountType.GetFirstFlags().Replace("_", " ") + this.ExtraHoverInfo(), -1f);
-      }
-      else
-      {
-        int num1 = SettingsPlayer.CheckPrestige(viewing, this.index);
-        int num2 = SettingsPlayer.CheckExperience(viewing, this.index);
-        int num3 = SettingsPlayer.CheckTournament(viewing, this.index);
-        if (num1 > 0)
-          MyToolTip.Show(string.Format("Prestige: <#00FF00>{0}</color>", (object) num1) + this.ExtraHoverInfo(), -1f);
-        else if (num2 > 0)
-          MyToolTip.Show(string.Format("Experience Level: <#00FF00>{0}</color>", (object) num2) + this.ExtraHoverInfo(), -1f);
-        else if (num3 > 0)
-          MyToolTip.Show(string.Format("<sprite name=\"tcoin\"> Tournament Coins: <#00FF00>{0}</color>", (object) num3) + this.ExtraHoverInfo(), -1f);
-        else if (SettingsPlayer.seasonHalloween.Find((Predicate<SettingsPlayer.Seasonal>) (z => z.outfit == this.outfit && z.index == this.index)) != null)
-          MyToolTip.Show("Seasonal login reward: <#FF8A00>Halloween</color>" + this.ExtraHoverInfo(), -1f);
-        else if (SettingsPlayer.seasonThanksgiving.Find((Predicate<SettingsPlayer.Seasonal>) (z => z.outfit == this.outfit && z.index == this.index)) != null)
-          MyToolTip.Show("Seasonal login reward: <#874400>Thanksgiving</color>" + this.ExtraHoverInfo(), -1f);
-        else if (SettingsPlayer.seasonEaster.Find((Predicate<SettingsPlayer.Seasonal>) (z => z.outfit == this.outfit && z.index == this.index)) != null)
-          MyToolTip.Show("Seasonal login reward: <#4444FF>Easter</color>" + this.ExtraHoverInfo(), -1f);
-        else if (SettingsPlayer.seasonChristmas.Find((Predicate<SettingsPlayer.Seasonal>) (z => z.outfit == this.outfit && z.index == this.index)) != null)
-        {
-          MyToolTip.Show("Seasonal login reward: <#44FF00>Christmas</color>" + this.ExtraHoverInfo(), -1f);
-        }
-        else
-        {
-          if (Client.cosmetics.array[(int) viewing][(int) (byte) this.index])
-            return;
-          MyToolTip.Show("Locked due to limited availability." + this.ExtraHoverInfo(), -1f);
-        }
-      }
+      if (Client.cosmetics.array[(int) viewing][(int) (byte) this.index] || !Inert.Instance.GetOutfit(viewing)[this.index].isLocked)
+        return;
+      MyToolTip.Show("Locked due to limited availability." + this.ExtraHoverInfo(), -1f);
     }
   }
 

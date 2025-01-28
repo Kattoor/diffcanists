@@ -14,8 +14,8 @@ public class WerewolfObject : MonoBehaviour
     Color32 gray = settingsPlayer.coloring.colors[0].gray;
     settingsPlayer.coloring.colors[0].gray = settingsPlayer.coloring.colors[0].red;
     ClanOutfit clanOutfit = ClientResources.Instance.GetClanOutfit(Client.GetAccount(name, false).clan);
-    this.leftArm.sprite = ConfigurePlayer.GetSprite(settingsPlayer.indexLeftHand, ClientResources.Instance._characterLeftHand, settingsPlayer, Outfit.LeftHand, settingsPlayer.textures?[2] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexLeftHand, Outfit.LeftHand));
-    this.rightArm.sprite = ConfigurePlayer.GetSprite(settingsPlayer.indexRightHand, ClientResources.Instance._characterRightHand, settingsPlayer, Outfit.RightHand, settingsPlayer.textures?[3] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexRightHand, Outfit.RightHand));
+    this.leftArm.sprite = ConfigurePlayer.GetSprite(settingsPlayer.indexLeftHand, Inert.Instance._characterLeftHand, settingsPlayer, Outfit.LeftHand, settingsPlayer.textures?[2] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexLeftHand, Outfit.LeftHand));
+    this.rightArm.sprite = ConfigurePlayer.GetSprite(settingsPlayer.indexRightHand, Inert.Instance._characterRightHand, settingsPlayer, Outfit.RightHand, settingsPlayer.textures?[3] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexRightHand, Outfit.RightHand));
     foreach (SpriteRenderer componentsInChild in this.GetComponentsInChildren<SpriteRenderer>())
     {
       if ((Object) componentsInChild.sprite != (Object) null && componentsInChild.sprite.texture.isReadable)

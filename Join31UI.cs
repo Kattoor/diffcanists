@@ -112,6 +112,18 @@ public class Join31UI : MonoBehaviour, IMiniGameUI
     Join31UI.Instance.useAudio = Global.GetPrefBool("prefchessaudio", true);
     Join31UI.Instance.buttonAudio.AlwaysOn = !Join31UI.Instance.useAudio;
     Join31UI.Instance.board.gameObject = (IMiniGameUI) Join31UI.Instance;
+    Join31Board.Cell[,] allCells = b.AllCells;
+    int upperBound1 = allCells.GetUpperBound(0);
+    int upperBound2 = allCells.GetUpperBound(1);
+    for (int lowerBound1 = allCells.GetLowerBound(0); lowerBound1 <= upperBound1; ++lowerBound1)
+    {
+      for (int lowerBound2 = allCells.GetLowerBound(1); lowerBound2 <= upperBound2; ++lowerBound2)
+      {
+        Join31Board.Cell x = allCells[lowerBound1, lowerBound2];
+        if (x.Piece != null)
+          Join31UI.Instance?.CreateImage(x);
+      }
+    }
   }
 
   public void ToggleAudio()

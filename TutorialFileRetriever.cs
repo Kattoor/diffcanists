@@ -100,7 +100,7 @@ public class TutorialFileRetriever
       {
         if (!stringSet.Contains(files[index1]))
         {
-          File.Delete(files[index1]);
+          Global.DeleteFile(files[index1]);
           Debug.Log((object) ("Deleted: " + files[index1]));
         }
       }

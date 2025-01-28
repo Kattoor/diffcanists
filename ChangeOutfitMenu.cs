@@ -106,7 +106,7 @@ public class ChangeOutfitMenu : MonoBehaviour
   {
     if ((UnityEngine.Object) this.selectedGameObject == (UnityEngine.Object) null)
       return;
-    File.Delete(this.selectedFilePath);
+    Global.DeleteFile(this.selectedFilePath);
     UnityEngine.Object.Destroy((UnityEngine.Object) this.selectedGameObject);
     this.selectedGameObject = (GameObject) null;
     this.buttonDelete.Interactable(false);
@@ -157,7 +157,7 @@ public class ChangeOutfitMenu : MonoBehaviour
     }), (string) null, false)), (Color) ColorScheme.GetColor(MyContextMenu.ColorYellow));
     myContextMenu.AddItem("Delete " + Path.GetFileNameWithoutExtension(s), (Action) (() =>
     {
-      File.Delete(s);
+      Global.DeleteFile(s);
       UnityEngine.Object.Destroy((UnityEngine.Object) gameObject);
     }), (Color) ColorScheme.GetColor(MyContextMenu.ColorRed));
     myContextMenu.Rebuild(false);

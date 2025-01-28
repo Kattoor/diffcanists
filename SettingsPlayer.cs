@@ -73,681 +73,6 @@ public class SettingsPlayer
       new SettingsPlayer.ByDust(68, 100, "Olympic Gold Medal")
     }
   };
-  public static List<List<SettingsPlayer.ByReason>> LockedByReason = new List<List<SettingsPlayer.ByReason>>()
-  {
-    new List<SettingsPlayer.ByReason>()
-    {
-      new SettingsPlayer.ByReason(146, "Played before the rate split")
-    },
-    new List<SettingsPlayer.ByReason>(),
-    new List<SettingsPlayer.ByReason>()
-    {
-      new SettingsPlayer.ByReason((int) sbyte.MaxValue, "Played before the rate split")
-    },
-    new List<SettingsPlayer.ByReason>(),
-    new List<SettingsPlayer.ByReason>()
-    {
-      new SettingsPlayer.ByReason(165, "Played before the rate split")
-    },
-    new List<SettingsPlayer.ByReason>()
-  };
-  public static List<List<SettingsPlayer.ByAchievement>> LockedByAchievement = new List<List<SettingsPlayer.ByAchievement>>()
-  {
-    new List<SettingsPlayer.ByAchievement>()
-    {
-      new SettingsPlayer.ByAchievement(24, Achievement.High_Mage),
-      new SettingsPlayer.ByAchievement(25, Achievement.High_Mage),
-      new SettingsPlayer.ByAchievement(26, Achievement.High_Mage),
-      new SettingsPlayer.ByAchievement(27, Achievement.Arch_Mage),
-      new SettingsPlayer.ByAchievement(28, Achievement.Arch_Mage),
-      new SettingsPlayer.ByAchievement(29, Achievement.Arch_Mage),
-      new SettingsPlayer.ByAchievement(80, Achievement.Axing_for_Trouble),
-      new SettingsPlayer.ByAchievement(86, Achievement.Just_a_Flesh_Wound),
-      new SettingsPlayer.ByAchievement(71, Achievement.Arch_Mage),
-      new SettingsPlayer.ByAchievement(77, Achievement.High_Mage),
-      new SettingsPlayer.ByAchievement(87, Achievement.You_got_the_Touch),
-      new SettingsPlayer.ByAchievement(88, Achievement.Kraken_Guard),
-      new SettingsPlayer.ByAchievement(90, Achievement.Block_out_the_sun),
-      new SettingsPlayer.ByAchievement(91, Achievement.Block_out_the_sun),
-      new SettingsPlayer.ByAchievement(94, Achievement.Seas_Arcanist),
-      new SettingsPlayer.ByAchievement(95, Achievement.Blood_Arcanist),
-      new SettingsPlayer.ByAchievement(96, Achievement.Blood_Arcanist),
-      new SettingsPlayer.ByAchievement(97, Achievement.Master_Team_Leader),
-      new SettingsPlayer.ByAchievement(102, Achievement.Overlight_Arcanist),
-      new SettingsPlayer.ByAchievement(106, Achievement.Soul_Drain),
-      new SettingsPlayer.ByAchievement(107, Achievement.Nature_Arcanist),
-      new SettingsPlayer.ByAchievement(108, Achievement.Claustrophobia),
-      new SettingsPlayer.ByAchievement(111, Achievement.Master_of_Arcanists),
-      new SettingsPlayer.ByAchievement(112, Achievement.Mage),
-      new SettingsPlayer.ByAchievement(113, Achievement.Lord_of_Wands),
-      new SettingsPlayer.ByAchievement(114, Achievement.Lord_of_Wands),
-      new SettingsPlayer.ByAchievement(115, Achievement.Frost_Arcanist),
-      new SettingsPlayer.ByAchievement(116, Achievement.Master_of_Seas),
-      new SettingsPlayer.ByAchievement(117, Achievement.Master_of_Seas),
-      new SettingsPlayer.ByAchievement(118, Achievement.Flame_Arcanist),
-      new SettingsPlayer.ByAchievement(119, Achievement.Paper_Bag),
-      new SettingsPlayer.ByAchievement(120, Achievement.Block_out_the_sun),
-      new SettingsPlayer.ByAchievement(121, Achievement.Glider),
-      new SettingsPlayer.ByAchievement(122, Achievement.Champion_of_Magic),
-      new SettingsPlayer.ByAchievement(123, Achievement.Seasons_Arcanist),
-      new SettingsPlayer.ByAchievement(124, Achievement.Master_of_Imps),
-      new SettingsPlayer.ByAchievement(126, Achievement.Druidism_Arcanist),
-      new SettingsPlayer.ByAchievement((int) sbyte.MaxValue, Achievement.Arch_Mage),
-      new SettingsPlayer.ByAchievement(134, Achievement.Lord_of_Wands),
-      new SettingsPlayer.ByAchievement(135, Achievement.Wand_Hoarder),
-      new SettingsPlayer.ByAchievement(145, Achievement.Diplomat),
-      new SettingsPlayer.ByAchievement(147, Achievement.High_Mage_Thinker),
-      new SettingsPlayer.ByAchievement(148, Achievement.High_Mage_Blitzer),
-      new SettingsPlayer.ByAchievement(149, Achievement.Swift_Arch_Mage),
-      new SettingsPlayer.ByAchievement(150, Achievement.Swift_Arch_Mage),
-      new SettingsPlayer.ByAchievement(151, Achievement.Methodical_Arch_Mage),
-      new SettingsPlayer.ByAchievement(152, Achievement.Lively_Arch_Mage),
-      new SettingsPlayer.ByAchievement(153, Achievement.Lively_Arch_Mage),
-      new SettingsPlayer.ByAchievement(154, Achievement.Supreme_Arch_Mage),
-      new SettingsPlayer.ByAchievement(155, Achievement.Supreme_Arch_Mage),
-      new SettingsPlayer.ByAchievement(156, Achievement.Supreme_Arch_Mage),
-      new SettingsPlayer.ByAchievement(157, Achievement.Supreme_Arch_Mage),
-      new SettingsPlayer.ByAchievement(158, Achievement.It_s_Alive_),
-      new SettingsPlayer.ByAchievement(159, Achievement.Ice_Hot),
-      new SettingsPlayer.ByAchievement(160, Achievement.Multi_Dunk_),
-      new SettingsPlayer.ByAchievement(162, Achievement.High_Mage_Partier),
-      new SettingsPlayer.ByAchievement(163, Achievement.High_Mage_Partier),
-      new SettingsPlayer.ByAchievement(164, Achievement.With_the_Fishies),
-      new SettingsPlayer.ByAchievement(165, Achievement.Lord_of_Dragons),
-      new SettingsPlayer.ByAchievement(166, Achievement.Lord_of_Dragons),
-      new SettingsPlayer.ByAchievement(167, Achievement.Sand_Arcanists),
-      new SettingsPlayer.ByAchievement(170, Achievement.Divided_World),
-      new SettingsPlayer.ByAchievement(171, Achievement.Storm_Arcanist),
-      new SettingsPlayer.ByAchievement(172, Achievement.Storm_Arcanist),
-      new SettingsPlayer.ByAchievement(173, Achievement.Overlight_Arcanist),
-      new SettingsPlayer.ByAchievement(174, Achievement.Overlight_Arcanist),
-      new SettingsPlayer.ByAchievement(175, Achievement.Stone_Arcanist),
-      new SettingsPlayer.ByAchievement(176, Achievement.Stone_Arcanist),
-      new SettingsPlayer.ByAchievement(177, Achievement.Frost_Arcanist)
-    },
-    new List<SettingsPlayer.ByAchievement>()
-    {
-      new SettingsPlayer.ByAchievement(73, Achievement.Kraken_Guard),
-      new SettingsPlayer.ByAchievement(82, Achievement.Master_of_Seas),
-      new SettingsPlayer.ByAchievement(83, Achievement.Master_of_Seas),
-      new SettingsPlayer.ByAchievement(84, Achievement.Lord_of_Wands),
-      new SettingsPlayer.ByAchievement(85, Achievement.Lord_of_Wands),
-      new SettingsPlayer.ByAchievement(87, Achievement.Master_of_Minions),
-      new SettingsPlayer.ByAchievement(88, Achievement.Master_of_Imps),
-      new SettingsPlayer.ByAchievement(95, Achievement.Diplomat),
-      new SettingsPlayer.ByAchievement(96, Achievement.High_Mage_Blitzer),
-      new SettingsPlayer.ByAchievement(97, Achievement.High_Mage_Blitzer),
-      new SettingsPlayer.ByAchievement(98, Achievement.Wrath_Wreaker),
-      new SettingsPlayer.ByAchievement(99, Achievement.Swift_Arch_Mage),
-      new SettingsPlayer.ByAchievement(101, Achievement.Master_Diplomat),
-      new SettingsPlayer.ByAchievement(102, Achievement.Master_of_Sand),
-      new SettingsPlayer.ByAchievement(106, Achievement.Nature_Arcanist)
-    },
-    new List<SettingsPlayer.ByAchievement>()
-    {
-      new SettingsPlayer.ByAchievement(24, Achievement.High_Mage),
-      new SettingsPlayer.ByAchievement(25, Achievement.High_Mage),
-      new SettingsPlayer.ByAchievement(26, Achievement.High_Mage),
-      new SettingsPlayer.ByAchievement(27, Achievement.Swift_Arch_Mage),
-      new SettingsPlayer.ByAchievement(28, Achievement.Arch_Mage),
-      new SettingsPlayer.ByAchievement(29, Achievement.Methodical_Arch_Mage),
-      new SettingsPlayer.ByAchievement(79, Achievement.Axing_for_Trouble),
-      new SettingsPlayer.ByAchievement(85, Achievement.Mark_of_Fame),
-      new SettingsPlayer.ByAchievement(84, Achievement.High_Mage),
-      new SettingsPlayer.ByAchievement(89, Achievement.You_got_the_Touch),
-      new SettingsPlayer.ByAchievement(90, Achievement.Kraken_Guard),
-      new SettingsPlayer.ByAchievement(92, Achievement._3rd_Dimension),
-      new SettingsPlayer.ByAchievement(93, Achievement.Glider),
-      new SettingsPlayer.ByAchievement(94, Achievement.Explosives_Expert),
-      new SettingsPlayer.ByAchievement(95, Achievement.Guardian_of_Souls),
-      new SettingsPlayer.ByAchievement(96, Achievement.Page_Turner),
-      new SettingsPlayer.ByAchievement(98, Achievement.Seas_Arcanist),
-      new SettingsPlayer.ByAchievement(99, Achievement.Sniper),
-      new SettingsPlayer.ByAchievement(108, Achievement.Frost_Arcanist),
-      new SettingsPlayer.ByAchievement(111, Achievement.Master_of_Seas),
-      new SettingsPlayer.ByAchievement(112, Achievement.Master_of_Arcanists),
-      new SettingsPlayer.ByAchievement(113, Achievement.Master_of_Seas),
-      new SettingsPlayer.ByAchievement(114, Achievement.Master_of_Nature),
-      new SettingsPlayer.ByAchievement(115, Achievement.Master_of_Minions),
-      new SettingsPlayer.ByAchievement(116, Achievement.Champion_of_Magic),
-      new SettingsPlayer.ByAchievement(117, Achievement.Master_of_Imps),
-      new SettingsPlayer.ByAchievement(119, Achievement.Cursed_Earth),
-      new SettingsPlayer.ByAchievement(120, Achievement.Druidism_Arcanist),
-      new SettingsPlayer.ByAchievement(121, Achievement.Arch_Mage),
-      new SettingsPlayer.ByAchievement(128, Achievement.High_Mage_Blitzer),
-      new SettingsPlayer.ByAchievement(129, Achievement.High_Mage_Partier),
-      new SettingsPlayer.ByAchievement(130, Achievement.Lively_Arch_Mage),
-      new SettingsPlayer.ByAchievement(131, Achievement.SMASH_),
-      new SettingsPlayer.ByAchievement(132, Achievement.Whiter_than_White),
-      new SettingsPlayer.ByAchievement(133, Achievement.It_s_Alive_),
-      new SettingsPlayer.ByAchievement(134, Achievement.It_s_Alive_),
-      new SettingsPlayer.ByAchievement(135, Achievement.Ice_Hot),
-      new SettingsPlayer.ByAchievement(136, Achievement.Ice_Hot),
-      new SettingsPlayer.ByAchievement(137, Achievement.Multi_Dunk_),
-      new SettingsPlayer.ByAchievement(138, Achievement.Comet_Chucker),
-      new SettingsPlayer.ByAchievement(139, Achievement.Volcanic_Volleyer),
-      new SettingsPlayer.ByAchievement(140, Achievement.Fissure_Finisher),
-      new SettingsPlayer.ByAchievement(143, Achievement.Lively_Arch_Mage),
-      new SettingsPlayer.ByAchievement(144, Achievement.With_the_Fishies),
-      new SettingsPlayer.ByAchievement(145, Achievement.Turing_Machine),
-      new SettingsPlayer.ByAchievement(146, Achievement.Skimmer),
-      new SettingsPlayer.ByAchievement(150, Achievement.Overlight_Arcanist),
-      new SettingsPlayer.ByAchievement(151, Achievement.Cogs_Arcanist)
-    },
-    new List<SettingsPlayer.ByAchievement>()
-    {
-      new SettingsPlayer.ByAchievement(24, Achievement.High_Mage),
-      new SettingsPlayer.ByAchievement(25, Achievement.High_Mage),
-      new SettingsPlayer.ByAchievement(26, Achievement.High_Mage),
-      new SettingsPlayer.ByAchievement(27, Achievement.Swift_Arch_Mage),
-      new SettingsPlayer.ByAchievement(28, Achievement.Arch_Mage),
-      new SettingsPlayer.ByAchievement(29, Achievement.Methodical_Arch_Mage),
-      new SettingsPlayer.ByAchievement(75, Achievement.High_Mage),
-      new SettingsPlayer.ByAchievement(82, Achievement.Axing_for_Trouble),
-      new SettingsPlayer.ByAchievement(85, Achievement.Master_of_Flame),
-      new SettingsPlayer.ByAchievement(90, Achievement.Circle_of_Death),
-      new SettingsPlayer.ByAchievement(91, Achievement.Mark_of_Fame),
-      new SettingsPlayer.ByAchievement(87, Achievement.High_Mage),
-      new SettingsPlayer.ByAchievement(94, Achievement.Master_of_Arcanists),
-      new SettingsPlayer.ByAchievement(96, Achievement.Nature_Arcanist),
-      new SettingsPlayer.ByAchievement(98, Achievement.Turing_Machine),
-      new SettingsPlayer.ByAchievement(99, Achievement.Seas_Arcanist),
-      new SettingsPlayer.ByAchievement(101, Achievement.You_got_the_Touch),
-      new SettingsPlayer.ByAchievement(102, Achievement.Apprentice),
-      new SettingsPlayer.ByAchievement(100, Achievement.Paper_Bag),
-      new SettingsPlayer.ByAchievement(106, Achievement.Kraken_Guard),
-      new SettingsPlayer.ByAchievement(109, Achievement.Axing_for_Trouble),
-      new SettingsPlayer.ByAchievement(110, Achievement.Blade_Master),
-      new SettingsPlayer.ByAchievement(112, Achievement.Celestial_Lord),
-      new SettingsPlayer.ByAchievement(113, Achievement.Icarus),
-      new SettingsPlayer.ByAchievement(114, Achievement.Master_of_Monkeys),
-      new SettingsPlayer.ByAchievement(122, Achievement.Master_of_Elements),
-      new SettingsPlayer.ByAchievement(124, Achievement.Overlight_Arcanist),
-      new SettingsPlayer.ByAchievement(125, Achievement.Blood_Arcanist),
-      new SettingsPlayer.ByAchievement(126, Achievement.Soul_Drain),
-      new SettingsPlayer.ByAchievement((int) sbyte.MaxValue, Achievement.Nature_Arcanist),
-      new SettingsPlayer.ByAchievement(129, Achievement.Master_of_Arcanists),
-      new SettingsPlayer.ByAchievement(130, Achievement.Blade_Master),
-      new SettingsPlayer.ByAchievement(131, Achievement.Lord_of_Wands),
-      new SettingsPlayer.ByAchievement(132, Achievement.Frost_Arcanist),
-      new SettingsPlayer.ByAchievement(134, Achievement.Flame_Arcanist),
-      new SettingsPlayer.ByAchievement(135, Achievement.Master_of_Minions),
-      new SettingsPlayer.ByAchievement(136, Achievement.Master_of_Darkness),
-      new SettingsPlayer.ByAchievement(78, Achievement.Arch_Mage),
-      new SettingsPlayer.ByAchievement(138, Achievement.Overlight_Arcanist),
-      new SettingsPlayer.ByAchievement(139, Achievement.Cursed_Earth),
-      new SettingsPlayer.ByAchievement(140, Achievement.Blood_Arcanist),
-      new SettingsPlayer.ByAchievement(141, Achievement.Drop_Shot),
-      new SettingsPlayer.ByAchievement(142, Achievement.Seasons_Arcanist),
-      new SettingsPlayer.ByAchievement(143, Achievement.Champion_of_Magic),
-      new SettingsPlayer.ByAchievement(137, Achievement.Master_of_Imps),
-      new SettingsPlayer.ByAchievement(147, Achievement.Druidism_Arcanist),
-      new SettingsPlayer.ByAchievement(167, Achievement.Natural_Spaghetti),
-      new SettingsPlayer.ByAchievement(168, Achievement.Diplomat),
-      new SettingsPlayer.ByAchievement(169, Achievement.Whiter_than_White),
-      new SettingsPlayer.ByAchievement(170, Achievement.High_Mage_Blitzer),
-      new SettingsPlayer.ByAchievement(171, Achievement.High_Mage_Thinker),
-      new SettingsPlayer.ByAchievement(172, Achievement.High_Mage_Partier),
-      new SettingsPlayer.ByAchievement(173, Achievement.Lively_Arch_Mage),
-      new SettingsPlayer.ByAchievement(174, Achievement.Supreme_Arch_Mage),
-      new SettingsPlayer.ByAchievement(175, Achievement.SMASH_),
-      new SettingsPlayer.ByAchievement(176, Achievement.Ice_Hot),
-      new SettingsPlayer.ByAchievement(177, Achievement.Ice_Hot),
-      new SettingsPlayer.ByAchievement(178, Achievement.Multi_Dunk_),
-      new SettingsPlayer.ByAchievement(179, Achievement.Crazy),
-      new SettingsPlayer.ByAchievement(181, Achievement.Seasons_Arcanist),
-      new SettingsPlayer.ByAchievement(182, Achievement.Guardian_of_Souls),
-      new SettingsPlayer.ByAchievement(183, Achievement.Master_of_Nature),
-      new SettingsPlayer.ByAchievement(184, Achievement.Dust_to_Dust),
-      new SettingsPlayer.ByAchievement(185, Achievement.Sand_Arcanists),
-      new SettingsPlayer.ByAchievement(189, Achievement.Divided_World),
-      new SettingsPlayer.ByAchievement(190, Achievement.Overlight_Arcanist),
-      new SettingsPlayer.ByAchievement(191, Achievement.Cogs_Arcanist),
-      new SettingsPlayer.ByAchievement(192, Achievement.Stone_Arcanist)
-    },
-    new List<SettingsPlayer.ByAchievement>()
-    {
-      new SettingsPlayer.ByAchievement(42, Achievement.Enchanter),
-      new SettingsPlayer.ByAchievement(43, Achievement.Apprentice),
-      new SettingsPlayer.ByAchievement(44, Achievement.Acolyte),
-      new SettingsPlayer.ByAchievement(45, Achievement.Mage),
-      new SettingsPlayer.ByAchievement(46, Achievement.High_Mage),
-      new SettingsPlayer.ByAchievement(47, Achievement.Arch_Mage),
-      new SettingsPlayer.ByAchievement(83, Achievement.Axing_for_Trouble),
-      new SettingsPlayer.ByAchievement(77, Achievement.Mark_of_Fame),
-      new SettingsPlayer.ByAchievement(101, Achievement.Didn_t_see_that_coming),
-      new SettingsPlayer.ByAchievement(106, Achievement.You_got_the_Touch),
-      new SettingsPlayer.ByAchievement(108, Achievement.Block_out_the_sun),
-      new SettingsPlayer.ByAchievement(110, Achievement.Master_Team_Leader),
-      new SettingsPlayer.ByAchievement(113, Achievement.Master_of_Seas),
-      new SettingsPlayer.ByAchievement(114, Achievement.Master_of_Seas),
-      new SettingsPlayer.ByAchievement(115, Achievement.Frost_Arcanist),
-      new SettingsPlayer.ByAchievement(116, Achievement.Blood_Arcanist),
-      new SettingsPlayer.ByAchievement(118, Achievement.Master_of_Nature),
-      new SettingsPlayer.ByAchievement(120, Achievement.Panoramic_View),
-      new SettingsPlayer.ByAchievement(121, Achievement.Panoramic_View),
-      new SettingsPlayer.ByAchievement(125, Achievement.Master_of_Arcanists),
-      new SettingsPlayer.ByAchievement(126, Achievement.Mage),
-      new SettingsPlayer.ByAchievement((int) sbyte.MaxValue, Achievement.Flame_Arcanist),
-      new SettingsPlayer.ByAchievement((int) sbyte.MaxValue, Achievement.Frost_Arcanist),
-      new SettingsPlayer.ByAchievement((int) sbyte.MaxValue, Achievement.Nature_Arcanist),
-      new SettingsPlayer.ByAchievement(128, Achievement.Master_of_Minions),
-      new SettingsPlayer.ByAchievement(129, Achievement.Overlight_Arcanist),
-      new SettingsPlayer.ByAchievement(130, Achievement.Soul_Drain),
-      new SettingsPlayer.ByAchievement(131, Achievement.Axing_for_Trouble),
-      new SettingsPlayer.ByAchievement(132, Achievement.Glider),
-      new SettingsPlayer.ByAchievement(133, Achievement.Champion_of_Magic),
-      new SettingsPlayer.ByAchievement(134, Achievement.Seasons_Arcanist),
-      new SettingsPlayer.ByAchievement(135, Achievement.Block_out_the_sun),
-      new SettingsPlayer.ByAchievement(136, Achievement.Master_of_Imps),
-      new SettingsPlayer.ByAchievement(139, Achievement.Wand_Hoarder),
-      new SettingsPlayer.ByAchievement(140, Achievement.Wand_Hoarder),
-      new SettingsPlayer.ByAchievement(141, Achievement.Master_of_Darkness),
-      new SettingsPlayer.ByAchievement(144, Achievement.Master_of_Illusion),
-      new SettingsPlayer.ByAchievement(145, Achievement.Druidism_Arcanist),
-      new SettingsPlayer.ByAchievement(146, Achievement.Arch_Mage),
-      new SettingsPlayer.ByAchievement(151, Achievement.Cosmos_Arcanist),
-      new SettingsPlayer.ByAchievement(152, Achievement.Wand_Hoarder),
-      new SettingsPlayer.ByAchievement(154, Achievement.Seas_Arcanist),
-      new SettingsPlayer.ByAchievement(161, Achievement.Seasons_Arcanist),
-      new SettingsPlayer.ByAchievement(162, Achievement.Stone_Arcanist),
-      new SettingsPlayer.ByAchievement(163, Achievement.Flame_Arcanist),
-      new SettingsPlayer.ByAchievement(164, Achievement.Didn_t_see_that_coming),
-      new SettingsPlayer.ByAchievement(166, Achievement.High_Mage_Blitzer),
-      new SettingsPlayer.ByAchievement(167, Achievement.High_Mage_Thinker),
-      new SettingsPlayer.ByAchievement(168, Achievement.High_Mage_Partier),
-      new SettingsPlayer.ByAchievement(169, Achievement.Lively_Arch_Mage),
-      new SettingsPlayer.ByAchievement(170, Achievement.Methodical_Arch_Mage),
-      new SettingsPlayer.ByAchievement(171, Achievement.It_s_Alive_),
-      new SettingsPlayer.ByAchievement(172, Achievement.Ice_Hot),
-      new SettingsPlayer.ByAchievement(173, Achievement.Multi_Dunk_),
-      new SettingsPlayer.ByAchievement(174, Achievement.Kraken_Guard),
-      new SettingsPlayer.ByAchievement(175, Achievement.Crazy),
-      new SettingsPlayer.ByAchievement(177, Achievement.With_the_Fishies),
-      new SettingsPlayer.ByAchievement(178, Achievement.Fear_Me_),
-      new SettingsPlayer.ByAchievement(179, Achievement.Acolyte),
-      new SettingsPlayer.ByAchievement(180, Achievement.Seasons_Arcanist),
-      new SettingsPlayer.ByAchievement(181, Achievement.Master_of_Sand),
-      new SettingsPlayer.ByAchievement(182, Achievement.Sand_Arcanists),
-      new SettingsPlayer.ByAchievement(183, Achievement.Master_of_Sand),
-      new SettingsPlayer.ByAchievement(184, Achievement.Divided_World),
-      new SettingsPlayer.ByAchievement(185, Achievement.Storm_Arcanist),
-      new SettingsPlayer.ByAchievement(186, Achievement.Overlight_Arcanist)
-    },
-    new List<SettingsPlayer.ByAchievement>()
-    {
-      new SettingsPlayer.ByAchievement(63, Achievement.Axing_for_Trouble),
-      new SettingsPlayer.ByAchievement(71, Achievement.Master_Team_Leader),
-      new SettingsPlayer.ByAchievement(72, Achievement.With_the_Fishies),
-      new SettingsPlayer.ByAchievement(75, Achievement.Seas_Arcanist),
-      new SettingsPlayer.ByAchievement(78, Achievement.Soul_Drain),
-      new SettingsPlayer.ByAchievement(88, Achievement.Lord_of_Wands),
-      new SettingsPlayer.ByAchievement(89, Achievement.Lord_of_Wands),
-      new SettingsPlayer.ByAchievement(92, Achievement.Glider),
-      new SettingsPlayer.ByAchievement(93, Achievement.Cosmos_Arcanist),
-      new SettingsPlayer.ByAchievement(95, Achievement.Didn_t_see_that_coming),
-      new SettingsPlayer.ByAchievement(96, Achievement.High_Mage_Blitzer),
-      new SettingsPlayer.ByAchievement(97, Achievement.High_Mage_Partier),
-      new SettingsPlayer.ByAchievement(98, Achievement.Supreme_Arch_Mage),
-      new SettingsPlayer.ByAchievement(99, Achievement.Miasma),
-      new SettingsPlayer.ByAchievement(100, Achievement.Lord_of_Dragons),
-      new SettingsPlayer.ByAchievement(101, Achievement.Target_Practice),
-      new SettingsPlayer.ByAchievement(102, Achievement.Frost_Arcanist),
-      new SettingsPlayer.ByAchievement(104, Achievement.Stone_Arcanist)
-    }
-  };
-  public static List<SettingsPlayer.Seasonal> seasonHalloween = new List<SettingsPlayer.Seasonal>()
-  {
-    new SettingsPlayer.Seasonal()
-    {
-      index = 76,
-      outfit = Outfit.Beard
-    },
-    new SettingsPlayer.Seasonal()
-    {
-      index = 93,
-      outfit = Outfit.Body
-    },
-    new SettingsPlayer.Seasonal()
-    {
-      index = 137,
-      outfit = Outfit.Body
-    },
-    new SettingsPlayer.Seasonal()
-    {
-      index = 76,
-      outfit = Outfit.Head
-    },
-    new SettingsPlayer.Seasonal()
-    {
-      index = 77,
-      outfit = Outfit.Head
-    },
-    new SettingsPlayer.Seasonal()
-    {
-      index = 77,
-      outfit = Outfit.Beard
-    },
-    new SettingsPlayer.Seasonal()
-    {
-      index = 92,
-      outfit = Outfit.Head
-    },
-    new SettingsPlayer.Seasonal()
-    {
-      index = 116,
-      outfit = Outfit.RightHand
-    },
-    new SettingsPlayer.Seasonal()
-    {
-      index = 117,
-      outfit = Outfit.RightHand
-    },
-    new SettingsPlayer.Seasonal()
-    {
-      index = 118,
-      outfit = Outfit.RightHand
-    },
-    new SettingsPlayer.Seasonal()
-    {
-      index = 123,
-      outfit = Outfit.LeftHand
-    },
-    new SettingsPlayer.Seasonal()
-    {
-      index = 97,
-      outfit = Outfit.LeftHand
-    },
-    new SettingsPlayer.Seasonal()
-    {
-      index = 111,
-      outfit = Outfit.Hair
-    },
-    new SettingsPlayer.Seasonal()
-    {
-      index = 153,
-      outfit = Outfit.Hair
-    },
-    new SettingsPlayer.Seasonal()
-    {
-      index = 166,
-      outfit = Outfit.RightHand
-    },
-    new SettingsPlayer.Seasonal()
-    {
-      index = 107,
-      outfit = Outfit.Head
-    },
-    new SettingsPlayer.Seasonal()
-    {
-      index = 108,
-      outfit = Outfit.Head
-    },
-    new SettingsPlayer.Seasonal()
-    {
-      index = 109,
-      outfit = Outfit.Head
-    },
-    new SettingsPlayer.Seasonal()
-    {
-      index = 106,
-      outfit = Outfit.Head
-    },
-    new SettingsPlayer.Seasonal()
-    {
-      index = 103,
-      outfit = Outfit.Beard
-    }
-  };
-  public static List<SettingsPlayer.Seasonal> seasonThanksgiving = new List<SettingsPlayer.Seasonal>()
-  {
-    new SettingsPlayer.Seasonal()
-    {
-      index = 99,
-      outfit = Outfit.Body
-    },
-    new SettingsPlayer.Seasonal()
-    {
-      index = 99,
-      outfit = Outfit.Hair
-    },
-    new SettingsPlayer.Seasonal()
-    {
-      index = 115,
-      outfit = Outfit.RightHand
-    }
-  };
-  public static List<SettingsPlayer.Seasonal> seasonEaster = new List<SettingsPlayer.Seasonal>()
-  {
-    new SettingsPlayer.Seasonal()
-    {
-      index = 138,
-      outfit = Outfit.Body
-    },
-    new SettingsPlayer.Seasonal()
-    {
-      index = 139,
-      outfit = Outfit.Body
-    },
-    new SettingsPlayer.Seasonal()
-    {
-      index = 89,
-      outfit = Outfit.Head
-    },
-    new SettingsPlayer.Seasonal()
-    {
-      index = 122,
-      outfit = Outfit.LeftHand
-    },
-    new SettingsPlayer.Seasonal()
-    {
-      index = 149,
-      outfit = Outfit.RightHand
-    },
-    new SettingsPlayer.Seasonal()
-    {
-      index = 153,
-      outfit = Outfit.RightHand
-    },
-    new SettingsPlayer.Seasonal()
-    {
-      index = 143,
-      outfit = Outfit.Hair
-    },
-    new SettingsPlayer.Seasonal()
-    {
-      index = 150,
-      outfit = Outfit.Hair
-    }
-  };
-  public static List<SettingsPlayer.Seasonal> seasonChristmas = new List<SettingsPlayer.Seasonal>()
-  {
-    new SettingsPlayer.Seasonal()
-    {
-      index = 141,
-      outfit = Outfit.Body
-    },
-    new SettingsPlayer.Seasonal()
-    {
-      index = 142,
-      outfit = Outfit.Body
-    },
-    new SettingsPlayer.Seasonal()
-    {
-      index = 156,
-      outfit = Outfit.Hair
-    },
-    new SettingsPlayer.Seasonal()
-    {
-      index = 157,
-      outfit = Outfit.Hair
-    }
-  };
-  public static List<List<SettingsPlayer.ByRole>> LockedByAccountType = new List<List<SettingsPlayer.ByRole>>()
-  {
-    new List<SettingsPlayer.ByRole>()
-    {
-      new SettingsPlayer.ByRole(89, AccountType.Arcane_Monster),
-      new SettingsPlayer.ByRole(SettingsPlayer.brine_body, AccountType.Lifetime),
-      new SettingsPlayer.ByRole(169, AccountType.Arch_Donator | AccountType.Lifetime)
-    },
-    new List<SettingsPlayer.ByRole>()
-    {
-      new SettingsPlayer.ByRole(74, AccountType.Arcane_Monster),
-      new SettingsPlayer.ByRole(75, AccountType.Arcane_Monster),
-      new SettingsPlayer.ByRole(SettingsPlayer.brine_head, AccountType.Lifetime),
-      new SettingsPlayer.ByRole(104, AccountType.Arch_Donator | AccountType.Lifetime)
-    },
-    new List<SettingsPlayer.ByRole>()
-    {
-      new SettingsPlayer.ByRole(67, AccountType.Arch_Donator),
-      new SettingsPlayer.ByRole(91, AccountType.Arcane_Monster),
-      new SettingsPlayer.ByRole(100, AccountType.Wiki_Staff),
-      new SettingsPlayer.ByRole(102, AccountType.Third_Place),
-      new SettingsPlayer.ByRole(103, AccountType.Second_Place),
-      new SettingsPlayer.ByRole(104, AccountType.First_Place),
-      new SettingsPlayer.ByRole(118, AccountType.Arch_Donator),
-      new SettingsPlayer.ByRole(125, AccountType.Audio_Wizard)
-    },
-    new List<SettingsPlayer.ByRole>()
-    {
-      new SettingsPlayer.ByRole(66, AccountType.Arch_Donator),
-      new SettingsPlayer.ByRole(89, AccountType.Asset_Creator),
-      new SettingsPlayer.ByRole(95, AccountType.Booster),
-      new SettingsPlayer.ByRole(97, AccountType.Tournament_Official),
-      new SettingsPlayer.ByRole(103, AccountType.Booster),
-      new SettingsPlayer.ByRole(104, AccountType.Donator),
-      new SettingsPlayer.ByRole(105, AccountType.Donator),
-      new SettingsPlayer.ByRole(108, AccountType.Arcane_Monster),
-      new SettingsPlayer.ByRole(111, AccountType.Asset_Creator),
-      new SettingsPlayer.ByRole(155, AccountType.Audio_Wizard),
-      new SettingsPlayer.ByRole(SettingsPlayer.brine_hand, AccountType.Lifetime),
-      new SettingsPlayer.ByRole(188, AccountType.Donator | AccountType.Arch_Donator | AccountType.Lifetime)
-    },
-    new List<SettingsPlayer.ByRole>()
-    {
-      new SettingsPlayer.ByRole(78, AccountType.Owner),
-      new SettingsPlayer.ByRole(103, AccountType.Contributor),
-      new SettingsPlayer.ByRole(104, AccountType.Backend_Technical_Director),
-      new SettingsPlayer.ByRole(105, AccountType.Mod),
-      new SettingsPlayer.ByRole(107, AccountType.Arcane_Monster),
-      new SettingsPlayer.ByRole(155, AccountType.Audio_Wizard),
-      new SettingsPlayer.ByRole(159, AccountType.Lifetime)
-    },
-    new List<SettingsPlayer.ByRole>()
-    {
-      new SettingsPlayer.ByRole(69, AccountType.Arcane_Monster)
-    }
-  };
-  public static List<List<SettingsPlayer.ByPrestige>> LockedByPrestige = new List<List<SettingsPlayer.ByPrestige>>()
-  {
-    new List<SettingsPlayer.ByPrestige>()
-    {
-      new SettingsPlayer.ByPrestige(133, 3),
-      new SettingsPlayer.ByPrestige(136, 4),
-      new SettingsPlayer.ByPrestige(143, 8)
-    },
-    new List<SettingsPlayer.ByPrestige>(),
-    new List<SettingsPlayer.ByPrestige>()
-    {
-      new SettingsPlayer.ByPrestige(124, 7)
-    },
-    new List<SettingsPlayer.ByPrestige>()
-    {
-      new SettingsPlayer.ByPrestige(156, 7)
-    },
-    new List<SettingsPlayer.ByPrestige>()
-    {
-      new SettingsPlayer.ByPrestige(137, 9),
-      new SettingsPlayer.ByPrestige(138, 9)
-    },
-    new List<SettingsPlayer.ByPrestige>()
-    {
-      new SettingsPlayer.ByPrestige(94, 8)
-    }
-  };
-  public static List<List<SettingsPlayer.ByTournament>> LockedByTournament = new List<List<SettingsPlayer.ByTournament>>()
-  {
-    new List<SettingsPlayer.ByTournament>()
-    {
-      new SettingsPlayer.ByTournament(161, 1000)
-    },
-    new List<SettingsPlayer.ByTournament>()
-    {
-      new SettingsPlayer.ByTournament(100, 1000)
-    },
-    new List<SettingsPlayer.ByTournament>()
-    {
-      new SettingsPlayer.ByTournament(141, 500),
-      new SettingsPlayer.ByTournament(142, 500)
-    },
-    new List<SettingsPlayer.ByTournament>()
-    {
-      new SettingsPlayer.ByTournament(67, 1000),
-      new SettingsPlayer.ByTournament(68, 1000),
-      new SettingsPlayer.ByTournament(70, 1000),
-      new SettingsPlayer.ByTournament(77, 1000),
-      new SettingsPlayer.ByTournament(88, 1000),
-      new SettingsPlayer.ByTournament(123, 1000),
-      new SettingsPlayer.ByTournament(157, 1000),
-      new SettingsPlayer.ByTournament(158, 1000),
-      new SettingsPlayer.ByTournament(159, 1000),
-      new SettingsPlayer.ByTournament(160, 750),
-      new SettingsPlayer.ByTournament(161, 1000),
-      new SettingsPlayer.ByTournament(162, 1000),
-      new SettingsPlayer.ByTournament(163, 1000),
-      new SettingsPlayer.ByTournament(165, 750),
-      new SettingsPlayer.ByTournament(180, 1000)
-    },
-    new List<SettingsPlayer.ByTournament>()
-    {
-      new SettingsPlayer.ByTournament(99, 1000)
-    },
-    new List<SettingsPlayer.ByTournament>()
-    {
-      new SettingsPlayer.ByTournament(62, 1000),
-      new SettingsPlayer.ByTournament(64, 250)
-    }
-  };
-  public static List<List<SettingsPlayer.ByPrestige>> LockedByExperience = new List<List<SettingsPlayer.ByPrestige>>()
-  {
-    new List<SettingsPlayer.ByPrestige>()
-    {
-      new SettingsPlayer.ByPrestige(128, 1),
-      new SettingsPlayer.ByPrestige(129, 4),
-      new SettingsPlayer.ByPrestige(130, 7),
-      new SettingsPlayer.ByPrestige(131, 10),
-      new SettingsPlayer.ByPrestige(132, 12)
-    },
-    new List<SettingsPlayer.ByPrestige>()
-    {
-      new SettingsPlayer.ByPrestige(93, 10)
-    },
-    new List<SettingsPlayer.ByPrestige>(),
-    new List<SettingsPlayer.ByPrestige>()
-    {
-      new SettingsPlayer.ByPrestige(150, 4),
-      new SettingsPlayer.ByPrestige(151, 7),
-      new SettingsPlayer.ByPrestige(152, 12)
-    },
-    new List<SettingsPlayer.ByPrestige>()
-    {
-      new SettingsPlayer.ByPrestige(147, 4),
-      new SettingsPlayer.ByPrestige(148, 7),
-      new SettingsPlayer.ByPrestige(158, 10),
-      new SettingsPlayer.ByPrestige(149, 12)
-    },
-    new List<SettingsPlayer.ByPrestige>()
-  };
-  public static List<List<byte>> AlwaysUnlocked = new List<List<byte>>()
-  {
-    new List<byte>(),
-    new List<byte>(),
-    new List<byte>(),
-    new List<byte>(),
-    new List<byte>(),
-    new List<byte>()
-  };
   private static Dictionary<string, SettingsPlayer.ByDust> buyables = new Dictionary<string, SettingsPlayer.ByDust>();
   public SpellsOnly _spells = new SpellsOnly();
   public Recolor coloring = new Recolor();
@@ -769,7 +94,6 @@ public class SettingsPlayer
   public Sprite[] textures;
   public SettingsPlayer.CustomAnim[] animations;
   public SettingsPlayer.MetaData[] metaData;
-  private static AchievementCosmetic _unlock;
 
   public byte fullBook
   {
@@ -1508,23 +832,24 @@ public class SettingsPlayer
 
   public static bool HeadNoMouth(string name, SettingsPlayer sp)
   {
-    byte indexHead = sp.indexHead;
-    if ((int) indexHead == (int) SettingsPlayer.clanOutfit[1])
+    if ((int) sp.indexHead == (int) SettingsPlayer.clanOutfit[1])
     {
       ClanOutfit clanOutfit = ClientResources.Instance.GetClanOutfit(Client.GetAccount(name, false).clan);
       if (clanOutfit != null && clanOutfit.outfits != null && (clanOutfit.outfits[1] != null && clanOutfit.outfits[1].effect == (byte) 1))
         return true;
     }
-    return SettingsPlayer.BeardNoMouth(sp.indexBeard) || SettingsPlayer.BeardNoMouth(sp.indexBeard2) || (SettingsPlayer.BeardNoMouth(sp.indexBeard3) || (int) indexHead == SettingsPlayer.sno_head) || ((int) indexHead == SettingsPlayer.sno_head2 || (int) indexHead == SettingsPlayer.sno_head3 || ((int) indexHead == SettingsPlayer.sno_head4 || indexHead == (byte) 76)) || (indexHead == (byte) 77 || indexHead == (byte) 78 || (indexHead == (byte) 94 || (int) sp.indexHead == SettingsPlayer.brine_head) || (sp.indexHead == (byte) 69 || sp.indexHead == (byte) 71 || (sp.indexHead == (byte) 81 || (int) sp.indexBody == SettingsPlayer.sno_body2))) || (indexHead == (byte) 73 || indexHead == (byte) 92 || (indexHead == (byte) 99 || indexHead == (byte) 100)) || indexHead == (byte) 104;
+    return SettingsPlayer.BeardNoMouth(sp.indexBeard) || SettingsPlayer.BeardNoMouth(sp.indexBeard2) || (SettingsPlayer.BeardNoMouth(sp.indexBeard3) || !Inert.Instance._characterBody[(int) sp.indexBody].hasMouth) || !Inert.Instance._characterHeads[(int) sp.indexHead].hasMouth;
   }
 
   private static bool BeardNoMouth(byte i)
   {
-    return i == (byte) 55 || i == (byte) 72 || (i == (byte) 77 || i == (byte) 53) || (i == (byte) 65 || i == (byte) 69 || (i == (byte) 94 || i == (byte) 99)) || (i == (byte) 100 || i == (byte) 101) || i == (byte) 102;
+    return !Inert.Instance._characterBeards[(int) i].hasMouth;
   }
 
   public void VerifyOutfit(Cosmetics cosmetics, Account a = null)
   {
+    if (Prefs.charPreview && (Client.game == null || Client.game.isSandbox))
+      return;
     if (a == null)
       a = Client.GetAccount(Client.Name, false);
     if (!SettingsPlayer.VerifyOutfit(a, cosmetics, a.accountType, Outfit.Body, (int) this.indexBody))
@@ -1550,184 +875,56 @@ public class SettingsPlayer
   {
   }
 
-  public static Sprite[] GetOutfits(int o)
+  public static OutfitDataList GetOutfits(int o)
   {
     switch (o)
     {
       case 0:
-        return ClientResources.Instance._characterBody;
+        return Inert.Instance._characterBody;
       case 1:
-        return ClientResources.Instance._characterHeads;
+        return Inert.Instance._characterHeads;
       case 2:
-        return ClientResources.Instance._characterLeftHand;
+        return Inert.Instance._characterLeftHand;
       case 3:
-        return ClientResources.Instance._characterRightHand;
+        return Inert.Instance._characterRightHand;
       case 4:
-        return ClientResources.Instance._characterHats;
+        return Inert.Instance._characterHats;
       case 5:
-        return ClientResources.Instance._characterBeards;
+        return Inert.Instance._characterBeards;
       default:
         Debug.LogError((object) ("Invalid index " + (object) o));
-        return ClientResources.Instance._characterBody;
-    }
-  }
-
-  public static void InitUnlockables(Cosmetics def)
-  {
-    byte num1 = 0;
-    foreach (List<SettingsPlayer.ByAchievement> byAchievementList in SettingsPlayer.LockedByAchievement)
-    {
-      foreach (SettingsPlayer.ByAchievement byAchievement in byAchievementList)
-        def.array[(int) num1][byAchievement.index] = false;
-      ++num1;
-    }
-    byte num2 = 0;
-    foreach (List<SettingsPlayer.ByRole> byRoleList in SettingsPlayer.LockedByAccountType)
-    {
-      foreach (SettingsPlayer.ByRole byRole in byRoleList)
-        def.array[(int) num2][byRole.index] = false;
-      ++num2;
-    }
-    byte num3 = 0;
-    foreach (List<SettingsPlayer.ByDust> byDustList in SettingsPlayer.LockedByDust)
-    {
-      foreach (SettingsPlayer.ByDust byDust in byDustList)
-      {
-        byDust.outfitType = (Outfit) num3;
-        SettingsPlayer.buyables.Add(byDust.name, byDust);
-        def.array[(int) num3][byDust.index] = false;
-      }
-      ++num3;
-    }
-    byte num4 = 0;
-    foreach (List<SettingsPlayer.ByPrestige> byPrestigeList in SettingsPlayer.LockedByPrestige)
-    {
-      foreach (SettingsPlayer.ByPrestige byPrestige in byPrestigeList)
-        def.array[(int) num4][byPrestige.index] = false;
-      ++num4;
-    }
-    byte num5 = 0;
-    foreach (List<SettingsPlayer.ByPrestige> byPrestigeList in SettingsPlayer.LockedByExperience)
-    {
-      foreach (SettingsPlayer.ByPrestige byPrestige in byPrestigeList)
-        def.array[(int) num5][byPrestige.index] = false;
-      ++num5;
-    }
-    byte num6 = 0;
-    foreach (List<SettingsPlayer.ByTournament> byTournamentList in SettingsPlayer.LockedByTournament)
-    {
-      foreach (SettingsPlayer.ByTournament byTournament in byTournamentList)
-        def.array[(int) num6][byTournament.index] = false;
-      ++num6;
-    }
-    foreach (SettingsPlayer.Seasonal seasonal in SettingsPlayer.seasonHalloween)
-      def.array[(int) seasonal.outfit][seasonal.index] = false;
-    foreach (SettingsPlayer.Seasonal seasonal in SettingsPlayer.seasonThanksgiving)
-      def.array[(int) seasonal.outfit][seasonal.index] = false;
-    foreach (SettingsPlayer.Seasonal seasonal in SettingsPlayer.seasonEaster)
-      def.array[(int) seasonal.outfit][seasonal.index] = false;
-    foreach (SettingsPlayer.Seasonal seasonChristma in SettingsPlayer.seasonChristmas)
-      def.array[(int) seasonChristma.outfit][seasonChristma.index] = false;
-  }
-
-  public static void Disable(Cosmetics def)
-  {
-    def.LockRest();
-    byte num1 = 0;
-    foreach (List<SettingsPlayer.ByAchievement> byAchievementList in SettingsPlayer.LockedByAchievement)
-    {
-      foreach (SettingsPlayer.ByAchievement byAchievement in byAchievementList)
-        def.array[(int) num1][byAchievement.index] = false;
-      ++num1;
-    }
-    byte num2 = 0;
-    foreach (List<SettingsPlayer.ByRole> byRoleList in SettingsPlayer.LockedByAccountType)
-    {
-      foreach (SettingsPlayer.ByRole byRole in byRoleList)
-        def.array[(int) num2][byRole.index] = false;
-      ++num2;
-    }
-    byte num3 = 0;
-    foreach (List<SettingsPlayer.ByTournament> byTournamentList in SettingsPlayer.LockedByTournament)
-    {
-      foreach (SettingsPlayer.ByTournament byTournament in byTournamentList)
-        def.array[(int) num3][byTournament.index] = false;
-      ++num3;
-    }
-    byte num4 = 0;
-    foreach (List<SettingsPlayer.ByPrestige> byPrestigeList in SettingsPlayer.LockedByExperience)
-    {
-      foreach (SettingsPlayer.ByPrestige byPrestige in byPrestigeList)
-        def.array[(int) num4][byPrestige.index] = false;
-      ++num4;
-    }
-    byte num5 = 0;
-    foreach (List<SettingsPlayer.ByPrestige> byPrestigeList in SettingsPlayer.LockedByPrestige)
-    {
-      foreach (SettingsPlayer.ByPrestige byPrestige in byPrestigeList)
-        def.array[(int) num5][byPrestige.index] = false;
-      ++num5;
+        return Inert.Instance._characterBody;
     }
   }
 
   public static Achievement CheckAchievements(Outfit type, int index)
   {
-    foreach (SettingsPlayer.ByAchievement byAchievement in SettingsPlayer.LockedByAchievement[(int) type])
-    {
-      if (byAchievement.index == index)
-        return byAchievement.a;
-    }
-    return Achievement.None;
+    return Inert.Instance.GetOutfit(type)[index].achievement;
   }
 
   public static AccountType CheckAccountType(Outfit type, int index)
   {
-    foreach (SettingsPlayer.ByRole byRole in SettingsPlayer.LockedByAccountType[(int) type])
-    {
-      if (byRole.index == index)
-        return byRole.a;
-    }
-    return AccountType.None;
+    return Inert.Instance.GetOutfit(type)[index].accountType;
   }
 
   public static bool CheckAlwaysUnlocked(Outfit type, int index)
   {
-    foreach (int num in SettingsPlayer.AlwaysUnlocked[(int) type])
-    {
-      if (num == index)
-        return true;
-    }
-    return false;
+    return !Inert.Instance.GetOutfit(type)[index].isLocked;
   }
 
   public static int CheckPrestige(Outfit type, int index)
   {
-    foreach (SettingsPlayer.ByPrestige byPrestige in SettingsPlayer.LockedByPrestige[(int) type])
-    {
-      if (byPrestige.index == index)
-        return byPrestige.prestige;
-    }
-    return 0;
+    return Inert.Instance.GetOutfit(type)[index].prestige;
   }
 
   public static int CheckExperience(Outfit type, int index)
   {
-    foreach (SettingsPlayer.ByPrestige byPrestige in SettingsPlayer.LockedByExperience[(int) type])
-    {
-      if (byPrestige.index == index)
-        return byPrestige.prestige;
-    }
-    return 0;
+    return Inert.Instance.GetOutfit(type)[index].experience;
   }
 
   public static int CheckTournament(Outfit type, int index)
   {
-    foreach (SettingsPlayer.ByTournament byTournament in SettingsPlayer.LockedByTournament[(int) type])
-    {
-      if (byTournament.index == index)
-        return byTournament.coins;
-    }
-    return 0;
+    return Inert.Instance.GetOutfit(type)[index].tournament;
   }
 
   public static int ClientHasAchievement(Outfit type, int index)
@@ -1745,12 +942,12 @@ public class SettingsPlayer
     if (num1 > 0)
       return (int) account.prestige < num1 ? 0 : 1;
     int num2 = SettingsPlayer.CheckExperience(type, index);
-    return num2 > 0 ? ((int) account.experience < num2 ? 0 : 1) : (SettingsPlayer.CheckTournament(type, index) > 0 || SettingsPlayer.seasonHalloween.Find((Predicate<SettingsPlayer.Seasonal>) (z => z.outfit == type && z.index == index)) != null || (SettingsPlayer.seasonThanksgiving.Find((Predicate<SettingsPlayer.Seasonal>) (z => z.outfit == type && z.index == index)) != null || SettingsPlayer.seasonEaster.Find((Predicate<SettingsPlayer.Seasonal>) (z => z.outfit == type && z.index == index)) != null) || (SettingsPlayer.seasonChristmas.Find((Predicate<SettingsPlayer.Seasonal>) (z => z.outfit == type && z.index == index)) != null || accountType != AccountType.None || achievement != Achievement.None) ? 0 : -1);
+    return num2 > 0 ? ((int) account.experience < num2 ? 0 : 1) : (SettingsPlayer.CheckTournament(type, index) > 0 || Inert.Instance.GetOutfit(type)[index].season != Server.ServerSettings.Season.None || (!string.IsNullOrEmpty(Inert.Instance.GetOutfit(type)[index].reason) || accountType != AccountType.None) || achievement != Achievement.None ? 0 : -1);
   }
 
   public static bool IsSeasonal(Outfit type, int index)
   {
-    return SettingsPlayer.seasonHalloween.Find((Predicate<SettingsPlayer.Seasonal>) (z => z.outfit == type && z.index == index)) != null || SettingsPlayer.seasonThanksgiving.Find((Predicate<SettingsPlayer.Seasonal>) (z => z.outfit == type && z.index == index)) != null || (SettingsPlayer.seasonEaster.Find((Predicate<SettingsPlayer.Seasonal>) (z => z.outfit == type && z.index == index)) != null || SettingsPlayer.seasonChristmas.Find((Predicate<SettingsPlayer.Seasonal>) (z => z.outfit == type && z.index == index)) != null);
+    return (uint) Inert.Instance.GetOutfit(type)[index].season > 0U;
   }
 
   public static SettingsPlayer.ByDust GetBuyable(string name)
@@ -1767,16 +964,21 @@ public class SettingsPlayer
     Outfit type,
     int index)
   {
-    if (c.array[(int) type][index] || SettingsPlayer.CheckAlwaysUnlocked(type, index) || acc.accountType.has(AccountType.Owner | AccountType.Press_Account))
-      return true;
-    Achievement achievement = SettingsPlayer.CheckAchievements(type, index);
-    if (achievement != Achievement.None && c.achievements[(int) achievement] || (a & SettingsPlayer.CheckAccountType(type, index)) != AccountType.None)
-      return true;
-    int num1 = SettingsPlayer.CheckPrestige(type, index);
-    if (num1 > 0 && (int) acc.prestige >= num1)
-      return true;
-    int num2 = SettingsPlayer.CheckExperience(type, index);
-    return num2 > 0 && (int) acc.experience >= num2;
+    return Inert.Instance.GetOutfit(type)[index].IsUnlocked(acc);
+  }
+
+  public static void SetupClientData()
+  {
+    for (int index1 = 0; index1 < 8; ++index1)
+    {
+      List<OutfitData> list = Inert.Instance.GetOutfit((Outfit) index1).list;
+      for (int index2 = 0; index2 < list.Count; ++index2)
+      {
+        list[index2].outfit = Outfit.Body;
+        list[index2].index = index2;
+        int achievement = (int) list[index2].achievement;
+      }
+    }
   }
 
   public class CustomAnim

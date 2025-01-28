@@ -75,7 +75,8 @@ public class ZSpell : ZEntity, ISpellBridge
     SpellEnum.Summon_Titan,
     SpellEnum.Summon_Wyrm,
     SpellEnum.Summon_Sphinx,
-    SpellEnum.Summon_Sand_Mite
+    SpellEnum.Summon_Sand_Mite,
+    SpellEnum.Zombie_Dragon
   };
   internal int steps = 1;
   public MyLocation target = NullMyLocation.Get();
@@ -748,7 +749,7 @@ public class ZSpell : ZEntity, ISpellBridge
     ZSpell.MoveSurroundings(this.game.world, this.position, this.EXORADIUS);
   }
 
-  public static void ApplyExplosionForce(
+  public static int ApplyExplosionForce(
     SpellEnum spellEnum,
     ZMyWorld world,
     MyLocation pos,
@@ -841,6 +842,7 @@ public class ZSpell : ZEntity, ISpellBridge
     for (int index = 0; index < zcreatureList.Count; ++index)
       zcreatureList[index].StartMoving(false);
     ZSpell.MoveSurroundings(world, pos, EXORADIUS);
+    return zcreatureList.Count;
   }
 
   protected void DestroyDelay()
@@ -1403,6 +1405,7 @@ label_58:
     zspell.game = game;
     zspell.id = ++game.nextSpellID;
     zspell.Copy(c, game);
+    zspell.randomNumber = game.RandomInt(0, int.MaxValue);
     zspell.SetupClient(c, position, q, parent, cre);
     return zspell;
   }
@@ -1419,6 +1422,7 @@ label_58:
     zflameWallSpell.game = game;
     zflameWallSpell.id = ++game.nextSpellID;
     zflameWallSpell.Copy((Spell) c, game);
+    zflameWallSpell.randomNumber = game.RandomInt(0, int.MaxValue);
     if ((UnityEngine.Object) c.effector2 != (UnityEngine.Object) null)
     {
       zflameWallSpell.effector2 = new ZEffector();
@@ -2498,15 +2502,16 @@ label_7:
   public static void FireRisingLava(Spell theSpell, ZGame game)
   {
     ZPerson zperson = game.CurrentPlayer();
-    if (zperson == null || zperson.game.globalEffectors.FindIndex((Predicate<ZEffector>) (a => (ZComponent) a != (object) null && a.type == EffectorType.Rising_Lava)) != -1)
+    if (zperson == null || (ZComponent) zperson.game.globalEffectors.Find((Predicate<ZEffector>) (a => (ZComponent) a != (object) null && a.type == EffectorType.Rising_Lava)) != (object) null)
       return;
     ZEffector zeffector = ZEffector.Create(game, theSpell.toSummon.GetComponent<Effector>(), new Vector3((float) game.map.Width / 2f, 0.0f), Quaternion.identity, game.GetMapTransform());
     zeffector.game = game;
     zeffector.active = false;
     zeffector.position = new MyLocation(game.map.Width / 2, 0);
+    zeffector.variable = Mathf.Max(1, Armageddon.CountCustomArmageddon(game, SpellEnum.Rising_Lava));
     foreach (ZEffector globalEffector in game.globalEffectors)
     {
-      if (globalEffector.type == EffectorType.Dense_Fog)
+      if ((ZComponent) globalEffector != (object) null && globalEffector.type == EffectorType.Dense_Fog)
       {
         globalEffector.halved = true;
         zeffector.halved = true;
@@ -2521,12 +2526,13 @@ label_7:
   public static void FireDenseFog(Spell theSpell, ZGame game)
   {
     ZPerson zperson = game.CurrentPlayer();
-    if (zperson == null || zperson.game.globalEffectors.FindIndex((Predicate<ZEffector>) (a => (ZComponent) a != (object) null && a.type == EffectorType.Dense_Fog)) != -1)
+    if (zperson == null || (ZComponent) zperson.game.globalEffectors.Find((Predicate<ZEffector>) (a => (ZComponent) a != (object) null && a.type == EffectorType.Dense_Fog)) != (object) null)
       return;
     ZEffector zeffector = ZEffector.Create(game, theSpell.toSummon.GetComponent<Effector>(), new Vector3((float) game.map.Width / 2f, (float) game.map.Height), Quaternion.identity, game.GetMapTransform());
     zeffector.game = game;
     zeffector.active = false;
     zeffector.position = new MyLocation(game.map.Width / 2, game.map.Height);
+    zeffector.variable = Mathf.Max(1, Armageddon.CountCustomArmageddon(game, SpellEnum.Dense_Fog));
     foreach (ZEffector globalEffector in game.globalEffectors)
     {
       if (globalEffector.type == EffectorType.Rising_Lava)
@@ -3378,6 +3384,7 @@ label_7:
               ZComponent.Instantiate<GameObject>(theSpell.explosion, singlePrecision, Quaternion.identity);
           }
           ZCreature creature = ZCreatureCreate.CreateCreature(c?.parent, theSpell.toSummon.GetComponent<Creature>(), (Vector2) singlePrecision, Quaternion.identity, game.GetMapTransform(), true);
+          creature.randomNumber = game.RandomInt(0, int.MaxValue);
           if ((ZComponent) c == (object) null)
           {
             c = creature;
@@ -3524,9 +3531,11 @@ label_7:
       if (!game.isClient)
         ZComponent.Destroy<GameObject>(zeffector.transform.GetChild(0).gameObject);
     }
-    else if (sum.spellEnum == SpellEnum.Summon_Swarm || sum.spellEnum == SpellEnum.Summon_Bees)
+    else if (sum.spellEnum == SpellEnum.Summon_Swarm || sum.spellEnum == SpellEnum.Summon_Bees || sum.spellEnum == SpellEnum.Zombie_Dragon)
     {
       ZEffector auraOfDecay = sum.auraOfDecay;
+      if (sum.spellEnum == SpellEnum.Zombie_Dragon)
+        auraOfDecay.type = EffectorType.Dragon_Aura_of_Decay;
       auraOfDecay.game = game;
       auraOfDecay.whoSummoned = sum;
       auraOfDecay.doNotCreateObjectOnResync = true;
@@ -3557,7 +3566,7 @@ label_7:
     }
     else if (sum.spellEnum == SpellEnum.Summon_Tiger)
     {
-      if (sum.familiarLevelDruidism > 0)
+      if (sum.familiarLevelDruidism > 0 && game.AllowMinionSpells)
         sum.spells.Add(new SpellSlot(Inert.GetSpell(SpellEnum.Compete)));
     }
     else if (sum.spellEnum == SpellEnum.Summon_Elves)
@@ -3667,7 +3676,7 @@ label_7:
       sum.FullArcane = true;
     else if (sum.spellEnum == SpellEnum.Summon_Reindeer && (UnityEngine.Object) theSpell != (UnityEngine.Object) null)
     {
-      if (sum.familiarLevelSeasons == 5)
+      if (sum.familiarLevelSeasons == 5 && game.AllowMinionSpells)
         sum.spells.Add(new SpellSlot(Inert.Instance.spells["Santa's Magic"])
         {
           MaxUses = 1
@@ -5938,6 +5947,23 @@ label_27:
     }
   }
 
+  public static IEnumerator<float> IEShandyShores(
+    Spell theSpell,
+    ZCreature c,
+    MyLocation target)
+  {
+    for (int xInt = -100; xInt <= 100; xInt += 5)
+      c.game.ongoing.RunSpell(ZSpell.IEnumeratorSandBlast(theSpell, c, target + new MyLocation(xInt, 0), Quaternion.identity, (FixedInt) 90, (FixedInt) 1, target, (FixedInt) 20, 50), true);
+    ZComponent.Instantiate<GameObject>(theSpell.explosion, target.ToSinglePrecision(), Quaternion.identity, c.game.GetMapTransform());
+    ZComponent.Instantiate<GameObject>(theSpell.explosion, target.ToSinglePrecision() + new Vector2(-50f, -10f), Quaternion.identity, c.game.GetMapTransform());
+    ZComponent.Instantiate<GameObject>(theSpell.explosion, target.ToSinglePrecision() + new Vector2(50f, -10f), Quaternion.identity, c.game.GetMapTransform());
+    ZComponent.Instantiate<GameObject>(theSpell.explosion, target.ToSinglePrecision() + new Vector2(-100f, -20f), Quaternion.identity, c.game.GetMapTransform());
+    ZComponent.Instantiate<GameObject>(theSpell.explosion, target.ToSinglePrecision() + new Vector2(100f, -20f), Quaternion.identity, c.game.GetMapTransform());
+    yield return 0.0f;
+    yield return 0.0f;
+    ZSpell.FireBlit(theSpell, c, target, (SpellSlot) null);
+  }
+
   public static IEnumerator<float> IEnumeratorSandBlast(
     Spell theSpell,
     ZCreature c,
@@ -5945,13 +5971,14 @@ label_27:
     Quaternion rot,
     FixedInt rot_z,
     FixedInt power,
-    MyLocation target)
+    MyLocation target,
+    FixedInt angle,
+    int grains = 100)
   {
     c.turnFriendlyDmg = -2;
     if (c.game.isClient)
       SandPool.Create();
     int amount = theSpell.amount;
-    FixedInt angle = (FixedInt) 2097152L;
     if (c.familiarLevelSand > 0)
     {
       amount += amount * c.familiarLevelSand / 5;
@@ -5959,12 +5986,12 @@ label_27:
     }
     for (int i = 0; i < amount; ++i)
     {
-      for (int index = 0; index < 100; ++index)
+      for (int index = 0; index < grains; ++index)
       {
         if (ZComponent.IsNull((ZComponent) c) || c.turnFriendlyDmg == c.game.turn)
           yield break;
         else
-          c.game.ongoing.RunSpell(ZSpellSand.SandMove(theSpell, c.game, c, pos, Inert.Velocity(rot_z + c.game.RandomFixedInt(-angle, angle), (FixedInt) theSpell.speedMax + power + c.game.RandomFixedInt((FixedInt) -2097152L, angle))), true);
+          c.game.ongoing.RunSpell(ZSpellSand.SandMove(theSpell, c.game, c, pos, Inert.Velocity(rot_z + c.game.RandomFixedInt(-angle, angle), c.game.RandomFixedInt((FixedInt) theSpell.speedMin, (FixedInt) theSpell.speedMax) + power + c.game.RandomFixedInt(-2, 2))), true);
       }
       while (c.game.ongoing.NumberOfSlowUpdateCoroutines > 10000)
         yield return 0.0f;
@@ -7262,7 +7289,7 @@ label_37:
       yield return 0.0f;
     FixedInt max = (FixedInt) child.speedMax + parent.familiarLevelSand;
     for (int index = 0; index < amount; ++index)
-      game.ongoing.RunSpell(ZSpellSand.SandMove(main, game, parent, position, Inert.Velocity((FixedInt) 90 - game.RandomFixedInt(-60, 60), game.RandomFixedInt((FixedInt) child.speedMin, max))), true);
+      game.ongoing.RunSpell(ZSpellSand.SandMove(main, game, parent, position, Inert.Velocity((FixedInt) 90 - game.RandomFixedInt(-60, 60), game.RandomFixedInt((FixedInt) 8, max))), true);
   }
 
   public void OnExplosionIceBomb()
@@ -8423,6 +8450,7 @@ label_37:
       case SpellEnum.Steam_Dragon:
       case SpellEnum.Arcane_Dragon:
       case SpellEnum.Corrupt_Dragon:
+      case SpellEnum.Zombie_Dragon:
         ZCreature sum1 = ZSpell.FireSummon(theSpell, c.game, c, target, -1, false, (ZPerson) null);
         if (!extended)
           break;
@@ -8681,7 +8709,7 @@ label_37:
         ZSpell.FireGeneric(theSpell, c, pos, rot_z, power);
         break;
       case SpellEnum.Deluge:
-        c.game.ongoing.RunSpell(ZSpell.IEnumeratorDeluge(c, theSpell, new MyLocation(target.x, (FixedInt) (c.map.Height + 1000)), -20, 20, 30), true);
+        c.game.ongoing.RunSpell(ZSpell.IEnumeratorDeluge(c, theSpell, new MyLocation(target.x, (FixedInt) (c.map.Height + 1000)), -20, 20, theSpell.amount), true);
         break;
       case SpellEnum.English_Summer:
       case SpellEnum.Acid_Rain:
@@ -9137,7 +9165,7 @@ label_37:
         break;
       case SpellEnum.Pocket_Sand:
       case SpellEnum.Spit:
-        c.game.ongoing.RunSpell(ZSpell.IEnumeratorSandBlast(theSpell, c, pos, Quaternion.identity, rot_z, power, target), true);
+        c.game.ongoing.RunSpell(ZSpell.IEnumeratorSandBlast(theSpell, c, pos, Quaternion.identity, rot_z, power, target, (FixedInt) 2, 100), true);
         break;
       case SpellEnum.Summon_King_Monarch:
       case SpellEnum.Summon_Monarchs:
@@ -9466,36 +9494,27 @@ label_37:
       case SpellEnum.Sandbag:
         if ((ZComponent) c.tower != (object) null)
         {
+          int health = c.tower.Health;
+          if (c.tower.type == TowerType.Sand)
+          {
+            c.tower.Health += 75;
+            if (c.tower.Health > c.tower.MaxHealth)
+              c.tower.Health = c.tower.MaxHealth;
+            c.parent.towerHealth[(int) c.tower.type] = c.tower.Health;
+            if (c.game.isServer && !c.game.isClient)
+              c.game.SendTowerHealth(c, (int) c.tower.type, c.tower.Health);
+          }
           SpellSlot spellSlot1 = c.GetSpellSlot(c.tower.baseTower.FromSpell.spellEnum);
           if (spellSlot1 != null)
           {
-            int health = c.tower.Health;
-            if (c.tower.type == TowerType.Sand)
-            {
-              c.tower.Health += 75;
-              if (c.tower.Health > c.tower.MaxHealth)
-                c.tower.Health = c.tower.MaxHealth;
-            }
-            int num4 = health * 100 / c.tower.MaxHealth;
-            if (num4 >= 75)
-              spellSlot1.SetTurnFired = spellSlot1.LastTurnFired - 3;
-            else if (num4 >= 50)
-              spellSlot1.SetTurnFired = spellSlot1.LastTurnFired - 2;
-            else if (num4 >= 25)
-              spellSlot1.SetTurnFired = spellSlot1.LastTurnFired - 1;
+            spellSlot1.SetTurnFired = Mathf.Min(spellSlot1.LastTurnFired, spellSlot1.LastTurnFired - 3);
             if (spellSlot1.UsedUses > 0)
               spellSlot1.SetUses = spellSlot1.UsedUses - 1;
-            if (c.tower.type == TowerType.Sand)
-            {
-              c.parent.towerHealth[(int) c.tower.type] = c.tower.Health;
-              if (c.game.isServer && !c.game.isClient)
-                c.game.SendTowerHealth(c, (int) c.tower.type, c.tower.Health);
-            }
           }
           c.DestroyTower(false);
           break;
         }
-        if (c.GetSpellSlot(SpellEnum.Sand_Castle) == null || c.parent.towerHealth[12] == 0)
+        if (c.parent.towerHealth[12] == 0)
           break;
         c.parent.towerHealth[12] += 50;
         if (c.parent.towerHealth[12] < 125)
@@ -9504,25 +9523,21 @@ label_37:
         break;
       case SpellEnum.Sandy_Shores:
         target.y = (FixedInt) 30;
-        ZComponent.Instantiate<GameObject>(theSpell.explosion, target.ToSinglePrecision(), Quaternion.identity, c.game.GetMapTransform());
-        ZComponent.Instantiate<GameObject>(theSpell.explosion, target.ToSinglePrecision() + new Vector2(-50f, -10f), Quaternion.identity, c.game.GetMapTransform());
-        ZComponent.Instantiate<GameObject>(theSpell.explosion, target.ToSinglePrecision() + new Vector2(50f, -10f), Quaternion.identity, c.game.GetMapTransform());
-        ZComponent.Instantiate<GameObject>(theSpell.explosion, target.ToSinglePrecision() + new Vector2(-100f, -20f), Quaternion.identity, c.game.GetMapTransform());
-        ZComponent.Instantiate<GameObject>(theSpell.explosion, target.ToSinglePrecision() + new Vector2(100f, -20f), Quaternion.identity, c.game.GetMapTransform());
-        ZSpell.FireBlit(theSpell, c, target, (SpellSlot) null);
-        if (theSpell.damage <= 0)
-          break;
-        ZSpell.InitArbritaryPolygons();
-        ZMyCollider poly = Inert.Instance.cachedBlitCollidersZ[9];
-        poly.ArbritaryInit();
-        poly.x = (int) target.x + poly.offsetX;
-        poly.y = (int) target.y + poly.offsetY;
-        List<ZMyCollider> zmyColliderList = c.game.world.OverlapArbritaryPolygonAll(poly, Inert.mask_movement_NoEffector | Inert.mask_Phantom);
-        for (int index1 = 0; index1 < zmyColliderList.Count; ++index1)
+        if (theSpell.damage > 0)
         {
-          if ((ZComponent) zmyColliderList[index1] != (object) null && (ZComponent) zmyColliderList[index1].creature != (object) null)
-            zmyColliderList[index1].creature.ApplyDamage(theSpell.spellEnum, theSpell.damageType, theSpell.damage, c, c.game.turn, (ISpellBridge) theSpell, false);
+          ZSpell.InitArbritaryPolygons();
+          ZMyCollider poly = Inert.Instance.cachedBlitCollidersZ[9];
+          poly.ArbritaryInit();
+          poly.x = (int) target.x + poly.offsetX;
+          poly.y = (int) target.y + poly.offsetY;
+          List<ZMyCollider> zmyColliderList = c.game.world.OverlapArbritaryPolygonAll(poly, Inert.mask_movement_NoEffector | Inert.mask_Phantom);
+          for (int index1 = 0; index1 < zmyColliderList.Count; ++index1)
+          {
+            if ((ZComponent) zmyColliderList[index1] != (object) null && (ZComponent) zmyColliderList[index1].creature != (object) null)
+              zmyColliderList[index1].creature.ApplyDamage(theSpell.spellEnum, theSpell.damageType, theSpell.damage, c, c.game.turn, (ISpellBridge) theSpell, false);
+          }
         }
+        c.game.ongoing.RunSpell(ZSpell.IEShandyShores(theSpell, c, target), true);
         break;
       case SpellEnum.Sand_Trap:
         ZSpell.SpawnSandTrap(theSpell, c, target);
@@ -9940,12 +9955,12 @@ label_37:
 
   public static int ClampedFlameLevel(ZCreature c)
   {
-    return c.familiarLevelFlame;
+    return !c.game.gameFacts.GetStyle().HasStyle(GameStyle.Elementals) ? c.familiarLevelFlame : Mathf.Min(4, c.familiarLevelFlame);
   }
 
   public static void UpgradeFullFire(ZCreature c, ZSpell s)
   {
-    if (!((ZComponent) c != (object) null) || !c.familiar.Has(FamiliarType.Flame) || c.familiarLevelFlame <= 0)
+    if (!((ZComponent) c != (object) null) || !c.familiar.Has(FamiliarType.Flame) || (c.familiarLevelFlame <= 0 || s.fromArmageddon))
       return;
     int num = ZSpell.ClampedFlameLevel(c);
     FixedInt fixedInt = (FixedInt) 1 + (FixedInt) num / FixedInt.Create(10);
@@ -9959,7 +9974,7 @@ label_37:
 
   public static void UpgradeFullFireShrapnel(ZCreature c, ZSpell s)
   {
-    if (!((ZComponent) c != (object) null) || !c.familiar.Has(FamiliarType.Flame) || c.familiarLevelFlame <= 0)
+    if (!((ZComponent) c != (object) null) || !c.familiar.Has(FamiliarType.Flame) || (c.familiarLevelFlame <= 0 || s.fromArmageddon))
       return;
     int num = ZSpell.ClampedFlameLevel(c);
     FixedInt fixedInt = (FixedInt) 1 + (FixedInt) num / FixedInt.Create(10);

@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 public class Inert : MonoBehaviour
 {
-  public static string Version = "v7.4";
+  public static string Version = "v7.5";
   public static int _Version = 62;
   public static int mask_Jar = 262144;
   public static int mask_ButterflyJar = 2097152;
@@ -27,6 +27,16 @@ public class Inert : MonoBehaviour
   public OrderedDictionary<string, Effector> baseEffectors = new OrderedDictionary<string, Effector>((IEqualityComparer<string>) Server._caseInsensitiveComparer);
   public OrderedDictionary<string, MyCollider> baseColliders = new OrderedDictionary<string, MyCollider>((IEqualityComparer<string>) Server._caseInsensitiveComparer);
   public KnownServersList servers;
+  public ClientResources clientResources;
+  public OutfitDataList _characterBody;
+  public OutfitDataList _characterHeads;
+  public OutfitDataList _characterLeftHand;
+  public OutfitDataList _characterRightHand;
+  public OutfitDataList _characterHats;
+  public OutfitDataList _characterBeards;
+  public OutfitDataList _characterLeftFoot;
+  public OutfitDataList _characterRightFoot;
+  public OutfitDataList _characterMouths;
   public Store Store;
   public Spell[] _spells;
   public Spell[] holidaySpells;
@@ -122,6 +132,73 @@ public class Inert : MonoBehaviour
   public void QuickLink_Inert()
   {
     this.QuickLink_InertExtra();
+  }
+
+  public IEnumerable<OutfitDataList> GetOutfitData()
+  {
+    yield return this._characterBody;
+    yield return this._characterHeads;
+    yield return this._characterLeftHand;
+    yield return this._characterRightHand;
+    yield return this._characterHats;
+    yield return this._characterBeards;
+    yield return this._characterLeftFoot;
+    yield return this._characterRightFoot;
+    yield return this._characterMouths;
+  }
+
+  public IEnumerable<OutfitData> GetOutfitData2()
+  {
+    foreach (OutfitDataList outfitDataList in this.GetOutfitData())
+    {
+      foreach (OutfitData outfitData in outfitDataList.list)
+        yield return outfitData;
+    }
+  }
+
+  public OutfitDataList GetOutfit(Outfit o)
+  {
+    switch (o)
+    {
+      case Outfit.Body:
+        return this._characterBody;
+      case Outfit.Head:
+        return this._characterHeads;
+      case Outfit.LeftHand:
+        return this._characterLeftHand;
+      case Outfit.RightHand:
+        return this._characterRightHand;
+      case Outfit.Hair:
+        return this._characterHats;
+      case Outfit.Beard:
+      case Outfit.Beard2:
+      case Outfit.Beard3:
+        return this._characterBeards;
+      case Outfit.LeftFoot:
+        return this._characterLeftFoot;
+      case Outfit.RightFoot:
+        return this._characterRightFoot;
+      case Outfit.Mouth:
+        return this._characterMouths;
+      default:
+        return this._characterBody;
+    }
+  }
+
+  public void SetupOutfits()
+  {
+    Outfit outfit = Outfit.Body;
+    foreach (OutfitDataList outfitDataList in this.GetOutfitData())
+    {
+      int num = 0;
+      foreach (OutfitData outfitData in outfitDataList.list)
+      {
+        outfitData.outfit = outfit;
+        outfitData.index = num;
+        ++num;
+      }
+      ++outfit;
+    }
   }
 
   public GameObject GetDucks()
@@ -257,6 +334,7 @@ public class Inert : MonoBehaviour
     foreach (Tower tower in x._towers)
       x.Towers.Add(tower.name, tower);
     x.SetDefaultStats();
+    x.SetupOutfits();
   }
 
   public void SetDefaultStats()
@@ -567,7 +645,7 @@ public class Inert : MonoBehaviour
       SettingsPlayer settingsPlayer = sp;
       component.EquipAll(name, settingsPlayer);
       if (!p.game.isSandbox)
-        creature.mouth.sprite = ClientResources.Instance._characterMouths[(int) sp.indexMouth];
+        creature.mouth.sprite = (Sprite) Inert.Instance._characterMouths[(int) sp.indexMouth];
       Inert.AddTorquingAndOrArchStaffs(p, creature, sp, true, destroyOld);
       Inert.AddOverheadCanvas(creature.clientObj);
     }
@@ -708,7 +786,10 @@ public class Inert : MonoBehaviour
           }
           if (!flag)
           {
-            Spell fromSpell = Inert.Instance._towers[creature.game.RandomInt(0, Inert.Instance._towers.Length)].FromSpell;
+            int index2 = creature.game.RandomInt(0, Inert.Instance._towers.Length - 1);
+            if (index2 >= 10)
+              ++index2;
+            Spell fromSpell = Inert.Instance._towers[index2].FromSpell;
             if ((UnityEngine.Object) fromSpell != (UnityEngine.Object) null)
             {
               SpellSlot spellSlot = new SpellSlot(fromSpell);

@@ -6,6 +6,17 @@ using UnityEngine;
 
 public class Spell : Entity, ISpellBridge
 {
+  public static float[] _tomatoScale = new float[8]
+  {
+    2.56f,
+    1.86f,
+    1.46f,
+    1.06f,
+    1.06f,
+    1.06f,
+    1.06f,
+    1.06f
+  };
   public SpellEnum spellEnum;
   public SpellStats stats;
   [NonSerialized]
@@ -31,9 +42,13 @@ public class Spell : Entity, ISpellBridge
   private IEnumerator _ScaleToZero()
   {
     Spell spell = this;
+    float z = 1f;
     while ((double) spell.transform.localScale.y > 0.0)
     {
-      float num = spell.transform.localScale.y - Time.deltaTime;
+      float num = ClientResources.Instance.tomatoCurve.Evaluate(z);
+      if ((double) num < 0.0)
+        num = 0.0f;
+      z -= Time.deltaTime;
       spell.transform.localScale = new Vector3(num, num, num);
       yield return (object) null;
     }

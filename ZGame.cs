@@ -728,6 +728,12 @@ label_57:
               Controller.Instance.InitMap(true, false);
               return;
             }
+            if (Client.joinedFrom == Client.JoinLocation.Store)
+            {
+              Controller.Instance.OpenMenu(Controller.Instance.MenuMain, false);
+              Controller.ShowPopup(Controller.Instance.MenuStore);
+              break;
+            }
             if (Client.isConnected || Client.offlineMode)
             {
               Controller.Instance.OpenMenu(Controller.Instance.MenuMain, false);
@@ -794,6 +800,20 @@ label_57:
     if (ZComponent.IsNull((ZComponent) zcreature) || zcreature.isDead || this.First_Turn_Teleport && p.localTurn < 0)
       return;
     p.awards.TurnEndedAt(zcreature.position);
+    for (int index = p.controlled.Count - 1; index >= 0; --index)
+    {
+      if (index < p.controlled.Count)
+      {
+        if (p.controlled[index].tempFlight)
+          p.controlled[index].RemoveFlight(false);
+        p.controlled[index].sprinting = 0;
+        if (p.controlled[index]._FourSeasonsCastAtEndOfTurn)
+        {
+          p.controlled[index]._FourSeasonsCastAtEndOfTurn = false;
+          ZSpell.FireSeasonal(Inert.Instance.Seasonal, p.controlled[index], p.controlled[index]._FourSeasonsLocation, false);
+        }
+      }
+    }
     if (zcreature.inWater && (p.localTurn > 0 || !this.First_Turn_Teleport))
     {
       if (this.isServer)
@@ -814,9 +834,10 @@ label_57:
       }
       p.SetGates(p.localTurn);
       ++p.waterMultipler;
-      if (zcreature.health <= 5)
+      if (this.isServer && zcreature.health <= 5)
       {
         zcreature.health = 0;
+        this.SendCreatureHealth(zcreature);
         zcreature.UpdateHealthTxt();
         this.with_the_fishes = true;
         if (this.isClient && Global.GetPrefBool("prefdeathmsg", true))
@@ -826,20 +847,6 @@ label_57:
     }
     else
       p.waterMultipler = 1;
-    for (int index = p.controlled.Count - 1; index >= 0; --index)
-    {
-      if (index < p.controlled.Count)
-      {
-        if (p.controlled[index].tempFlight)
-          p.controlled[index].RemoveFlight(false);
-        p.controlled[index].sprinting = 0;
-        if (p.controlled[index]._FourSeasonsCastAtEndOfTurn)
-        {
-          p.controlled[index]._FourSeasonsCastAtEndOfTurn = false;
-          ZSpell.FireSeasonal(Inert.Instance.Seasonal, p.controlled[index], p.controlled[index]._FourSeasonsLocation, false);
-        }
-      }
-    }
     if (p.inactiveTurns < 3 || !this.isServer || this.isClient)
       return;
     this.Resign(p, false);

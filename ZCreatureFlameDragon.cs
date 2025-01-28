@@ -15,7 +15,7 @@ public class ZCreatureFlameDragon : ZCreature
     bool isLoop = false)
   {
     if (dt != this.ImmuneTo || this.ImmuneTo == DamageType.None)
-      return base.ApplyDamage(spellEnum, dt, damage, enemy, TurnCreated, spellRef, false);
+      return base.ApplyDamage(spellEnum, dt, damage, enemy, TurnCreated, spellRef, isLoop);
     if (dt == DamageType.Snow)
       this.ApplyHeal(DamageType.Snow, Mathf.Max(1, damage / 2), enemy);
     return 0;

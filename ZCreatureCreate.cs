@@ -40,6 +40,7 @@ public static class ZCreatureCreate
     z.id = id;
     z.position = pos;
     z.parent = parent;
+    z.randomNumber = reader.ReadInt32();
     z.health = reader.ReadInt32();
     z.maxHealth = reader.ReadInt32();
     z.isPawn = reader.ReadBoolean();
@@ -147,6 +148,7 @@ public static class ZCreatureCreate
     writer.Write(c.baseCreature.name);
     writer.Write(c.isPawn);
     writer.Write(c.position);
+    writer.Write(c.randomNumber);
     writer.Write(c.health);
     writer.Write(c.maxHealth);
     writer.Write(c.isPawn);

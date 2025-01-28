@@ -164,6 +164,7 @@ public static class GameSerializer
     writer.Write(x.curSpeed.RawValue);
     writer.Write(x.fromArmageddon);
     writer.Write(x.velocity);
+    writer.Write(x.randomNumber);
     writer.Write(x.Bounces);
     writer.Write(x.addedDeathVector);
     writer.Write(x.timesBounced);
@@ -214,6 +215,7 @@ public static class GameSerializer
     z.curSpeed = (FixedInt) reader.ReadInt64();
     z.fromArmageddon = reader.ReadBoolean();
     z.velocity = reader.ReadMyLocation();
+    z.randomNumber = reader.ReadInt32();
     z.Bounces = reader.ReadInt32();
     z.addedDeathVector = reader.ReadMyLocation();
     z.timesBounced = reader.ReadInt32();

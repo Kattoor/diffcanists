@@ -91,8 +91,12 @@ public class CharacterCreation : Catalogue
   public Toggle optionRevealSeasonal;
   public Toggle optionRevealAccountType;
   public Toggle optionClanOutfit;
+  public Toggle optionPreviews;
   public UIOnHover optionAdvanced;
   public UIOnHover optionBasic;
+  [Header("Color picker")]
+  public RawImage previewColor;
+  public SpriteRenderer previewBG;
   [Header("Undo")]
   public UIOnHover buttonUndo;
   public UIOnHover buttonRedo;
@@ -100,7 +104,7 @@ public class CharacterCreation : Catalogue
   public TMP_Text txtRedo;
   private SettingsPlayer stackCurrent;
   private int _curOffset;
-  private Sprite[] curGroup;
+  private OutfitDataList curGroup;
   private UIOnHover activeButtonOutfit;
   private UIOnHover activeButtonPreset;
   private ZCreature creature;
@@ -131,8 +135,24 @@ public class CharacterCreation : Catalogue
     CharacterCreation.Instance = this;
     this.buttonShare.SetActive(false);
     this.txtCoins.text = Client.MyAccount.tournamentCoins.ToString();
+    this.optionPreviews.SetIsOnWithoutNotify(Prefs.charPreview);
     this.lockedOutfit[0].SetActive(!Client.MyAccount.accountType.has(AccountType.Donator));
     this.lockedOutfit[1].SetActive(!Client.MyAccount.accountType.has(AccountType.Arch_Donator | AccountType.Lifetime));
+  }
+
+  public void TogglePreview(bool v)
+  {
+    Prefs.charPreview = v;
+    this.Refresh();
+  }
+
+  public void Refresh()
+  {
+    if (this.curGroup == null)
+      return;
+    this.FilterOutfits();
+    this.Populate(this.curPage);
+    this.HighlightButtonOutfit((int) this.viewing);
   }
 
   public static void Create(SettingsPlayer sp = null, Action<SettingsPlayer> onEnd = null)
@@ -147,6 +167,20 @@ public class CharacterCreation : Catalogue
     CharacterCreation.Instance.txtMainMenu.text = "Ok";
     CharacterCreation.Instance.txtCancel.text = "Cancel";
     CharacterCreation.Instance.buttonShare.SetActive((UnityEngine.Object) LobbyMenu.instance != (UnityEngine.Object) null || (UnityEngine.Object) UnratedMenu.instance != (UnityEngine.Object) null || (UnityEngine.Object) RatedMenu.instance != (UnityEngine.Object) null && !string.IsNullOrEmpty(Client.sharingWith));
+  }
+
+  public void ClickBackColor()
+  {
+    ColorPickerUI.Create(this.previewColor.color, (Action<Color>) (c =>
+    {
+      this.previewColor.color = c;
+      this.previewBG.color = c;
+      Prefs.previewColor = (Color32) c;
+    }), (Action<Color>) (c =>
+    {
+      this.previewColor.color = c;
+      this.previewBG.color = c;
+    }));
   }
 
   public void resetanim()
@@ -460,6 +494,8 @@ public class CharacterCreation : Catalogue
     if (this.settingsPlayer.coloring.HasCustom())
       this.toggleColorSelected.isOn = true;
     DiscordIntergration.Instance?.UpdateActivityCharacterCreation();
+    this.previewColor.color = (Color) Prefs.previewColor;
+    this.previewBG.color = (Color) Prefs.previewColor;
   }
 
   public void ToggleToolTips(bool v)
@@ -553,14 +589,14 @@ public class CharacterCreation : Catalogue
   public void SelectRandomize()
   {
     System.Random r = new System.Random();
-    this.settingsPlayer.indexBody = (byte) r.Next(0, ClientResources.Instance._characterBody.Length);
-    this.settingsPlayer.indexHead = (byte) r.Next(0, ClientResources.Instance._characterHeads.Length);
-    this.settingsPlayer.indexLeftHand = (byte) r.Next(0, ClientResources.Instance._characterLeftHand.Length);
-    this.settingsPlayer.indexRightHand = (byte) r.Next(0, ClientResources.Instance._characterRightHand.Length);
-    this.settingsPlayer.indexHat = (byte) r.Next(0, ClientResources.Instance._characterHats.Length);
-    this.settingsPlayer.indexBeard = (byte) r.Next(0, ClientResources.Instance._characterBeards.Length);
-    this.settingsPlayer.indexBeard2 = (byte) r.Next(0, ClientResources.Instance._characterBeards.Length);
-    this.settingsPlayer.indexBeard3 = (byte) r.Next(0, ClientResources.Instance._characterBeards.Length);
+    this.settingsPlayer.indexBody = (byte) Inert.Instance._characterBody.Random(Client.MyAccount);
+    this.settingsPlayer.indexHead = (byte) Inert.Instance._characterHeads.Random(Client.MyAccount);
+    this.settingsPlayer.indexLeftHand = (byte) Inert.Instance._characterLeftHand.Random(Client.MyAccount);
+    this.settingsPlayer.indexRightHand = (byte) Inert.Instance._characterRightHand.Random(Client.MyAccount);
+    this.settingsPlayer.indexHat = (byte) Inert.Instance._characterHats.Random(Client.MyAccount);
+    this.settingsPlayer.indexBeard = (byte) Inert.Instance._characterBeards.Random(Client.MyAccount);
+    this.settingsPlayer.indexBeard2 = (byte) Inert.Instance._characterBeards.Random(Client.MyAccount);
+    this.settingsPlayer.indexBeard3 = (byte) Inert.Instance._characterBeards.Random(Client.MyAccount);
     this.settingsPlayer.coloring.Set(Outfit.None, ColorType.Red, RandomExtensions.RandomColor(r));
     this.settingsPlayer.coloring.Set(Outfit.None, ColorType.Green, RandomExtensions.RandomColor(r));
     this.settingsPlayer.coloring.Set(Outfit.None, ColorType.Blue, RandomExtensions.RandomColor(r));
@@ -810,7 +846,7 @@ public class CharacterCreation : Catalogue
     if (num <= 0 || Client.MyAccount.cosmetics.array[(int) CharacterCreation.GetViewing(this.viewing)][i])
       return;
     if (Client.MyAccount.tournamentCoins >= num)
-      MyMessageBox.Create("Buy this outfit piece for <sprite name=\"tcoin\"> <#FF0000>" + (object) num + "</color> tournament coins?", (Action) (() => Prestige.Ask((byte) 10, (int) CharacterCreation.GetViewing(this.viewing), i)), "Ok", "Cancel", (Action) null, (Action) null, this.curGroup[i]);
+      MyMessageBox.Create("Buy this outfit piece for <sprite name=\"tcoin\"> <#FF0000>" + (object) num + "</color> tournament coins?", (Action) (() => Prestige.Ask((byte) 10, (int) CharacterCreation.GetViewing(this.viewing), i)), "Ok", "Cancel", (Action) null, (Action) null, this.curGroup[i].sprite, (string) null, (Action) null);
     else
       MyToolTip.Show("You need <sprite name=\"tcoin\"> " + (object) (num - Client.MyAccount.tournamentCoins) + " more tournament coins to buy this outfit - Better sign-up for the next one!", -1f);
   }
@@ -1099,23 +1135,27 @@ public class CharacterCreation : Catalogue
     int index1 = 0;
     int index2 = 0;
     Outfit viewing = CharacterCreation.GetViewing(this.viewing);
-    int index3 = (int) viewing;
+    int num1 = (int) viewing;
+    bool charPreview = Prefs.charPreview;
     for (; index1 < count - this._curOffset && index1 < 75; ++index1)
     {
       bool disabled = false;
-      int index4 = this.curSorted[index1 + this._curOffset];
-      if (index3 < 6 && !Client.cosmetics.array[index3][index4])
+      int index3 = this.curSorted[index1 + this._curOffset];
+      if (num1 < 6 && !Inert.Instance.GetOutfit(viewing)[index3].IsUnlocked(Client.MyAccount))
       {
-        int num = SettingsPlayer.ClientHasAchievement(viewing, index4);
-        if (num <= 0)
+        int num2 = SettingsPlayer.ClientHasAchievement(viewing, index3);
+        if (num2 <= 0)
         {
-          if (num >= 0)
-            disabled = true;
+          if (num2 >= 0)
+          {
+            if (!charPreview)
+              disabled = true;
+          }
           else
             continue;
         }
       }
-      this.outfitButtons[index2].SetSprite(this.curGroup[index4], viewing, index4, disabled);
+      this.outfitButtons[index2].SetSprite(this.curGroup[index3].sprite, viewing, index3, disabled);
       this.outfitButtons[index2].gameObject.SetActive(true);
       ++index2;
     }
@@ -1136,7 +1176,7 @@ public class CharacterCreation : Catalogue
   public void SelectBody()
   {
     this.viewing = Outfit.Body;
-    this.curGroup = ClientResources.Instance._characterBody;
+    this.curGroup = Inert.Instance._characterBody;
     this.FilterOutfits();
     this.Populate(0);
     this.HighlightButtonOutfit((int) this.viewing);
@@ -1145,7 +1185,7 @@ public class CharacterCreation : Catalogue
   public void SelectBeard()
   {
     this.viewing = Outfit.Beard;
-    this.curGroup = ClientResources.Instance._characterBeards;
+    this.curGroup = Inert.Instance._characterBeards;
     this.FilterOutfits();
     this.Populate(0);
     this.HighlightButtonOutfit((int) this.viewing);
@@ -1156,7 +1196,7 @@ public class CharacterCreation : Catalogue
     if (this.lockedOutfit[0].activeInHierarchy)
       return;
     this.viewing = Outfit.Beard2;
-    this.curGroup = ClientResources.Instance._characterBeards;
+    this.curGroup = Inert.Instance._characterBeards;
     this.FilterOutfits();
     this.Populate(0);
     this.HighlightButtonOutfit((int) this.viewing);
@@ -1167,7 +1207,7 @@ public class CharacterCreation : Catalogue
     if (this.lockedOutfit[1].activeInHierarchy)
       return;
     this.viewing = Outfit.Beard3;
-    this.curGroup = ClientResources.Instance._characterBeards;
+    this.curGroup = Inert.Instance._characterBeards;
     this.FilterOutfits();
     this.Populate(0);
     this.HighlightButtonOutfit((int) this.viewing);
@@ -1176,7 +1216,7 @@ public class CharacterCreation : Catalogue
   public void SelectHair()
   {
     this.viewing = Outfit.Hair;
-    this.curGroup = ClientResources.Instance._characterHats;
+    this.curGroup = Inert.Instance._characterHats;
     this.FilterOutfits();
     this.Populate(0);
     this.HighlightButtonOutfit((int) this.viewing);
@@ -1185,7 +1225,7 @@ public class CharacterCreation : Catalogue
   public void SelectHead()
   {
     this.viewing = Outfit.Head;
-    this.curGroup = ClientResources.Instance._characterHeads;
+    this.curGroup = Inert.Instance._characterHeads;
     this.FilterOutfits();
     this.Populate(0);
     this.HighlightButtonOutfit((int) this.viewing);
@@ -1194,7 +1234,7 @@ public class CharacterCreation : Catalogue
   public void SelectLeftHand()
   {
     this.viewing = Outfit.LeftHand;
-    this.curGroup = ClientResources.Instance._characterLeftHand;
+    this.curGroup = Inert.Instance._characterLeftHand;
     this.FilterOutfits();
     this.Populate(0);
     this.HighlightButtonOutfit((int) this.viewing);
@@ -1203,7 +1243,7 @@ public class CharacterCreation : Catalogue
   public void SelectRightHand()
   {
     this.viewing = Outfit.RightHand;
-    this.curGroup = ClientResources.Instance._characterRightHand;
+    this.curGroup = Inert.Instance._characterRightHand;
     this.FilterOutfits();
     this.Populate(0);
     this.HighlightButtonOutfit((int) this.viewing);
@@ -1212,7 +1252,7 @@ public class CharacterCreation : Catalogue
   public void SelectLeftFoot()
   {
     this.viewing = Outfit.LeftFoot;
-    this.curGroup = ClientResources.Instance._characterLeftFoot;
+    this.curGroup = Inert.Instance._characterLeftFoot;
     this.FilterOutfits();
     this.Populate(0);
     this.HighlightButtonOutfit((int) this.viewing);
@@ -1221,7 +1261,7 @@ public class CharacterCreation : Catalogue
   public void SelectRightFoot()
   {
     this.viewing = Outfit.RightFoot;
-    this.curGroup = ClientResources.Instance._characterRightFoot;
+    this.curGroup = Inert.Instance._characterRightFoot;
     this.FilterOutfits();
     this.Populate(0);
     this.HighlightButtonOutfit((int) this.viewing);
@@ -1230,7 +1270,7 @@ public class CharacterCreation : Catalogue
   public void SelectMouth()
   {
     this.viewing = Outfit.Mouth;
-    this.curGroup = ClientResources.Instance._characterMouths;
+    this.curGroup = Inert.Instance._characterMouths;
     this.FilterOutfits();
     this.Populate(0);
     this.HighlightButtonOutfit((int) this.viewing);
@@ -1238,15 +1278,15 @@ public class CharacterCreation : Catalogue
 
   public void CreatedSortedGroups()
   {
-    this.AddGroup(Outfit.Body, ClientResources.Instance._characterBody);
-    this.AddGroup(Outfit.Head, ClientResources.Instance._characterHeads);
-    this.AddGroup(Outfit.LeftHand, ClientResources.Instance._characterLeftHand);
-    this.AddGroup(Outfit.RightHand, ClientResources.Instance._characterRightHand);
-    this.AddGroup(Outfit.Hair, ClientResources.Instance._characterHats);
-    this.AddGroup(Outfit.Beard, ClientResources.Instance._characterBeards);
-    this.AddGroup(Outfit.LeftFoot, ClientResources.Instance._characterLeftFoot);
-    this.AddGroup(Outfit.RightFoot, ClientResources.Instance._characterRightFoot);
-    this.AddGroup(Outfit.Mouth, ClientResources.Instance._characterMouths);
+    this.AddGroup(Outfit.Body, Inert.Instance._characterBody);
+    this.AddGroup(Outfit.Head, Inert.Instance._characterHeads);
+    this.AddGroup(Outfit.LeftHand, Inert.Instance._characterLeftHand);
+    this.AddGroup(Outfit.RightHand, Inert.Instance._characterRightHand);
+    this.AddGroup(Outfit.Hair, Inert.Instance._characterHats);
+    this.AddGroup(Outfit.Beard, Inert.Instance._characterBeards);
+    this.AddGroup(Outfit.LeftFoot, Inert.Instance._characterLeftFoot);
+    this.AddGroup(Outfit.RightFoot, Inert.Instance._characterRightFoot);
+    this.AddGroup(Outfit.Mouth, Inert.Instance._characterMouths);
     this.sortedGroups.Add(this.sortedGroups[5]);
     this.sortedGroups.Add(this.sortedGroups[5]);
   }
@@ -1334,12 +1374,12 @@ public class CharacterCreation : Catalogue
     this.filteredGroup = intList.Count == 0 ? this.sortedGroups[(int) viewing] : intList;
   }
 
-  private void AddGroup(Outfit viewing, Sprite[] g)
+  private void AddGroup(Outfit viewing, OutfitDataList g)
   {
     List<int> intList = new List<int>();
     for (int index = 0; index < g.Length; ++index)
     {
-      if (viewing < Outfit.LeftFoot && !Client.cosmetics.array[(int) viewing][index])
+      if (viewing < Outfit.LeftFoot && !Inert.Instance.GetOutfit(viewing)[index].IsUnlocked(Client.MyAccount))
       {
         int num = SettingsPlayer.ClientHasAchievement(viewing, index);
         if (num <= 0 && num < 0)

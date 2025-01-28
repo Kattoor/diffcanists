@@ -8,9 +8,11 @@ public class MyMessageBox : MonoBehaviour
 {
   public Action onEnd;
   public Action onCancel;
+  public Action onOther;
   public TMP_Text text;
   public TMP_Text txtOk;
   public TMP_Text txtCancel;
+  public TMP_Text txtOther;
   public Toggle doNotShow;
   public Action donotshow;
   public Image image;
@@ -25,12 +27,15 @@ public class MyMessageBox : MonoBehaviour
     string cancel = "Cancel",
     Action onCancel = null,
     Action doNotShow = null,
-    Sprite icon = null)
+    Sprite icon = null,
+    string other = null,
+    Action onOther = null)
   {
     MyMessageBox andApply = Controller.Instance.CreateAndApply<MyMessageBox>(Controller.Instance.messageBox, Controller.Instance.transform);
     MyMessageBox.Instance = andApply;
     andApply.text.text = msg;
     andApply.txtOk.text = ok;
+    andApply.onOther = onOther;
     andApply.txtCancel.text = cancel;
     andApply.onEnd = onEnd;
     andApply.onCancel = onCancel;
@@ -43,10 +48,13 @@ public class MyMessageBox : MonoBehaviour
       andApply.image.sprite = icon;
       andApply.image.gameObject.SetActive(true);
     }
-    if (doNotShow == null)
-      return;
-    andApply.donotshow = doNotShow;
-    andApply.doNotShow.gameObject.SetActive(true);
+    if (doNotShow != null)
+    {
+      andApply.donotshow = doNotShow;
+      andApply.doNotShow.gameObject.SetActive(true);
+    }
+    andApply.txtOther.text = other;
+    andApply.txtOther.transform.parent.gameObject.SetActive(!string.IsNullOrEmpty(other));
   }
 
   private void OnDestroy()
@@ -71,6 +79,15 @@ public class MyMessageBox : MonoBehaviour
     Action onCancel = this.onCancel;
     if (onCancel != null)
       onCancel();
+    UnityEngine.Object.Destroy((UnityEngine.Object) this.gameObject);
+  }
+
+  public void ClickOther()
+  {
+    this.ToggleShowAgain();
+    Action onOther = this.onOther;
+    if (onOther != null)
+      onOther();
     UnityEngine.Object.Destroy((UnityEngine.Object) this.gameObject);
   }
 

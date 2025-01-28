@@ -50,7 +50,7 @@ public class ButtonReplayFile : MonoBehaviour, IRecycledScrollViewGenericItem
     }), (string) null, false)), (Color) ColorScheme.GetColor(MyContextMenu.ColorYellow));
     myContextMenu.AddItem("Delete " + Path.GetFileNameWithoutExtension(this.name), (Action) (() =>
     {
-      File.Delete(this.name);
+      Global.DeleteFile(this.name);
       this.gameObject.SetActive(false);
       int index = ReplayMenu.Instance.games.FindIndex((Predicate<ReplayMenu.CleanReplayName>) (xx => string.Equals(xx.path, this.gameObject.name)));
       if (index > -1)

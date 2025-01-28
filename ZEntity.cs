@@ -20,6 +20,7 @@ public class ZEntity : ZComponent
   public ZGame game;
   [NonSerialized]
   public ZMyCollider collider;
+  public int randomNumber;
   private MyLocation _position;
   [NonSerialized]
   public MyLocation velocity;

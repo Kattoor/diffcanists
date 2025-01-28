@@ -74,6 +74,8 @@ public class Server : MonoBehaviour
   private static byte errorMsg = 0;
   public static System.Random randomNumberGenerator = new System.Random();
   public static int cur = 0;
+  public static Server.ServerSettings.Season cachedSeason = Server.ServerSettings.Season.None;
+  public static List<OutfitData> cachedSeasonOutfits = (List<OutfitData>) null;
   private static GameFacts tempFacts = (GameFacts) null;
   private static float nextKeepAlive = 60f;
   private static float nextRatedCheck = 0.0f;
@@ -120,88 +122,12 @@ public class Server : MonoBehaviour
   {
     get
     {
-      if (Server._defcos == null)
-      {
-        Server._defcos = new Cosmetics();
-        Server._defcos.SetAll();
-        Server._defcos.LockRest();
-        Server._defcos.body[65] = false;
-        Server._defcos.body[67] = false;
-        Server._defcos.body[68] = false;
-        Server._defcos.body[69] = false;
-        Server._defcos.body[70] = false;
-        Server._defcos.body[71] = false;
-        Server._defcos.body[76] = false;
-        Server._defcos.body[98] = false;
-        Server._defcos.body[101] = false;
-        Server._defcos.body[SettingsPlayer.strelizia_body] = false;
-        Server._defcos.body[SettingsPlayer.quinn_body2] = false;
-        Server._defcos.head[59] = false;
-        Server._defcos.head[61] = false;
-        Server._defcos.head[62] = false;
-        Server._defcos.head[63] = false;
-        Server._defcos.head[64] = false;
-        Server._defcos.head[67] = false;
-        Server._defcos.head[78] = false;
-        Server._defcos.head[81] = false;
-        Server._defcos.leftArm[64] = false;
-        Server._defcos.leftArm[65] = false;
-        Server._defcos.leftArm[66] = false;
-        Server._defcos.leftArm[67] = false;
-        Server._defcos.leftArm[105] = false;
-        Server._defcos.leftArm[107] = false;
-        Server._defcos.leftArm[SettingsPlayer.strelizia_mHand] = false;
-        Server._defcos.rightArm[63] = false;
-        Server._defcos.rightArm[64] = false;
-        Server._defcos.rightArm[65] = false;
-        Server._defcos.rightArm[66] = false;
-        Server._defcos.rightArm[67] = false;
-        Server._defcos.rightArm[68] = false;
-        Server._defcos.rightArm[70] = false;
-        Server._defcos.rightArm[73] = false;
-        Server._defcos.rightArm[77] = false;
-        Server._defcos.rightArm[84] = false;
-        Server._defcos.rightArm[88] = false;
-        Server._defcos.rightArm[119] = false;
-        Server._defcos.rightArm[121] = false;
-        Server._defcos.rightArm[123] = false;
-        Server._defcos.rightArm[SettingsPlayer.strelizia_pHand] = false;
-        Server._defcos.rightArm[SettingsPlayer.godsword] = false;
-        Server._defcos.rightArm[SettingsPlayer.olympic_torch] = false;
-        Server._defcos.rightArm[SettingsPlayer.cosmos_helper] = false;
-        Server._defcos.rightArm[157] = false;
-        Server._defcos.rightArm[158] = false;
-        Server._defcos.rightArm[159] = false;
-        Server._defcos.rightArm[160] = false;
-        Server._defcos.rightArm[161] = false;
-        Server._defcos.rightArm[162] = false;
-        Server._defcos.rightArm[163] = false;
-        Server._defcos.hat[74] = false;
-        Server._defcos.hat[76] = false;
-        Server._defcos.hat[78] = false;
-        Server._defcos.hat[99] = false;
-        Server._defcos.hat[SettingsPlayer.strelizia_hat] = false;
-        Server._defcos.beard[57] = false;
-        Server._defcos.beard[59] = false;
-        Server._defcos.beard[60] = false;
-        Server._defcos.beard[62] = false;
-        Server._defcos.beard[64] = false;
-        Server._defcos.rightArm[164] = false;
-        Server._defcos.leftArm[126] = false;
-        Server._defcos.hat[160] = false;
-        Server._defcos.head[94] = false;
-        Server._defcos.body[144] = false;
-        Server._defcos.body[88] = false;
-        Server._defcos.head[73] = false;
-        Server._defcos.leftArm[90] = false;
-        Server._defcos.rightArm[106] = false;
-        Server._defcos.rightArm[107] = false;
-        Server._defcos.beard[75] = false;
-        SettingsPlayer.InitUnlockables(Server._defcos);
-        Server._defcos.spells.ResetAll();
-        Prestige.Unlock(Server._defcos, BookOf.Arcane, true, true);
-        Prestige.Unlock(Server._defcos, BookOf.Flame, true, false);
-      }
+      if (Server._defcos != null)
+        return Server._defcos;
+      Server._defcos = new Cosmetics();
+      Server._defcos.spells.ResetAll();
+      Prestige.Unlock(Server._defcos, BookOf.Arcane, true, true);
+      Prestige.Unlock(Server._defcos, BookOf.Flame, true, false);
       return Server._defcos;
     }
   }
@@ -3091,24 +3017,29 @@ public class Server : MonoBehaviour
 
   private static void ApplySeasonalOutfits(Hazel.Connection c)
   {
-    switch (Server.settings.season)
+    if (Server.settings.season != Server.ServerSettings.Season.None && (Server.cachedSeason != Server.settings.season || Server.cachedSeasonOutfits == null))
+      Server.CacheSeasonOutfits();
+    if (Server.settings.season == Server.ServerSettings.Season.None)
+      return;
+    Server.ApplySeasonalOutfit(c);
+  }
+
+  private static void CacheSeasonOutfits()
+  {
+    Server.cachedSeasonOutfits = new List<OutfitData>();
+    Outfit outfit = Outfit.Body;
+    foreach (OutfitDataList outfitDataList in Inert.Instance.GetOutfitData())
     {
-      case Server.ServerSettings.Season.Halloween:
-        Server.ApplyOutfit(c, SettingsPlayer.seasonHalloween);
-        break;
-      case Server.ServerSettings.Season.Thanksgiving:
-        Server.ApplyOutfit(c, SettingsPlayer.seasonThanksgiving);
-        break;
-      case Server.ServerSettings.Season.Christmas:
-        Server.ApplyOutfit(c, SettingsPlayer.seasonChristmas);
-        break;
-      case Server.ServerSettings.Season.Easter:
-        Server.ApplyOutfit(c, SettingsPlayer.seasonEaster);
-        break;
+      for (int index = 0; index < outfitDataList.list.Count; ++index)
+      {
+        if (outfitDataList[index].season == Server.settings.season)
+          Server.cachedSeasonOutfits.Add(outfitDataList[index]);
+      }
+      ++outfit;
     }
   }
 
-  private static void ApplyOutfit(Hazel.Connection c, List<SettingsPlayer.Seasonal> list)
+  private static void ApplySeasonalOutfit(Hazel.Connection c)
   {
   }
 

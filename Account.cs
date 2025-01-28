@@ -80,6 +80,8 @@ public class Account
   [JsonIgnore]
   public bool activeItemsChanged;
   [JsonIgnore]
+  public bool steamVerified;
+  [JsonIgnore]
   internal bool saveCosmetics;
   public const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   public const string charsExpanded = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+=-<>,./?;:[{]}|";
@@ -814,7 +816,7 @@ public class Account
   public long lastLogin { get; set; }
 
   [JsonProperty("u")]
-  public int dust { get; set; } = 100;
+  public int dust { get; set; }
 
   [JsonProperty("ap")]
   public int poll { get; set; }
@@ -954,9 +956,11 @@ public class Account
     return i.ToString() + Account.number(i);
   }
 
-  public static string number(int i)
+  public static string number(int ii)
   {
-    switch (i)
+    if (ii % 100 >= 11 && ii % 100 <= 13)
+      return "th";
+    switch (ii % 10)
     {
       case 1:
         return "st";
@@ -1022,6 +1026,27 @@ public class Account
       }
     }
     return stringBuilder.ToString();
+  }
+
+  public static int RomanSpriteIndex(char c)
+  {
+    switch (c)
+    {
+      case 'C':
+        return 4;
+      case 'I':
+        return 0;
+      case 'L':
+        return 3;
+      case 'M':
+        return 5;
+      case 'V':
+        return 1;
+      case 'X':
+        return 2;
+      default:
+        return 0;
+    }
   }
 
   public Account()
@@ -1096,6 +1121,14 @@ public class Account
     this.server = other.server;
   }
 
+  public static int MaxNameLength
+  {
+    get
+    {
+      return 13;
+    }
+  }
+
   public static string ValidName(string s)
   {
     s = s.ToLower();
@@ -1105,7 +1138,7 @@ public class Account
       return "Cannot begin with a Space";
     if (s.EndsWith(" "))
       return "Cannot end with a Space";
-    if (s.Length > 13)
+    if (s.Length > Account.MaxNameLength)
       return "Maximum 13 Characters";
     string str = Account.ContainsInvalidWord(s);
     if (str != null)

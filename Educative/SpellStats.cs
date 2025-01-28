@@ -55,5 +55,6 @@ namespace Educative
     public int Bounces;
     public bool hitPhantom;
     public bool destroyTerrainFirstBounce;
+    public int maxSandDamage;
   }
 }

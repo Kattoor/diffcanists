@@ -28,7 +28,7 @@ public enum Achievement
   Master_of_Blood = 24, // 0x00000018
   Master_of_Druidism = 25, // 0x00000019
   Master_of_Cosmos = 26, // 0x0000001A
-  Master_of_Book15 = 27, // 0x0000001B
+  Master_of_Sand = 27, // 0x0000001B
   Master_of_Book16 = 28, // 0x0000001C
   Flame_Arcanist = 29, // 0x0000001D
   Frost_Arcanist = 30, // 0x0000001E
@@ -44,7 +44,7 @@ public enum Achievement
   Blood_Arcanist = 40, // 0x00000028
   Druidism_Arcanist = 41, // 0x00000029
   Cosmos_Arcanist = 42, // 0x0000002A
-  Book15_Arcanist = 43, // 0x0000002B
+  Sand_Arcanists = 43, // 0x0000002B
   Book16_Arcanist = 44, // 0x0000002C
   Champion_of_Magic = 45, // 0x0000002D
   Master_of_Imps = 46, // 0x0000002E
@@ -126,5 +126,6 @@ public enum Achievement
   Lively_Arch_Mage = 122, // 0x0000007A
   Supreme_Arch_Mage = 123, // 0x0000007B
   Natural_Spaghetti = 124, // 0x0000007C
+  Target_Practice = 125, // 0x0000007D
   None = 255, // 0x000000FF
 }

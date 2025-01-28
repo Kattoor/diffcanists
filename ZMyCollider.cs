@@ -17,6 +17,8 @@ public class ZMyCollider : ZComponent
   public int x;
   public int y;
   public int radiusY;
+  private Coords _boundsMin;
+  private Coords _boundsMax;
   [NonSerialized]
   internal MyCollider.ParentNode firstParent;
   [NonSerialized]
@@ -242,7 +244,9 @@ public class ZMyCollider : ZComponent
   {
     get
     {
-      return this.baseCollider.boundsMin;
+      if (this._boundsMin == null)
+        this._boundsMin = this.baseCollider.boundsMin;
+      return this._boundsMin;
     }
   }
 
@@ -250,7 +254,9 @@ public class ZMyCollider : ZComponent
   {
     get
     {
-      return this.baseCollider.boundsMax;
+      if (this._boundsMax == null)
+        this._boundsMax = this.baseCollider.boundsMax;
+      return this._boundsMax;
     }
   }
 
@@ -301,6 +307,14 @@ public class ZMyCollider : ZComponent
     {
       return !((ZComponent) this.creature?.rider != (object) null) ? 1 : 0;
     }
+  }
+
+  public void RectangleChangeBounds()
+  {
+    int x = this.radius / 2;
+    int y = this.radiusY / 2;
+    this._boundsMin = new Coords(-x, -y);
+    this._boundsMax = new Coords(x, y);
   }
 
   public void ArbritaryInit()

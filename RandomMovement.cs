@@ -10,6 +10,11 @@ public class RandomMovement : MonoBehaviour
   protected Vector3 lastPos;
   protected Vector3 nextPos;
 
+  private void Awake()
+  {
+    this.time = (float) Random.Range(-100, 100);
+  }
+
   private void LateUpdate()
   {
     this.time += Time.deltaTime * this.Speed;

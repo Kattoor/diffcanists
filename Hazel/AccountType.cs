@@ -6,7 +6,7 @@ namespace Hazel
     None = 0,
     Mod = 1,
     Developer = 2,
-    Head_of_Moderation = 4,
+    Admin = 4,
     Muted = 8,
     Audio_Director = 16, // 0x00000010
     Arcane_Monster = 32, // 0x00000020

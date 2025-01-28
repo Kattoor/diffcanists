@@ -14,6 +14,7 @@ namespace Educative
     public object spell;
     public bool onPlayersPanel;
     public bool no_AI_still_use_turn;
+    public int prestige;
     public Table colors;
     public Table spells;
     public Table outfit;
@@ -28,7 +29,8 @@ namespace Educative
       string name = "",
       Table outfit = null,
       Table spells = null,
-      BookOf elemental = BookOf.Nothing)
+      BookOf elemental = BookOf.Nothing,
+      int prestige = 0)
     {
       return new Summon()
       {
@@ -41,7 +43,8 @@ namespace Educative
         elemental = elemental,
         playSound = playSound,
         onPlayersPanel = onPlayersPanel,
-        name = name
+        name = name,
+        prestige = prestige
       };
     }
   }

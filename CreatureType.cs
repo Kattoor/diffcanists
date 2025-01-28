@@ -37,4 +37,6 @@ public enum CreatureType
   Javelin,
   Wisp,
   Bear,
+  Sphinx,
+  Map_Bottom,
 }

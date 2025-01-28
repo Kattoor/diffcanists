@@ -115,7 +115,7 @@ public class ReplayMenu : Catalogue
             ReplayMenu.isSpectator = !reader.ReadBoolean();
             ReplayMenu.nameWhoRecordedReplay = reader.ReadString();
             GameFacts gf = new GameFacts();
-            gf.ManualDeserialize(reader, true, false);
+            gf.ManualDeserialize(reader, true, false, (byte) 0);
             Client.game = gf.game;
             StringBuilder stringBuilder = new StringBuilder("Players: ");
             for (int index = 0; index < gf.players.Count; ++index)

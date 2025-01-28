@@ -5,21 +5,20 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Inert : MonoBehaviour
 {
-  public static string Version = "v7.1";
+  public static string Version = "v7.2";
   public static int _Version = 62;
   public static int mask_Jar = 262144;
   public static int mask_ButterflyJar = 2097152;
   public static int mask_Phantom = 65536;
-  public static int mask_entity_movement = 43776;
-  public static int mask_spell_movement = 8448;
-  public static int mask_movement_NoEffector = 8448;
+  public static int mask_entity_movement = 47872;
+  public static int mask_spell_movement = 12544;
+  public static int mask_movement_NoEffector = 12544;
   public static int mask_all = Inert.mask_movement_NoEffector | 1024 | 2048 | 512 | 65536 | Inert.mask_Jar;
   internal Dictionary<string, Creature> Creatures = new Dictionary<string, Creature>();
   internal Dictionary<string, Tower> Towers = new Dictionary<string, Tower>();
@@ -42,6 +41,7 @@ public class Inert : MonoBehaviour
   public Sprite[] ArmageddonIcons;
   public MyCollider basicCircleCollider;
   public Creature baseLeafCreature;
+  [Header("Custom Polygons")]
   public List<MyCollider> cachedBlitColliders;
   internal List<ZMyCollider> cachedBlitCollidersZ;
   public GameObject Player_Character_GO;
@@ -83,6 +83,7 @@ public class Inert : MonoBehaviour
   public Spell arcaneMist;
   public Spell arcaneDragon;
   public Spell corruptDragon;
+  public CreatureTree mapBottom;
   public Texture2D iceBlockTex;
   public Texture2D gargoyleStoneTex;
   public Texture2D gargoyleStoneTexReversed;
@@ -117,42 +118,9 @@ public class Inert : MonoBehaviour
   public static byte[] Version_As_Bytes;
   public List<MinerMarket.Item> minerMarket;
 
-  [ContextMenu("Export Achieve")]
-  private void exportachieve()
+  public void QuickLink_Inert()
   {
-    List<(string, string, string)> valueTupleList = new List<(string, string, string)>();
-    foreach (Achievements.Container container in Achievements.list)
-      valueTupleList.Add((Global.MakeSafeForCode(container.name), container.name, container.description));
-    valueTupleList.Sort((Comparison<(string, string, string)>) ((a, b) => a.name.CompareTo(b.name)));
-    MyLog myLog = new MyLog("Arch.txt");
-    foreach ((string, string, string) valueTuple in valueTupleList)
-      myLog.LogNoTime("|" + valueTuple.Item1 + "| |" + valueTuple.Item2 + "| |" + valueTuple.Item3 + "|");
-    myLog.Dispose();
-  }
-
-  [ContextMenu("Export Clans")]
-  public void ExportClans()
-  {
-    for (int index = 0; index < this._spells.Length; ++index)
-    {
-      if (this._spells[index].name.Contains("Curse"))
-        Debug.Log((object) (this._spells[index].name + " " + (object) index));
-    }
-  }
-
-  [ContextMenu("Testzsa")]
-  private void testzsa()
-  {
-    using (FileStream fileStream = new FileStream("C:\\Users\\after\\Downloads\\Arc_stats.json", FileMode.Open))
-    {
-      using (myBinaryReader r = new myBinaryReader((Stream) fileStream))
-      {
-        int num1 = (int) r.ReadByte();
-        int num2 = (int) r.ReadByte();
-        AllRankingsContainer rankingsContainer = AllRankingsContainer.Deserialize(r);
-        Debug.Log((object) (rankingsContainer.low[0].name + " " + (object) rankingsContainer.low[0].gameLowTime.rating));
-      }
-    }
+    this.QuickLink_InertExtra();
   }
 
   [ContextMenu("Apply Curves")]
@@ -610,6 +578,18 @@ public class Inert : MonoBehaviour
     }
   }
 
+  public static void SetClientColor(ZPerson p, int index)
+  {
+    if (!p.game.isClient)
+      return;
+    if (p.FullArcane)
+      p.clientColor = ClientResources.Instance.ModColors[0];
+    else if ((int) p.settingsPlayer.indexBody == SettingsPlayer.sno_body2)
+      p.clientColor = new Color(0.5f, 0.5f, 0.5f);
+    else
+      p.clientColor = TeamColors.GetColor(index);
+  }
+
   public static ZCreature CreateCharacter(
     ZPerson p,
     SettingsPlayer sp,
@@ -618,8 +598,7 @@ public class Inert : MonoBehaviour
     bool onPlayerPanel = true,
     bool noSpells = false)
   {
-    if (p.game.isClient)
-      p.clientColor = (int) sp.indexBody != SettingsPlayer.sno_body2 ? TeamColors.GetColor(index) : new Color(0.5f, 0.5f, 0.5f);
+    Inert.SetClientColor(p, index);
     ZCreature creature = ZCreatureCreate.CreateCreature(p, Inert.Instance.Player_Character_GO.GetComponent<Creature>(), pos.ToSinglePrecision(), Quaternion.identity, p.game.GetMapTransform(), true);
     creature.game = p.game;
     creature.parent = p;
@@ -776,7 +755,7 @@ public class Inert : MonoBehaviour
       {
         Client.settingsPlayer.Serialize(w);
         Client._ratedFacts.Serialize(w, true);
-        w.Write((byte) 4);
+        w.Write((byte) 5);
         Client._gameSettings.Serialize(w);
       }
       File.WriteAllBytes(path, memoryStream.ToArray());
@@ -799,101 +778,8 @@ public class Inert : MonoBehaviour
     }
   }
 
-  [ContextMenu("Gen Polygons")]
-  private void genpolygons()
+  public void QuickLink_InertExtra()
   {
-    StringBuilder stringBuilder1 = new StringBuilder("[System.Serializable]\npublic enum CachedPolygonEnums {\n");
-    using (FileStream fileStream = new FileStream("CachedPolygons.txt", FileMode.Create))
-    {
-      using (StreamWriter streamWriter = new StreamWriter((Stream) fileStream))
-      {
-        streamWriter.WriteLine("public static class StaticPolygons");
-        streamWriter.WriteLine("{");
-        streamWriter.WriteLine("public static bool Inside(CachedPolygonEnums e, int x, int y)");
-        streamWriter.WriteLine("{");
-        streamWriter.WriteLine("    return polygons[(int)e].Inside(x, y);");
-        streamWriter.WriteLine("}");
-        streamWriter.WriteLine(" public static CachedPolygon[] polygons = new CachedPolygon[] {");
-        int num1 = 0;
-        foreach (Spell spell in ((IEnumerable<Spell>) this._spells).Concat<Spell>((IEnumerable<Spell>) this._Additionalspells).Concat<Spell>((IEnumerable<Spell>) this._otherspells))
-        {
-          if (spell.type == CastType.Tower || spell.spellEnum == SpellEnum.Forest_Seed)
-          {
-            Debug.Log((object) spell.toSummon.name);
-            Texture2D texture2D = spell.type == CastType.Tower ? spell.toSummon.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.texture : spell.toSummon.GetComponent<SpriteRenderer>().sprite.texture;
-            Color32[] pixels32 = texture2D.GetPixels32();
-            bool[,] flagArray = new bool[texture2D.width, texture2D.height];
-            int index1 = 0;
-            StringBuilder stringBuilder2 = new StringBuilder();
-            int num2 = spell.type == CastType.Tower ? (int) spell.toSummon.transform.GetChild(0).localPosition.y : 0;
-            stringBuilder1.Append(spell.name.Replace(' ', '_')).Append(",\n");
-            ++num1;
-            stringBuilder2.Append("new CachedPolygon(){ offset = ").Append(num2).Append(", grid = new bool[,] {//").Append(spell.name.Replace(' ', '_')).Append(" - ").Append(texture2D.width).Append(" x " + (object) texture2D.height);
-            stringBuilder2.Append("\n");
-            for (int index2 = 0; index2 < texture2D.height; ++index2)
-            {
-              stringBuilder2.Append("{");
-              for (int index3 = 0; index3 < texture2D.width; ++index3)
-              {
-                flagArray[index3, index2] = pixels32[index1].a > (byte) 0;
-                stringBuilder2.Append(flagArray[index3, index2].ToString().ToLower()).Append(", ");
-                ++index1;
-              }
-              stringBuilder2.Append("},\n");
-            }
-            stringBuilder2.Append("}},");
-            if (num1 == 10)
-            {
-              stringBuilder2.Append("\nnull");
-              stringBuilder1.Append("None,\n");
-            }
-            streamWriter.WriteLine(stringBuilder2.ToString());
-          }
-        }
-        stringBuilder1.Append("}");
-        streamWriter.WriteLine("new CachedPolygon()};");
-        streamWriter.WriteLine(stringBuilder1.ToString());
-        streamWriter.WriteLine("");
-        streamWriter.WriteLine("}");
-      }
-    }
-    Global.OpenURL("CachedPolygons.txt");
-  }
-
-  [ContextMenu("Gen Specific Polygon")]
-  private void genpolygons2()
-  {
-    SpellEnum spellEnum = SpellEnum.Tree_House;
-    Spell spell1 = (Spell) null;
-    foreach (Spell spell2 in ((IEnumerable<Spell>) this._spells).Concat<Spell>((IEnumerable<Spell>) this._Additionalspells).Concat<Spell>((IEnumerable<Spell>) this._otherspells))
-    {
-      if (spell2.spellEnum == spellEnum)
-      {
-        spell1 = spell2;
-        break;
-      }
-    }
-    Texture2D texture2D = spell1.type == CastType.Tower ? spell1.toSummon.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.texture : spell1.toSummon.GetComponent<SpriteRenderer>().sprite.texture;
-    Color32[] pixels32 = texture2D.GetPixels32();
-    bool[,] flagArray = new bool[texture2D.width, texture2D.height];
-    int index1 = 0;
-    StringBuilder stringBuilder = new StringBuilder();
-    int num = spell1.type == CastType.Tower ? (int) spell1.toSummon.transform.GetChild(0).localPosition.y : 0;
-    stringBuilder.Append("new CachedPolygon(){ offset = ").Append(num).Append(", grid = new bool[,] {//").Append(spell1.name.Replace(' ', '_')).Append(" - ").Append(texture2D.width).Append(" x " + (object) texture2D.height);
-    stringBuilder.Append("\n");
-    for (int index2 = 0; index2 < texture2D.height; ++index2)
-    {
-      stringBuilder.Append("{");
-      for (int index3 = 0; index3 < texture2D.width; ++index3)
-      {
-        flagArray[index3, index2] = pixels32[index1].a > (byte) 0;
-        stringBuilder.Append(flagArray[index3, index2].ToString().ToLower()).Append(", ");
-        ++index1;
-      }
-      stringBuilder.Append("},\n");
-    }
-    stringBuilder.Append("}},");
-    GUIUtility.systemCopyBuffer = stringBuilder.ToString();
-    Debug.Log((object) ("Cached Polygon copied to clipboard - " + spell1.name));
+    this.QuickLink_Inert();
   }
 }

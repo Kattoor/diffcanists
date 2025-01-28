@@ -31,8 +31,12 @@ public class StoreObject : MonoBehaviour
   public Sprite undeadBeard;
   public Sprite undeadLeftFoot;
   public Sprite undeadRightFoot;
+  [Header("Object")]
+  public Outfit objPlacement;
+  public GameObject obj;
   [Header("Spell Sprite")]
   public Sprite spellSprite;
+  public Sprite altSpellSprite;
 
   public static bool OnSummon(Creature c)
   {
@@ -43,8 +47,10 @@ public class StoreObject : MonoBehaviour
       {
         if (activeItem.which == ArcanistsStore.Which.SpellSkin && objList[activeItem.index].spellEnum == c.serverObj.spellEnum)
         {
-          objList[activeItem.index].obj.Setup(c);
-          return true;
+          int num = objList[activeItem.index].obj.Setup(c) ? 1 : 0;
+          if (num != 0)
+            c.activeStoreObject = objList[activeItem.index].obj;
+          return num != 0;
         }
       }
     }
@@ -55,26 +61,32 @@ public class StoreObject : MonoBehaviour
     return false;
   }
 
-  public static void OnUndead(Creature c)
+  public static bool OnUndead(Creature c, SpellEnum spellEnum)
   {
     List<ArcanistsStore.Item> objList = Store.Instance.Get(ArcanistsStore.Which.SpellSkin);
     try
     {
       foreach (ActiveItem activeItem in c.parent.account.activeItems.items)
       {
-        if (activeItem.which == ArcanistsStore.Which.SpellSkin && objList[activeItem.index].spellEnum == c.serverObj.spellEnum)
-          objList[activeItem.index].obj.SetupUndead(c);
+        if (activeItem.which == ArcanistsStore.Which.SpellSkin && objList[activeItem.index].spellEnum == spellEnum)
+        {
+          int num = objList[activeItem.index].obj.SetupUndead(c) ? 1 : 0;
+          if (num != 0)
+            c.activeStoreObject = objList[activeItem.index].obj;
+          return num != 0;
+        }
       }
     }
     catch (Exception ex)
     {
       Debug.LogError((object) ex.ToString());
     }
+    return false;
   }
 
-  public static bool OnSpell(ZSpell c, ZCreature cre)
+  public static bool OnSpell(ZSpell c, ZCreature cre, bool alt = false)
   {
-    if ((ZComponent) cre == (object) null)
+    if ((ZComponent) cre == (object) null || cre.parent == null)
       return false;
     List<ArcanistsStore.Item> objList = Store.Instance.Get(ArcanistsStore.Which.SpellSkin);
     try
@@ -83,7 +95,7 @@ public class StoreObject : MonoBehaviour
       {
         if (activeItem.which == ArcanistsStore.Which.SpellSkin && objList[activeItem.index].spellEnum == c.spellEnum)
         {
-          objList[activeItem.index].obj.Setup(c);
+          objList[activeItem.index].obj.Setup(c, alt);
           return true;
         }
       }
@@ -95,7 +107,21 @@ public class StoreObject : MonoBehaviour
     return false;
   }
 
-  public void Setup(Creature c)
+  public bool AttachedObjects(Creature c)
+  {
+    if ((UnityEngine.Object) this.obj != (UnityEngine.Object) null)
+    {
+      SpriteRenderer sprite = c.GetSprite(this.objPlacement);
+      if ((UnityEngine.Object) sprite != (UnityEngine.Object) null)
+      {
+        UnityEngine.Object.Instantiate<GameObject>(this.obj, sprite.transform.position, Quaternion.identity, sprite.transform).transform.localScale = new Vector3(1f, 1f, 1f);
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public bool Setup(Creature c)
   {
     if (this.animatedSprites.Length != 0)
     {
@@ -108,52 +134,61 @@ public class StoreObject : MonoBehaviour
       }
       component1.choose = component1.sprites;
       SpriteRenderer component2 = c.GetComponent<SpriteRenderer>();
-      if (!((UnityEngine.Object) component2 != (UnityEngine.Object) null))
-        return;
-      component2.sprite = component1.sprites[0];
+      if ((UnityEngine.Object) component2 != (UnityEngine.Object) null)
+        component2.sprite = component1.sprites[0];
+      this.AttachedObjects(c);
+      return true;
     }
-    else
+    bool flag = false;
+    if ((UnityEngine.Object) this.Body != (UnityEngine.Object) null)
     {
-      if ((UnityEngine.Object) this.Body != (UnityEngine.Object) null)
-      {
-        c.body.sprite = this.Body;
-        this.Recolor(c.body, c);
-      }
-      if ((UnityEngine.Object) this.Head != (UnityEngine.Object) null)
-      {
-        c.head.sprite = this.Head;
-        this.Recolor(c.head, c);
-      }
-      if ((UnityEngine.Object) this.LeftHand != (UnityEngine.Object) null)
-      {
-        c.leftArm.sprite = this.LeftHand;
-        this.Recolor(c.leftArm, c);
-      }
-      if ((UnityEngine.Object) this.RightHand != (UnityEngine.Object) null)
-      {
-        c.rightArm.sprite = this.RightHand;
-        this.Recolor(c.rightArm, c);
-      }
-      if ((UnityEngine.Object) this.Hair != (UnityEngine.Object) null)
-      {
-        c.hat.sprite = this.Hair;
-        this.Recolor(c.hat, c);
-      }
-      if ((UnityEngine.Object) this.Beard != (UnityEngine.Object) null)
-      {
-        c.beard.sprite = this.Beard;
-        this.Recolor(c.beard, c);
-      }
-      if ((UnityEngine.Object) this.LeftFoot != (UnityEngine.Object) null)
-      {
-        c.leftFoot.sprite = this.LeftFoot;
-        this.Recolor(c.leftFoot, c);
-      }
-      if (!((UnityEngine.Object) this.RightFoot != (UnityEngine.Object) null))
-        return;
+      c.body.sprite = this.Body;
+      this.Recolor(c.body, c);
+      flag = true;
+    }
+    if ((UnityEngine.Object) this.Head != (UnityEngine.Object) null)
+    {
+      c.head.sprite = this.Head;
+      this.Recolor(c.head, c);
+      flag = true;
+    }
+    if ((UnityEngine.Object) this.LeftHand != (UnityEngine.Object) null)
+    {
+      c.leftArm.sprite = this.LeftHand;
+      this.Recolor(c.leftArm, c);
+      flag = true;
+    }
+    if ((UnityEngine.Object) this.RightHand != (UnityEngine.Object) null)
+    {
+      c.rightArm.sprite = this.RightHand;
+      this.Recolor(c.rightArm, c);
+      flag = true;
+    }
+    if ((UnityEngine.Object) this.Hair != (UnityEngine.Object) null)
+    {
+      c.hat.sprite = this.Hair;
+      this.Recolor(c.hat, c);
+      flag = true;
+    }
+    if ((UnityEngine.Object) this.Beard != (UnityEngine.Object) null)
+    {
+      c.beard.sprite = this.Beard;
+      this.Recolor(c.beard, c);
+      flag = true;
+    }
+    if ((UnityEngine.Object) this.LeftFoot != (UnityEngine.Object) null)
+    {
+      c.leftFoot.sprite = this.LeftFoot;
+      this.Recolor(c.leftFoot, c);
+      flag = true;
+    }
+    if ((UnityEngine.Object) this.RightFoot != (UnityEngine.Object) null)
+    {
       c.rightFoot.sprite = this.RightFoot;
       this.Recolor(c.rightFoot, c);
+      flag = true;
     }
+    return this.AttachedObjects(c) | flag;
   }
 
   private void Recolor(SpriteRenderer x, Creature c)
@@ -170,7 +205,7 @@ public class StoreObject : MonoBehaviour
     ConfigurePlayer.ApplyOutfit(x, c.serverObj.daOriginalTrueParent != null ? c.serverObj.daOriginalTrueParent.settingsPlayer : c.parent.settingsPlayer);
   }
 
-  public void SetupUndead(Creature c)
+  public bool SetupUndead(Creature c)
   {
     if (this.undeadAnimatedSprites.Length != 0)
     {
@@ -183,59 +218,67 @@ public class StoreObject : MonoBehaviour
       }
       component1.choose = component1.sprites;
       SpriteRenderer component2 = c.GetComponent<SpriteRenderer>();
-      if (!((UnityEngine.Object) component2 != (UnityEngine.Object) null))
-        return;
-      component2.sprite = component1.sprites[0];
+      if ((UnityEngine.Object) component2 != (UnityEngine.Object) null)
+        component2.sprite = component1.sprites[0];
+      return true;
     }
-    else
+    bool flag = false;
+    if ((UnityEngine.Object) this.undeadBody != (UnityEngine.Object) null)
     {
-      if ((UnityEngine.Object) this.undeadBody != (UnityEngine.Object) null)
-      {
-        c.body.sprite = this.undeadBody;
-        this.UndeadRecolor(c.body, c);
-      }
-      if ((UnityEngine.Object) this.undeadHead != (UnityEngine.Object) null)
-      {
-        c.head.sprite = this.undeadHead;
-        this.UndeadRecolor(c.head, c);
-      }
-      if ((UnityEngine.Object) this.undeadLeftHand != (UnityEngine.Object) null)
-      {
-        c.leftArm.sprite = this.undeadLeftHand;
-        this.UndeadRecolor(c.leftArm, c);
-      }
-      if ((UnityEngine.Object) this.undeadRightHand != (UnityEngine.Object) null)
-      {
-        c.rightArm.sprite = this.undeadRightHand;
-        this.UndeadRecolor(c.rightArm, c);
-      }
-      if ((UnityEngine.Object) this.undeadHair != (UnityEngine.Object) null)
-      {
-        c.hat.sprite = this.undeadHair;
-        this.UndeadRecolor(c.hat, c);
-      }
-      if ((UnityEngine.Object) this.undeadBeard != (UnityEngine.Object) null)
-      {
-        c.beard.sprite = this.undeadBeard;
-        this.UndeadRecolor(c.beard, c);
-      }
-      if ((UnityEngine.Object) this.undeadLeftFoot != (UnityEngine.Object) null)
-      {
-        c.leftFoot.sprite = this.undeadLeftFoot;
-        this.UndeadRecolor(c.leftFoot, c);
-      }
-      if (!((UnityEngine.Object) this.undeadRightFoot != (UnityEngine.Object) null))
-        return;
+      c.body.sprite = this.undeadBody;
+      this.UndeadRecolor(c.body, c);
+      flag = true;
+    }
+    if ((UnityEngine.Object) this.undeadHead != (UnityEngine.Object) null)
+    {
+      c.head.sprite = this.undeadHead;
+      this.UndeadRecolor(c.head, c);
+      flag = true;
+    }
+    if ((UnityEngine.Object) this.undeadLeftHand != (UnityEngine.Object) null)
+    {
+      c.leftArm.sprite = this.undeadLeftHand;
+      this.UndeadRecolor(c.leftArm, c);
+      flag = true;
+    }
+    if ((UnityEngine.Object) this.undeadRightHand != (UnityEngine.Object) null)
+    {
+      c.rightArm.sprite = this.undeadRightHand;
+      this.UndeadRecolor(c.rightArm, c);
+      flag = true;
+    }
+    if ((UnityEngine.Object) this.undeadHair != (UnityEngine.Object) null)
+    {
+      c.hat.sprite = this.undeadHair;
+      this.UndeadRecolor(c.hat, c);
+      flag = true;
+    }
+    if ((UnityEngine.Object) this.undeadBeard != (UnityEngine.Object) null)
+    {
+      c.beard.sprite = this.undeadBeard;
+      this.UndeadRecolor(c.beard, c);
+      flag = true;
+    }
+    if ((UnityEngine.Object) this.undeadLeftFoot != (UnityEngine.Object) null)
+    {
+      c.leftFoot.sprite = this.undeadLeftFoot;
+      this.UndeadRecolor(c.leftFoot, c);
+      flag = true;
+    }
+    if ((UnityEngine.Object) this.undeadRightFoot != (UnityEngine.Object) null)
+    {
       c.rightFoot.sprite = this.undeadRightFoot;
       this.UndeadRecolor(c.rightFoot, c);
+      flag = true;
     }
+    return flag;
   }
 
-  public void Setup(ZSpell s)
+  public void Setup(ZSpell s, bool alt = false)
   {
     if (!((UnityEngine.Object) this.spellSprite != (UnityEngine.Object) null))
       return;
-    s.gameObject.GetComponent<SpriteRenderer>().sprite = this.spellSprite;
+    s.gameObject.GetComponent<SpriteRenderer>().sprite = alt ? this.altSpellSprite : this.spellSprite;
     if (this.SnowTexture == ExplosionCutout.None)
       return;
     s.snowCutout = this.SnowTexture;

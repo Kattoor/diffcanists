@@ -10,6 +10,7 @@ public static class GameSerializer
     writer.Write(x.team);
     writer.Write(x.id);
     writer.Write(x.localTurn);
+    writer.Write(x.lastTowerCast);
     writer.Write(x.yourTurn);
     writer.Write(x.ready);
     writer.Write(x.sendResync);
@@ -24,8 +25,7 @@ public static class GameSerializer
     writer.Write(x.lastArmageddon);
     writer.Write(x.name);
     x.settingsPlayer.Serialize(writer);
-    x.account.Serialize(writer, false);
-    writer.WriteNoAlpha((Color32) x.clientColor);
+    x.account.Serialize(writer, true);
     writer.Write(x.timesOutfitChanged);
     writer.Write((int) x.familiarBook);
     writer.Write((int) x.ActivateableFamiliar);
@@ -101,6 +101,7 @@ public static class GameSerializer
     x.team = reader.ReadInt32();
     x.id = reader.ReadByte();
     x.localTurn = reader.ReadInt32();
+    x.lastTowerCast = reader.ReadInt32();
     x.yourTurn = reader.ReadBoolean();
     x.ready = reader.ReadBoolean();
     x.sendResync = reader.ReadBoolean();
@@ -116,8 +117,7 @@ public static class GameSerializer
     x.name = reader.ReadString();
     x.settingsPlayer = new SettingsPlayer();
     x.settingsPlayer.Deserialize(reader);
-    x.account.Deserialize(reader, false);
-    x.clientColor = (Color) reader.ReadColor32NoAlpha();
+    x.account.Deserialize(reader, true);
     x.timesOutfitChanged = reader.ReadInt32();
     x.familiarBook = (FamiliarType) reader.ReadInt32();
     x.ActivateableFamiliar = (BookOf) reader.ReadInt32();
@@ -131,8 +131,7 @@ public static class GameSerializer
     x.MinionMaster = reader.ReadBoolean();
     x.BombMaster = reader.ReadBoolean();
     x.spellsCast = JsonConvert.DeserializeObject<Dictionary<SpellEnum, SpellsCast>>(reader.ReadString());
-    if (x.FullArcane)
-      x.clientColor = ClientResources.Instance.ModColors[0];
+    Inert.SetClientColor(x, (int) x.id);
     for (int index = 0; index < x.familiarLevels.Length; ++index)
       x.familiarLevels[index] = reader.ReadInt32();
   }
@@ -184,7 +183,7 @@ public static class GameSerializer
     x.effector2?.Serialize(writer, false);
   }
 
-  public static ZSpell DeserializeSpell(ZGame game, myBinaryReader reader)
+  public static ZSpell DeserializeSpell(ZGame game, myBinaryReader reader, ZCreature cre)
   {
     int num1 = reader.ReadBoolean() ? 1 : 0;
     int num2 = reader.ReadInt32();
@@ -192,7 +191,7 @@ public static class GameSerializer
       return game.helper.Getspell(num2);
     Spell spell = Inert.GetSpell(reader.ReadString());
     MyLocation myLocation = reader.ReadMyLocation();
-    ZSpell z = !((Object) spell != (Object) null) ? new ZSpell() : (!(typeof (FlameWallSpell) == spell.GetType()) ? ZSpell.Create(game, spell, (Vector3) myLocation.ToSinglePrecision(), Quaternion.identity, game.GetMapTransform(), (ZCreature) null) : ZSpell.Create(game, spell, (Vector3) myLocation.ToSinglePrecision(), Quaternion.identity, game.GetMapTransform(), (ZCreature) null));
+    ZSpell z = !((Object) spell != (Object) null) ? new ZSpell() : (!(typeof (FlameWallSpell) == spell.GetType()) ? ZSpell.Create(game, spell, (Vector3) myLocation.ToSinglePrecision(), Quaternion.identity, game.GetMapTransform(), cre) : (ZSpell) ZSpell.Create(game, (FlameWallSpell) spell, (Vector3) myLocation.ToSinglePrecision(), Quaternion.identity, game.GetMapTransform(), cre));
     game.helper.spellID.Add(num2, z);
     z.id = num2;
     z.position = myLocation;

@@ -11,5 +11,6 @@ namespace Educative
     Meter_Flash,
     Meter_Bolt,
     Meter_Target,
+    SpellIcon,
   }
 }

@@ -1,4 +1,5 @@
 
+using Educative;
 using Junk;
 using System;
 using System.Collections.Generic;
@@ -154,6 +155,7 @@ public class ZMap
       }
     }
     this.rawspriteColors.Clear();
+    ContainerGame.Dispose();
     Resources.UnloadUnusedAssets();
   }
 
@@ -264,17 +266,23 @@ public class ZMap
     else if (game.players.Count == 2)
     {
       int num1 = 256;
-      int num2 = game.gameFacts.GetTimeInSeconds() <= 10 ? 256 : 448;
-      int num3 = game.gameFacts.realMap == MapEnum.Jungle ? 300 : 0;
+      int num2 = 0;
+      if (game.gameFacts.realMap == MapEnum.Wasteland)
+      {
+        num2 = 256;
+        num1 = 512;
+      }
+      int num3 = game.gameFacts.GetTimeInSeconds() <= 10 ? 256 : 448;
+      int num4 = game.gameFacts.realMap == MapEnum.Jungle ? 300 : 0;
       for (int index1 = 0; index1 < game.players.Count; ++index1)
       {
         List<MyLocation> myLocationList = new List<MyLocation>();
         FixedInt fixedInt = (FixedInt) (this.Height - game.players[index1].controlled[0].radius);
-        MyLocation startPosition1 = game.players[index1].controlled[0].GetStartPosition(new MyLocation((FixedInt) (index1 == 0 ? num1 : this.Width - num1), fixedInt - num3));
+        MyLocation startPosition1 = game.players[index1].controlled[0].GetStartPosition(new MyLocation((FixedInt) (index1 == 0 ? num1 + num2 : this.Width - num1), fixedInt - num4));
         myLocationList.Add(startPosition1);
-        for (int index2 = 16; index2 <= num2; index2 += 16)
+        for (int index2 = 16; index2 <= num3; index2 += 16)
         {
-          MyLocation startPosition2 = game.players[index1].controlled[0].GetStartPosition(new MyLocation((FixedInt) (index1 == 0 ? num1 + index2 : this.Width - num1 - index2), fixedInt - num3));
+          MyLocation startPosition2 = game.players[index1].controlled[0].GetStartPosition(new MyLocation((FixedInt) (index1 == 0 ? num1 + index2 + num2 : this.Width - num1 - index2), fixedInt - num4));
           myLocationList.Add(startPosition2);
         }
         myLocationList.Sort((Comparison<MyLocation>) ((aa, bb) => (int) aa.y - (int) bb.y));
@@ -363,9 +371,19 @@ public class ZMap
     this.rawspriteColors[(x >> 7) + (y >> 7) * this._numBlocksHorizontal].SetPixel((x & (int) sbyte.MaxValue) + ((y & (int) sbyte.MaxValue) << 7), c);
   }
 
+  public void UpdatePixelNoBounds(int x, int y, Color32 c)
+  {
+    this.rawspriteColors[(x >> 7) + (y >> 7) * this._numBlocksHorizontal].SetPixel((x & (int) sbyte.MaxValue) + ((y & (int) sbyte.MaxValue) << 7), c);
+  }
+
   public Color32 GetPixel(int x, int y)
   {
     return x < 0 || y < 0 || (x >= this.Width || y >= this.Height) ? (Color32) Color.white : this.rawspriteColors[(x >> 7) + (y >> 7) * this._numBlocksHorizontal].colors[(x & (int) sbyte.MaxValue) + ((y & (int) sbyte.MaxValue) << 7)];
+  }
+
+  public Color32 GetPixelNoBoundsCheck(int x, int y)
+  {
+    return this.rawspriteColors[(x >> 7) + (y >> 7) * this._numBlocksHorizontal].colors[(x & (int) sbyte.MaxValue) + ((y & (int) sbyte.MaxValue) << 7)];
   }
 
   private bool PixelNotTransparent(int x, int y)
@@ -545,7 +563,9 @@ public class ZMap
 
   public void DoPastBlit(PastBlits p)
   {
-    if (p.hue)
+    if (p.index == -1)
+      ZSpellSand.Blit(this, Color32.Lerp(SpellSand.color1, SpellSand.color2, UnityEngine.Random.Range(0.0f, 1f)), p.x, p.y);
+    else if (p.hue)
     {
       Color32[] pixels32;
       if (!ZMap.cachedPixels.TryGetValue(Inert.Instance.cutouts[p.index], out pixels32))
@@ -569,6 +589,11 @@ public class ZMap
       this.BitBltBrightness(Inert.Instance.cutouts[p.index], p.x, p.y, p.brightness.ToFloat(), p.ignoreAlpha);
     else
       this.BitBlt(Inert.Instance.cutouts[p.index], p.x, p.y, p.ignoreAlpha, true);
+  }
+
+  public void TutorialBitBlt(Texture2D index, int x, int y, bool ignoreAlpha = true, bool apply = true)
+  {
+    this.BitBlt(index, x, y, ignoreAlpha, apply);
   }
 
   public void ServerBitBltRotate(
@@ -652,7 +677,7 @@ public class ZMap
     if (this.BitBltPixelNotAlpha(x, y))
       return;
     this.UpdatePixel(x, y, color);
-    this.Apply();
+    SandPool.NeedApply = true;
   }
 
   public void BitBlt(Texture2D mask, int x, int y, bool ignoreAlpha = true, bool apply = true)
@@ -941,7 +966,11 @@ public class ZMap
         {
           Color32 color32 = this.BitBltPixelColor(x, y);
           if (color32.a > (byte) 0 && ((int) color32.r < (int) pixels32[index].r || color32.b > (byte) 0 || color32.g > (byte) 0))
-            this.UpdatePixel(x, y, pixels32[index]);
+          {
+            Color32 c = pixels32[index];
+            c.a = color32.a;
+            this.UpdatePixel(x, y, c);
+          }
         }
         ++num5;
       }
@@ -1084,7 +1113,7 @@ public class ZMap
               }
               else
               {
-                if (!collideWithThorns && creature1.GetType() == typeof (ZCreatureThorn))
+                if (!collideWithThorns && (creature1.GetType() == typeof (ZCreatureThorn) || creature1.type == CreatureType.Map_Bottom))
                 {
                   this.world.listPool.ReturnList(list);
                   return false;
@@ -1620,6 +1649,136 @@ public class ZMap
       for (; x4 <= num9; ++x4)
       {
         if (x4 < 0 || x4 >= this.Width || this.PixelNotAlpha(x4, y4, creature, mask, true))
+          return false;
+      }
+      if (num5 <= 0)
+      {
+        ++num2;
+        num5 += num4;
+        num4 += 2;
+      }
+      if (num5 > 0)
+      {
+        --num1;
+        num3 += 2;
+        num5 += (-radius << 1) + num3;
+      }
+    }
+    return true;
+  }
+
+  public bool CheckCircleOnlyEntities(int x0, int y0, int radius, ZCreature creature, int mask)
+  {
+    int num1 = radius - 1;
+    int num2 = 0;
+    int num3 = 1;
+    int num4 = 1;
+    int num5 = num3 - (radius << 1);
+    while (num1 >= num2)
+    {
+      int x1 = x0 - num1;
+      int y1 = y0 + num2;
+      int num6 = x0 + num1;
+      if (y1 < 0 || y1 >= this.Height)
+        return false;
+      for (; x1 <= num6; ++x1)
+      {
+        if (x1 < 0 || x1 >= this.Width || this.PhysicsCollidePoint(creature, x1, y1, mask, true))
+          return false;
+      }
+      int x2 = x0 - num2;
+      int y2 = y0 + num1;
+      int num7 = x0 + num2;
+      if (y2 < 0 || y2 >= this.Height)
+        return false;
+      for (; x2 <= num7; ++x2)
+      {
+        if (x2 < 0 || x2 >= this.Width || this.PhysicsCollidePoint(creature, x2, y2, mask, true))
+          return false;
+      }
+      int x3 = x0 - num1;
+      int y3 = y0 - num2;
+      int num8 = x0 + num1;
+      if (y3 < 0 || y3 >= this.Height)
+        return false;
+      for (; x3 <= num8; ++x3)
+      {
+        if (x3 < 0 || x3 >= this.Width || this.PhysicsCollidePoint(creature, x3, y3, mask, true))
+          return false;
+      }
+      int x4 = x0 - num2;
+      int y4 = y0 - num1;
+      int num9 = x0 + num2;
+      if (y4 < 0 || y4 >= this.Height)
+        return false;
+      for (; x4 <= num9; ++x4)
+      {
+        if (x4 < 0 || x4 >= this.Width || this.PhysicsCollidePoint(creature, x4, y4, mask, true))
+          return false;
+      }
+      if (num5 <= 0)
+      {
+        ++num2;
+        num5 += num4;
+        num4 += 2;
+      }
+      if (num5 > 0)
+      {
+        --num1;
+        num3 += 2;
+        num5 += (-radius << 1) + num3;
+      }
+    }
+    return true;
+  }
+
+  public bool CheckCircleOnlyMap(int x0, int y0, int radius)
+  {
+    int num1 = radius - 1;
+    int num2 = 0;
+    int num3 = 1;
+    int num4 = 1;
+    int num5 = num3 - (radius << 1);
+    while (num1 >= num2)
+    {
+      int x1 = x0 - num1;
+      int y1 = y0 + num2;
+      int num6 = x0 + num1;
+      if (y1 < 0 || y1 >= this.Height)
+        return false;
+      for (; x1 <= num6; ++x1)
+      {
+        if (x1 < 0 || x1 >= this.Width || !this.CheckPositionOnlyMap(x1, y1))
+          return false;
+      }
+      int x2 = x0 - num2;
+      int y2 = y0 + num1;
+      int num7 = x0 + num2;
+      if (y2 < 0 || y2 >= this.Height)
+        return false;
+      for (; x2 <= num7; ++x2)
+      {
+        if (x2 < 0 || x2 >= this.Width || !this.CheckPositionOnlyMap(x2, y2))
+          return false;
+      }
+      int x3 = x0 - num1;
+      int y3 = y0 - num2;
+      int num8 = x0 + num1;
+      if (y3 < 0 || y3 >= this.Height)
+        return false;
+      for (; x3 <= num8; ++x3)
+      {
+        if (x3 < 0 || x3 >= this.Width || !this.CheckPositionOnlyMap(x3, y3))
+          return false;
+      }
+      int x4 = x0 - num2;
+      int y4 = y0 - num1;
+      int num9 = x0 + num2;
+      if (y4 < 0 || y4 >= this.Height)
+        return false;
+      for (; x4 <= num9; ++x4)
+      {
+        if (x4 < 0 || x4 >= this.Width || !this.CheckPositionOnlyMap(x4, y4))
           return false;
       }
       if (num5 <= 0)

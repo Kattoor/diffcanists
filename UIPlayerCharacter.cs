@@ -288,7 +288,7 @@ public class UIPlayerCharacter : MonoBehaviour
     this.beard3.transform.SetSiblingIndex(ConfigurePlayer.BeardInFront(p.settingsPlayer.indexBeard3) ? 9 : 6 + num2);
     foreach (byte spell1 in p.settingsPlayer.spells)
     {
-      if ((int) spell1 < Inert.Instance.spells.Count && spell1 < byte.MaxValue)
+      if ((int) spell1 < Inert.Instance._spells.Length && spell1 < byte.MaxValue)
       {
         Spell spell2 = !p.seasonISHoliday || spell1 < (byte) 120 || spell1 > (byte) 131 ? Inert.Instance._spells[(int) spell1] : Inert.Instance.holidaySpells[(int) spell1 - 120];
         if (spell2.level == 3)
@@ -305,9 +305,12 @@ public class UIPlayerCharacter : MonoBehaviour
       int index2 = 0;
       while (index2 < 12)
       {
-        Spell spell = !p.seasonISHoliday || num3 != 10 ? Inert.Instance._spells[index1] : Inert.Instance.holidaySpells[index2];
-        if (spell.level == 3)
-          this.AddLevel3(spell);
+        if (index1 < Inert.Instance._spells.Length)
+        {
+          Spell spell = !p.seasonISHoliday || num3 != 10 ? Inert.Instance._spells[index1] : Inert.Instance.holidaySpells[index2];
+          if (spell.level == 3)
+            this.AddLevel3(spell);
+        }
         ++index2;
         ++index1;
       }

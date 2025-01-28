@@ -8,7 +8,7 @@ public static class SaveFolder
   {
     get
     {
-      return Directory.Exists(Application.dataPath + "/SavedData") ? Application.dataPath + "/SavedData" : Application.persistentDataPath;
+      return Directory.Exists(Path.GetFullPath(".") + "/SavedData") ? Path.GetFullPath(".") + "/SavedData" : Application.persistentDataPath;
     }
   }
 }

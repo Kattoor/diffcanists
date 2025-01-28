@@ -77,4 +77,15 @@ public enum EffectorType
   Phantom = 72, // 0x00000048
   Fake_Portal = 73, // 0x00000049
   Dense_Fog = 74, // 0x0000004A
+  Mind_Control = 75, // 0x0000004B
+  Sand_Trap = 76, // 0x0000004C
+  Burning_Sands = 77, // 0x0000004D
+  Sandy_Shores = 78, // 0x0000004E
+  Monolith = 79, // 0x0000004F
+  Pyramid = 80, // 0x00000050
+  Mana = 81, // 0x00000051
+  WaterWalking = 82, // 0x00000052
+  Sands_of_Time = 83, // 0x00000053
+  Sand_Mite = 84, // 0x00000054
+  Sand_Mite_Embeded = 85, // 0x00000055
 }

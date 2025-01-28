@@ -427,7 +427,7 @@ namespace ChessConsole
           {
             if (!((UnityEngine.Object) ChatBox.Instance != (UnityEngine.Object) null))
               return;
-            ChatBox.Instance.NewChatMsg("[Chess] " + str1, str2, (Color) ColorScheme.GetColor(Global.ColorMiniGameText), str1, ChatOrigination.MiniGame, ContentType.STRING, (object) null);
+            ChatBox.Instance.NewChatMsg("[Checkers] " + str1, str2, (Color) ColorScheme.GetColor(Global.ColorMiniGameText), str1, ChatOrigination.MiniGame, ContentType.STRING, (object) null);
           }));
           break;
         case 8:

@@ -7,6 +7,7 @@ namespace Educative
   [Serializable]
   public class LuaColor
   {
+    public static readonly LuaColor white = LuaColor.construct(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue);
     public byte r;
     public byte g;
     public byte b;

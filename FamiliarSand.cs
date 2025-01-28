@@ -1,10 +1,11 @@
 
 using UnityEngine;
 
-public class FamiliarRock : Familiar
+public class FamiliarSand : Familiar
 {
   public float maxDistance = 4f;
   public float speed = 1f;
+  public float walkSpeed = 20f;
   public float height = 18f;
   public int lineCast = 30;
   public IAnimator anim;
@@ -31,19 +32,30 @@ public class FamiliarRock : Familiar
       if ((double) this.creature.transformscale > 0.0)
         offset.x = -offset.x;
       Vector3 vector3 = (Vector3) this.creature.position.ToSinglePrecision() + offset;
-      Coords coords = this.creature.game.map.bresenhamsLineCastOnlyTerrain(new Coords((int) vector3.x, (int) vector3.y), new Coords((int) vector3.x, (int) vector3.y - (this.creature.GetRadius() + this.lineCast)));
-      if (coords != null)
-        vector3.y = (float) coords.y + this.height;
+      Coords coords1 = this.creature.game.map.bresenhamsLineCastOnlyTerrain(new Coords((int) vector3.x, (int) vector3.y), new Coords((int) vector3.x, (int) vector3.y - (this.creature.GetRadius() + this.lineCast)));
+      if (coords1 != null)
+        vector3.y = (float) coords1.y + this.height;
       if ((double) this.transform.localScale.x < 0.0 && (double) this.creature.transformscale > 0.0)
         this.transform.localScale = new Vector3(1f, 1f, 1f);
       else if ((double) this.transform.localScale.x > 0.0 && (double) this.creature.transformscale < 0.0)
         this.transform.localScale = new Vector3(-1f, 1f, 1f);
       bool flag = true;
       float num = Vector3.Distance(vector3, this.transform.position);
-      if ((int) vector3.y != (int) this.transform.position.y || (double) num > (double) this.maxDistance)
+      if (Mathf.Abs((int) vector3.y - (int) this.transform.position.y) > 1 || (double) num > (double) this.maxDistance)
       {
-        this.transform.position = Vector3.Lerp(this.transform.position, vector3, Time.deltaTime * this.speed);
-        if ((double) num > 3.0 && this.lastState == AnimateState.Walk && this.creature.animator.currentState == AnimateState.Stop)
+        Coords coords2 = (int) this.transform.position.x == (int) vector3.x ? coords1 : this.creature.game.map.bresenhamsLineCastOnlyTerrain(new Coords((int) this.transform.position.x, (int) this.transform.position.y), new Coords((int) this.transform.position.x, (int) this.transform.position.y - (this.creature.GetRadius() + this.lineCast)));
+        if (coords2 != null)
+        {
+          if ((double) vector3.x < (double) this.transform.position.x - 1.0)
+            this.transform.position = new Vector3(this.transform.position.x - this.walkSpeed * Time.deltaTime, Mathf.Lerp(this.transform.position.y, (float) coords2.y + this.height, Time.deltaTime * this.speed));
+          else if ((double) vector3.x > (double) this.transform.position.x + 1.0)
+            this.transform.position = new Vector3(this.transform.position.x + this.walkSpeed * Time.deltaTime, Mathf.Lerp(this.transform.position.y, (float) coords2.y + this.height, Time.deltaTime * this.speed));
+          else
+            this.transform.position = new Vector3(this.transform.position.x, Mathf.Lerp(this.transform.position.y, (float) coords2.y + this.height, Time.deltaTime * this.speed));
+        }
+        else
+          this.transform.position = Vector3.Lerp(this.transform.position, vector3, Time.deltaTime * this.speed);
+        if ((double) num > 3.0)
         {
           this.anim.Play(AnimateState.Walk, 0.05f, true);
           flag = false;
@@ -58,7 +70,7 @@ public class FamiliarRock : Familiar
       }
       else if (this.creature.animator.currentState == AnimateState.Jump)
       {
-        this.anim.Play(AnimateState.Jump, 0.0f, true);
+        this.anim.Play(AnimateState.Jump, 0.05f, true);
         this.lastState = AnimateState.Jump;
       }
       else

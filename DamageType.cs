@@ -40,4 +40,5 @@ public enum DamageType
   Sting,
   Gravity,
   SunderLight,
+  Sand,
 }

@@ -365,11 +365,12 @@ public class ConfigurePlayer : MonoBehaviour
 
   public static void PrestigeHat(Image r, byte i, Color c, bool destroy)
   {
+    int extra = (int) i - 9;
     if ((int) i >= ClientResources.Instance._iconsPrestige.Length)
-      i = (byte) 0;
+      i = (byte) (ClientResources.Instance._iconsPrestige.Length - 1);
     if (r.gameObject.CompareTag("RawImage") & destroy)
       ConfigurePlayer.DestroyOutfit(r.sprite);
-    r.sprite = Recolor.PrestigeHat(ClientResources.Instance._iconsPrestige[(int) i], c);
+    r.sprite = Recolor.PrestigeHat(ClientResources.Instance._iconsPrestige[(int) i], c, extra);
     r.gameObject.tag = "RawImage";
   }
 

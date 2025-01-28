@@ -121,6 +121,9 @@ public class LobbyMenu : Catalogue
     this.toggleUnratedGames.onValueChanged.AddListener(new UnityAction<bool>(this.ToggleViewUnratedGames));
     this.RefreshGames();
     this.ViewLobby();
+    if (!RatedTab.FindingOpponents)
+      return;
+    this.ratedTab.FindOpponents(true);
   }
 
   public void TogglePoll()

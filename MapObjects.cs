@@ -7,11 +7,16 @@ public class MapObjects : MonoBehaviour
   public SpriteRenderer[] waves;
   [Header("Dashes")]
   public Transform TopDash;
+  public Transform BottomDash;
   public Transform LeftDash;
   public Transform RightDash;
   public Transform LeftCorner;
   public Transform RightCorner;
+  public Transform LeftCorner2;
+  public Transform RightCorner2;
   public SpriteRenderer water;
+  public SpriteRenderer land;
+  public SpriteRenderer empty_void;
   private Camera _camera;
 
   public static MapObjects Instance { get; private set; }
@@ -30,6 +35,24 @@ public class MapObjects : MonoBehaviour
       Debug.LogError((object) "MapObjects.cs Instance is corrupted");
     else
       MapObjects.Instance = (MapObjects) null;
+  }
+
+  public void Setup(WaterStyle w)
+  {
+    if (w == WaterStyle.Default || w == WaterStyle.Water)
+      return;
+    this.water.gameObject.SetActive(false);
+    for (int index = 0; index < this.waves.Length; ++index)
+      this.waves[index].gameObject.SetActive(false);
+    this.BottomDash.gameObject.SetActive(true);
+    this.empty_void.size = new Vector2((float) (Client.game.map.Width + 2000), 1000f);
+    this.empty_void.transform.position = new Vector3((float) (Client.game.map.Width / 2), -500f);
+    this.empty_void.gameObject.SetActive(true);
+    if (w != WaterStyle.Ground)
+      return;
+    this.land.size = new Vector2((float) Client.game.map.Width, 1000f);
+    this.land.transform.position = new Vector3((float) (Client.game.map.Width / 2), -500f);
+    this.land.gameObject.SetActive(true);
   }
 
   public void ColorWaves()
@@ -72,6 +95,9 @@ public class MapObjects : MonoBehaviour
       case MapEnum.Ghostly_Halls:
         this.Adjust(0.2f, -0.68f, 0.16f);
         break;
+      case MapEnum.Desert:
+        this.Adjust(0.08611111f, 0.0f, 0.06f);
+        break;
       case MapEnum.Space_Nexus:
         this.Adjust(0.3083333f, 0.0f, -0.2f);
         break;
@@ -103,5 +129,9 @@ public class MapObjects : MonoBehaviour
     this.RightDash.GetComponent<SpriteRenderer>().size = new Vector2((float) Client.map.Height, 14f);
     this.LeftCorner.position = new Vector3(-7f, (float) (Client.map.Height + 7), 0.0f);
     this.RightCorner.position = new Vector3((float) (Client.map.Width + 7), (float) (Client.map.Height + 7), 0.0f);
+    this.BottomDash.position = new Vector3((float) Client.map.Width * 0.5f, -7f, 0.0f);
+    this.BottomDash.GetComponent<SpriteRenderer>().size = new Vector2((float) Client.map.Width, 14f);
+    this.LeftCorner2.position = new Vector3(-7f, -7f, 0.0f);
+    this.RightCorner2.position = new Vector3((float) (Client.map.Width + 7), -7f, 0.0f);
   }
 }

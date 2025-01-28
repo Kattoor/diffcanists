@@ -61,6 +61,7 @@ public class Controller : MonoBehaviour
   public CheckersUI checkersui;
   public Join31UI Join31ui;
   public RPSTBGUI RPSTBGui;
+  [Header("Map Objects ")]
   public GameObject mapObj;
   public GameObject mapMeterObj;
   public GameObject miniCamera;
@@ -73,6 +74,7 @@ public class Controller : MonoBehaviour
   public MyToolTip MenuToolTip;
   public MyToolTip MenuToolTip2;
   public MyPopup MyPopupItem;
+  public UnratedTab unratedTab;
   public UIAchievement uIAchievement;
   public GameObject MenuEmoji;
   public QuickchatUI quickchat;

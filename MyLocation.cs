@@ -350,6 +350,8 @@ public struct MyLocation
 
   public static void Reflect(MyLocation vector, ref MyLocation normal, out MyLocation ret)
   {
+    if (normal.y == 0 && normal.x == 0)
+      normal.y = (FixedInt) 1;
     FixedInt ret1;
     MyLocation.Dot(vector, normal, out ret1);
     normal.Multiply(ret1.RawValue, out ret);

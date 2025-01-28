@@ -585,9 +585,12 @@ public class ZCreatureTree : ZCreature
       return 0;
     if (dt == DamageType.Heal || dt == DamageType.Heal20 || dt == DamageType.Heal50)
     {
-      this.health += damage;
-      if (this.health > this.maxHealth)
-        this.health = this.maxHealth;
+      if (!this.baseTree.isStructure)
+      {
+        this.health += damage;
+        if (this.health > this.maxHealth)
+          this.health = this.maxHealth;
+      }
       return 0;
     }
     if (this.baseTree.isButterflyJar)
@@ -618,7 +621,7 @@ public class ZCreatureTree : ZCreature
       ZSpell.ApplyExplosionForce(SpellEnum.Butterfly_Jar, this.world, this.position, 0, Curve.None, 10, 50, (FixedInt) 0, DamageType.None, (ZCreature) this, this.game.turn, Curve.Generic, (ISpellBridge) null, (ZCreature) null);
       return 0;
     }
-    if (dt == DamageType.Drain && (ZComponent) enemy != (object) null)
+    if (dt == DamageType.Drain && (ZComponent) enemy != (object) null && !this.baseTree.isStructure)
     {
       damage = Mathf.Min(damage, enemy.health);
       enemy.DoHeal(damage, dt, enemy, false);
@@ -628,6 +631,17 @@ public class ZCreatureTree : ZCreature
     }
     if (this.health > 900)
       return 0;
+    if (dt == DamageType.Sand)
+    {
+      if (this.curSandTurn != this.game.everIncreasingVariable)
+      {
+        this.curSandTurn = this.game.everIncreasingVariable;
+        this.curSandDamage = 0;
+      }
+      if (spellRef != null && spellRef.maxSandDamage <= this.curSandDamage)
+        return 0;
+      this.curSandDamage += damage;
+    }
     this.health -= damage;
     if (this.health <= 0)
     {
@@ -682,7 +696,7 @@ public class ZCreatureTree : ZCreature
 
   public override void StartMoving(bool fromInput = false)
   {
-    if (this.moving != null || this.isDead || (this.baseTree.isButterflyJar || !this.baseCreature.canMove))
+    if (this.moving != null || this.isDead || (this.baseTree.isButterflyJar || !this.baseCreature.canMove) || this.baseTree.isStructure)
       return;
     if (this.map.CheckTexutureOnlyMap((int) this.position.x, (int) this.position.y, this.texture))
     {

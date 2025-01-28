@@ -7,4 +7,7 @@ public enum AnimateState
   Fall,
   Attack,
   Swing,
+  Burrow,
+  Burrowing,
+  UnBurrow,
 }

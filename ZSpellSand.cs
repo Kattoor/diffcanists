@@ -8,7 +8,7 @@ public class ZSpellSand : ZSpell
 
   public void Blit()
   {
-    if (!this.map.CheckPositionOnlyEntities((int) this.position.x, (int) this.position.y, (ZCreature) null, 256))
+    if (!this.map.CheckPositionOnlyEntities((int) this.position.x, (int) this.position.y, (ZCreature) null, 8448))
       return;
     this.map.BitBlt(this.color, (int) this.position.x, (int) this.position.y);
   }
@@ -35,7 +35,7 @@ label_2:
     int collisionFrame = 2;
     if (zspellSand.game.isClient)
     {
-      zspellSand.color = (Color32) Color.Lerp(SpellSand.color1, SpellSand.color2, Random.Range(0.0f, 1f));
+      zspellSand.color = Color32.Lerp(SpellSand.color1, SpellSand.color2, Random.Range(0.0f, 1f));
       zspellSand.clientObj.GetComponent<SpriteRenderer>().color = (Color) zspellSand.color;
     }
     while (!zspellSand.isDead)
@@ -186,11 +186,27 @@ label_31:
     }
   }
 
-  public static void Blit(ZMap map, MyLocation position, Color32 color)
+  public static void Blit(ZMap map, Color32 color, int x, int y)
   {
-    if (!map.CheckPositionOnlyEntities((int) position.x, (int) position.y, (ZCreature) null, 256))
+    map.BitBltDelay(color, x, y);
+    map.BitBltDelay(color, x - 1, y);
+    map.BitBltDelay(color, x + 1, y);
+    map.BitBltDelay(color, x, y + 1);
+  }
+
+  public static void Blit(ZMap map, MyLocation position, Color32 color, ZCreature parent)
+  {
+    if (!map.CheckPositionOnlyEntities((int) position.x, (int) position.y - 1, (ZCreature) null, 256))
       return;
-    map.BitBltDelay(color, (int) position.x, (int) position.y);
+    int x = (int) position.x;
+    int y = (int) position.y;
+    ZSpellSand.Blit(map, color, x, y);
+    map._pastBits.Add(new PastBlits()
+    {
+      index = -1,
+      x = x,
+      y = y
+    });
   }
 
   public static IEnumerator<float> SandMove(
@@ -200,7 +216,7 @@ label_31:
     MyLocation position,
     MyLocation velocity)
   {
-    int collisionFrame = 2;
+    int collisionFrame = 0;
     bool isDead = false;
     int curDuration = 0;
     ZMap map = game.map;
@@ -226,6 +242,8 @@ label_31:
       }
       while (num1 > 0)
       {
+        if (curDuration == 2)
+          toCollideCheck = (ZCreature) null;
         num1 = 0;
         int x4 = (int) (velocity.x + x1);
         int y4 = (int) (velocity.y + y1);
@@ -237,7 +255,7 @@ label_31:
             velocity.y = (FixedInt) 0;
             velocity.x = (FixedInt) 0;
             position = new MyLocation(x2, y2);
-            zcreature.ApplyDamage(spell.spellEnum, spell.damageType, spell.damage, parent, game.turn, (ISpellBridge) null, false);
+            zcreature.ApplyDamage(spell.spellEnum, spell.damageType, spell.damage, parent, game.turn, (ISpellBridge) spell, false);
             yield break;
           }
           else
@@ -273,11 +291,11 @@ label_31:
                 position = new MyLocation(num2, yInt);
                 velocity.x = (FixedInt) 0;
                 velocity.y = (FixedInt) -10;
-                goto label_21;
+                goto label_23;
               }
             }
             position = new MyLocation(num2, yInt);
-            ZSpellSand.Blit(map, position, (Color32) Color.Lerp(SpellSand.color1, SpellSand.color2, Random.Range(0.0f, 1f)));
+            ZSpellSand.Blit(map, position, Color32.Lerp(SpellSand.color1, SpellSand.color2, Random.Range(0.0f, 1f)), parent);
             yield break;
           }
         }
@@ -290,16 +308,23 @@ label_31:
         }
       }
       position += velocity;
-label_21:
+label_23:
       if (game.isClient)
         SandPool.Instance?.Add((Vector3) position.ToSinglePrecision());
       if (position.y < 1)
       {
-        ZSpellSand.Blit(map, position, (Color32) Color.Lerp(SpellSand.color1, SpellSand.color2, Random.Range(0.0f, 1f)));
+        if (game.waterType == WaterStyle.No_Water)
+          break;
+        position.y = (FixedInt) 0;
+        for (int index = 0; index < 10; ++index)
+        {
+          if (map.GetPixel((int) position.x, (int) position.y).a > (byte) 0 && map.GetPixel((int) position.x - 1, (int) position.y).a > (byte) 0 && map.GetPixel((int) position.x + 1, (int) position.y).a > (byte) 0)
+            position.y += 1;
+        }
+        ZSpellSand.Blit(map, position, Color32.Lerp(SpellSand.color1, SpellSand.color2, Random.Range(0.0f, 1f)), parent);
         break;
       }
-      if (velocity.y > -ZMap.MaxSpeed)
-        velocity.y += map.Gravity;
+      velocity.y += map.Gravity;
       ++curDuration;
       if (curDuration >= 600)
         break;

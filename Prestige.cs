@@ -101,6 +101,9 @@ public static class Prestige
         Client.MyAccount.wands = r.ReadInt32();
         Client.MyAccount.totalWands = r.ReadInt32();
         Prestige.RefreshUI();
+        if (!Prestige.ReadyToPrestige(Client.MyAccount) || !((UnityEngine.Object) ChatBox.Instance != (UnityEngine.Object) null))
+          break;
+        ChatBox.Instance?.NewChatMsg("You have collected enough wands to prestige (Can be done from the Spell Selection menu).", (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
         break;
       case 9:
         Client.MyAccount.tournamentCoins = r.ReadInt32();
@@ -419,7 +422,7 @@ public static class Prestige
 
   public static bool ViewLocked(this ViewSpellLocks s)
   {
-    return (uint) (s & (ViewSpellLocks.Locked | ViewSpellLocks.Locked_Rated_Restricted)) > 0U;
+    return (uint) (s & (ViewSpellLocks.Locked | ViewSpellLocks.Locked_Rated_Restricted | ViewSpellLocks.Rated_Restricted)) > 0U;
   }
 
   public static bool ViewRestricted(this ViewSpellLocks s)
@@ -429,7 +432,7 @@ public static class Prestige
 
   public static int MaxWands(Account acc)
   {
-    return acc.prestige < (byte) 1 ? 153 : 237;
+    return acc.prestige < (byte) 1 ? 153 : 258;
   }
 
   public static bool ReadyToPrestige(Account acc)

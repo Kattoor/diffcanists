@@ -196,11 +196,10 @@ public class Achievements
     },
     new Achievements.Container()
     {
-      name = "Master of ",
-      description = "Win a rated game with the full Book of ",
+      name = "Master of Sand",
+      description = "Win a rated game with the full Book of Sand",
       points = (ushort) 300,
-      ratedOnly = true,
-      available = false
+      ratedOnly = true
     },
     new Achievements.Container()
     {
@@ -310,11 +309,10 @@ public class Achievements
     },
     new Achievements.Container()
     {
-      name = "Arcanist",
-      description = "Win a rated game with the full Book of ",
+      name = "Sand Arcanist",
+      description = "Win a rated game, over 1250 rating, with the Crab familiar",
       points = (ushort) 300,
-      ratedOnly = true,
-      available = false
+      ratedOnly = true
     },
     new Achievements.Container()
     {
@@ -850,6 +848,13 @@ public class Achievements
       name = "Natural Spaghetti",
       description = "Win a game while controlling the greatest forces",
       points = (ushort) 200,
+      ratedOnly = true
+    },
+    new Achievements.Container()
+    {
+      name = "Target Practice",
+      description = "Deal over 120 damage with a single javelin",
+      points = (ushort) 300,
       ratedOnly = true
     }
   };

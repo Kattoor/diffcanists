@@ -3,6 +3,7 @@ using MoonSharp.Interpreter;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEngine;
 
@@ -10,6 +11,7 @@ namespace Educative
 {
   public class ContainerGame
   {
+    private static Dictionary<string, Texture2D> _cachedTextures = new Dictionary<string, Texture2D>();
     [MoonSharpHidden]
     public ZGame game;
     [MoonSharpHidden]
@@ -150,6 +152,12 @@ namespace Educative
       this.tutorial.ShowInfo(message, onContinue, pauseGame, unpauseGame);
     }
 
+    public void hideInfo()
+    {
+      HUD.instance.turTextbox.text = "";
+      HUD.instance.tutPopup.gameObject.SetActive(false);
+    }
+
     public void Talk(ContainerCreature what, string message, TalkOptions options = null)
     {
       MyPopup.Show(message, what.creature.transform, (Sprite) null);
@@ -232,6 +240,18 @@ namespace Educative
       set
       {
         this.game.AllowMovement = value;
+      }
+    }
+
+    public bool allowMinionMovement
+    {
+      get
+      {
+        return this.game.AllowMinionMovement;
+      }
+      set
+      {
+        this.game.AllowMinionMovement = value;
       }
     }
 
@@ -485,6 +505,44 @@ namespace Educative
     public void setMapPixel(int x, int y, LuaColor c)
     {
       Client.game.map.SetPixelColor(x, y, LuaColor.From(c));
+    }
+
+    public static void Dispose()
+    {
+      foreach (KeyValuePair<string, Texture2D> cachedTexture in ContainerGame._cachedTextures)
+      {
+        if ((UnityEngine.Object) cachedTexture.Value != (UnityEngine.Object) null)
+          UnityEngine.Object.Destroy((UnityEngine.Object) cachedTexture.Value);
+      }
+      ContainerGame._cachedTextures.Clear();
+    }
+
+    public void drawImage(string file, int x, int y, bool apply = false)
+    {
+      Texture2D texture2D = (Texture2D) null;
+      if (!ContainerGame._cachedTextures.TryGetValue(file, out texture2D))
+      {
+        texture2D = new Texture2D(2, 2);
+        string path1 = Application.persistentDataPath + Path.DirectorySeparatorChar.ToString() + "TutorialAssets";
+        if (!Directory.Exists(path1))
+          Directory.CreateDirectory(path1);
+        string path2 = path1 + Path.DirectorySeparatorChar.ToString() + file;
+        if (file.Contains(".."))
+        {
+          Tutorial.Print("Invalid Path: " + file);
+          return;
+        }
+        if (!path2.EndsWith(".png"))
+          path2 += ".png";
+        if (!File.Exists(path2))
+        {
+          Tutorial.Print("File does not exist: " + path2);
+          return;
+        }
+        texture2D.LoadImage(File.ReadAllBytes(path2));
+        ContainerGame._cachedTextures.Add(file, texture2D);
+      }
+      Client.game.map.TutorialBitBlt(texture2D, x, y, false, apply);
     }
 
     public void drawRectangle(int x, int y, int width, int height, LuaColor c)
@@ -747,6 +805,13 @@ namespace Educative
       CameraMovement.Instance.TutorialLerpToPosition(new Vector3((float) point.x, (float) point.y), interuptable);
     }
 
+    public void cameraFollow(ContainerCreature creature, bool force = true)
+    {
+      if (!(creature != (ContainerCreature) null) || !((ZComponent) creature.creature != (object) null) || !((UnityEngine.Object) creature.creature.transform != (UnityEngine.Object) null))
+        return;
+      CameraMovement.Instance.LerpToTransform(creature.creature, force);
+    }
+
     public string getInputString()
     {
       return Input.inputString;
@@ -779,7 +844,7 @@ namespace Educative
       {
         if (summon.elemental > BookOf.Arcane)
           this.game.gameFacts.SetStyle(GameStyle.Elementals);
-        ZPerson zperson1 = Player.SpawnZezima(new MyLocation((int) summon.position.x, (int) summon.position.y), false, summon.name, summon.team, settings.settings, summon.onPlayersPanel);
+        ZPerson zperson1 = Player.SpawnZezima(new MyLocation((int) summon.position.x, (int) summon.position.y), false, summon.name, summon.team, settings.settings, summon.onPlayersPanel, summon.prestige);
         if (summon.onPlayersPanel)
         {
           ZPerson zperson2 = zperson1;
@@ -862,6 +927,35 @@ namespace Educative
     public ContainerIndicator createIndicator(
       IndicatorKind kind,
       Point point,
+      LuaColor color,
+      double radius = 18.0,
+      double angle = 0.0,
+      double lifetime = 0.0)
+    {
+      if (color == null)
+        color = LuaColor.white;
+      for (int index = this.tutorial.activeIndicators.Count - 1; index >= 0; --index)
+      {
+        if ((UnityEngine.Object) this.tutorial.activeIndicators[index].indicator == (UnityEngine.Object) null)
+          this.tutorial.activeIndicators.RemoveAt(index);
+      }
+      if (this.tutorial.activeIndicators.Count >= 10000)
+        throw new Exception("To many indicators");
+      GameObject s = UnityEngine.Object.Instantiate<GameObject>(ClientResources.Instance.tutIndicators[Mathf.Clamp((int) kind, 0, ClientResources.Instance.tutIndicators.Count - 1)], new Vector3((float) (int) point.x, (float) (int) point.y), Quaternion.identity, HUD.instance.game.GetMapTransform());
+      ContainerIndicator containerIndicator = new ContainerIndicator(this.tutorial, s, kind, radius);
+      this.tutorial.activeIndicators.Add(containerIndicator);
+      s.GetComponentInChildren<SpriteRenderer>().color = (Color) LuaColor.From(color);
+      if (kind == IndicatorKind.Area)
+        s.transform.localScale = new Vector3((float) radius / 128f, (float) radius / 128f, 1f);
+      s.transform.localEulerAngles = new Vector3(0.0f, 0.0f, (float) angle);
+      if (lifetime > 0.0)
+        UnityEngine.Object.Destroy((UnityEngine.Object) s, (float) lifetime);
+      return containerIndicator;
+    }
+
+    public ContainerIndicator createIndicator(
+      IndicatorKind kind,
+      Point point,
       string hexColor = "#FFFFFF",
       double radius = 18.0,
       double angle = 0.0,
@@ -905,6 +999,229 @@ namespace Educative
       else if ((ZComponent) creature != (object) null && (spellObj.GetType() == typeof (double) || spellObj.GetType() == typeof (int)))
         spell = creature.spells[(int) spellObj].spell;
       return spell;
+    }
+
+    public KeyCode[] getKeyBinds(KeyBinds key)
+    {
+      switch (key)
+      {
+        case KeyBinds.WalkLeft:
+          return new KeyCode[2]
+          {
+            hardInput.GetKeyCode("Move Left", false),
+            hardInput.GetKeyCode("Move Left", true)
+          };
+        case KeyBinds.WalkRight:
+          return new KeyCode[2]
+          {
+            hardInput.GetKeyCode("Move Right", false),
+            hardInput.GetKeyCode("Move Right", true)
+          };
+        case KeyBinds.HighJump:
+          return new KeyCode[4]
+          {
+            hardInput.GetKeyCode("High Jump", false),
+            hardInput.GetKeyCode("High Jump", true),
+            hardInput.GetKeyCode("High Jump 2", false),
+            hardInput.GetKeyCode("High Jump 2", true)
+          };
+        case KeyBinds.LongJump:
+          return new KeyCode[4]
+          {
+            hardInput.GetKeyCode("Long Jump", false),
+            hardInput.GetKeyCode("Long Jump", true),
+            hardInput.GetKeyCode("Long Jump 2", false),
+            hardInput.GetKeyCode("Long Jump 2", true)
+          };
+        case KeyBinds.SkipTurn:
+          return new KeyCode[2]
+          {
+            hardInput.GetKeyCode("Skip Turn", false),
+            hardInput.GetKeyCode("Skip Turn", true)
+          };
+        case KeyBinds.SwitchMinion:
+          return new KeyCode[2]
+          {
+            hardInput.GetKeyCode("Minions", false),
+            hardInput.GetKeyCode("Minions", true)
+          };
+        case KeyBinds.CenterCamera:
+          return new KeyCode[2]
+          {
+            hardInput.GetKeyCode("Center Camera", false),
+            hardInput.GetKeyCode("Center Camera", true)
+          };
+        case KeyBinds.CameraUp:
+          return new KeyCode[2]
+          {
+            hardInput.GetKeyCode("Camera Up", false),
+            hardInput.GetKeyCode("Camera Up", true)
+          };
+        case KeyBinds.CameraLeft:
+          return new KeyCode[2]
+          {
+            hardInput.GetKeyCode("Camera Left", false),
+            hardInput.GetKeyCode("Camera Left", true)
+          };
+        case KeyBinds.CameraDown:
+          return new KeyCode[2]
+          {
+            hardInput.GetKeyCode("Camera Down", false),
+            hardInput.GetKeyCode("Camera Down", true)
+          };
+        case KeyBinds.CameraRight:
+          return new KeyCode[2]
+          {
+            hardInput.GetKeyCode("Camera Right", false),
+            hardInput.GetKeyCode("Camera Right", true)
+          };
+        case KeyBinds.FlipFlop:
+          return new KeyCode[2]
+          {
+            hardInput.GetKeyCode("Flip Flop", false),
+            hardInput.GetKeyCode("Flip Flop", true)
+          };
+        case KeyBinds.BackQuote:
+          return new KeyCode[2]
+          {
+            hardInput.GetKeyCode("BackQuote", false),
+            hardInput.GetKeyCode("BackQuote", true)
+          };
+        case KeyBinds.ExtendedShot:
+          return new KeyCode[2]
+          {
+            hardInput.GetKeyCode("Extended Shot", false),
+            hardInput.GetKeyCode("Extended Shot", true)
+          };
+        case KeyBinds.ToggleIcons:
+          return new KeyCode[2]
+          {
+            hardInput.GetKeyCode("ToggleIcons", false),
+            hardInput.GetKeyCode("ToggleIcons", true)
+          };
+        case KeyBinds.ZoomIn:
+          return new KeyCode[2]
+          {
+            hardInput.GetKeyCode("ZoomIn", false),
+            hardInput.GetKeyCode("ZoomIn", true)
+          };
+        case KeyBinds.ZoomOut:
+          return new KeyCode[2]
+          {
+            hardInput.GetKeyCode("ZoomOut", false),
+            hardInput.GetKeyCode("ZoomOut", true)
+          };
+        case KeyBinds.NoGlide:
+          return new KeyCode[2]
+          {
+            hardInput.GetKeyCode("No Glide", false),
+            hardInput.GetKeyCode("No Glide", true)
+          };
+        case KeyBinds.Sprint:
+          return new KeyCode[2]
+          {
+            hardInput.GetKeyCode("sprint", false),
+            hardInput.GetKeyCode("sprint", true)
+          };
+        case KeyBinds.NoIceJump:
+          return new KeyCode[2]
+          {
+            hardInput.GetKeyCode("NoIceJump", false),
+            hardInput.GetKeyCode("NoIceJump", true)
+          };
+        case KeyBinds.Ping:
+          return new KeyCode[2]
+          {
+            hardInput.GetKeyCode("mapping", false),
+            hardInput.GetKeyCode("mapping", true)
+          };
+        case KeyBinds.Detower:
+          return new KeyCode[2]
+          {
+            hardInput.GetKeyCode("detower", false),
+            hardInput.GetKeyCode("detower", true)
+          };
+        case KeyBinds.AssignableHotkey:
+          return new KeyCode[2]
+          {
+            hardInput.GetKeyCode("AssignableHotkey", false),
+            hardInput.GetKeyCode("AssignableHotkey", true)
+          };
+        case KeyBinds.OverheadEmoji:
+          return new KeyCode[2]
+          {
+            hardInput.GetKeyCode("OverheadEmoji", false),
+            hardInput.GetKeyCode("OverheadEmoji", true)
+          };
+        case KeyBinds.Hotkey1:
+          return new KeyCode[2]
+          {
+            hardInput.GetKeyCode("Hotkey1", false),
+            hardInput.GetKeyCode("Hotkey1", true)
+          };
+        case KeyBinds.Hotkey2:
+          return new KeyCode[2]
+          {
+            hardInput.GetKeyCode("Hotkey2", false),
+            hardInput.GetKeyCode("Hotkey2", true)
+          };
+        case KeyBinds.Hotkey3:
+          return new KeyCode[2]
+          {
+            hardInput.GetKeyCode("Hotkey3", false),
+            hardInput.GetKeyCode("Hotkey3", true)
+          };
+        case KeyBinds.Hotkey4:
+          return new KeyCode[2]
+          {
+            hardInput.GetKeyCode("Hotkey4", false),
+            hardInput.GetKeyCode("Hotkey4", true)
+          };
+        case KeyBinds.Hotkey5:
+          return new KeyCode[2]
+          {
+            hardInput.GetKeyCode("Hotkey5", false),
+            hardInput.GetKeyCode("Hotkey5", true)
+          };
+        case KeyBinds.Hotkey6:
+          return new KeyCode[2]
+          {
+            hardInput.GetKeyCode("Hotkey6", false),
+            hardInput.GetKeyCode("Hotkey6", true)
+          };
+        case KeyBinds.Hotkey7:
+          return new KeyCode[2]
+          {
+            hardInput.GetKeyCode("Hotkey7", false),
+            hardInput.GetKeyCode("Hotkey7", true)
+          };
+        case KeyBinds.Hotkey8:
+          return new KeyCode[2]
+          {
+            hardInput.GetKeyCode("Hotkey8", false),
+            hardInput.GetKeyCode("Hotkey8", true)
+          };
+        case KeyBinds.Hotkey9:
+          return new KeyCode[2]
+          {
+            hardInput.GetKeyCode("Hotkey9", false),
+            hardInput.GetKeyCode("Hotkey9", true)
+          };
+        case KeyBinds.Hotkey10:
+          return new KeyCode[2]
+          {
+            hardInput.GetKeyCode("Hotkey0", false),
+            hardInput.GetKeyCode("Hotkey0", true)
+          };
+        case KeyBinds.SpellSwitch:
+          return new KeyCode[2]
+          {
+            hardInput.GetKeyCode("SpellSwitch", false),
+            hardInput.GetKeyCode("SpellSwitch", true)
+          };
+        default:
+          return new KeyCode[0];
+      }
     }
   }
 }

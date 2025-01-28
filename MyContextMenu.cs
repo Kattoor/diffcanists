@@ -163,10 +163,13 @@ public class MyContextMenu : MonoBehaviour
     EmojiSelector.Create(a, (Transform) this.container);
   }
 
-  public GameObject AddSpellSelector(UnityAction<SpellEnum> a)
+  public GameObject AddSpellSelector(
+    UnityAction<SpellEnum> a,
+    Func<Spell, bool> f,
+    bool allowMultiple = false)
   {
     GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(ClientResources.Instance.contextSpells, (Transform) this.container);
-    gameObject.GetComponent<ContextMenuSpells>().Setup(a);
+    gameObject.GetComponent<ContextMenuSpells>().Setup(a, f, allowMultiple);
     return gameObject;
   }
 
@@ -353,6 +356,25 @@ public class MyContextMenu : MonoBehaviour
     this.AddItem("Display Prestige", (Action) (() => Client.AskToChangeDisplayIcon((int) byte.MaxValue)), (Color) ColorScheme.GetColor(MyContextMenu.ColorYellow));
     if (!Client.MyAccount.badges.AllOff())
       this.AddItem("Display Badge...", (Action) (() => this.SelectBadge(acc)), (Color) ColorScheme.GetColor(MyContextMenu.ColorYellow));
+    ButtonArrayContextmenu arrayContextmenu = this.AddArray();
+    for (int index = 0; index < AccountExtension._IconOrder.Length; ++index)
+    {
+      if (((AccountType) accountType & AccountExtension._IconOrder[index]) != AccountType.None)
+      {
+        byte b = AccountExtension._IconOrder[index].GetIndex();
+        if (AccountExtension._IconOrder[index] != AccountType.Muted || !acc.AccountNotLinked())
+          arrayContextmenu.AddItem(ChatBox.IconString(acc, AccountExtension._IconOrder[index]), (Action) (() =>
+          {
+            if (acc.accountType.IsMuted())
+              return;
+            Client.AskToChangeDisplayIcon((int) b);
+          }), AccountExtension._IconOrder[index].ToSpacelessString());
+        if (arrayContextmenu.Count >= 5)
+          arrayContextmenu = this.AddArray();
+      }
+    }
+    if (arrayContextmenu.Count == 0)
+      UnityEngine.Object.Destroy((UnityEngine.Object) arrayContextmenu.gameObject);
     if (accountType == 0)
     {
       this.AddItem(Client.Name + " is the best", (Action) (() => {}), (Color) ColorScheme.GetColor(MyContextMenu.ColorPurple));
@@ -372,22 +394,6 @@ public class MyContextMenu : MonoBehaviour
     MyContextMenu myContextMenu = MyContextMenu.Show();
     BitBools badges = Client.MyAccount.badges;
     ButtonArrayContextmenu arrayContextmenu = myContextMenu.AddArray();
-    for (int index = 0; index < AccountExtension._IconOrder.Length; ++index)
-    {
-      if (((AccountType) accountType & AccountExtension._IconOrder[index]) != AccountType.None)
-      {
-        byte b = AccountExtension._IconOrder[index].GetIndex();
-        if (AccountExtension._IconOrder[index] != AccountType.Muted || acc.discord != 0UL)
-          arrayContextmenu.AddItem(ChatBox.IconString(acc, AccountExtension._IconOrder[index]), (Action) (() =>
-          {
-            if (acc.accountType.IsMuted())
-              return;
-            Client.AskToChangeDisplayIcon((int) b);
-          }), AccountExtension._IconOrder[index].ToSpacelessString());
-        if (arrayContextmenu.Count >= 24)
-          arrayContextmenu = myContextMenu.AddArray();
-      }
-    }
     for (int index = 0; index < (int) byte.MaxValue; ++index)
     {
       if (badges[index])
@@ -533,6 +539,19 @@ public class MyContextMenu : MonoBehaviour
               }
             }
           }
+          else if (x.Value.status == (byte) 0)
+          {
+            foreach (string player in x.Value.players)
+            {
+              if (string.Equals(player, acc.name))
+              {
+                this.AddItem("Join " + s + " game", (Action) (() => Client.AskTojoinGame(x.Key)), (Color) ColorScheme.GetColor(MyContextMenu.ColorCyan));
+                this.AddSeperator("--------------------------");
+                flag = true;
+                break;
+              }
+            }
+          }
           if (flag)
             break;
         }
@@ -629,7 +648,7 @@ public class MyContextMenu : MonoBehaviour
           if (((AccountType) accountType & AccountExtension._IconOrder[index1]) != AccountType.None)
           {
             int index2 = (int) AccountExtension._IconOrder[index1].GetIndex();
-            if (AccountExtension._IconOrder[index1] == AccountType.Muted && acc.discord == 0UL)
+            if (AccountExtension._IconOrder[index1] == AccountType.Muted && acc.discord == 0UL && !acc.steamVerified)
               this.AddItem(ChatBox.IconString(acc, AccountExtension._IconOrder[index1]) + "Unverified", (Action) (() => {}), (Color) ColorScheme.GetColor(MyContextMenu.ColorBlue));
             else
               this.AddItem(ChatBox.IconString(acc, AccountExtension._IconOrder[index1]) + AccountExtension._IconOrder[index1].ToSpacelessString(), (Action) (() => {}), (Color) ColorScheme.GetColor(MyContextMenu.ColorBlue));

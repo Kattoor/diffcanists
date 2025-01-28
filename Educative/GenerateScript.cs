@@ -23,6 +23,7 @@ namespace Educative
       UserData.RegisterType<Summon>(InteropAccessMode.Default, (string) null);
       UserData.RegisterType<UIElement>(InteropAccessMode.Default, (string) null);
       UserData.RegisterType<KeyCode>(InteropAccessMode.Default, (string) null);
+      UserData.RegisterType<KeyBinds>(InteropAccessMode.Default, (string) null);
       UserData.RegisterType<SpellEnum>(InteropAccessMode.Default, (string) null);
       UserData.RegisterType<CastType>(InteropAccessMode.Default, (string) null);
       UserData.RegisterType<DamageType>(InteropAccessMode.Default, (string) null);
@@ -51,10 +52,11 @@ namespace Educative
           [(object) "colorHex"] = (object) new Func<string, LuaColor>(LuaColor.construct),
           [(object) "createUI"] = (object) new Func<Script, UIElement, UIElement>(UIElement.createUI),
           [(object) "createInput"] = (object) new Func<Script, UIElement, string, bool, bool, bool, UIElement>(UIElement.createInput),
-          [(object) "summon"] = (object) new Func<string, Point, int, Table, bool, bool, string, Table, Table, BookOf, Summon>(Summon.construct),
+          [(object) "summon"] = (object) new Func<string, Point, int, Table, bool, bool, string, Table, Table, BookOf, int, Summon>(Summon.construct),
           [(object) "spell"] = (object) new Func<string, ContainerSpell>(ContainerGame.getSpell),
           [(object) "createPoll"] = (object) new Func<string, MyPoll>(MyPoll.construct),
           [(object) "KeyCode"] = (object) UserData.CreateStatic<KeyCode>(),
+          [(object) "KeyBinds"] = (object) UserData.CreateStatic<KeyBinds>(),
           [(object) "SpellEnum"] = (object) UserData.CreateStatic<SpellEnum>(),
           [(object) "CastType"] = (object) UserData.CreateStatic<CastType>(),
           [(object) "DamageType"] = (object) UserData.CreateStatic<DamageType>(),

@@ -10,7 +10,7 @@ public static class SortedEnum
     PlayerEnum.Six,
     PlayerEnum.Twenty_Four
   };
-  public static MapEnum[] mapEnums = new MapEnum[18]
+  public static MapEnum[] mapEnums = new MapEnum[19]
   {
     MapEnum.Grassy_Hills,
     MapEnum.Giants_Mountains,
@@ -29,6 +29,7 @@ public static class SortedEnum
     MapEnum.Jungle,
     MapEnum.Alien_World,
     MapEnum.Ghostly_Halls,
+    MapEnum.Desert,
     MapEnum.Random
   };
   public static TimeEnum[] timeEnums = new TimeEnum[10]

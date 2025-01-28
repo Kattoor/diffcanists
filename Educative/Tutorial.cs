@@ -585,7 +585,7 @@ namespace Educative
               CCreateEntity ccreateEntity = (CCreateEntity) command;
               if (ccreateEntity.summon == 0)
               {
-                ZPerson zperson1 = Player.SpawnZezima(new MyLocation((FixedInt) (float) ccreateEntity.point_location.x, (FixedInt) (float) ccreateEntity.point_location.y), ccreateEntity.bool_OnPlayerPanel, ccreateEntity.Name, ccreateEntity.team, ccreateEntity.settings, true);
+                ZPerson zperson1 = Player.SpawnZezima(new MyLocation((FixedInt) (float) ccreateEntity.point_location.x, (FixedInt) (float) ccreateEntity.point_location.y), ccreateEntity.bool_OnPlayerPanel, ccreateEntity.Name, ccreateEntity.team, ccreateEntity.settings, true, 0);
                 t.creatures.Add(ccreateEntity.identifier, zperson1.first());
                 if (ccreateEntity.bool_OnPlayerPanel)
                 {
@@ -987,7 +987,7 @@ namespace Educative
               if (onFrame.IsNotNil())
                 t.onFrame = (Action<int>) (z => script.Call(onFrame, (object) z));
               if (dynValue1.IsNil())
-                script.DoString("function waitFPS(iterations)\r\n    iterations = iterations + game.frame\r\n\twhile iterations > game.frame do\r\n\t\tcoroutine.yield(0)\r\n\tend\r\nend", (Table) null, (string) null);
+                script.DoString("function waitFPS(iterations, graphics)\r\n    if(graphics) then\r\n        while iterations > 0 do\r\n            iterations = iterations - 1\r\n            coroutine.yield(0)\r\n        end\r\n    else\r\n        iterations = iterations + game.frame\r\n\t    while iterations > game.frame do\r\n\t\t    coroutine.yield(0)\r\n\t    end\r\n    end\r\nend", (Table) null, (string) null);
               if (dynValue2.IsNil())
                 script.DoString("function wait(t)\r\n    local e = (game.totalTimeElapsed + t) \r\n    while (e > game.totalTimeElapsed) do\r\n        coroutine.yield(0)  \r\n    end\r\nend", (Table) null, (string) null);
               DynValue coroutine = script.CreateCoroutine(function);

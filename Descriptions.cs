@@ -71,6 +71,10 @@ public static class Descriptions
     {
       "Cosmos",
       "Cosmos spells focus on getting to your opponents no matter where in the universe they are."
+    },
+    {
+      "Sands",
+      "Sand spells focus on area denial and crowd control."
     }
   };
   private static Dictionary<string, string> bookDesriptions = new Dictionary<string, string>()
@@ -101,7 +105,7 @@ public static class Descriptions
     },
     {
       "OverLight",
-      "Cherub\n(drains 20 health per cast)\nRemoves the 150 protection shield cap. For every charge the familiar has, you and your minions will gain 1 point of shielding up to a maximum of 50 each turn, Shining Bolt will do 2 extra damage and Sunder 5 extra damage.\nAt Level 5: Rising Star gets a 5 turn cooldown."
+      "Cherub\n(drains 20 health per cast)\nFor every charge the familiar has, you and your minions will gain 1 point of shielding up to a maximum of 50 each turn, Shining Bolt will do 2 extra damage and Sunder 5 extra damage.\nAt Level 5: Rising Star gets a 5 turn cooldown."
     },
     {
       "Nature",
@@ -125,7 +129,7 @@ public static class Descriptions
     },
     {
       "Illusion",
-      "Allusion\n(drains 20 health per cast)\nWho needs health, just give it away! (to a hurt ally/minion) Highest missing health takes priority. Learn the Spell Blink. Makes you significantly smaller.\nAt level 5: Duplicates have no expiration and spawn with 75% health - Vortex is buffed."
+      "Allusion\n(drains 20 health per cast)\nWho needs health, just give it away! (to a hurt ally/minion) Highest missing health takes priority. Learn the Spell Blink. Makes you significantly smaller.\nAt level 5: Duplicates have no expiration and spawn with 75% health - Vortex is buffed. Glide is available 1 turn sooner per level."
     },
     {
       "Blood",
@@ -138,6 +142,10 @@ public static class Descriptions
     {
       "Cosmos",
       "Gravitation\n(drains 20 health per cast)\nAt level 1 Learn the spell Gravity Well. Each level makes you weigh slightly more, making you more resistant to knockback. Lessens the affect of the Gravity debuff. Increases the digging capabilities of Collision Course and Shooting Stars. Increases Supernova's potential damage."
+    },
+    {
+      "Sands",
+      "Crab\n(drains 20 health per cast)\nLearn the spells Entomb, Summon Sand Mite, and Sands of Time at levels 1, 3, and 5. For each familiar level create more sand with a wider area of effect and sand structures will also be more durable."
     }
   };
   private static Dictionary<string, string> deathMessages = new Dictionary<string, string>()
@@ -1165,6 +1173,54 @@ public static class Descriptions
     {
       "Dense Fog",
       "{0} couldn't see in the dense fog."
+    },
+    {
+      "Pocket Sand",
+      "{0} was pocketed in {1}'s pocket sand."
+    },
+    {
+      "Bucket of Sand",
+      "{0} was buried in {1}'s bucket of sand."
+    },
+    {
+      "Sandy Shores",
+      "{0} was outbid on {1}'s real estate."
+    },
+    {
+      "Pyramid",
+      "{0} was in awe of {1}'s pyramid."
+    },
+    {
+      "Pyramid Strike",
+      "{0} was in awe of {1}'s pyramid."
+    },
+    {
+      "Burning Sands",
+      "{0} was unable to find the oasis in {1}'s burning sands."
+    },
+    {
+      "Sand Trap",
+      "{0} sprung {1}'s sand trap."
+    },
+    {
+      "Sand Storm",
+      "{0} did not take shelter during {1}'s sand storm."
+    },
+    {
+      "Summon Sphinx",
+      "{0} was reflected upon by {1}'s sphinx."
+    },
+    {
+      "Summon Sand Mite",
+      "{0} was irritated by {1}'s sand mite."
+    },
+    {
+      "Consume",
+      "{0} was consumed by {1}'s sand wyrm."
+    },
+    {
+      "Spit",
+      "{0} was disgraced by {1}'s sand wyrm."
     }
   };
   private static Dictionary<string, string> spellDescriptions = new Dictionary<string, string>()
@@ -1363,7 +1419,7 @@ public static class Descriptions
     },
     {
       "Flight",
-      "Personal:\n{0}\nThis spell will let you soar over the landscape and shoot spells down from on high, though is disrupted if you take damage."
+      "Personal: does not end your turn\n{0}\nThis spell will let you soar over the landscape and shoot spells down from on high, though is disrupted if you take damage."
     },
     {
       "Storm",
@@ -1495,7 +1551,7 @@ public static class Descriptions
     },
     {
       "Forest Seed",
-      "Targeted:\n{0}\nCreates a magical 75 hitpoint tree at the targeted location, which blocks projectiles and absorbs damage. Loses 15 hitpoints at the start of each of your turns. The tree cannot be created where existing units stand. Can be used on the first turn if the time limit is less than 20 seconds."
+      "Targeted:\n{0}\nCreates a magical *75 hitpoint tree at the targeted location, which blocks projectiles and absorbs damage. Loses 15 hitpoints at the start of each of your turns. The tree cannot be created where existing units stand. Can be used on the first turn if the time limit is less than 20 seconds."
     },
     {
       "Summon Pixies",
@@ -1671,7 +1727,7 @@ public static class Descriptions
     },
     {
       "Banish",
-      "Personal:\n{0}\nBanishes the Imp back into the ether. Using this ability does not end your turn."
+      "Personal: does not end your turn\n{0}\nBanishes the Imp back into the ether."
     },
     {
       "Self Destruct",
@@ -1699,7 +1755,7 @@ public static class Descriptions
     },
     {
       "Cancel Flight",
-      "Personal:\n{0}\nStops your Arcanist from flying. You cannot cast Flight again this turn."
+      "Personal: does not end your turn\n{0}\nStops your Arcanist from flying. You cannot cast Flight again this turn."
     },
     {
       "Spirit Hurricane",
@@ -1863,19 +1919,19 @@ public static class Descriptions
     },
     {
       "Summer Weather",
-      "Targeted: 20 avg damage\n(Changes with the Seasons)\nA weak English Summer which lasts but a single turn. Does not resolve until after your turn. Does not end your turn."
+      "Targeted: 20 avg damage, does not end your turn\n(Changes with the Seasons)\nA weak English Summer which lasts but a single turn. Does not resolve until after your turn."
     },
     {
       "Autumn Weather",
-      "Targeted: 20 avg damage\n(Changes with the Seasons)\nA weak Autumn Leaves. Does not resolve until after your turn. Does not end your turn."
+      "Targeted: 20 avg damage, does not end your turn\n(Changes with the Seasons)\nA weak Autumn Leaves. Does not resolve until after your turn."
     },
     {
       "Winter Weather",
-      "Targeted: 20 avg damage\n(Changes with the Seasons)\nA weak Blizzard which lasts but a single turn. Does not resolve until after your turn. Does not end your turn."
+      "Targeted: 20 avg damage, does not end your turn\n(Changes with the Seasons)\nA weak Blizzard which lasts but a single turn. Does not resolve until after your turn."
     },
     {
       "Spring Weather",
-      "Targeted: 20 avg damage\n(Changes with the Seasons)\nA weak Storm which lasts but a single turn. Does not resolve until after your turn. Does not end your turn."
+      "Targeted: 20 avg damage, does not end your turn\n(Changes with the Seasons)\nA weak Storm which lasts but a single turn. Does not resolve until after your turn."
     },
     {
       "Air Surge",
@@ -1899,7 +1955,7 @@ public static class Descriptions
     },
     {
       "Glide",
-      "Personal:\n{0}\nStarts active (ends on your turn). Gives you the ability to glide for 1 turn (Hold space while jumping to suppress gliding). While gliding you will attempt to turn around while going out of bounds. This spell does not end your turn."
+      "Personal: does not end your turn\n{0}\nStarts active (ends on your turn). Gives you the ability to glide for 1 turn (Hold space while jumping to suppress gliding). While gliding you will attempt to turn around while going out of bounds."
     },
     {
       "Magical Barrier",
@@ -1931,7 +1987,7 @@ public static class Descriptions
     },
     {
       "Curse of Loneliness",
-      "Targeted:\n{0}\nTarget cannot summon minions on their next turn. This spell does not end your turn, but you cannot summon minions this turn."
+      "Targeted: does not end your turn\n{0}\n You and the target cannot summon minions on their next turn (respectively)."
     },
     {
       "Blood Mist",
@@ -2011,15 +2067,15 @@ public static class Descriptions
     },
     {
       "Frost Leap",
-      "Ball:\n{0}\nLeap across the map. Max power is increased for each Frost familiar level you have. Aim it like every other ball spell. This spell does not end your turn."
+      "Ball: does not end your turn\n{0}\nLeap across the map. Max power is increased for each Frost familiar level you have. Aim it like every other ball spell."
     },
     {
       "Hatch",
-      "Personal: Does not end your turn\n{0}\nHatch into a mountable arcane dragon adolescent with a close range attack. Waiting till the egg reaches 150hp will result in a random full grown dragon spawning instead. If it hatches with less then 25 health it instead comes as a dragon hatchling. Steam dragons are not \"hatched\"; they are made. (Which is totally possible)"
+      "Personal: does not end your turn\n{0}\nHatch into a mountable arcane dragon adolescent with a close range attack. Waiting till the egg reaches 150hp will result in a random full grown dragon spawning instead. If it hatches with less then 25 health it instead comes as a dragon hatchling. Steam dragons are not \"hatched\"; they are made. (Which is totally possible)"
     },
     {
       "Dragon Hatchling",
-      "Personal: Does not end your turn\n{0}\nHatch into a dragon hatchling which has the spells Arcane Flash and Arcane Glyphs. Waiting till the egg reaches 25hp will result in a dragon adolescent instead."
+      "Personal: does not end your turn\n{0}\nHatch into a dragon hatchling which has the spells Arcane Flash and Arcane Glyphs. Waiting till the egg reaches 25hp will result in a dragon adolescent instead."
     },
     {
       "Rawr!",
@@ -2051,7 +2107,7 @@ public static class Descriptions
     },
     {
       "Gift of Giving",
-      "Personal:\n{0}\nTo give is better than to receive... So give yourself two things, that oughta make up for it - Does not end your turn."
+      "Personal: does not end your turn\n{0}\nTo give is better than to receive... So give yourself two things, that oughta make up for it."
     },
     {
       "Forestation",
@@ -2071,7 +2127,7 @@ public static class Descriptions
     },
     {
       "Stepping Stone",
-      "Targeted:\n{0}\nPlace a small stone - Does not end your turn."
+      "Targeted: does not end your turn\n{0}\nPlace a small stone."
     },
     {
       "Summon Mountain Goat",
@@ -2083,15 +2139,15 @@ public static class Descriptions
     },
     {
       "Morph",
-      "Personal:\n{0}\nTransforms the gargoyle into a stone statue that cannot attack, but heals 25 health a turn, up to 100. If you are already stone, it turns you back into a gargoyle. This spell does not end your turn."
+      "Personal: does not end your turn\n{0}\nTransforms the gargoyle into a stone statue that cannot attack, but heals 25 health a turn, up to 100. If you are already stone, it turns you back into a gargoyle."
     },
     {
       "Little Devil",
-      "Arcane Minion: 10 health\n{0}\nIf there weren't enough already here's another one - Cooldown is decreased by one for each Arcane familiar level you have. This spell does not end your turn."
+      "Arcane Minion: 10 health, does not end your turn\n{0}\nIf there weren't enough already here's another one - Cooldown is decreased by one for each Arcane familiar level you have."
     },
     {
       "Blink",
-      "Targeted:\n{0}\nShort range teleport that does not end your turn... In the blink of an eye."
+      "Targeted: does not end your turn\n{0}\nShort range teleport, in the blink of an eye."
     },
     {
       "Pie",
@@ -2107,7 +2163,7 @@ public static class Descriptions
     },
     {
       "Melt",
-      "Personal: health as damage\n{0}\nThe snowman melts into water droplets. Amount depends on its current health. This spell does not end your turn."
+      "Personal: health as damage, does not end your turn\n{0}\nThe snowman melts into water droplets. Amount depends on its current health."
     },
     {
       "Snowbolt",
@@ -2163,11 +2219,11 @@ public static class Descriptions
     },
     {
       "Healing Spores",
-      "Targeted: 15 heal\n{0}\nStay happy and healthy with these nutritious mushrooms. If used on a minion it heals for x2. This spell does not end your turn."
+      "Targeted: 15 heal, does not end your turn\n{0}\nStay happy and healthy with these nutritious mushrooms. If used on a minion it heals for x2."
     },
     {
       "Harmony",
-      "Personal:\n{0}\nAt the end of your turn, until your next turn, you and your minions share all damage taken (The primary target takes 50% of that damage unless that damage is less than the total minions that are under the effect of harmony, in which case it's shared amongst the healthiest). This spell does not end your turn."
+      "Personal: does not end your turn\n{0}\nAt the end of your turn, until your next turn, you and your minions split all damage taken (The primary target takes 50% of that damage unless that damage is less than the total minions that are under the effect of harmony, in which case it's split amongst the healthiest)."
     },
     {
       "Enchanted Axes",
@@ -2191,7 +2247,7 @@ public static class Descriptions
     },
     {
       "Faerie Jump",
-      "Bolt: 0 damage\n{0}\n Jump in the chosen direction, allowing you to get to hard to reach places. This spell does not end your turn."
+      "Bolt: 0 damage,  does not end your turn\n{0}\n Jump in the chosen direction, allowing you to get to hard to reach places."
     },
     {
       "Summon Boar",
@@ -2219,7 +2275,7 @@ public static class Descriptions
     },
     {
       "Swipe",
-      "Melee: 15 damage\n{0}\nA quick attack which does not end your turn."
+      "Melee: 15 damage, does not end your turn\n{0}\nA quick attack."
     },
     {
       "Bite",
@@ -2231,15 +2287,15 @@ public static class Descriptions
     },
     {
       "Herd Mentality",
-      "Minion: 40 health\n{0}\nSummons another boar to fight alongside. This spell does not end your turn."
+      "Minion: 40 health, does not end your turn\n{0}\nSummons another boar to fight alongside."
     },
     {
       "Pack Leader",
-      "Minion: 40 health\n{0}\nSummons another wolf to fight alongside. This spell does not end your turn."
+      "Minion: 40 health, does not end your turn\n{0}\nSummons another wolf to fight alongside."
     },
     {
       "Spirit Link",
-      "Targeted:\n{0}\nSacrifice the wisp and teleport the nearby allied target to its location. This spell does not end your turn. Cannot be used in close proximity of another entity."
+      "Targeted: does not end your turn\n{0}\nSacrifice the wisp and teleport the nearby allied target to its location. Cannot be used in close proximity of another entity."
     },
     {
       "Wormhole",
@@ -2255,7 +2311,7 @@ public static class Descriptions
     },
     {
       "Abduction",
-      "Bolt:\n{0}\nMakes the target float in a beam of light for a short time and pulls them slowly towards the caster, then drops them. If they were not flying, gravity is applied till the start of their next turn. Lasts twice as long and 50% further reach if the caster is in a MACAIR. This spell does not end your turn."
+      "Bolt: does not end your turn\n{0}\nMakes the target float in a beam of light for a short time and pulls them slowly towards the caster, then drops them. If they were not flying, gravity is applied till the start of their next turn. Lasts twice as long and 50% further reach if the caster is in a MACAIR."
     },
     {
       "MACAIR",
@@ -2263,7 +2319,7 @@ public static class Descriptions
     },
     {
       "Drone Strike",
-      "Bolt: 15 damage\n{0}\nA weak, short ranged perfectly accurate bolt of energy that destroys no terrain and has zero knockback. This spell does not end your turn."
+      "Bolt: 15 damage, does not end your turn\n{0}\nA weak, short ranged perfectly accurate bolt of energy that destroys no terrain and has zero knockback."
     },
     {
       "Fusion",
@@ -2271,7 +2327,7 @@ public static class Descriptions
     },
     {
       "Gravity Pulse",
-      "Ball: 30 damage\n{0}\nApplies Gravity for 3 turns. Explosion pulls in rather than out."
+      "Ball: 30 damage\n{0}\nApplies Gravity for 2 turns. Explosion pulls in rather than out."
     },
     {
       "Shooting Stars",
@@ -2307,7 +2363,7 @@ public static class Descriptions
     },
     {
       "Summon Bees",
-      "Arcane Minion: flying; 1 health\n{0}\nStrings the first chance it gets and is stunned when it stings. Controlled by the hive. This spell does not end your turn."
+      "Arcane Minion: flying; 1 health, does not end your turn\n{0}\nStrings the first chance it gets and is stunned when it stings. Controlled by the hive."
     },
     {
       "Butterfly Jar",
@@ -2315,7 +2371,7 @@ public static class Descriptions
     },
     {
       "Spirit Walk",
-      "Targeted:\n{0}\nSeparate mind and body, becoming a phantom-like creature allowing the wisp to move through terrain. Does not end your turn."
+      "Targeted: does not end your turn\n{0}\nSeparate mind and body, becoming a phantom-like creature allowing the wisp to move through terrain."
     },
     {
       "Retribution",
@@ -2339,11 +2395,95 @@ public static class Descriptions
     },
     {
       "Stalk",
-      "Targeted: 25 damage\n{0}\nDisappear from sight, pouncing on the closest enemy at the start of your next turn. This spell does not end your turn."
+      "Targeted: 25 damage, does not end your turn\n{0}\nDisappear from sight, pouncing on the closest enemy at the start of your next turn."
     },
     {
       "Tomato",
-      "Ball: 0 damage\n{0}\n A tomato you can throw at other players for a bit of fun.<br>(Buyable at the shop)<br><br>*Note these are not synced up between clients. So if there are any moving entities it may hit on one client and miss on another."
+      "Ball: 0 damage\n{0}\nA tomato you can throw at other players for a bit of fun.<br>(Buyable at the shop)<br><br>*Note these are not synced up between clients. So if there are any moving entities it may hit on one client and miss on another."
+    },
+    {
+      "Tomato Emoji",
+      "Ball: 0 damage\n{0}\nConsumes 2 tomatoes -Throw an emoji at other players for a bit of fun.<br>(Buyable at the shop)<br><br>*Note these are not synced up between clients. So if there are any moving entities it may hit on one client and miss on another."
+    },
+    {
+      "Pocket Sand",
+      "Bolt: 1000 grains of sand, up to 50 damage\n{0}\nThrow sand a short distance."
+    },
+    {
+      "Bucket of Sand",
+      "Bomb: 2000 grains of sand, up to 75 damage\n{0}\n Disperses sand in an up and out pattern."
+    },
+    {
+      "Sandy Shores",
+      "Targeted: 50 damage\n{0}\nCreates a beach front on the shore line for a nice vacation home."
+    },
+    {
+      "Burning Sands",
+      "Targeted: 10-25 damage per turn\n{0}\nSets an area spanning the entire height of the map ablaze. Increasing in damage the more sand is in the targeted location."
+    },
+    {
+      "Monolith",
+      "Structure: 50 health\n{0}\nSpawns up to 15 health orbs each turn which can be picked up by anyone. Can only have one built at a time and will not spawn more then 20 orbs in the general area, so make sure to pick them up each turn. Can only have one at a time and it cannot be built in terrain."
+    },
+    {
+      "Pyramid",
+      "Structure: 75 health\n{0}\nAttacks the closest enemy with a beam of energy dealing up to 25 damage a turn. Can only have one built at a time and it must be built in terrain."
+    },
+    {
+      "Sandbag",
+      "Personal:\n{0}\nDe-towers you and puts the tower on a cooldown depending on how much health the tower currently has. If used while in a Sand Castle, will heal it up to 75 health (maxes at 125). Otherwise it'll have the same health as when this spell was used."
+    },
+    {
+      "Sand Castle",
+      "Tower: 125 health\n(Immune to sand damage; 1 use only)\nLoses 25 health each turn. This cannot destroy the tower. Will not take double damage from any damage source."
+    },
+    {
+      "Summon Wyrm",
+      "Arcane Minion: 25 health\n{0}\nCannot move, but has the spell Burrow which will not end your turn if it was use the previous turn. Also has the spells Spit and Consume."
+    },
+    {
+      "Sand Trap",
+      "Targeted: 10 damage\n{0}\nPlaces an invisible trap at the targeted location. Will only trigger against enemies and will always stun the target."
+    },
+    {
+      "Sand Storm",
+      "Arena: Directional, 50,000 grains of sand, up to 100 damage\n{0}\nWill come of the direction your arcanist is facing away from and cover the arena in sand."
+    },
+    {
+      "Summon Sphinx",
+      "Soulbound Minion: flying, 125 health\n(Immune to sand damage; 1 use only)\nReflects 33% of the damage taken (minimum of 1 damage reflected) and can mind control other minions until the original owners next turn."
+    },
+    {
+      "Entomb",
+      "Targeted:\n{0}\nCreates a nice place for a future burial chamber."
+    },
+    {
+      "Sands of Time",
+      "Targeted: Delayed Teleport\n{0}\nWill teleport you to the targeted location at the start of your next turn."
+    },
+    {
+      "Summon Sand Mite",
+      "Arcane Minion: 5 health\n{0}\nWhen it comes into contact with an enemy it will burrow into their skin, removing itself from the battlefield and will deal 5 damage to the target on each of their turns. How irritating."
+    },
+    {
+      "Pyramid Strike",
+      "Targeted: 25 damage\n{0}\nA strike from the pyramid."
+    },
+    {
+      "Spit",
+      "Bolt: 100 grains of sand, up to 15 damage, does not end your turn\n{0}\nIrritate the enemy with a bit of sand."
+    },
+    {
+      "Consume",
+      "Targeted: units with hitpoints equal to or lesser then the wyrm\n{0}\nConsume the targeted unit, added its hitpoints to it's own."
+    },
+    {
+      "Burrow",
+      "Targeted: terrain, does not end your turn\n{0}\nBurrows to the targeted location. Target must be touching terrain."
+    },
+    {
+      "Mind Control",
+      "Targeted: enemy units\n{0}\nTake control of the target until it's owners next turn."
     }
   };
 
@@ -2500,12 +2640,25 @@ public static class Descriptions
       int num = slot != null ? spell.damage + slot.bonusDmg : spell.damage;
       return combined ? (string.Format(s, (object) str, (object) ((num - num / 2).ToString() + "-" + (object) num)), str) : (string.Format(s, (object) "", (object) ((num - num / 2).ToString() + "-" + (object) num)), str);
     }
+    if ((UnityEngine.Object) spell != (UnityEngine.Object) null && spell.type == CastType.Tower)
+    {
+      Tower component = spell.toSummon.GetComponent<Tower>();
+      int maxHealth = component.MaxHealth;
+      StringBuilderPlus stringBuilderPlus = new StringBuilderPlus();
+      for (int index = 1; index <= 5; ++index)
+      {
+        stringBuilderPlus.Append(component.MaxHealth - component.MaxHealth * ((6 - index) * 10) / 100);
+        if (index < 5)
+          stringBuilderPlus.Append(", ");
+      }
+      s = s + "\n\nRechargeable Towers that are cast within 4 turns of another tower will reduce their max hitpoints by up to 50%. Starting Hitpoints under this mechanic would be: " + stringBuilderPlus.ToString();
+    }
     return combined ? (string.Format(s, (object) str), str) : (string.Format(s, (object) ""), str);
   }
 
   public static string GetBookDescription(BookOf b)
   {
-    if (b == BookOf.Arcane && Client.GetAccount(Client.Name, false).accountType.has(AccountType.Developer | AccountType.Arcane_Monster | AccountType.Game_Director))
+    if (b == BookOf.Arcane && Client.GetAccount(Client.Name, false).accountType.has(AccountType.Developer | AccountType.Admin | AccountType.Arcane_Monster | AccountType.Game_Director))
       return "Arcane Neutrality:\n(drains 100 health at casting)\nRemoves familiar effects from the game.\n" + Descriptions.bookDesriptions["Arcane"];
     if (b == BookOf.Seasons)
     {

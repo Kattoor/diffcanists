@@ -72,7 +72,7 @@ public class OutfitButton : MonoBehaviour
       AccountType accountType = SettingsPlayer.CheckAccountType(viewing, this.index);
       if (accountType != AccountType.None)
       {
-        MyToolTip.Show("Account role required: <#FF0000>" + accountType.ToString().Replace("_", " ") + this.ExtraHoverInfo(), -1f);
+        MyToolTip.Show("Account role required: <#FF0000>" + accountType.GetFirstFlags().Replace("_", " ") + this.ExtraHoverInfo(), -1f);
       }
       else
       {

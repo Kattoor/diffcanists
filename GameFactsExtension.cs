@@ -55,14 +55,17 @@ public static class GameFactsExtension
     gf.settings.Serialize(writer);
     writer.Write(gf.status);
     writer.Write((int) ((double) Time.realtimeSinceStartup - (double) gf.serverStartTime));
+    writer.Write(gf.customQueue);
   }
 
   public static void ManualDeserialize(
     this GameFacts gf,
     myBinaryReader reader,
     bool includeSentinels = false,
-    bool fromServer = false)
+    bool fromServer = false,
+    byte version = 0)
   {
+    version = version > (byte) 0 ? version : (byte) 5;
     gf.game = new ZGame();
     gf.game.gameFacts = gf;
     gf.players.Clear();
@@ -100,9 +103,10 @@ public static class GameFactsExtension
       for (int index = 0; index < num2; ++index)
         gf.invitedPlayers.Add(reader.ReadString());
     }
-    gf.settings.Deserialize(reader, (byte) 4);
+    gf.settings.Deserialize(reader, version);
     gf.status = reader.ReadByte();
     gf.serverStartTime = (int) ((double) Controller.realtimeSinceStartup - (double) reader.ReadInt32());
+    gf.customQueue = reader.ReadInt32();
     if (!includeSentinels)
       return;
     gf.SetMapMode(gf.realMap);

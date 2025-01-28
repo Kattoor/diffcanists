@@ -117,21 +117,22 @@ public class ClickSpell : MonoBehaviour
 
   public void OnPointerEnter(int i)
   {
-    this.OnPointerEnter(this.spellButtons[i], Player.Instance.selected.spells[i]);
+    this.OnPointerEnter(this.spellButtons[i], Player.Instance.selected.spells[i], false);
   }
 
   public void OnPointerEnterSpectator(int i)
   {
     int tomatoes = Client.MyAccount.tomatoes;
     HUD.instance.specSpells[i].MaxUses = tomatoes;
-    this.OnPointerEnter(HUD.instance.specTomatoes[i], HUD.instance.specSpells[i]);
+    this.OnPointerEnter(HUD.instance.specTomatoes[i], HUD.instance.specSpells[i], true);
   }
 
-  public void OnPointerEnter(SpellButton a, SpellSlot slot)
+  public void OnPointerEnter(SpellButton a, SpellSlot slot, bool spec)
   {
     this.active = a;
     a.bg.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
-    a.bg.transform.SetAsLastSibling();
+    if (!spec)
+      a.bg.transform.SetAsLastSibling();
     a.txtName.gameObject.SetActive(true);
     if (a.error == 0)
     {
@@ -579,6 +580,12 @@ public class ClickSpell : MonoBehaviour
         return "Cannot cast while trdapped inside a jar";
       case 136:
         return "Already has a similar spell active";
+      case 137:
+        return "Cannot use this tower while on the water";
+      case 138:
+        return "Can only have one of each structure at a time";
+      case 139:
+        return "Can only be cast while in a tower";
       default:
         return "";
     }
@@ -588,7 +595,7 @@ public class ClickSpell : MonoBehaviour
   {
     if (c.inWater)
       return 0;
-    if (c.collider.gameObjectLayer == 21 && (s == SpellEnum.Arcane_Gate || s == SpellEnum.Santas_Magic || (s == SpellEnum.Blink || s == SpellEnum.The_ol_swaparoo)))
+    if (c.collider.gameObjectLayer == 21 && (s == SpellEnum.Arcane_Gate || s == SpellEnum.Santas_Magic || (s == SpellEnum.Blink || s == SpellEnum.The_ol_swaparoo) || s == SpellEnum.Sands_of_Time))
       return 135;
     if (c.type == CreatureType.Gargoyle && (!c.canMove && s != SpellEnum.Stone_Form || s == SpellEnum.Stone_Form && c.race == CreatureRace.Undead && c.canMove))
       return c.race == CreatureRace.Undead ? 7 : 112;
@@ -604,8 +611,6 @@ public class ClickSpell : MonoBehaviour
     }
     if (s == SpellEnum.Glide)
     {
-      if ((ZComponent) c.tower != (object) null)
-        return 1;
       if (c.phantom)
         return 4;
       return c.flying ? 6 : 0;
@@ -630,11 +635,11 @@ public class ClickSpell : MonoBehaviour
       {
         ZCreature zcreature = c.game.CurrentCreature();
         if ((zcreature != null ? (!zcreature.HasSpell(s) ? 1 : 0) : 0) == 0)
-          goto label_46;
+          goto label_44;
       }
       return !c.pawn ? 9 : 115;
     }
-label_46:
+label_44:
     switch (s)
     {
       case SpellEnum.Dark_Defences:
@@ -648,7 +653,7 @@ label_46:
       case SpellEnum.Social_Distancing:
         return c.socialDistancing ? 11 : 0;
       default:
-        if (s == SpellEnum.Arcane_Gate || s == SpellEnum.Santas_Magic || (s == SpellEnum.The_ol_swaparoo || s == SpellEnum.Blink))
+        if (s == SpellEnum.Arcane_Gate || s == SpellEnum.Santas_Magic || (s == SpellEnum.The_ol_swaparoo || s == SpellEnum.Blink) || s == SpellEnum.Sands_of_Time)
           return c.entangled ? 12 : 0;
         if (s == SpellEnum.Charge || s == SpellEnum.Mine || s == SpellEnum.Rampage)
           return c.stunned ? 13 : 0;
@@ -680,34 +685,51 @@ label_46:
             return 3;
           return !((ZComponent) c.rider != (object) null) ? 126 : 125;
         }
-        if (s == SpellEnum.Protection_Shield && c.shield >= 150 && (!c.game.originalSpellsOnly && c.familiarLevelOverlight == 0))
+        if (s == SpellEnum.Protection_Shield && c.shield >= 150 && !c.game.originalSpellsOnly)
           return 131;
         if (s == SpellEnum.Retribution && c.retribution > 0)
           return 132;
-        if (theSpell.MaxMinionCount > 0)
+        switch (s)
         {
-          int num = 0;
-          using (List<ZCreature>.Enumerator enumerator = c.parent.controlled.GetEnumerator())
-          {
-            while (enumerator.MoveNext())
+          case SpellEnum.Monolith:
+            if ((ZComponent) c.effectors.Find((Predicate<ZEffector>) (z => z.type == EffectorType.Monolith)) != (object) null)
+              return 138;
+            break;
+          case SpellEnum.Sandbag:
+            if ((ZComponent) c.tower == (object) null)
+              return 139;
+            break;
+          case SpellEnum.Pyramid:
+            if ((ZComponent) c.effectors.Find((Predicate<ZEffector>) (z => z.type == EffectorType.Pyramid)) != (object) null)
+              return 138;
+            break;
+          default:
+            if (theSpell.MaxMinionCount > 0)
             {
-              ZCreature current = enumerator.Current;
-              if ((ZComponent) current != (object) null && current.spellEnum == s)
+              int num = 0;
+              using (List<ZCreature>.Enumerator enumerator = c.parent.controlled.GetEnumerator())
               {
-                ++num;
-                if (num >= theSpell.MaxMinionCount)
-                  return 133;
+                while (enumerator.MoveNext())
+                {
+                  ZCreature current = enumerator.Current;
+                  if ((ZComponent) current != (object) null && current.spellEnum == s)
+                  {
+                    ++num;
+                    if (num >= theSpell.MaxMinionCount)
+                      return 133;
+                  }
+                }
+                break;
               }
             }
-            break;
-          }
+            else
+            {
+              if (s == SpellEnum.Storm_Shield && (ZComponent) c.stormShield != (object) null && c.stormShield.MaxTurnsAlive > 1000)
+                return 136;
+              break;
+            }
         }
-        else
-        {
-          if (s == SpellEnum.Storm_Shield && (ZComponent) c.stormShield != (object) null && c.stormShield.MaxTurnsAlive > 1000)
-            return 136;
-          break;
-        }
+        break;
     }
     return 0;
   }

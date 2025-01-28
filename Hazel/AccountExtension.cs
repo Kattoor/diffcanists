@@ -17,7 +17,7 @@ namespace Hazel
       AccountType.Audio_Director,
       AccountType.Website_Director,
       AccountType.Tournament_Director,
-      AccountType.Head_of_Moderation,
+      AccountType.Admin,
       AccountType.Perm_Muted,
       AccountType.Muted,
       AccountType.Contributor,
@@ -74,37 +74,37 @@ namespace Hazel
 
     public static bool isMod(this AccountType a)
     {
-      return (uint) (a & (AccountType.Mod | AccountType.Head_of_Moderation)) > 0U;
+      return (uint) (a & (AccountType.Mod | AccountType.Admin)) > 0U;
     }
 
     public static bool isDev(this AccountType a)
     {
-      return (uint) (a & (AccountType.Developer | AccountType.Game_Director | AccountType.Owner)) > 0U;
+      return (uint) (a & (AccountType.Developer | AccountType.Admin | AccountType.Game_Director | AccountType.Owner)) > 0U;
     }
 
     public static bool isDevOrHeadMod(this AccountType a)
     {
-      return (uint) (a & (AccountType.Developer | AccountType.Head_of_Moderation | AccountType.Game_Director | AccountType.Owner)) > 0U;
+      return (uint) (a & (AccountType.Developer | AccountType.Admin | AccountType.Game_Director | AccountType.Owner)) > 0U;
     }
 
     public static bool IsModPlus(this AccountType a)
     {
-      return (uint) (a & (AccountType.Mod | AccountType.Developer | AccountType.Head_of_Moderation | AccountType.Game_Director | AccountType.Owner)) > 0U;
+      return (uint) (a & (AccountType.Mod | AccountType.Developer | AccountType.Admin | AccountType.Game_Director | AccountType.Owner)) > 0U;
     }
 
     public static bool IsModPlusTOParticipate(this AccountType a)
     {
-      return (uint) (a & (AccountType.Mod | AccountType.Developer | AccountType.Head_of_Moderation | AccountType.Tournament_Official | AccountType.Game_Director | AccountType.Owner | AccountType.Tournament_Director | AccountType.Tourny_Participate)) > 0U;
+      return (uint) (a & (AccountType.Mod | AccountType.Developer | AccountType.Admin | AccountType.Tournament_Official | AccountType.Game_Director | AccountType.Owner | AccountType.Tournament_Director | AccountType.Tourny_Participate)) > 0U;
     }
 
     public static bool IsModPlusTO(this AccountType a)
     {
-      return (uint) (a & (AccountType.Mod | AccountType.Developer | AccountType.Head_of_Moderation | AccountType.Tournament_Official | AccountType.Game_Director | AccountType.Owner | AccountType.Tournament_Director)) > 0U;
+      return (uint) (a & (AccountType.Mod | AccountType.Developer | AccountType.Admin | AccountType.Tournament_Official | AccountType.Game_Director | AccountType.Owner | AccountType.Tournament_Director)) > 0U;
     }
 
     public static bool Heightened(this AccountType a)
     {
-      return (uint) (a & (AccountType.Mod | AccountType.Developer | AccountType.Head_of_Moderation | AccountType.Audio_Director | AccountType.Contributor | AccountType.Backend_Technical_Director | AccountType.Wiki_Staff | AccountType.Twitch_Streamer | AccountType.Youtube_Creator | AccountType.Asset_Creator | AccountType.Audio_Wizard | AccountType.Website_Director | AccountType.Game_Director | AccountType.Art_Director | AccountType.Owner | AccountType.Tournament_Director)) > 0U;
+      return (uint) (a & (AccountType.Mod | AccountType.Developer | AccountType.Admin | AccountType.Audio_Director | AccountType.Contributor | AccountType.Backend_Technical_Director | AccountType.Wiki_Staff | AccountType.Twitch_Streamer | AccountType.Youtube_Creator | AccountType.Asset_Creator | AccountType.Audio_Wizard | AccountType.Website_Director | AccountType.Game_Director | AccountType.Art_Director | AccountType.Owner | AccountType.Tournament_Director)) > 0U;
     }
   }
 }

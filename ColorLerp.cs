@@ -11,6 +11,7 @@ public class ColorLerp : MonoBehaviour
   private bool up = true;
   private float c = 0.5f;
   public ZCreature _creature;
+  public bool randomOffset;
   private float cur;
 
   public void Kill()
@@ -27,9 +28,17 @@ public class ColorLerp : MonoBehaviour
 
   private void Start()
   {
-    if (!Application.isBatchMode)
-      return;
-    this.enabled = false;
+    if (Application.isBatchMode)
+    {
+      this.enabled = false;
+    }
+    else
+    {
+      if (!this.randomOffset)
+        return;
+      this.cur = Random.Range(0.0f, 1f);
+      this.up = Random.Range(0, 10) >= 5;
+    }
   }
 
   private void Update()

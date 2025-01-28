@@ -126,7 +126,44 @@ public class SpellLobbyChange : MonoBehaviour
       this.toggleRated.AlwaysOn = true;
       this.toggleRated.Interactable(false);
     }
+    if (this.toggleSandbox.AlwaysOn && Global.GetPrefBool("prefflashsandbox", true))
+      this.StartCoroutine(this.Flash((UIOnHoverChild) this.toggleSandbox, Color.white, 1f, 10f));
     this.Refresh(false);
+    if (!Prestige.ReadyToPrestige(Client.MyAccount) || !Prestige.AboveRating(Client.MyAccount, 0) || (!this.toggleSandbox.AlwaysOn || !Global.GetPrefBool("prefflashprestige", true)))
+      return;
+    this.StartCoroutine(this.Flash(this.buttonPrestige.transform.GetChild(0).GetComponent<UIOnHoverChild>(), Color.red, 1f, 10f));
+  }
+
+  private IEnumerator Flash(UIOnHoverChild button, Color r2, float f = 1f, float speed = 10f)
+  {
+    Color r = button.textPressedColor;
+    float cur = 0.0f;
+    bool up = true;
+    while ((double) f > 0.0)
+    {
+      f -= Time.deltaTime;
+      if (up)
+      {
+        cur += Time.deltaTime * speed;
+        if ((double) cur >= 1.0)
+        {
+          cur = 1f;
+          up = false;
+        }
+      }
+      else
+      {
+        cur -= Time.deltaTime * speed;
+        if ((double) cur <= 0.0)
+        {
+          cur = 0.0f;
+          up = true;
+        }
+      }
+      button.GetText.color = Color.Lerp(r, r2, cur);
+      yield return (object) null;
+    }
+    button.GetText.color = button.textPressedColor;
   }
 
   public void Refresh(bool book = false)
@@ -135,12 +172,13 @@ public class SpellLobbyChange : MonoBehaviour
     {
       this.OpenBook(this.openBook);
       this.UpdateElementalIcon();
+      this.UpdateHolidaySprites();
       this.CreateHeaders();
     }
     this.txtScrollCount.text = Client.MyAccount.wands.ToString();
     this.txtMaxScrolls.text = "Obtained: " + (object) Client.MyAccount.totalWands + "/" + (object) Prestige.MaxWands(Client.MyAccount);
     bool prestige = Prestige.ReadyToPrestige(Client.MyAccount);
-    this.buttonPrestige.SetActive(prestige || Client.MyAccount.prestige > (byte) 0 && (!prestige || Client.MyAccount.prestige < (byte) 10));
+    this.buttonPrestige.SetActive(prestige || Client.MyAccount.prestige > (byte) 0 && (!prestige || Client.MyAccount.prestige < byte.MaxValue));
     this.txtPrestige.text = prestige ? "Prestige" : "Downgrade";
     this.buttonPrestige.GetComponent<UIOnHover>().Interactable(true);
     if (prestige && !Prestige.AboveRating(Client.MyAccount, 0))
@@ -188,9 +226,9 @@ public class SpellLobbyChange : MonoBehaviour
     if (Prestige.ReadyToPrestige(Client.MyAccount))
     {
       if (Client.MyAccount.prestige < (byte) 2)
-        MyMessageBox.Create("Clicking 'Prestige' will reset all your spells to Arcane, Fire Levels 1 & 2, Cogs, and a book of your choosing. Set your wands to 50 and increase your prestige level by 1: giving you the next prestige hat and the ability to unlock all of the books.", (Action) (() => this.Prestiging()), "Prestige!", "Cancel", (Action) null, (Action) null, (Sprite) null);
+        MyMessageBox.Create("Clicking 'Prestige' will reset all your spells to Arcane, Flame Levels 1 & 2, Cogs, and a book of your choosing. Set your wands to 50 and increase your prestige level by 1: giving you the next prestige hat and the ability to unlock all of the books.", (Action) (() => this.Prestiging()), "Prestige!", "Cancel", (Action) null, (Action) null, (Sprite) null);
       else
-        MyMessageBox.Create("Clicking 'Prestige' will reset all your spells to Arcane, Fire Levels 1 & 2, Cogs, and a book of your choosing. Set your wands to 0 and increase your prestige level by 1: giving you the next prestige hat. You CANNOT gain wands in unrated games after the second prestige.", (Action) (() => this.Prestiging()), "Prestige!", "Cancel", (Action) null, (Action) null, (Sprite) null);
+        MyMessageBox.Create("Clicking 'Prestige' will reset all your spells to Arcane, Flame Levels 1 & 2, Cogs, and a book of your choosing. Set your wands to 0 and increase your prestige level by 1: giving you the next prestige hat. You <color=red>CANNOT gain wands in unrated games</color> after the second prestige.", (Action) (() => this.Prestiging()), "Prestige!", "Cancel", (Action) null, (Action) null, (Sprite) null);
     }
     else
       MyMessageBox.Create("Clicking 'Downgrade' will decrease your prestige by 1, remove all wands you currently have and unlock all your spells. ONLY do this if you are stuck and cannot gain wands.", (Action) (() => Prestige.Ask((byte) 5, 0)), "Downgrade...", "Cancel", (Action) null, (Action) null, (Sprite) null);
@@ -348,6 +386,7 @@ public class SpellLobbyChange : MonoBehaviour
     {
       this.settingsPlayer.fullBook = (byte) (b + 1);
       this.UpdateElementalIcon();
+      this.UpdateHolidaySprites();
     }), true);
   }
 
@@ -365,6 +404,8 @@ public class SpellLobbyChange : MonoBehaviour
 
   private void UpdateHolidaySprites()
   {
+    if ((UnityEngine.Object) this.imgSeasons == (UnityEngine.Object) null)
+      return;
     this.imgSeasons.sprite = this.settingsPlayer._spells.SeasonsIsHoliday ? this.spriteHoliday : this.spriteSeasons;
     this.imgHoliday.sprite = !this.settingsPlayer._spells.SeasonsIsHoliday ? this.spriteHoliday : this.spriteSeasons;
   }
@@ -508,7 +549,7 @@ public class SpellLobbyChange : MonoBehaviour
         this.OpenExtraSpells((BookOf) e);
         this.PostClickBook();
       }));
-      num1 += 64;
+      num1 += 60;
       uiOnHover.gameObject.SetActive(true);
       if (index == 10)
         this.imgSeasons = uiOnHover.GetComponent<Image>();
@@ -742,6 +783,7 @@ public class SpellLobbyChange : MonoBehaviour
     }
     this.OpenBook(this.openBook);
     this.UpdateElementalIcon();
+    this.UpdateHolidaySprites();
   }
 
   public bool HasSpell(byte spellID)

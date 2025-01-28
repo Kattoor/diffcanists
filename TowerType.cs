@@ -13,4 +13,5 @@ public enum TowerType
   Wooden,
   Cosmos,
   Holiday,
+  Sand,
 }

@@ -155,6 +155,7 @@ public static class Global
   public const byte MsgRandomRestrictions = 106;
   public const byte MsgAuthSteam = 107;
   public const byte MsgAuthDiscord = 108;
+  public const byte MsgPreGameFacts = 109;
   public const byte MsgClanChat = 150;
   public const byte MsgPrivateChat = 151;
   public const byte MsgTeamChat = 152;
@@ -163,6 +164,7 @@ public static class Global
   public const byte MsgQuickChat = 155;
   public const byte MsgTest = 156;
   public const byte MsgEmoji = 157;
+  public const byte MsgTowerHealth = 187;
   public const byte MsgCreatureSpells = 188;
   public const byte MsgCreatureHealth = 189;
   public const byte MsgSpellbookInfo = 190;

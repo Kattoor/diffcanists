@@ -67,6 +67,8 @@ public class Familiar : MonoBehaviour
         return new Vector3(20f, 23f, 0.0f);
       case BookOf.Cosmos:
         return new Vector3(18f, 25f, 0.0f);
+      case BookOf.Sands:
+        return new Vector3(28f, 0.0f, 0.0f);
       default:
         return Vector3.zero;
     }

@@ -19,5 +19,6 @@ public enum MapEnum
   Random = 16777216, // 0x01000000
   Alien_World = 33554432, // 0x02000000
   Ghostly_Halls = 67108864, // 0x04000000
+  Desert = 134217728, // 0x08000000
   Space_Nexus = 1073741824, // 0x40000000
 }

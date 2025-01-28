@@ -28,19 +28,19 @@ public class StartUp : MonoBehaviour
   {
     try
     {
-      string str = Application.dataPath + "/SavedData";
+      string persistentDataPath = SaveFolder.persistentDataPath;
       string sourceDir = Application.persistentDataPath.Replace("Arcanists", "Arcanists 2").Replace("ArcaneGamingLtd", "DefaultCompany");
-      if (Global.GetPrefBool("checkdirswitch", false) || !Directory.Exists(str) || (!Directory.Exists(sourceDir + "/SavedSpells") || Directory.GetFiles(str + "/SavedSpells").Length != 0))
+      if (Global.GetPrefBool("checkdirswitch2", false) || !Directory.Exists(persistentDataPath) || (!Directory.Exists(sourceDir + "/SavedSpells") || Directory.GetFiles(persistentDataPath + "/SavedSpells").Length != 0))
       {
         if (!Directory.Exists(sourceDir + "/SavedSpells") || Directory.Exists(Application.persistentDataPath + "/SavedSpells"))
           return;
-        StartUp.CopyDirectory(sourceDir, Application.persistentDataPath);
+        StartUp.CopyDirectory(sourceDir, persistentDataPath);
       }
       else
       {
-        Global.SetPrefBool("checkdirswitch", true);
+        Global.SetPrefBool("checkdirswitch2", true);
         Debug.Log((object) "Transferring saved outfits/spells into steam cloud save");
-        StartUp.CopyDirectory(sourceDir, str);
+        StartUp.CopyDirectory(sourceDir, persistentDataPath);
       }
     }
     catch (Exception ex)

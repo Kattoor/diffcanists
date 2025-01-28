@@ -37,6 +37,8 @@ public static class BookExtensions
         return new Color(0.7333333f, 0.5882353f, 0.3411765f);
       case BookOf.Cosmos:
         return new Color(0.4f, 0.0f, 0.509804f);
+      case BookOf.Sands:
+        return new Color(0.7372549f, 0.6745098f, 0.4862745f);
       default:
         return Color.white;
     }

@@ -17,7 +17,7 @@ public static class Content
         return (object) Tutorial.FromBytes(reader.ReadBytes());
       case ContentType.GameSettings:
         GameSettings gameSettings = new GameSettings();
-        gameSettings.Deserialize(reader, (byte) 4);
+        gameSettings.Deserialize(reader, (byte) 5);
         return (object) gameSettings;
       case ContentType.ClanInvite:
         return (object) new ClanInvite()
@@ -37,7 +37,7 @@ public static class Content
       case ContentType.ColorScheme:
         return (object) ColorScheme.Deserialize(reader);
       case ContentType.RatedSettings:
-        return (object) RatedFacts.Deserialize(3, reader);
+        return (object) RatedFacts.Deserialize(4, reader);
       case ContentType.RatedContainer:
         return (object) RatedContainer.Deserialize(reader);
       default:

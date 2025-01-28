@@ -3,7 +3,7 @@ using Hazel;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -19,13 +19,13 @@ public class UnratedMenu : Catalogue
     1f,
     1f
   };
-  public GameObject[] Advanced_Options;
-  public GameObject[] Rated_Options;
+  public UnratedTab unratedTab;
   public RectTransform _containerAccounts;
   public RectTransform _containerInvite;
   public GameObject panelInvite;
   public TextMeshProUGUI txtRateType;
   public TextMeshProUGUI txtName;
+  public TextMeshProUGUI txtDescription;
   public Button buttonStartGame;
   public TMP_Text buttonStartGameTxt;
   public Image startGameImg;
@@ -39,39 +39,10 @@ public class UnratedMenu : Catalogue
   public UIOnHover butViewClan;
   public UIOnHover butAddFriend;
   internal Viewing viewing;
-  [Header("Groups")]
-  public UIOnHover[] groupInvite;
-  public UIOnHover[] groupPlayers;
-  public UIOnHover[] groupSpectate;
-  public UIOnHover[] groupTurnTime;
-  public UIOnHover[] groupMapStyle;
-  public UIOnHover[] groupArmageddon;
-  public UIOnHover[] groupTeams;
-  public UIOnHover[] groupPerTeam;
-  public UIOnHover[] groupMapGen;
-  public UIOnHover[] groupGameStyles;
-  [Header("Custom Armageddon")]
-  public GameObject panelCustomArmageddon;
-  public Image[] _customArmageddonImages;
-  public TMP_Text txtNumPlayers;
-  public TMP_Text txtPlayerCount;
-  public TMP_Text txtGameOwner;
-  public TMP_Text txtArmageddonStart;
-  public TMP_Text txtStartHealth;
-  public TMP_Text txtElementalLevel;
-  public TMP_Text txtCountdown;
-  public TMP_Text txtCountdownDelay;
-  public TMP_Text txtCustomTime;
-  public TMP_Text txtMapSize;
-  public TMP_Text txtMapSizeHeight;
-  public TMP_Text txtMapSeed;
   public UIOnHover buttonAdvanced;
-  public UIOnHover buttonArmageddonTurn;
-  public UIOnHover buttonTournament;
-  public TMP_Text txtDescription;
-  public Image zombieMonkey;
-  public Sprite spZombieMonkey;
-  public Sprite spMonkey;
+  [Header("Custom Armageddon")]
+  public TMP_Text txtNumPlayers;
+  public TMP_Text txtGameOwner;
   public GameObject panelMultiBooks;
   public List<MultiSelectConfig> multiBooks;
   public GameObject buttonMultiBookPanel;
@@ -80,8 +51,8 @@ public class UnratedMenu : Catalogue
   public SpellImageList spellImageList;
   [Header("Scroll")]
   public ScrollRect scrollRect;
+  public GameObject panelPopup;
   private bool isFirst;
-  private bool advanced;
   private bool allReady;
 
   public static UnratedMenu instance { get; private set; }
@@ -131,23 +102,11 @@ public class UnratedMenu : Catalogue
   private void Start()
   {
     this.ViewLobby();
-    this.RefreshGameOptions();
     ChatBox.Instance.Init(ColorScheme.GetColor(Global.ColorGameText));
     AudioManager.PlayMusicMainMenu();
     if (Client._gameFacts.GetRatedMode())
       ChatBox.Instance.NewChatMsg("This is a rated lobby.", (Color) ColorScheme.GetColor(Global.ColorSystem));
-    foreach (GameObject advancedOption in this.Advanced_Options)
-    {
-      if ((UnityEngine.Object) advancedOption != (UnityEngine.Object) null)
-        advancedOption.SetActive(this.advanced);
-    }
-    if (!Client._gameFacts.GetRatedMode())
-      return;
-    foreach (GameObject ratedOption in this.Rated_Options)
-    {
-      if ((UnityEngine.Object) ratedOption != (UnityEngine.Object) null)
-        ratedOption.SetActive(false);
-    }
+    this.unratedTab._Start();
   }
 
   private void OnDestroy()
@@ -204,8 +163,8 @@ public class UnratedMenu : Catalogue
       {
         this.buttonStartGameTxt.text = "Ready";
         this.startGameImg.color = (Color) new Color32((byte) 43, (byte) 147, (byte) 38, byte.MaxValue);
-        this.groupSpectate[0].Interactable(false);
-        this.groupTeams[0].Interactable(false);
+        this.unratedTab.groupSpectate[0].Interactable(false);
+        this.unratedTab.groupTeams[0].Interactable(false);
       }
       if (str1 == null)
         return;
@@ -251,6 +210,10 @@ public class UnratedMenu : Catalogue
       Client.AskToAddFriend(true, true, s);
     }), (string) null, false);
     myContextMenu.Rebuild(false);
+  }
+
+  public void RightClickDescription()
+  {
   }
 
   public void ClickSettings()
@@ -301,6 +264,13 @@ public class UnratedMenu : Catalogue
       if (group[index].AlwaysOn)
         group[index].AlwaysOn = false;
     }
+  }
+
+  private void Update()
+  {
+    if (!Input.GetKeyDown(KeyCode.F12) || !Input.GetKey(KeyCode.LeftControl) || !Client.MyAccount.accountType.isDev())
+      return;
+    this.UploadToServer();
   }
 
   public void RefreshFriends(bool updatePos = false)
@@ -460,35 +430,17 @@ public class UnratedMenu : Catalogue
 
   public bool IsAdvanced()
   {
-    foreach (GameObject advancedOption in this.Advanced_Options)
-    {
-      if ((UnityEngine.Object) advancedOption != (UnityEngine.Object) null)
-      {
-        foreach (UIOnHover componentsInChild in advancedOption.GetComponentsInChildren<UIOnHover>())
-        {
-          if (componentsInChild.AlwaysOn && !componentsInChild.gameObject.CompareTag("Ignore") && componentsInChild.gameObject.activeSelf)
-            return true;
-        }
-      }
-    }
-    return false;
+    return this.unratedTab.IsAdvanced();
   }
 
   public void ClickToggleAdvanced()
   {
-    this.ToggleAdvanced(!this.advanced);
+    this.ToggleAdvanced(!this.unratedTab.advanced);
   }
 
   public void ToggleAdvanced(bool v)
   {
-    this.advanced = v;
-    Global.SetPrefBool("prefadvanced", v);
-    this.buttonAdvanced.AlwaysOn = this.advanced;
-    foreach (GameObject advancedOption in this.Advanced_Options)
-    {
-      if ((UnityEngine.Object) advancedOption != (UnityEngine.Object) null && (!Client._gameFacts.GetRatedMode() || !((IEnumerable<GameObject>) this.Rated_Options).Contains<GameObject>(advancedOption)))
-        advancedOption.SetActive(this.advanced);
-    }
+    this.unratedTab.ToggleAdvanced(v);
   }
 
   public void AskToChangeElementalLevel(int x)
@@ -539,6 +491,11 @@ public class UnratedMenu : Catalogue
   public void AskRemoveCustomArmageddon(int x)
   {
     Client.AskToChangeGameMode(GameFacts.Message.Remove_Custom_Armageddon, x);
+  }
+
+  public void Ask(GameFacts.Message g, int x)
+  {
+    Client.AskToChangeGameMode(g, x);
   }
 
   [EnumAction(typeof (GameStyle))]
@@ -659,125 +616,10 @@ public class UnratedMenu : Catalogue
 
   public void RefreshGameOptions()
   {
+    this.unratedTab.RefreshGameOptions();
     this.UpdateStartButton();
-    this.ToggleAll(this.groupInvite);
-    this.ToggleAll(this.groupSpectate);
-    this.ToggleAll(this.groupMapStyle);
-    this.ToggleAll(this.groupArmageddon);
-    this.ToggleAll(this.groupTeams);
-    this.ToggleAll(this.groupPerTeam);
-    this.ToggleAll(this.groupMapGen);
-    this.ToggleAll(this.groupGameStyles);
-    switch (Client._gameFacts.GetInviteMode())
-    {
-      case InviteEnum.Invite_Only:
-        this.groupInvite[0].AlwaysOn = true;
-        break;
-      case InviteEnum.Clan:
-        this.groupInvite[1].AlwaysOn = true;
-        break;
-      case InviteEnum.Friends:
-        this.groupInvite[2].AlwaysOn = true;
-        break;
-      case InviteEnum.Similar_Rating:
-        this.groupInvite[3].AlwaysOn = true;
-        break;
-      case InviteEnum.Open:
-        this.groupInvite[4].AlwaysOn = true;
-        break;
-      case InviteEnum.BookClub:
-        this.groupInvite[5].AlwaysOn = true;
-        break;
-    }
     this.UpdatePlayerCount();
-    if (Client._gameFacts.GetSpectatorMode())
-      this.groupSpectate[1].AlwaysOn = true;
-    TMP_Text txtCustomTime = this.txtCustomTime;
-    ushort num1 = Client._gameFacts.customTime;
-    string str1 = num1.ToString();
-    txtCustomTime.text = str1;
-    MapEnum mapMode = Client._gameFacts.GetMapMode();
-    MapEnum armageddon = Client._gameFacts.GetArmageddon();
-    if (armageddon == ~MapEnum.Dont_Mind)
-      this.groupArmageddon[this.groupArmageddon.Length - 1].AlwaysOn = true;
-    foreach (MapEnum e in (MapEnum[]) Enum.GetValues(typeof (MapEnum)))
-    {
-      if (e != MapEnum.Dont_Mind)
-      {
-        if ((mapMode & e) != ~MapEnum.Dont_Mind)
-          this.groupMapStyle[GameFacts.GetMapIndex(e)].AlwaysOn = true;
-        if ((armageddon & e) != ~MapEnum.Dont_Mind)
-          this.groupArmageddon[GameFacts.GetMapIndex(e)].AlwaysOn = true;
-      }
-    }
-    if (Client._gameFacts.GetTeamMode())
-    {
-      this.groupTeams[1].AlwaysOn = true;
-      this.panelPlayersPerTeam.SetActive(!Client._gameFacts.GetRatedMode());
-    }
-    else
-    {
-      this.groupTeams[0].AlwaysOn = true;
-      this.panelPlayersPerTeam.SetActive(false);
-    }
-    if (Client._gameFacts.GetMultiTeamMode())
-      this.groupTeams[2].AlwaysOn = true;
-    int style = (int) Client._gameFacts.GetStyle();
-    if (((GameStyle) style).HasStyle(GameStyle.Shuffle_Players))
-      this.groupGameStyles[0].AlwaysOn = true;
-    if (((GameStyle) style).HasStyle(GameStyle.Random_Spells))
-      this.groupGameStyles[1].AlwaysOn = true;
-    if (((GameStyle) style).HasStyle(GameStyle.Original_Spells_Only))
-      this.groupGameStyles[2].AlwaysOn = true;
-    if (((GameStyle) style).HasStyle(GameStyle.No_Movement))
-      this.groupGameStyles[3].AlwaysOn = true;
-    if (((GameStyle) style).HasStyle(GameStyle.Zero_Shield))
-      this.groupGameStyles[4].AlwaysOn = true;
-    if (((GameStyle) style).HasStyle(GameStyle.First_Turn_Teleport))
-      this.groupGameStyles[5].AlwaysOn = true;
-    if (((GameStyle) style).HasStyle(GameStyle.Elementals))
-      this.groupGameStyles[6].AlwaysOn = true;
-    if (((GameStyle) style).HasStyle(GameStyle.Bid))
-      this.groupGameStyles[7].AlwaysOn = true;
-    if (((GameStyle) style).HasStyle(GameStyle.Sandbox))
-      this.groupGameStyles[8].AlwaysOn = true;
-    if (((GameStyle) style).HasStyle(GameStyle.Arcane_Monster))
-      this.groupGameStyles[9].AlwaysOn = true;
-    if (((GameStyle) style).HasStyle(GameStyle.Watchtower))
-      this.groupGameStyles[10].AlwaysOn = true;
-    this.groupGameStyles[7].gameObject.SetActive(false);
-    this.groupGameStyles[8].gameObject.SetActive(!Client._gameFacts.GetRatedMode());
-    if (Client._gameFacts.GetPlayersPerTeam() == PlayersPerTeam.Half)
-      this.groupPerTeam[7].AlwaysOn = true;
-    else
-      this.groupPerTeam[Mathf.Clamp(Client._gameFacts.GetNumberPlayersPerTeam() - 2, 0, 7)].AlwaysOn = true;
-    this.buttonTournament.AlwaysOn = Client._gameFacts.GetTournamentMode();
-    this.buttonTournament.gameObject.SetActive(Client.MyAccount.accountType.IsModPlusTOParticipate() && !Client._gameFacts.GetRatedMode() || this.buttonTournament.AlwaysOn);
-    this.txtArmageddonStart.text = "Turn\n" + Client._gameFacts.armageddonTurn.ToString();
-    TMP_Text txtStartHealth = this.txtStartHealth;
-    num1 = Client._gameFacts.startHealth;
-    string str2 = "Health: " + num1.ToString();
-    txtStartHealth.text = str2;
-    this.txtMapSize.text = "Width: " + (object) Client._gameFacts.settings.mapWidth + "%";
-    this.txtMapSizeHeight.text = "Height: " + (object) Client._gameFacts.settings.mapHeight + "%";
-    this.txtMapSeed.text = "Seed: " + (Client._gameFacts.settings.fixedMapSeed ? Client._gameFacts.settings.mapSeed.ToString() : "Random");
-    this.txtElementalLevel.text = "Elementals\n" + Client._gameFacts.elementalLevel.ToString();
-    this.txtCountdown.text = "Countdown: " + (Client._gameFacts.countdownTime == (short) 0 ? "<#FF0000>X" : (Client._gameFacts.countdownTime < (short) 0 ? "<sprite=23> " + Global.IntToTime((int) Client._gameFacts.countdownTime, 10) : Global.IntToTime((int) Client._gameFacts.countdownTime, 10)));
-    this.txtCountdownDelay.text = "Delay: " + (Client._gameFacts.countdownTime == (short) 0 ? "<#FF0000>X" : Client._gameFacts.countdownDelay.ToString());
-    this.txtPlayerCount.text = Client._gameFacts.customPlayerCount.ToString();
-    this.groupMapGen[0].AlwaysOn = Client._gameFacts.settings.mapWidth != (byte) 100;
-    this.groupMapGen[1].AlwaysOn = Client._gameFacts.settings.mapHeight != (byte) 100;
-    this.groupMapGen[2].AlwaysOn = Client._gameFacts.settings.fixedMapSeed;
-    this.groupPlayers[0].AlwaysOn = true;
-    this.groupPlayers[1].AlwaysOn = Client._gameFacts.startHealth != (ushort) 250;
-    this.groupPlayers[2].AlwaysOn = Client._gameFacts.restrictions != null && Client._gameFacts.restrictions.AnyRestricted();
-    this.buttonArmageddonTurn.AlwaysOn = Client._gameFacts.armageddonTurn != (byte) 10;
-    this.groupTurnTime[0].AlwaysOn = true;
-    this.groupTurnTime[1].AlwaysOn = (uint) Client._gameFacts.countdownTime > 0U;
-    this.groupTurnTime[2].Interactable((uint) Client._gameFacts.countdownTime > 0U);
-    this.groupTurnTime[2].AlwaysOn = (uint) Client._gameFacts.countdownTime > 0U;
     this.txtDescription.text = Client._gameFacts.settings.FilteredDescription();
-    this.zombieMonkey.sprite = Client._gameFacts.GetStyle().HasStyle(GameStyle.Zombie_Monkey) ? this.spZombieMonkey : this.spMonkey;
     SpellLobbyChange.Instance?.RefreshList();
     this.spellImageList?.SetSpells();
     if (this.IsFirst)
@@ -813,40 +655,16 @@ public class UnratedMenu : Catalogue
         this.multiBooks[0].spells.SetSpells(this.multiBooks[0].settings);
         this.multiBooks[0].UpdateOutfit();
       }
-      int num2 = Client._gameFacts.GetNumberPlayersPerTeam() - 1;
+      int num = Client._gameFacts.GetNumberPlayersPerTeam() - 1;
       for (int index = 0; index < this.multiBooks.Count; ++index)
-        this.multiBooks[index].gameObject.SetActive(index < num2);
+        this.multiBooks[index].gameObject.SetActive(index < num);
       this.buttonMultiBookPanel.SetActive(true);
     }
     else
       this.buttonMultiBookPanel.SetActive(false);
-    if (!this.advanced && this.IsAdvanced() || Global.GetPrefBool("prefadvanced", false))
+    if (!this.unratedTab.advanced && this.IsAdvanced() || Global.GetPrefBool("prefadvanced", false))
       this.ToggleAdvanced(true);
-    this.buttonAdvanced.AlwaysOn = this.advanced;
-    List<SpellEnum> customArmageddon = Client._gameFacts.settings.customArmageddon;
-    if ((customArmageddon != null ? (__nonvirtual (customArmageddon.Count) > 0 ? 1 : 0) : 0) != 0)
-    {
-      this.panelCustomArmageddon.SetActive(true);
-      int index;
-      for (index = 0; index < Client._gameFacts.settings.customArmageddon.Count && index < this._customArmageddonImages.Length; ++index)
-      {
-        Spell spell = Inert.GetSpell(Client._gameFacts.settings.customArmageddon[index]);
-        if ((UnityEngine.Object) spell == (UnityEngine.Object) null || spell.level > 3 && !GameFacts.AllowCustomArmageddon(spell.spellEnum))
-        {
-          Client._gameFacts.settings.customArmageddon.RemoveAt(index);
-          --index;
-        }
-        else
-        {
-          this._customArmageddonImages[index].sprite = ClientResources.Instance.GetSpellIcon(spell.name);
-          this._customArmageddonImages[index].gameObject.SetActive(true);
-        }
-      }
-      for (; index < this._customArmageddonImages.Length; ++index)
-        this._customArmageddonImages[index].gameObject.SetActive(false);
-    }
-    else
-      this.panelCustomArmageddon.SetActive(false);
+    this.buttonAdvanced.AlwaysOn = this.unratedTab.advanced;
     DiscordIntergration.Instance?.UpdateActivity(Client._gameFacts, false, false);
   }
 
@@ -1136,7 +954,28 @@ public class UnratedMenu : Catalogue
       return;
     MyContextMenu myContextMenu = MyContextMenu.Show();
     myContextMenu.AddSeperator("Game's Description");
-    myContextMenu.AddInput((Action<string>) (s => Client.AskToChangeDescription(s)), "", true);
+    myContextMenu.AddInput((Action<string>) (s => Client.AskToChangeDescription(s)), Client._gameFacts.settings.description, true);
+    if (Client._gameFacts.GetRatedMode())
+      myContextMenu.AddSeperator("<#FF0000>----Rated Game So these do nothing----");
+    myContextMenu.AddSeperator("Obscure Game Options");
+    for (int index = 0; index < ZGame.MoreGameOptions.GetLength(0); ++index)
+    {
+      int z = index;
+      if (Client._gameFacts.settings.description.Contains(ZGame.MoreGameOptions[index, 0]))
+        myContextMenu.AddItem(ZGame.MoreGameOptions[index, 0] + " | " + ZGame.MoreGameOptions[index, 1], (Action) (() =>
+        {
+          if (!this.IsFirst)
+            return;
+          Client.AskToChangeDescription(Client._gameFacts.settings.description.Replace(ZGame.MoreGameOptions[z, 0], ""));
+        }), MyContextMenu.ColorRed);
+      else
+        myContextMenu.AddItem(ZGame.MoreGameOptions[index, 0] + " | " + ZGame.MoreGameOptions[index, 1], (Action) (() =>
+        {
+          if (!this.IsFirst)
+            return;
+          Client.AskToChangeDescription(Client._gameFacts.settings.description + ZGame.MoreGameOptions[z, 0]);
+        }), MyContextMenu.ColorGreen);
+    }
     myContextMenu.Rebuild(false);
   }
 
@@ -1189,6 +1028,21 @@ public class UnratedMenu : Catalogue
     myContextMenu.Rebuild(false);
   }
 
+  public void ClickMapOptions()
+  {
+    if (!this.IsFirst)
+      return;
+    MyContextMenu myContextMenu = MyContextMenu.Show();
+    myContextMenu.AddItem("Alternate Map Generation", (Action) (() => this.Ask(GameFacts.Message.Alternate_Generation, 0)), (Color) (Client._gameFacts.settings.altGeneration ? ColorScheme.GetColor(MyContextMenu.ColorRed) : ColorScheme.GetColor(MyContextMenu.ColorCream)));
+    myContextMenu.AddSeperator("--------------------------");
+    myContextMenu.AddSeperator("----Water Styles----");
+    myContextMenu.AddItem("Map Default", (Action) (() => this.Ask(GameFacts.Message.Water, 0)), (Color) (Client._gameFacts.settings.water == WaterStyle.Default ? ColorScheme.GetColor(MyContextMenu.ColorRed) : ColorScheme.GetColor(MyContextMenu.ColorCream)));
+    myContextMenu.AddItem("Water", (Action) (() => this.Ask(GameFacts.Message.Water, 3)), (Color) (Client._gameFacts.settings.water == WaterStyle.Water ? ColorScheme.GetColor(MyContextMenu.ColorRed) : ColorScheme.GetColor(MyContextMenu.ColorCream)));
+    myContextMenu.AddItem("Ground", (Action) (() => this.Ask(GameFacts.Message.Water, 2)), (Color) (Client._gameFacts.settings.water == WaterStyle.Ground ? ColorScheme.GetColor(MyContextMenu.ColorRed) : ColorScheme.GetColor(MyContextMenu.ColorCream)));
+    myContextMenu.AddItem("No Water", (Action) (() => this.Ask(GameFacts.Message.Water, 1)), (Color) (Client._gameFacts.settings.water == WaterStyle.No_Water ? ColorScheme.GetColor(MyContextMenu.ColorRed) : ColorScheme.GetColor(MyContextMenu.ColorCream)));
+    myContextMenu.Rebuild(false);
+  }
+
   public void ClickArmageddonAdditionalOptions()
   {
     if (!this.IsFirst)
@@ -1201,7 +1055,7 @@ public class UnratedMenu : Catalogue
       myContextMenu1.AddItem("Add Custom Armageddon", (Action) (() =>
       {
         MyContextMenu myContextMenu2 = MyContextMenu.Show();
-        myContextMenu2.AddSpellSelector((UnityAction<SpellEnum>) (s => this.AskAddCustomArmageddon((int) s)));
+        myContextMenu2.AddSpellSelector((UnityAction<SpellEnum>) (s => this.AskAddCustomArmageddon((int) s)), (Func<Spell, bool>) (spell => spell.level > 3 && !GameFacts.AllowCustomArmageddon(spell.spellEnum)), false);
         myContextMenu2.Rebuild(true);
       }), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
     List<SpellEnum> customArmageddon = Client._gameFacts.settings.customArmageddon;
@@ -1219,9 +1073,84 @@ public class UnratedMenu : Catalogue
           myContextMenu1.AddItemWithImage(spell.name, ClientResources.Instance.GetSpellIcon(spell.name), (Action) (() => this.AskRemoveCustomArmageddon((int) e)), (Color) ColorScheme.GetColor(MyContextMenu.ColorRed), "");
       }
       myContextMenu1.AddSeperator("--------------------------");
-      myContextMenu1.AddItem("Remove all", (Action) (() => this.AskRemoveCustomArmageddon(-1)), (Color) ColorScheme.GetColor(MyContextMenu.ColorRed));
+      myContextMenu1.AddItem("Remove all Armageddons", (Action) (() => this.AskRemoveCustomArmageddon(-1)), (Color) ColorScheme.GetColor(MyContextMenu.ColorRed));
     }
     myContextMenu1.Rebuild(false);
+  }
+
+  public void ClickAutoIncludeSpells()
+  {
+    if (!this.IsFirst)
+      return;
+    MyContextMenu myContextMenu1 = MyContextMenu.Show();
+    myContextMenu1.AddSeperator("----Auto Include spell book spells----");
+    if (Client._gameFacts.settings.autoInclude == null || Client._gameFacts.settings.autoInclude.Count < 250)
+    {
+      myContextMenu1.AddItem("Add Auto Include Spell (You can select multiple)", (Action) (() =>
+      {
+        MyContextMenu myContextMenu2 = MyContextMenu.Show();
+        myContextMenu2.AddSpellSelector((UnityAction<SpellEnum>) (s => this.Ask(GameFacts.Message.AutoInclude, (int) s)), (Func<Spell, bool>) (spell => spell.level > 3), true);
+        myContextMenu2.AddItem("Close", (Action) null, MyContextMenu.ColorRed);
+        myContextMenu2.Rebuild(true);
+      }), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
+      myContextMenu1.AddSeperator("Note: You can only have 1 of each spell, selecting it again will remove it.");
+    }
+    List<SpellEnum> autoInclude = Client._gameFacts.settings.autoInclude;
+    if ((autoInclude != null ? (__nonvirtual (autoInclude.Count) > 0 ? 1 : 0) : 0) != 0)
+    {
+      if (Client._gameFacts.settings.autoInclude.Count < 250)
+        myContextMenu1.AddSeperator("--------------------------");
+      for (int index = 0; index < Client._gameFacts.settings.autoInclude.Count; ++index)
+      {
+        Spell spell = Inert.GetSpell(Client._gameFacts.settings.autoInclude[index]);
+        SpellEnum e = Client._gameFacts.settings.autoInclude[index];
+        if ((UnityEngine.Object) spell == (UnityEngine.Object) null)
+          myContextMenu1.AddItem("Invalid Spell", (Action) (() => this.Ask(GameFacts.Message.AutoInclude, (int) e)), (Color) ColorScheme.GetColor(MyContextMenu.ColorRed));
+        else
+          myContextMenu1.AddItemWithImage(spell.name, ClientResources.Instance.GetSpellIcon(spell.name), (Action) (() => this.Ask(GameFacts.Message.Remove_AutoInclude, (int) e)), (Color) ColorScheme.GetColor(MyContextMenu.ColorRed), "");
+      }
+      myContextMenu1.AddSeperator("--------------------------");
+      myContextMenu1.AddItem("Remove all spells", (Action) (() => this.Ask(GameFacts.Message.Remove_AutoInclude, -1)), (Color) ColorScheme.GetColor(MyContextMenu.ColorRed));
+    }
+    myContextMenu1.Rebuild(false);
+  }
+
+  public void UploadToServer()
+  {
+    if (!Client.MyAccount.accountType.isDev())
+      return;
+    MyContextMenu myContextMenu = MyContextMenu.Show();
+    myContextMenu.AddSeperator("-----Send As------");
+    myContextMenu.AddItem("Low Time", (Action) (() => this._sendGameFactsToServer(1)), MyContextMenu.ColorGreen);
+    myContextMenu.AddItem("High Time", (Action) (() => this._sendGameFactsToServer(2)), MyContextMenu.ColorGreen);
+    myContextMenu.AddItem("Party Mode", (Action) (() => this._sendGameFactsToServer(3)), MyContextMenu.ColorGreen);
+    myContextMenu.AddSeperator("-----Remove-----");
+    myContextMenu.AddItem("Low Time", (Action) (() => this._sendGameFactsToServer(-1)), MyContextMenu.ColorRed);
+    myContextMenu.AddItem("High Time", (Action) (() => this._sendGameFactsToServer(-2)), MyContextMenu.ColorRed);
+    myContextMenu.AddItem("Party Mode", (Action) (() => this._sendGameFactsToServer(-3)), MyContextMenu.ColorRed);
+  }
+
+  private void _sendGameFactsToServer(int x)
+  {
+    List<string> players = Client._gameFacts.players;
+    List<Connection> connections = Client._gameFacts.connections;
+    HashSet<string> invitedPlayers = Client._gameFacts.invitedPlayers;
+    Client._gameFacts.players = new List<string>();
+    Client._gameFacts.connections = new List<Connection>();
+    Client._gameFacts.invitedPlayers = new HashSet<string>();
+    using (MemoryStream memoryStream = new MemoryStream())
+    {
+      using (myBinaryWriter writer = new myBinaryWriter((Stream) memoryStream))
+      {
+        writer.Write((byte) 109);
+        writer.Write(x);
+        Client._gameFacts.ManualSerialize(writer, false);
+      }
+      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
+    }
+    Client._gameFacts.players = players;
+    Client._gameFacts.connections = connections;
+    Client._gameFacts.invitedPlayers = invitedPlayers;
   }
 
   public void ClickShowRestrictions()

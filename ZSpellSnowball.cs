@@ -153,7 +153,7 @@ label_2:
         zspellSnowball.velocity = MyLocation.zero;
         zspellSnowball.isMoving = false;
         zspellSnowball.Splash();
-        if (zspellSnowball.spellEnum != SpellEnum.Brine_Bolt)
+        if (zspellSnowball.spellEnum != SpellEnum.Brine_Bolt && zspellSnowball.game.waterType != WaterStyle.No_Water)
           zspellSnowball.OnDeath(true);
         else
           ZComponent.Destroy<GameObject>(zspellSnowball.gameObject);

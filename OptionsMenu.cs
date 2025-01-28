@@ -24,6 +24,8 @@ public class OptionsMenu : Catalogue
   public Toggle toggleNewSpellIcons;
   public Toggle toggleNewPanelPlayer;
   public Toggle toggleColoredNames;
+  public Toggle toggleFlashSandbox;
+  public Toggle toggleFlashPrestige;
   public Image bigImage;
   [Header("Sound")]
   public UIOnSlider sliderSound;
@@ -153,10 +155,20 @@ public class OptionsMenu : Catalogue
       this.toggleNewPanelPlayer.isOn = Global.GetPrefBool("useNewPanelPlayer", true);
       this.toggleNewPanelPlayer.onValueChanged.AddListener((UnityAction<bool>) (v => HUD.TogglePanelPlayer(v)));
     }
-    if (!((UnityEngine.Object) this.toggleColoredNames != (UnityEngine.Object) null))
+    if ((UnityEngine.Object) this.toggleColoredNames != (UnityEngine.Object) null)
+    {
+      this.toggleColoredNames.isOn = Global.GetPrefBool("prefcolorednames", !HUD.useNewPanelPlayer);
+      this.toggleColoredNames.onValueChanged.AddListener((UnityAction<bool>) (v => HUD.ToggleColoredNames(v)));
+    }
+    if ((UnityEngine.Object) this.toggleFlashSandbox != (UnityEngine.Object) null)
+    {
+      this.toggleFlashSandbox.isOn = Global.GetPrefBool("prefflashsandbox", true);
+      this.toggleFlashSandbox.onValueChanged.AddListener((UnityAction<bool>) (v => Global.SetPrefBool("prefflashsandbox", v)));
+    }
+    if (!((UnityEngine.Object) this.toggleFlashPrestige != (UnityEngine.Object) null))
       return;
-    this.toggleColoredNames.isOn = Global.GetPrefBool("prefcolorednames", !HUD.useNewPanelPlayer);
-    this.toggleColoredNames.onValueChanged.AddListener((UnityAction<bool>) (v => HUD.ToggleColoredNames(v)));
+    this.toggleFlashPrestige.isOn = Global.GetPrefBool("prefflashprestige", true);
+    this.toggleFlashPrestige.onValueChanged.AddListener((UnityAction<bool>) (v => Global.SetPrefBool("prefflashprestige", v)));
   }
 
   public static void ShowHUDContextMenu()

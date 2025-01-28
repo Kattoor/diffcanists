@@ -25,8 +25,11 @@ public class GameSettings
   public Restrictions restrictions;
   public int mapSeed;
   public bool fixedMapSeed;
-  public const byte Version = 4;
+  public bool altGeneration;
+  public WaterStyle water;
+  public const byte Version = 5;
   public List<SpellEnum> customArmageddon;
+  public List<SpellEnum> autoInclude;
 
   public string FilteredDescription()
   {
@@ -39,7 +42,7 @@ public class GameSettings
     {
       using (myBinaryWriter w = new myBinaryWriter((Stream) memoryStream))
       {
-        w.Write((byte) 4);
+        w.Write((byte) 5);
         this.Serialize(w);
       }
       File.WriteAllBytes(s, memoryStream.ToArray());
@@ -70,7 +73,7 @@ public class GameSettings
         {
           b.Serialize(w);
           memoryStream.Position = 0L;
-          this.Deserialize(r, (byte) 4);
+          this.Deserialize(r, (byte) 5);
         }
       }
     }
@@ -91,6 +94,8 @@ public class GameSettings
     w.Write(this.customTime);
     w.Write(this.customPlayerCount);
     w.Write((int) this.gameType);
+    w.Write(this.altGeneration);
+    w.Write((int) this.water);
     w.Write(this.restrictions == null ? (byte) 0 : (byte) 1);
     if (this.restrictions != null)
       this.restrictions.Serialize(w);
@@ -104,13 +109,21 @@ public class GameSettings
         this.customArmageddon.RemoveAt(5);
     }
     w.Write(this.customArmageddon == null ? 0 : this.customArmageddon.Count);
-    if (this.customArmageddon == null)
+    if (this.customArmageddon != null)
+    {
+      for (int index = 0; index < this.customArmageddon.Count; ++index)
+        w.Write((int) this.customArmageddon[index]);
+    }
+    if (this.autoInclude != null && this.autoInclude.Count > 250)
+      this.autoInclude.RemoveRange(250, this.autoInclude.Count - 250);
+    w.Write(this.autoInclude == null ? 0 : this.autoInclude.Count);
+    if (this.autoInclude == null)
       return;
-    for (int index = 0; index < this.customArmageddon.Count; ++index)
-      w.Write((int) this.customArmageddon[index]);
+    for (int index = 0; index < this.autoInclude.Count; ++index)
+      w.Write((int) this.autoInclude[index]);
   }
 
-  public void Deserialize(myBinaryReader r, byte version = 4)
+  public void Deserialize(myBinaryReader r, byte version = 5)
   {
     this.description = r.ReadString();
     this.gameModes = r.ReadInt32();
@@ -125,6 +138,16 @@ public class GameSettings
     this.customTime = r.ReadUInt16();
     this.customPlayerCount = r.ReadByte();
     this.gameType = version <= (byte) 2 ? ZGame.GameType.Party : (ZGame.GameType) Mathf.Clamp(r.ReadInt32(), 0, 2);
+    if (version > (byte) 4)
+    {
+      this.altGeneration = r.ReadBoolean();
+      this.water = (WaterStyle) r.ReadInt32();
+    }
+    else
+    {
+      this.altGeneration = false;
+      this.water = WaterStyle.Water;
+    }
     byte version1 = r.ReadByte();
     if (version1 > (byte) 0)
     {
@@ -143,15 +166,26 @@ public class GameSettings
     this.mapHeight = r.ReadByte();
     if (version <= (byte) 3)
       return;
-    int num = r.ReadInt32();
-    if (num > 0 && num <= 5)
+    int num1 = r.ReadInt32();
+    if (num1 > 0 && num1 <= 5)
     {
       this.customArmageddon = new List<SpellEnum>();
-      for (int index = 0; index < num; ++index)
+      for (int index = 0; index < num1; ++index)
         this.customArmageddon.Add((SpellEnum) r.ReadInt32());
     }
     else
       this.customArmageddon = (List<SpellEnum>) null;
+    if (version <= (byte) 4)
+      return;
+    int num2 = r.ReadInt32();
+    if (num2 > 0 && num2 <= 250)
+    {
+      this.autoInclude = new List<SpellEnum>();
+      for (int index = 0; index < num2; ++index)
+        this.autoInclude.Add((SpellEnum) r.ReadInt32());
+    }
+    else
+      this.autoInclude = (List<SpellEnum>) null;
   }
 
   public void Clamp()

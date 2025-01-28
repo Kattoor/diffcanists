@@ -15,6 +15,7 @@ using UnityEngine.UI;
 
 public class CharacterCreation : Catalogue
 {
+  public SpellEnum curCreature = SpellEnum.None;
   [NonSerialized]
   public List<OutfitButton> outfitButtons = new List<OutfitButton>();
   private System.Collections.Generic.Stack<SettingsPlayer> stackUndo = new System.Collections.Generic.Stack<SettingsPlayer>();
@@ -39,6 +40,7 @@ public class CharacterCreation : Catalogue
     KeyCode.A
   });
   private int lastBody = -1;
+  public Camera _cameraPreview;
   private const int amount = 75;
   public Inert inert;
   public ClientResources clientResources;
@@ -150,6 +152,32 @@ public class CharacterCreation : Catalogue
   public void resetanim()
   {
     this.creature?.animator.Play(AnimateState.Stop, 0.0f, true);
+  }
+
+  public void ExportClanOutfits()
+  {
+    if (!Directory.Exists("Clan outfits/"))
+      Directory.CreateDirectory("Clan outfits/");
+    foreach (KeyValuePair<string, ClanOutfit> clanOutfit1 in ClientResources.Instance.clanOutfits)
+    {
+      if (clanOutfit1.Value != null)
+      {
+        ClanOutfit clanOutfit2 = clanOutfit1.Value;
+        int num = 0;
+        foreach (ClanOutfit.Meta outfit in clanOutfit2.outfits)
+        {
+          if (outfit != null && outfit.png != null && outfit.png.Length > 10)
+          {
+            if (!Directory.Exists("Clan outfits/" + clanOutfit1.Key))
+              Directory.CreateDirectory("Clan outfits/" + clanOutfit1.Key);
+            File.WriteAllBytes("Clan outfits/" + clanOutfit1.Key + "/" + clanOutfit1.Key + "_" + (object) (Outfit) num + ".png", outfit.png);
+            File.WriteAllText("Clan outfits/" + clanOutfit1.Key + "/" + clanOutfit1.Key + "_" + (object) (Outfit) num + ".meta", outfit.pivot.ToString());
+          }
+          ++num;
+        }
+      }
+    }
+    Global.OpenURL("Clan outfits/");
   }
 
   public void SavePNG2(string n, bool url = false)
@@ -345,6 +373,35 @@ public class CharacterCreation : Catalogue
     return tex;
   }
 
+  public void ReplaceCharacter(SpellEnum minion)
+  {
+    Spell spell = Inert.GetSpell(minion);
+    this.curCreature = minion;
+    UnityEngine.Object.Destroy((UnityEngine.Object) this.playerObj);
+    this.playerObj = ZCreatureCreate.CreateCreature((ZPerson) null, (!((UnityEngine.Object) spell != (UnityEngine.Object) null) || !((UnityEngine.Object) spell.toSummon != (UnityEngine.Object) null) || !((UnityEngine.Object) spell.toSummon.GetComponent<Creature>() != (UnityEngine.Object) null) ? this.pfab_PlayerCharacter : spell.toSummon).GetComponent<Creature>(), (Vector2) Vector3.zero, Quaternion.identity, (Transform) null, true).gameObject;
+    Creature component = this.playerObj.GetComponent<Creature>();
+    this.creature = component.serverObj;
+    this.configPlayer = this.playerObj.GetComponent<ConfigurePlayer>() ?? this.playerObj.AddComponent<ConfigurePlayer>();
+    this.configPlayer.spriteHead = component.head;
+    this.configPlayer.spriteBody = component.body;
+    this.configPlayer.spriteRightHand = component.rightArm;
+    this.configPlayer.spriteLeftHand = component.leftArm;
+    this.configPlayer.spriteRightFoot = component.rightFoot;
+    this.configPlayer.spriteLeftFoot = component.leftFoot;
+    this.configPlayer.spriteHat = component.hat;
+    this.configPlayer.spriteBeard = component.beard;
+    this.configPlayer.spriteBeard2 = component.beard2;
+    this.configPlayer.spriteBeard3 = component.beard3;
+    this.configPlayer.spriteMouth = component.mouth;
+    this._cameraPreview.orthographicSize = (float) (component.radius * 2 + 2);
+    component.enabled = false;
+    if ((UnityEngine.Object) component.bg != (UnityEngine.Object) null)
+      component.bg.gameObject.SetActive(false);
+    if ((UnityEngine.Object) component.overheadCanvas != (UnityEngine.Object) null)
+      component.overheadCanvas.gameObject.SetActive(false);
+    this.EquipAll();
+  }
+
   private void Start()
   {
     if (this.onEnd == null)
@@ -425,14 +482,25 @@ public class CharacterCreation : Catalogue
 
   internal void EquipAll()
   {
-    this.configPlayer.EquipAll(Client.Name, this.settingsPlayer);
-    ClientResources.GetArchMageStaff(this.settingsPlayer, this.creature, this.person, Client.MyAccount, true);
-    if (this.creature.animator.currentState == AnimateState.Walk && (this.lastBody == SettingsPlayer.body_skate && (int) this.settingsPlayer.indexBody != SettingsPlayer.body_skate || this.lastBody != SettingsPlayer.body_skate && (int) this.settingsPlayer.indexBody == SettingsPlayer.body_skate))
+    if (this.curCreature != SpellEnum.None)
     {
-      this.creature.animator.Play(AnimateState.Stop, 0.0f, true);
-      this.creature.animator.Play(AnimateState.Walk, float.MaxValue, true);
+      foreach (SpriteRenderer componentsInChild in this.playerObj.gameObject.GetComponentsInChildren<SpriteRenderer>())
+      {
+        if ((UnityEngine.Object) componentsInChild.sprite != (UnityEngine.Object) null && componentsInChild.sprite.texture.isReadable)
+          ConfigurePlayer.ApplyOutfit(componentsInChild, this.settingsPlayer);
+      }
     }
-    this.lastBody = (int) this.settingsPlayer.indexBody;
+    else
+    {
+      this.configPlayer.EquipAll(Client.Name, this.settingsPlayer);
+      ClientResources.GetArchMageStaff(this.settingsPlayer, this.creature, this.person, Client.MyAccount, true);
+      if (this.creature.animator.currentState == AnimateState.Walk && (this.lastBody == SettingsPlayer.body_skate && (int) this.settingsPlayer.indexBody != SettingsPlayer.body_skate || this.lastBody != SettingsPlayer.body_skate && (int) this.settingsPlayer.indexBody == SettingsPlayer.body_skate))
+      {
+        this.creature.animator.Play(AnimateState.Stop, 0.0f, true);
+        this.creature.animator.Play(AnimateState.Walk, float.MaxValue, true);
+      }
+      this.lastBody = (int) this.settingsPlayer.indexBody;
+    }
   }
 
   public void ClickRefresh()
@@ -485,19 +553,19 @@ public class CharacterCreation : Catalogue
   public void SelectRandomize()
   {
     System.Random r = new System.Random();
-    this.configPlayer.settingsPlayer.indexBody = (byte) r.Next(0, ClientResources.Instance._characterBody.Length);
-    this.configPlayer.settingsPlayer.indexHead = (byte) r.Next(0, ClientResources.Instance._characterHeads.Length);
-    this.configPlayer.settingsPlayer.indexLeftHand = (byte) r.Next(0, ClientResources.Instance._characterLeftHand.Length);
-    this.configPlayer.settingsPlayer.indexRightHand = (byte) r.Next(0, ClientResources.Instance._characterRightHand.Length);
-    this.configPlayer.settingsPlayer.indexHat = (byte) r.Next(0, ClientResources.Instance._characterHats.Length);
-    this.configPlayer.settingsPlayer.indexBeard = (byte) r.Next(0, ClientResources.Instance._characterBeards.Length);
-    this.configPlayer.settingsPlayer.indexBeard2 = (byte) r.Next(0, ClientResources.Instance._characterBeards.Length);
-    this.configPlayer.settingsPlayer.indexBeard3 = (byte) r.Next(0, ClientResources.Instance._characterBeards.Length);
-    this.configPlayer.settingsPlayer.coloring.Set(Outfit.None, ColorType.Red, RandomExtensions.RandomColor(r));
-    this.configPlayer.settingsPlayer.coloring.Set(Outfit.None, ColorType.Green, RandomExtensions.RandomColor(r));
-    this.configPlayer.settingsPlayer.coloring.Set(Outfit.None, ColorType.Blue, RandomExtensions.RandomColor(r));
-    this.configPlayer.settingsPlayer.coloring.Set(Outfit.None, ColorType.Gray, RandomExtensions.RandomColor(r));
-    this.configPlayer.settingsPlayer.VerifyOutfit(Client.cosmetics, (Account) null);
+    this.settingsPlayer.indexBody = (byte) r.Next(0, ClientResources.Instance._characterBody.Length);
+    this.settingsPlayer.indexHead = (byte) r.Next(0, ClientResources.Instance._characterHeads.Length);
+    this.settingsPlayer.indexLeftHand = (byte) r.Next(0, ClientResources.Instance._characterLeftHand.Length);
+    this.settingsPlayer.indexRightHand = (byte) r.Next(0, ClientResources.Instance._characterRightHand.Length);
+    this.settingsPlayer.indexHat = (byte) r.Next(0, ClientResources.Instance._characterHats.Length);
+    this.settingsPlayer.indexBeard = (byte) r.Next(0, ClientResources.Instance._characterBeards.Length);
+    this.settingsPlayer.indexBeard2 = (byte) r.Next(0, ClientResources.Instance._characterBeards.Length);
+    this.settingsPlayer.indexBeard3 = (byte) r.Next(0, ClientResources.Instance._characterBeards.Length);
+    this.settingsPlayer.coloring.Set(Outfit.None, ColorType.Red, RandomExtensions.RandomColor(r));
+    this.settingsPlayer.coloring.Set(Outfit.None, ColorType.Green, RandomExtensions.RandomColor(r));
+    this.settingsPlayer.coloring.Set(Outfit.None, ColorType.Blue, RandomExtensions.RandomColor(r));
+    this.settingsPlayer.coloring.Set(Outfit.None, ColorType.Gray, RandomExtensions.RandomColor(r));
+    this.settingsPlayer.VerifyOutfit(Client.cosmetics, (Account) null);
     this.UpdateColors();
     this.EquipAll();
     this.Changed();
@@ -568,11 +636,36 @@ public class CharacterCreation : Catalogue
     myContextMenu.Rebuild(false);
   }
 
+  public void MinionPopup()
+  {
+    MyContextMenu myContextMenu = MyContextMenu.Show();
+    int num = 1;
+    ButtonArrayContextmenu arrayContextmenu = myContextMenu.AddArray();
+    arrayContextmenu.AddImage(ClientResources.Instance.GetSpellIcon("Banish"), "Player", (Action) (() => this.ReplaceCharacter(SpellEnum.None)));
+    foreach (KeyValuePair<string, Spell> spell in Inert.Instance.spells)
+    {
+      if ((UnityEngine.Object) spell.Value.toSummon != (UnityEngine.Object) null && spell.Value.type == CastType.Placement && (spell.Value.amount > 0 && (UnityEngine.Object) spell.Value.toSummon.GetComponent<Creature>() != (UnityEngine.Object) null))
+      {
+        if (num >= 10)
+        {
+          num = 0;
+          arrayContextmenu = myContextMenu.AddArray();
+        }
+        SpellEnum se = spell.Value.spellEnum;
+        arrayContextmenu.AddImage(ClientResources.Instance.GetSpellIcon(spell.Key), spell.Key, (Action) (() => this.ReplaceCharacter(se)));
+        ++num;
+      }
+    }
+    myContextMenu.Rebuild(false);
+  }
+
   public void ExtraContextMenu()
   {
     MyContextMenu myContextMenu = MyContextMenu.Show();
     this.settingsPlayer.MakeSureIntitialized();
     myContextMenu.AddItem("Export as URL (Experimental)", (Action) (() => this.SavePNG2("Hi", true)), (Color) ColorScheme.GetColor(MyContextMenu.ColorBlue));
+    if (Client.MyAccount.accountType.isDev())
+      myContextMenu.AddItem("Export All Clan Outfits", (Action) (() => this.ExportClanOutfits()), (Color) ColorScheme.GetColor(MyContextMenu.ColorBlue));
     myContextMenu.AddSeperator("-------------");
     bool flag = false;
     if (this.settingsPlayer.textures != null)
@@ -651,7 +744,7 @@ public class CharacterCreation : Catalogue
       this.container_creator_controls.SetActive(!this.container_creator_controls.activeSelf);
       Global.SetPrefBool("prefassetcreator", this.container_creator_controls.activeSelf);
     }
-    else if (Input.GetKeyDown(KeyCode.F11) && Client.MyAccount.accountType.has(AccountType.Developer))
+    else if (Input.GetKeyDown(KeyCode.F11) && Client.MyAccount.accountType.isDev())
       this.TestClan();
     else if (Input.GetKeyDown(KeyCode.F12) && Client.MyAccount.accountType.isDev())
     {
@@ -727,44 +820,44 @@ public class CharacterCreation : Catalogue
     switch (this.viewing)
     {
       case Outfit.Body:
-        this.configPlayer.settingsPlayer.indexBody = (byte) i;
+        this.settingsPlayer.indexBody = (byte) i;
         break;
       case Outfit.Head:
-        this.configPlayer.settingsPlayer.indexHead = (byte) i;
+        this.settingsPlayer.indexHead = (byte) i;
         break;
       case Outfit.LeftHand:
-        this.configPlayer.settingsPlayer.indexLeftHand = (byte) i;
+        this.settingsPlayer.indexLeftHand = (byte) i;
         break;
       case Outfit.RightHand:
-        this.configPlayer.settingsPlayer.indexRightHand = (byte) i;
+        this.settingsPlayer.indexRightHand = (byte) i;
         break;
       case Outfit.Hair:
-        this.configPlayer.settingsPlayer.indexHat = (byte) i;
+        this.settingsPlayer.indexHat = (byte) i;
         break;
       case Outfit.Beard:
-        this.configPlayer.settingsPlayer.indexBeard = (byte) i;
+        this.settingsPlayer.indexBeard = (byte) i;
         break;
       case Outfit.LeftFoot:
         this.settingsPlayer.custom = (byte) 1;
-        this.configPlayer.settingsPlayer.indexLeftFoot = (byte) i;
+        this.settingsPlayer.indexLeftFoot = (byte) i;
         break;
       case Outfit.RightFoot:
         this.settingsPlayer.custom = (byte) 1;
-        this.configPlayer.settingsPlayer.indexRightFoot = (byte) i;
+        this.settingsPlayer.indexRightFoot = (byte) i;
         break;
       case Outfit.Mouth:
         this.settingsPlayer.custom = (byte) 1;
-        this.configPlayer.settingsPlayer.indexMouth = (byte) i;
+        this.settingsPlayer.indexMouth = (byte) i;
         break;
       case Outfit.Beard2:
-        this.configPlayer.settingsPlayer.indexBeard2 = (byte) i;
+        this.settingsPlayer.indexBeard2 = (byte) i;
         break;
       case Outfit.Beard3:
-        this.configPlayer.settingsPlayer.indexBeard3 = (byte) i;
+        this.settingsPlayer.indexBeard3 = (byte) i;
         break;
     }
-    this.configPlayer.settingsPlayer.ResetCustom(this.viewing);
-    this.configPlayer.settingsPlayer.custom = this.configPlayer.settingsPlayer.CustomContainsSomething() ? (byte) 1 : (byte) 0;
+    this.settingsPlayer.ResetCustom(this.viewing);
+    this.settingsPlayer.custom = this.settingsPlayer.CustomContainsSomething() ? (byte) 1 : (byte) 0;
     this.EquipAll();
     this.Changed();
     this.FindEquipped();
@@ -918,7 +1011,7 @@ public class CharacterCreation : Catalogue
 
   public void FindEquipped()
   {
-    int index = (int) this.configPlayer.settingsPlayer.GetOutfitIndex(this.viewing);
+    int index = (int) this.settingsPlayer.GetOutfitIndex(this.viewing);
     int index1 = this.outfitButtons.FindIndex((Predicate<OutfitButton>) (z => z.Index == index && z.gameObject.activeSelf));
     if (index1 >= 0)
     {

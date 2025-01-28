@@ -21,7 +21,7 @@ public class Server : MonoBehaviour
   public static RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider();
   public static bool CompressMap = true;
   public static string discordLink = "https://discord.gg/PNnYxsc";
-  public static string wikiLink = "https://arcanists2.fandom.com/wiki/Arcanists_2_Wiki";
+  public static string wikiLink = "https://arcanists.fandom.com/wiki/Arcanists_Wiki";
   public static string websiteLink = "https://www.arcanists2.com/";
   public static int raidMode = 1;
   public static int chatMode = 0;
@@ -46,6 +46,7 @@ public class Server : MonoBehaviour
   public static float realTimeSinceStartup = 0.0f;
   public static byte[] compressedClanOutfits = (byte[]) null;
   public static byte[] compressedRatedRestrictions = (byte[]) null;
+  public static GameFacts[] _preGameFacts = new GameFacts[3];
   public static bool allowUnverifiedUsersToTalk = false;
   public static bool allowGameCreation = true;
   public static bool logNetworkErrors = false;
@@ -93,6 +94,8 @@ public class Server : MonoBehaviour
   public static Restrictions _casinoRestrictions;
   public static RatedFacts _defaultRatedFacts;
   public bool isReady;
+  public static byte[] compressedGameFacts;
+  public static List<byte[]> _quickFacts;
 
   internal static StringComparer _caseInsensitiveComparer
   {
@@ -758,11 +761,13 @@ public class Server : MonoBehaviour
               w.Write((byte) c.player.account.spectatorChat);
               w.Write((byte) c.player.account.clanChat);
               w.Write(c.player.account.state);
+              w.Write(!string.IsNullOrEmpty(c.player.account.steamKey));
               w.Write(c.player.account.wands);
               w.Write(c.player.account.totalWands);
               w.Write(c.player.account.tournamentCoins);
               Account.SerializeList(c.player.account.friends, w);
               Account.SerializeList(c.player.account.ignored, w);
+              w.Write(Server.compressedGameFacts);
               if (!string.IsNullOrEmpty(c.player.account.clan))
               {
                 Clan clan = (Clan) null;
@@ -1245,10 +1250,10 @@ public class Server : MonoBehaviour
                           Server.ReturnServerMsg(c, "Verify your discord ID to play rated games.");
                           break;
                         }
-                        Server.ReturnServerMsg(c, "Looks like you're banned from rateds :(");
+                        Server.ReturnServerMsg(c, "Looks like you're banned from rated games :(");
                         break;
                       }
-                      if (gameFacts.status == (byte) 0 && gameFacts.connections.Count < (int) gameFacts.customPlayerCount && c.player.location == Location.Lobby && ((!gameFacts.GetRatedMode() || c.player.account.discord != 0UL) && (!gameFacts.connections[0].player.account.ignored.Contains(c.player.account.name) || gameFacts.invitedPlayers.Contains(c.player.account.name))) && (gameFacts.GetInviteMode() == InviteEnum.Open || gameFacts.invitedPlayers.Contains(c.player.account.name) || gameFacts.GetInviteMode() == InviteEnum.Clan && gameFacts.connections.Count > 0 && string.Equals(gameFacts.connections[0].player.account.clan, c.player.account.clan) || (gameFacts.GetInviteMode() == InviteEnum.Friends && (gameFacts.connections.Count == 0 || gameFacts.connections[0].player.account.friends.Contains(c.player.account.name)) || gameFacts.GetInviteMode() == InviteEnum.Similar_Rating && gameFacts.connections.Count > 0 && Mathf.Abs((int) gameFacts.connections[0].player.account.similarRating - (int) c.player.account.similarRating) <= 500)))
+                      if (gameFacts.status == (byte) 0 && gameFacts.connections.Count < (int) gameFacts.customPlayerCount && c.player.location == Location.Lobby && (!gameFacts.connections[0].player.account.ignored.Contains(c.player.account.name) || gameFacts.invitedPlayers.Contains(c.player.account.name)) && (gameFacts.GetInviteMode() == InviteEnum.Open || gameFacts.invitedPlayers.Contains(c.player.account.name) || gameFacts.GetInviteMode() == InviteEnum.Clan && gameFacts.connections.Count > 0 && string.Equals(gameFacts.connections[0].player.account.clan, c.player.account.clan) || (gameFacts.GetInviteMode() == InviteEnum.Friends && (gameFacts.connections.Count == 0 || gameFacts.connections[0].player.account.friends.Contains(c.player.account.name)) || gameFacts.GetInviteMode() == InviteEnum.Similar_Rating && gameFacts.connections.Count > 0 && Mathf.Abs((int) gameFacts.connections[0].player.account.similarRating - (int) c.player.account.similarRating) <= 500)))
                       {
                         c.player.gameNumber = key1;
                         gameFacts.connections.Add(c);
@@ -1290,7 +1295,7 @@ public class Server : MonoBehaviour
                   case 29:
                   case 39:
                     GameFacts gf1 = new GameFacts();
-                    gf1.settings.Deserialize(myBinaryReader, (byte) 4);
+                    gf1.settings.Deserialize(myBinaryReader, (byte) 5);
                     gf1.settings.Clamp();
                     if (c.player.account.accountType.IsMuted() && !string.IsNullOrEmpty(gf1.settings.description))
                       gf1.settings.description = "";
@@ -1315,11 +1320,6 @@ public class Server : MonoBehaviour
                     Server.SendGameCreated(gf1);
                     break;
                   case 36:
-                    if (Server._ratedQueue.ContainsKey(c))
-                    {
-                      Server.ReturnMsg(c, "Spectaing while finding opponents is not currently supported :(");
-                      break;
-                    }
                     int key2 = myBinaryReader.ReadInt32();
                     GameFacts gf2 = (GameFacts) null;
                     if (Server._games.TryGetValue(key2, out gf2))
@@ -1541,7 +1541,7 @@ public class Server : MonoBehaviour
                         return;
                       GameFacts.Message message = (GameFacts.Message) myBinaryReader.ReadByte();
                       int num1 = myBinaryReader.ReadInt32();
-                      if (num1 == -1 && message != GameFacts.Message.Remove_Custom_Armageddon || gg2.GetTournamentMode() && message != GameFacts.Message.Tournament && !c.player.account.accountType.IsModPlusTOParticipate())
+                      if (num1 == -1 && message != GameFacts.Message.Remove_Custom_Armageddon && message != GameFacts.Message.Remove_AutoInclude || gg2.GetTournamentMode() && message != GameFacts.Message.Tournament && !c.player.account.accountType.IsModPlusTOParticipate())
                         return;
                       switch (message)
                       {
@@ -1743,8 +1743,8 @@ public class Server : MonoBehaviour
                         case GameFacts.Message.Custom_Armageddon:
                           if (!System.Enum.IsDefined(typeof (SpellEnum), (object) num1))
                             return;
-                          Spell spell = Inert.GetSpell((SpellEnum) num1);
-                          if ((UnityEngine.Object) spell == (UnityEngine.Object) null || spell.level > 3 && !GameFacts.AllowCustomArmageddon(spell.spellEnum))
+                          Spell spell1 = Inert.GetSpell((SpellEnum) num1);
+                          if ((UnityEngine.Object) spell1 == (UnityEngine.Object) null || spell1.level > 3 && !GameFacts.AllowCustomArmageddon(spell1.spellEnum))
                             return;
                           if (gg2.settings.customArmageddon == null)
                             gg2.settings.customArmageddon = new List<SpellEnum>();
@@ -1765,6 +1765,49 @@ public class Server : MonoBehaviour
                           if (gg2.settings.customArmageddon.Count == 0)
                           {
                             gg2.settings.customArmageddon = (List<SpellEnum>) null;
+                            break;
+                          }
+                          break;
+                        case GameFacts.Message.Alternate_Generation:
+                          gg2.settings.altGeneration = !gg2.settings.altGeneration;
+                          break;
+                        case GameFacts.Message.Water:
+                          if (!System.Enum.IsDefined(typeof (WaterStyle), (object) num1))
+                            return;
+                          gg2.settings.water = (WaterStyle) num1;
+                          break;
+                        case GameFacts.Message.AutoInclude:
+                          if (!System.Enum.IsDefined(typeof (SpellEnum), (object) num1))
+                            return;
+                          Spell spell2 = Inert.GetSpell((SpellEnum) num1);
+                          if ((UnityEngine.Object) spell2 == (UnityEngine.Object) null || spell2.level > 3)
+                            return;
+                          if (gg2.settings.autoInclude == null)
+                            gg2.settings.autoInclude = new List<SpellEnum>();
+                          SpellEnum s = (SpellEnum) num1;
+                          int index = gg2.settings.autoInclude.FindIndex((Predicate<SpellEnum>) (z => z == s));
+                          if (index >= 0)
+                          {
+                            gg2.settings.autoInclude.RemoveAt(index);
+                            break;
+                          }
+                          if (gg2.settings.autoInclude.Count >= 250)
+                            return;
+                          gg2.settings.autoInclude.Add(s);
+                          break;
+                        case GameFacts.Message.Remove_AutoInclude:
+                          if (gg2.settings.autoInclude == null)
+                            return;
+                          if (num1 == -1)
+                          {
+                            gg2.settings.autoInclude = (List<SpellEnum>) null;
+                            break;
+                          }
+                          if (!gg2.settings.autoInclude.Remove((SpellEnum) num1))
+                            return;
+                          if (gg2.settings.autoInclude.Count == 0)
+                          {
+                            gg2.settings.autoInclude = (List<SpellEnum>) null;
                             break;
                           }
                           break;
@@ -1928,7 +1971,7 @@ public class Server : MonoBehaviour
                     Server.ValidateShare(c, myBinaryReader, args.Bytes, false, false);
                     break;
                   case 78:
-                    new GameFacts().ManualDeserialize(myBinaryReader, true, false);
+                    new GameFacts().ManualDeserialize(myBinaryReader, true, false, (byte) 0);
                     break;
                   case 79:
                     GameFacts gg3 = (GameFacts) null;
@@ -1950,7 +1993,7 @@ public class Server : MonoBehaviour
                         return;
                       int num1 = gg4.GetRatedMode() ? 1 : 0;
                       GameSettings gameSettings = new GameSettings();
-                      gameSettings.Deserialize(myBinaryReader, (byte) 4);
+                      gameSettings.Deserialize(myBinaryReader, (byte) 5);
                       gameSettings.Clamp();
                       gg4.settings = gameSettings;
                       if (c.player.account.accountType.IsMuted() && !string.IsNullOrEmpty(gg4.settings.description))
@@ -1988,7 +2031,7 @@ public class Server : MonoBehaviour
                       if (gg5.connections.Count == 0 || gg5.connections[0] != c || gg5.GetInviteMode() == InviteEnum.BookClub)
                         return;
                       string str = myBinaryReader.ReadString();
-                      if (str.Length > 40)
+                      if (str.Length > 100)
                         return;
                       gg5.settings.description = str;
                       if (c.player.account.accountType.IsMuted() && !string.IsNullOrEmpty(str))
@@ -2069,6 +2112,91 @@ public class Server : MonoBehaviour
     if (Server._games.TryGetValue(port, out gameFacts) && gameFacts.game != null)
       gameFacts.game.CleanUp(false);
     Server._games.Remove(port);
+  }
+
+  public static byte[] SerializePreGameFacts()
+  {
+    if (Server._preGameFacts == null)
+      return new byte[3];
+    using (MemoryStream memoryStream = new MemoryStream())
+    {
+      using (myBinaryWriter writer = new myBinaryWriter((Stream) memoryStream))
+      {
+        writer.Write(Server._preGameFacts[0] != null ? (byte) 5 : (byte) 0);
+        if (Server._preGameFacts[0] != null)
+          Server._preGameFacts[0].ManualSerialize(writer, false);
+        writer.Write(Server._preGameFacts[1] != null ? (byte) 5 : (byte) 0);
+        if (Server._preGameFacts[1] != null)
+          Server._preGameFacts[1].ManualSerialize(writer, false);
+        writer.Write(Server._preGameFacts[2] != null ? (byte) 5 : (byte) 0);
+        if (Server._preGameFacts[2] != null)
+          Server._preGameFacts[2].ManualSerialize(writer, false);
+      }
+      return memoryStream.ToArray();
+    }
+  }
+
+  private static void AddQuickFacts(GameFacts f)
+  {
+    if (f == null)
+    {
+      Server._quickFacts.Add((byte[]) null);
+    }
+    else
+    {
+      using (MemoryStream memoryStream = new MemoryStream())
+      {
+        using (myBinaryWriter writer = new myBinaryWriter((Stream) memoryStream))
+          f.ManualSerialize(writer, false);
+        Server._quickFacts.Add(memoryStream.ToArray());
+      }
+    }
+  }
+
+  public static GameFacts FromQuickFacts(int which)
+  {
+    GameFacts gf = new GameFacts();
+    using (MemoryStream memoryStream = new MemoryStream(Server._quickFacts[which]))
+    {
+      using (myBinaryReader reader = new myBinaryReader((Stream) memoryStream))
+        gf.ManualDeserialize(reader, false, false, (byte) 0);
+    }
+    return gf;
+  }
+
+  public static void DeserializePreGameFacts(myBinaryReader r)
+  {
+    Server._preGameFacts = new GameFacts[3];
+    Server._quickFacts = new List<byte[]>();
+    byte version1 = r.ReadByte();
+    if (version1 > (byte) 0)
+    {
+      Server._preGameFacts[0] = new GameFacts();
+      Server._preGameFacts[0].ManualDeserialize(r, false, false, version1);
+    }
+    byte version2 = r.ReadByte();
+    if (version2 > (byte) 0)
+    {
+      Server._preGameFacts[1] = new GameFacts();
+      Server._preGameFacts[1].ManualDeserialize(r, false, false, version2);
+    }
+    byte version3 = r.ReadByte();
+    if (version3 > (byte) 0)
+    {
+      Server._preGameFacts[2] = new GameFacts();
+      Server._preGameFacts[2].ManualDeserialize(r, false, false, version3);
+    }
+    Server.AddQuickFacts(Server._preGameFacts[0]);
+    Server.AddQuickFacts(Server._preGameFacts[1]);
+    Server.AddQuickFacts(Server._preGameFacts[2]);
+    if (Server._ratedQueue.Count <= 0)
+      return;
+    foreach (KeyValuePair<Hazel.Connection, RatedContainer> rated in Server._ratedQueue)
+    {
+      Server.SendStopFindingOpponents(rated.Key);
+      Server.OnStoppedSearching(rated.Key);
+    }
+    Server._ratedQueue.Clear();
   }
 
   public static void GlobalHandler(Hazel.Connection c, myBinaryReader reader, byte[] bytes, byte tag)

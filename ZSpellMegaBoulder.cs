@@ -9,7 +9,7 @@ public class ZSpellMegaBoulder : ZSpell
   public void Expand()
   {
     AudioManager.Play(this.explosionClip);
-    if (this.game.isClient && (Object) this.gameObject != (Object) null)
+    if (this.game.isClient && (Object) this.gameObject != (Object) null && !StoreObject.OnSpell((ZSpell) this, this.parent, true))
       this.gameObject.GetComponent<SpriteRenderer>().sprite = Inert.Instance.megaBoulderSprite;
     this.radius = 28;
     this.velocity.x *= 786432L;

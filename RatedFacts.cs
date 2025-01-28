@@ -14,9 +14,11 @@ public class RatedFacts
   public const int DONT_MIND = -1;
   public int armageddon;
   public int gameType;
-  public const byte Version = 3;
+  public const byte Version = 4;
   public short rating;
   public SpellsOnly spellOverrides;
+
+  public int customQueue { get; set; }
 
   public override bool Equals(object obj)
   {
@@ -35,44 +37,52 @@ public class RatedFacts
 
   public void VerifyGameType(bool forced = false)
   {
-    this.gameType = Mathf.Clamp(this.gameType, 0, 2);
-    if (this.teams != -1 | forced)
-      this.teams &= 16842752;
-    if (this.teams == 0)
-      this.teams = forced ? 65536 : -1;
-    if (this.gameType == 0)
+    if (this.customQueue > 0)
     {
-      this.armageddon = 0;
-      this.extraOptions = 4096;
-      this.playerCount = (int) ((TimeEnum) this.teams & GameFacts.GetLowTimes());
-      if ((this.teams & 65536) != 0)
-        this.playerCount |= 67108864;
-      if (this.turnTime != -1 | forced)
-        this.turnTime &= 1335296;
-      if (this.turnTime != 0)
-        return;
-      this.turnTime = forced ? 16384 : -1;
-    }
-    else if (this.gameType == 1)
-    {
-      this.armageddon = 0;
-      this.extraOptions = 4096;
-      this.playerCount = (this.teams & 16777216) != 0 ? 1375731712 : 67108864;
-      if ((this.teams & 65536) != 0)
-        this.playerCount |= 67108864;
-      if (this.turnTime != -1 | forced)
-        this.turnTime = (int) ((TimeEnum) this.turnTime & GameFacts.GetHighTimes());
-      if (this.turnTime != 0)
-        return;
-      this.turnTime = forced ? 1024 : -1;
+      this.customQueue = Mathf.Clamp(this.customQueue, 1, 3);
+      this.gameType = this.customQueue - 1;
     }
     else
     {
-      if (this.turnTime != -1 | forced)
-        this.turnTime = (int) ((TimeEnum) this.turnTime & GameFacts.GetPartyTimes());
-      if (this.turnTime != 0)
-        return;
-      this.turnTime = -1;
+      this.gameType = Mathf.Clamp(this.gameType, 0, 2);
+      if (this.teams != -1 | forced)
+        this.teams &= 16842752;
+      if (this.teams == 0)
+        this.teams = forced ? 65536 : -1;
+      if (this.gameType == 0)
+      {
+        this.armageddon = 0;
+        this.extraOptions = 4096;
+        this.playerCount = (int) ((TimeEnum) this.teams & GameFacts.GetLowTimes());
+        if ((this.teams & 65536) != 0)
+          this.playerCount |= 67108864;
+        if (this.turnTime != -1 | forced)
+          this.turnTime &= 1335296;
+        if (this.turnTime != 0)
+          return;
+        this.turnTime = forced ? 16384 : -1;
+      }
+      else if (this.gameType == 1)
+      {
+        this.armageddon = 0;
+        this.extraOptions = 4096;
+        this.playerCount = (this.teams & 16777216) != 0 ? 1375731712 : 67108864;
+        if ((this.teams & 65536) != 0)
+          this.playerCount |= 67108864;
+        if (this.turnTime != -1 | forced)
+          this.turnTime = (int) ((TimeEnum) this.turnTime & GameFacts.GetHighTimes());
+        if (this.turnTime != 0)
+          return;
+        this.turnTime = forced ? 1024 : -1;
+      }
+      else
+      {
+        if (this.turnTime != -1 | forced)
+          this.turnTime = (int) ((TimeEnum) this.turnTime & GameFacts.GetPartyTimes());
+        if (this.turnTime != 0)
+          return;
+        this.turnTime = -1;
+      }
     }
   }
 
@@ -92,7 +102,8 @@ public class RatedFacts
       extraOptions = this.extraOptions,
       teams = this.teams,
       armageddon = this.armageddon,
-      rating = this.rating
+      rating = this.rating,
+      customQueue = this.customQueue
     };
   }
 
@@ -329,6 +340,12 @@ public class RatedFacts
 
   public int MinPlayersNeeded()
   {
+    if (this.customQueue == this.gameType + 1 && Server._preGameFacts != null)
+    {
+      GameFacts preGameFact = Server._preGameFacts[this.customQueue - 1];
+      if (preGameFact != null)
+        return (int) preGameFact.customPlayerCount;
+    }
     if (this.gameType < 2)
       return (this.teams & 65536) != 0 ? 2 : 4;
     if ((this.playerCount & 67108864) != 0)
@@ -346,6 +363,12 @@ public class RatedFacts
 
   public int MaxPlayersNeeded()
   {
+    if (this.customQueue == this.gameType + 1 && Server._preGameFacts != null)
+    {
+      GameFacts preGameFact = Server._preGameFacts[this.customQueue - 1];
+      if (preGameFact != null)
+        return (int) preGameFact.customPlayerCount;
+    }
     if (this.gameType < 2)
       return (this.teams & 65536) != 0 ? 2 : 8;
     if ((this.playerCount & 33554432) != 0)
@@ -362,8 +385,15 @@ public class RatedFacts
     return 2;
   }
 
+  public bool IsCustomQueue()
+  {
+    return this.customQueue == this.gameType + 1 && Server._preGameFacts != null && Server._preGameFacts[this.customQueue - 1] != null;
+  }
+
   public bool PlayerCountIsActive(int players)
   {
+    if (this.IsCustomQueue())
+      return true;
     switch (players)
     {
       case 1:
@@ -385,7 +415,9 @@ public class RatedFacts
 
   public static bool Match(RatedFacts a, RatedFacts b)
   {
-    if (a.gameType != b.gameType || a.gameType > 1 && (a.playerCount & b.playerCount) == 0 || ((a.turnTime & b.turnTime) == 0 || (a.mapStyle & b.mapStyle) == 0 || (!a.MatchExtraOption(GameStyle.Random_Spells, b) || !a.MatchExtraOption(GameStyle.Original_Spells_Only, b))) || (!a.MatchExtraOption(GameStyle.Elementals, b) || !a.MatchExtraOption(GameStyle.First_Turn_Teleport, b) || (!a.MatchExtraOption(GameStyle.Bid, b) || !a.MatchExtraOption(GameStyle.Watchtower, b)) || (a.teams & b.teams) == 0))
+    if (a.customQueue == b.customQueue && a.customQueue == a.gameType + 1)
+      return true;
+    if (a.customQueue != b.customQueue || a.gameType != b.gameType || a.gameType > 1 && (a.playerCount & b.playerCount) == 0 || ((a.turnTime & b.turnTime) == 0 || (a.mapStyle & b.mapStyle) == 0 || (!a.MatchExtraOption(GameStyle.Random_Spells, b) || !a.MatchExtraOption(GameStyle.Original_Spells_Only, b))) || (!a.MatchExtraOption(GameStyle.Elementals, b) || !a.MatchExtraOption(GameStyle.First_Turn_Teleport, b) || (!a.MatchExtraOption(GameStyle.Bid, b) || !a.MatchExtraOption(GameStyle.Watchtower, b)) || (a.teams & b.teams) == 0))
       return false;
     if ((a.armageddon & b.armageddon) != 0 || a.armageddon == b.armageddon || (b.armageddon == -1 || a.armageddon == -1))
       return true;
@@ -408,6 +440,7 @@ public class RatedFacts
     this.extraOptions &= a.extraOptions;
     this.teams &= a.teams;
     this.armageddon &= a.armageddon;
+    this.customQueue &= a.customQueue;
   }
 
   public void Share(myBinaryWriter w)
@@ -419,6 +452,7 @@ public class RatedFacts
     w.Write(this.teams);
     w.Write(this.armageddon);
     w.Write(this.gameType);
+    w.Write(this.customQueue);
   }
 
   public void Serialize(myBinaryWriter w, bool includeBook = true)
@@ -431,9 +465,9 @@ public class RatedFacts
     w.Write(this.armageddon);
     w.Write(this.gameType);
     w.Write(this.spellOverrides == null || !includeBook ? (byte) 0 : (byte) 1);
-    if (!(this.spellOverrides != null & includeBook))
-      return;
-    this.spellOverrides.Serialize(w);
+    if (this.spellOverrides != null & includeBook)
+      this.spellOverrides.Serialize(w);
+    w.Write(this.customQueue);
   }
 
   public static RatedFacts Deserialize(int version, myBinaryReader r)
@@ -455,15 +489,10 @@ public class RatedFacts
       return;
     if (version > 2)
       this.gameType = r.ReadInt32();
-    if (r.ReadByte() == (byte) 1)
-    {
-      if (version > 2)
-        this.spellOverrides = SpellsOnly.Deserialize(r);
-      else
-        this.spellOverrides = SpellsOnly.OLDDeserialize(r);
-    }
-    else
-      this.spellOverrides = (SpellsOnly) null;
+    this.spellOverrides = r.ReadByte() != (byte) 1 ? (SpellsOnly) null : (version <= 2 ? SpellsOnly.OLDDeserialize(r) : SpellsOnly.Deserialize(r));
+    if (version <= 3)
+      return;
+    this.customQueue = r.ReadInt32();
   }
 
   public void DeserializeShare(int version, myBinaryReader r)
@@ -475,6 +504,7 @@ public class RatedFacts
     this.teams = r.ReadInt32();
     this.armageddon = r.ReadInt32();
     this.gameType = r.ReadInt32();
+    this.customQueue = r.ReadInt32();
   }
 
   public void SerializeToFile(string s)
@@ -483,7 +513,7 @@ public class RatedFacts
     {
       using (myBinaryWriter w = new myBinaryWriter((Stream) memoryStream))
       {
-        w.Write((byte) 3);
+        w.Write((byte) 4);
         this.Serialize(w, true);
       }
       File.WriteAllBytes(s, memoryStream.ToArray());

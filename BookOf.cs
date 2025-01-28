@@ -20,4 +20,5 @@ public enum BookOf
   Blood = 12, // 0x0000000C
   Druidism = 13, // 0x0000000D
   Cosmos = 14, // 0x0000000E
+  Sands = 15, // 0x0000000F
 }

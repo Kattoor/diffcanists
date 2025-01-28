@@ -13,8 +13,8 @@ public class Pathfinder
   {
     if (this.Tiles != null)
       return;
-    this.Width = w;
-    this.Height = h;
+    this.Width = w / 10;
+    this.Height = h / 10;
     this.Tiles = new Pathfinder.Node[this.Width, this.Height];
     for (int x = 0; x < this.Width; ++x)
     {
@@ -240,7 +240,7 @@ public class Pathfinder
 
     public bool open(ZCreature c)
     {
-      return !Client.map.CheckPosition(this.pos.x, this.pos.y, c, Inert.mask_entity_movement);
+      return !Client.map.CheckPosition(this.pos.x * 10, this.pos.y * 10, c, Inert.mask_entity_movement);
     }
 
     public bool IsDiagonal(Pathfinder.Node b)

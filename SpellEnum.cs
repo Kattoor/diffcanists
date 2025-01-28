@@ -215,7 +215,7 @@ public enum SpellEnum
   Stepping_Stone = 209, // 0x000000D1
   Summon_Tutorial_Target = 210, // 0x000000D2
   Call_of_the_Void = 211, // 0x000000D3
-  Sand_Blast = 212, // 0x000000D4
+  Pocket_Sand = 212, // 0x000000D4
   Summon_King_Monarch = 213, // 0x000000D5
   Life_Dew = 214, // 0x000000D6
   Breeze = 215, // 0x000000D7
@@ -307,4 +307,26 @@ public enum SpellEnum
   When_Pigs_Fly = 301, // 0x0000012D
   Dense_Fog = 302, // 0x0000012E
   Tomato = 303, // 0x0000012F
+  Monolith = 304, // 0x00000130
+  Summon_Wyrm = 305, // 0x00000131
+  Sandbag = 306, // 0x00000132
+  Sandy_Shores = 307, // 0x00000133
+  Bucket_of_Sand = 308, // 0x00000134
+  Pyramid = 309, // 0x00000135
+  Sand_Trap = 310, // 0x00000136
+  Sand_Castle = 311, // 0x00000137
+  Burning_Sands = 312, // 0x00000138
+  Sand_Storm = 313, // 0x00000139
+  Summon_Sphinx = 314, // 0x0000013A
+  Mind_Control = 315, // 0x0000013B
+  Burrow = 316, // 0x0000013C
+  Consume = 317, // 0x0000013D
+  Spit = 318, // 0x0000013E
+  Pyramid_Strike = 319, // 0x0000013F
+  Mana = 320, // 0x00000140
+  Sands_of_Time = 321, // 0x00000141
+  Summon_Sand_Mite = 322, // 0x00000142
+  Entomb = 323, // 0x00000143
+  Tomato_Emoji = 324, // 0x00000144
+  Zombie_Dragon = 325, // 0x00000145
 }

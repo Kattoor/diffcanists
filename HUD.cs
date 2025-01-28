@@ -541,7 +541,7 @@ public class HUD : UIBehaviour
 
   public void CastSpell(Spell s, ZCreature c)
   {
-    this.textSpellCasted.text = "Casting " + ClickSpell.GetSpellName(s, c);
+    this.textSpellCasted.text = s.spellEnum == SpellEnum.Monolith || s.spellEnum == SpellEnum.Pyramid ? "Constructing " + ClickSpell.GetSpellName(s, c) : "Casting " + ClickSpell.GetSpellName(s, c);
     this.StartCoroutine(this.SpellTextLerp(s.EndsTurn ? 3f : 2f));
   }
 
@@ -807,8 +807,12 @@ public class HUD : UIBehaviour
 
   public void RefreshSpectatorSpells(int count)
   {
+    int num = 0;
     foreach (SpellButton specTomato in this.specTomatoes)
-      specTomato.SetVisual(specTomato.nameOfSpell, specTomato.nameOfSpell, count, 0, false);
+    {
+      specTomato.SetVisual(specTomato.nameOfSpell, specTomato.nameOfSpell, num == 1 ? count / 2 : count, 0, false);
+      ++num;
+    }
   }
 
   private IEnumerator ReadyRepeat()
@@ -873,6 +877,8 @@ public class HUD : UIBehaviour
       Client.game.gameFacts = Client._gameFacts;
       Client._gameFacts.game = Client.game;
       this.game.MaxTurnTime = Client._gameFacts.GetTimeInSeconds();
+      this.game.PlayersMaxTurnTime = (float) this.game.MaxTurnTime;
+      AudioManager.TurnTimer.NextTurn(this.game);
       this.game.ArcaneZero = false;
       Inert.LoadSettingsPlayer();
       this.game.isSandbox = true;
@@ -899,12 +905,13 @@ public class HUD : UIBehaviour
       this.game.gameFacts.realMap = GameFacts.MapFromIndex(e);
       this.game.gameFacts.SetMapMode(this.game.gameFacts.realMap);
       this.game.armageddon = this.game.gameFacts.realMap;
+      this.game.SandBoxOrOnline();
       if (this.game.isTutorial && string.Equals("Empty", Client._tutorial.mapId))
         Client.map.SetMapSprite(this.game, new Color32[Client._tutorial.customWidth * Client._tutorial.customHeight], Client._tutorial.customHeight, Client._tutorial.customWidth);
       else
         Client.map.SetMapSprite(this.game, ClientResources.Instance._maps[e]);
       this.game.init_sandbox();
-      this.game.SandBoxOrOnline();
+      this.game.AfterGeneration();
       ZPerson player1 = Client._gameFacts.connections[0].player.player;
       player1.game = this.game;
       player1.settingsPlayer = settingsPlayer;
@@ -966,6 +973,8 @@ public class HUD : UIBehaviour
     }
     if (this.game != null)
       this.txtGameOptions.text = this.game.gameFacts.ToString(this.game, true);
+    if (this.game.isTutorial)
+      HUD.instance.buttonShowSpells.SetActive(false);
     if (this.game.isSandbox)
       HUD.instance.buttonShowSpells.transform.GetChild(0).GetComponent<TMP_Text>().SetText("Dev Console", true);
     if (this.game.isReplay)
@@ -1143,9 +1152,9 @@ public class HUD : UIBehaviour
     }
   }
 
-  private static void OnInitSpell(ZCreature creature, SpellSlot slot)
+  public static void OnInitSpell(ZCreature creature, SpellSlot slot, bool fromReplay = false)
   {
-    if (slot.spell.spellEnum == SpellEnum.Glide)
+    if (slot.spell.spellEnum == SpellEnum.Glide && !fromReplay)
       ZSpell.FireGlide(slot.spell, creature);
     else if (slot.spell.spellEnum == SpellEnum.Arcane_Gate || slot.spell.spellEnum == SpellEnum.Santas_Magic)
       creature.parent.AddGate(slot);
@@ -1235,7 +1244,7 @@ public class HUD : UIBehaviour
     BookOf b = zcreature.spells.Count > 9 ? zcreature.spells[9].spell.bookOf : BookOf.Nothing;
     for (int index1 = 0; index1 < zcreature.spells.Count; ++index1)
     {
-      HUD.OnInitSpell(zcreature, zcreature.spells[index1]);
+      HUD.OnInitSpell(zcreature, zcreature.spells[index1], false);
       if (zcreature.spells[index1].spell.bookOf == b)
         ++num3;
       if (game.AllowExpansion && zcreature.spells[index1].spell.IsMinionSpell())
@@ -1262,7 +1271,7 @@ public class HUD : UIBehaviour
           HUD.instance.familiarHowTo.SetActive(true);
       }
     }
-    if (num3 == 12 && b == BookOf.Arcane && (game.isSandbox || game.gameFacts.GetAllowArcanePowers()) && (x.account.accountType.has(AccountType.Developer | AccountType.Arcane_Monster | AccountType.Game_Director) && !x.game.isRated))
+    if (num3 == 12 && b == BookOf.Arcane && (game.isSandbox || game.gameFacts.GetAllowArcanePowers()) && (x.account.accountType.has(AccountType.Developer | AccountType.Admin | AccountType.Arcane_Monster | AccountType.Game_Director) && !x.game.isRated))
       HUD.TransformArcaneMonster(x, zcreature, game, index);
     if (num1 >= 12 && zcreature.game.AllowExpansion)
     {
@@ -1294,6 +1303,7 @@ public class HUD : UIBehaviour
       }
       Spell spell1 = Inert.GetSpell(SpellEnum.Summon_Titan);
       zcreature.spells.Add(new SpellSlot(spell1));
+      HUD.OnInitSpell(zcreature, zcreature.spells[zcreature.spells.Count - 1], false);
       ZFamiliar.CreateMinionMaster(x);
     }
     else if (num2 >= 9)
@@ -1302,9 +1312,25 @@ public class HUD : UIBehaviour
       foreach (KeyValuePair<SpellEnum, Spell> spellsEnum in Inert.Instance.spellsEnums)
       {
         if (spellsEnum.Value.spellType == SpellType.Bomb && !zcreature.HasSpell(spellsEnum.Value.spellEnum))
+        {
           zcreature.spells.Add(new SpellSlot(spellsEnum.Value));
+          HUD.OnInitSpell(zcreature, zcreature.spells[zcreature.spells.Count - 1], false);
+        }
       }
       ZFamiliar.CreateBombMaster(x);
+    }
+    if (game.gameFacts.settings.autoInclude != null)
+    {
+      for (int index1 = game.gameFacts.settings.autoInclude.Count - 1; index1 >= 0; --index1)
+      {
+        SpellEnum s = game.gameFacts.settings.autoInclude[index1];
+        Spell spell = Inert.GetSpell(s);
+        if ((UnityEngine.Object) spell != (UnityEngine.Object) null && spell.level <= 3 && !zcreature.HasSpell(s))
+        {
+          zcreature.spells.Insert(0, new SpellSlot(spell));
+          HUD.OnInitSpell(zcreature, zcreature.spells[0], false);
+        }
+      }
     }
     if (game.gameFacts.GetStyle().HasStyle(GameStyle.Elementals))
     {
@@ -1323,7 +1349,7 @@ public class HUD : UIBehaviour
         if (index1 != 0 && spellIndex >= 0)
           zcreature.spells.RemoveAt(spellIndex);
         zcreature.spells.Insert(index3, new SpellSlot(spell));
-        HUD.OnInitSpell(zcreature, zcreature.spells[index3]);
+        HUD.OnInitSpell(zcreature, zcreature.spells[index3], false);
         ++index3;
         if (spell.level == 3 && game.isClient)
           HUD.instance.uiPlayerCharacters[(int) zcreature.parent.id].AddLevel3(spell);
@@ -2055,8 +2081,17 @@ public class HUD : UIBehaviour
     OptionsMenu.ShowHUDContextMenu();
   }
 
+  public static void UpdateTimeSounds()
+  {
+    if (Client.game.isSandbox || !((UnityEngine.Object) Player.Instance != (UnityEngine.Object) null) || !Player.Instance.person.yourTurn)
+      return;
+    AudioManager.Timer(Client.game.PlayersMaxTurnTime - Client.game.serverState.turnTime);
+  }
+
   public void UpdateTime()
   {
+    if (this.game == null || this.game.serverState == null)
+      return;
     if ((int) this.lastPlayersTurn != (int) this.game.serverState.playersTurn)
     {
       this.lastPlayersTurn = this.game.serverState.playersTurn;

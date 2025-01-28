@@ -346,7 +346,7 @@ public class PanelPlayer : MonoBehaviour
     this.summonText.text = num1.ToString() + "/" + (object) num2;
   }
 
-  public void SetHP(int i, float maxHealth = 250f)
+  public void SetHP(int i, int towerHealth = 0, float maxHealth = 250f)
   {
     if (this.defeated)
     {
@@ -354,7 +354,7 @@ public class PanelPlayer : MonoBehaviour
         return;
       this.defeated = false;
       this.nameText.text = this.name;
-      this.hpText.text = i.ToString();
+      this.hpText.text = (i + towerHealth).ToString() + (towerHealth > 0 ? (object) ("<voffset=4px><size=70%> (" + (object) towerHealth + ")") : (object) "");
       this.hpBar.sizeDelta = new Vector2(Mathf.Min(390f, (float) ((double) Mathf.Min((float) i, 500f) / 250.0 * 190.0 + 10.0)), this.hpBar.sizeDelta.y);
       this.hpBarNew.fillAmount = (float) i / maxHealth;
       this.hpbarNewStars.anchoredPosition = new Vector2(this.hpBarNew.fillAmount * this.hpBarNew.rectTransform.sizeDelta.x, 0.0f);
@@ -375,7 +375,7 @@ public class PanelPlayer : MonoBehaviour
     }
     else
     {
-      this.hpText.text = i.ToString();
+      this.hpText.text = (i + towerHealth).ToString() + (towerHealth > 0 ? (object) ("<voffset=4px><size=70%> (" + (object) towerHealth + ")") : (object) "");
       this.hpBar.sizeDelta = new Vector2((float) ((double) Mathf.Min((float) i, 500f) / 250.0 * 190.0 + 10.0), this.hpBar.sizeDelta.y);
       this.hpBarNew.fillAmount = (float) i / maxHealth;
       this.hpbarNewStars.anchoredPosition = new Vector2(this.hpBarNew.fillAmount * this.hpBarNew.rectTransform.sizeDelta.x, 0.0f);

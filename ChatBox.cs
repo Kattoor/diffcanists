@@ -164,7 +164,7 @@ public class ChatBox : UIBehaviour
     ChatBox.showDate = Global.GetPrefBool("prefshowdate", true);
     ChatBox.showFade = PlayerPrefs.GetInt("prefshowfade", 2);
     ChatBox.showIcons = Global.GetPrefBool("prefshowicons", true);
-    this.discordButton.SetActive(Client.MyAccount.discord == 0UL && Client.MyAccount.accountType.IsMuted() && Client.isConnected);
+    this.discordButton.SetActive(Client.MyAccount.AccountNotLinked() && Client.MyAccount.accountType.IsMuted() && Client.isConnected);
   }
 
   public void ToggleEmojiSelector()
@@ -654,14 +654,14 @@ public class ChatBox : UIBehaviour
       case AccountType.None:
         return "";
       case AccountType.Mod:
-      case AccountType.Head_of_Moderation:
+      case AccountType.Admin:
         return "<sprite=\"AccountIconsAll\" anim=\"168,183,15\"> ";
       case AccountType.Developer:
       case AccountType.Game_Director:
       case AccountType.Owner:
         return "<sprite=\"AccountIconsAll\" anim=\"144,159,15\"> ";
       case AccountType.Muted:
-        return acc.discord != 0UL ? "<sprite=\"AccountIconsAll\" index=223> " : "<sprite=\"AccountIconsAll\" index=222>";
+        return acc.discord != 0UL || acc.steamVerified ? "<sprite=\"AccountIconsAll\" index=223> " : "<sprite=\"AccountIconsAll\" index=222>";
       case AccountType.Audio_Director:
         return "<sprite=\"AccountIconsAll\" anim=\"312,327,10\"> ";
       case AccountType.Arcane_Monster:
@@ -717,7 +717,7 @@ public class ChatBox : UIBehaviour
 
   public static string PrestigeString(int prestige)
   {
-    return "<sprite=\"AccountIconsAll\" index=" + (object) (191 + prestige) + "> ";
+    return "<sprite=\"AccountIconsAll\" index=" + (object) (191 + Mathf.Min(10, prestige)) + "> ";
   }
 
   public static string ExperienceString(int ex)
@@ -748,7 +748,7 @@ public class ChatBox : UIBehaviour
         return "";
       if (!link)
         return ChatBox.IconString(acc, acc.accountType.has(AccountType.Perm_Muted) ? AccountType.Perm_Muted : AccountType.Muted) + str;
-      return "<link=\"" + (acc.discord == 0UL ? "Unverified" : "Muted") + "\">" + ChatBox.IconString(acc, acc.accountType.has(AccountType.Perm_Muted) ? AccountType.Perm_Muted : AccountType.Muted) + "</link>" + str;
+      return "<link=\"" + (acc.discord != 0UL || acc.steamVerified ? "Muted" : "Unverified") + "\">" + ChatBox.IconString(acc, acc.accountType.has(AccountType.Perm_Muted) ? AccountType.Perm_Muted : AccountType.Muted) + "</link>" + str;
     }
     int accountType = (int) acc.accountType;
     if (acc.displayedIcon == 252)
@@ -769,7 +769,7 @@ public class ChatBox : UIBehaviour
         return "<sprite=\"AccountIconsAll\" index=221> " + str;
       if (!link)
         return ChatBox.PrestigeString((int) acc.prestige) + str;
-      return "<link=\"Prestige " + acc.prestige.ToString() + "\">" + ChatBox.PrestigeString((int) acc.prestige) + "</link>" + str;
+      return "<link=\"Prestige " + acc.prestige.ToString() + "\">" + ChatBox.PrestigeString(Mathf.Min(10, (int) acc.prestige)) + "</link>" + str;
     }
     if (acc.displayedIcon != 0)
     {

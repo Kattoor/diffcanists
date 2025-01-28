@@ -17,6 +17,7 @@ public class Spectator
   public const byte MsgEmoji = 6;
   public const byte MsgAction = 7;
   public const byte MsgTomato = 8;
+  public const byte MsgTomatoEmoji = 9;
 
   public static bool isConnected
   {
@@ -83,6 +84,33 @@ public class Spectator
         {
           myBinaryWriter.Write((byte) 83);
           myBinaryWriter.Write((byte) 8);
+          myBinaryWriter.Write(connection.player.id);
+          myBinaryWriter.Write(which);
+          myBinaryWriter.Write(angle);
+          myBinaryWriter.Write(power);
+        }
+        connection.SendBytes(memoryStream.ToArray(), SendOption.None);
+      }
+    }
+  }
+
+  public static void AskTomatoEmoji(int which, float angle, float power)
+  {
+    if (Client.game.isServer)
+    {
+      BoatSpectators.Instance.OnTomatoEmoji(0, which, angle, power);
+    }
+    else
+    {
+      Connection connection = Spectator.isConnected ? Spectator.connection : Client.connection;
+      if (connection == null || connection.State != ConnectionState.Connected || !connection.player.inBoat)
+        return;
+      using (MemoryStream memoryStream = new MemoryStream())
+      {
+        using (myBinaryWriter myBinaryWriter = new myBinaryWriter((Stream) memoryStream))
+        {
+          myBinaryWriter.Write((byte) 83);
+          myBinaryWriter.Write((byte) 9);
           myBinaryWriter.Write(connection.player.id);
           myBinaryWriter.Write(which);
           myBinaryWriter.Write(angle);

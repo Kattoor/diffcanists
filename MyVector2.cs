@@ -19,6 +19,11 @@ public struct MyVector2
     this.y = b.y;
   }
 
+  public override string ToString()
+  {
+    return string.Format("({0},{1})", (object) this.x, (object) this.y);
+  }
+
   [JsonIgnore]
   public static MyVector2 zero
   {

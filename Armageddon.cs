@@ -193,9 +193,19 @@ public static class Armageddon
     ZSpell.FireRainOfChaos(Inert.Instance.ArmageddonObjects[GameFacts.GetMapIndex(p.game.armageddon)], p.first(), new MyLocation(xInt, 0), true);
   }
 
+  private static void Desert(ZPerson p)
+  {
+    if (p.localTurn % 2 != 0 && p.localTurn <= 20)
+      return;
+    int xInt = p.game.RandomInt(100, Mathf.Min(p.map.Width - 100, Mathf.Max(1, p.localTurn - p.game.armageddonTurn) * 100));
+    if (p.game.RandomInt(0, 10) >= 5)
+      xInt = p.map.Width - xInt;
+    ZSpell.FireBurningSands(Inert.Instance.ArmageddonObjects[GameFacts.GetMapIndex(p.game.armageddon)], p.first(), new MyLocation(xInt, 0), 25, true);
+  }
+
   private static void Sky_Castles(ZPerson p)
   {
-    int xInt = p.game.RandomInt(100, p.map.Width - 100);
+    int xInt = p.game.RandomInt(100, Mathf.Min(p.map.Width - 100, Mathf.Max(1, p.localTurn - p.game.armageddonTurn) * 100));
     if (p.game.RandomInt(0, 10) >= 5)
       xInt = p.map.Width - xInt;
     Spell armageddonObject = Inert.Instance.ArmageddonObjects[GameFacts.GetMapIndex(p.game.armageddon)];
@@ -358,7 +368,7 @@ public static class Armageddon
       return;
     p.game.armageddonTurnVariable = 25;
     Spell spell3 = Inert.Instance.spells["Redo"];
-    ZSpell.FireRedo(spell3, c, true);
+    ZSpell.FireRedo(spell3, c, true, false);
     if (!p.game.isClient)
       return;
     AudioManager.Play(spell3.castClip);
@@ -491,6 +501,9 @@ public static class Armageddon
         break;
       case MapEnum.Ghostly_Halls:
         Armageddon.GhostlyHalls(p);
+        break;
+      case MapEnum.Desert:
+        Armageddon.Desert(p);
         break;
       case MapEnum.Space_Nexus:
         Armageddon.Arcana_te_Deum(p);

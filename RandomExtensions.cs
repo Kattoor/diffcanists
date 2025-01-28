@@ -13,7 +13,7 @@ public static class RandomExtensions
 
   public static BookOf LastBook()
   {
-    return BookOf.Cosmos;
+    return BookOf.Sands;
   }
 
   public static int Clamp(this ZGame.GameType gameType)
@@ -211,5 +211,28 @@ public static class RandomExtensions
   public static bool IsNot(this OperatingSystem os, OperatingSystem e)
   {
     return (os & e) == (OperatingSystem) 0;
+  }
+
+  public static string GetFirstFlags(this AccountType value)
+  {
+    foreach (AccountType accountType in Enum.GetValues(typeof (AccountType)))
+    {
+      if (value.HasFlag((Enum) accountType) && accountType != AccountType.None)
+        return accountType.ToString();
+    }
+    return "";
+  }
+
+  public static string GetActiveFlags(this AccountType value)
+  {
+    StringBuilder stringBuilder = new StringBuilder();
+    foreach (AccountType accountType in Enum.GetValues(typeof (AccountType)))
+    {
+      if (value.HasFlag((Enum) accountType) && accountType != AccountType.None)
+        stringBuilder.Append(accountType.ToString()).Append(", ");
+    }
+    if (stringBuilder.Length > 0)
+      stringBuilder.Length -= 2;
+    return stringBuilder.ToString();
   }
 }

@@ -19,6 +19,7 @@ public class AchievementsMenu : Catalogue
   public Image[] coins;
   public GameObject infoPanel;
   public GameObject statsPanel;
+  public TMP_Text txtAmount;
   public Image outfitImage;
   public bool isStatic;
   private AchievementButton activeButton;
@@ -96,6 +97,7 @@ public class AchievementsMenu : Catalogue
     int num1 = 5;
     int num2 = -5;
     int num3 = 0;
+    int num4 = 0;
     int index = -1;
     foreach (Achievement achievement in (Achievement[]) Enum.GetValues(typeof (Achievement)))
     {
@@ -107,6 +109,8 @@ public class AchievementsMenu : Catalogue
           AchievementButton achievementButton = UnityEngine.Object.Instantiate<AchievementButton>(this.pfabItem, (Transform) this.container);
           achievementButton.achievement = achievement;
           achievementButton.rect.anchoredPosition = new Vector2((float) num1, (float) num2);
+          if (Client.cosmetics.achievements[index])
+            ++num4;
           achievementButton.image.sprite = Client.cosmetics.achievements[index] ? ClientResources.Instance._achievementIcons[index] : ClientResources.Instance._achievementNotObtained;
           achievementButton.gameObject.SetActive(true);
           ++num3;
@@ -120,6 +124,7 @@ public class AchievementsMenu : Catalogue
         }
       }
     }
+    this.txtAmount.text = num4.ToString() + "/" + (object) num3;
   }
 
   public void ClickMainMenu()

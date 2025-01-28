@@ -10,20 +10,33 @@ namespace Educative
   {
     private object _graphic = (object) 0;
     private Anchor _anchor = Anchor.MiddleCenter;
-    public bool clickDestroy = true;
     public UIElement parent;
     [MoonSharpHidden]
     public LuaPanel container;
     [MoonSharpHidden]
     public Script script;
     private string _onClick;
+    private DynValue _onClick2;
     public object clickID;
+    public bool clickDestroy;
 
     public bool isDead
     {
       get
       {
         return (Object) this.container == (Object) null;
+      }
+    }
+
+    public bool visible
+    {
+      get
+      {
+        return this.container.gameObject.activeSelf;
+      }
+      set
+      {
+        this.container.gameObject.SetActive(value);
       }
     }
 
@@ -184,6 +197,18 @@ namespace Educative
       }
     }
 
+    public DynValue onClick2
+    {
+      get
+      {
+        return this._onClick2;
+      }
+      set
+      {
+        this.SetCallback(value);
+      }
+    }
+
     public string color
     {
       get
@@ -197,6 +222,20 @@ namespace Educative
         this.container.image.color = color;
         this.container.button.StopAllCoroutines();
         this.container.button.NormalColor = color;
+      }
+    }
+
+    public LuaColor color2
+    {
+      get
+      {
+        return LuaColor.From((Color32) this.container.image.color);
+      }
+      set
+      {
+        this.container.image.color = (Color) LuaColor.From(value);
+        this.container.button.StopAllCoroutines();
+        this.container.button.NormalColor = this.container.image.color;
       }
     }
 
@@ -226,6 +265,46 @@ namespace Educative
         Color color = Color.white;
         ColorUtility.TryParseHtmlString(value, out color);
         this.container.text.color = color;
+      }
+    }
+
+    public LuaColor textColor2
+    {
+      get
+      {
+        return LuaColor.From((Color32) this.container.text.color);
+      }
+      set
+      {
+        this.container.text.color = (Color) LuaColor.From(value);
+      }
+    }
+
+    public string highlightColor
+    {
+      get
+      {
+        return "#" + ColorUtility.ToHtmlStringRGBA(this.container.button.textHighlightedColor);
+      }
+      set
+      {
+        Color color = Color.white;
+        ColorUtility.TryParseHtmlString(value, out color);
+        this.container.button.textHighlightedColor = color;
+        this.container.button.textPressedColor = color;
+      }
+    }
+
+    public LuaColor highlightColor2
+    {
+      get
+      {
+        return LuaColor.From((Color32) this.container.button.textHighlightedColor);
+      }
+      set
+      {
+        this.container.button.textHighlightedColor = (Color) LuaColor.From(value);
+        this.container.button.textPressedColor = (Color) LuaColor.From(value);
       }
     }
 
@@ -278,6 +357,16 @@ namespace Educative
       }
     }
 
+    private void SetCallback(DynValue v)
+    {
+      this._onClick2 = v;
+      Color color = ColorHSV.LowerHigher(this.container.image.color, 0.4f);
+      this.container.button.HighlightedColor = color;
+      this.container.button.PressedColor = color;
+      this.container.image.raycastTarget = true;
+      this.container.button.enabled = true;
+    }
+
     private void SetCallback(string s)
     {
       this._onClick = s;
@@ -303,7 +392,9 @@ namespace Educative
 
     private void OnClick()
     {
-      if (!string.IsNullOrEmpty(this._onClick))
+      if (this._onClick2 != null)
+        this.script.Call(this._onClick2, (object) this);
+      else if (!string.IsNullOrEmpty(this._onClick))
         this.script.Call(this.script.Globals.Get(this._onClick), this.clickID, (object) this);
       if (!this.clickDestroy)
         return;
@@ -312,7 +403,9 @@ namespace Educative
 
     private void OnInputEnd(string s)
     {
-      if (!string.IsNullOrEmpty(this._onClick))
+      if (this._onClick2 != null)
+        this.script.Call(this._onClick2, (object) this);
+      else if (!string.IsNullOrEmpty(this._onClick))
         this.script.Call(this.script.Globals.Get(this._onClick), (object) s, (object) this);
       if (!this.clickDestroy)
         return;

@@ -1,0 +1,42 @@
+
+namespace Educative
+{
+  public enum KeyBinds
+  {
+    WalkLeft,
+    WalkRight,
+    HighJump,
+    LongJump,
+    SkipTurn,
+    SwitchMinion,
+    CenterCamera,
+    CameraUp,
+    CameraLeft,
+    CameraDown,
+    CameraRight,
+    FlipFlop,
+    BackQuote,
+    ExtendedShot,
+    ToggleIcons,
+    ZoomIn,
+    ZoomOut,
+    NoGlide,
+    Sprint,
+    NoIceJump,
+    Ping,
+    Detower,
+    AssignableHotkey,
+    OverheadEmoji,
+    Hotkey1,
+    Hotkey2,
+    Hotkey3,
+    Hotkey4,
+    Hotkey5,
+    Hotkey6,
+    Hotkey7,
+    Hotkey8,
+    Hotkey9,
+    Hotkey10,
+    SpellSwitch,
+  }
+}

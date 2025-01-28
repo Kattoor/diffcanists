@@ -117,12 +117,32 @@ namespace Educative
       }
     }
 
+    public LuaColor color2
+    {
+      get
+      {
+        return LuaColor.From((Color32) this.indicator.GetComponentInChildren<SpriteRenderer>().color);
+      }
+      set
+      {
+        this.indicator.GetComponentInChildren<SpriteRenderer>().color = (Color) LuaColor.From(value);
+      }
+    }
+
     public IndicatorKind kind
     {
       get
       {
         return this._kind;
       }
+    }
+
+    public void setIcon(object spellObj)
+    {
+      Spell spell = ContainerGame.getSpell(spellObj, (ZCreature) null);
+      if (!((UnityEngine.Object) spell != (UnityEngine.Object) null))
+        return;
+      this.indicator.GetComponentInChildren<SpriteRenderer>().sprite = ClientResources.Instance.GetSpellIcon(spell.name);
     }
 
     public void Destroy()

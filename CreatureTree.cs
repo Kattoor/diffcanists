@@ -6,6 +6,7 @@ public class CreatureTree : Creature
   public Texture2D texture;
   public ExplosionCutout cutoutTexture;
   public bool isButterflyJar;
+  public bool isStructure;
 
   public override ZCreature Get()
   {

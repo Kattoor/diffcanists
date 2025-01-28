@@ -442,8 +442,6 @@ namespace Educative
 
     public void setDirection(int dir)
     {
-      if (this.isMoving)
-        return;
       if (dir > 0)
       {
         if ((double) this.creature.transformscale >= 0.0)
@@ -456,6 +454,11 @@ namespace Educative
           return;
         this.creature.SetScale((float) dir);
       }
+    }
+
+    public int getDirection()
+    {
+      return (double) this.creature.transformscale <= 0.0 ? -1 : 1;
     }
 
     public int getFamiliarLevel(BookOf book)
@@ -654,6 +657,36 @@ namespace Educative
       if (!((ZComponent) this.creature == (object) Player.Instance?.person?.first()))
         return;
       Player.Instance.UnselectSpell();
+    }
+
+    public float angleToFire(object spellObj, Point target, float power = 1f)
+    {
+      Spell spell = ContainerGame.getSpell(spellObj, this.creature);
+      if (!((Object) spell != (Object) null))
+        return (float) (int) (FixedInt) 1L;
+      MyLocation myLocation = target.ToMyLocation() - this.creature.position;
+      myLocation.Normalize();
+      FixedInt d = FixedInt.Abs(this.creature.position.x - (FixedInt) (float) target.x);
+      FixedInt fixedInt = (FixedInt) spell.speedMax;
+      if (fixedInt <= 0)
+        fixedInt = (FixedInt) 1000;
+      FixedInt x = spell.affectedByGravity ? ZSpell.AngleToGoDistance(fixedInt * (FixedInt) power, -this.creature.game.gravity, d, (FixedInt) (float) target.y - this.creature.position.y, true) : FixedInt.Atan2(myLocation.y, myLocation.x) * FixedInt.Rad2Deg;
+      if (target.x < this.creature.position.x.ToDouble() && !FixedInt.InvalidAngle(x))
+        x = (FixedInt) 180 - x;
+      return x.ToFloat();
+    }
+
+    public float powerToFire(object spellObj, Point target, float angle = 45f)
+    {
+      Spell spell = ContainerGame.getSpell(spellObj, this.creature);
+      if (!((Object) spell != (Object) null))
+        return 1f;
+      (target.ToMyLocation() - this.creature.position).Normalize();
+      FixedInt distance = FixedInt.Abs(this.creature.position.x - (FixedInt) (float) target.x);
+      FixedInt fixedInt = (FixedInt) spell.speedMax;
+      if (fixedInt <= 0)
+        fixedInt = (FixedInt) 1000;
+      return (ZSpell.CalculateStartingVelocity(-this.creature.game.gravity, distance, (FixedInt) (float) target.y - this.creature.position.y, (FixedInt) angle) / fixedInt).ToFloat();
     }
 
     public void fireAt(object spellObj, ContainerCreature target, double anglevariance = 0.0)

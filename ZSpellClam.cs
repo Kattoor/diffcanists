@@ -115,7 +115,7 @@ label_44:
         zspellClam.velocity = MyLocation.zero;
         zspellClam.isMoving = false;
         zspellClam.Splash();
-        zspellClam.DestroyDelay();
+        zspellClam.OnDeath(true);
         break;
       }
       if (zspellClam.addVelocity)

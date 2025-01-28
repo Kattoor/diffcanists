@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class IndicatorOfDecay : MonoBehaviour
 {
-  private static ZMyCollider[] MyColliders = new ZMyCollider[20];
+  internal static ZMyCollider[] MyColliders = new ZMyCollider[20];
   private static ContactFilter2D filter = IndicatorOfDecay.InitFilter();
   private ZCreature creature;
   private ZMyCollider col;

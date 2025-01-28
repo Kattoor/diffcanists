@@ -228,6 +228,43 @@ public class ZTower : ZComponent
     return (this.firstCast || this.type == TowerType.Stone) && (this.type == TowerType.Stone || !this.game.isElementals) && (this.type == TowerType.Stone && this.game.AllowExpansion || !this.game.isElementals && this.creature.familiar.Has(FamiliarType.Stone) && this.creature.familiarLevelStone > 0);
   }
 
+  public void OnHealthChanged()
+  {
+    if (this.type != TowerType.Sand)
+      return;
+    if (this.Health > 100)
+    {
+      this.collider.baseCollider = Inert.Instance.cachedBlitColliders[11];
+      if (this.game.isClient && (UnityEngine.Object) this.transform != (UnityEngine.Object) null)
+        this.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = ClientResources.Instance.sandCastleSprites[0];
+    }
+    else if (this.Health > 75)
+    {
+      this.collider.baseCollider = Inert.Instance.cachedBlitColliders[12];
+      if (this.game.isClient && (UnityEngine.Object) this.transform != (UnityEngine.Object) null)
+        this.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = ClientResources.Instance.sandCastleSprites[1];
+    }
+    else if (this.Health > 50)
+    {
+      this.collider.baseCollider = Inert.Instance.cachedBlitColliders[13];
+      if (this.game.isClient && (UnityEngine.Object) this.transform != (UnityEngine.Object) null)
+        this.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = ClientResources.Instance.sandCastleSprites[2];
+    }
+    else if (this.Health > 25)
+    {
+      this.collider.baseCollider = Inert.Instance.cachedBlitColliders[14];
+      if (this.game.isClient && (UnityEngine.Object) this.transform != (UnityEngine.Object) null)
+        this.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = ClientResources.Instance.sandCastleSprites[3];
+    }
+    else if (this.Health > 0)
+    {
+      this.collider.baseCollider = Inert.Instance.cachedBlitColliders[15];
+      if (this.game.isClient && (UnityEngine.Object) this.transform != (UnityEngine.Object) null)
+        this.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = ClientResources.Instance.sandCastleSprites[4];
+    }
+    this.collider.ArbritaryInit();
+  }
+
   public void DelayKill()
   {
     if (this.dead)
@@ -272,7 +309,7 @@ public class ZTower : ZComponent
         this.creature.ApplyHeal(DamageType.Heal, 10, this.creature);
         break;
       case TowerType.Seasons:
-        ZSpell.TreeHouse(this.creature, this.baseTower.FromSpell);
+        ZSpell.TreeHouse(this.creature, Inert.GetSpell(SpellEnum.Autumn_Leaves));
         break;
       case TowerType.Wooden:
         ZSpell.ApplyExplosionForce(SpellEnum.Watchtower, this.creature.world, this.creature.position, 40, Curve.Generic, 50, 50, (FixedInt) 8, DamageType.Wallop, this.creature, this.creature.game.turn, Curve.Generic, (ISpellBridge) null, (ZCreature) null);
@@ -281,6 +318,14 @@ public class ZTower : ZComponent
           break;
         AudioManager.Play(AudioManager.instance.watchtowerDestroyed);
         ZComponent.Instantiate<GameObject>(ClientResources.Instance.woodenExplosion, this.creature.transform.position, Quaternion.identity, this.game.GetMapTransform());
+        break;
+      case TowerType.Sand:
+        this.Health -= Mathf.Min(this.Health - 1, 25);
+        if (this.Health <= 0)
+          this.Health = 1;
+        this.OnHealthChanged();
+        this.game.CreatureMoveSurroundings(this.position, this.radius + 20, (ZMyCollider) null, true);
+        this.creature.UpdateHealthTxt();
         break;
     }
   }
@@ -413,7 +458,11 @@ public class ZTower : ZComponent
             enemy?.parent?.awards.Heal(enemy, this.creature, damage);
             return;
           case DamageType.Pebble:
-            damage <<= 1;
+            if (this.type != TowerType.Sand)
+            {
+              damage <<= 1;
+              break;
+            }
             break;
           case DamageType.Water:
             if (this.creature.familiar.Has(FamiliarType.Seas))
@@ -430,6 +479,18 @@ public class ZTower : ZComponent
             if ((ZComponent) enemy != (object) null)
               num1 += enemy.additionalBleedOutDamage;
             damage += num1;
+            break;
+          case DamageType.Sand:
+            if (this.creature.curSandTurn != this.game.everIncreasingVariable)
+            {
+              this.creature.curSandTurn = this.game.everIncreasingVariable;
+              this.creature.curSandDamage = 0;
+            }
+            if (spellRef != null && spellRef.maxSandDamage <= this.creature.curSandDamage)
+              return;
+            this.creature.curSandDamage += damage;
+            if (this.type == TowerType.Sand)
+              return;
             break;
         }
         if ((this.type == TowerType.Stone || !this.game.isElementals) && dt != DamageType.Percentage50)
@@ -462,14 +523,19 @@ public class ZTower : ZComponent
           int damage1 = Mathf.Min(enemy.health, Mathf.Clamp(damage, 0, this.Health)) / 2;
           if (damage1 < 1)
             damage1 = 1;
-          enemy.DoHeal(damage1, dt, enemy, false);
-          if (enemy.health > enemy.maxHealth)
+          if (this.creature.shield > 0)
+            damage1 -= this.creature.shield;
+          if (damage1 > 0)
           {
-            int num2 = damage1 - (enemy.health - enemy.maxHealth);
-            enemy.health = enemy.maxHealth;
+            enemy.DoHeal(damage1, dt, enemy, false);
+            if (enemy.health > enemy.maxHealth)
+            {
+              int num2 = damage1 - (enemy.health - enemy.maxHealth);
+              enemy.health = enemy.maxHealth;
+            }
+            enemy.UpdateHealthTxt();
+            enemy?.parent?.awards.Heal(enemy, this.creature, damage);
           }
-          enemy.UpdateHealthTxt();
-          enemy?.parent?.awards.Heal(enemy, this.creature, damage);
         }
         if (dt == DamageType.Gravity)
         {
@@ -517,6 +583,7 @@ public class ZTower : ZComponent
         this.Health -= damage;
         if (this.Health > this.MaxHealth)
           this.Health = this.MaxHealth;
+        this.OnHealthChanged();
         enemy?.achievementParent?.awards.DealtDamge(enemy, this.creature, damage, hitBySpell, spellRef);
         if (this.creature.entangled)
         {

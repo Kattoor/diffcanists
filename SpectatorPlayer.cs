@@ -1,4 +1,5 @@
 
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +11,7 @@ public class SpectatorPlayer : MonoBehaviour
   internal GameObject[] meter_subs;
   private Image meterFill;
   private bool LockMeter;
+  public int selectedEmoji;
   private bool extendedShot;
   private Vector3 mouseWorldPos;
   private Vector3 diff;
@@ -22,7 +24,7 @@ public class SpectatorPlayer : MonoBehaviour
   private void Awake()
   {
     SpectatorPlayer.Instance = this;
-    this.meter = Object.Instantiate<GameObject>(HUD.instance.specMeter);
+    this.meter = UnityEngine.Object.Instantiate<GameObject>(HUD.instance.specMeter, Client.game.GetMapTransform());
     this.meter_subs = new GameObject[this.meter.transform.childCount];
     for (int index = 0; index < this.meter_subs.Length; ++index)
       this.meter_subs[index] = this.meter.transform.GetChild(index).gameObject;
@@ -37,7 +39,7 @@ public class SpectatorPlayer : MonoBehaviour
 
   private void OnDestroy()
   {
-    if (!((Object) SpectatorPlayer.Instance == (Object) this))
+    if (!((UnityEngine.Object) SpectatorPlayer.Instance == (UnityEngine.Object) this))
       return;
     SpectatorPlayer.Instance = (SpectatorPlayer) null;
   }
@@ -60,16 +62,38 @@ public class SpectatorPlayer : MonoBehaviour
       this.UnselectSpell();
       MyToolTip.Show("You can buy more tomatoes at the shop.", -1f);
     }
-    else
+    else if (i == 1 && Client.MyAccount.tomatoes <= 1 && !Client.game.isSandbox)
     {
-      this.selectingSpell = true;
-      this.selectedSpellIndex = i;
-      for (int index = 0; index < this.meter_subs.Length; ++index)
-        this.meter_subs[index].SetActive(true);
-      CursorList.Instance.SetCursor(0, CursorMode.Auto);
-      HUD.instance.panelFireControls.SetActive(true);
-      HUD.instance.panelAimControls.SetActive(false);
+      this.UnselectSpell();
+      MyToolTip.Show("You can buy more tomatoes at the shop. This spell costs 2 tomatoes to cast.", -1f);
     }
+    else if (i == 1)
+    {
+      MyContextMenu m = MyContextMenu.Show();
+      m.AddEmojiSelector((Action<string>) (s =>
+      {
+        int startIndex = s.IndexOf('"') + 1;
+        s = s.Substring(startIndex, s.LastIndexOf('"') - startIndex);
+        this.selectedEmoji = EmojiInfo.GetIndex(s);
+        this.FinishSelectingSpell(i);
+        m.Close();
+        MyToolTip.Close();
+      }));
+      m.Rebuild(false);
+    }
+    else
+      this.FinishSelectingSpell(i);
+  }
+
+  public void FinishSelectingSpell(int i)
+  {
+    this.selectingSpell = true;
+    this.selectedSpellIndex = i;
+    for (int index = 0; index < this.meter_subs.Length; ++index)
+      this.meter_subs[index].SetActive(true);
+    CursorList.Instance.SetCursor(0, CursorMode.Auto);
+    HUD.instance.panelFireControls.SetActive(true);
+    HUD.instance.panelAimControls.SetActive(false);
   }
 
   public void ToggleExtendedShot(bool v)
@@ -77,7 +101,7 @@ public class SpectatorPlayer : MonoBehaviour
     this.extendedShot = v;
     HUD.instance.buttonAlt.AlwaysOn = v;
     float x = 1f;
-    if ((Object) this.meter_subs[0] == (Object) null)
+    if ((UnityEngine.Object) this.meter_subs[0] == (UnityEngine.Object) null)
       return;
     if (v)
       x = 1f + Player.LinearExtend(Player.GetPowerLevel(this.rot_z), (FixedInt) 1).ToFloat();
@@ -101,7 +125,10 @@ public class SpectatorPlayer : MonoBehaviour
 
   private void SendFire()
   {
-    Spectator.AskTomato(this.selectedSpellIndex, this.rot_z.ToFloat(), this.meterFill.fillAmount);
+    if (this.selectedSpellIndex == 1)
+      Spectator.AskTomatoEmoji(this.selectedEmoji, this.rot_z.ToFloat(), this.meterFill.fillAmount);
+    else
+      Spectator.AskTomato(this.selectedSpellIndex, this.rot_z.ToFloat(), this.meterFill.fillAmount);
     this.selectedSpellIndex = -1;
   }
 

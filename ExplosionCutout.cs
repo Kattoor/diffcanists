@@ -79,4 +79,8 @@ public enum ExplosionCutout
   ChristmasTree,
   Grove_Renewal,
   CogFall_Cheese,
+  Monolith,
+  Pyramid,
+  Sandy_Shores,
+  Entomb,
 }

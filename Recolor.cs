@@ -244,7 +244,14 @@ public class Recolor
     return Global.AddSprite(Sprite.Create(texture2, rect3, pivot, (float) pixelsPerUnit));
   }
 
-  public static Sprite PrestigeHat(Sprite spriteorigonal, Color gray)
+  public static void Roman(Color32[] pixels, Color gray, int start, int w)
+  {
+    Color32 color32_1 = new Color32(byte.MaxValue, (byte) 128, byte.MaxValue, byte.MaxValue);
+    Color32 color32_2 = (Color32) (gray * (Color) new Color32((byte) 127, (byte) 127, (byte) 127, byte.MaxValue));
+    Color32 color32_3 = new Color32((byte) 0, (byte) 0, (byte) 0, byte.MaxValue);
+  }
+
+  public static Sprite PrestigeHat(Sprite spriteorigonal, Color gray, int extra)
   {
     Texture2D texture1 = spriteorigonal.texture;
     Rect rect1 = spriteorigonal.rect;
@@ -273,14 +280,79 @@ public class Recolor
         pixels[index] = gray * (Color) new Color32(r, r, r, color32.a);
       }
     }
+    Rect rect3;
+    if (extra > 0)
+    {
+      int width3 = (int) spriteorigonal.rect.width;
+      int height3 = (int) spriteorigonal.rect.height;
+      MapGenerator.getOutlineArray(28);
+      int num1 = width3 / 2;
+      int num2 = height3 / 2 + 2;
+      Color32 color32_1 = new Color32(byte.MaxValue, (byte) 128, byte.MaxValue, byte.MaxValue);
+      Color32 color32_2 = (Color32) (gray * (Color) new Color32((byte) 127, (byte) 127, (byte) 127, byte.MaxValue));
+      Color32 color32_3 = new Color32((byte) 0, (byte) 0, (byte) 0, byte.MaxValue);
+      string romanNumber = Account.ToRomanNumber(extra);
+      int num3 = 0;
+      foreach (char c in romanNumber)
+        num3 += (int) ClientResources.Instance._iconsPrestigeBonus[Account.RomanSpriteIndex(c)].rect.width;
+      int num4 = num1 - num3 / 2;
+      Color32[] pixels32 = ClientResources.Instance._iconsPrestigeBonus[0].texture.GetPixels32();
+      foreach (char c in romanNumber)
+      {
+        Sprite iconsPrestigeBonu = ClientResources.Instance._iconsPrestigeBonus[Account.RomanSpriteIndex(c)];
+        int width4 = ClientResources.Instance._iconsPrestigeBonus[0].texture.width;
+        int num5 = 0;
+        while (true)
+        {
+          double num6 = (double) num5;
+          rect3 = iconsPrestigeBonu.rect;
+          double width5 = (double) rect3.width;
+          if (num6 < width5)
+          {
+            int num7 = 0;
+            while (true)
+            {
+              double num8 = (double) num7;
+              rect3 = iconsPrestigeBonu.rect;
+              double height4 = (double) rect3.height;
+              if (num8 < height4)
+              {
+                Color[] colorArray = pixels;
+                int index1 = num4 + num5 + (num2 + num7) * width3;
+                Color color1 = gray;
+                Color32[] color32Array = pixels32;
+                rect3 = iconsPrestigeBonu.rect;
+                int num9 = (int) rect3.x + num5;
+                rect3 = iconsPrestigeBonu.rect;
+                int num10 = ((int) rect3.y + num7) * width4;
+                int index2 = num9 + num10;
+                Color color2 = (Color) color32Array[index2];
+                Color color3 = color1 * color2;
+                colorArray[index1] = color3;
+                ++num7;
+              }
+              else
+                break;
+            }
+            ++num5;
+          }
+          else
+            break;
+        }
+        int num11 = num4;
+        rect3 = ClientResources.Instance._iconsPrestigeBonus[Account.RomanSpriteIndex(c)].rect;
+        int width6 = (int) rect3.width;
+        num4 = num11 + width6;
+      }
+    }
     texture2D1.SetPixels(pixels);
     texture2D1.Apply(false);
     Texture2D texture2 = texture2D1;
-    Rect rect3 = spriteorigonal.rect;
-    double width3 = (double) (int) rect3.width;
     rect3 = spriteorigonal.rect;
-    double height3 = (double) (int) rect3.height;
-    Rect rect4 = new Rect(0.0f, 0.0f, (float) width3, (float) height3);
+    double width7 = (double) (int) rect3.width;
+    rect3 = spriteorigonal.rect;
+    double height5 = (double) (int) rect3.height;
+    Rect rect4 = new Rect(0.0f, 0.0f, (float) width7, (float) height5);
     Vector2 pivot = new Vector2(spriteorigonal.pivot.x / (float) texture2D1.width, spriteorigonal.pivot.y / (float) texture2D1.height);
     double pixelsPerUnit = (double) spriteorigonal.pixelsPerUnit;
     return Global.AddSprite(Sprite.Create(texture2, rect4, pivot, (float) pixelsPerUnit));

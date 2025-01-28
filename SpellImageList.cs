@@ -68,7 +68,7 @@ public class SpellImageList : MonoBehaviour
         this.spellSlot[index].enabled = true;
         this.restricted[index].gameObject.SetActive(Restrictions.IsSpellRestricted((int) spells[index]));
         int spell = (int) spells[index];
-        if (Prestige.IsUnlocked(Client.MyAccount, spell) || !Client.viewSpellLocks.ViewLocked())
+        if (Prestige.IsUnlocked(Client.MyAccount, spell) || !Client.viewSpellLocks.ViewLocked() && ((UnityEngine.Object) UnratedMenu.instance == (UnityEngine.Object) null || Client._gameFacts.GetStyle().HasStyle(GameStyle.Sandbox)))
         {
           if (!Restrictions.IsSpellRestricted(spell))
           {

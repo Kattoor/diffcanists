@@ -8,6 +8,7 @@ public class StoreMenu : MonoBehaviour
 {
   public TMP_Text txtCrystals;
   public TMP_Text txtTomatoes;
+  public TMP_Text testServer;
   [Header("Arcanists")]
   public ButtonArcanistsStore pfabItem;
   public GameObject panelArc;

@@ -56,6 +56,9 @@ public static class ZCreatureCreate
     z.TrueSize = reader.ReadInt32();
     z.controllable = reader.ReadBoolean();
     z.movementFromInput = reader.ReadBoolean();
+    z.curSandDamage = reader.ReadInt32();
+    z.curSandTurn = reader.ReadInt32();
+    z.waterShield = reader.ReadInt32();
     z.waterWalking = reader.ReadBoolean();
     z.frostWalking = reader.ReadBoolean();
     z.LongJumpData = reader.ReadMyLocation();
@@ -79,6 +82,7 @@ public static class ZCreatureCreate
     z.scaleFixed = (FixedInt) reader.ReadInt64();
     z.FullArcane = reader.ReadBoolean();
     z.spellEnum = (SpellEnum) reader.ReadInt32();
+    z.isMindControlled = reader.ReadBoolean();
     z.gliding = reader.ReadBoolean();
     z.moneyFrames = reader.ReadInt32();
     z.removeFlight = reader.ReadBoolean();
@@ -159,6 +163,9 @@ public static class ZCreatureCreate
     writer.Write(c.TrueSize);
     writer.Write(c.controllable);
     writer.Write(c.movementFromInput);
+    writer.Write(c.curSandDamage);
+    writer.Write(c.curSandTurn);
+    writer.Write(c.waterShield);
     writer.Write(c.waterWalking);
     writer.Write(c.frostWalking);
     writer.Write(c.LongJumpData);
@@ -183,6 +190,7 @@ public static class ZCreatureCreate
     writer.Write(c.scaleFixed.RawValue);
     writer.Write(c.FullArcane);
     writer.Write((int) c.spellEnum);
+    writer.Write(c.isMindControlled);
     writer.Write(c.gliding);
     writer.Write(c.moneyFrames);
     writer.Write(c.removeFlight);

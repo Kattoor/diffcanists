@@ -30,7 +30,8 @@ public class PrestigeMenu : MonoBehaviour
     "Ancient ruins teeming with arcane energy. Once a home to the mightiest mages. Stay long enough and you might witness a small portion of their arcane prowess.",
     "Foliage and overgrowth covers these ancient and consecrated grounds. They say the wood they use from the trees of the Kharazi Jungle is full of magic, but the bark is not what you need to watch out for, for there is a greater threat that lies within.",
     "Organic landscapes of a distant planet, with many places to hide, who knows what lays inside. Be careful of shooting stars on either side!",
-    "These ethereal halls were once a bastion of great magical power, now haunted by restless spirits. Eerie whispers and flickering apparitions fill the air as the echoes of past enchantments linger."
+    "These ethereal halls were once a bastion of great magical power, now haunted by restless spirits. Eerie whispers and flickering apparitions fill the air as the echoes of past enchantments linger.",
+    "Remnants of a past civilization, once lush and green, now the battle grounds of aspiring Arcanists. Just don't stay to long or the heat my get to you."
   };
   public RectTransform bgrect;
   public GameObject[] panels;
@@ -79,7 +80,7 @@ public class PrestigeMenu : MonoBehaviour
     switch (e)
     {
       case 0:
-        if (Client.MyAccount.prestige >= (byte) 10)
+        if (Client.MyAccount.prestige >= byte.MaxValue)
         {
           this.txtPrestigeRequirments.text = string.Format(this.txtPrestigeRequirments.text, (object) "<color=green>Congratulations, You've reached the highest prestige!");
           break;

@@ -10,6 +10,7 @@ public class ZPerson
 {
   public int team = -1;
   public int localTurn = -1;
+  public int lastTowerCast = -1;
   public short startingRating = 1000;
   public int lastArmageddon = -100;
   public List<ZCreature> controlled = new List<ZCreature>();
@@ -17,11 +18,11 @@ public class ZPerson
   public List<ZCreature> takenMinions = new List<ZCreature>();
   public List<ZGame.MinionBookTitan> minionBookTitans = new List<ZGame.MinionBookTitan>();
   public List<SpellEnum> shownLevel3 = new List<SpellEnum>();
-  public int[] towerHealth = new int[12];
+  public int[] towerHealth = new int[13];
   public Connection connection = (Connection) new TcpConnection();
   public string name = "-";
+  public SettingsPlayer settingsPlayer = new SettingsPlayer();
   public Account account = new Account();
-  public Color clientColor = Color.gray;
   public HashSet<SpellSlot> randomSyncedZSpells = new HashSet<SpellSlot>();
   public BookOf ActivateableFamiliar = BookOf.Nothing;
   public bool drainable = true;
@@ -51,7 +52,6 @@ public class ZPerson
   internal bool clientResyncing;
   public bool isFake;
   public bool host;
-  public SettingsPlayer settingsPlayer;
   public PanelPlayer panelPlayer;
   public List<ZFamiliar> familiars;
   public List<SpellSlot> arcaneGateSpellSlot;
@@ -175,6 +175,8 @@ public class ZPerson
       return false;
     return this.connection.player.gameNumber == this.game.gameFacts.id || this.connection.player.gameNumber == id;
   }
+
+  public Color clientColor { get; set; } = Color.gray;
 
   public int GetNextMoveID()
   {

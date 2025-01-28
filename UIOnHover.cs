@@ -220,22 +220,12 @@ public class UIOnHover : UIOnHoverChild, IPointerDownHandler, IEventSystemHandle
       if (eventData.button != PointerEventData.InputButton.Left)
         return;
       this.isDown = false;
-      if (Input.touchSupported)
+      if (Input.touchSupported && ((double) this.holdTime <= 0.5 || (this.onRightClick == null || this.onRightClick.IsNull()) && !this.onEnterIsRightClick))
       {
-        if ((double) this.holdTime > 1.0 && (this.onRightClick != null && !this.onRightClick.IsNull() || this.onEnterIsRightClick))
-        {
-          if (this.onEnterIsRightClick)
-            this.onEnter?.Invoke();
-          else
-            this.onRightClick?.Invoke();
-        }
-        else
-        {
-          if (this.onClick != null)
-            this.onClick.Invoke();
-          if ((bool) (UnityEngine.Object) this.audioClick)
-            AudioManager.Play(this.audioClick);
-        }
+        if (this.onClick != null)
+          this.onClick.Invoke();
+        if ((bool) (UnityEngine.Object) this.audioClick)
+          AudioManager.Play(this.audioClick);
       }
       int num = eventData.dragging ? 1 : 0;
       if (!this.interactable || this.alwaysOn)

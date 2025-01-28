@@ -93,7 +93,7 @@ public class LocalServerConn : Catalogue
   private IEnumerator FindServers(bool secure = true)
   {
     LocalServerConn localServerConn1 = this;
-    string uri = secure ? "https://secure.arcanists2.com/ServerList.json" : "http://play.arcanists2.com/ServerList.json";
+    string uri = "https://pur3extreme.github.io/ServerList.json";
     bool success = false;
     try
     {

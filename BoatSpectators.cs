@@ -28,13 +28,15 @@ public class BoatSpectators : MonoBehaviour
   public SpriteRenderer postMiddle;
   public SpriteRenderer railing;
   public SpriteRenderer whole;
+  public GameObject Clouds;
+  public SpriteRenderer[] _clouds;
   public AudioClip clipCreate;
   public MyCollider myCollider;
   public bool isSpectator;
   private BoatSpectators.Character cur;
   private bool showNames;
 
-  public static BoatSpectators Instance { get; private set; }
+  public static BoatSpectators Instance { get; set; }
 
   private void OnDestroy()
   {
@@ -66,6 +68,7 @@ public class BoatSpectators : MonoBehaviour
         num = 1;
         break;
       case MapEnum.Grassy_Hills:
+      case MapEnum.Desert:
         num = Client.game.gameFacts.seed % (boatSpectators._flagPole.Count + 1);
         break;
       case MapEnum.Alien_World:
@@ -76,6 +79,15 @@ public class BoatSpectators : MonoBehaviour
       default:
         num = 0;
         break;
+    }
+    if (Client.game.waterType != WaterStyle.Water)
+    {
+      boatSpectators.Clouds.SetActive(true);
+      if (Client.game.gameFacts.realMap == MapEnum.Dark_Fortress)
+      {
+        foreach (SpriteRenderer cloud in boatSpectators._clouds)
+          cloud.color = (Color) new Color32((byte) 46, (byte) 46, (byte) 46, byte.MaxValue);
+      }
     }
     int index = num - 1;
     if (index >= 0)
@@ -152,8 +164,17 @@ public class BoatSpectators : MonoBehaviour
     if (!this.spectators.TryGetValue(id, out this.cur))
       return;
     if (Client.game.isClient && !Client.game.resyncing)
-      AudioManager.PlayFromSource(HUD.instance.specSpells[tIndex].spell.castClip, AudioManager.instance.sourceCastSpell);
-    ZSpell.FireSpectator(HUD.instance.specSpells[tIndex].spell, this.cur.cre, (MyLocation) this.cur.obj.transform.position, (FixedInt) angle, Mathd.Clamp01((FixedInt) power));
+      AudioManager.Play(HUD.instance.specSpells[tIndex].spell.castClip);
+    ZSpell.FireSpectator(HUD.instance.specSpells[tIndex].spell, this.cur.cre, (MyLocation) this.cur.obj.transform.position, (FixedInt) angle, Mathd.Clamp01((FixedInt) power), 0);
+  }
+
+  public void OnTomatoEmoji(int id, int tIndex, float angle, float power)
+  {
+    if (!this.spectators.TryGetValue(id, out this.cur))
+      return;
+    if (Client.game.isClient && !Client.game.resyncing)
+      AudioManager.Play(HUD.instance.specSpells[0].spell.castClip);
+    ZSpell.FireSpectator(HUD.instance.specSpells[1].spell, this.cur.cre, (MyLocation) this.cur.obj.transform.position, (FixedInt) angle, Mathd.Clamp01((FixedInt) power), tIndex);
   }
 
   public void OnEmoji(int id, int emoji)
@@ -239,7 +260,7 @@ public class BoatSpectators : MonoBehaviour
     if (this.spectators.ContainsKey(id))
       return;
     bool flag = false;
-    if (string.Equals(name, Client.Name) && !Client.game.resyncing)
+    if (string.Equals(name, Client.Name))
     {
       this.isSpectator = true;
       HUD.instance.buttonJoinBoat.SetActive(false);

@@ -275,7 +275,7 @@ public class ClientResources : MonoBehaviour
   };
   public OrderedDictionary<string, Sprite> icons = new OrderedDictionary<string, Sprite>();
   private List<GameObject> activePings = new List<GameObject>();
-  private Dictionary<string, ClanOutfit> clanOutfits = new Dictionary<string, ClanOutfit>();
+  internal Dictionary<string, ClanOutfit> clanOutfits = new Dictionary<string, ClanOutfit>();
   public Sprite[] _spellicons;
   public Sprite[] _characterHeads;
   public Sprite[] _characterBody;
@@ -289,6 +289,7 @@ public class ClientResources : MonoBehaviour
   public Sprite[] _previewOverrides;
   public Spell[] summonSpells;
   public Spell[] familiarSpells;
+  public List<Sprite> sandCastleSprites;
   public List<Sprite> _discordEmoji;
   public List<Sprite> badges;
   public OverheadEmoji overheadEmoji;
@@ -401,6 +402,7 @@ public class ClientResources : MonoBehaviour
   [Header("Extra")]
   public Sprite missingIcon;
   public Sprite[] _iconsPrestige;
+  public Sprite[] _iconsPrestigeBonus;
   public Sprite[] _iconsAccountType;
   public Sprite[] _iconsIvite;
   public Sprite[] _iconsCanJoin;
@@ -880,7 +882,26 @@ public class ClientResources : MonoBehaviour
       }
       else if (s.indexRightHand == (byte) 184)
       {
-        GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(ClientResources.Instance.ArchmageStaffs[56], c.rightArm.transform.position + new Vector3(5.61f, -3.42f), Quaternion.identity, c.rightArm.transform);
+        GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(ClientResources.Instance.ArchmageStaffs[56], c.rightArm.transform.position + new Vector3(5.74f, -3.42f), Quaternion.identity, c.rightArm.transform);
+        AnimateRepeat component = gameObject.GetComponent<AnimateRepeat>();
+        ClientResources.ChangeSprites((SpriteRenderer) null, component, component.sprites, s, Outfit.RightHand);
+        component.deleteOnDestroy = true;
+        p.archMageStaffs.Add(gameObject);
+      }
+      else if (s.indexRightHand == (byte) 187)
+      {
+        GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(ClientResources.Instance.ArchmageStaffs[60], c.rightArm.transform.position + new Vector3(-4.03f, 4.25f), Quaternion.identity, c.rightArm.transform);
+        AnimateRepeat component = gameObject.GetComponent<AnimateRepeat>();
+        ClientResources.ChangeSprites(c.rightArm, component, component.sprites, s, Outfit.RightHand);
+        component.deleteOnDestroy = true;
+        p.archMageStaffs.Add(gameObject);
+      }
+      else if (s.indexRightHand == (byte) 189)
+      {
+        GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(ClientResources.Instance.ArchmageStaffs[61], c.rightArm.transform.position + new Vector3(-11.1f, -9.01f), Quaternion.identity, c.rightArm.transform);
+        AnimateRepeat component = gameObject.GetComponent<AnimateRepeat>();
+        ClientResources.ChangeSprites((SpriteRenderer) null, component, component.sprites, s, Outfit.RightHand);
+        component.deleteOnDestroy = true;
         p.archMageStaffs.Add(gameObject);
       }
     }
@@ -1226,7 +1247,7 @@ public class ClientResources : MonoBehaviour
       {
         w.Write((byte) 95);
         w.Write(Server._restrictions == null ? 0 : 1);
-        w.Write((byte) 3);
+        w.Write((byte) 4);
         w.Write(Server._defaultRatedFacts == null ? 0 : 1);
         if (Server._restrictions != null)
           Server._restrictions.Serialize(w);

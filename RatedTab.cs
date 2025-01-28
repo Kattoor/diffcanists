@@ -26,6 +26,9 @@ public class RatedTab : MonoBehaviour
   public GameObject panelInfoAltSettings;
   public Button buttonStartGame;
   public TMP_Text txtStartGame;
+  public TMP_Text txtDescription;
+  public RectTransform containerGameFacts;
+  public GameObject optionCustomQueue;
   public GameObject pfabFriend;
   public UIOnHover[] groupLadder;
   public UIOnHover[] groupPlayers;
@@ -34,12 +37,14 @@ public class RatedTab : MonoBehaviour
   public UIOnHover[] groupArmageddon;
   public UIOnHover[] groupTeams;
   public UIOnHover[] groupGameStyles;
+  public UIOnHover[] groupCustomQueue;
   [Header("Alternate settings")]
   public SpellImageList spellOverrides;
   public GameObject panelSpellOverrides;
   public UIOnHover[] alternateSettings;
   public Toggle toggleBroadcast;
-  private bool findingOpponents;
+  public GameObject panelDisabled;
+  private static bool findingOpponents;
   [Header("Disco")]
   public RectTransform discoBall;
   public Image discoPfab;
@@ -56,7 +61,11 @@ public class RatedTab : MonoBehaviour
   {
     get
     {
-      return (UnityEngine.Object) RatedTab.instance != (UnityEngine.Object) null && RatedTab.instance.findingOpponents;
+      return RatedTab.findingOpponents;
+    }
+    set
+    {
+      RatedTab.findingOpponents = value;
     }
   }
 
@@ -170,14 +179,14 @@ public class RatedTab : MonoBehaviour
     while ((double) cur < 60.0)
     {
       cur += Time.deltaTime;
-      if (!this.findingOpponents)
+      if (!RatedTab.findingOpponents)
         yield break;
       else
         yield return (object) 0;
     }
     this.discoBall.gameObject.SetActive(true);
     AudioManager.PlayMusic(this.discoMusic);
-    while (this.findingOpponents && (double) this.discoBall.anchoredPosition.y > -100.0)
+    while (RatedTab.findingOpponents && (double) this.discoBall.anchoredPosition.y > -100.0)
     {
       Vector2 anchoredPosition = this.discoBall.anchoredPosition;
       anchoredPosition.y -= Time.deltaTime * 100f;
@@ -188,7 +197,7 @@ public class RatedTab : MonoBehaviour
       yield return (object) null;
     }
     int i = 0;
-    while (this.findingOpponents && !this.closeDisco)
+    while (RatedTab.findingOpponents && !this.closeDisco)
     {
       ++i;
       if (i >= 1)
@@ -233,7 +242,7 @@ public class RatedTab : MonoBehaviour
       Client._ratedFacts.list.Clear();
       Client._ratedFacts.list.Add(r);
     }
-    if (this.findingOpponents)
+    if (RatedTab.findingOpponents)
       Client.AskToFindOpponents(false);
     this.gameObject.SetActive(true);
     this.RefreshGameOptions();
@@ -290,11 +299,16 @@ public class RatedTab : MonoBehaviour
     Client.AskToChangeGameMode(GameFacts.Message.Team, x);
   }
 
+  public void AskToChangeGameModeCustomQueue(int x)
+  {
+    Client.AskToChangeGameMode(GameFacts.Message.CustomQueue, x);
+  }
+
   public void FindOpponents(bool v)
   {
     this.periods = 0;
     this.txtStartGame.text = v ? "Searching" : "FIND OPPONENT";
-    this.findingOpponents = v;
+    RatedTab.findingOpponents = v;
     LobbyMenu.instance?.panelFindingOpponents.SetActive(v);
     if (!v)
       return;
@@ -394,6 +408,14 @@ public class RatedTab : MonoBehaviour
         if (!Enum.IsDefined(typeof (ZGame.GameType), (object) mode))
           return;
         ratedFacts.gameType = mode;
+        if (ratedFacts.customQueue != 0)
+        {
+          ratedFacts.customQueue = mode + 1;
+          break;
+        }
+        break;
+      case GameFacts.Message.CustomQueue:
+        ratedFacts.customQueue = mode != 0 ? ratedFacts.gameType + 1 : 0;
         break;
       default:
         return;
@@ -418,6 +440,7 @@ public class RatedTab : MonoBehaviour
     this.ToggleAll(this.groupArmageddon);
     this.ToggleAll(this.groupTeams);
     this.ToggleAll(this.groupGameStyles);
+    this.ToggleAll(this.groupCustomQueue);
     this.ToggleAll(this.alternateSettings);
     this.panelInfoAltSettings.SetActive(Client._ratedFacts.list.Count > 1);
     if (this._ratedFacts.turnTime == -1)
@@ -498,6 +521,10 @@ public class RatedTab : MonoBehaviour
       if ((extraOptions & 65536) != 0)
         this.groupGameStyles[8].AlwaysOn = true;
     }
+    this.groupCustomQueue[this._ratedFacts.customQueue == 0 ? 0 : 1].AlwaysOn = true;
+    this.optionCustomQueue.SetActive(Server._preGameFacts != null && Server._preGameFacts[this._ratedFacts.gameType] != null);
+    this.txtDescription.text = Server._preGameFacts == null || Server._preGameFacts[this._ratedFacts.gameType] == null ? "" : Server._preGameFacts[this._ratedFacts.gameType].settings.description;
+    this.panelDisabled.SetActive((uint) this._ratedFacts.customQueue > 0U);
     this.groupLadder[Mathf.Clamp(this._ratedFacts.gameType, 0, 2)].AlwaysOn = true;
     if (this._ratedFacts.playerCount == -1)
     {
@@ -553,6 +580,26 @@ public class RatedTab : MonoBehaviour
 
   public void ClickInvitePlayers()
   {
+  }
+
+  public void ClickViewCustomQueue()
+  {
+    if (Server._preGameFacts == null || Server._preGameFacts[this._ratedFacts.gameType] == null)
+    {
+      MyToolTip.Show("No preset settings exist for this ladder", -1f);
+    }
+    else
+    {
+      UnratedTab.Popup(this.containerGameFacts, Server._preGameFacts[this._ratedFacts.gameType]);
+      this.containerGameFacts.gameObject.SetActive(true);
+    }
+  }
+
+  public void HideCustomQueue()
+  {
+    if ((UnityEngine.Object) UnratedTab.instance != (UnityEngine.Object) null)
+      UnityEngine.Object.Destroy((UnityEngine.Object) UnratedTab.instance.gameObject);
+    this.containerGameFacts.gameObject.SetActive(false);
   }
 
   public void ClickSpellOverrides()
@@ -625,33 +672,35 @@ public class RatedTab : MonoBehaviour
 
   public void ClickStartGame()
   {
-    if (!this.findingOpponents)
+    if (!RatedTab.findingOpponents)
     {
       int num = 0;
       foreach (RatedFacts ratedFacts in Client._ratedFacts.list)
       {
         ++num;
-        int gameType = ratedFacts.gameType;
-        if (ratedFacts.gameType == 2 && (ratedFacts.extraOptions & 10) == 0)
+        if (ratedFacts.customQueue <= 0 || Server._preGameFacts[ratedFacts.customQueue - 1].GetStyle().HasStyle(GameStyle.Original_Spells_Only))
         {
-          if (!((UnityEngine.Object) ChatBox.Instance != (UnityEngine.Object) null))
+          if (ratedFacts.gameType == 2 && (ratedFacts.extraOptions & 10) == 0)
+          {
+            if (!((UnityEngine.Object) ChatBox.Instance != (UnityEngine.Object) null))
+              return;
+            ChatBox.Instance.NewChatMsg("", "You must search for Random Spells and/or Elementals in the Party Mode queue.", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
             return;
-          ChatBox.Instance.NewChatMsg("", "You must search for Random Spells and/or Elementals in the Party Mode queue.", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
-          return;
-        }
-        if ((ratedFacts.extraOptions & 16) != 0 && (ratedFacts.spellOverrides != null ? Server.OriginalSpellsOnly(GameStyle.Original_Spells_Only, ratedFacts.spellOverrides) : Server.OriginalSpellsOnly(GameStyle.Original_Spells_Only, Client.settingsPlayer)))
-        {
-          ChatBox.Instance.NewChatMsg("You have original spells enabled, but have non-original spells in your settings profile { " + (object) num + " } !!!!", (Color) ColorScheme.GetColor(Global.ColorSystem));
-          return;
+          }
+          if ((ratedFacts.customQueue != 0 || (ratedFacts.extraOptions & 16) != 0) && (ratedFacts.spellOverrides != null ? Server.OriginalSpellsOnly(GameStyle.Original_Spells_Only, ratedFacts.spellOverrides) : Server.OriginalSpellsOnly(GameStyle.Original_Spells_Only, Client.settingsPlayer)))
+          {
+            ChatBox.Instance.NewChatMsg("You have original spells enabled, but have non-original spells in your settings profile { " + (object) num + " } !!!!", (Color) ColorScheme.GetColor(Global.ColorSystem));
+            return;
+          }
         }
       }
     }
-    Client.AskToFindOpponents(!this.findingOpponents);
+    Client.AskToFindOpponents(!RatedTab.findingOpponents);
   }
 
   public void ClickReset()
   {
-    if (this.findingOpponents)
+    if (RatedTab.findingOpponents)
       return;
     Client._ratedFacts.list.Clear();
     Client._ratedFacts.AddDefault();

@@ -154,7 +154,9 @@ public class SettingsPlayer
       new SettingsPlayer.ByAchievement(163, Achievement.High_Mage_Partier),
       new SettingsPlayer.ByAchievement(164, Achievement.With_the_Fishies),
       new SettingsPlayer.ByAchievement(165, Achievement.Lord_of_Dragons),
-      new SettingsPlayer.ByAchievement(166, Achievement.Lord_of_Dragons)
+      new SettingsPlayer.ByAchievement(166, Achievement.Lord_of_Dragons),
+      new SettingsPlayer.ByAchievement(167, Achievement.Sand_Arcanists),
+      new SettingsPlayer.ByAchievement(170, Achievement.Divided_World)
     },
     new List<SettingsPlayer.ByAchievement>()
     {
@@ -170,7 +172,8 @@ public class SettingsPlayer
       new SettingsPlayer.ByAchievement(97, Achievement.High_Mage_Blitzer),
       new SettingsPlayer.ByAchievement(98, Achievement.Wrath_Wreaker),
       new SettingsPlayer.ByAchievement(99, Achievement.Swift_Arch_Mage),
-      new SettingsPlayer.ByAchievement(101, Achievement.Master_Diplomat)
+      new SettingsPlayer.ByAchievement(101, Achievement.Master_Diplomat),
+      new SettingsPlayer.ByAchievement(102, Achievement.Master_of_Sand)
     },
     new List<SettingsPlayer.ByAchievement>()
     {
@@ -285,7 +288,9 @@ public class SettingsPlayer
       new SettingsPlayer.ByAchievement(181, Achievement.Seasons_Arcanist),
       new SettingsPlayer.ByAchievement(182, Achievement.Guardian_of_Souls),
       new SettingsPlayer.ByAchievement(183, Achievement.Master_of_Nature),
-      new SettingsPlayer.ByAchievement(184, Achievement.Dust_to_Dust)
+      new SettingsPlayer.ByAchievement(184, Achievement.Dust_to_Dust),
+      new SettingsPlayer.ByAchievement(185, Achievement.Sand_Arcanists),
+      new SettingsPlayer.ByAchievement(189, Achievement.Divided_World)
     },
     new List<SettingsPlayer.ByAchievement>()
     {
@@ -348,7 +353,11 @@ public class SettingsPlayer
       new SettingsPlayer.ByAchievement(177, Achievement.With_the_Fishies),
       new SettingsPlayer.ByAchievement(178, Achievement.Fear_Me_),
       new SettingsPlayer.ByAchievement(179, Achievement.Acolyte),
-      new SettingsPlayer.ByAchievement(180, Achievement.Seasons_Arcanist)
+      new SettingsPlayer.ByAchievement(180, Achievement.Seasons_Arcanist),
+      new SettingsPlayer.ByAchievement(181, Achievement.Master_of_Sand),
+      new SettingsPlayer.ByAchievement(182, Achievement.Sand_Arcanists),
+      new SettingsPlayer.ByAchievement(183, Achievement.Master_of_Sand),
+      new SettingsPlayer.ByAchievement(184, Achievement.Divided_World)
     },
     new List<SettingsPlayer.ByAchievement>()
     {
@@ -366,7 +375,8 @@ public class SettingsPlayer
       new SettingsPlayer.ByAchievement(97, Achievement.High_Mage_Partier),
       new SettingsPlayer.ByAchievement(98, Achievement.Supreme_Arch_Mage),
       new SettingsPlayer.ByAchievement(99, Achievement.Miasma),
-      new SettingsPlayer.ByAchievement(100, Achievement.Lord_of_Dragons)
+      new SettingsPlayer.ByAchievement(100, Achievement.Lord_of_Dragons),
+      new SettingsPlayer.ByAchievement(101, Achievement.Target_Practice)
     }
   };
   public static List<SettingsPlayer.Seasonal> seasonHalloween = new List<SettingsPlayer.Seasonal>()
@@ -536,13 +546,15 @@ public class SettingsPlayer
     new List<SettingsPlayer.ByRole>()
     {
       new SettingsPlayer.ByRole(89, AccountType.Arcane_Monster),
-      new SettingsPlayer.ByRole(SettingsPlayer.brine_body, AccountType.Lifetime)
+      new SettingsPlayer.ByRole(SettingsPlayer.brine_body, AccountType.Lifetime),
+      new SettingsPlayer.ByRole(169, AccountType.Arch_Donator | AccountType.Lifetime)
     },
     new List<SettingsPlayer.ByRole>()
     {
       new SettingsPlayer.ByRole(74, AccountType.Arcane_Monster),
       new SettingsPlayer.ByRole(75, AccountType.Arcane_Monster),
-      new SettingsPlayer.ByRole(SettingsPlayer.brine_head, AccountType.Lifetime)
+      new SettingsPlayer.ByRole(SettingsPlayer.brine_head, AccountType.Lifetime),
+      new SettingsPlayer.ByRole(104, AccountType.Arch_Donator | AccountType.Lifetime)
     },
     new List<SettingsPlayer.ByRole>()
     {
@@ -567,7 +579,8 @@ public class SettingsPlayer
       new SettingsPlayer.ByRole(108, AccountType.Arcane_Monster),
       new SettingsPlayer.ByRole(111, AccountType.Asset_Creator),
       new SettingsPlayer.ByRole(155, AccountType.Audio_Wizard),
-      new SettingsPlayer.ByRole(SettingsPlayer.brine_hand, AccountType.Lifetime)
+      new SettingsPlayer.ByRole(SettingsPlayer.brine_hand, AccountType.Lifetime),
+      new SettingsPlayer.ByRole(188, AccountType.Donator | AccountType.Arch_Donator | AccountType.Lifetime)
     },
     new List<SettingsPlayer.ByRole>()
     {
@@ -1460,12 +1473,12 @@ public class SettingsPlayer
       if (clanOutfit != null && clanOutfit.outfits != null && (clanOutfit.outfits[1] != null && clanOutfit.outfits[1].effect == (byte) 1))
         return true;
     }
-    return SettingsPlayer.BeardNoMouth(sp.indexBeard) || SettingsPlayer.BeardNoMouth(sp.indexBeard2) || (SettingsPlayer.BeardNoMouth(sp.indexBeard3) || (int) indexHead == SettingsPlayer.sno_head) || ((int) indexHead == SettingsPlayer.sno_head2 || (int) indexHead == SettingsPlayer.sno_head3 || ((int) indexHead == SettingsPlayer.sno_head4 || indexHead == (byte) 76)) || (indexHead == (byte) 77 || indexHead == (byte) 78 || (indexHead == (byte) 94 || (int) sp.indexHead == SettingsPlayer.brine_head) || (sp.indexHead == (byte) 69 || sp.indexHead == (byte) 71 || (sp.indexHead == (byte) 81 || (int) sp.indexBody == SettingsPlayer.sno_body2))) || (indexHead == (byte) 73 || indexHead == (byte) 92 || indexHead == (byte) 99) || indexHead == (byte) 100;
+    return SettingsPlayer.BeardNoMouth(sp.indexBeard) || SettingsPlayer.BeardNoMouth(sp.indexBeard2) || (SettingsPlayer.BeardNoMouth(sp.indexBeard3) || (int) indexHead == SettingsPlayer.sno_head) || ((int) indexHead == SettingsPlayer.sno_head2 || (int) indexHead == SettingsPlayer.sno_head3 || ((int) indexHead == SettingsPlayer.sno_head4 || indexHead == (byte) 76)) || (indexHead == (byte) 77 || indexHead == (byte) 78 || (indexHead == (byte) 94 || (int) sp.indexHead == SettingsPlayer.brine_head) || (sp.indexHead == (byte) 69 || sp.indexHead == (byte) 71 || (sp.indexHead == (byte) 81 || (int) sp.indexBody == SettingsPlayer.sno_body2))) || (indexHead == (byte) 73 || indexHead == (byte) 92 || (indexHead == (byte) 99 || indexHead == (byte) 100)) || indexHead == (byte) 104;
   }
 
   private static bool BeardNoMouth(byte i)
   {
-    return i == (byte) 55 || i == (byte) 72 || (i == (byte) 77 || i == (byte) 53) || (i == (byte) 65 || i == (byte) 69 || (i == (byte) 94 || i == (byte) 99)) || i == (byte) 100;
+    return i == (byte) 55 || i == (byte) 72 || (i == (byte) 77 || i == (byte) 53) || (i == (byte) 65 || i == (byte) 69 || (i == (byte) 94 || i == (byte) 99)) || i == (byte) 100 || i == (byte) 101;
   }
 
   public void VerifyOutfit(Cosmetics cosmetics, Account a = null)

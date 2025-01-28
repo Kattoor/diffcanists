@@ -1,6 +1,7 @@
 
 using Educative;
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class Spell : Entity, ISpellBridge
@@ -21,6 +22,22 @@ public class Spell : Entity, ISpellBridge
   public Effector effector;
   internal int spellIndex;
   private Renderer _renderer;
+
+  public void ScaleToZero()
+  {
+    this.StartCoroutine(this._ScaleToZero());
+  }
+
+  private IEnumerator _ScaleToZero()
+  {
+    Spell spell = this;
+    while ((double) spell.transform.localScale.y > 0.0)
+    {
+      float num = spell.transform.localScale.y - Time.deltaTime;
+      spell.transform.localScale = new Vector3(num, num, num);
+      yield return (object) null;
+    }
+  }
 
   public int radius
   {
@@ -346,6 +363,14 @@ public class Spell : Entity, ISpellBridge
     get
     {
       return this.runTimeStats.destroyTerrainBounces;
+    }
+  }
+
+  public int maxSandDamage
+  {
+    get
+    {
+      return this.runTimeStats.maxSandDamage;
     }
   }
 

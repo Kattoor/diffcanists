@@ -42,6 +42,8 @@ public class AudioManager : MonoBehaviour
   public AudioClip leapHit;
   public AudioClip stalkAppear;
   public AudioClip[] turnStart;
+  public AudioClip turnEnd;
+  public AudioClip turnEndCountdown;
   [Header("Music")]
   public AudioClip musicMainMenu;
   public AudioClip musicCredits;
@@ -57,6 +59,7 @@ public class AudioManager : MonoBehaviour
   public AudioSource sourceChargeSpell;
   public AudioSource sourceCastSpell;
   public AudioSource sourcePickupMusic;
+  public AudioSource sourceTurnEnd;
   private int curIndex;
   private int curIndexNapalm;
 
@@ -263,5 +266,29 @@ public class AudioManager : MonoBehaviour
   private void OnDestroy()
   {
     AudioManager.instance = (AudioManager) null;
+  }
+
+  public static void Timer(float f)
+  {
+    if ((double) f >= (double) AudioManager.TurnTimer._lastTime || (double) f <= 0.0)
+      return;
+    AudioManager.TurnTimer._lastTime = Mathf.Floor(f - 0.1f);
+    if ((double) AudioManager.TurnTimer._lastTime == 0.0 && (Object) AudioManager.instance.sourceTurnEnd.clip != (Object) AudioManager.instance.turnEnd)
+      AudioManager.TurnTimer._lastTime = 0.4f;
+    Debug.Log((object) ("Time: " + (object) f));
+    AudioManager.instance.sourceTurnEnd.volume = PlayerPrefs.GetFloat("turnendsound", 1f);
+    AudioManager.instance.sourceTurnEnd.clip = (double) f <= 0.5 ? AudioManager.instance.turnEnd : AudioManager.instance.turnEndCountdown;
+    AudioManager.instance.sourceTurnEnd.Play();
+  }
+
+  public static class TurnTimer
+  {
+    public static float _lastTime = -1f;
+
+    public static void NextTurn(ZGame g)
+    {
+      AudioManager.TurnTimer._lastTime = Mathf.Floor(Mathf.Clamp((float) (((double) g.PlayersMaxTurnTime - 1.0) / 2.0), 2f, 5f));
+      AudioManager.instance.sourceTurnEnd.Stop();
+    }
   }
 }

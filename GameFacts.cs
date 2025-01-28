@@ -27,6 +27,7 @@ public class GameFacts
   public double lastChange;
   public int serverStartTime;
   public bool tournamentWasSetByTO;
+  public int customQueue;
   public byte status;
   public const byte status_Not_Started = 0;
   public const byte status_Starting = 1;
@@ -192,11 +193,18 @@ public class GameFacts
 
   public void CalculateGameType()
   {
-    int timeInSeconds = this.GetTimeInSeconds();
-    if (this.IsNonStandard() || timeInSeconds < 7 || (timeInSeconds > 90 || this.armageddonTurn != (byte) 10) || (this.startHealth != (ushort) 250 || this.restrictions != null && this.restrictions.AnyRestricted()) || (this.GetArmageddon() != ~MapEnum.Dont_Mind || this.settings.customArmageddon != null))
-      this.gameType = ZGame.GameType.Party;
+    if (this.customQueue > 0)
+    {
+      this.gameType = (ZGame.GameType) (this.customQueue - 1);
+    }
     else
-      this.gameType = this.GetTimeInSeconds() < 30 ? ZGame.GameType.LowStandard : ZGame.GameType.HighStandard;
+    {
+      int timeInSeconds = this.GetTimeInSeconds();
+      if (this.IsNonStandard() || timeInSeconds < 7 || (timeInSeconds > 90 || this.armageddonTurn != (byte) 10) || (this.startHealth != (ushort) 250 || this.restrictions != null && this.restrictions.AnyRestricted()) || (this.GetArmageddon() != ~MapEnum.Dont_Mind || this.settings.customArmageddon != null))
+        this.gameType = ZGame.GameType.Party;
+      else
+        this.gameType = this.GetTimeInSeconds() < 30 ? ZGame.GameType.LowStandard : ZGame.GameType.HighStandard;
+    }
   }
 
   public static bool AllowCustomArmageddon(SpellEnum s)
@@ -232,6 +240,17 @@ public class GameFacts
     }
     else
       stringBuilder.Append("Armageddon: ").Append(g == null ? GameFacts.ArmageddonName(this.GetArmageddon(), style) : GameFacts.ArmageddonName(g.armageddon, style)).Append(g == null || g.armageddon != MapEnum.Grassy_Hills ? " (turn " + (object) this.armageddonTurn + ")<br>" : "<br>");
+    if (this.settings.autoInclude != null && this.settings.autoInclude.Count > 0)
+    {
+      stringBuilder.Append("Auto Included: ");
+      foreach (SpellEnum s in this.settings.autoInclude)
+      {
+        Spell spell = Inert.GetSpell(s);
+        if ((UnityEngine.Object) spell != (UnityEngine.Object) null && spell.level <= 3)
+          stringBuilder.Append("<sprite name=\"" + spell.name + "\">");
+      }
+      stringBuilder.Append("<br>");
+    }
     if (g == null)
       stringBuilder.Append("Players: ").Append(this.players.Count).Append("/").Append(this.customPlayerCount.ToString()).Append("<br>");
     else
@@ -482,24 +501,24 @@ public class GameFacts
 
   public void SetMapMode(MapEnum e)
   {
-    this.gameModes4 &= -1207928433;
+    this.gameModes4 &= -1342146161;
     this.gameModes4 = (int) ((MapEnum) this.gameModes4 | e);
   }
 
   public void SetArmageddon(MapEnum e)
   {
-    this.gameModes3 &= -1207928433;
+    this.gameModes3 &= -1342146161;
     this.gameModes3 = (int) ((MapEnum) this.gameModes3 | e);
   }
 
   public void ActivateAllMaps()
   {
-    this.gameModes4 |= 1207927920;
+    this.gameModes4 |= 1342145648;
   }
 
   public void ActivateAlArmageddons()
   {
-    this.gameModes3 |= 1207928432;
+    this.gameModes3 |= 1342146160;
   }
 
   public void SetPlayersPerTeam(PlayersPerTeam e)
@@ -567,12 +586,12 @@ public class GameFacts
 
   public MapEnum GetMapMode()
   {
-    return (MapEnum) (this.gameModes4 & 1207928432);
+    return (MapEnum) (this.gameModes4 & 1342146160);
   }
 
   public MapEnum GetArmageddon()
   {
-    return (MapEnum) (this.gameModes3 & 1207928432);
+    return (MapEnum) (this.gameModes3 & 1342146160);
   }
 
   public static int AllMaps()
@@ -825,6 +844,8 @@ public class GameFacts
         return "Alien";
       case MapEnum.Ghostly_Halls:
         return "Halls";
+      case MapEnum.Desert:
+        return "Desert";
       case MapEnum.Space_Nexus:
         return "Nexus";
       default:
@@ -872,6 +893,8 @@ public class GameFacts
         return "Alien World";
       case MapEnum.Ghostly_Halls:
         return "Ghostly Halls";
+      case MapEnum.Desert:
+        return "Desert";
       case MapEnum.Space_Nexus:
         return "Space Nexus";
       default:
@@ -917,6 +940,8 @@ public class GameFacts
         return "Shooting Stars";
       case MapEnum.Ghostly_Halls:
         return "Duplication";
+      case MapEnum.Desert:
+        return "Burning Sands";
       case MapEnum.Space_Nexus:
         return "Arcane Meteor";
       default:
@@ -962,6 +987,8 @@ public class GameFacts
         return "Stars";
       case MapEnum.Ghostly_Halls:
         return "Dupe";
+      case MapEnum.Desert:
+        return "Burning";
       case MapEnum.Space_Nexus:
         return "Meteor";
       default:
@@ -1009,6 +1036,8 @@ public class GameFacts
         return MapEnum.Alien_World;
       case 17:
         return MapEnum.Ghostly_Halls;
+      case 18:
+        return MapEnum.Desert;
       default:
         return ~MapEnum.Dont_Mind;
     }
@@ -1052,6 +1081,8 @@ public class GameFacts
         return 16;
       case MapEnum.Ghostly_Halls:
         return 17;
+      case MapEnum.Desert:
+        return 18;
       case MapEnum.Space_Nexus:
         return 14;
       default:
@@ -1110,5 +1141,10 @@ public class GameFacts
     GameType = 27, // 0x1B
     Custom_Armageddon = 28, // 0x1C
     Remove_Custom_Armageddon = 29, // 0x1D
+    Alternate_Generation = 30, // 0x1E
+    Water = 31, // 0x1F
+    AutoInclude = 32, // 0x20
+    Remove_AutoInclude = 33, // 0x21
+    CustomQueue = 34, // 0x22
   }
 }

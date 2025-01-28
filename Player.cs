@@ -332,6 +332,22 @@ public class Player : MonoBehaviour
     ClickSpell.Instance.OnPointerEnter(i);
   }
 
+  public void ForceSelect(ZCreature c)
+  {
+    this.UnselectSpell();
+    int id = (int) c.parent.id;
+    int index = c.parent.controlled.FindIndex((Predicate<ZCreature>) (z => (ZComponent) z == (object) c));
+    if (index == -1)
+      return;
+    this.selectedCreaturePlayerOffset = id;
+    this.selectedCreatureIndex = index;
+    this.selected = c;
+    CameraMovement.Instance.LerpToTransform(this.selected, false);
+    this.UpdateVisuals();
+    this.UnselectSpell();
+    AudioManager.Play(this.selected.clientObj.clipSelect);
+  }
+
   public void NextControlled(bool fromDeath = false, bool audio = true)
   {
     do
@@ -726,7 +742,7 @@ label_1:
       this.mouseWorldPos.y = 0.0f;
     this.meter_subs[4].transform.position = this.mouseWorldPos;
     this.meter_subs[4].SetActive(true);
-    if (selectedSpell.spellEnum == SpellEnum.Arcane_Gate || selectedSpell.spellEnum == SpellEnum.Santas_Magic || (selectedSpell.spellEnum == SpellEnum.Dive || selectedSpell.spellEnum == SpellEnum.Blink))
+    if (selectedSpell.spellEnum == SpellEnum.Arcane_Gate || selectedSpell.spellEnum == SpellEnum.Santas_Magic || (selectedSpell.spellEnum == SpellEnum.Sands_of_Time || selectedSpell.spellEnum == SpellEnum.Dive) || (selectedSpell.spellEnum == SpellEnum.Blink || selectedSpell.spellEnum == SpellEnum.Burrow))
       ((RectTransform) this.meter_subs[4].transform).sizeDelta = new Vector2((float) ((!((ZComponent) this.selected.tower != (object) null) || this.selected.tower.type != TowerType.Arcane ? this.selected.radius : 32) * 2), (float) ((!((ZComponent) this.selected.tower != (object) null) || this.selected.tower.type != TowerType.Arcane ? this.selected.radius : 32) * 2));
     else if (selectedSpell.spellEnum == SpellEnum.Arcane_Portal)
     {
@@ -736,6 +752,11 @@ label_1:
     else if (selectedSpell.spellEnum == SpellEnum.Wormhole)
     {
       int num = radius * 2 + 2;
+      ((RectTransform) this.meter_subs[4].transform).sizeDelta = new Vector2((float) num, (float) num);
+    }
+    else if (selectedSpell.spellEnum == SpellEnum.Consume)
+    {
+      int num = radius * 2 + (this.selected.radius - 18);
       ((RectTransform) this.meter_subs[4].transform).sizeDelta = new Vector2((float) num, (float) num);
     }
     else
@@ -1027,26 +1048,36 @@ label_1:
     string name = "Zezima",
     int team = 1,
     SettingsPlayer spDefault = null,
-    bool onPlayerPanel = true)
+    bool onPlayerPanel = true,
+    int prestige = 0)
   {
     ZPerson zperson = new ZPerson();
-    zperson.account.prestige = (byte) 5;
+    zperson.account.prestige = (byte) prestige;
     SettingsPlayer sp = spDefault ?? new SettingsPlayer();
     if (spDefault == null)
     {
-      string path = SaveFolder.persistentDataPath + Path.DirectorySeparatorChar.ToString() + "SavedSpells" + Path.DirectorySeparatorChar.ToString() + name + ".spellBook";
+      string[] strArray1 = new string[6];
+      strArray1[0] = SaveFolder.persistentDataPath;
+      char directorySeparatorChar = Path.DirectorySeparatorChar;
+      strArray1[1] = directorySeparatorChar.ToString();
+      strArray1[2] = "SavedSpells";
+      directorySeparatorChar = Path.DirectorySeparatorChar;
+      strArray1[3] = directorySeparatorChar.ToString();
+      strArray1[4] = name;
+      strArray1[5] = ".spellBook";
+      string path = string.Concat(strArray1);
       SettingsPlayer b1 = File.Exists(path) ? SettingsPlayer.Load(path) : Client.settingsPlayer;
       sp.CopySpells(b1, false);
-      string[] strArray = new string[6];
-      strArray[0] = SaveFolder.persistentDataPath;
-      char directorySeparatorChar = Path.DirectorySeparatorChar;
-      strArray[1] = directorySeparatorChar.ToString();
-      strArray[2] = "SavedOutfits";
+      string[] strArray2 = new string[6];
+      strArray2[0] = SaveFolder.persistentDataPath;
       directorySeparatorChar = Path.DirectorySeparatorChar;
-      strArray[3] = directorySeparatorChar.ToString();
-      strArray[4] = name;
-      strArray[5] = ".outfit";
-      SettingsPlayer b2 = SettingsPlayer.Load(string.Concat(strArray));
+      strArray2[1] = directorySeparatorChar.ToString();
+      strArray2[2] = "SavedOutfits";
+      directorySeparatorChar = Path.DirectorySeparatorChar;
+      strArray2[3] = directorySeparatorChar.ToString();
+      strArray2[4] = name;
+      strArray2[5] = ".outfit";
+      SettingsPlayer b2 = SettingsPlayer.Load(string.Concat(strArray2));
       sp.CopyOutfit(b2);
     }
     zperson.name = name;
@@ -1531,7 +1562,7 @@ label_1:
               else
                 this.NextSpell();
             }
-            if (!this.selected.stunned && (!this.movedThisTurn || (ZComponent) this.selected.tower == (object) null || this.selected.tower.type != TowerType.Cosmos))
+            if ((ZComponent) this.selected != (object) null && !this.selected.stunned && (!this.movedThisTurn || (ZComponent) this.selected.tower == (object) null || this.selected.tower.type != TowerType.Cosmos))
             {
               if (this.selected.minerMarket != null && this.selected.minerMarket.Has(MinerMarket.Types.Platinum_Climbing_Hooks) && ((UnityEngine.Object) this.selectedSpell == (UnityEngine.Object) null && MyInput.GetMouseButton(0)) && (!Player.IsPointerOverGameObject(0) && (!HUD.UseTouchControls || !HUD.instance.PressingOnScreenControl)))
                 this.SendMove((byte) 211);

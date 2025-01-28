@@ -114,7 +114,7 @@ label_29:
           zspellConductorRod.game.ongoing.RunSpell(ZSpell.IEnumeratorLightningStrike(zspellConductorRod.parent, new MyLocation(zspellConductorRod.position.x, (FixedInt) zspellConductorRod.map.Height), -30, 30, amount, true, (int) zspellConductorRod.position.x, (int) zspellConductorRod.position.y, zspellConductorRod.hitCreature), true);
         }
         else if (zspellConductorRod.spellEnum == SpellEnum.Collision_Course)
-          ZSpell.BaseFire(Inert.GetSpell(SpellEnum.Starfire), zspellConductorRod.parent, new MyLocation(zspellConductorRod.position.x, (FixedInt) (zspellConductorRod.parent.game.map.Height + 1000)), Quaternion.identity, new MyLocation(0, -40), true, false);
+          ZSpell.BaseFire(Inert.GetSpell(SpellEnum.Starfire), zspellConductorRod.parent, new MyLocation(zspellConductorRod.position.x, (FixedInt) (zspellConductorRod.parent.game.map.Height + 1000)), Quaternion.identity, new MyLocation(0, -40), true, false, true);
         if (zspellConductorRod.game.AllowExpansion && (ZComponent) zspellConductorRod.parent != (object) null || zspellConductorRod.spellEnum == SpellEnum.Collision_Course)
         {
           ZEffector effector = zspellConductorRod.effector;

@@ -11,7 +11,7 @@ public class pfabName : MonoBehaviour, IPointerClickHandler, IEventSystemHandler
   {
     (Color) new Color32((byte) 73, (byte) 73, (byte) 73, byte.MaxValue),
     (Color) new Color32((byte) 0, byte.MaxValue, (byte) 0, byte.MaxValue),
-    (Color) new Color32((byte) 100, (byte) 100, byte.MaxValue, byte.MaxValue)
+    (Color) new Color32((byte) 115, (byte) 100, byte.MaxValue, byte.MaxValue)
   };
   public TMP_Text txtName;
   public TMP_Text txtRating;

@@ -73,7 +73,7 @@ label_43:
                   for (int index3 = 0; index3 < 4; ++index3)
                   {
                     MyLocation power = Inert.Velocity(zspellMeteor.game.RandomFixedInt(0, 360), 15);
-                    ZSpell.BaseFire(component, zspellMeteor.parent, zspellMeteor.position, Quaternion.identity, power, true, false);
+                    ZSpell.BaseFire(component, zspellMeteor.parent, zspellMeteor.position, Quaternion.identity, power, true, false, true);
                   }
                 }
                 if (zspellMeteor.spellEnum == SpellEnum.Fire_Cannon)

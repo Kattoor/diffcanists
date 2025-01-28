@@ -124,7 +124,7 @@ label_46:
         break;
       }
       if (zspellMechanicalArrow.curDuration % 30 == 0)
-        ZSpell.BaseFire(zspellMechanicalArrow.toSummon.GetComponent<Spell>(), zspellMechanicalArrow.parent, zspellMechanicalArrow.position, Quaternion.identity, new MyLocation(0, -5), true, false);
+        ZSpell.BaseFire(zspellMechanicalArrow.toSummon.GetComponent<Spell>(), zspellMechanicalArrow.parent, zspellMechanicalArrow.position, Quaternion.identity, new MyLocation(0, -5), true, false, true);
       yield return 0.0f;
     }
   }

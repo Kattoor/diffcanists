@@ -5120,11 +5120,11 @@ label_19:
         Inert.Instance.Splash((Vector3) this.position.ToSinglePrecision(), (float) this.radius);
         if (this.spellEnum == SpellEnum.Summon_Snowman || this.spellEnum == SpellEnum.Summon_Snowman2)
         {
-          ZSpell zspell1 = ZSpell.BaseFire(Inert.Instance.spells["Snowball"], this.parent.first(), this.position, Quaternion.identity, Inert.Velocity((FixedInt) -90, 1), true, false);
+          ZSpell zspell1 = ZSpell.BaseFire(Inert.Instance.spells["Snowball"], this.parent.first(), this.position, Quaternion.identity, Inert.Velocity((FixedInt) -90, 1), true, false, true);
           zspell1.curDuration = zspell1.maxDuration;
-          ZSpell zspell2 = ZSpell.BaseFire(Inert.Instance.spells["Snowball"], this.parent.first(), this.position, Quaternion.identity, Inert.Velocity((FixedInt) -45, 1), true, false);
+          ZSpell zspell2 = ZSpell.BaseFire(Inert.Instance.spells["Snowball"], this.parent.first(), this.position, Quaternion.identity, Inert.Velocity((FixedInt) -45, 1), true, false, true);
           zspell2.curDuration = zspell2.maxDuration;
-          ZSpell zspell3 = ZSpell.BaseFire(Inert.Instance.spells["Snowball"], this.parent.first(), this.position, Quaternion.identity, Inert.Velocity((FixedInt) -135, 1), true, false);
+          ZSpell zspell3 = ZSpell.BaseFire(Inert.Instance.spells["Snowball"], this.parent.first(), this.position, Quaternion.identity, Inert.Velocity((FixedInt) -135, 1), true, false, true);
           zspell3.curDuration = zspell3.maxDuration;
         }
         this.OnDeath(true);

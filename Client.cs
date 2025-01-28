@@ -63,7 +63,7 @@ public static class Client
   public static string identifier = "";
   public static string NameOrReplay = "";
   public static string currentIP = "";
-  public static string serverIP = "45.92.39.181";
+  public static string serverIP = "45.92.39.111";
   public static string serverURL = "play.arcanists2.com";
   public static byte[] cryp = (byte[]) null;
   public static int port = 43594;

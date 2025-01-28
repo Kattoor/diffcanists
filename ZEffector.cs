@@ -848,14 +848,14 @@ public class ZEffector : ZComponent
           break;
         case EffectorType.Vine_Bloom:
           MyLocation position3 = this.whoSummoned.position;
-          this.SetVineThorn66(ZSpell.BaseFire(Inert.Instance.VineBloomThorn, this.whoSummoned, position3, Quaternion.identity, Inert.Velocity(this.game.RandomFixedInt(45, 135), this.game.RandomInt(15, 25)), true, false));
-          this.SetVineThorn66(ZSpell.BaseFire(Inert.Instance.VineBloomThorn, this.whoSummoned, position3, Quaternion.identity, Inert.Velocity(this.game.RandomFixedInt(45, 135), this.game.RandomInt(15, 25)), true, false));
-          this.SetVineThorn66(ZSpell.BaseFire(Inert.Instance.VineBloomThorn, this.whoSummoned, position3, Quaternion.identity, Inert.Velocity(this.game.RandomFixedInt(45, 135), this.game.RandomInt(15, 25)), true, false));
-          this.SetVineThorn66(ZSpell.BaseFire(Inert.Instance.VineBloomThorn, this.whoSummoned, position3, Quaternion.identity, Inert.Velocity(this.game.RandomFixedInt(45, 135), this.game.RandomInt(15, 25)), true, false));
-          this.SetVineThorn66(ZSpell.BaseFire(Inert.Instance.VineBloomVine, this.whoSummoned, position3, Quaternion.identity, Inert.Velocity(this.game.RandomFixedInt(45, 135), this.game.RandomInt(15, 25)), true, false));
-          this.SetVineThorn66(ZSpell.BaseFire(Inert.Instance.VineBloomVine, this.whoSummoned, position3, Quaternion.identity, Inert.Velocity(this.game.RandomFixedInt(45, 135), this.game.RandomInt(15, 25)), true, false));
-          this.SetVineThorn66(ZSpell.BaseFire(Inert.Instance.VineBloomVine, this.whoSummoned, position3, Quaternion.identity, Inert.Velocity(this.game.RandomFixedInt(45, 135), this.game.RandomInt(15, 25)), true, false));
-          this.SetVineThorn66(ZSpell.BaseFire(Inert.Instance.VineBloomVine, this.whoSummoned, position3, Quaternion.identity, Inert.Velocity(this.game.RandomFixedInt(45, 135), this.game.RandomInt(15, 25)), true, false));
+          this.SetVineThorn66(ZSpell.BaseFire(Inert.Instance.VineBloomThorn, this.whoSummoned, position3, Quaternion.identity, Inert.Velocity(this.game.RandomFixedInt(45, 135), this.game.RandomInt(15, 25)), true, false, true));
+          this.SetVineThorn66(ZSpell.BaseFire(Inert.Instance.VineBloomThorn, this.whoSummoned, position3, Quaternion.identity, Inert.Velocity(this.game.RandomFixedInt(45, 135), this.game.RandomInt(15, 25)), true, false, true));
+          this.SetVineThorn66(ZSpell.BaseFire(Inert.Instance.VineBloomThorn, this.whoSummoned, position3, Quaternion.identity, Inert.Velocity(this.game.RandomFixedInt(45, 135), this.game.RandomInt(15, 25)), true, false, true));
+          this.SetVineThorn66(ZSpell.BaseFire(Inert.Instance.VineBloomThorn, this.whoSummoned, position3, Quaternion.identity, Inert.Velocity(this.game.RandomFixedInt(45, 135), this.game.RandomInt(15, 25)), true, false, true));
+          this.SetVineThorn66(ZSpell.BaseFire(Inert.Instance.VineBloomVine, this.whoSummoned, position3, Quaternion.identity, Inert.Velocity(this.game.RandomFixedInt(45, 135), this.game.RandomInt(15, 25)), true, false, true));
+          this.SetVineThorn66(ZSpell.BaseFire(Inert.Instance.VineBloomVine, this.whoSummoned, position3, Quaternion.identity, Inert.Velocity(this.game.RandomFixedInt(45, 135), this.game.RandomInt(15, 25)), true, false, true));
+          this.SetVineThorn66(ZSpell.BaseFire(Inert.Instance.VineBloomVine, this.whoSummoned, position3, Quaternion.identity, Inert.Velocity(this.game.RandomFixedInt(45, 135), this.game.RandomInt(15, 25)), true, false, true));
+          this.SetVineThorn66(ZSpell.BaseFire(Inert.Instance.VineBloomVine, this.whoSummoned, position3, Quaternion.identity, Inert.Velocity(this.game.RandomFixedInt(45, 135), this.game.RandomInt(15, 25)), true, false, true));
           this.whoSummoned.OnDeath(true);
           break;
         case EffectorType.English_Summer:
@@ -1079,7 +1079,7 @@ public class ZEffector : ZComponent
           MyLocation pos2 = (ZComponent) this.spell.parent != (object) null ? this.spell.parent.position : this.position;
           int y2 = (int) pos2.y;
           pos2.y = (FixedInt) (this.map.Height + 1000);
-          ZSpell.BaseFire(Inert.GetSpell(SpellEnum.Starfire), this.whoSummoned, pos2, Quaternion.identity, new MyLocation(0, -40), true, true);
+          ZSpell.BaseFire(Inert.GetSpell(SpellEnum.Starfire), this.whoSummoned, pos2, Quaternion.identity, new MyLocation(0, -40), true, true, true);
           if (this.turnsAlive != 2)
             break;
           this.Die(indexInParent, destroyable, global);
@@ -2949,7 +2949,7 @@ label_52:
   {
     if (this.dead || ZComponent.IsNull((ZComponent) this))
       return;
-    ZSpell zspell = ZSpell.BaseFire(s, this.whoSummoned, this.position + new MyLocation(leftSide ? -100 : 100, 33), Quaternion.identity, !leftSide ? Inert.Velocity((FixedInt) 100, this.game.RandomFixedInt((FixedInt) s.speedMin, (FixedInt) s.speedMax)) : Inert.Velocity((FixedInt) 80, this.game.RandomFixedInt((FixedInt) s.speedMin, (FixedInt) s.speedMax)), true, true);
+    ZSpell zspell = ZSpell.BaseFire(s, this.whoSummoned, this.position + new MyLocation(leftSide ? -100 : 100, 33), Quaternion.identity, !leftSide ? Inert.Velocity((FixedInt) 100, this.game.RandomFixedInt((FixedInt) s.speedMin, (FixedInt) s.speedMax)) : Inert.Velocity((FixedInt) 80, this.game.RandomFixedInt((FixedInt) s.speedMin, (FixedInt) s.speedMax)), true, true, true);
     zspell.fromArmageddon = this.fromArmageddon;
     zspell.name = "Maelstrom";
   }
@@ -2959,7 +2959,7 @@ label_52:
     if (this.dead || ZComponent.IsNull((ZComponent) this))
       return;
     MyLocation myLocation = new MyLocation(this.variable > 0 ? -1000 : this.game.map.Width + 1000, this.game.map.Height + 100);
-    ZSpell zspell = ZSpell.BaseFire(s, this.whoSummoned, myLocation, Quaternion.identity, Inert.Velocity(Inert.AngleOfVectors(this.position, myLocation) + (angleVarience == 0 ? (FixedInt) 0 : this.game.RandomFixedInt(-angleVarience, angleVarience)), 40), true, true);
+    ZSpell zspell = ZSpell.BaseFire(s, this.whoSummoned, myLocation, Quaternion.identity, Inert.Velocity(Inert.AngleOfVectors(this.position, myLocation) + (angleVarience == 0 ? (FixedInt) 0 : this.game.RandomFixedInt(-angleVarience, angleVarience)), 40), true, true, true);
     zspell.fromArmageddon = this.fromArmageddon;
     zspell.name = "Shooting Stars";
   }
@@ -2968,7 +2968,7 @@ label_52:
   {
     if (this.dead || ZComponent.IsNull((ZComponent) this))
       return;
-    ZSpell zspell = ZSpell.BaseFire(s, this.whoSummoned, this.position + new MyLocation(this.game.RandomFixedInt(-30, 30), (FixedInt) 33), Quaternion.identity, Inert.Velocity((FixedInt) 90, this.game.RandomFixedInt((FixedInt) s.speedMin, (FixedInt) s.speedMax) - 2), true, true);
+    ZSpell zspell = ZSpell.BaseFire(s, this.whoSummoned, this.position + new MyLocation(this.game.RandomFixedInt(-30, 30), (FixedInt) 33), Quaternion.identity, Inert.Velocity((FixedInt) 90, this.game.RandomFixedInt((FixedInt) s.speedMin, (FixedInt) s.speedMax) - 2), true, true, true);
     zspell.fromArmageddon = this.fromArmageddon;
     zspell.name = "Maelstrom";
   }
@@ -2978,7 +2978,7 @@ label_52:
     if (this.dead || ZComponent.IsNull((ZComponent) this))
       return;
     FixedInt angle = this.game.RandomFixedInt(85, 95);
-    ZSpell zspell = ZSpell.BaseFire(s, this.whoSummoned, this.position + new MyLocation(0, 33), Quaternion.identity, Inert.Velocity(angle, this.game.RandomFixedInt((FixedInt) s.speedMax - 25, (FixedInt) s.speedMax + 5)), true, true);
+    ZSpell zspell = ZSpell.BaseFire(s, this.whoSummoned, this.position + new MyLocation(0, 33), Quaternion.identity, Inert.Velocity(angle, this.game.RandomFixedInt((FixedInt) s.speedMax - 25, (FixedInt) s.speedMax + 5)), true, true, true);
     zspell.fromArmageddon = this.fromArmageddon;
     if (!this.game.isClient)
       return;
@@ -2993,7 +2993,7 @@ label_52:
     if (this.dead || ZComponent.IsNull((ZComponent) this))
       return;
     MyLocation myLocation = Inert.Velocity(this.game.RandomFixedInt(80, 100), this.game.RandomFixedInt((FixedInt) s.speedMax - 5, (FixedInt) s.speedMax + 5));
-    ZSpell s1 = ZSpell.BaseFire(s, this.whoSummoned, this.position + new MyLocation(0, 33), Quaternion.identity, myLocation, false, true);
+    ZSpell s1 = ZSpell.BaseFire(s, this.whoSummoned, this.position + new MyLocation(0, 33), Quaternion.identity, myLocation, false, true, true);
     s1.fromArmageddon = this.fromArmageddon;
     s1.maxDuration = (int) this.game.RandomFixedInt(s1.maxDuration / 2, s1.maxDuration);
     ZSpell.UpgradeFullFire(this.whoSummoned, s1);
@@ -3011,7 +3011,7 @@ label_52:
     if (this.dead || ZComponent.IsNull((ZComponent) this))
       return;
     MyLocation myLocation = Inert.Velocity(this.game.RandomFixedInt(0, 360), this.game.RandomFixedInt((FixedInt) s.speedMax - 5, (FixedInt) s.speedMax + 5));
-    ZSpell zspell = ZSpell.BaseFire(s, this.whoSummoned, this.position + new MyLocation(0, 33), Quaternion.identity, myLocation, false, true);
+    ZSpell zspell = ZSpell.BaseFire(s, this.whoSummoned, this.position + new MyLocation(0, 33), Quaternion.identity, myLocation, false, true, true);
     zspell.fromArmageddon = this.fromArmageddon;
     zspell.maxDuration = (int) this.game.RandomFixedInt(zspell.maxDuration / 2, zspell.maxDuration);
     zspell.SetVelocity(myLocation);

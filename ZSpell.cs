@@ -498,7 +498,8 @@ public class ZSpell : ZEntity, ISpellBridge
     Quaternion rot,
     MyLocation power,
     bool setVelocity = true,
-    bool isChild = false)
+    bool isChild = false,
+    bool follow = true)
   {
     ZSpell zspell = ZSpell.Create(c.game, spell, (Vector3) pos.ToSinglePrecision(), spell.Rotates ? rot : Quaternion.identity, c.game.GetMapTransform(), c);
     zspell.game = c.game;
@@ -509,7 +510,7 @@ public class ZSpell : ZEntity, ISpellBridge
       zspell.fromArmageddon = true;
     if (setVelocity)
       zspell.SetVelocity(power);
-    if (zspell.game.isClient && !zspell.game.resyncing && CameraMovement.FOLLOWTARGETS)
+    if (((!zspell.game.isClient || zspell.game.resyncing ? 0 : (CameraMovement.FOLLOWTARGETS ? 1 : 0)) & (follow ? 1 : 0)) != 0)
       CameraMovement.followTargets.Enqueue((IFollowTarget) new FollowEntity((ZEntity) zspell));
     return zspell;
   }
@@ -4307,7 +4308,7 @@ label_27:
       MyLocation power = Inert.Velocity(angle + c.game.RandomFixedInt(-10485760L, 10485760L), speed);
       if (pos.x < c.GetPositionAI.x)
         power.x = -power.x;
-      ZSpell.BaseFire(spell, c, c.GetPositionAI, Quaternion.identity, power, true, false);
+      ZSpell.BaseFire(spell, c, c.GetPositionAI, Quaternion.identity, power, true, false, true);
       yield return 0.0f;
       yield return 0.0f;
       yield return 0.0f;
@@ -4339,7 +4340,7 @@ label_27:
         MyLocation power = Inert.Velocity(angle + c.game.RandomFixedInt(-5242880L, 5242880L), speed);
         if (target.x < start.x)
           power.x = -power.x;
-        ZSpell.BaseFire(theSpell, c, start, Quaternion.identity, power, true, false).maxDuration = 90;
+        ZSpell.BaseFire(theSpell, c, start, Quaternion.identity, power, true, false, true).maxDuration = 90;
         yield return 0.0f;
         yield return 0.0f;
         yield return 0.0f;
@@ -4524,7 +4525,7 @@ label_27:
     pos.x -= (FixedInt) (80 * (num1 / 2)) * fixedInt;
     for (int index = 0; index < num1; ++index)
     {
-      ZSpell.BaseFire(theSpell, c, pos, Quaternion.identity, power1, true, false);
+      ZSpell.BaseFire(theSpell, c, pos, Quaternion.identity, power1, true, false, true);
       pos.x += (FixedInt) 80 * fixedInt;
     }
   }
@@ -4570,7 +4571,7 @@ label_27:
     zero.x -= (FixedInt) (100 * (amount / 2)) * fixedInt;
     for (int index = 0; index < amount; ++index)
     {
-      ZSpell zspell = ZSpell.BaseFire(theSpell, c, zero, Quaternion.identity, power, true, false);
+      ZSpell zspell = ZSpell.BaseFire(theSpell, c, zero, Quaternion.identity, power, true, false, true);
       zspell.fromArmageddon = armageddon;
       zspell.affectedByGravity = false;
       zero.x += (FixedInt) 100 * fixedInt;
@@ -4592,7 +4593,7 @@ label_27:
     dir *= (FixedInt) theSpell.speedMax;
     for (int i = 0; i < amount; ++i)
     {
-      ZSpell.BaseFire(theSpell, c, new MyLocation(pos.x + c.game.RandomFixedInt(-100, 100), pos.y + c.game.RandomFixedInt(0, 25)), Quaternion.identity, dir, true, false).affectedByGravity = false;
+      ZSpell.BaseFire(theSpell, c, new MyLocation(pos.x + c.game.RandomFixedInt(-100, 100), pos.y + c.game.RandomFixedInt(0, 25)), Quaternion.identity, dir, true, false, true).affectedByGravity = false;
       yield return 0.0f;
       yield return 0.0f;
     }
@@ -4616,7 +4617,7 @@ label_27:
       {
         FixedInt fixedInt = c.game.RandomFixedInt((FixedInt) theSpell.speedMin, (FixedInt) theSpell.speedMax) * 2;
         MyLocation power = (myLocation - zero1).normalized * fixedInt;
-        ZSpell zspell = ZSpell.BaseFire(theSpell, c, zero1, Quaternion.identity, power, true, false);
+        ZSpell zspell = ZSpell.BaseFire(theSpell, c, zero1, Quaternion.identity, power, true, false, true);
         zspell.fromArmageddon = armageddon;
         zspell.curSpeed = fixedInt;
         zspell.target.y = myLocation.y;
@@ -4635,7 +4636,7 @@ label_27:
         zero2.x = target.x + c.game.RandomInt(-25, 25);
         FixedInt fixedInt = c.game.RandomFixedInt((FixedInt) theSpell.speedMin, (FixedInt) theSpell.speedMax);
         MyLocation power = (zero2 - zero1).normalized * fixedInt;
-        ZSpell zspell = ZSpell.BaseFire(theSpell, c, zero1, Quaternion.identity, power, true, false);
+        ZSpell zspell = ZSpell.BaseFire(theSpell, c, zero1, Quaternion.identity, power, true, false, true);
         zspell.fromArmageddon = armageddon;
         zspell.curSpeed = fixedInt;
         zspell.target.y = zero2.y;
@@ -4674,7 +4675,7 @@ label_27:
     MyLocation power = (target - zero).normalized * (FixedInt) theSpell.speedMax;
     if (power.y > -20)
       power.y = (FixedInt) -20;
-    ZSpell.BaseFire(theSpell, c, zero, Quaternion.identity, power, true, false);
+    ZSpell.BaseFire(theSpell, c, zero, Quaternion.identity, power, true, false, true);
   }
 
   public static IEnumerator<float> IEOceansFury(Spell theSpell, ZCreature c)
@@ -4695,9 +4696,9 @@ label_27:
       for (int index = 0; index < 10; ++index)
       {
         MyLocation power1 = Inert.Velocity(c.game.RandomFixedInt(-10, 10) + 20 + index * 6, c.game.RandomFixedInt(-5, 5) + 40);
-        (game.firstOceanFury ? ZSpell.BaseFire(Inert.Instance.oceanDrop1, c, left, Quaternion.identity, power1, true, false) : ZSpell.BaseFire(Inert.Instance.oceanDrop2, c, left, Quaternion.identity, power1, true, false)).name = theSpell.name;
+        (game.firstOceanFury ? ZSpell.BaseFire(Inert.Instance.oceanDrop1, c, left, Quaternion.identity, power1, true, false, true) : ZSpell.BaseFire(Inert.Instance.oceanDrop2, c, left, Quaternion.identity, power1, true, false, true)).name = theSpell.name;
         MyLocation power2 = Inert.Velocity(c.game.RandomFixedInt(-10, 10) + 110 + index * 6, c.game.RandomFixedInt(-5, 5) + 40);
-        (game.firstOceanFury ? ZSpell.BaseFire(Inert.Instance.oceanDrop1, c, right, Quaternion.identity, power2, true, false) : ZSpell.BaseFire(Inert.Instance.oceanDrop2, c, right, Quaternion.identity, power2, true, false)).name = theSpell.name;
+        (game.firstOceanFury ? ZSpell.BaseFire(Inert.Instance.oceanDrop1, c, right, Quaternion.identity, power2, true, false, true) : ZSpell.BaseFire(Inert.Instance.oceanDrop2, c, right, Quaternion.identity, power2, true, false, true)).name = theSpell.name;
       }
       for (int z = 0; z < 20; ++z)
         yield return 0.0f;
@@ -4756,7 +4757,7 @@ label_27:
             pos.y = (FixedInt) (p.map.Height + 800);
             pos.x = position.x + p.game.RandomInt(-300, 300);
             MyLocation power = (position - pos).normalized * (FixedInt) theSpell.speedMax;
-            ZSpell.BaseFire(theSpell, c, pos, Quaternion.identity, power, true, false);
+            ZSpell.BaseFire(theSpell, c, pos, Quaternion.identity, power, true, false, true);
             yield return 0.0f;
             yield return 0.0f;
             yield return 0.0f;
@@ -4939,7 +4940,7 @@ label_27:
     FixedInt power)
   {
     MyLocation myLocation = Inert.Velocity(rot_z, Mathd.LerpUnclamped((FixedInt) theSpell.speedMin, (FixedInt) theSpell.speedMax, power));
-    ZSpell s = ZSpell.BaseFire(theSpell, c, pos, Inert.RotationOfVelocity(Inert.Velocity(rot_z).ToSinglePrecision()), myLocation, false, false);
+    ZSpell s = ZSpell.BaseFire(theSpell, c, pos, Inert.RotationOfVelocity(Inert.Velocity(rot_z).ToSinglePrecision()), myLocation, false, false, true);
     ZSpell.UpgradeFullFire(c, s);
     s.SetVelocity(myLocation);
   }
@@ -4952,7 +4953,7 @@ label_27:
     FixedInt power)
   {
     MyLocation power1 = Inert.Velocity(rot_z, Mathd.LerpUnclamped((FixedInt) theSpell.speedMin, (FixedInt) theSpell.speedMax, power));
-    ZSpell zspell = ZSpell.BaseFire(theSpell, c, pos, Inert.RotationOfVelocity(Inert.Velocity(rot_z).ToSinglePrecision()), power1, false, false);
+    ZSpell zspell = ZSpell.BaseFire(theSpell, c, pos, Inert.RotationOfVelocity(Inert.Velocity(rot_z).ToSinglePrecision()), power1, false, false, false);
     zspell.velocity = power1;
     zspell.moving = Client.game.spectatorOngoing.RunSpell(zspell.SpellMove(false, false), false);
   }
@@ -4965,7 +4966,7 @@ label_27:
     FixedInt power)
   {
     MyLocation power1 = Inert.Velocity(rot_z, Mathd.LerpUnclamped((FixedInt) theSpell.speedMin, (FixedInt) theSpell.speedMax, power));
-    ZSpell.BaseFire(theSpell, c, pos, Inert.RotationOfVelocity(Inert.Velocity(rot_z).ToSinglePrecision()), power1, true, false);
+    ZSpell.BaseFire(theSpell, c, pos, Inert.RotationOfVelocity(Inert.Velocity(rot_z).ToSinglePrecision()), power1, true, false, true);
   }
 
   public static ZSpell FireGenericReturn(
@@ -4976,7 +4977,7 @@ label_27:
     FixedInt power)
   {
     MyLocation power1 = Inert.Velocity(rot_z, Mathd.LerpUnclamped((FixedInt) theSpell.speedMin, (FixedInt) theSpell.speedMax, power));
-    return ZSpell.BaseFire(theSpell, c, pos, Inert.RotationOfVelocity(Inert.Velocity(rot_z).ToSinglePrecision()), power1, true, false);
+    return ZSpell.BaseFire(theSpell, c, pos, Inert.RotationOfVelocity(Inert.Velocity(rot_z).ToSinglePrecision()), power1, true, false, true);
   }
 
   public static void FireShiningBolt(
@@ -4987,7 +4988,7 @@ label_27:
     FixedInt power)
   {
     MyLocation power1 = Inert.Velocity(rot_z, Mathd.LerpUnclamped((FixedInt) theSpell.speedMin, (FixedInt) theSpell.speedMax, power));
-    ZSpell zspell = ZSpell.BaseFire(theSpell, c, pos, Inert.RotationOfVelocity(Inert.Velocity(rot_z).ToSinglePrecision()), power1, true, false);
+    ZSpell zspell = ZSpell.BaseFire(theSpell, c, pos, Inert.RotationOfVelocity(Inert.Velocity(rot_z).ToSinglePrecision()), power1, true, false, true);
     if (!c.game.AllowExpansion)
       return;
     zspell.damage += c.familiarLevelOverlight * 2;
@@ -5001,7 +5002,7 @@ label_27:
     FixedInt power)
   {
     MyLocation power1 = Inert.Velocity(rot_z, Mathd.LerpUnclamped((FixedInt) theSpell.speedMin, (FixedInt) theSpell.speedMax, power));
-    ZSpell.BaseFire(theSpell, c, pos, Inert.RotationOfVelocity(Inert.Velocity(rot_z).ToSinglePrecision()), power1, true, false).target = pos;
+    ZSpell.BaseFire(theSpell, c, pos, Inert.RotationOfVelocity(Inert.Velocity(rot_z).ToSinglePrecision()), power1, true, false, true).target = pos;
   }
 
   public static void FireFireArrow(
@@ -5223,7 +5224,7 @@ label_27:
                     for (int index3 = 0; index3 < 2; ++index3)
                     {
                       MyLocation power = right ? Inert.Velocity(game.RandomFixedInt(fixedInt - 20, fixedInt + 45), game.RandomInt(8, 20)) : Inert.Velocity(game.RandomFixedInt(fixedInt - 45, fixedInt + 20), game.RandomInt(8, 20));
-                      ZSpell.BaseFire(fromSpell, c, position + new MyLocation(game.RandomFixedInt(-15, 15), game.RandomFixedInt(-15, 15)), Quaternion.identity, power, true, false);
+                      ZSpell.BaseFire(fromSpell, c, position + new MyLocation(game.RandomFixedInt(-15, 15), game.RandomFixedInt(-15, 15)), Quaternion.identity, power, true, false, true);
                     }
                   }
                   else if (c.tower.type == TowerType.Holiday)
@@ -5234,7 +5235,7 @@ label_27:
                     for (int index3 = 0; index3 < 5; ++index3)
                     {
                       MyLocation power = right ? Inert.Velocity(game.RandomFixedInt(fixedInt - 20, fixedInt + 45), game.RandomInt(8, 20)) : Inert.Velocity(game.RandomFixedInt(fixedInt - 45, fixedInt + 20), game.RandomInt(8, 20));
-                      ZSpell zspell = ZSpell.BaseFire(component, c, position + new MyLocation(game.RandomFixedInt(-15, 15), game.RandomFixedInt(-15, 15)), Quaternion.identity, power, true, false);
+                      ZSpell zspell = ZSpell.BaseFire(component, c, position + new MyLocation(game.RandomFixedInt(-15, 15), game.RandomFixedInt(-15, 15)), Quaternion.identity, power, true, false, true);
                       if (game.isClient)
                         zspell.name = "Snow Globe";
                     }
@@ -5821,7 +5822,7 @@ label_27:
   {
     c.turnFriendlyDmg = -2;
     MyLocation power1 = Inert.Velocity(target.x, (FixedInt) theSpell.speedMax);
-    ZSpell zspell1 = ZSpell.BaseFire(theSpell, c, pos, rot, power1, false, false);
+    ZSpell zspell1 = ZSpell.BaseFire(theSpell, c, pos, rot, power1, false, false, true);
     zspell1.velocity = power1;
     zspell1.moving = c.game.ongoing.RunSpell(zspell1.SpellMove(false, false), true);
     if (slot != null && slot.bonusDmg > 0)
@@ -5836,7 +5837,7 @@ label_27:
     if (!ZComponent.IsNull((ZComponent) c) && !c.isDead && c.turnFriendlyDmg != c.game.turn)
     {
       MyLocation power2 = Inert.Velocity(rot_z, (FixedInt) theSpell.speedMax);
-      ZSpell zspell2 = ZSpell.BaseFire(theSpell, c, pos, rot, power2, false, false);
+      ZSpell zspell2 = ZSpell.BaseFire(theSpell, c, pos, rot, power2, false, false, true);
       zspell2.velocity = power2;
       zspell2.moving = c.game.ongoing.RunSpell(zspell2.SpellMove(false, false), true);
       if (slot != null && slot.bonusDmg > 0)
@@ -5863,11 +5864,11 @@ label_27:
   {
     FixedInt acc = accuracy.HasValue ? accuracy.Value : (FixedInt) 2097152L;
     c.turnFriendlyDmg = -2;
-    ZSpell.BaseFire(theSpell, c, pos, rot, Inert.Velocity(target.x + c.game.RandomFixedInt(-acc, acc), (FixedInt) theSpell.speedMax + power + c.game.RandomFixedInt(-acc, acc)), true, false);
+    ZSpell.BaseFire(theSpell, c, pos, rot, Inert.Velocity(target.x + c.game.RandomFixedInt(-acc, acc), (FixedInt) theSpell.speedMax + power + c.game.RandomFixedInt(-acc, acc)), true, false, true);
     for (int i = 0; i < 15; ++i)
       yield return 0.0f;
     if (!ZComponent.IsNull((ZComponent) c) && !c.isDead && c.turnFriendlyDmg != c.game.turn)
-      ZSpell.BaseFire(theSpell, c, pos, rot, Inert.Velocity(rot_z + c.game.RandomFixedInt(-acc, acc), (FixedInt) theSpell.speedMax + power + c.game.RandomFixedInt(-acc, acc)), true, false);
+      ZSpell.BaseFire(theSpell, c, pos, rot, Inert.Velocity(rot_z + c.game.RandomFixedInt(-acc, acc), (FixedInt) theSpell.speedMax + power + c.game.RandomFixedInt(-acc, acc)), true, false, true);
   }
 
   public static IEnumerator<float> IEnumeratorPebbleShot(
@@ -6091,7 +6092,7 @@ label_27:
   {
     for (int i = 0; i < amount; ++i)
     {
-      ZSpell.BaseFire(spell, c, new MyLocation(pos.x + c.game.RandomInt(minX, maxX), pos.y), Quaternion.identity, new MyLocation(0, -5), true, false);
+      ZSpell.BaseFire(spell, c, new MyLocation(pos.x + c.game.RandomInt(minX, maxX), pos.y), Quaternion.identity, new MyLocation(0, -5), true, false, true);
       if (c.game.isClient)
         AudioManager.Play(AudioManager.instance.waterExplosion);
       yield return 0.0f;
@@ -6111,7 +6112,7 @@ label_27:
   {
     for (int i = 0; i < amount; ++i)
     {
-      ZSpell.BaseFire(spell, c, new MyLocation(pos.x + c.game.RandomInt(minX, maxX), pos.y), Quaternion.identity, new MyLocation((FixedInt) 0, (FixedInt) -10485760L), true, false).velocity.y += c.game.RandomFixedInt(-1, 1);
+      ZSpell.BaseFire(spell, c, new MyLocation(pos.x + c.game.RandomInt(minX, maxX), pos.y), Quaternion.identity, new MyLocation((FixedInt) 0, (FixedInt) -10485760L), true, false, true).velocity.y += c.game.RandomFixedInt(-1, 1);
       if (i % 3 == 0)
         yield return 0.0f;
     }
@@ -6175,7 +6176,7 @@ label_27:
     {
       if (c.game.isClient)
         AudioManager.Play(spell.castClip);
-      ZSpell.BaseFire(spell, c, new MyLocation(pos.x + (minX < 0 ? c.game.RandomInt(minX, maxX) : 0), pos.y), Quaternion.identity, Inert.Velocity2((FixedInt) 180 + (angleMargin > 0 ? c.game.RandomFixedInt(-angleMargin, angleMargin) : (FixedInt) 0), (FixedInt) 10), true, false);
+      ZSpell.BaseFire(spell, c, new MyLocation(pos.x + (minX < 0 ? c.game.RandomInt(minX, maxX) : 0), pos.y), Quaternion.identity, Inert.Velocity2((FixedInt) 180 + (angleMargin > 0 ? c.game.RandomFixedInt(-angleMargin, angleMargin) : (FixedInt) 0), (FixedInt) 10), true, false, true);
       yield return 0.0f;
     }
   }
@@ -6200,7 +6201,7 @@ label_27:
       if (coords != null)
       {
         c.map.ServerBitBlt((int) kablam.explosionCutout, coords.x, coords.y, true, true);
-        ZSpell.BaseFire(Inert.Instance.LightningStrike, c, coords.ToMyLocation(), Quaternion.identity, Inert.Velocity((FixedInt) c.game.RandomInt(0, 360), 8), true, true);
+        ZSpell.BaseFire(Inert.Instance.LightningStrike, c, coords.ToMyLocation(), Quaternion.identity, Inert.Velocity((FixedInt) c.game.RandomInt(0, 360), 8), true, true, true);
         if (c.game.isClient && !c.game.resyncing)
         {
           c.game.electricityPool.Spawn(new Vector3((float) x, (float) y), coords.ToVector());
@@ -6255,7 +6256,7 @@ label_27:
       if (coords != null)
       {
         c.map.ServerBitBlt((int) kablam.explosionCutout, coords.x, coords.y, true, true);
-        ZSpell.BaseFire(Inert.Instance.LightningStrike, c, coords.ToMyLocation(), Quaternion.identity, Inert.Velocity((FixedInt) c.game.RandomInt(0, 360), 8), true, true);
+        ZSpell.BaseFire(Inert.Instance.LightningStrike, c, coords.ToMyLocation(), Quaternion.identity, Inert.Velocity((FixedInt) c.game.RandomInt(0, 360), 8), true, true, true);
         if (c.game.isClient && !c.game.resyncing)
         {
           c.game.electricityPool.Spawn(new Vector3((float) num, (float) (y + 1000)), coords.ToVector());
@@ -6911,7 +6912,7 @@ label_36:
     for (int index = 0; index < this.amount; ++index)
     {
       MyLocation power = Inert.Velocity(fixedInt * index, (FixedInt) component.speedMax);
-      ZSpell zspell = ZSpell.BaseFire(component, this.parent, this.position, Quaternion.identity, power, true, true);
+      ZSpell zspell = ZSpell.BaseFire(component, this.parent, this.position, Quaternion.identity, power, true, true, true);
       if (this.game.isClient)
         zspell.name = this.name;
       zspell.extraCheck = zcreature;
@@ -6936,7 +6937,7 @@ label_36:
     FixedInt angle = (FixedInt) 360 / spell.amount;
     for (int index = 0; index < spell.amount; ++index)
     {
-      ZSpell zspell = ZSpell.BaseFire(child, parent, position, Quaternion.identity, Inert.Velocity(angle * index, (FixedInt) child.speedMax), true, true);
+      ZSpell zspell = ZSpell.BaseFire(child, parent, position, Quaternion.identity, Inert.Velocity(angle * index, (FixedInt) child.speedMax), true, true, true);
       if (game.isClient)
         zspell.name = spell.name;
       zspell.extraCheck = ExtraCheck;
@@ -6949,7 +6950,7 @@ label_36:
     yield return 0.0f;
     for (int index = 0; index < spell.amount; ++index)
     {
-      ZSpell zspell = ZSpell.BaseFire(child, parent, position, Quaternion.identity, Inert.Velocity(angle * index, (FixedInt) child.speedMax), true, true);
+      ZSpell zspell = ZSpell.BaseFire(child, parent, position, Quaternion.identity, Inert.Velocity(angle * index, (FixedInt) child.speedMax), true, true, true);
       if (game.isClient)
         zspell.name = spell.name;
       zspell.extraCheck = ExtraCheck;
@@ -6965,7 +6966,7 @@ label_36:
     for (int index = 0; index < 4; ++index)
     {
       MyLocation power = Inert.Velocity((FixedInt) (90 * index), 9);
-      ZSpell zspell = ZSpell.BaseFire(component, this.parent, this.position, Quaternion.identity, power, true, true);
+      ZSpell zspell = ZSpell.BaseFire(component, this.parent, this.position, Quaternion.identity, power, true, true, true);
       if (this.game.isClient)
         zspell.name = this.name;
     }
@@ -6979,7 +6980,7 @@ label_36:
     for (int index = 0; index < this.amount; ++index)
     {
       MyLocation myLocation = Inert.Velocity(this.game.RandomFixedInt(0, 360), (FixedInt) component.speedMax);
-      ZSpell s = ZSpell.BaseFire(component, this.parent, this.position, Quaternion.identity, myLocation, false, false);
+      ZSpell s = ZSpell.BaseFire(component, this.parent, this.position, Quaternion.identity, myLocation, false, false, true);
       if (this.game.isClient)
         s.name = this.name;
       s.extraCheck = zcreature;
@@ -7023,7 +7024,7 @@ label_36:
       }
       fixedInt1 = angle;
       MyLocation power = Inert.Velocity(angle, (FixedInt) component.speedMax);
-      ZSpell zspell = ZSpell.BaseFire(component, this.parent, this.position, Quaternion.identity, power, true, false);
+      ZSpell zspell = ZSpell.BaseFire(component, this.parent, this.position, Quaternion.identity, power, true, false, true);
       if (this.game.isClient)
         zspell.name = this.name;
       zspell.extraCheck = zcreature;
@@ -7047,7 +7048,7 @@ label_36:
         if (angle > 360)
           angle -= 360;
         MyLocation power = Inert.Velocity(angle, (FixedInt) component.speedMax);
-        ZSpell zspell = ZSpell.BaseFire(component, this.parent, this.position, Quaternion.identity, power, true, true);
+        ZSpell zspell = ZSpell.BaseFire(component, this.parent, this.position, Quaternion.identity, power, true, true, true);
         if (this.game.isClient)
           zspell.name = this.name;
         fixedInt1 += fixedInt2;
@@ -7065,7 +7066,7 @@ label_36:
         if (angle > 360)
           angle -= 360;
         MyLocation power = Inert.Velocity(angle, (FixedInt) component.speedMax);
-        ZSpell zspell = ZSpell.BaseFire(component, this.parent, this.position, Quaternion.identity, power, true, true);
+        ZSpell zspell = ZSpell.BaseFire(component, this.parent, this.position, Quaternion.identity, power, true, true, true);
         if (this.game.isClient)
           zspell.name = this.name;
         fixedInt1 += fixedInt2;
@@ -7084,7 +7085,7 @@ label_36:
     for (int index = 0; index < amount; ++index)
     {
       MyLocation power = Inert.Velocity(this.game.RandomFixedInt(0, 360), 10);
-      ZSpell zspell = ZSpell.BaseFire(component, this.parent, this.position, Quaternion.identity, power, true, true);
+      ZSpell zspell = ZSpell.BaseFire(component, this.parent, this.position, Quaternion.identity, power, true, true, true);
       if (this.game.isClient)
         zspell.name = this.name;
       if (ZComponent.IsNull((ZComponent) zcreature))
@@ -7101,7 +7102,7 @@ label_36:
     ZCreature ExtraCheck = theSpell.map.PhysicsCollideCreature((ZCreature) null, (int) theSpell.position.x, (int) theSpell.position.y, 0);
     for (int i = 0; i < theSpell.amount; ++i)
     {
-      ZSpell zspell = ZSpell.BaseFire(child, theSpell.parent, pos, Quaternion.identity, Inert.Velocity(theSpell.game.RandomFixedInt(0, 360), 3), true, true);
+      ZSpell zspell = ZSpell.BaseFire(child, theSpell.parent, pos, Quaternion.identity, Inert.Velocity(theSpell.game.RandomFixedInt(0, 360), 3), true, true, true);
       if (theSpell.game.isClient)
         zspell.name = theSpell.name;
       if (ZComponent.IsNull((ZComponent) ExtraCheck))
@@ -7127,7 +7128,7 @@ label_36:
       diff.x += game.RandomFixedInt(524288L, 1572864L);
       diff.y += game.RandomFixedInt(524288L, 1572864L);
       MyLocation power = Inert.Velocity(Inert.AngleOfVelocity(diff) + game.RandomFixedInt(-10, 10), diff.magnitude + game.RandomFixedInt(-5, 5));
-      ZSpell zspell = ZSpell.BaseFire(child, parent, pos, Quaternion.identity, power, true, false);
+      ZSpell zspell = ZSpell.BaseFire(child, parent, pos, Quaternion.identity, power, true, false, true);
       if (game.isClient)
         zspell.name = "Melted Snowman";
     }
@@ -7148,7 +7149,7 @@ label_36:
       diff.x += game.RandomFixedInt(524288L, 1572864L);
       diff.y += game.RandomFixedInt(524288L, 1572864L);
       MyLocation power = Inert.Velocity(Inert.AngleOfVelocity(diff) + game.RandomFixedInt(-30, 30), diff.magnitude + game.RandomFixedInt(-5, 5));
-      ZSpell zspell = ZSpell.BaseFire(child, parent, pos, Quaternion.identity, power, true, false);
+      ZSpell zspell = ZSpell.BaseFire(child, parent, pos, Quaternion.identity, power, true, false, true);
       if (game.isClient)
         zspell.name = "Melted Snowman";
     }
@@ -7165,7 +7166,7 @@ label_36:
       MyLocation velocity2 = this.velocity;
       velocity2.x *= this.game.RandomFixedInt(524288L, 1572864L);
       velocity2.y *= this.game.RandomFixedInt(524288L, 1572864L);
-      ZSpell zspell = ZSpell.BaseFire(component, this.parent, position, Quaternion.identity, velocity2, true, true);
+      ZSpell zspell = ZSpell.BaseFire(component, this.parent, position, Quaternion.identity, velocity2, true, true, true);
       zspell.curDuration = 5;
       if (this.game.isClient)
         zspell.name = this.name;
@@ -7189,7 +7190,7 @@ label_36:
         FixedInt fixedInt = Inert.AngleOfVelocity(this.velocity);
         myLocation = !(Mathd.Abs(this.velocity.x) > Mathd.Abs(this.velocity.y)) ? Inert.Velocity(fixedInt + this.game.RandomFixedInt(-12, 12), this.velocity.magnitude * this.game.RandomFixedInt((FixedInt) 524288L, (FixedInt) 1572864L)) : Inert.Velocity(fixedInt + this.game.RandomFixedInt(-10, 10), this.velocity.magnitude * this.game.RandomFixedInt((FixedInt) 1048576L, (FixedInt) 1572864L));
       }
-      ZSpell zspell = ZSpell.BaseFire(component, this.parent, position, Quaternion.identity, myLocation, true, false);
+      ZSpell zspell = ZSpell.BaseFire(component, this.parent, position, Quaternion.identity, myLocation, true, false, true);
       if (this.game.skimmed_on_water)
         zspell.damage = 4;
       if (this.game.isClient)
@@ -7215,7 +7216,7 @@ label_36:
       {
         x = game.RandomFixedInt(-5242880L, 5242880L),
         y = game.RandomFixedInt(-5242880L, 5242880L)
-      }, true, false);
+      }, true, false, true);
       if (game.isClient)
         zspell.name = theSpell.name;
     }
@@ -7230,7 +7231,7 @@ label_36:
     for (int index = 0; index < 5; ++index)
     {
       MyLocation power = Inert.Velocity(theSpell.game.RandomFixedInt(fixedInt - 30, fixedInt + 30), theSpell.game.RandomInt(1, 17));
-      ZSpell zspell = ZSpell.BaseFire(component, theSpell.parent, position + new MyLocation(theSpell.game.RandomFixedInt(-15, 15), theSpell.game.RandomFixedInt(-15, 15)), Quaternion.identity, power, true, false);
+      ZSpell zspell = ZSpell.BaseFire(component, theSpell.parent, position + new MyLocation(theSpell.game.RandomFixedInt(-15, 15), theSpell.game.RandomFixedInt(-15, 15)), Quaternion.identity, power, true, false, true);
       if (theSpell.game.isClient)
         zspell.name = theSpell.name;
     }
@@ -7246,7 +7247,7 @@ label_36:
     for (int index = 0; index < 50; ++index)
     {
       MyLocation power = Inert.Velocity(theSpell.game.RandomFixedInt(fixedInt - 30, fixedInt + 30), theSpell.game.RandomInt(1, 17));
-      ZSpell zspell = ZSpell.BaseFire(component, theSpell.parent, position + new MyLocation(theSpell.game.RandomFixedInt(-15, 15), theSpell.game.RandomFixedInt(-15, 15)), Quaternion.identity, power, true, false);
+      ZSpell zspell = ZSpell.BaseFire(component, theSpell.parent, position + new MyLocation(theSpell.game.RandomFixedInt(-15, 15), theSpell.game.RandomFixedInt(-15, 15)), Quaternion.identity, power, true, false, true);
       if (theSpell.game.isClient)
         zspell.name = theSpell.name;
     }
@@ -7265,7 +7266,7 @@ label_36:
     for (int index = 0; index < 4; ++index)
     {
       MyLocation myLocation = Inert.Velocity(this.game.RandomFixedInt(0, 360), (FixedInt) component.speedMax);
-      ZSpell zspell = ZSpell.BaseFire(component, this.parent, this.position, Quaternion.identity, myLocation, false, true);
+      ZSpell zspell = ZSpell.BaseFire(component, this.parent, this.position, Quaternion.identity, myLocation, false, true, true);
       zspell.extraCheck = zcreature;
       if ((ZComponent) this.parent != (object) null && this.parent.parent != null && this.parent.parent.localTurn <= 0)
         zspell.damage /= 2;
@@ -7282,7 +7283,7 @@ label_36:
     for (int index = 0; index < 6; ++index)
     {
       MyLocation power = Inert.Velocity(this.game.RandomFixedInt(0, 360), 12);
-      ZSpell zspell = ZSpell.BaseFire(component, this.parent, this.position, Quaternion.identity, power, true, true);
+      ZSpell zspell = ZSpell.BaseFire(component, this.parent, this.position, Quaternion.identity, power, true, true, true);
       if (this.game.isClient)
         zspell.name = this.name;
     }
@@ -7524,7 +7525,7 @@ label_36:
   public static void FireCogFall(Spell theSpell, ZCreature c, MyLocation target)
   {
     target.y = (FixedInt) (c.map.Height + 1000);
-    ZSpell.BaseFire(theSpell, c, target, Quaternion.identity, new MyLocation(0, -1), true, false);
+    ZSpell.BaseFire(theSpell, c, target, Quaternion.identity, new MyLocation(0, -1), true, false, true);
   }
 
   public void OnExplosionMechanicalArrow()
@@ -7534,7 +7535,7 @@ label_36:
     {
       MyLocation power = Inert.Velocity((FixedInt) (24 * index), 8);
       power.x += power.x / 4;
-      ZSpell zspell = ZSpell.BaseFire(component, this.parent, this.position, Quaternion.identity, power, true, true);
+      ZSpell zspell = ZSpell.BaseFire(component, this.parent, this.position, Quaternion.identity, power, true, true, true);
       if (this.game.isClient)
         zspell.name = this.name;
     }
@@ -7549,7 +7550,7 @@ label_36:
   {
     yield return 0.0f;
     for (int index = 0; index < 4; ++index)
-      ZSpell.BaseFire(Inert.Instance.cog, parent, pos, Quaternion.identity, Inert.Velocity((FixedInt) (90 * index), 6), true, false).name = "Steam Dragon";
+      ZSpell.BaseFire(Inert.Instance.cog, parent, pos, Quaternion.identity, Inert.Velocity((FixedInt) (90 * index), 6), true, false, true).name = "Steam Dragon";
   }
 
   public void OnExplosionRainOfClams()
@@ -7710,7 +7711,7 @@ label_36:
     for (int index = 0; index < 12; ++index)
     {
       MyLocation power = Inert.Velocity((FixedInt) (index * 30), this.explodeOnImpact ? (FixedInt) component.speedMax / (FixedInt) 3145728L : (FixedInt) component.speedMax * 838860L);
-      ZSpell zspell = ZSpell.BaseFire(component, this.parent, this.position, Quaternion.identity, power, true, false);
+      ZSpell zspell = ZSpell.BaseFire(component, this.parent, this.position, Quaternion.identity, power, true, false, true);
       if (this.game.isClient)
         zspell.name = this.name;
       if (ZComponent.IsNull((ZComponent) zcreature))
@@ -7729,7 +7730,7 @@ label_36:
     for (int index = 0; index < 15; ++index)
     {
       MyLocation power = Inert.Velocity((FixedInt) (index * 24), this.explodeOnImpact ? (FixedInt) component.speedMax / (FixedInt) 3145728L : (FixedInt) component.speedMax * 838860L);
-      ZSpell zspell = ZSpell.BaseFire(component, this.parent, this.position, Quaternion.identity, power, true, false);
+      ZSpell zspell = ZSpell.BaseFire(component, this.parent, this.position, Quaternion.identity, power, true, false, true);
       if (this.game.isClient)
         zspell.name = this.name;
       if (ZComponent.IsNull((ZComponent) zcreature1))
@@ -8085,7 +8086,7 @@ label_36:
         ZEffector.RechargeElectrostaticCharges(c.game);
         break;
       case SpellEnum.Chain_Lightning:
-        ZSpell.BaseFire(theSpell, c, pos, Quaternion.identity, Inert.Velocity(rot_z, (FixedInt) theSpell.speedMax + power), true, false);
+        ZSpell.BaseFire(theSpell, c, pos, Quaternion.identity, Inert.Velocity(rot_z, (FixedInt) theSpell.speedMax + power), true, false, true);
         if (ZComponent.IsNull((ZComponent) c))
           break;
         ZEffector.RechargeElectrostaticCharges(c.game);

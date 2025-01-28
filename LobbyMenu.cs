@@ -245,14 +245,18 @@ public class LobbyMenu : Catalogue
     valueTupleList.Sort((Comparison<(string, int)>) ((a, b) => a.online == b.online ? a.name.CompareTo(b.name) : b.online - a.online));
     this._containerAccounts.DestroyChildern();
     this._containerAccounts.sizeDelta = new Vector2(this._containerAccounts.sizeDelta.x, (float) (num1 * valueTupleList.Count + 35));
-    for (int index = 0; index < valueTupleList.Count; ++index)
+    for (int index1 = 0; index1 < valueTupleList.Count; ++index1)
     {
       GameObject andApply = Controller.Instance.CreateAndApply(this.pfabFriend, (Transform) this._containerAccounts);
-      ((RectTransform) andApply.transform).anchoredPosition = new Vector2((float) num2, (float) (-index * num1 - 2 - 35));
+      ((RectTransform) andApply.transform).anchoredPosition = new Vector2((float) num2, (float) (-index1 * num1 - 2 - 35));
       pfabName component = andApply.GetComponent<pfabName>();
-      component.Setup(valueTupleList[index].Item1, false);
-      component.ready.color = pfabName.colorStatus[valueTupleList[index].Item2];
-      component.txtName.color = pfabName.colorStatus[valueTupleList[index].Item2];
+      component.Setup(valueTupleList[index1].Item1, false);
+      int server = Client.GetAccount(valueTupleList[index1].Item1, false).server;
+      int index2 = valueTupleList[index1].Item2 == 1 ? (Client.MyAccount.server == server ? 1 : 2) : 0;
+      if (server > 0)
+        component.txtName.text += string.Format(" ({0})", (object) server);
+      component.ready.color = pfabName.colorStatus[index2];
+      component.txtName.color = pfabName.colorStatus[index2];
     }
     if (!updatePos)
       return;
@@ -321,15 +325,19 @@ public class LobbyMenu : Catalogue
       memberXList.Sort((Comparison<Clan.MemberX>) ((a, b) => b.acc.location.Online() == a.acc.location.Online() ? (b.role == a.role ? a.name.CompareTo(b.name) : (int) (b.role - a.role)) : (!b.acc.location.Online() ? -1 : 1)));
       this._containerAccounts.DestroyChildern();
       this._containerAccounts.sizeDelta = new Vector2(this._containerAccounts.sizeDelta.x, (float) (num1 * memberXList.Count + 2));
-      for (int index = 0; index < memberXList.Count; ++index)
+      for (int index1 = 0; index1 < memberXList.Count; ++index1)
       {
         GameObject andApply = Controller.Instance.CreateAndApply(this.pfabFriend, (Transform) this._containerAccounts);
-        ((RectTransform) andApply.transform).anchoredPosition = new Vector2((float) num2, (float) (-index * num1 - 2));
+        ((RectTransform) andApply.transform).anchoredPosition = new Vector2((float) num2, (float) (-index1 * num1 - 2));
         pfabName component = andApply.GetComponent<pfabName>();
-        component.Setup(memberXList[index].name, false);
-        component.txtRating.text = "(" + memberXList[index].role.ToString().Replace('_', ' ') + ")";
-        component.ready.color = pfabName.colorStatus[memberXList[index].acc.location.Online() ? 1 : 0];
-        component.txtName.color = pfabName.colorStatus[memberXList[index].acc.location.Online() ? 1 : 0];
+        component.Setup(memberXList[index1].name, false);
+        component.txtRating.text = "(" + memberXList[index1].role.ToString().Replace('_', ' ') + ")";
+        int server = Client.GetAccount(memberXList[index1].name, false).server;
+        int index2 = memberXList[index1].acc.location.Online() ? (Client.MyAccount.server == server ? 1 : 2) : 0;
+        if (server > 0)
+          component.txtName.text += string.Format(" ({0})", (object) server);
+        component.ready.color = pfabName.colorStatus[index2];
+        component.txtName.color = pfabName.colorStatus[index2];
       }
       if (!updatePos)
         return;

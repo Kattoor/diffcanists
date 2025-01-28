@@ -109,7 +109,7 @@ public class LocalServerConn : Catalogue
           KnownServersList knownServersList = JsonConvert.DeserializeObject<KnownServersList>(webRequest.downloadHandler.text);
           Server.serverList = knownServersList;
           bool flag = false;
-          if (knownServersList.servers.Count > 1)
+          if (knownServersList.servers.Count > 0)
           {
             localServerConn1.panelServers.SetActive(true);
             foreach (KnownServers server in knownServersList.servers)
@@ -198,7 +198,7 @@ public class LocalServerConn : Catalogue
 
   public void ResetPassword()
   {
-    Global.OpenURL("https://discord.com/api/oauth2/authorize?response_type=token&client_id=633505532753346580&redirect_uri=http%3A%2F%2F45.92.39.181%3A8080&scope=identify&state=ResetPassword");
+    Global.OpenURL("https://discord.com/api/oauth2/authorize?response_type=token&client_id=633505532753346580&redirect_uri=http%3A%2F%2F45.92.39.111%3A8080&scope=identify&state=ResetPassword");
     this.panelReset.SetActive(false);
   }
 

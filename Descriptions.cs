@@ -2243,7 +2243,7 @@ public static class Descriptions
     },
     {
       "Prickly Barrier",
-      "Targeted: 30 damage\n{0}\nThis will damage anyone foolish enough to get too close. Will spread each turn, but all your barrier's snares share the same damage source. The snare will only last 4 turns."
+      "Targeted: 25 damage\n{0}\nThis will damage anyone foolish enough to get too close. Will spread each turn, but all your barrier's snares share the same damage source. The snare will last 5 turns."
     },
     {
       "Bear Claw",
@@ -2271,7 +2271,7 @@ public static class Descriptions
     },
     {
       "Bear Form",
-      "Personal:\n{0}\nTransform into a bear for the next 2 turns giving you the spells Rampage, Swipe and the passive 'Provoke' allowing you to deal bonus damage for each percentage of health you are missing. Restricts you to Druidism and Arcane spellbooks."
+      "Personal:\n{0}\nTransform into a bear for the next five turns giving you the spells Rampage, Swipe and the passive 'Provoke' allowing you to deal bonus damage for each percentage of health you are missing. Restricts you to Druidism and Arcane spellbooks."
     },
     {
       "Rampage",
@@ -2604,7 +2604,7 @@ public static class Descriptions
       {
         if (str.Length > 0)
           str += "\n";
-        str = str + "Shared Cooldown: " + slot.spell.runTimeStats.sharedCooldown.ToString().Replace('_', ' ');
+        str = str + "Shared CD: " + slot.spell.runTimeStats.sharedCooldown.ToString().Replace('_', ' ');
       }
     }
     else
@@ -2646,7 +2646,7 @@ public static class Descriptions
       {
         if (str.Length > 0)
           str += "\n";
-        str = str + "Shared Cooldown: " + spell.runTimeStats.sharedCooldown.ToString().Replace('_', ' ');
+        str = str + "Shared CD: " + spell.runTimeStats.sharedCooldown.ToString().Replace('_', ' ');
       }
     }
     if (string.Equals(name, "Enchanted Axes"))

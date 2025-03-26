@@ -2109,7 +2109,7 @@ label_16:
           if (dt != DamageType.Rake || (ZComponent) enemy == (object) this || !this.isPawn && this.parent == enemy.parent)
             return 0;
           if ((ZComponent) this.mount == (object) enemy)
-            goto label_49;
+            goto label_51;
         }
         if (this.FullArcane)
         {
@@ -2141,10 +2141,10 @@ label_16:
           switch (dt)
           {
             case DamageType.Heal:
-              goto label_47;
+              goto label_49;
             case DamageType.Drain:
               if (!((ZComponent) enemy != (object) this))
-                goto label_47;
+                goto label_49;
               else
                 break;
           }
@@ -2152,19 +2152,26 @@ label_16:
           {
             if ((ZComponent) enemy == (object) this.mount && dt == DamageType.Wallop)
               return 0;
+            bool flag = this.mount.race == CreatureRace.Undead && dt == DamageType.Light;
             damage = this.mount.ApplyDamage(hitBySpell, dt, damage, enemy, TurnCreated, spellRef, false);
             if (damage <= 0)
               return 0;
-            goto label_49;
+            if (flag)
+            {
+              dt = DamageType.None;
+              goto label_51;
+            }
+            else
+              goto label_51;
           }
         }
-label_47:
+label_49:
         if (!ZComponent.IsNull((ZComponent) this.tower))
         {
           this.tower.ApplyDamage(hitBySpell, dt, damage, enemy, TurnCreated, spellRef);
           return 0;
         }
-label_49:
+label_51:
         if (this.familiar.Has(FamiliarType.Stone) && this.familiarLevelStone > 0 && dt != DamageType.Percentage50)
         {
           if (damage < 0)
@@ -2360,7 +2367,7 @@ label_49:
             return 0;
           this.curSandDamage += damage;
         }
-        bool flag = this.shield > 0;
+        bool flag1 = this.shield > 0;
         if (this.shield > 0 && dt != DamageType.IgnoreShield && (dt != DamageType.Percentage50 && hitBySpell != SpellEnum.Blood_Craze))
         {
           this.HealBloodBank(enemy, Mathf.Min(this.shield, damage), dt);
@@ -2381,16 +2388,16 @@ label_49:
                 {
                   ZPerson parent = this.parent;
                   if ((parent != null ? (!parent.yourTurn ? 1 : 0) : 0) == 0 && this.game.serverState.busy != ServerState.Busy.No && (this.game.serverState.busy != ServerState.Busy.Moving && this.game.serverState.busy != ServerState.Busy.Moving_NoCountdown) && this.game.serverState.busy != ServerState.Busy.Between_Turns)
-                    goto label_168;
+                    goto label_170;
                 }
                 if (TurnCreated < this.turnProtectionShieldCast)
-                  goto label_168;
+                  goto label_170;
               }
               else
-                goto label_168;
+                goto label_170;
             }
             this.OnStunned();
-label_168:
+label_170:
             this.UpdateHealthTxt();
             enemy?.achievementParent?.awards.DealtDamge(enemy, this, damage, hitBySpell, spellRef);
             return 0;
@@ -2476,7 +2483,7 @@ label_168:
           this.DarkDefenses(true);
         if (this.health <= 0)
         {
-          if ((!flag || this.spellEnum != SpellEnum.Summon_Pixies && this.spellEnum != SpellEnum.Summon_Pegasus && this.spellEnum != SpellEnum.Summon_Paladin) && this.CheckToTunUndead(dt, enemy))
+          if ((!flag1 || this.spellEnum != SpellEnum.Summon_Pixies && this.spellEnum != SpellEnum.Summon_Pegasus && this.spellEnum != SpellEnum.Summon_Paladin) && this.CheckToTunUndead(dt, enemy))
           {
             this.UpdateHealthTxt();
             return 0;

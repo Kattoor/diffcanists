@@ -230,9 +230,15 @@ public static class GameSerializer
     bool flag3 = reader.ReadBoolean();
     game.helper.spell_effector.Add(new ZGame.IDSpell(z, reader.ReadInt32()));
     if (num5 != 0)
+    {
       ZMyCollider.Deserialize(ref z.colliderB, game, reader);
+      z.colliderB.spell = z;
+    }
     if (flag1)
+    {
       ZMyCollider.Deserialize(ref z.collider, game, reader);
+      z.collider.spell = z;
+    }
     if (flag2)
       z.effector = ZEffector.Deserialze(game, game.helper.GetCreature(num3), reader, z.effector);
     if (flag3)

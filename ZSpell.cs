@@ -2521,6 +2521,7 @@ label_7:
     zeffector.active = false;
     zeffector.position = new MyLocation(game.map.Width / 2, 0);
     zeffector.variable = Mathf.Max(1, Armageddon.CountCustomArmageddon(game, SpellEnum.Rising_Lava));
+    zeffector.TurnCreated = zperson.localTurn;
     foreach (ZEffector globalEffector in game.globalEffectors)
     {
       if ((ZComponent) globalEffector != (object) null && globalEffector.type == EffectorType.Dense_Fog)
@@ -2545,6 +2546,7 @@ label_7:
     zeffector.active = false;
     zeffector.position = new MyLocation(game.map.Width / 2, game.map.Height);
     zeffector.variable = Mathf.Max(1, Armageddon.CountCustomArmageddon(game, SpellEnum.Dense_Fog));
+    zeffector.TurnCreated = zperson.localTurn;
     foreach (ZEffector globalEffector in game.globalEffectors)
     {
       if (globalEffector.type == EffectorType.Rising_Lava)

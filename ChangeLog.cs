@@ -10,6 +10,12 @@ public static class ChangeLog
   {
     new ChangeLog.PatchNotes()
     {
+      version = "7.91",
+      date = "January 30, 2025",
+      notes = "Bug Fixes:\r\n- Monolith and Pyramid desync issues\r\n- Prickly Barrier Description\r\n- Bear Form Description\r\n- Unrated game creation issues\r\n- Liches will not take unexpected additional damage when mounted on an undead minion and hit by a light spell (Lights x2 damage will not be applied twice if the minion dies and there is left over damage)\r\n- Rising Lava Armageddon when theres more then 1 player\r\n        \r\n        \r\n        "
+    },
+    new ChangeLog.PatchNotes()
+    {
       version = "7.9",
       date = "January 26, 2025",
       notes = "Balance Updates:\r\n- Duplication armageddon does not count towards your controlled minion count (they will also disappear after 5 turns)\r\n- Structures can now be past if you already have one. However it will move the existing one and increase its power.\r\n\r\nAdditions:\r\n- Outfits for 10 or so achievements\r\n- Plague Water Lord skin\r\n\r\nBug Fixes:\r\n- Monolith is visible\r\n- Cannot damage your own structures with sand\r\n- All creatures on the team do their upkeep and then they'll refresh their effectors after the upkeep phase (It was mixed together)\r\n- Players who have not accumulated at least 150 total wands cannot play any type of rated game\r\n- The custom queue feature from last patch works now\r\n- Autumn Leaves that are deactivated will not cause damage if they fall (and will also check for collision when reactivating)\r\n- Boars/DK/Miner/Bear will properly check for effectors when charging/digging\r\n- Towering error text while an Angel\r\n- Custom Armageddon Flight/Towers will not interact with each other\r\n- AFK players in rated games will auto resign after 3 turns\r\n        \r\n\r\n        "

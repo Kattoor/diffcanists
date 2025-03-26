@@ -142,7 +142,7 @@ public class ZEffector : ZComponent
     }
   }
 
-  public int TurnCreated { get; private set; }
+  public int TurnCreated { get; set; }
 
   public int GetTurnsAlive()
   {
@@ -156,7 +156,7 @@ public class ZEffector : ZComponent
 
   internal static bool HasCreatureSerialization(EffectorType type)
   {
-    return type == EffectorType.Butterfly_Jar || type == EffectorType.Forest_Seed || type == EffectorType.Grove_Renewal;
+    return type == EffectorType.Butterfly_Jar || type == EffectorType.Forest_Seed || (type == EffectorType.Grove_Renewal || type == EffectorType.Monolith) || type == EffectorType.Pyramid;
   }
 
   internal static SpellEnum FromType(EffectorType type)
@@ -169,6 +169,10 @@ public class ZEffector : ZComponent
         return SpellEnum.Butterfly_Jar;
       case EffectorType.Grove_Renewal:
         return SpellEnum.Grove_Renewal;
+      case EffectorType.Monolith:
+        return SpellEnum.Monolith;
+      case EffectorType.Pyramid:
+        return SpellEnum.Pyramid;
       default:
         return SpellEnum.None;
     }
@@ -342,6 +346,7 @@ public class ZEffector : ZComponent
       if ((ZComponent) z.collider == (object) null)
         z.collider = new ZMyCollider();
       ZMyCollider.Deserialize(ref z.collider, game, reader);
+      z.collider.effector = z;
     }
     z._position = pos;
     z.id = num2;
@@ -495,6 +500,8 @@ public class ZEffector : ZComponent
       case EffectorType.Sand_Trap:
       case EffectorType.Burning_Sands:
       case EffectorType.Sandy_Shores:
+      case EffectorType.Monolith:
+      case EffectorType.Pyramid:
       case EffectorType.Mana:
         return true;
       case EffectorType.Static_Ball:

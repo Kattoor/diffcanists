@@ -132,6 +132,7 @@ public static class ZCreatureCreate
     if ((ZComponent) z.collider == (object) null)
       z.collider = new ZMyCollider();
     ZMyCollider.Deserialize(ref z.collider, z.game, reader);
+    z.collider.creature = z;
     z.isPawn = flag;
     z.game.helper.creatureID.Add(z.id, z);
     return z;

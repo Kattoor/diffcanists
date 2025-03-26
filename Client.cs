@@ -3318,7 +3318,6 @@ label_206:
                 else
                   c.health = result;
                 c.UpdateHealthTxt();
-                Debug.Log((object) result);
                 if (result <= 0)
                   c.OnDeath(true);
                 ChatBox instance = ChatBox.Instance;

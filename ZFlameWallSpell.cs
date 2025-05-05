@@ -2,15 +2,10 @@
 using System;
 using System.Collections.Generic;
 
+#nullable disable
 public class ZFlameWallSpell : ZSpell
 {
-  public ZMyCollider colliderA
-  {
-    get
-    {
-      return this.collider;
-    }
-  }
+  public ZMyCollider colliderA => this.collider;
 
   public bool IsFriendly(ZCreature c)
   {
@@ -63,7 +58,7 @@ public class ZFlameWallSpell : ZSpell
       FixedInt y1 = zflameWallSpell.velocity.y;
       FixedInt fixedInt3 = zflameWallSpell.velocity.x;
       FixedInt fixedInt4 = zflameWallSpell.velocity.y;
-      if (x1 > 1 || x1 < -1 || (y1 > 1 || y1 < -1))
+      if (x1 > 1 || x1 < -1 || y1 > 1 || y1 < -1)
       {
         if (FixedInt.Abs(x1) > FixedInt.Abs(y1))
           zflameWallSpell.steps = (int) FixedInt.Abs(x1) + 1;
@@ -105,20 +100,20 @@ public class ZFlameWallSpell : ZSpell
                 }
               }
               if (zflameWallSpell.spellEnum == SpellEnum.Flame_Wall)
-                zflameWallSpell.effector.EffectCreature((ZCreature) null, false);
+                zflameWallSpell.effector.EffectCreature((ZCreature) null);
             }
             zflameWallSpell.velocity.y = (FixedInt) 0;
             zflameWallSpell.velocity.x = (FixedInt) 0;
             zflameWallSpell.SetPosition(new MyLocation(zflameWallSpell.validX, zflameWallSpell.validY));
             zflameWallSpell.moving = (IEnumerator<float>) null;
             zflameWallSpell.isMoving = false;
-            if (!zflameWallSpell.ShouldSpellFall(false))
+            if (!zflameWallSpell.ShouldSpellFall())
             {
               yield break;
             }
             else
             {
-              zflameWallSpell.moving = zflameWallSpell.game.ongoing.RunSpell(zflameWallSpell.SpellMove(false, true), true);
+              zflameWallSpell.moving = zflameWallSpell.game.ongoing.RunSpell(zflameWallSpell.SpellMove(false, true));
               yield break;
             }
           }
@@ -174,8 +169,8 @@ public class ZFlameWallSpell : ZSpell
   {
     this.isNull = true;
     this.isDead = true;
-    this.colliderA?.Disable(true);
-    this.colliderB?.Disable(true);
+    this.colliderA?.Disable();
+    this.colliderB?.Disable();
     this.DestroyDelay();
   }
 }

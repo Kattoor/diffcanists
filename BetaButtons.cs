@@ -1,0 +1,30 @@
+
+#nullable disable
+public enum BetaButtons
+{
+  MenuStore,
+  MenuLogin,
+  MenuMain,
+  MenuLobby,
+  MenuUnrated,
+  MenuRated,
+  MenuCharacterCreation,
+  MenuSpellSelection,
+  MenuOptions,
+  MenuHUD,
+  MenuScreenSize,
+  MenuReplay,
+  MenuControls,
+  MenuRatings,
+  MenuAchievements,
+  MenuPrestige,
+  PopupSavedSpells,
+  PopupSavedOutfits,
+  RewindingPanel,
+  MenuPatchNotes,
+  MenuCredits,
+  MenuClanList,
+  MenuTutorialEditor,
+  MenuTutorialCodeEditor,
+  MenuColorScheme,
+}

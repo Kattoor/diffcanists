@@ -14,30 +14,31 @@ using System.Runtime.Serialization;
 using System.Text;
 using UnityEngine;
 
+#nullable disable
 namespace Educative
 {
   public class Tutorial
   {
     public string Name = "Custom Tutorial";
     public string message = "";
+    public int lastID;
     public string mapId = "Sandbox";
+    public string rootFolder = "";
     public int customWidth = 1920;
     public int customHeight = 960;
+    public bool isDefault;
+    public bool NOBACKGROUND;
+    public int _index;
     public List<Command> commands = new List<Command>();
     public SettingsPlayer settings = SettingsPlayer.DefaultSettings();
+    public KeyCode[] keyCodes;
     internal Dictionary<int, ZCreature> creatures = new Dictionary<int, ZCreature>();
+    internal IEnumerator<float> ie;
+    private int totalEntitiesCreated;
     internal List<ContainerIndicator> activeIndicators = new List<ContainerIndicator>();
     internal Dictionary<int, int> namedVariable = new Dictionary<int, int>();
     internal Dictionary<int, int> commandsByIdentifier = new Dictionary<int, int>();
     internal List<(int firstIndex, int lastIndex)> nestedLoops = new List<(int, int)>();
-    private List<KeyCode> m_activeInputs = new List<KeyCode>();
-    public int lastID;
-    public bool isDefault;
-    public bool NOBACKGROUND;
-    public int _index;
-    public KeyCode[] keyCodes;
-    internal IEnumerator<float> ie;
-    private int totalEntitiesCreated;
     internal Action<ContainerCreature> onDeath;
     internal Action<ContainerCreature, ContainerSpell> onCast;
     internal Action<int> onFrame;
@@ -51,15 +52,10 @@ namespace Educative
     [NonSerialized]
     internal Script myscript;
     internal float startTime;
+    private List<KeyCode> m_activeInputs = new List<KeyCode>();
     public bool waitingForContinue;
 
-    public static Tutorial Default
-    {
-      get
-      {
-        return new Tutorial();
-      }
-    }
+    public static Tutorial Default => new Tutorial();
 
     public void RemoveCallbacks()
     {
@@ -67,9 +63,34 @@ namespace Educative
       this.onDeath = (Action<ContainerCreature>) null;
     }
 
-    public static Tutorial FromCodeOnly(string s)
+    internal static string FindPath(string rootFolder, string file)
+    {
+      file = file.Replace('\\', ' ').Replace('/', ' ').Replace("..", "");
+      if (!file.EndsWith(".png"))
+        file += ".png";
+      Path.GetFileName(file);
+      return Tutorial.FindFirstFile(rootFolder, file) ?? Tutorial.FindFirstFile(SaveFolder.persistentDataPath + Path.DirectorySeparatorChar.ToString() + "TutorialAssets", file) ?? Tutorial.FindFirstFile(SaveFolder.persistentDataPath + Path.DirectorySeparatorChar.ToString() + "Tutorials", file) ?? Tutorial.FindFirstFile(SaveFolder.persistentDataPath + Path.DirectorySeparatorChar.ToString() + "CustomMaps", file) ?? Tutorial.FindFirstFile(KnownFolders.GetDownloadFolderPath(), file) ?? (string) null;
+    }
+
+    internal static string FindFirstFile(string rootFolder, string file)
+    {
+      if (!string.IsNullOrEmpty(rootFolder) && Directory.Exists(rootFolder))
+      {
+        if (!rootFolder.EndsWith("/") && !rootFolder.EndsWith("\\") && !rootFolder.EndsWith(Path.DirectorySeparatorChar.ToString()))
+          rootFolder += Path.DirectorySeparatorChar.ToString();
+        if (File.Exists(rootFolder + file))
+          return rootFolder + file;
+        string[] files = Directory.GetFiles(rootFolder, file, SearchOption.AllDirectories);
+        if (files.Length != 0)
+          return files[0];
+      }
+      return (string) null;
+    }
+
+    public static Tutorial FromCodeOnly(string s, string rootPath = null)
     {
       Tutorial tutorial = new Tutorial();
+      tutorial.rootFolder = rootPath;
       string str1 = "--NAME =";
       int num1 = s.IndexOf(str1, StringComparison.OrdinalIgnoreCase);
       int num2 = 0;
@@ -84,54 +105,54 @@ namespace Educative
       num2 = 0;
       if (num4 >= 0)
       {
-        int num3 = s.IndexOfAny(new char[2]{ '\n', '\r' }, num4 + str2.Length);
-        if (num3 > num4)
-          tutorial.message = s.Substring(num4 + str2.Length, num3 - num4 - str2.Length).Trim();
+        int num5 = s.IndexOfAny(new char[2]{ '\n', '\r' }, num4 + str2.Length);
+        if (num5 > num4)
+          tutorial.message = s.Substring(num4 + str2.Length, num5 - num4 - str2.Length).Trim();
       }
       string str3 = "--MAP =";
-      int num5 = s.IndexOf(str3, StringComparison.OrdinalIgnoreCase);
+      int num6 = s.IndexOf(str3, StringComparison.OrdinalIgnoreCase);
       num2 = 0;
-      if (num5 >= 0)
+      if (num6 >= 0)
       {
-        int num3 = s.IndexOfAny(new char[2]{ '\n', '\r' }, num5 + str3.Length);
-        if (num3 > num5)
-          tutorial.mapId = s.Substring(num5 + str3.Length, num3 - num5 - str3.Length).Trim();
+        int num7 = s.IndexOfAny(new char[2]{ '\n', '\r' }, num6 + str3.Length);
+        if (num7 > num6)
+          tutorial.mapId = s.Substring(num6 + str3.Length, num7 - num6 - str3.Length).Trim();
       }
       if (string.Equals("Empty", tutorial.mapId))
       {
         string str4 = "--WIDTH =";
-        int num3 = s.IndexOf(str4, StringComparison.OrdinalIgnoreCase);
+        int num8 = s.IndexOf(str4, StringComparison.OrdinalIgnoreCase);
         num2 = 0;
-        if (num3 >= 0)
+        if (num8 >= 0)
         {
-          int num6 = s.IndexOfAny(new char[2]{ '\n', '\r' }, num3 + str4.Length);
-          if (num6 > num3)
-            tutorial.customWidth = Mathf.Clamp(int.Parse(s.Substring(num3 + str4.Length, num6 - num3 - str4.Length).Trim()), 10, 8192);
+          int num9 = s.IndexOfAny(new char[2]{ '\n', '\r' }, num8 + str4.Length);
+          if (num9 > num8)
+            tutorial.customWidth = Mathf.Clamp(int.Parse(s.Substring(num8 + str4.Length, num9 - num8 - str4.Length).Trim()), 10, 8192);
         }
         string str5 = "--HEIGHT =";
-        int num7 = s.IndexOf(str5, StringComparison.OrdinalIgnoreCase);
+        int num10 = s.IndexOf(str5, StringComparison.OrdinalIgnoreCase);
         num2 = 0;
-        if (num7 >= 0)
+        if (num10 >= 0)
         {
-          int num6 = s.IndexOfAny(new char[2]{ '\n', '\r' }, num7 + str5.Length);
-          if (num6 > num7)
-            tutorial.customHeight = Mathf.Clamp(int.Parse(s.Substring(num7 + str5.Length, num6 - num7 - str5.Length).Trim()), 10, 8192);
+          int num11 = s.IndexOfAny(new char[2]{ '\n', '\r' }, num10 + str5.Length);
+          if (num11 > num10)
+            tutorial.customHeight = Mathf.Clamp(int.Parse(s.Substring(num10 + str5.Length, num11 - num10 - str5.Length).Trim()), 10, 8192);
         }
       }
       string str6 = "--SPELLS =";
-      int num8 = s.IndexOf(str6, StringComparison.OrdinalIgnoreCase);
+      int num12 = s.IndexOf(str6, StringComparison.OrdinalIgnoreCase);
       num2 = 0;
       if (s.IndexOf("--NOBACKGROUND") >= 0)
         tutorial.NOBACKGROUND = true;
-      if (num8 >= 0)
+      if (num12 >= 0)
       {
-        int num3 = s.IndexOfAny(new char[2]{ '\n', '\r' }, num8 + str6.Length);
-        if (num3 > num8)
+        int num13 = s.IndexOfAny(new char[2]{ '\n', '\r' }, num12 + str6.Length);
+        if (num13 > num12)
         {
-          string str4 = s.Substring(num8 + str6.Length, num3 - num8 - str6.Length).Trim();
-          if (str4[0] == '{' && str4[str4.Length - 1] == '}')
+          string str7 = s.Substring(num12 + str6.Length, num13 - num12 - str6.Length).Trim();
+          if (str7[0] == '{' && str7[str7.Length - 1] == '}')
           {
-            string[] strArray = str4.Substring(1, str4.Length - 2).Split(new char[1]
+            string[] strArray = str7.Substring(1, str7.Length - 2).Split(new char[1]
             {
               ','
             }, StringSplitOptions.RemoveEmptyEntries);
@@ -149,14 +170,14 @@ namespace Educative
       cscript1.code = s;
       cscript1.Name = "Script";
       CScript cscript2 = cscript1;
-      string str7 = "--DEBUG =";
-      int num9 = s.IndexOf(str7, StringComparison.OrdinalIgnoreCase);
+      string str8 = "--DEBUG =";
+      int num14 = s.IndexOf(str8, StringComparison.OrdinalIgnoreCase);
       num2 = 0;
-      if (num9 >= 0)
+      if (num14 >= 0)
       {
-        int num3 = s.IndexOfAny(new char[2]{ '\n', '\r' }, num9 + str7.Length);
-        if (num3 > num9)
-          cscript2.bool_debug = string.Equals(s.Substring(num9 + str7.Length, num3 - num9 - str7.Length).Trim(), "TRUE", StringComparison.OrdinalIgnoreCase);
+        int num15 = s.IndexOfAny(new char[2]{ '\n', '\r' }, num14 + str8.Length);
+        if (num15 > num14)
+          cscript2.bool_debug = string.Equals(s.Substring(num14 + str8.Length, num15 - num14 - str8.Length).Trim(), "TRUE", StringComparison.OrdinalIgnoreCase);
       }
       tutorial.commands.Add((Command) cscript2);
       return tutorial;
@@ -196,10 +217,10 @@ namespace Educative
 
     public int GetMapID()
     {
-      for (int index = 0; index < ClientResources.Instance._maps.Length; ++index)
+      for (int mapId = 0; mapId < ClientResources.Instance._maps.Length; ++mapId)
       {
-        if (string.Equals(ClientResources.Instance._maps[index].name, this.mapId))
-          return index;
+        if (string.Equals(ClientResources.Instance._maps[mapId].name, this.mapId))
+          return mapId;
       }
       return 0;
     }
@@ -275,35 +296,32 @@ namespace Educative
       this.m_activeInputs = keyCodeList2;
     }
 
-    public ZCreature GetPlayer()
-    {
-      return Client.game.players[0].first();
-    }
+    public ZCreature GetPlayer() => Client.game.players[0].first();
 
     public ZCreature GetCreature(int identifier)
     {
-      ZCreature zcreature = (ZCreature) null;
+      ZCreature creature1 = (ZCreature) null;
       if (identifier < 0 && this.creatures.Count > 0)
       {
-        foreach (KeyValuePair<int, ZCreature> creature in this.creatures)
+        foreach (KeyValuePair<int, ZCreature> creature2 in this.creatures)
         {
-          if ((ZComponent) creature.Value != (object) null)
-            return creature.Value;
+          if ((ZComponent) creature2.Value != (object) null)
+            return creature2.Value;
         }
       }
-      this.creatures.TryGetValue(identifier, out zcreature);
-      return zcreature;
+      this.creatures.TryGetValue(identifier, out creature1);
+      return creature1;
     }
 
     public List<Tutorial.ReturnEntity> CalculatePossibilities()
     {
-      List<Tutorial.ReturnEntity> returnEntityList = new List<Tutorial.ReturnEntity>();
-      returnEntityList.Add(new Tutorial.ReturnEntity()
+      List<Tutorial.ReturnEntity> possibilities = new List<Tutorial.ReturnEntity>();
+      possibilities.Add(new Tutorial.ReturnEntity()
       {
         identifier = -2,
         index = -2
       });
-      returnEntityList.Add(new Tutorial.ReturnEntity()
+      possibilities.Add(new Tutorial.ReturnEntity()
       {
         identifier = -1,
         index = -1
@@ -311,43 +329,43 @@ namespace Educative
       for (int index = 0; index < this.commands.Count; ++index)
       {
         if (this.commands[index].type == Command.Type.CreateEntity)
-          returnEntityList.Add(new Tutorial.ReturnEntity()
+          possibilities.Add(new Tutorial.ReturnEntity()
           {
             identifier = this.commands[index].identifier,
             index = index
           });
       }
-      return returnEntityList;
+      return possibilities;
     }
 
     public List<Tutorial.ReturnEntity> CalculateCommandID()
     {
-      List<Tutorial.ReturnEntity> returnEntityList = new List<Tutorial.ReturnEntity>();
-      returnEntityList.Add(new Tutorial.ReturnEntity()
+      List<Tutorial.ReturnEntity> commandId = new List<Tutorial.ReturnEntity>();
+      commandId.Add(new Tutorial.ReturnEntity()
       {
         name = "Next",
         identifier = -1,
         index = -1
       });
       for (int index = 0; index < this.commands.Count; ++index)
-        returnEntityList.Add(new Tutorial.ReturnEntity()
+        commandId.Add(new Tutorial.ReturnEntity()
         {
           name = (index + 1).ToString() + ") " + this.commands[index].Name,
           identifier = this.commands[index].identifier,
           index = index
         });
-      return returnEntityList;
+      return commandId;
     }
 
     public List<Tutorial.ReturnEntity> CalculateVariables()
     {
-      List<Tutorial.ReturnEntity> returnEntityList = new List<Tutorial.ReturnEntity>();
+      List<Tutorial.ReturnEntity> variables = new List<Tutorial.ReturnEntity>();
       for (int index = 0; index < this.commands.Count; ++index)
       {
         if (this.commands[index].type == Command.Type.IntitializeVariables)
         {
           foreach (CIntitializeVarible.ListVars listVars in ((CIntitializeVarible) this.commands[index]).list)
-            returnEntityList.Add(new Tutorial.ReturnEntity()
+            variables.Add(new Tutorial.ReturnEntity()
             {
               name = "var - " + listVars.name,
               identifier = listVars.identifier + 1000,
@@ -355,7 +373,7 @@ namespace Educative
             });
         }
       }
-      return returnEntityList;
+      return variables;
     }
 
     public void CreateCommand(Command c)
@@ -405,11 +423,11 @@ namespace Educative
     {
       using (MemoryStream memoryStream = new MemoryStream(sent))
       {
-        using (BsonReader bsonReader = new BsonReader((Stream) memoryStream))
+        using (BsonReader reader = new BsonReader((Stream) memoryStream))
           return new JsonSerializer()
           {
             TypeNameHandling = TypeNameHandling.Auto
-          }.Deserialize<Tutorial>((JsonReader) bsonReader);
+          }.Deserialize<Tutorial>((JsonReader) reader);
       }
     }
 
@@ -441,12 +459,12 @@ namespace Educative
 
     private void _GenerateLoopGotos()
     {
-      for (int start = this.commands.Count - 1; start >= 0; --start)
+      for (int index = this.commands.Count - 1; index >= 0; --index)
       {
-        if (this.commands[start].type == Command.Type.LoopWhileTrue)
-          this._FindLoopAtHere(start);
-        else if (this.commands[start].type == Command.Type.If)
-          ((CIfThen) this.commands[start]).commandID = this._ReturnLoopAtHere(start);
+        if (this.commands[index].type == Command.Type.LoopWhileTrue)
+          this._FindLoopAtHere(index);
+        else if (this.commands[index].type == Command.Type.If)
+          ((CIfThen) this.commands[index]).commandID = this._ReturnLoopAtHere(index);
       }
       for (int index = 0; index < this.commands.Count; ++index)
       {
@@ -497,6 +515,29 @@ namespace Educative
       return -1;
     }
 
+    public void Speak(
+      ContainerCreature creature,
+      string message,
+      bool onContinue,
+      bool pauseGame,
+      bool unpauseGame)
+    {
+      Action action1 = (Action) (() =>
+      {
+        HUD.instance.turTextbox.text = "";
+        HUD.instance.tutPopup.gameObject.SetActive(false);
+        this.waitingForContinue = false;
+        if (!unpauseGame)
+          return;
+        Client.game.tutorialPaused = false;
+      });
+      Action action2 = (Action) (() => HUD.instance.ToggleTutorial());
+      HUD.instance.TutorialPopup(message, onContinue ? action1 : action2, onContinue, pauseGame);
+      if (!onContinue)
+        return;
+      this.waitingForContinue = true;
+    }
+
     public void ShowInfo(string message, bool onContinue, bool pauseGame, bool unpauseGame)
     {
       Action action1 = (Action) (() =>
@@ -517,7 +558,7 @@ namespace Educative
 
     public void OnWin()
     {
-      if (!this.isDefault || this._index < 0 || (this._index >= Prestige.tutorialInfo.Count || Client.MyAccount.tutorials[this._index]))
+      if (!this.isDefault || this._index < 0 || this._index >= Prestige.tutorialInfo.Count || Client.MyAccount.tutorials[this._index])
         return;
       Client.MyAccount.tutorials[this._index] = true;
       Prestige.Ask((byte) 8, this._index);
@@ -541,7 +582,7 @@ namespace Educative
         Client.game.tutorialPaused = false;
       });
       Action toggleTut = (Action) (() => HUD.instance.ToggleTutorial());
-      HUD.instance.TutorialPopup("No info? Some tutorial this is!!!!!!!!!!!", toggleTut, false, false);
+      HUD.instance.TutorialPopup("No info? Some tutorial this is!!!!!!!!!!!", toggleTut);
       t.startTime = Time.realtimeSinceStartup;
       while (index < t.commands.Count && (UnityEngine.Object) HUD.instance != (UnityEngine.Object) null)
       {
@@ -569,7 +610,7 @@ namespace Educative
             {
               creature1.MoveToPosition = cmove.point_location.ToMyLocation();
               creature1.Demount();
-              creature1.Fall(false);
+              creature1.Fall();
             }
             ++index;
             break;
@@ -577,7 +618,7 @@ namespace Educative
             ++t.totalEntitiesCreated;
             if (t.totalEntitiesCreated > 100)
             {
-              HUD.instance.TutorialPopup("Entity Creation limit reached - Aborting tutorial", toggleTut, false, false);
+              HUD.instance.TutorialPopup("Entity Creation limit reached - Aborting tutorial", toggleTut);
               yield break;
             }
             else
@@ -585,7 +626,7 @@ namespace Educative
               CCreateEntity ccreateEntity = (CCreateEntity) command;
               if (ccreateEntity.summon == 0)
               {
-                ZPerson zperson1 = Player.SpawnZezima(new MyLocation((FixedInt) (float) ccreateEntity.point_location.x, (FixedInt) (float) ccreateEntity.point_location.y), ccreateEntity.bool_OnPlayerPanel, ccreateEntity.Name, ccreateEntity.team, ccreateEntity.settings, true, 0);
+                ZPerson zperson1 = Player.SpawnZezima(new MyLocation((FixedInt) (float) ccreateEntity.point_location.x, (FixedInt) (float) ccreateEntity.point_location.y), ccreateEntity.bool_OnPlayerPanel, ccreateEntity.Name, ccreateEntity.team, ccreateEntity.settings);
                 t.creatures.Add(ccreateEntity.identifier, zperson1.first());
                 if (ccreateEntity.bool_OnPlayerPanel)
                 {
@@ -604,7 +645,7 @@ namespace Educative
               {
                 Spell summonSpell = ClientResources.Instance.summonSpells[Mathf.Clamp(ccreateEntity.summon - 1, 0, ClientResources.Instance.summonSpells.Length - 1)];
                 ZPerson overrideZPerson = ccreateEntity.team >= HUD.instance.game.players.Count || !((ZComponent) HUD.instance.game.players[ccreateEntity.team].first() != (object) null) ? Tutorial.CreatePerson(ccreateEntity.team, ccreateEntity.Name, ccreateEntity.settings, ccreateEntity.bool_OnPlayerPanel) : HUD.instance.game.players[ccreateEntity.team];
-                ZCreature c = ZSpell.FireSummon(summonSpell, HUD.instance.game, overrideZPerson.first(), new MyLocation((FixedInt) (float) ccreateEntity.point_location.x, (FixedInt) (float) ccreateEntity.point_location.y), 1, false, overrideZPerson);
+                ZCreature c = ZSpell.FireSummon(summonSpell, HUD.instance.game, overrideZPerson.first(), new MyLocation((FixedInt) (float) ccreateEntity.point_location.x, (FixedInt) (float) ccreateEntity.point_location.y), 1, overrideZPerson: overrideZPerson);
                 t.creatures.Add(ccreateEntity.identifier, c);
                 if (ccreateEntity.bool_OnPlayerPanel)
                 {
@@ -685,7 +726,7 @@ namespace Educative
               Spell spell = Inert.GetSpell(ccastSpell.spellEnum);
               if ((UnityEngine.Object) spell != (UnityEngine.Object) null)
               {
-                ZSpell.FireWhich(spell, creature4, creature4.position, FixedInt.Create(ccastSpell.angle), FixedInt.Create(ccastSpell.power), ccastSpell.point_target.ToMyLocation(), NullMyLocation.Get(), 0, false, (SpellSlot) null, false);
+                ZSpell.FireWhich(spell, creature4, creature4.position, FixedInt.Create(ccastSpell.angle), FixedInt.Create(ccastSpell.power), ccastSpell.point_target.ToMyLocation(), NullMyLocation.Get());
                 if ((ZComponent) creature4 == (object) Player.Instance?.person?.first())
                   Player.Instance.UnselectSpell();
               }
@@ -814,11 +855,11 @@ namespace Educative
             cif.rightValue.SetEntity(t);
             if (cif.Evaulate())
             {
-              for (int index1 = 0; index1 < t.commands.Count; ++index1)
+              for (int index2 = 0; index2 < t.commands.Count; ++index2)
               {
-                if (t.commands[index1].identifier == cif.commandID)
+                if (t.commands[index2].identifier == cif.commandID)
                 {
-                  index = index1 - 1;
+                  index = index2 - 1;
                   break;
                 }
               }
@@ -832,10 +873,10 @@ namespace Educative
             ++index;
             break;
           case Command.Type.CreateIndicator:
-            for (int index1 = t.activeIndicators.Count - 1; index1 >= 0; --index1)
+            for (int index3 = t.activeIndicators.Count - 1; index3 >= 0; --index3)
             {
-              if ((UnityEngine.Object) t.activeIndicators[index1].indicator == (UnityEngine.Object) null)
-                t.activeIndicators.RemoveAt(index1);
+              if ((UnityEngine.Object) t.activeIndicators[index3].indicator == (UnityEngine.Object) null)
+                t.activeIndicators.RemoveAt(index3);
             }
             if (t.activeIndicators.Count < 10)
             {
@@ -853,7 +894,7 @@ namespace Educative
               ++index;
               break;
             }
-            HUD.instance.TutorialPopup("Indicator limit reached - Aborting tutorial", toggleTut, false, false);
+            HUD.instance.TutorialPopup("Indicator limit reached - Aborting tutorial", toggleTut);
             yield break;
           case Command.Type.ClearIndicators:
             foreach (ContainerIndicator activeIndicator in t.activeIndicators)
@@ -987,9 +1028,9 @@ namespace Educative
               if (onFrame.IsNotNil())
                 t.onFrame = (Action<int>) (z => script.Call(onFrame, (object) z));
               if (dynValue1.IsNil())
-                script.DoString("function waitFPS(iterations, graphics)\r\n    if(graphics) then\r\n        while iterations > 0 do\r\n            iterations = iterations - 1\r\n            coroutine.yield(0)\r\n        end\r\n    else\r\n        iterations = iterations + game.frame\r\n\t    while iterations > game.frame do\r\n\t\t    coroutine.yield(0)\r\n\t    end\r\n    end\r\nend", (Table) null, (string) null);
+                script.DoString("function waitFPS(iterations, graphics)\r\n    if(graphics) then\r\n        while iterations > 0 do\r\n            iterations = iterations - 1\r\n            coroutine.yield(0)\r\n        end\r\n    else\r\n        iterations = iterations + game.frame\r\n\t    while iterations > game.frame do\r\n\t\t    coroutine.yield(0)\r\n\t    end\r\n    end\r\nend");
               if (dynValue2.IsNil())
-                script.DoString("function wait(t)\r\n    local e = (game.totalTimeElapsed + t) \r\n    while (e > game.totalTimeElapsed) do\r\n        coroutine.yield(0)  \r\n    end\r\nend", (Table) null, (string) null);
+                script.DoString("function wait(t)\r\n    local e = (game.totalTimeElapsed + t) \r\n    while (e > game.totalTimeElapsed) do\r\n        coroutine.yield(0)  \r\n    end\r\nend");
               DynValue coroutine = script.CreateCoroutine(function);
               while (true)
               {
@@ -997,18 +1038,18 @@ namespace Educative
                 {
                   if (snap && Input.anyKeyDown && Client.game.AllowCallbacks)
                   {
-                    for (int index1 = 0; index1 < t.keyCodes.Length; ++index1)
+                    for (int index4 = 0; index4 < t.keyCodes.Length; ++index4)
                     {
-                      if (Input.GetKeyDown(t.keyCodes[index1]))
-                        script.Call(onKeyDown, (object) t.keyCodes[index1]);
+                      if (Input.GetKeyDown(t.keyCodes[index4]))
+                        script.Call(onKeyDown, (object) t.keyCodes[index4]);
                     }
                   }
                   if (hasKeyHeld && Input.anyKey && Client.game.AllowCallbacks)
                   {
-                    for (int index1 = 0; index1 < t.keyCodes.Length; ++index1)
+                    for (int index5 = 0; index5 < t.keyCodes.Length; ++index5)
                     {
-                      if (Input.GetKey(t.keyCodes[index1]))
-                        script.Call(onKeyHeld, (object) t.keyCodes[index1]);
+                      if (Input.GetKey(t.keyCodes[index5]))
+                        script.Call(onKeyHeld, (object) t.keyCodes[index5]);
                     }
                   }
                   if (hasKeyUp && Client.game.AllowCallbacks)
@@ -1060,7 +1101,7 @@ namespace Educative
       if (team > 11)
         team = 11;
       GameFacts gameFacts = HUD.instance.game.gameFacts;
-      ZPerson zperson = new ZPerson()
+      ZPerson person = new ZPerson()
       {
         game = HUD.instance.game,
         id = (byte) team,
@@ -1068,19 +1109,19 @@ namespace Educative
         name = team == 0 ? Client.Name : name,
         settingsPlayer = settings
       };
-      zperson.clientColor = TeamColors.GetColor((int) zperson.id);
+      person.clientColor = TeamColors.GetColor((int) person.id);
       if (onPlayerPanel)
       {
-        gameFacts.game.players.Add(zperson);
+        gameFacts.game.players.Add(person);
         TcpConnection tcpConnection = new TcpConnection();
         gameFacts.connections.Add((Connection) tcpConnection);
-        tcpConnection.player.player = zperson;
-        tcpConnection.player.account = zperson.account;
-        zperson.connection = (Connection) tcpConnection;
+        tcpConnection.player.player = person;
+        tcpConnection.player.account = person.account;
+        person.connection = (Connection) tcpConnection;
       }
       else
-        gameFacts.game._playersExtended.Add(zperson);
-      return zperson;
+        gameFacts.game._playersExtended.Add(person);
+      return person;
     }
 
     public class ReturnEntity

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 
+#nullable disable
 namespace mattmc3.dotmore.Collections.Generic
 {
   public class Comparer2<T> : Comparer<T>
@@ -10,14 +11,9 @@ namespace mattmc3.dotmore.Collections.Generic
 
     public Comparer2(Comparison<T> comparison)
     {
-      if (comparison == null)
-        throw new ArgumentNullException(nameof (comparison));
-      this._compareFunction = comparison;
+      this._compareFunction = comparison != null ? comparison : throw new ArgumentNullException(nameof (comparison));
     }
 
-    public override int Compare(T arg1, T arg2)
-    {
-      return this._compareFunction(arg1, arg2);
-    }
+    public override int Compare(T arg1, T arg2) => this._compareFunction(arg1, arg2);
   }
 }

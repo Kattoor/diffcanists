@@ -1,6 +1,7 @@
 
 using System;
 
+#nullable disable
 namespace UnityThreading
 {
   public static class ActionExtension
@@ -10,10 +11,7 @@ namespace UnityThreading
       return that.RunAsync(UnityThreadHelper.TaskDistributor);
     }
 
-    public static Task RunAsync(this Action that, TaskDistributor target)
-    {
-      return target.Dispatch(that);
-    }
+    public static Task RunAsync(this Action that, TaskDistributor target) => target.Dispatch(that);
 
     public static Task<T> RunAsync<T>(this Func<T> that)
     {
@@ -25,9 +23,6 @@ namespace UnityThreading
       return target.Dispatch<T>(that);
     }
 
-    public static Task<T> AsTask<T>(this Func<T> that)
-    {
-      return new Task<T>(that);
-    }
+    public static Task<T> AsTask<T>(this Func<T> that) => new Task<T>(that);
   }
 }

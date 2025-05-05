@@ -1,4 +1,5 @@
 
+#nullable disable
 namespace LibNoise
 {
   public enum QualityMode

@@ -1,6 +1,7 @@
 
 using System;
 
+#nullable disable
 [Serializable]
 public enum Curve
 {

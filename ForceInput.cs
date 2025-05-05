@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+#nullable disable
 public class ForceInput : MonoBehaviour
 {
   public Selectable input;

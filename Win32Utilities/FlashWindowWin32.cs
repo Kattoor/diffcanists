@@ -2,6 +2,7 @@
 using System;
 using System.Runtime.InteropServices;
 
+#nullable disable
 namespace Win32Utilities
 {
   internal class FlashWindowWin32 : IFlashWindow

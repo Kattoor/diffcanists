@@ -10,13 +10,9 @@ using System.Text;
 using TMPro;
 using UnityEngine;
 
+#nullable disable
 public class ReplayMenu : Catalogue
 {
-  public static string nameWhoRecordedReplay = "";
-  public static bool isSpectator = false;
-  internal List<ReplayMenu.CleanReplayName> games = new List<ReplayMenu.CleanReplayName>();
-  internal string currentGame = "";
-  private string lastClicked = "";
   public GameObject buttonOpenFileExplorer;
   public UIOnHover watchButton;
   public UIOnHover saveButton;
@@ -28,10 +24,15 @@ public class ReplayMenu : Catalogue
   public TMP_Text txt_name;
   public TMP_Text txt_GameOver;
   public GameObject panelGameOver;
+  internal List<ReplayMenu.CleanReplayName> games = new List<ReplayMenu.CleanReplayName>();
+  internal string currentGame = "";
   internal ButtonReplayFile selectedGameObject;
+  public static string nameWhoRecordedReplay = "";
+  public static bool isSpectator = false;
   public UIOnHover buttonDelete;
   public UIOnHover buttonRename;
   public RecycledScrollViewGeneric recycled;
+  private string lastClicked = "";
 
   public static ReplayMenu Instance { get; private set; }
 
@@ -77,7 +78,7 @@ public class ReplayMenu : Catalogue
       this.selectedGameObject.text.text = s;
       ReplayMenu.Instance.ViewGame(str);
     });
-    myContextMenu.AddInput(a, (string) null, false);
+    myContextMenu.AddInput(a);
   }
 
   public static string GetName(string n)
@@ -115,7 +116,7 @@ public class ReplayMenu : Catalogue
             ReplayMenu.isSpectator = !reader.ReadBoolean();
             ReplayMenu.nameWhoRecordedReplay = reader.ReadString();
             GameFacts gf = new GameFacts();
-            gf.ManualDeserialize(reader, true, false, (byte) 0);
+            gf.ManualDeserialize(reader, true);
             Client.game = gf.game;
             StringBuilder stringBuilder = new StringBuilder("Players: ");
             for (int index = 0; index < gf.players.Count; ++index)
@@ -197,10 +198,7 @@ public class ReplayMenu : Catalogue
     ReplayMenu.Instance = (ReplayMenu) null;
   }
 
-  private void Start()
-  {
-    this.Populate();
-  }
+  private void Start() => this.Populate();
 
   private void Populate()
   {
@@ -267,10 +265,7 @@ public class ReplayMenu : Catalogue
     this.Populate();
   }
 
-  public void press_mainmenu()
-  {
-    Controller.Instance.OpenMenu(Controller.Instance.MenuMain, false);
-  }
+  public void press_mainmenu() => Controller.Instance.OpenMenu(Controller.Instance.MenuMain, false);
 
   public void press_WatchReplay()
   {
@@ -298,10 +293,7 @@ public class ReplayMenu : Catalogue
     this.ViewGame(str);
   }
 
-  public void OpenFileLocation()
-  {
-    Global.OpenFileLocation("SavedReplays");
-  }
+  public void OpenFileLocation() => Global.OpenFileLocation("SavedReplays");
 
   public class OldTeams
   {

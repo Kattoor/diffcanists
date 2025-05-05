@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 
+#nullable disable
 namespace UnityThreading
 {
   public class Channel<T> : IDisposable
@@ -25,15 +26,10 @@ namespace UnityThreading
 
     public Channel(int bufferSize)
     {
-      if (bufferSize < 1)
-        throw new ArgumentOutOfRangeException(nameof (bufferSize), "Must be greater or equal to 1.");
-      this.BufferSize = bufferSize;
+      this.BufferSize = bufferSize >= 1 ? bufferSize : throw new ArgumentOutOfRangeException(nameof (bufferSize), "Must be greater or equal to 1.");
     }
 
-    ~Channel()
-    {
-      this.Dispose();
-    }
+    ~Channel() => this.Dispose();
 
     public void Resize(int newBufferSize)
     {
@@ -56,10 +52,7 @@ namespace UnityThreading
       }
     }
 
-    public bool Set(T value)
-    {
-      return this.Set(value, int.MaxValue);
-    }
+    public bool Set(T value) => this.Set(value, int.MaxValue);
 
     public bool Set(T value, int timeoutInMilliseconds)
     {
@@ -88,10 +81,7 @@ namespace UnityThreading
       }
     }
 
-    public T Get()
-    {
-      return this.Get(int.MaxValue, default (T));
-    }
+    public T Get() => this.Get(int.MaxValue, default (T));
 
     public T Get(int timeoutInMilliseconds, T defaultValue)
     {

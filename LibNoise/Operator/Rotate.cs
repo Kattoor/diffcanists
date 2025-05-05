@@ -1,6 +1,7 @@
 
 using System;
 
+#nullable disable
 namespace LibNoise.Operator
 {
   public class Rotate : ModuleBase
@@ -39,38 +40,20 @@ namespace LibNoise.Operator
 
     public double X
     {
-      get
-      {
-        return this._x;
-      }
-      set
-      {
-        this.SetAngles(value, this._y, this._z);
-      }
+      get => this._x;
+      set => this.SetAngles(value, this._y, this._z);
     }
 
     public double Y
     {
-      get
-      {
-        return this._y;
-      }
-      set
-      {
-        this.SetAngles(this._x, value, this._z);
-      }
+      get => this._y;
+      set => this.SetAngles(this._x, value, this._z);
     }
 
     public double Z
     {
-      get
-      {
-        return this._x;
-      }
-      set
-      {
-        this.SetAngles(this._x, this._y, value);
-      }
+      get => this._x;
+      set => this.SetAngles(this._x, this._y, value);
     }
 
     private void SetAngles(double x, double y, double z)

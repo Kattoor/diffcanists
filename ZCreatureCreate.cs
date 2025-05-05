@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+#nullable disable
 public static class ZCreatureCreate
 {
   public static ZCreature CreateCreature(
@@ -27,6 +28,11 @@ public static class ZCreatureCreate
     return z;
   }
 
+  public static bool IsGate(SpellSlot slot)
+  {
+    return slot.spell.spellEnum == SpellEnum.Arcane_Gate || slot.spell.spellEnum == SpellEnum.Santas_Magic || slot.spell.spellEnum == SpellEnum.Sands_of_Time;
+  }
+
   public static ZCreature Deserialize(ZPerson parent, myBinaryReader reader, int index)
   {
     int num1 = reader.ReadBoolean() ? 1 : 0;
@@ -36,7 +42,7 @@ public static class ZCreatureCreate
     Creature creature = Inert.GetCreature(reader.ReadString());
     bool flag = reader.ReadBoolean();
     MyLocation pos = reader.ReadMyLocation();
-    ZCreature z = !flag ? Inert.CreateCharacter(parent, parent.settingsPlayer, pos, index, true, true) : (typeof (CreatureThorn) == creature.GetType() ? (ZCreature) ZCreatureCreate.CreateThorn(parent.game, parent, (CreatureThorn) creature, pos.ToSinglePrecision(), Quaternion.identity, parent.game.GetMapTransform()) : (typeof (CreatureJavelin) == creature.GetType() ? (ZCreature) ZCreatureCreate.CreateJavalin(parent.game, (CreatureJavelin) creature, pos.ToSinglePrecision(), Quaternion.identity, parent.game.GetMapTransform()) : ZCreatureCreate.CreateCreature(parent, creature, pos.ToSinglePrecision(), Quaternion.identity, parent.game.GetMapTransform(), false)));
+    ZCreature z = !flag ? Inert.CreateCharacter(parent, parent.settingsPlayer, pos, index, noSpells: true) : (typeof (CreatureThorn) == ((object) creature).GetType() ? (ZCreature) ZCreatureCreate.CreateThorn(parent.game, parent, (CreatureThorn) creature, pos.ToSinglePrecision(), Quaternion.identity, parent.game.GetMapTransform()) : (typeof (CreatureJavelin) == ((object) creature).GetType() ? (ZCreature) ZCreatureCreate.CreateJavalin(parent.game, (CreatureJavelin) creature, pos.ToSinglePrecision(), Quaternion.identity, parent.game.GetMapTransform()) : ZCreatureCreate.CreateCreature(parent, creature, pos.ToSinglePrecision(), Quaternion.identity, parent.game.GetMapTransform(), false)));
     z.id = id;
     z.position = pos;
     z.parent = parent;
@@ -66,14 +72,15 @@ public static class ZCreatureCreate
     z.HighJumpData = reader.ReadMyLocation();
     parent.game.helper.id_daOgParent.Add(new ZGame.ID2(z, reader.ReadInt32()));
     parent.game.helper.id_oldParents.Add(new ZGame.ID2(z, reader.ReadInt32()));
+    parent.game.helper.id_curseOfHaute.Add(new ZGame.ID2(z, reader.ReadInt32()));
     z.spells.Clear();
     int num2 = reader.ReadInt32();
     for (int index1 = 0; index1 < num2; ++index1)
     {
-      SpellSlot s = SpellSlot.Deserialize(parent, reader);
-      z.spells.Add(s);
-      if (!flag && s.spell.spellEnum == SpellEnum.Arcane_Gate || s.spell.spellEnum == SpellEnum.Santas_Magic)
-        z.parent?.AddGate(s);
+      SpellSlot spellSlot = SpellSlot.Deserialize(parent, reader);
+      z.spells.Add(spellSlot);
+      if (!flag && ZCreatureCreate.IsGate(spellSlot))
+        z.parent?.AddGate(spellSlot);
     }
     z.moneyBags = reader.ReadBoolean();
     z.audioBags = reader.ReadBoolean();
@@ -83,7 +90,7 @@ public static class ZCreatureCreate
     z.scaleFixed = (FixedInt) reader.ReadInt64();
     z.FullArcane = reader.ReadBoolean();
     z.spellEnum = (SpellEnum) reader.ReadInt32();
-    z.isMindControlled = reader.ReadBoolean();
+    parent.game.helper.id_mindController.Add(new ZGame.ID2(z, reader.ReadInt32()));
     z.gliding = reader.ReadBoolean();
     z.moneyFrames = reader.ReadInt32();
     z.removeFlight = reader.ReadBoolean();
@@ -175,6 +182,7 @@ public static class ZCreatureCreate
     writer.Write(c.HighJumpData);
     writer.Write(ZGame.GetID(c.daOriginalTrueParent));
     writer.Write(ZGame.GetID(c.originalParent));
+    writer.Write(ZGame.GetID(c.curse_of_haute));
     if (!includeSpells && !c.isPawn)
     {
       writer.Write(0);
@@ -183,7 +191,7 @@ public static class ZCreatureCreate
     {
       writer.Write(c.spells.Count);
       for (int index = 0; index < c.spells.Count; ++index)
-        c.spells[index].Serialize(c.game, writer, false);
+        c.spells[index].Serialize(c.game, writer);
     }
     writer.Write(c.moneyBags);
     writer.Write(c.audioBags);
@@ -193,7 +201,7 @@ public static class ZCreatureCreate
     writer.Write(c.scaleFixed.RawValue);
     writer.Write(c.FullArcane);
     writer.Write((int) c.spellEnum);
-    writer.Write(c.isMindControlled);
+    writer.Write(ZGame.GetID(c.mindController));
     writer.Write(c.gliding);
     writer.Write(c.moneyFrames);
     writer.Write(c.removeFlight);
@@ -242,22 +250,18 @@ public static class ZCreatureCreate
     c.collider.Serialize(c.game, writer);
   }
 
-  public static ZCreature Clone(
-    ZGame game,
-    ZCreature old,
-    Transform p,
-    MyLocation position)
+  public static ZCreature Clone(ZGame game, ZCreature old, Transform p, MyLocation position)
   {
     ZCreature zcreature = old.baseCreature.Get();
     zcreature.id = ++game.nextCreatureID;
     zcreature.game = game;
-    zcreature.Clone(old, false);
+    zcreature.Clone(old);
     zcreature.ClientSetup(old.baseCreature, position.ToSinglePrecision(), Quaternion.identity, p);
     zcreature.gliding = false;
     zcreature.invulnerable = -1;
     zcreature.game = game;
     zcreature.collider.world = game.world;
-    ZSpell.ApplyEffectors(game, zcreature, zcreature.position, -1, (Spell) null, (ZCreature) null, false);
+    ZSpell.ApplyEffectors(game, zcreature, zcreature.position);
     zcreature.spells.Clear();
     foreach (SpellSlot spell in old.spells)
       zcreature.spells.Add(new SpellSlot(spell));
@@ -267,6 +271,8 @@ public static class ZCreatureCreate
         zcreature.ClientTransformWaterTroll();
       else if (zcreature.type == CreatureType.Hard_Water_Troll)
         zcreature.ClientTransformFreshWaterTroll();
+      else if (zcreature.type == CreatureType.Flesh_Golem)
+        zcreature.ClientTransformFleshGolem();
     }
     if (zcreature.flying)
     {

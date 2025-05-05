@@ -5,11 +5,9 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
+#nullable disable
 public class StoreMenu : MonoBehaviour
 {
-  private static ArcanistsStore curStore = (ArcanistsStore) null;
-  private static bool holdScroll = false;
-  public static float scrollPos = 1f;
   public TMP_Text txtCrystals;
   public TMP_Text txtTomatoes;
   public TMP_Text testServer;
@@ -21,18 +19,21 @@ public class StoreMenu : MonoBehaviour
   public ButtonSteamStore[] steamButtons;
   public GameObject panelSteam;
   public Sprite spriteCrystal;
+  private static ArcanistsStore curStore = (ArcanistsStore) null;
+  private static bool holdScroll = false;
   public TMP_Text startedFromSteam;
   public ScrollRect scrollRect;
+  public static float scrollPos = 1f;
 
   public static StoreMenu Instance { get; private set; }
 
   private void Awake()
   {
     StoreMenu.Instance = this;
-    this.txtCrystals.SetText(Client.MyAccount.dust.ToString(), true);
+    this.txtCrystals.SetText(Client.MyAccount.dust.ToString());
     if (Client.MyAccount.tomatoes > 0)
     {
-      this.txtTomatoes.SetText(Client.MyAccount.tomatoes.ToString(), true);
+      this.txtTomatoes.SetText(Client.MyAccount.tomatoes.ToString());
       this.txtTomatoes.transform.parent.gameObject.SetActive(true);
     }
     this.startedFromSteam.gameObject.SetActive(!SteamManager.startedFromSteam);
@@ -69,10 +70,7 @@ public class StoreMenu : MonoBehaviour
     this.scrollRect.verticalScrollbar.onValueChanged.AddListener(new UnityAction<float>(this.OnScroll));
   }
 
-  public void ClickClose()
-  {
-    UnityEngine.Object.Destroy((UnityEngine.Object) this.gameObject);
-  }
+  public void ClickClose() => UnityEngine.Object.Destroy((UnityEngine.Object) this.gameObject);
 
   public void ClickTomatoes()
   {
@@ -129,7 +127,7 @@ public class StoreMenu : MonoBehaviour
     {
       ButtonArcanistsStore buttonArcanistsStore = UnityEngine.Object.Instantiate<ButtonArcanistsStore>(this.pfabItem, (Transform) this.containerStore);
       bool isUnlocked = storeItems.IsUnlocked(x.which, i);
-      bool isActive = activeItems.FindIndex(closure_0 ?? (closure_0 = (Predicate<ActiveItem>) (z => z.which == x.which && z.index == i))) > -1;
+      bool isActive = activeItems.FindIndex((Predicate<ActiveItem>) (z => z.which == x.which && z.index == i)) > -1;
       buttonArcanistsStore.Setup(x1, x.which, i, isUnlocked, isActive);
       buttonArcanistsStore.gameObject.SetActive(true);
       int e = i;
@@ -153,10 +151,7 @@ public class StoreMenu : MonoBehaviour
     StoreMenu.scrollPos = v;
   }
 
-  public void SetScrollPosition()
-  {
-    this.scrollRect.verticalNormalizedPosition = 0.0f;
-  }
+  public void SetScrollPosition() => this.scrollRect.verticalNormalizedPosition = 0.0f;
 
   private void _clickedArcButton()
   {
@@ -175,23 +170,23 @@ public class StoreMenu : MonoBehaviour
   {
     ArcanistsStore.Item item = Store.Instance.Get(which)[itemIndex];
     if (which == ArcanistsStore.Which.SpellSkin)
-      MyMessageBox.Create("Buy <#FF0000>" + item.name + "</color> for <#00FFFF>" + (object) item.cost + "</color> crystals?", (Action) (() => Prestige.Ask((byte) 12, (int) which, itemIndex)), "Ok", "Cancel", (Action) null, (Action) null, item.sprite, "Preview", (Action) (() =>
+      MyMessageBox.Create("Buy <#FF0000>" + item.name + "</color> for <#00FFFF>" + (object) item.cost + "</color> crystals?", (Action) (() => Prestige.Ask((byte) 12, (int) which, itemIndex)), icon: item.sprite, other: "Preview", onOther: (Action) (() =>
       {
         if ((UnityEngine.Object) MainMenu.Instance == (UnityEngine.Object) null)
         {
-          MyMessageBox.Create("Sorry, you can only preview skins from the main menu!", (Action) null, "Ok", "Cancel", (Action) null, (Action) null, (Sprite) null, (string) null, (Action) null);
+          MyMessageBox.Create("Sorry, you can only preview skins from the main menu!", (Action) null);
         }
         else
         {
           Client.previewItem = item;
           Client._gameFacts = new GameFacts();
           Client.joinedFrom = Client.JoinLocation.Store;
-          Controller.Instance.InitMap(true, false);
+          Controller.Instance.InitMap(true);
           DiscordIntergration.Instance?.UpdateActivitySandbox();
         }
       }));
     else
-      MyMessageBox.Create("Buy <#FF0000>" + item.name + "</color> for <#00FFFF>" + (object) item.cost + "</color> crystals?", (Action) (() => Prestige.Ask((byte) 12, (int) which, itemIndex)), "Ok", "Cancel", (Action) null, (Action) null, item.sprite, (string) null, (Action) null);
+      MyMessageBox.Create("Buy <#FF0000>" + item.name + "</color> for <#00FFFF>" + (object) item.cost + "</color> crystals?", (Action) (() => Prestige.Ask((byte) 12, (int) which, itemIndex)), icon: item.sprite);
   }
 
   public void RightClickItem(int itemIndex, ArcanistsStore.Which which)
@@ -201,30 +196,27 @@ public class StoreMenu : MonoBehaviour
     {
       string ok = Client.MyAccount.storeItems.IsUnlocked(which, itemIndex) ? "Toggle" : (string) null;
       Action onEnd = (Action) (() => Prestige.Ask((byte) 16, (int) which, itemIndex, true));
-      MyMessageBox.Create("Preview <#FF0000>" + item.name + "</color>?", onEnd, ok, "Cancel", (Action) null, (Action) null, item.sprite, "Preview", (Action) (() =>
+      MyMessageBox.Create("Preview <#FF0000>" + item.name + "</color>?", onEnd, ok, icon: item.sprite, other: "Preview", onOther: (Action) (() =>
       {
         if ((UnityEngine.Object) MainMenu.Instance == (UnityEngine.Object) null)
         {
-          MyMessageBox.Create("Sorry, you can only preview skins from the main menu!", (Action) null, "Ok", "Cancel", (Action) null, (Action) null, (Sprite) null, (string) null, (Action) null);
+          MyMessageBox.Create("Sorry, you can only preview skins from the main menu!", (Action) null);
         }
         else
         {
           Client.previewItem = item;
           Client._gameFacts = new GameFacts();
           Client.joinedFrom = Client.JoinLocation.Store;
-          Controller.Instance.InitMap(true, false);
+          Controller.Instance.InitMap(true);
           DiscordIntergration.Instance?.UpdateActivitySandbox();
         }
       }));
     }
     else
-      MyMessageBox.Create("<#FF0000>" + item.name + "</color>", (Action) null, (string) null, "Cancel", (Action) null, (Action) null, item.sprite, (string) null, (Action) null);
+      MyMessageBox.Create("<#FF0000>" + item.name + "</color>", (Action) null, (string) null, icon: item.sprite);
   }
 
-  public void BuyCrystals(int x)
-  {
-    Prestige.Ask((byte) 11, x);
-  }
+  public void BuyCrystals(int x) => Prestige.Ask((byte) 11, x);
 
   public void HideCrystalPanel()
   {
@@ -232,13 +224,7 @@ public class StoreMenu : MonoBehaviour
     this.panelArc.SetActive(true);
   }
 
-  public void Tooltip(string s)
-  {
-    MyToolTip.Show(s, -1f);
-  }
+  public void Tooltip(string s) => MyToolTip.Show(s);
 
-  public void HideTooltip()
-  {
-    MyToolTip.Close();
-  }
+  public void HideTooltip() => MyToolTip.Close();
 }

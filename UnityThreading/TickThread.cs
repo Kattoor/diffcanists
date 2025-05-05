@@ -3,13 +3,14 @@ using System;
 using System.Collections;
 using System.Threading;
 
+#nullable disable
 namespace UnityThreading
 {
   public sealed class TickThread : ThreadBase
   {
-    private ManualResetEvent tickEvent = new ManualResetEvent(false);
     private Action action;
     private int tickLengthInMilliseconds;
+    private ManualResetEvent tickEvent = new ManualResetEvent(false);
 
     public TickThread(Action action, int tickLengthInMilliseconds)
       : this(action, tickLengthInMilliseconds, true)

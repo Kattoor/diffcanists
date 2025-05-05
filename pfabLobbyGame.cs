@@ -9,10 +9,14 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class pfabLobbyGame : MonoBehaviour, IPointerClickHandler, IEventSystemHandler, IPointerExitHandler, IRecycledScrollViewGenericItem
+#nullable disable
+public class pfabLobbyGame : 
+  MonoBehaviour,
+  IPointerClickHandler,
+  IEventSystemHandler,
+  IPointerExitHandler,
+  IRecycledScrollViewGenericItem
 {
-  private static HashSet<string> multiTeam = new HashSet<string>();
-  private int last_seconds = -1;
   public TMP_Text txtStatus;
   public TMP_Text txtOwner;
   public TMP_Text txtPlayers;
@@ -49,106 +53,96 @@ public class pfabLobbyGame : MonoBehaviour, IPointerClickHandler, IEventSystemHa
   public Image imgWatchtower;
   private GameFacts gameFacts;
   private RatedFacts ratedFacts;
+  private static HashSet<string> multiTeam = new HashSet<string>();
+  private int last_seconds = -1;
 
-  public GameFacts GetGameFacts
-  {
-    get
-    {
-      return this.gameFacts;
-    }
-  }
+  public GameFacts GetGameFacts => this.gameFacts;
 
-  public RatedFacts GetRatedFacts
-  {
-    get
-    {
-      return this.ratedFacts;
-    }
-  }
+  public RatedFacts GetRatedFacts => this.ratedFacts;
 
   public void HoverAll()
   {
     if (this.gameFacts != null)
-      MyToolTip.Show(this.gameFacts.ToString((ZGame) null, false), -1f);
+      MyToolTip.Show(this.gameFacts.ToString((ZGame) null));
     else
-      MyToolTip.Show(this.ratedFacts.ToString(true, (pfabLobbyGame) null), -1f);
+      MyToolTip.Show(this.ratedFacts.ToString(true));
   }
 
   public void HoverDescription()
   {
     if (this.gameFacts == null)
       return;
-    MyToolTip.Show(this.gameFacts.settings.FilteredDescription(), -1f);
+    MyToolTip.Show(this.gameFacts.settings.FilteredDescription());
   }
 
   public void HoverInvite()
   {
     if (this.gameFacts == null)
       return;
-    MyToolTip.Show(this.gameFacts.GetInviteMode().ToString().Replace('_', ' '), -1f);
+    MyToolTip.Show(this.gameFacts.GetInviteMode().ToString().Replace('_', ' '));
   }
 
   public void HoverJoin()
   {
     if (this.gameFacts == null)
       return;
-    MyToolTip.Show("Is the door open?", -1f);
+    MyToolTip.Show("Is the door open?");
   }
 
   public void HoverSpectators()
   {
     if (this.gameFacts == null)
       return;
-    MyToolTip.Show("Allow Spectators: " + this.gameFacts.GetSpectatorMode().ToString().Replace('_', ' '), -1f);
+    MyToolTip.Show("Allow Spectators: " + this.gameFacts.GetSpectatorMode().ToString().Replace('_', ' '));
   }
 
   public void HoverRated()
   {
     if (this.gameFacts == null)
       return;
-    MyToolTip.Show("Rated: " + this.gameFacts.GetRatedMode().ToString().Replace('_', ' '), -1f);
+    MyToolTip.Show("Rated: " + this.gameFacts.GetRatedMode().ToString().Replace('_', ' '));
   }
 
   public void HoverTime()
   {
     if (this.gameFacts == null)
       return;
-    MyToolTip.Show("Turn time: " + (object) this.gameFacts.customTime + " seconds", -1f);
+    MyToolTip.Show("Turn time: " + (object) this.gameFacts.customTime + " seconds");
   }
 
   public void HoverLadderType()
   {
     if (this.gameFacts == null)
       return;
-    MyToolTip.Show("Ladder: " + RatedFacts.GetGameTypeAsStringLong((int) this.gameFacts.gameType), -1f);
+    MyToolTip.Show("Ladder: " + RatedFacts.GetGameTypeAsStringLong((int) this.gameFacts.gameType));
   }
 
   public void HoverMap()
   {
     if (this.gameFacts == null)
       return;
-    MyToolTip.Show("Map: " + GameFacts.MapName(this.gameFacts.GetMapMode()), -1f);
+    MyToolTip.Show("Map: " + GameFacts.MapName(this.gameFacts.GetMapMode()));
   }
 
   public void HoverTeam()
   {
     if (this.gameFacts == null)
       return;
-    MyToolTip.Show(this.gameFacts.GetTeamMode() ? "Teams of " + (object) this.gameFacts.GetNumberPlayersPerTeam() : "FFA", -1f);
+    MyToolTip.Show(this.gameFacts.GetTeamMode() ? "Teams of " + (object) this.gameFacts.GetNumberPlayersPerTeam() : "FFA");
   }
 
   public void HoverMod()
   {
     if (this.gameFacts == null)
       return;
-    MyToolTip.Show("Allow Arcane Monster: " + (this.gameFacts.GetAllowArcanePowers() ? "Players with this symbol <sprite=\"AccountIconsAll\" index=240> by their name can use an enhanced version of full arcane" : "No"), -1f);
+    MyToolTip.Show("Allow Arcane Monster: " + (this.gameFacts.GetAllowArcanePowers() ? "Players with this symbol <sprite=\"AccountIconsAll\" index=240> by their name can use an enhanced version of full arcane" : "No"));
   }
 
   public void HoverRandomSpells()
   {
     if (this.gameFacts == null)
       return;
-    MyToolTip.Show((this.gameFacts.GetStyle() & GameStyle.Random_Spells) == ~GameStyle.Dont_Mind ? "Standard - You choose your own spells" : "Random Spells", -1f);
+    MyToolTip.Show((this.gameFacts.GetStyle() & GameStyle.Random_Spells) == ~GameStyle.Dont_Mind ? "Standard - You choose your own spells" : "Random Spells");
   }
 
   public void HoverForcedSpells()
@@ -156,21 +150,21 @@ public class pfabLobbyGame : MonoBehaviour, IPointerClickHandler, IEventSystemHa
     if (this.gameFacts == null)
       return;
     GameStyle gameStyle = this.gameFacts.GetStyle() & GameStyle.Original_Spells_Only;
-    MyToolTip.Show(gameStyle == ~GameStyle.Dont_Mind ? "Standard - All spells are useable" : gameStyle.ToString().Replace('_', ' '), -1f);
+    MyToolTip.Show(gameStyle == ~GameStyle.Dont_Mind ? "Standard - All spells are useable" : gameStyle.ToString().Replace('_', ' '));
   }
 
   public void HoverElemental()
   {
     if (this.gameFacts == null)
       return;
-    MyToolTip.Show((this.gameFacts.GetStyle() & GameStyle.Elementals) == ~GameStyle.Dont_Mind ? "Standard - Elementals are not active" : "Elementals - You start with a full book along side your 16 chosen spells", -1f);
+    MyToolTip.Show((this.gameFacts.GetStyle() & GameStyle.Elementals) == ~GameStyle.Dont_Mind ? "Standard - Elementals are not active" : "Elementals - You start with a full book along side your 16 chosen spells");
   }
 
   public void HoverZeroShield()
   {
     if (this.gameFacts == null)
       return;
-    MyToolTip.Show("<b>Zero Shield</b> - Players CANNOT cast offensive spells the first turn ", -1f);
+    MyToolTip.Show("<b>Zero Shield</b> - Players CANNOT cast offensive spells the first turn ");
   }
 
   public void HoverArmageddon()
@@ -179,43 +173,40 @@ public class pfabLobbyGame : MonoBehaviour, IPointerClickHandler, IEventSystemHa
       return;
     List<SpellEnum> customArmageddon = this.gameFacts.settings.customArmageddon;
     if ((customArmageddon != null ? (__nonvirtual (customArmageddon.Count) > 0 ? 1 : 0) : 0) != 0)
-      MyToolTip.Show("<b>Armageddon:</b>\n" + HUD.GetCustomArmageddonName(this.gameFacts), -1f);
+      MyToolTip.Show("<b>Armageddon:</b>\n" + HUD.GetCustomArmageddonName(this.gameFacts));
     else
-      MyToolTip.Show("<b>Armageddon</b> - " + (this.gameFacts.GetArmageddon() == ~MapEnum.Dont_Mind ? GameFacts.ArmageddonName(this.gameFacts.GetMapMode(), this.gameFacts.GetStyle()) : GameFacts.ArmageddonName(this.gameFacts.GetArmageddon(), this.gameFacts.GetStyle())), -1f);
+      MyToolTip.Show("<b>Armageddon</b> - " + (this.gameFacts.GetArmageddon() == ~MapEnum.Dont_Mind ? GameFacts.ArmageddonName(this.gameFacts.GetMapMode(), this.gameFacts.GetStyle()) : GameFacts.ArmageddonName(this.gameFacts.GetArmageddon(), this.gameFacts.GetStyle())));
   }
 
   public void HoverFTT()
   {
     if (this.gameFacts == null)
       return;
-    MyToolTip.Show("<b>First turn teleport</b> - Players start in the water and get a free teleport on the first turn ", -1f);
+    MyToolTip.Show("<b>First turn teleport</b> - Players start in the water and get a free teleport on the first turn ");
   }
 
   public void HoverBid()
   {
     if (this.gameFacts == null)
       return;
-    MyToolTip.Show("<b>First Turn Bid</b> - Players anonymously bid lifepoints to see who goes first", -1f);
+    MyToolTip.Show("<b>First Turn Bid</b> - Players anonymously bid lifepoints to see who goes first");
   }
 
   public void HoverHealth()
   {
     if (this.gameFacts == null)
       return;
-    MyToolTip.Show("<b>Starting Health</b> - " + (object) this.gameFacts.startHealth, -1f);
+    MyToolTip.Show("<b>Starting Health</b> - " + (object) this.gameFacts.startHealth);
   }
 
   public void HoverCountdown()
   {
     if (this.gameFacts == null)
       return;
-    MyToolTip.Show("<b>Countdown</b> - " + Global.IntToTime((int) this.gameFacts.countdownTime, 10) + " +" + (object) this.gameFacts.countdownDelay + "s delay" + (this.gameFacts.countdownTime < (short) 0 ? (object) "<br>You lose if time runs out" : (object) "<br>You get 5 second turns if time runs out"), -1f);
+    MyToolTip.Show("<b>Countdown</b> - " + Global.IntToTime((int) this.gameFacts.countdownTime) + " +" + (object) this.gameFacts.countdownDelay + "s delay" + (this.gameFacts.countdownTime < (short) 0 ? (object) "<br>You lose if time runs out" : (object) "<br>You get 5 second turns if time runs out"));
   }
 
-  public void LeaveHover()
-  {
-    MyToolTip.instance?._Close();
-  }
+  public void LeaveHover() => MyToolTip.instance?._Close();
 
   public void Init(string s)
   {
@@ -232,7 +223,7 @@ public class pfabLobbyGame : MonoBehaviour, IPointerClickHandler, IEventSystemHa
   {
     this.ratedFacts = r;
     this.gameFacts = (GameFacts) null;
-    r.ToString(false, this);
+    r.ToString(p: this);
     this.obj_gameFacts.SetActive(false);
     this.obj_ratedFacts.SetActive(true);
     int index = 1;
@@ -241,10 +232,12 @@ public class pfabLobbyGame : MonoBehaviour, IPointerClickHandler, IEventSystemHa
     this.buttonJoin.interactable = true;
     this.buttonJoin.onClick.RemoveAllListeners();
     this.buttonJoin.onClick.AddListener((UnityAction) (() => LobbyMenu.instance.ratedTab.ClickedLobbyQueue(r, false)));
-    SpriteState spriteState = this.buttonJoin.spriteState;
-    spriteState.highlightedSprite = Controller.Instance.useColorScheme ? ClientResources.Instance.joinHover[index] : ClientResources.Instance.ogjoinHover[index];
-    spriteState.pressedSprite = Controller.Instance.useColorScheme ? ClientResources.Instance.joinPressed[index] : ClientResources.Instance.ogjoinPressed[index];
-    spriteState.disabledSprite = Controller.Instance.useColorScheme ? ClientResources.Instance.joinDefault[index] : ClientResources.Instance.ogjoinDefault[index];
+    SpriteState spriteState = this.buttonJoin.spriteState with
+    {
+      highlightedSprite = Controller.Instance.useColorScheme ? ClientResources.Instance.joinHover[index] : ClientResources.Instance.ogjoinHover[index],
+      pressedSprite = Controller.Instance.useColorScheme ? ClientResources.Instance.joinPressed[index] : ClientResources.Instance.ogjoinPressed[index],
+      disabledSprite = Controller.Instance.useColorScheme ? ClientResources.Instance.joinDefault[index] : ClientResources.Instance.ogjoinDefault[index]
+    };
     this.buttonJoinImg.sprite = Controller.Instance.useColorScheme ? ClientResources.Instance.joinDefault[index] : ClientResources.Instance.ogjoinDefault[index];
     this.buttonJoin.spriteState = spriteState;
   }
@@ -264,7 +257,7 @@ public class pfabLobbyGame : MonoBehaviour, IPointerClickHandler, IEventSystemHa
     {
       foreach (string player in g.players)
       {
-        if (Client.GetAccount(player, false).accountType.has(AccountType.Arcane_Monster))
+        if (Client.GetAccount(player).accountType.has(AccountType.Arcane_Monster))
         {
           index1 = 3;
           break;
@@ -283,7 +276,7 @@ public class pfabLobbyGame : MonoBehaviour, IPointerClickHandler, IEventSystemHa
       case 0:
         if (g.players.Count < customPlayerCount)
         {
-          if (inviteMode == InviteEnum.Open || inviteMode == InviteEnum.Friends || g.invitedPlayers.Contains(Client.Name) || (inviteMode == InviteEnum.Clan && string.Equals(Client.GetAccount(g.players[0], false).clan, Client.MyAccount.clan) || inviteMode == InviteEnum.Similar_Rating && Mathf.Abs((int) Client.GetAccount(g.players[0], false).similarRating - (int) Client.MyAccount.similarRating) <= 500))
+          if (inviteMode == InviteEnum.Open || inviteMode == InviteEnum.Friends || g.invitedPlayers.Contains(Client.Name) || inviteMode == InviteEnum.Clan && string.Equals(Client.GetAccount(g.players[0]).clan, Client.MyAccount.clan) || inviteMode == InviteEnum.Similar_Rating && Mathf.Abs((int) Client.GetAccount(g.players[0]).similarRating - (int) Client.MyAccount.similarRating) <= 500)
           {
             this.buttonJoin.gameObject.SetActive(true);
             this.buttonJoin.interactable = true;
@@ -367,7 +360,7 @@ public class pfabLobbyGame : MonoBehaviour, IPointerClickHandler, IEventSystemHa
     this.imgFTT.gameObject.SetActive(g.GetStyle().HasStyle(GameStyle.First_Turn_Teleport));
     this.imgWatchtower.gameObject.SetActive(g.GetStyle().HasStyle(GameStyle.Watchtower));
     this.imgBid.gameObject.SetActive(false);
-    this.imgCountdown.gameObject.SetActive((uint) g.countdownTime > 0U);
+    this.imgCountdown.gameObject.SetActive(g.countdownTime != (short) 0);
     this.imgHealth.gameObject.SetActive(g.startHealth != (ushort) 250);
     this.imgDescription.gameObject.SetActive(!string.IsNullOrEmpty(this.gameFacts.settings.description));
     switch (g.GetInviteMode())
@@ -426,9 +419,9 @@ public class pfabLobbyGame : MonoBehaviour, IPointerClickHandler, IEventSystemHa
     }
     g.CalculateGameType();
     int num1 = 0;
-    for (int index2 = 0; index2 < g.players.Count; ++index2)
+    for (int index3 = 0; index3 < g.players.Count; ++index3)
     {
-      int num2 = (int) Client.GetAccount(g.players[index2], false)[(int) g.gameType].rating;
+      int num2 = (int) Client.GetAccount(g.players[index3])[(int) g.gameType].rating;
       if (num2 < 0)
         num2 = 1000;
       num1 += num2;
@@ -441,10 +434,7 @@ public class pfabLobbyGame : MonoBehaviour, IPointerClickHandler, IEventSystemHa
     this.FixedUpdate();
   }
 
-  public void OnPointerExit(PointerEventData eventData)
-  {
-    MyToolTip.Close();
-  }
+  public void OnPointerExit(PointerEventData eventData) => MyToolTip.Close();
 
   public void OnPointerClick(PointerEventData eventData)
   {
@@ -455,7 +445,7 @@ public class pfabLobbyGame : MonoBehaviour, IPointerClickHandler, IEventSystemHa
         MyContextMenu myContextMenu = MyContextMenu.Show();
         myContextMenu.AddItem("Queue as an alternate setting", (Action) (() => LobbyMenu.instance.ratedTab.ClickedLobbyQueue(this.ratedFacts, true)), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
         myContextMenu.AddItem("Queue with these settings", (Action) (() => LobbyMenu.instance.ratedTab.ClickedLobbyQueue(this.ratedFacts, false)), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
-        myContextMenu.Rebuild(false);
+        myContextMenu.Rebuild();
       }
       else
       {
@@ -477,32 +467,32 @@ public class pfabLobbyGame : MonoBehaviour, IPointerClickHandler, IEventSystemHa
         }
         if (Client.MyAccount.accountType.IsModPlus())
         {
-          myContextMenu.AddSeperator("--------------------------");
+          myContextMenu.AddSeperator();
           myContextMenu.AddItem("ID: " + (object) this.gameFacts.id, (Action) (() => Global.systemCopyBuffer = this.gameFacts.id.ToString()), (Color) ColorScheme.GetColor(MyContextMenu.ColorBlue));
         }
         if (this.gameFacts.players.Contains(Client.Name) && (this.gameFacts.status == (byte) 2 || this.gameFacts.status == (byte) 1))
         {
-          myContextMenu.AddSeperator("--------------------------");
+          myContextMenu.AddSeperator();
           myContextMenu.AddItem("Rejoin Game", (Action) (() => Client.Ask((byte) 93, this.gameFacts.id)), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
         }
-        myContextMenu.Rebuild(false);
+        myContextMenu.Rebuild();
       }
     }
     else if (eventData.button == PointerEventData.InputButton.Middle)
     {
       if (this.gameFacts != null)
-        MyToolTip.Show(this.gameFacts.ToString((ZGame) null, false), -1f);
+        MyToolTip.Show(this.gameFacts.ToString((ZGame) null));
       else
-        MyToolTip.Show(this.ratedFacts.ToString(true, (pfabLobbyGame) null), -1f);
+        MyToolTip.Show(this.ratedFacts.ToString(true));
     }
     else
     {
       if (eventData.button != PointerEventData.InputButton.Left)
         return;
       if (this.gameFacts != null)
-        MyToolTip.Show(this.gameFacts.ToString((ZGame) null, false), -1f);
+        MyToolTip.Show(this.gameFacts.ToString((ZGame) null));
       else
-        MyToolTip.Show(this.ratedFacts.ToString(true, (pfabLobbyGame) null), -1f);
+        MyToolTip.Show(this.ratedFacts.ToString(true));
     }
   }
 
@@ -537,8 +527,5 @@ public class pfabLobbyGame : MonoBehaviour, IPointerClickHandler, IEventSystemHa
   }
 
   [SpecialName]
-  GameObject IRecycledScrollViewGenericItem.get_gameObject()
-  {
-    return this.gameObject;
-  }
+  GameObject IRecycledScrollViewGenericItem.get_gameObject() => this.gameObject;
 }

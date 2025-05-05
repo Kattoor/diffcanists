@@ -8,12 +8,170 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+#nullable disable
 public class ClientResources : MonoBehaviour
 {
   internal TutorialFileRetriever tutorialFileRetriever = new TutorialFileRetriever("pur3extreme.github.io/ArcanistsTutorials/index.html");
+  public Sprite[] _spellicons;
+  public Sprite[] _characterHeads;
+  public Sprite[] _characterBody;
+  public Sprite[] _characterHats;
+  public Sprite[] _characterLeftHand;
+  public Sprite[] _characterRightHand;
+  public Sprite[] _characterLeftFoot;
+  public Sprite[] _characterRightFoot;
+  public Sprite[] _characterBeards;
+  public Sprite[] _characterMouths;
+  public Sprite[] _previewOverrides;
+  public Material tomatoExplosionMaterial;
+  public AnimationCurve tomatoCurve;
+  public Texture2D[] tomatoExplosion;
+  public Spell[] summonSpells;
+  public Spell[] familiarSpells;
+  public List<Sprite> sandCastleSprites;
+  public List<Sprite> _discordEmoji;
+  public List<Sprite> badges;
   public Dictionary<string, Sprite> _overridePreviews = new Dictionary<string, Sprite>();
+  public OverheadEmoji overheadEmoji;
+  public Phasing Phased;
+  public Sprite[] ratingTypes;
+  public Sprite headMage;
+  public Sprite wandDisabled;
+  public BigBubble big_bubble;
+  public GameObject deathExplosion;
+  public ParticleBloodSyphon bloodSyphon;
+  public ParticleBloodSyphon consumeSoul;
+  public GameObject spaceshipObj;
+  public Sprite grizzlyHead;
+  public Sprite grizzlyUndeadHead;
+  public ClientResources.TutorialData[] _tutorials;
+  public Color[] pollColors;
+  public LuaPanel luaPanel;
+  public TMP_InputField luaInput;
+  public Sprite[] luaGraphic;
+  public Canvas overheadCanvasSpectator;
+  public PfabMapPing pfabMapPing;
+  public static int ColorBlindness;
+  public Material _matColorPalette;
+  public Texture2D _texturePalette;
+  public List<ColorMaterial> _schemematerials;
+  public Sprite[] joinDefault;
+  public Sprite[] joinHover;
+  public Sprite[] joinPressed;
+  public Sprite[] ogjoinDefault;
+  public Sprite[] ogjoinHover;
+  public Sprite[] ogjoinPressed;
+  public Sprite[] zombieDucks;
+  public Sprite[] ducks;
+  public Sprite clear;
+  [Header("Prickly")]
+  public Sprite[] prickly_sprites;
+  [SerializeField]
+  private Sprite[] _largeUI;
+  [SerializeField]
+  private Sprite[] _smallUI;
   internal Dictionary<string, Sprite> largeUI = new Dictionary<string, Sprite>();
   internal Dictionary<string, Sprite> smallUI = new Dictionary<string, Sprite>();
+  public GameObject pfabMinerMarketIcons;
+  public SandPool sandPool;
+  public BoatSpectators boatSpectators;
+  [Header("Colors")]
+  public TeamColors colorsRegular;
+  public Sprite zombieMonkeyIcon;
+  public Sprite imgRestricted;
+  public Sprite imgLocked;
+  public Sprite imgBuyable;
+  public Sprite imgBuyable2;
+  public Sprite imgBuyable3;
+  [Header("Context Menu Items")]
+  public InputFieldPlus contextMenuInputField;
+  public InputFieldPlus contextMenuInputFieldLong;
+  public VectorFieldContextMenu contextMenuVectorField;
+  public ButtonArrayContextmenu contextButtonArray;
+  public UIOnSlider contextMenuSlider;
+  public GameObject contextSpells;
+  public Toggle contextToggle;
+  public SelectionArrow _selectionArrow;
+  public List<Texture2D> bloodTextures;
+  public List<GameObject> tutIndicators;
+  public GameObject folderPfab;
+  public UIPlayerCharacter uiPlayerCharacter;
+  public Sprite[] staffPerElement;
+  public AudioClip clipChangeSpellBook;
+  [Header("Achievement Icons")]
+  public List<Sprite> _achievementIcons;
+  public Sprite _achievementNotObtained;
+  public GameObject woodenExplosion;
+  public GameObject minionMasterFamiliar;
+  public GameObject bombMasterFamiliar;
+  public GameObject gravityObj;
+  public ElementalSelection elementalSelection;
+  public Sprite empty;
+  public Sprite[] spellBookIcons;
+  public Sprite[] altSpellBookIcons;
+  public Sprite spellBookIconHoliday;
+  public Texture2D mouthTex;
+  public Sprite[] MainMenuSprites;
+  public GameObject bg_glow;
+  public GameObject minimap_glow;
+  public Sprite megaBoulderSprite;
+  public GameObject particleCharge;
+  public GameObject particleMine;
+  public GameObject lightExplosion;
+  public GameObject lavaBombExplosion;
+  public Sprite[] seasonIcons;
+  public Sprite[] wispPhantomSprites;
+  [Header("Undead Sprites")]
+  public Sprite[] zombieDragonSprites;
+  public Sprite[] zombieDragonAttackSprites;
+  public Sprite[] corruptZombieDragonSprites;
+  public Sprite[] corruptZombieDragonAttackSprites;
+  public Sprite[] zombiePegasusSprites;
+  public Sprite[] freshWaterSprites;
+  public Sprite[] hardWaterSprites;
+  public Sprite[] monarchSprites;
+  public Sprite[] fleshGolemSprites;
+  [Header("Maps")]
+  public Sprite[] _scaled_maps;
+  public Sprite[] _maps;
+  public Sprite[] _scaled_mapBgs;
+  public Sprite[] mapBgs;
+  public Sprite[] mapBgBig;
+  [Header("Colors")]
+  public Color[] DarkArcane;
+  public Color[] ModColors;
+  public Color[] colorsMain;
+  public Color[] colorsSecondary;
+  public Color[] colorsHair;
+  public Color[] colorSkin;
+  public Color[] colorOSRS;
+  [Header("Extra")]
+  public Sprite missingIcon;
+  public Sprite[] _iconsPrestige;
+  public Sprite[] _iconsPrestigeBonus;
+  public Sprite[] _iconsAccountType;
+  public Sprite[] _iconsIvite;
+  public Sprite[] _iconsCanJoin;
+  public Sprite[] _iconsSpectate;
+  public Sprite[] _iconsRated;
+  public Sprite[] _iconsTime;
+  public Sprite[] _iconsMap;
+  public Sprite[] _iconsMapBig;
+  public Sprite[] _iconsTeam;
+  public Sprite[] _iconsArcaneMod;
+  public Sprite[] _iconsRandom;
+  public Sprite[] _iconsForced;
+  public Sprite[] _iconsElementals;
+  public Sprite[] _iconsZeroShield;
+  public Sprite[] _iconsChatFilter;
+  public Sprite[] _gameTypes;
+  public AnimateUIExplosion uiexplosion;
+  public Sprite paperClip;
+  public Sprite spriteBlack;
+  public Sprite spellBGIconOld;
+  public Sprite spellBGIconNew;
+  public Sprite spellOverheadBGIconOld;
+  public Sprite spellOverheadBGIconNew;
   public float[] lowTimePalette = new float[256]
   {
     0.0f,
@@ -273,165 +431,13 @@ public class ClientResources : MonoBehaviour
     254f,
     (float) byte.MaxValue
   };
+  public Material lowTimeMaterial;
+  public Sprite[] pingIcons;
+  public GameObject[] ArchmageStaffs;
+  public TMP_SpriteAsset spriteAsset;
   public OrderedDictionary<string, Sprite> icons = new OrderedDictionary<string, Sprite>();
   private List<GameObject> activePings = new List<GameObject>();
   internal Dictionary<string, ClanOutfit> clanOutfits = new Dictionary<string, ClanOutfit>();
-  public Sprite[] _spellicons;
-  public Sprite[] _characterHeads;
-  public Sprite[] _characterBody;
-  public Sprite[] _characterHats;
-  public Sprite[] _characterLeftHand;
-  public Sprite[] _characterRightHand;
-  public Sprite[] _characterLeftFoot;
-  public Sprite[] _characterRightFoot;
-  public Sprite[] _characterBeards;
-  public Sprite[] _characterMouths;
-  public Sprite[] _previewOverrides;
-  public Material tomatoExplosionMaterial;
-  public AnimationCurve tomatoCurve;
-  public Texture2D[] tomatoExplosion;
-  public Spell[] summonSpells;
-  public Spell[] familiarSpells;
-  public List<Sprite> sandCastleSprites;
-  public List<Sprite> _discordEmoji;
-  public List<Sprite> badges;
-  public OverheadEmoji overheadEmoji;
-  public Phasing Phased;
-  public Sprite[] ratingTypes;
-  public Sprite headMage;
-  public Sprite wandDisabled;
-  public BigBubble big_bubble;
-  public GameObject deathExplosion;
-  public ParticleBloodSyphon bloodSyphon;
-  public GameObject spaceshipObj;
-  public Sprite grizzlyHead;
-  public Sprite grizzlyUndeadHead;
-  public ClientResources.TutorialData[] _tutorials;
-  public Color[] pollColors;
-  public LuaPanel luaPanel;
-  public TMP_InputField luaInput;
-  public Sprite[] luaGraphic;
-  public Canvas overheadCanvasSpectator;
-  public PfabMapPing pfabMapPing;
-  public static int ColorBlindness;
-  public Material _matColorPalette;
-  public Texture2D _texturePalette;
-  public List<ColorMaterial> _schemematerials;
-  public Sprite[] joinDefault;
-  public Sprite[] joinHover;
-  public Sprite[] joinPressed;
-  public Sprite[] ogjoinDefault;
-  public Sprite[] ogjoinHover;
-  public Sprite[] ogjoinPressed;
-  public Sprite[] zombieDucks;
-  public Sprite[] ducks;
-  [Header("Prickly")]
-  public Sprite[] prickly_sprites;
-  [SerializeField]
-  private Sprite[] _largeUI;
-  [SerializeField]
-  private Sprite[] _smallUI;
-  public GameObject pfabMinerMarketIcons;
-  public SandPool sandPool;
-  public BoatSpectators boatSpectators;
-  [Header("Colors")]
-  public TeamColors colorsRegular;
-  public Sprite zombieMonkeyIcon;
-  public Sprite imgRestricted;
-  public Sprite imgLocked;
-  public Sprite imgBuyable;
-  public Sprite imgBuyable2;
-  public Sprite imgBuyable3;
-  [Header("Context Menu Items")]
-  public InputFieldPlus contextMenuInputField;
-  public InputFieldPlus contextMenuInputFieldLong;
-  public VectorFieldContextMenu contextMenuVectorField;
-  public ButtonArrayContextmenu contextButtonArray;
-  public UIOnSlider contextMenuSlider;
-  public GameObject contextSpells;
-  public Toggle contextToggle;
-  public SelectionArrow _selectionArrow;
-  public List<Texture2D> bloodTextures;
-  public List<GameObject> tutIndicators;
-  public GameObject folderPfab;
-  public UIPlayerCharacter uiPlayerCharacter;
-  public Sprite[] staffPerElement;
-  public AudioClip clipChangeSpellBook;
-  [Header("Achievement Icons")]
-  public List<Sprite> _achievementIcons;
-  public Sprite _achievementNotObtained;
-  public GameObject woodenExplosion;
-  public GameObject minionMasterFamiliar;
-  public GameObject bombMasterFamiliar;
-  public GameObject gravityObj;
-  public ElementalSelection elementalSelection;
-  public Sprite empty;
-  public Sprite[] spellBookIcons;
-  public Sprite spellBookIconHoliday;
-  public Texture2D mouthTex;
-  public Sprite[] MainMenuSprites;
-  public GameObject bg_glow;
-  public GameObject minimap_glow;
-  public Sprite megaBoulderSprite;
-  public GameObject particleCharge;
-  public GameObject particleMine;
-  public GameObject lightExplosion;
-  public GameObject lavaBombExplosion;
-  public Sprite[] seasonIcons;
-  public Sprite[] wispPhantomSprites;
-  [Header("Undead Sprites")]
-  public Sprite[] zombieDragonSprites;
-  public Sprite[] zombieDragonAttackSprites;
-  public Sprite[] corruptZombieDragonSprites;
-  public Sprite[] corruptZombieDragonAttackSprites;
-  public Sprite[] zombiePegasusSprites;
-  public Sprite[] freshWaterSprites;
-  public Sprite[] hardWaterSprites;
-  public Sprite[] monarchSprites;
-  [Header("Maps")]
-  public Sprite[] _scaled_maps;
-  public Sprite[] _maps;
-  public Sprite[] _scaled_mapBgs;
-  public Sprite[] mapBgs;
-  public Sprite[] mapBgBig;
-  [Header("Colors")]
-  public Color[] DarkArcane;
-  public Color[] ModColors;
-  public Color[] colorsMain;
-  public Color[] colorsSecondary;
-  public Color[] colorsHair;
-  public Color[] colorSkin;
-  public Color[] colorOSRS;
-  [Header("Extra")]
-  public Sprite missingIcon;
-  public Sprite[] _iconsPrestige;
-  public Sprite[] _iconsPrestigeBonus;
-  public Sprite[] _iconsAccountType;
-  public Sprite[] _iconsIvite;
-  public Sprite[] _iconsCanJoin;
-  public Sprite[] _iconsSpectate;
-  public Sprite[] _iconsRated;
-  public Sprite[] _iconsTime;
-  public Sprite[] _iconsMap;
-  public Sprite[] _iconsMapBig;
-  public Sprite[] _iconsTeam;
-  public Sprite[] _iconsArcaneMod;
-  public Sprite[] _iconsRandom;
-  public Sprite[] _iconsForced;
-  public Sprite[] _iconsElementals;
-  public Sprite[] _iconsZeroShield;
-  public Sprite[] _iconsChatFilter;
-  public Sprite[] _gameTypes;
-  public AnimateUIExplosion uiexplosion;
-  public Sprite paperClip;
-  public Sprite spriteBlack;
-  public Sprite spellBGIconOld;
-  public Sprite spellBGIconNew;
-  public Sprite spellOverheadBGIconOld;
-  public Sprite spellOverheadBGIconNew;
-  public Material lowTimeMaterial;
-  public GameObject[] ArchmageStaffs;
-  public TMP_SpriteAsset spriteAsset;
   private ClanOutfit tempOutfit;
 
   public static ClientResources Instance { get; set; }
@@ -504,29 +510,29 @@ public class ClientResources : MonoBehaviour
     Vector2 vector2;
     ref Vector2 local = ref vector2;
     UnityEngine.Bounds bounds1 = sprite.bounds;
-    double x = (double) bounds1.min.x;
+    double x1 = (double) bounds1.min.x;
     bounds1 = sprite.bounds;
     double num1 = (double) bounds1.extents.x * 2.0;
-    double num2 = 0.0 - x / num1;
+    double x2 = 0.0 - x1 / num1;
     UnityEngine.Bounds bounds2 = sprite.bounds;
-    double y = (double) bounds2.min.y;
+    double y1 = (double) bounds2.min.y;
     bounds2 = sprite.bounds;
-    double num3 = (double) bounds2.extents.y * 2.0;
-    double num4 = 0.0 - y / num3;
-    local = new Vector2((float) num2, (float) num4);
+    double num2 = (double) bounds2.extents.y * 2.0;
+    double y2 = 0.0 - y1 / num2;
+    local = new Vector2((float) x2, (float) y2);
     tmpSprite.pivot = new Vector2((float) (0.0 - (double) vector2.x * (double) rect.width), rect.height - vector2.y * rect.height);
     int[] array = spriteAsset.spriteInfoList.Select<TMP_Sprite, int>((Func<TMP_Sprite, int>) (item => item.id)).ToArray<int>();
-    int num5 = 0;
+    int num3 = 0;
     for (int index = 0; index < array.Length && array[0] == 0; ++index)
     {
       if (index > 0 && array[index] - array[index - 1] > 1)
       {
-        num5 = array[index - 1] + 1;
+        num3 = array[index - 1] + 1;
         break;
       }
-      num5 = index + 1;
+      num3 = index + 1;
     }
-    tmpSprite.id = num5;
+    tmpSprite.id = num3;
     tmpSprite.xAdvance = rect.width;
     tmpSprite.scale = 1.2f;
     tmpSprite.xOffset = 0.0f;
@@ -572,6 +578,21 @@ public class ClientResources : MonoBehaviour
 
   internal static void ChangeSprites(
     SpriteRenderer disable,
+    AnimateDragon anim,
+    Sprite[] list,
+    SettingsPlayer s,
+    Outfit o)
+  {
+    if ((UnityEngine.Object) disable != (UnityEngine.Object) null)
+      ClientResources.Erase(disable);
+    for (int index = 0; index < list.Length; ++index)
+      list[index] = s.coloring.Texture(list[index], o);
+    anim.sprites = list;
+    anim.GetSpriteRenderer.sprite = list[0];
+  }
+
+  internal static void ChangeSprites(
+    SpriteRenderer disable,
     AnimateRepeat anim,
     Sprite[] list,
     SettingsPlayer s,
@@ -581,6 +602,7 @@ public class ClientResources : MonoBehaviour
       ClientResources.Erase(disable);
     for (int index = 0; index < list.Length; ++index)
       list[index] = s.coloring.Texture(list[index], o);
+    anim.sprites = list;
     anim.GetSpriteRenderer.sprite = list[0];
   }
 
@@ -603,7 +625,26 @@ public class ClientResources : MonoBehaviour
       anim.deleteOnDestroy = true;
     for (int index = 0; index < list.Length; ++index)
       list[index] = Recolor.Texture(origList[index], colors[0], colors[1], colors[2], colors[3]);
+    anim.sprites = list;
     anim.GetSpriteRenderer.sprite = list[0];
+  }
+
+  internal static void DefaultArchObjectRightArm(
+    SettingsPlayer s,
+    ZCreature c,
+    ZPerson p,
+    Vector3? offset = null,
+    bool delete = true,
+    float animSpeed = 0.0f)
+  {
+    GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(Inert.Instance._characterRightHand[(int) s.indexRightHand].archObject, c.rightArm.transform.position + (offset.HasValue ? offset.Value : Vector3.zero), Quaternion.identity, c.rightArm.transform);
+    AnimateRepeat component = gameObject.GetComponent<AnimateRepeat>();
+    ClientResources.ChangeSprites(delete ? c.rightArm : (SpriteRenderer) null, component, Inert.Instance._characterRightHand[(int) s.indexRightHand].animatedSprites.ToArray(), s, Outfit.RightHand);
+    component.deleteOnDestroy = true;
+    component.GetSpriteRenderer.sortingOrder = c.rightArm.sortingOrder;
+    if ((double) animSpeed != 0.0)
+      component.UpdateTimeToFinish(animSpeed);
+    p.archMageStaffs.Add(gameObject);
   }
 
   public static void GetArchMageStaff(
@@ -643,10 +684,14 @@ public class ClientResources : MonoBehaviour
       GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(ClientResources.Instance.ArchmageStaffs[1], c.rightArm.transform);
       gameObject.transform.localPosition = new Vector3(-5.5f, 16.5f);
       p.archMageStaffs.Add(gameObject);
-      ParticleSystem.MainModule main = gameObject.GetComponent<ParticleSystem>().main;
-      main.startColor = new ParticleSystem.MinMaxGradient((Color) s.coloring.colors[3].red, Color.white);
-      main = gameObject.transform.GetChild(0).GetComponent<ParticleSystem>().main;
-      main.startColor = new ParticleSystem.MinMaxGradient((Color) s.coloring.colors[3].red, Color.white);
+      ParticleSystem.MainModule main = gameObject.GetComponent<ParticleSystem>().main with
+      {
+        startColor = new ParticleSystem.MinMaxGradient((Color) s.coloring.colors[3].red, Color.white)
+      };
+      main = gameObject.transform.GetChild(0).GetComponent<ParticleSystem>().main with
+      {
+        startColor = new ParticleSystem.MinMaxGradient((Color) s.coloring.colors[3].red, Color.white)
+      };
     }
     else if ((int) s.indexBody == SettingsPlayer.sno_body2)
     {
@@ -862,9 +907,10 @@ public class ClientResources : MonoBehaviour
         GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(ClientResources.Instance.ArchmageStaffs[51], c.rightArm.transform.position, Quaternion.identity, c.rightArm.transform);
         SpriteRenderer component1 = gameObject.transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>();
         float a = component1.color.a;
-        Color blue = (Color) s.coloring.colors[3].blue;
-        blue.a = a;
-        component1.color = blue;
+        component1.color = (Color) s.coloring.colors[3].blue with
+        {
+          a = a
+        };
         AnimateRepeat component2 = gameObject.GetComponent<AnimateRepeat>();
         ClientResources.ChangeSprites((SpriteRenderer) null, component2, component2.sprites, s, Outfit.RightHand);
         component2.deleteOnDestroy = true;
@@ -938,6 +984,22 @@ public class ClientResources : MonoBehaviour
         component.deleteOnDestroy = true;
         p.archMageStaffs.Add(gameObject);
       }
+      else if (s.indexRightHand == (byte) 208)
+      {
+        GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(Inert.Instance._characterRightHand[(int) s.indexRightHand].archObject, c.rightArm.transform.position + new Vector3(0.0f, 0.0f), Quaternion.identity, c.rightArm.transform);
+        ParticleSystem componentInChildren = gameObject.GetComponentInChildren<ParticleSystem>();
+        componentInChildren.main.startColor = new ParticleSystem.MinMaxGradient((Color) (s.coloring.colors[3].green with
+        {
+          a = (byte) ((double) componentInChildren.main.startColor.color.a * (double) byte.MaxValue)
+        }));
+        p.archMageStaffs.Add(gameObject);
+      }
+      else if (s.indexRightHand == (byte) 213)
+        ClientResources.DefaultArchObjectRightArm(s, c, p);
+      else if (s.indexRightHand == (byte) 214)
+        ClientResources.DefaultArchObjectRightArm(s, c, p);
+      else if (s.indexRightHand == (byte) 215)
+        ClientResources.DefaultArchObjectRightArm(s, c, p, delete: false, animSpeed: 1f);
     }
     if (s.indexHead == (byte) 110)
     {
@@ -1069,10 +1131,10 @@ public class ClientResources : MonoBehaviour
     else if (s.indexLeftHand == (byte) 149)
     {
       GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(ClientResources.Instance.ArchmageStaffs[62], c.leftArm.transform.position + new Vector3(7.22f, -3.29f), Quaternion.identity, c.leftArm.transform);
-      ParticleSystem.MainModule main = gameObject.GetComponent<ParticleSystem>().main;
-      Color32 red = s.coloring.colors[2].red;
-      red.a = (byte) 55;
-      main.startColor = new ParticleSystem.MinMaxGradient((Color) red);
+      gameObject.GetComponent<ParticleSystem>().main.startColor = new ParticleSystem.MinMaxGradient((Color) (s.coloring.colors[2].red with
+      {
+        a = (byte) 55
+      }));
       p.archMageStaffs.Add(gameObject);
     }
     else if (s.indexLeftHand == (byte) 151)
@@ -1083,34 +1145,60 @@ public class ClientResources : MonoBehaviour
       ClientResources.ChangeSprites((SpriteRenderer) null, component, component.sprites, s, Outfit.LeftHand);
       p.archMageStaffs.Add(gameObject);
     }
+    else if (s.indexLeftHand == (byte) 163)
+    {
+      GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(Inert.Instance._characterLeftHand[(int) s.indexLeftHand].archObject, c.leftArm.transform.position, Quaternion.identity, c.leftArm.transform);
+      AnimateRepeat component = gameObject.GetComponent<AnimateRepeat>();
+      ClientResources.ChangeSprites(c.leftArm, component, component.sprites, s, Outfit.LeftHand);
+      component.deleteOnDestroy = true;
+      p.archMageStaffs.Add(gameObject);
+    }
+    else if (s.indexLeftHand == (byte) 166)
+    {
+      GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(Inert.Instance._characterLeftHand[(int) s.indexLeftHand].archObject, c.leftArm.transform.position, Quaternion.identity, c.leftArm.transform);
+      AnimateRepeat component = gameObject.GetComponent<AnimateRepeat>();
+      ClientResources.ChangeSprites(c.leftArm, component, Inert.Instance._characterLeftHand[(int) s.indexLeftHand].animatedSprites.ToArray(), s, Outfit.LeftHand);
+      component.UpdateTimeToFinish(6f);
+      component.deleteOnDestroy = true;
+      p.archMageStaffs.Add(gameObject);
+    }
+    if (s.indexBody == (byte) 187)
+    {
+      GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(Inert.Instance._characterBody[(int) s.indexBody].archObject, c.body.transform);
+      gameObject.GetComponent<AnimateRepeat>().sprites = Inert.Instance._characterBody[(int) s.indexBody].animatedSprites.ToArray();
+      gameObject.GetComponent<SpriteRenderer>().sprite = Inert.Instance._characterBody[(int) s.indexBody].animatedSprites[0];
+      p.archMageStaffs.Add(gameObject);
+    }
     if (s.animations != null)
     {
-      for (int index = 0; index < 11; ++index)
+      for (int o = 0; o < 11; ++o)
       {
-        if (s.animations[index] != null)
+        if (s.animations[o] != null)
         {
-          GameObject g = UnityEngine.Object.Instantiate<GameObject>(ClientResources.Instance.ArchmageStaffs[12], c.gameObject.GetComponent<ConfigurePlayer>().Get((Outfit) index).transform);
+          GameObject g = UnityEngine.Object.Instantiate<GameObject>(ClientResources.Instance.ArchmageStaffs[12], c.gameObject.GetComponent<ConfigurePlayer>().Get((Outfit) o).transform);
           g.transform.localPosition = Vector3.zero;
           AnimateRepeat component = g.GetComponent<AnimateRepeat>();
-          component.sprites = s.animations[index].sprites.ToArray();
+          component.sprites = s.animations[o].sprites.ToArray();
           g.GetComponent<SpriteRenderer>().sprite = component.sprites[0];
-          ClientResources.ArcColor(g, s.coloring.colors[index]);
-          component.UpdateFPS(s.metaData[index].fps);
+          ClientResources.ArcColor(g, s.coloring.colors[o]);
+          component.UpdateFPS(s.metaData[o].fps);
           p.archMageStaffs.Add(g);
         }
       }
     }
     if (Client.game == null)
       return;
-    if (Client.game?.gameFacts != null && (s.indexRightHand == (byte) 29 || s.indexRightHand == (byte) 67 || s.indexRightHand == (byte) 70))
+    if (Client.game?.gameFacts != null && s.indexRightHand == (byte) 29)
     {
       GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(ClientResources.Instance.ArchmageStaffs[2], Client.GetMapTransform());
       gameObject.transform.position = Client.game.gameFacts.settingsPlayer.Count != 1 ? new Vector3((float) (Client.map.Width / (Client.game.gameFacts.settingsPlayer.Count - 1) * (int) p.id), (float) (Client.map.Height + 1000)) : new Vector3(0.0f, 1000f);
       ArchmageStaff component = gameObject.GetComponent<ArchmageStaff>();
       component.target = c.clientObj;
       component.id = (int) p.id;
-      Color green = (Color) s.coloring.colors[0].green;
-      green.a = 0.5f;
+      Color green = (Color) s.coloring.colors[0].green with
+      {
+        a = 0.5f
+      };
       gameObject.transform.GetComponent<SpriteRenderer>().color = green;
       p.archMageStaffs.Add(gameObject);
     }
@@ -1145,14 +1233,18 @@ public class ClientResources : MonoBehaviour
         component.triIndex = index;
         if (index == 0)
         {
-          Color red = (Color) s.coloring.colors[0].red;
-          red.a = 0.5f;
+          Color red = (Color) s.coloring.colors[0].red with
+          {
+            a = 0.5f
+          };
           gameObject.transform.GetComponent<SpriteRenderer>().color = red;
         }
         else if (index == 2)
         {
-          Color blue = (Color) s.coloring.colors[0].blue;
-          blue.a = 0.5f;
+          Color blue = (Color) s.coloring.colors[0].blue with
+          {
+            a = 0.5f
+          };
           gameObject.transform.GetComponent<SpriteRenderer>().color = blue;
         }
         x += 1920f;
@@ -1170,7 +1262,7 @@ public class ClientResources : MonoBehaviour
 
   public static void CheckNotScaled(SettingsPlayer s, Creature c)
   {
-    if ((s.indexRightHand == (byte) 70 || s.indexRightHand == (byte) 77 || (s.indexRightHand == (byte) 67 || s.indexRightHand == (byte) 97) || (s.indexRightHand == (byte) 98 || s.indexRightHand == (byte) 120)) && c.rightArm.gameObject.layer != 20)
+    if ((s.indexRightHand == (byte) 70 || s.indexRightHand == (byte) 77 || s.indexRightHand == (byte) 67 || s.indexRightHand == (byte) 97 || s.indexRightHand == (byte) 98 || s.indexRightHand == (byte) 120) && c.rightArm.gameObject.layer != 20)
       c.notScaled.Add(new Creature.NotScaled(c.animator, c.rightArm, s.indexRightHand == (byte) 120 ? -10f : 0.0f, Outfit.RightHand));
     if (s.indexLeftHand == (byte) 106 && c.leftArm.gameObject.layer != 20)
       c.notScaled.Add(new Creature.NotScaled(c.animator, c.leftArm, 12f, Outfit.LeftHand));
@@ -1181,9 +1273,9 @@ public class ClientResources : MonoBehaviour
 
   public Sprite GetSpellIcon(string s)
   {
-    Sprite sprite = (Sprite) null;
-    if (this.icons.TryGetValue(s, out sprite))
-      return sprite;
+    Sprite spellIcon = (Sprite) null;
+    if (this.icons.TryGetValue(s, out spellIcon))
+      return spellIcon;
     Debug.LogError((object) ("Missing Spell Icon: " + s));
     return this.missingIcon;
   }
@@ -1232,6 +1324,9 @@ public class ClientResources : MonoBehaviour
     pfabMapPing.lineMiniMap.startColor = color;
     pfabMapPing.lineMiniMap.endColor = color;
     this.activePings.Add(pfabMapPing.gameObject);
+    if (type > 0)
+      pfabMapPing.icon.sprite = ClientResources.Instance.pingIcons[Mathf.Clamp(type, 0, ClientResources.Instance.pingIcons.Length - 1)];
+    AudioManager.Play(AudioManager.instance.ping[Mathf.Clamp(type, 0, AudioManager.instance.ping.Length - 1)]);
   }
 
   public void SetClanOutfit(string clan, ClanOutfit outfit)
@@ -1253,13 +1348,13 @@ public class ClientResources : MonoBehaviour
       clanOutfit.Value.Dispose();
     this.clanOutfits.Clear();
     int num = r.ReadInt32();
-    for (int index1 = 0; index1 < num; ++index1)
+    for (int index = 0; index < num; ++index)
     {
       if (r.ReadByte() == (byte) 1)
       {
-        string index2 = r.ReadString();
+        string key = r.ReadString();
         ClanOutfit clanOutfit = ClanOutfit.Deserialize(r);
-        this.clanOutfits[index2] = clanOutfit;
+        this.clanOutfits[key] = clanOutfit;
         clanOutfit.ClientCreateSprites();
       }
     }
@@ -1307,13 +1402,13 @@ public class ClientResources : MonoBehaviour
       using (myBinaryWriter w = new myBinaryWriter((Stream) memoryStream))
       {
         w.Write((byte) 95);
-        w.Write(Server._restrictions == null ? 0 : 1);
+        w.Write(Server._restrictions == null ? 0 : 2);
         w.Write((byte) 4);
-        w.Write(Server._defaultRatedFacts == null ? 0 : 1);
+        w.Write(Server._defaultRatedFacts == null ? 0 : 4);
         if (Server._restrictions != null)
           Server._restrictions.Serialize(w);
         if (Server._defaultRatedFacts != null)
-          Server._defaultRatedFacts.Serialize(w, true);
+          Server._defaultRatedFacts.Serialize(w);
       }
       return memoryStream.ToArray();
     }
@@ -1321,14 +1416,14 @@ public class ClientResources : MonoBehaviour
 
   public static void DeserializeRestrictions(myBinaryReader r)
   {
-    int num1 = r.ReadInt32();
-    byte num2 = r.ReadByte();
-    int num3 = r.ReadInt32() == 1 ? 1 : 0;
-    if (num1 > 0)
-      Server._restrictions = Restrictions.Deserialize(r, (byte) num1);
-    if (num3 == 0)
+    int version1 = r.ReadInt32();
+    byte version2 = r.ReadByte();
+    int num = r.ReadInt32() == 1 ? 1 : 0;
+    if (version1 > 0)
+      Server._restrictions = Restrictions.Deserialize(r, (byte) version1);
+    if (num == 0)
       return;
-    Server._defaultRatedFacts = RatedFacts.Deserialize((int) num2, r);
+    Server._defaultRatedFacts = RatedFacts.Deserialize((int) version2, r);
   }
 
   public static void SaveRestrictions()
@@ -1349,11 +1444,11 @@ public class ClientResources : MonoBehaviour
           using (myBinaryReader myBinaryReader = new myBinaryReader((Stream) memoryStream))
           {
             int num1 = (int) myBinaryReader.ReadByte();
-            int num2 = myBinaryReader.ReadInt32();
-            byte num3 = myBinaryReader.ReadByte();
-            int num4 = myBinaryReader.ReadInt32() == 1 ? 1 : 0;
-            Server._restrictions = num2 == 0 ? (Restrictions) null : Restrictions.Deserialize(myBinaryReader, (byte) num2);
-            Server._defaultRatedFacts = num4 == 0 ? (RatedFacts) null : RatedFacts.Deserialize((int) num3, myBinaryReader);
+            int version1 = myBinaryReader.ReadInt32();
+            byte version2 = myBinaryReader.ReadByte();
+            int num2 = myBinaryReader.ReadInt32() == 1 ? 1 : 0;
+            Server._restrictions = version1 == 0 ? (Restrictions) null : Restrictions.Deserialize(myBinaryReader, (byte) version1);
+            Server._defaultRatedFacts = num2 == 0 ? (RatedFacts) null : RatedFacts.Deserialize((int) version2, myBinaryReader);
           }
         }
       }
@@ -1378,17 +1473,17 @@ public class ClientResources : MonoBehaviour
         using (myBinaryReader w = new myBinaryReader((Stream) memoryStream))
         {
           int num1 = (int) w.ReadByte();
-          int num2 = w.ReadInt32();
-          int num3 = w.ReadInt32();
-          if (num2 > 0)
+          int version1 = w.ReadInt32();
+          int version2 = w.ReadInt32();
+          if (version1 > 0)
           {
-            int num4 = (int) w.ReadByte();
-            Server._casinoRestrictions = Restrictions.Deserialize(w, (byte) num2);
+            int num2 = (int) w.ReadByte();
+            Server._casinoRestrictions = Restrictions.Deserialize(w, (byte) version1);
           }
-          if (num3 <= 0)
+          if (version2 <= 0)
             return;
-          int num5 = (int) w.ReadByte();
-          Server._randomSpellRestrictions = Restrictions.Deserialize(w, (byte) num3);
+          int num3 = (int) w.ReadByte();
+          Server._randomSpellRestrictions = Restrictions.Deserialize(w, (byte) version2);
         }
       }
     }

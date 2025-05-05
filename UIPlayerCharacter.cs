@@ -6,14 +6,9 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
+#nullable disable
 public class UIPlayerCharacter : MonoBehaviour
 {
-  public List<Image> spells = new List<Image>();
-  public RectTransform[] transforms = new RectTransform[9];
-  private Vector2[] startPos = new Vector2[11];
-  private Vector2[] wonPos = new Vector2[11];
-  private Vector2 pos = Vector2.zero;
-  internal int myID = 1000;
   public Image leftArm;
   public Image leftFoot;
   public Image body;
@@ -29,12 +24,18 @@ public class UIPlayerCharacter : MonoBehaviour
   public Text pName;
   public Image pBGColor;
   public Text txtRematch;
+  public List<Image> spells = new List<Image>();
+  public RectTransform[] transforms = new RectTransform[9];
+  private Vector2[] startPos = new Vector2[11];
+  private Vector2[] wonPos = new Vector2[11];
   private const float distance = 30f;
   private bool initialized;
   private Coroutine coroutine;
   private float t;
+  private Vector2 pos = Vector2.zero;
   private const float speed = 3f;
   internal bool disposable;
+  internal int myID = 1000;
   private int i;
   [NonSerialized]
   public UIPlayerCharacter.AnimState state;
@@ -185,10 +186,7 @@ public class UIPlayerCharacter : MonoBehaviour
       this.state = UIPlayerCharacter.AnimState.Won;
   }
 
-  private void OnDestroy()
-  {
-    this.Cleanup();
-  }
+  private void OnDestroy() => this.Cleanup();
 
   public void Cleanup()
   {
@@ -290,7 +288,7 @@ public class UIPlayerCharacter : MonoBehaviour
     {
       if ((int) spell1 < Inert.Instance._spells.Length && spell1 < byte.MaxValue)
       {
-        Spell spell2 = !p.seasonISHoliday || spell1 < (byte) 120 || spell1 > (byte) 131 ? Inert.Instance._spells[(int) spell1] : Inert.Instance.holidaySpells[(int) spell1 - 120];
+        Spell spell2 = p.settingsPlayer._spells.IsAlt((int) spell1) ? Inert.Instance.altSpells[(int) spell1] : Inert.Instance._spells[(int) spell1];
         if (spell2.level == 3)
           this.AddLevel3(spell2);
       }
@@ -301,18 +299,18 @@ public class UIPlayerCharacter : MonoBehaviour
       int num4 = p.game.gameFacts.GetStyle().HasStyle(GameStyle.Original_Spells_Only) ? 9 : (int) RandomExtensions.LastBook();
       if (num3 < 0 || num3 > num4)
         num3 = 0;
-      int index1 = num3 * 12;
-      int index2 = 0;
-      while (index2 < 12)
+      int spellIndex = num3 * 12;
+      int num5 = 0;
+      while (num5 < 12)
       {
-        if (index1 < Inert.Instance._spells.Length)
+        if (spellIndex < Inert.Instance._spells.Length)
         {
-          Spell spell = !p.seasonISHoliday || num3 != 10 ? Inert.Instance._spells[index1] : Inert.Instance.holidaySpells[index2];
+          Spell spell = p.settingsPlayer._spells.IsAlt(spellIndex) ? Inert.Instance.altSpells[spellIndex] : Inert.Instance._spells[spellIndex];
           if (spell.level == 3)
             this.AddLevel3(spell);
         }
-        ++index2;
-        ++index1;
+        ++num5;
+        ++spellIndex;
       }
     }
     foreach (ZGame.MinionBookTitan minionBookTitan in p.minionBookTitans)
@@ -351,10 +349,7 @@ public class UIPlayerCharacter : MonoBehaviour
     ++this.i;
   }
 
-  public void Won()
-  {
-    this.state = UIPlayerCharacter.AnimState.Won;
-  }
+  public void Won() => this.state = UIPlayerCharacter.AnimState.Won;
 
   public void ShowScrolls(int amount)
   {

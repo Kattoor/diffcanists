@@ -1,4 +1,5 @@
 
+#nullable disable
 public abstract class IAI
 {
   public ZGame game;

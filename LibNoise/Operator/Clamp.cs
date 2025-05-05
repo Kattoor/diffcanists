@@ -1,4 +1,5 @@
 
+#nullable disable
 namespace LibNoise.Operator
 {
   public class Clamp : ModuleBase
@@ -27,26 +28,14 @@ namespace LibNoise.Operator
 
     public double Maximum
     {
-      get
-      {
-        return this._max;
-      }
-      set
-      {
-        this._max = value;
-      }
+      get => this._max;
+      set => this._max = value;
     }
 
     public double Minimum
     {
-      get
-      {
-        return this._min;
-      }
-      set
-      {
-        this._min = value;
-      }
+      get => this._min;
+      set => this._min = value;
     }
 
     public void SetBounds(double min, double max)

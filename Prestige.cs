@@ -5,22 +5,9 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
+#nullable disable
 public static class Prestige
 {
-  public static List<Prestige.TutorialInfo> tutorialInfo = new List<Prestige.TutorialInfo>()
-  {
-    new Prestige.TutorialInfo() { wands = 5 },
-    new Prestige.TutorialInfo() { wands = 5 },
-    new Prestige.TutorialInfo() { wands = 5 },
-    new Prestige.TutorialInfo() { wands = 5 },
-    new Prestige.TutorialInfo() { wands = 5 },
-    new Prestige.TutorialInfo() { wands = 5 },
-    new Prestige.TutorialInfo() { wands = 5 },
-    new Prestige.TutorialInfo() { wands = 5 },
-    new Prestige.TutorialInfo() { wands = 5 },
-    new Prestige.TutorialInfo() { wands = 5 },
-    new Prestige.TutorialInfo() { wands = 5 }
-  };
   public const byte MsgInfo = 1;
   public const byte MsgUnlockBook = 2;
   public const byte MsgUnlockSpell = 3;
@@ -37,6 +24,20 @@ public static class Prestige
   public const byte MsgCrystalCompleteTxn = 14;
   public const byte MsgTomatoCount = 15;
   public const byte MsgToggleArcanistsItem = 16;
+  public static List<Prestige.TutorialInfo> tutorialInfo = new List<Prestige.TutorialInfo>()
+  {
+    new Prestige.TutorialInfo() { wands = 5 },
+    new Prestige.TutorialInfo() { wands = 5 },
+    new Prestige.TutorialInfo() { wands = 5 },
+    new Prestige.TutorialInfo() { wands = 5 },
+    new Prestige.TutorialInfo() { wands = 5 },
+    new Prestige.TutorialInfo() { wands = 5 },
+    new Prestige.TutorialInfo() { wands = 5 },
+    new Prestige.TutorialInfo() { wands = 5 },
+    new Prestige.TutorialInfo() { wands = 5 },
+    new Prestige.TutorialInfo() { wands = 5 },
+    new Prestige.TutorialInfo() { wands = 5 }
+  };
 
   public static void ServerHandler(Connection c, myBinaryReader r)
   {
@@ -50,7 +51,7 @@ public static class Prestige
     a.totalWands = a.wands;
     a.cosmetics.spells.ResetAll();
     Prestige.Unlock(a, BookOf.Arcane, true, true);
-    Prestige.Unlock(a, BookOf.Flame, true, false);
+    Prestige.Unlock(a, BookOf.Flame, true);
     Prestige.Unlock(a, BookOf.Cogs, true, true);
     Prestige.Unlock(a, additionalBook, true, true);
     if (oldPrestige < 5 && newPrestige >= 5)
@@ -70,8 +71,8 @@ public static class Prestige
     a.wands = 0;
     int num = a.prestige == (byte) 0 ? 9 : (int) (RandomExtensions.LastBook() + 1);
     a.cosmetics.spells.ResetAll();
-    for (int index = 0; index < num; ++index)
-      Prestige.Unlock(a, (BookOf) index, true, true);
+    for (int book = 0; book < num; ++book)
+      Prestige.Unlock(a, (BookOf) book, true, true);
   }
 
   public static void ClientHandler(myBinaryReader r)
@@ -79,7 +80,7 @@ public static class Prestige
     switch (r.ReadByte())
     {
       case 2:
-        Prestige.Unlock(Client.MyAccount, (BookOf) r.ReadInt32(), false, false);
+        Prestige.Unlock(Client.MyAccount, (BookOf) r.ReadInt32());
         Prestige.RefreshUI();
         break;
       case 3:
@@ -105,7 +106,7 @@ public static class Prestige
         break;
       case 9:
         Client.MyAccount.tournamentCoins = r.ReadInt32();
-        CharacterCreation.Instance?.txtCoins.SetText(Client.MyAccount.tournamentCoins.ToString(), true);
+        CharacterCreation.Instance?.txtCoins.SetText(Client.MyAccount.tournamentCoins.ToString());
         break;
       case 10:
         Client.MyAccount.cosmetics.array[r.ReadInt32()][r.ReadInt32()] = true;
@@ -120,14 +121,14 @@ public static class Prestige
         break;
       case 13:
         Client.MyAccount.dust = r.ReadInt32();
-        StoreMenu.Instance?.txtCrystals.SetText(Client.MyAccount.dust.ToString(), true);
+        StoreMenu.Instance?.txtCrystals.SetText(Client.MyAccount.dust.ToString());
         break;
       case 15:
         int count = r.ReadInt32();
         Client.MyAccount.tomatoes = count;
         if ((UnityEngine.Object) StoreMenu.Instance != (UnityEngine.Object) null)
         {
-          StoreMenu.Instance.txtTomatoes.SetText(count.ToString(), true);
+          StoreMenu.Instance.txtTomatoes.SetText(count.ToString());
           StoreMenu.Instance.txtTomatoes.transform.parent.gameObject.SetActive(count > 0);
         }
         if (!((UnityEngine.Object) HUD.instance != (UnityEngine.Object) null))
@@ -150,8 +151,8 @@ public static class Prestige
     SpellLobbyChange.Instance?.Refresh(true);
     ChooseJsonDialog.Instance?.Refresh();
     PrestigeLobbyUI.Instance?.Refresh(false);
-    LobbyMenu.instance?.RefreshNames(false);
-    UnratedMenu.instance?.RefreshNames(false, false);
+    LobbyMenu.instance?.RefreshNames();
+    UnratedMenu.instance?.RefreshNames(false);
   }
 
   public static void Ask(byte msg, int info)
@@ -164,7 +165,7 @@ public static class Prestige
         myBinaryWriter.Write(msg);
         myBinaryWriter.Write(info);
       }
-      Client.connection?.SendBytes(memoryStream.ToArray(), SendOption.None);
+      Client.connection?.SendBytes(memoryStream.ToArray());
     }
   }
 
@@ -178,7 +179,7 @@ public static class Prestige
         myBinaryWriter.Write(msg);
         myBinaryWriter.Write(info);
       }
-      Client.connection?.SendBytes(memoryStream.ToArray(), SendOption.None);
+      Client.connection?.SendBytes(memoryStream.ToArray());
     }
   }
 
@@ -193,7 +194,7 @@ public static class Prestige
         myBinaryWriter.Write(info);
         myBinaryWriter.Write(success);
       }
-      Client.connection?.SendBytes(memoryStream.ToArray(), SendOption.None);
+      Client.connection?.SendBytes(memoryStream.ToArray());
     }
   }
 
@@ -208,7 +209,7 @@ public static class Prestige
         myBinaryWriter.Write(info);
         myBinaryWriter.Write(info2);
       }
-      Client.connection?.SendBytes(memoryStream.ToArray(), SendOption.None);
+      Client.connection?.SendBytes(memoryStream.ToArray());
     }
   }
 
@@ -224,7 +225,7 @@ public static class Prestige
         myBinaryWriter.Write(info2);
         myBinaryWriter.Write(boolean);
       }
-      Client.connection?.SendBytes(memoryStream.ToArray(), SendOption.None);
+      Client.connection?.SendBytes(memoryStream.ToArray());
     }
   }
 
@@ -241,7 +242,7 @@ public static class Prestige
         w.Write(c.player.account.totalWands);
         c.player.account.cosmetics.Serialize(w);
       }
-      c.SendBytes(memoryStream.ToArray(), SendOption.None);
+      c.SendBytes(memoryStream.ToArray());
     }
     Server.UpdateAccountInfo(c.player.account, false);
   }
@@ -259,7 +260,7 @@ public static class Prestige
       }
       if (c.State != ConnectionState.Connected || c == null)
         return;
-      c.SendBytes(memoryStream.ToArray(), SendOption.None);
+      c.SendBytes(memoryStream.ToArray());
     }
   }
 
@@ -275,7 +276,7 @@ public static class Prestige
       }
       if (c.State != ConnectionState.Connected || c == null)
         return;
-      c.SendBytes(memoryStream.ToArray(), SendOption.None);
+      c.SendBytes(memoryStream.ToArray());
     }
   }
 
@@ -335,8 +336,8 @@ public static class Prestige
       if (acc.cosmetics.spells[index1])
         return;
       acc.wands -= 5;
-      for (int index2 = 0; index2 < 10; index2 += 2)
-        acc.cosmetics.spells[index1 + index2] = true;
+      for (int index3 = 0; index3 < 10; index3 += 2)
+        acc.cosmetics.spells[index1 + index3] = true;
     }
   }
 
@@ -432,23 +433,17 @@ public static class Prestige
 
   public static bool ViewLocked(this ViewSpellLocks s)
   {
-    return (uint) (s & (ViewSpellLocks.Locked | ViewSpellLocks.Locked_Rated_Restricted | ViewSpellLocks.Rated_Restricted)) > 0U;
+    return (s & (ViewSpellLocks.Locked | ViewSpellLocks.Locked_Rated_Restricted | ViewSpellLocks.Rated_Restricted)) != 0;
   }
 
   public static bool ViewRestricted(this ViewSpellLocks s)
   {
-    return (uint) (s & (ViewSpellLocks.Locked_Rated_Restricted | ViewSpellLocks.Rated_Restricted)) > 0U;
+    return (s & (ViewSpellLocks.Locked_Rated_Restricted | ViewSpellLocks.Rated_Restricted)) != 0;
   }
 
-  public static int MaxWands(Account acc)
-  {
-    return acc.prestige < (byte) 1 ? 153 : 258;
-  }
+  public static int MaxWands(Account acc) => acc.prestige < (byte) 1 ? 153 : 258;
 
-  public static bool ReadyToPrestige(Account acc)
-  {
-    return acc.totalWands >= Prestige.MaxWands(acc);
-  }
+  public static bool ReadyToPrestige(Account acc) => acc.totalWands >= Prestige.MaxWands(acc);
 
   public static bool AboveRating(Account acc, int other = 0)
   {

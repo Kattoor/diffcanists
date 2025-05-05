@@ -1,8 +1,29 @@
 
 using System.Runtime.CompilerServices;
 
+#nullable disable
 public class MyPerlin
 {
+  private const short INLINE = 256;
+  private const short OPTIMISE = 512;
+  private int mSeed = 1337;
+  private FixedInt mFrequency = (FixedInt) 10485L;
+  private MyPerlin.NoiseType mNoiseType;
+  private MyPerlin.RotationType3D mRotationType3D;
+  private MyPerlin.TransformType3D mTransformType3D = MyPerlin.TransformType3D.DefaultOpenSimplex2;
+  private MyPerlin.FractalType mFractalType;
+  private int mOctaves = 3;
+  private FixedInt mLacunarity = (FixedInt) 2097152L;
+  private FixedInt mGain = (FixedInt) 524288L;
+  private FixedInt mWeightedStrength = (FixedInt) 0;
+  private FixedInt mPingPongStength = (FixedInt) 2097152L;
+  private FixedInt mFractalBounding = (FixedInt) 1 / (FixedInt) 1835008L;
+  private MyPerlin.CellularDistanceFunction mCellularDistanceFunction = MyPerlin.CellularDistanceFunction.EuclideanSq;
+  private MyPerlin.CellularReturnType mCellularReturnType = MyPerlin.CellularReturnType.Distance;
+  private FixedInt mCellularJitterModifier = (FixedInt) 1;
+  private MyPerlin.DomainWarpType mDomainWarpType;
+  private MyPerlin.TransformType3D mWarpTransformType3D = MyPerlin.TransformType3D.DefaultOpenSimplex2;
+  private FixedInt mDomainWarpAmp = (FixedInt) 1;
   private static readonly FixedInt[] Gradients2D = new FixedInt[256]
   {
     (FixedInt) 136866L,
@@ -2063,44 +2084,15 @@ public class MyPerlin
     (FixedInt) 304603L,
     (FixedInt) 0L
   };
-  private int mSeed = 1337;
-  private FixedInt mFrequency = (FixedInt) 10485L;
-  private MyPerlin.TransformType3D mTransformType3D = MyPerlin.TransformType3D.DefaultOpenSimplex2;
-  private int mOctaves = 3;
-  private FixedInt mLacunarity = (FixedInt) 2097152L;
-  private FixedInt mGain = (FixedInt) 524288L;
-  private FixedInt mWeightedStrength = (FixedInt) 0;
-  private FixedInt mPingPongStength = (FixedInt) 2097152L;
-  private FixedInt mFractalBounding = (FixedInt) 1 / (FixedInt) 1835008L;
-  private MyPerlin.CellularDistanceFunction mCellularDistanceFunction = MyPerlin.CellularDistanceFunction.EuclideanSq;
-  private MyPerlin.CellularReturnType mCellularReturnType = MyPerlin.CellularReturnType.Distance;
-  private FixedInt mCellularJitterModifier = (FixedInt) 1;
-  private MyPerlin.TransformType3D mWarpTransformType3D = MyPerlin.TransformType3D.DefaultOpenSimplex2;
-  private FixedInt mDomainWarpAmp = (FixedInt) 1;
-  private const short INLINE = 256;
-  private const short OPTIMISE = 512;
-  private MyPerlin.NoiseType mNoiseType;
-  private MyPerlin.RotationType3D mRotationType3D;
-  private MyPerlin.FractalType mFractalType;
-  private MyPerlin.DomainWarpType mDomainWarpType;
   private const int PrimeX = 501125321;
   private const int PrimeY = 1136930381;
   private const int PrimeZ = 1720413743;
 
-  public MyPerlin(int seed = 1337)
-  {
-    this.SetSeed(seed);
-  }
+  public MyPerlin(int seed = 1337) => this.SetSeed(seed);
 
-  public void SetSeed(int seed)
-  {
-    this.mSeed = seed;
-  }
+  public void SetSeed(int seed) => this.mSeed = seed;
 
-  public void SetFrequency(FixedInt frequency)
-  {
-    this.mFrequency = frequency;
-  }
+  public void SetFrequency(FixedInt frequency) => this.mFrequency = frequency;
 
   public void SetNoiseType(MyPerlin.NoiseType noiseType)
   {
@@ -2115,10 +2107,7 @@ public class MyPerlin
     this.UpdateWarpTransformType3D();
   }
 
-  public void SetFractalType(MyPerlin.FractalType fractalType)
-  {
-    this.mFractalType = fractalType;
-  }
+  public void SetFractalType(MyPerlin.FractalType fractalType) => this.mFractalType = fractalType;
 
   public void SetFractalOctaves(int octaves)
   {
@@ -2126,10 +2115,7 @@ public class MyPerlin
     this.CalculateFractalBounding();
   }
 
-  public void SetFractalLacunarity(FixedInt lacunarity)
-  {
-    this.mLacunarity = lacunarity;
-  }
+  public void SetFractalLacunarity(FixedInt lacunarity) => this.mLacunarity = lacunarity;
 
   public void SetFractalGain(FixedInt gain)
   {
@@ -2169,10 +2155,7 @@ public class MyPerlin
     this.UpdateWarpTransformType3D();
   }
 
-  public void SetDomainWarpAmp(FixedInt domainWarpAmp)
-  {
-    this.mDomainWarpAmp = domainWarpAmp;
-  }
+  public void SetDomainWarpAmp(FixedInt domainWarpAmp) => this.mDomainWarpAmp = domainWarpAmp;
 
   [MethodImpl((MethodImplOptions) 512)]
   public FixedInt GetNoise(FixedInt x, FixedInt y)
@@ -2243,34 +2226,19 @@ public class MyPerlin
   }
 
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
-  private static FixedInt FastMin(FixedInt a, FixedInt b)
-  {
-    return !(a < b) ? b : a;
-  }
+  private static FixedInt FastMin(FixedInt a, FixedInt b) => !(a < b) ? b : a;
 
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
-  private static FixedInt FastMax(FixedInt a, FixedInt b)
-  {
-    return !(a > b) ? b : a;
-  }
+  private static FixedInt FastMax(FixedInt a, FixedInt b) => !(a > b) ? b : a;
 
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
-  private static FixedInt FastAbs(FixedInt f)
-  {
-    return !(f < 0) ? f : -f;
-  }
+  private static FixedInt FastAbs(FixedInt f) => !(f < 0) ? f : -f;
 
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
-  private static FixedInt FastSqrt(FixedInt f)
-  {
-    return Mathd.Sqrt(f);
-  }
+  private static FixedInt FastSqrt(FixedInt f) => Mathd.Sqrt(f);
 
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
-  private static int FastFloor(FixedInt f)
-  {
-    return !(f >= 0) ? (int) f - 1 : (int) f;
-  }
+  private static int FastFloor(FixedInt f) => !(f >= 0) ? (int) f - 1 : (int) f;
 
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
   private static int FastRound(FixedInt f)
@@ -2279,30 +2247,16 @@ public class MyPerlin
   }
 
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
-  private static FixedInt Lerp(FixedInt a, FixedInt b, FixedInt t)
-  {
-    return a + t * (b - a);
-  }
+  private static FixedInt Lerp(FixedInt a, FixedInt b, FixedInt t) => a + t * (b - a);
 
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
-  private static FixedInt InterpHermite(FixedInt t)
-  {
-    return t * t * ((FixedInt) 3 - (FixedInt) 2 * t);
-  }
+  private static FixedInt InterpHermite(FixedInt t) => t * t * ((FixedInt) 3 - (FixedInt) 2 * t);
 
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
-  private static FixedInt InterpQuintic(FixedInt t)
-  {
-    return t * t * t * (t * (t * 6 - 15) + 10);
-  }
+  private static FixedInt InterpQuintic(FixedInt t) => t * t * t * (t * (t * 6 - 15) + 10);
 
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
-  private static FixedInt CubicLerp(
-    FixedInt a,
-    FixedInt b,
-    FixedInt c,
-    FixedInt d,
-    FixedInt t)
+  private static FixedInt CubicLerp(FixedInt a, FixedInt b, FixedInt c, FixedInt d, FixedInt t)
   {
     FixedInt fixedInt = d - c - (a - b);
     return t * t * t * fixedInt + t * t * (a - b - fixedInt) + t * (c - a) + b;
@@ -2357,12 +2311,7 @@ public class MyPerlin
   }
 
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
-  private static FixedInt GradCoord(
-    int seed,
-    int xPrimed,
-    int yPrimed,
-    FixedInt xd,
-    FixedInt yd)
+  private static FixedInt GradCoord(int seed, int xPrimed, int yPrimed, FixedInt xd, FixedInt yd)
   {
     int num = MyPerlin.Hash(seed, xPrimed, yPrimed);
     int index = (num ^ num >> 15) & 254;
@@ -2519,7 +2468,7 @@ public class MyPerlin
     {
       case MyPerlin.NoiseType.OpenSimplex2:
       case MyPerlin.NoiseType.OpenSimplex2S:
-        FixedInt fixedInt1 = (FixedInt) 524288L * ((FixedInt) 1.732051f - 1);
+        FixedInt fixedInt1 = (FixedInt) 524288L * ((FixedInt) 1.73205078f - 1);
         FixedInt fixedInt2 = (x + y) * fixedInt1;
         x += fixedInt2;
         y += fixedInt2;
@@ -2537,19 +2486,19 @@ public class MyPerlin
     {
       case MyPerlin.TransformType3D.ImproveXYPlanes:
         FixedInt fixedInt1 = x + y;
-        FixedInt fixedInt2 = fixedInt1 * -(FixedInt) 0.2113249f;
-        z *= (FixedInt) 0.5773503f;
+        FixedInt fixedInt2 = fixedInt1 * -(FixedInt) 0.211324871f;
+        z *= (FixedInt) 0.577350259f;
         x += fixedInt2 - z;
         y = y + fixedInt2 - z;
-        z += fixedInt1 * (FixedInt) 0.5773503f;
+        z += fixedInt1 * (FixedInt) 0.577350259f;
         break;
       case MyPerlin.TransformType3D.ImproveXZPlanes:
         FixedInt fixedInt3 = x + z;
-        FixedInt fixedInt4 = fixedInt3 * -(FixedInt) 0.2113249f;
-        y *= (FixedInt) 0.5773503f;
+        FixedInt fixedInt4 = fixedInt3 * -(FixedInt) 0.211324871f;
+        y *= (FixedInt) 0.577350259f;
         x += fixedInt4 - y;
         z += fixedInt4 - y;
-        y += fixedInt3 * (FixedInt) 0.5773503f;
+        y += fixedInt3 * (FixedInt) 0.577350259f;
         break;
       case MyPerlin.TransformType3D.DefaultOpenSimplex2:
         FixedInt fixedInt5 = (FixedInt) 0.6666667f;
@@ -2592,7 +2541,7 @@ public class MyPerlin
     {
       case MyPerlin.DomainWarpType.OpenSimplex2:
       case MyPerlin.DomainWarpType.OpenSimplex2Reduced:
-        FixedInt fixedInt1 = (FixedInt) 524288L * ((FixedInt) 1.732051f - 1);
+        FixedInt fixedInt1 = (FixedInt) 524288L * ((FixedInt) 1.73205078f - 1);
         FixedInt fixedInt2 = (x + y) * fixedInt1;
         x += fixedInt2;
         y += fixedInt2;
@@ -2607,19 +2556,19 @@ public class MyPerlin
     {
       case MyPerlin.TransformType3D.ImproveXYPlanes:
         FixedInt fixedInt1 = x + y;
-        FixedInt fixedInt2 = fixedInt1 * -(FixedInt) 0.2113249f;
-        z *= (FixedInt) 0.5773503f;
+        FixedInt fixedInt2 = fixedInt1 * -(FixedInt) 0.211324871f;
+        z *= (FixedInt) 0.577350259f;
         x += fixedInt2 - z;
         y = y + fixedInt2 - z;
-        z += fixedInt1 * (FixedInt) 0.5773503f;
+        z += fixedInt1 * (FixedInt) 0.577350259f;
         break;
       case MyPerlin.TransformType3D.ImproveXZPlanes:
         FixedInt fixedInt3 = x + z;
-        FixedInt fixedInt4 = fixedInt3 * -(FixedInt) 0.2113249f;
-        y *= (FixedInt) 0.5773503f;
+        FixedInt fixedInt4 = fixedInt3 * -(FixedInt) 0.211324871f;
+        y *= (FixedInt) 0.577350259f;
         x += fixedInt4 - y;
         z += fixedInt4 - y;
-        y += fixedInt3 * (FixedInt) 0.5773503f;
+        y += fixedInt3 * (FixedInt) 0.577350259f;
         break;
       case MyPerlin.TransformType3D.DefaultOpenSimplex2:
         FixedInt fixedInt5 = (FixedInt) 0.6666667f;
@@ -2789,17 +2738,17 @@ public class MyPerlin
     FixedInt fixedInt9;
     if (yd1 > xd1)
     {
-      FixedInt xd2 = xd1 + fixedInt1;
-      FixedInt yd2 = yd1 + (fixedInt1 - 1);
-      FixedInt fixedInt10 = (FixedInt) 524288L - xd2 * xd2 - yd2 * yd2;
-      fixedInt9 = !(fixedInt10 <= 0) ? fixedInt10 * fixedInt10 * (fixedInt10 * fixedInt10) * MyPerlin.GradCoord(seed, xPrimed, yPrimed + 1136930381, xd2, yd2) : (FixedInt) 0;
+      FixedInt xd3 = xd1 + fixedInt1;
+      FixedInt yd3 = yd1 + (fixedInt1 - 1);
+      FixedInt fixedInt10 = (FixedInt) 524288L - xd3 * xd3 - yd3 * yd3;
+      fixedInt9 = !(fixedInt10 <= 0) ? fixedInt10 * fixedInt10 * (fixedInt10 * fixedInt10) * MyPerlin.GradCoord(seed, xPrimed, yPrimed + 1136930381, xd3, yd3) : (FixedInt) 0;
     }
     else
     {
-      FixedInt xd2 = xd1 + (fixedInt1 - 1);
-      FixedInt yd2 = yd1 + fixedInt1;
-      FixedInt fixedInt10 = (FixedInt) 524288L - xd2 * xd2 - yd2 * yd2;
-      fixedInt9 = !(fixedInt10 <= 0) ? fixedInt10 * fixedInt10 * (fixedInt10 * fixedInt10) * MyPerlin.GradCoord(seed, xPrimed + 501125321, yPrimed, xd2, yd2) : (FixedInt) 0;
+      FixedInt xd4 = xd1 + (fixedInt1 - 1);
+      FixedInt yd4 = yd1 + fixedInt1;
+      FixedInt fixedInt11 = (FixedInt) 524288L - xd4 * xd4 - yd4 * yd4;
+      fixedInt9 = !(fixedInt11 <= 0) ? fixedInt11 * fixedInt11 * (fixedInt11 * fixedInt11) * MyPerlin.GradCoord(seed, xPrimed + 501125321, yPrimed, xd4, yd4) : (FixedInt) 0;
     }
     return (fixedInt6 + fixedInt9 + fixedInt8) * (FixedInt) 104686524L;
   }
@@ -2839,20 +2788,20 @@ public class MyPerlin
       }
       else if (fixedInt2 > fixedInt1 && fixedInt2 >= fixedInt3)
       {
-        FixedInt fixedInt6 = fixedInt5 + fixedInt2 + fixedInt2;
-        if (fixedInt6 > 1)
+        FixedInt fixedInt8 = fixedInt5 + fixedInt2 + fixedInt2;
+        if (fixedInt8 > 1)
         {
-          FixedInt fixedInt7 = fixedInt6 - 1;
-          fixedInt4 += fixedInt7 * fixedInt7 * (fixedInt7 * fixedInt7) * MyPerlin.GradCoord(seed, xPrimed, yPrimed - num5 * 1136930381, zPrimed, xd, yd + num5, zd);
+          FixedInt fixedInt9 = fixedInt8 - 1;
+          fixedInt4 += fixedInt9 * fixedInt9 * (fixedInt9 * fixedInt9) * MyPerlin.GradCoord(seed, xPrimed, yPrimed - num5 * 1136930381, zPrimed, xd, yd + num5, zd);
         }
       }
       else
       {
-        FixedInt fixedInt6 = fixedInt5 + fixedInt3 + fixedInt3;
-        if (fixedInt6 > 1)
+        FixedInt fixedInt10 = fixedInt5 + fixedInt3 + fixedInt3;
+        if (fixedInt10 > 1)
         {
-          FixedInt fixedInt7 = fixedInt6 - 1;
-          fixedInt4 += fixedInt7 * fixedInt7 * (fixedInt7 * fixedInt7) * MyPerlin.GradCoord(seed, xPrimed, yPrimed, zPrimed - num6 * 1720413743, xd, yd, zd + num6);
+          FixedInt fixedInt11 = fixedInt10 - 1;
+          fixedInt4 += fixedInt11 * fixedInt11 * (fixedInt11 * fixedInt11) * MyPerlin.GradCoord(seed, xPrimed, yPrimed, zPrimed - num6 * 1720413743, xd, yd, zd + num6);
         }
       }
       if (num7 != 1)
@@ -2881,7 +2830,7 @@ public class MyPerlin
 
   private FixedInt SingleOpenSimplex2S(int seed, FixedInt x, FixedInt y)
   {
-    FixedInt fixedInt1 = ((FixedInt) 3 - (FixedInt) 1.732051f) / 6;
+    FixedInt fixedInt1 = ((FixedInt) 3 - (FixedInt) 1.73205078f) / 6;
     int num1 = MyPerlin.FastFloor(x);
     int num2 = MyPerlin.FastFloor(y);
     FixedInt fixedInt2 = x - num1;
@@ -2912,62 +2861,62 @@ public class MyPerlin
       }
       else
       {
-        FixedInt xd3 = xd1 + fixedInt1;
-        FixedInt yd3 = yd1 + (fixedInt1 - 1);
-        FixedInt fixedInt10 = (FixedInt) 2097152L / (FixedInt) 3145728L - xd3 * xd3 - yd3 * yd3;
-        if (fixedInt10 > 0)
-          fixedInt8 += fixedInt10 * fixedInt10 * (fixedInt10 * fixedInt10) * MyPerlin.GradCoord(seed, xPrimed1, yPrimed1 + 1136930381, xd3, yd3);
+        FixedInt xd4 = xd1 + fixedInt1;
+        FixedInt yd4 = yd1 + (fixedInt1 - 1);
+        FixedInt fixedInt11 = (FixedInt) 2097152L / (FixedInt) 3145728L - xd4 * xd4 - yd4 * yd4;
+        if (fixedInt11 > 0)
+          fixedInt8 += fixedInt11 * fixedInt11 * (fixedInt11 * fixedInt11) * MyPerlin.GradCoord(seed, xPrimed1, yPrimed1 + 1136930381, xd4, yd4);
       }
       if (fixedInt3 - fixedInt9 > 1)
       {
-        FixedInt xd3 = xd1 + ((FixedInt) 3 * fixedInt1 - 1);
-        FixedInt yd3 = yd1 + ((FixedInt) 3 * fixedInt1 - 2);
-        FixedInt fixedInt10 = (FixedInt) 2097152L / (FixedInt) 3145728L - xd3 * xd3 - yd3 * yd3;
-        if (fixedInt10 > 0)
-          fixedInt8 += fixedInt10 * fixedInt10 * (fixedInt10 * fixedInt10) * MyPerlin.GradCoord(seed, xPrimed1 + 501125321, yPrimed1 - 2021106534, xd3, yd3);
+        FixedInt xd5 = xd1 + ((FixedInt) 3 * fixedInt1 - 1);
+        FixedInt yd5 = yd1 + ((FixedInt) 3 * fixedInt1 - 2);
+        FixedInt fixedInt12 = (FixedInt) 2097152L / (FixedInt) 3145728L - xd5 * xd5 - yd5 * yd5;
+        if (fixedInt12 > 0)
+          fixedInt8 += fixedInt12 * fixedInt12 * (fixedInt12 * fixedInt12) * MyPerlin.GradCoord(seed, xPrimed1 + 501125321, yPrimed1 - 2021106534, xd5, yd5);
       }
       else
       {
-        FixedInt xd3 = xd1 + (fixedInt1 - 1);
-        FixedInt yd3 = yd1 + fixedInt1;
-        FixedInt fixedInt10 = (FixedInt) 2097152L / (FixedInt) 3145728L - xd3 * xd3 - yd3 * yd3;
-        if (fixedInt10 > 0)
-          fixedInt8 += fixedInt10 * fixedInt10 * (fixedInt10 * fixedInt10) * MyPerlin.GradCoord(seed, xPrimed1 + 501125321, yPrimed1, xd3, yd3);
+        FixedInt xd6 = xd1 + (fixedInt1 - 1);
+        FixedInt yd6 = yd1 + fixedInt1;
+        FixedInt fixedInt13 = (FixedInt) 2097152L / (FixedInt) 3145728L - xd6 * xd6 - yd6 * yd6;
+        if (fixedInt13 > 0)
+          fixedInt8 += fixedInt13 * fixedInt13 * (fixedInt13 * fixedInt13) * MyPerlin.GradCoord(seed, xPrimed1 + 501125321, yPrimed1, xd6, yd6);
       }
     }
     else
     {
       if (fixedInt2 + fixedInt9 < 0)
       {
-        FixedInt xd3 = xd1 + ((FixedInt) 1 - fixedInt1);
-        FixedInt yd3 = yd1 - fixedInt1;
-        FixedInt fixedInt10 = (FixedInt) 2097152L / (FixedInt) 3145728L - xd3 * xd3 - yd3 * yd3;
-        if (fixedInt10 > 0)
-          fixedInt8 += fixedInt10 * fixedInt10 * (fixedInt10 * fixedInt10) * MyPerlin.GradCoord(seed, xPrimed1 - 501125321, yPrimed1, xd3, yd3);
+        FixedInt xd7 = xd1 + ((FixedInt) 1 - fixedInt1);
+        FixedInt yd7 = yd1 - fixedInt1;
+        FixedInt fixedInt14 = (FixedInt) 2097152L / (FixedInt) 3145728L - xd7 * xd7 - yd7 * yd7;
+        if (fixedInt14 > 0)
+          fixedInt8 += fixedInt14 * fixedInt14 * (fixedInt14 * fixedInt14) * MyPerlin.GradCoord(seed, xPrimed1 - 501125321, yPrimed1, xd7, yd7);
       }
       else
       {
-        FixedInt xd3 = xd1 + (fixedInt1 - 1);
-        FixedInt yd3 = yd1 + fixedInt1;
-        FixedInt fixedInt10 = (FixedInt) 2097152L / (FixedInt) 3145728L - xd3 * xd3 - yd3 * yd3;
-        if (fixedInt10 > 0)
-          fixedInt8 += fixedInt10 * fixedInt10 * (fixedInt10 * fixedInt10) * MyPerlin.GradCoord(seed, xPrimed1 + 501125321, yPrimed1, xd3, yd3);
+        FixedInt xd8 = xd1 + (fixedInt1 - 1);
+        FixedInt yd8 = yd1 + fixedInt1;
+        FixedInt fixedInt15 = (FixedInt) 2097152L / (FixedInt) 3145728L - xd8 * xd8 - yd8 * yd8;
+        if (fixedInt15 > 0)
+          fixedInt8 += fixedInt15 * fixedInt15 * (fixedInt15 * fixedInt15) * MyPerlin.GradCoord(seed, xPrimed1 + 501125321, yPrimed1, xd8, yd8);
       }
       if (fixedInt3 < fixedInt9)
       {
-        FixedInt xd3 = xd1 - fixedInt1;
-        FixedInt yd3 = yd1 - (fixedInt1 - 1);
-        FixedInt fixedInt10 = (FixedInt) 2097152L / (FixedInt) 3145728L - xd3 * xd3 - yd3 * yd3;
-        if (fixedInt10 > 0)
-          fixedInt8 += fixedInt10 * fixedInt10 * (fixedInt10 * fixedInt10) * MyPerlin.GradCoord(seed, xPrimed1, yPrimed1 - 1136930381, xd3, yd3);
+        FixedInt xd9 = xd1 - fixedInt1;
+        FixedInt yd9 = yd1 - (fixedInt1 - 1);
+        FixedInt fixedInt16 = (FixedInt) 2097152L / (FixedInt) 3145728L - xd9 * xd9 - yd9 * yd9;
+        if (fixedInt16 > 0)
+          fixedInt8 += fixedInt16 * fixedInt16 * (fixedInt16 * fixedInt16) * MyPerlin.GradCoord(seed, xPrimed1, yPrimed1 - 1136930381, xd9, yd9);
       }
       else
       {
-        FixedInt xd3 = xd1 + fixedInt1;
-        FixedInt yd3 = yd1 + (fixedInt1 - 1);
-        FixedInt fixedInt10 = (FixedInt) 2097152L / (FixedInt) 3145728L - xd3 * xd3 - yd3 * yd3;
-        if (fixedInt10 > 0)
-          fixedInt8 += fixedInt10 * fixedInt10 * (fixedInt10 * fixedInt10) * MyPerlin.GradCoord(seed, xPrimed1, yPrimed1 + 1136930381, xd3, yd3);
+        FixedInt xd10 = xd1 + fixedInt1;
+        FixedInt yd10 = yd1 + (fixedInt1 - 1);
+        FixedInt fixedInt17 = (FixedInt) 2097152L / (FixedInt) 3145728L - xd10 * xd10 - yd10 * yd10;
+        if (fixedInt17 > 0)
+          fixedInt8 += fixedInt17 * fixedInt17 * (fixedInt17 * fixedInt17) * MyPerlin.GradCoord(seed, xPrimed1, yPrimed1 + 1136930381, xd10, yd10);
       }
     }
     return fixedInt8 * (FixedInt) 19128081L;
@@ -3018,18 +2967,18 @@ public class MyPerlin
       FixedInt fixedInt15 = fixedInt9 + fixedInt10 + fixedInt4;
       if (fixedInt15 > 0)
       {
-        FixedInt xd3 = xd1;
-        FixedInt yd3 = yd1 - (num8 | 1);
-        FixedInt zd3 = zd1 - (num9 | 1);
-        fixedInt7 += fixedInt15 * fixedInt15 * (fixedInt15 * fixedInt15) * MyPerlin.GradCoord(seed, num4 + (num7 & 501125321), num5 + (~num8 & 1136930381), num6 + (~num9 & 1720413743), xd3, yd3, zd3);
+        FixedInt xd4 = xd1;
+        FixedInt yd4 = yd1 - (num8 | 1);
+        FixedInt zd4 = zd1 - (num9 | 1);
+        fixedInt7 += fixedInt15 * fixedInt15 * (fixedInt15 * fixedInt15) * MyPerlin.GradCoord(seed, num4 + (num7 & 501125321), num5 + (~num8 & 1136930381), num6 + (~num9 & 1720413743), xd4, yd4, zd4);
       }
       FixedInt fixedInt16 = fixedInt11 + fixedInt6;
       if (fixedInt16 > 0)
       {
-        FixedInt xd3 = (FixedInt) (num7 | 1) + xd2;
-        FixedInt yd3 = yd2;
-        FixedInt zd3 = zd2;
-        fixedInt7 += fixedInt16 * fixedInt16 * (fixedInt16 * fixedInt16) * MyPerlin.GradCoord(seed1, num4 + (num7 & 1002250642), num5 + 1136930381, num6 + 1720413743, xd3, yd3, zd3);
+        FixedInt xd5 = (FixedInt) (num7 | 1) + xd2;
+        FixedInt yd5 = yd2;
+        FixedInt zd5 = zd2;
+        fixedInt7 += fixedInt16 * fixedInt16 * (fixedInt16 * fixedInt16) * MyPerlin.GradCoord(seed1, num4 + (num7 & 1002250642), num5 + 1136930381, num6 + 1720413743, xd5, yd5, zd5);
         flag1 = true;
       }
     }
@@ -3037,91 +2986,91 @@ public class MyPerlin
     FixedInt fixedInt17 = fixedInt9 + fixedInt4;
     if (fixedInt17 > 0)
     {
-      FixedInt xd3 = xd1;
-      FixedInt yd3 = yd1 - (num8 | 1);
-      FixedInt zd3 = zd1;
-      fixedInt7 += fixedInt17 * fixedInt17 * (fixedInt17 * fixedInt17) * MyPerlin.GradCoord(seed, num4 + (num7 & 501125321), num5 + (~num8 & 1136930381), num6 + (num9 & 1720413743), xd3, yd3, zd3);
+      FixedInt xd6 = xd1;
+      FixedInt yd6 = yd1 - (num8 | 1);
+      FixedInt zd6 = zd1;
+      fixedInt7 += fixedInt17 * fixedInt17 * (fixedInt17 * fixedInt17) * MyPerlin.GradCoord(seed, num4 + (num7 & 501125321), num5 + (~num8 & 1136930381), num6 + (num9 & 1720413743), xd6, yd6, zd6);
     }
     else
     {
-      FixedInt fixedInt15 = fixedInt8 + fixedInt10 + fixedInt4;
-      if (fixedInt15 > 0)
+      FixedInt fixedInt18 = fixedInt8 + fixedInt10 + fixedInt4;
+      if (fixedInt18 > 0)
       {
-        FixedInt xd3 = xd1 - (num7 | 1);
-        FixedInt yd3 = yd1;
-        FixedInt zd3 = zd1 - (num9 | 1);
-        fixedInt7 += fixedInt15 * fixedInt15 * (fixedInt15 * fixedInt15) * MyPerlin.GradCoord(seed, num4 + (~num7 & 501125321), num5 + (num8 & 1136930381), num6 + (~num9 & 1720413743), xd3, yd3, zd3);
+        FixedInt xd7 = xd1 - (num7 | 1);
+        FixedInt yd7 = yd1;
+        FixedInt zd7 = zd1 - (num9 | 1);
+        fixedInt7 += fixedInt18 * fixedInt18 * (fixedInt18 * fixedInt18) * MyPerlin.GradCoord(seed, num4 + (~num7 & 501125321), num5 + (num8 & 1136930381), num6 + (~num9 & 1720413743), xd7, yd7, zd7);
       }
-      FixedInt fixedInt16 = fixedInt12 + fixedInt6;
-      if (fixedInt16 > 0)
+      FixedInt fixedInt19 = fixedInt12 + fixedInt6;
+      if (fixedInt19 > 0)
       {
-        FixedInt xd3 = xd2;
-        FixedInt yd3 = (FixedInt) (num8 | 1) + yd2;
-        FixedInt zd3 = zd2;
-        fixedInt7 += fixedInt16 * fixedInt16 * (fixedInt16 * fixedInt16) * MyPerlin.GradCoord(seed1, num4 + 501125321, num5 + (num8 & -2021106534), num6 + 1720413743, xd3, yd3, zd3);
+        FixedInt xd8 = xd2;
+        FixedInt yd8 = (FixedInt) (num8 | 1) + yd2;
+        FixedInt zd8 = zd2;
+        fixedInt7 += fixedInt19 * fixedInt19 * (fixedInt19 * fixedInt19) * MyPerlin.GradCoord(seed1, num4 + 501125321, num5 + (num8 & -2021106534), num6 + 1720413743, xd8, yd8, zd8);
         flag2 = true;
       }
     }
     bool flag3 = false;
-    FixedInt fixedInt18 = fixedInt10 + fixedInt4;
-    if (fixedInt18 > 0)
+    FixedInt fixedInt20 = fixedInt10 + fixedInt4;
+    if (fixedInt20 > 0)
     {
-      FixedInt xd3 = xd1;
-      FixedInt yd3 = yd1;
-      FixedInt zd3 = zd1 - (num9 | 1);
-      fixedInt7 += fixedInt18 * fixedInt18 * (fixedInt18 * fixedInt18) * MyPerlin.GradCoord(seed, num4 + (num7 & 501125321), num5 + (num8 & 1136930381), num6 + (~num9 & 1720413743), xd3, yd3, zd3);
+      FixedInt xd9 = xd1;
+      FixedInt yd9 = yd1;
+      FixedInt zd9 = zd1 - (num9 | 1);
+      fixedInt7 += fixedInt20 * fixedInt20 * (fixedInt20 * fixedInt20) * MyPerlin.GradCoord(seed, num4 + (num7 & 501125321), num5 + (num8 & 1136930381), num6 + (~num9 & 1720413743), xd9, yd9, zd9);
     }
     else
     {
-      FixedInt fixedInt15 = fixedInt8 + fixedInt9 + fixedInt4;
-      if (fixedInt15 > 0)
+      FixedInt fixedInt21 = fixedInt8 + fixedInt9 + fixedInt4;
+      if (fixedInt21 > 0)
       {
-        FixedInt xd3 = xd1 - (num7 | 1);
-        FixedInt yd3 = yd1 - (num8 | 1);
-        FixedInt zd3 = zd1;
-        fixedInt7 += fixedInt15 * fixedInt15 * (fixedInt15 * fixedInt15) * MyPerlin.GradCoord(seed, num4 + (~num7 & 501125321), num5 + (~num8 & 1136930381), num6 + (num9 & 1720413743), xd3, yd3, zd3);
+        FixedInt xd10 = xd1 - (num7 | 1);
+        FixedInt yd10 = yd1 - (num8 | 1);
+        FixedInt zd10 = zd1;
+        fixedInt7 += fixedInt21 * fixedInt21 * (fixedInt21 * fixedInt21) * MyPerlin.GradCoord(seed, num4 + (~num7 & 501125321), num5 + (~num8 & 1136930381), num6 + (num9 & 1720413743), xd10, yd10, zd10);
       }
-      FixedInt fixedInt16 = fixedInt13 + fixedInt6;
-      if (fixedInt16 > 0)
+      FixedInt fixedInt22 = fixedInt13 + fixedInt6;
+      if (fixedInt22 > 0)
       {
-        FixedInt xd3 = xd2;
-        FixedInt yd3 = yd2;
-        FixedInt zd3 = (FixedInt) (num9 | 1) + zd2;
-        fixedInt7 += fixedInt16 * fixedInt16 * (fixedInt16 * fixedInt16) * MyPerlin.GradCoord(seed1, num4 + 501125321, num5 + 1136930381, num6 + (num9 & -854139810), xd3, yd3, zd3);
+        FixedInt xd11 = xd2;
+        FixedInt yd11 = yd2;
+        FixedInt zd11 = (FixedInt) (num9 | 1) + zd2;
+        fixedInt7 += fixedInt22 * fixedInt22 * (fixedInt22 * fixedInt22) * MyPerlin.GradCoord(seed1, num4 + 501125321, num5 + 1136930381, num6 + (num9 & -854139810), xd11, yd11, zd11);
         flag3 = true;
       }
     }
     if (!flag1)
     {
-      FixedInt fixedInt15 = fixedInt12 + fixedInt13 + fixedInt6;
-      if (fixedInt15 > 0)
+      FixedInt fixedInt23 = fixedInt12 + fixedInt13 + fixedInt6;
+      if (fixedInt23 > 0)
       {
-        FixedInt xd3 = xd2;
-        FixedInt yd3 = (FixedInt) (num8 | 1) + yd2;
-        FixedInt zd3 = (FixedInt) (num9 | 1) + zd2;
-        fixedInt7 += fixedInt15 * fixedInt15 * (fixedInt15 * fixedInt15) * MyPerlin.GradCoord(seed1, num4 + 501125321, num5 + (num8 & -2021106534), num6 + (num9 & -854139810), xd3, yd3, zd3);
+        FixedInt xd12 = xd2;
+        FixedInt yd12 = (FixedInt) (num8 | 1) + yd2;
+        FixedInt zd12 = (FixedInt) (num9 | 1) + zd2;
+        fixedInt7 += fixedInt23 * fixedInt23 * (fixedInt23 * fixedInt23) * MyPerlin.GradCoord(seed1, num4 + 501125321, num5 + (num8 & -2021106534), num6 + (num9 & -854139810), xd12, yd12, zd12);
       }
     }
     if (!flag2)
     {
-      FixedInt fixedInt15 = fixedInt11 + fixedInt13 + fixedInt6;
-      if (fixedInt15 > 0)
+      FixedInt fixedInt24 = fixedInt11 + fixedInt13 + fixedInt6;
+      if (fixedInt24 > 0)
       {
-        FixedInt xd3 = (FixedInt) (num7 | 1) + xd2;
-        FixedInt yd3 = yd2;
-        FixedInt zd3 = (FixedInt) (num9 | 1) + zd2;
-        fixedInt7 += fixedInt15 * fixedInt15 * (fixedInt15 * fixedInt15) * MyPerlin.GradCoord(seed1, num4 + (num7 & 1002250642), num5 + 1136930381, num6 + (num9 & -854139810), xd3, yd3, zd3);
+        FixedInt xd13 = (FixedInt) (num7 | 1) + xd2;
+        FixedInt yd13 = yd2;
+        FixedInt zd13 = (FixedInt) (num9 | 1) + zd2;
+        fixedInt7 += fixedInt24 * fixedInt24 * (fixedInt24 * fixedInt24) * MyPerlin.GradCoord(seed1, num4 + (num7 & 1002250642), num5 + 1136930381, num6 + (num9 & -854139810), xd13, yd13, zd13);
       }
     }
     if (!flag3)
     {
-      FixedInt fixedInt15 = fixedInt11 + fixedInt12 + fixedInt6;
-      if (fixedInt15 > 0)
+      FixedInt fixedInt25 = fixedInt11 + fixedInt12 + fixedInt6;
+      if (fixedInt25 > 0)
       {
-        FixedInt xd3 = (FixedInt) (num7 | 1) + xd2;
-        FixedInt yd3 = (FixedInt) (num8 | 1) + yd2;
-        FixedInt zd3 = zd2;
-        fixedInt7 += fixedInt15 * fixedInt15 * (fixedInt15 * fixedInt15) * MyPerlin.GradCoord(seed1, num4 + (num7 & 1002250642), num5 + (num8 & -2021106534), num6 + 1720413743, xd3, yd3, zd3);
+        FixedInt xd14 = (FixedInt) (num7 | 1) + xd2;
+        FixedInt yd14 = (FixedInt) (num8 | 1) + yd2;
+        FixedInt zd14 = zd2;
+        fixedInt7 += fixedInt25 * fixedInt25 * (fixedInt25 * fixedInt25) * MyPerlin.GradCoord(seed1, num4 + (num7 & 1002250642), num5 + (num8 & -2021106534), num6 + 1720413743, xd14, yd14, zd14);
       }
     }
     return fixedInt7 * (FixedInt) 9485445L;
@@ -3147,7 +3096,9 @@ public class MyPerlin
           {
             int num5 = MyPerlin.Hash(seed, xPrimed, yPrimed);
             int index3 = num5 & 510;
-            FixedInt b = MyPerlin.FastAbs((FixedInt) index1 - x + MyPerlin.RandVecs2D[index3] * fixedInt3) + MyPerlin.FastAbs((FixedInt) index2 - y + MyPerlin.RandVecs2D[index3 | 1] * fixedInt3);
+            FixedInt f1 = (FixedInt) index1 - x + MyPerlin.RandVecs2D[index3] * fixedInt3;
+            FixedInt f2 = (FixedInt) index2 - y + MyPerlin.RandVecs2D[index3 | 1] * fixedInt3;
+            FixedInt b = MyPerlin.FastAbs(f1) + MyPerlin.FastAbs(f2);
             fixedInt2 = MyPerlin.FastMax(MyPerlin.FastMin(fixedInt2, b), fixedInt1);
             if (b < fixedInt1)
             {
@@ -3160,21 +3111,21 @@ public class MyPerlin
         }
         break;
       case MyPerlin.CellularDistanceFunction.Hybrid:
-        for (int index1 = num1 - 1; index1 <= num1 + 1; ++index1)
+        for (int index4 = num1 - 1; index4 <= num1 + 1; ++index4)
         {
           int yPrimed = num4;
-          for (int index2 = num2 - 1; index2 <= num2 + 1; ++index2)
+          for (int index5 = num2 - 1; index5 <= num2 + 1; ++index5)
           {
-            int num5 = MyPerlin.Hash(seed, xPrimed, yPrimed);
-            int index3 = num5 & 510;
-            FixedInt f1 = (FixedInt) index1 - x + MyPerlin.RandVecs2D[index3] * fixedInt3;
-            FixedInt f2 = (FixedInt) index2 - y + MyPerlin.RandVecs2D[index3 | 1] * fixedInt3;
-            FixedInt b = MyPerlin.FastAbs(f1) + MyPerlin.FastAbs(f2) + (f1 * f1 + f2 * f2);
+            int num6 = MyPerlin.Hash(seed, xPrimed, yPrimed);
+            int index6 = num6 & 510;
+            FixedInt f3 = (FixedInt) index4 - x + MyPerlin.RandVecs2D[index6] * fixedInt3;
+            FixedInt f4 = (FixedInt) index5 - y + MyPerlin.RandVecs2D[index6 | 1] * fixedInt3;
+            FixedInt b = MyPerlin.FastAbs(f3) + MyPerlin.FastAbs(f4) + (f3 * f3 + f4 * f4);
             fixedInt2 = MyPerlin.FastMax(MyPerlin.FastMin(fixedInt2, b), fixedInt1);
             if (b < fixedInt1)
             {
               fixedInt1 = b;
-              num3 = num5;
+              num3 = num6;
             }
             yPrimed += 1136930381;
           }
@@ -3182,21 +3133,21 @@ public class MyPerlin
         }
         break;
       default:
-        for (int index1 = num1 - 1; index1 <= num1 + 1; ++index1)
+        for (int index7 = num1 - 1; index7 <= num1 + 1; ++index7)
         {
           int yPrimed = num4;
-          for (int index2 = num2 - 1; index2 <= num2 + 1; ++index2)
+          for (int index8 = num2 - 1; index8 <= num2 + 1; ++index8)
           {
-            int num5 = MyPerlin.Hash(seed, xPrimed, yPrimed);
-            int index3 = num5 & 510;
-            FixedInt fixedInt4 = (FixedInt) index1 - x + MyPerlin.RandVecs2D[index3] * fixedInt3;
-            FixedInt fixedInt5 = (FixedInt) index2 - y + MyPerlin.RandVecs2D[index3 | 1] * fixedInt3;
+            int num7 = MyPerlin.Hash(seed, xPrimed, yPrimed);
+            int index9 = num7 & 510;
+            FixedInt fixedInt4 = (FixedInt) index7 - x + MyPerlin.RandVecs2D[index9] * fixedInt3;
+            FixedInt fixedInt5 = (FixedInt) index8 - y + MyPerlin.RandVecs2D[index9 | 1] * fixedInt3;
             FixedInt b = fixedInt4 * fixedInt4 + fixedInt5 * fixedInt5;
             fixedInt2 = MyPerlin.FastMax(MyPerlin.FastMin(fixedInt2, b), fixedInt1);
             if (b < fixedInt1)
             {
               fixedInt1 = b;
-              num3 = num5;
+              num3 = num7;
             }
             yPrimed += 1136930381;
           }
@@ -3275,22 +3226,25 @@ public class MyPerlin
         }
         break;
       case MyPerlin.CellularDistanceFunction.Manhattan:
-        for (int index1 = num1 - 1; index1 <= num1 + 1; ++index1)
+        for (int index5 = num1 - 1; index5 <= num1 + 1; ++index5)
         {
           int yPrimed = num5;
-          for (int index2 = num2 - 1; index2 <= num2 + 1; ++index2)
+          for (int index6 = num2 - 1; index6 <= num2 + 1; ++index6)
           {
             int zPrimed = num6;
-            for (int index3 = num3 - 1; index3 <= num3 + 1; ++index3)
+            for (int index7 = num3 - 1; index7 <= num3 + 1; ++index7)
             {
-              int num7 = MyPerlin.Hash(seed, xPrimed, yPrimed, zPrimed);
-              int index4 = num7 & 1020;
-              FixedInt b = MyPerlin.FastAbs((FixedInt) index1 - x + MyPerlin.RandVecs3D[index4] * fixedInt3) + MyPerlin.FastAbs((FixedInt) index2 - y + MyPerlin.RandVecs3D[index4 | 1] * fixedInt3) + MyPerlin.FastAbs((FixedInt) index3 - z + MyPerlin.RandVecs3D[index4 | 2] * fixedInt3);
+              int num8 = MyPerlin.Hash(seed, xPrimed, yPrimed, zPrimed);
+              int index8 = num8 & 1020;
+              FixedInt f1 = (FixedInt) index5 - x + MyPerlin.RandVecs3D[index8] * fixedInt3;
+              FixedInt f2 = (FixedInt) index6 - y + MyPerlin.RandVecs3D[index8 | 1] * fixedInt3;
+              FixedInt f3 = (FixedInt) index7 - z + MyPerlin.RandVecs3D[index8 | 2] * fixedInt3;
+              FixedInt b = MyPerlin.FastAbs(f1) + MyPerlin.FastAbs(f2) + MyPerlin.FastAbs(f3);
               fixedInt2 = MyPerlin.FastMax(MyPerlin.FastMin(fixedInt2, b), fixedInt1);
               if (b < fixedInt1)
               {
                 fixedInt1 = b;
-                num4 = num7;
+                num4 = num8;
               }
               zPrimed += 1720413743;
             }
@@ -3300,25 +3254,25 @@ public class MyPerlin
         }
         break;
       case MyPerlin.CellularDistanceFunction.Hybrid:
-        for (int index1 = num1 - 1; index1 <= num1 + 1; ++index1)
+        for (int index9 = num1 - 1; index9 <= num1 + 1; ++index9)
         {
           int yPrimed = num5;
-          for (int index2 = num2 - 1; index2 <= num2 + 1; ++index2)
+          for (int index10 = num2 - 1; index10 <= num2 + 1; ++index10)
           {
             int zPrimed = num6;
-            for (int index3 = num3 - 1; index3 <= num3 + 1; ++index3)
+            for (int index11 = num3 - 1; index11 <= num3 + 1; ++index11)
             {
-              int num7 = MyPerlin.Hash(seed, xPrimed, yPrimed, zPrimed);
-              int index4 = num7 & 1020;
-              FixedInt f1 = (FixedInt) index1 - x + MyPerlin.RandVecs3D[index4] * fixedInt3;
-              FixedInt f2 = (FixedInt) index2 - y + MyPerlin.RandVecs3D[index4 | 1] * fixedInt3;
-              FixedInt f3 = (FixedInt) index3 - z + MyPerlin.RandVecs3D[index4 | 2] * fixedInt3;
-              FixedInt b = MyPerlin.FastAbs(f1) + MyPerlin.FastAbs(f2) + MyPerlin.FastAbs(f3) + (f1 * f1 + f2 * f2 + f3 * f3);
+              int num9 = MyPerlin.Hash(seed, xPrimed, yPrimed, zPrimed);
+              int index12 = num9 & 1020;
+              FixedInt f4 = (FixedInt) index9 - x + MyPerlin.RandVecs3D[index12] * fixedInt3;
+              FixedInt f5 = (FixedInt) index10 - y + MyPerlin.RandVecs3D[index12 | 1] * fixedInt3;
+              FixedInt f6 = (FixedInt) index11 - z + MyPerlin.RandVecs3D[index12 | 2] * fixedInt3;
+              FixedInt b = MyPerlin.FastAbs(f4) + MyPerlin.FastAbs(f5) + MyPerlin.FastAbs(f6) + (f4 * f4 + f5 * f5 + f6 * f6);
               fixedInt2 = MyPerlin.FastMax(MyPerlin.FastMin(fixedInt2, b), fixedInt1);
               if (b < fixedInt1)
               {
                 fixedInt1 = b;
-                num4 = num7;
+                num4 = num9;
               }
               zPrimed += 1720413743;
             }
@@ -3745,50 +3699,50 @@ public class MyPerlin
     {
       FixedInt xd2 = xd1 + ((FixedInt) 2 * fixedInt1 - 1);
       FixedInt yd2 = yd1 + ((FixedInt) 2 * fixedInt1 - 1);
-      FixedInt fixedInt8 = fixedInt9 * fixedInt9 * (fixedInt9 * fixedInt9);
+      FixedInt fixedInt10 = fixedInt9 * fixedInt9 * (fixedInt9 * fixedInt9);
       FixedInt xo;
       FixedInt yo;
       if (outGradOnly)
         MyPerlin.GradCoordOut(seed, xPrimed + 501125321, yPrimed + 1136930381, out xo, out yo);
       else
         MyPerlin.GradCoordDual(seed, xPrimed + 501125321, yPrimed + 1136930381, xd2, yd2, out xo, out yo);
-      fixedInt6 += fixedInt8 * xo;
-      fixedInt5 += fixedInt8 * yo;
+      fixedInt6 += fixedInt10 * xo;
+      fixedInt5 += fixedInt10 * yo;
     }
     if (yd1 > xd1)
     {
-      FixedInt xd2 = xd1 + fixedInt1;
-      FixedInt yd2 = yd1 + (fixedInt1 - 1);
-      FixedInt fixedInt8 = (FixedInt) 524288L - xd2 * xd2 - yd2 * yd2;
-      if (fixedInt8 > 0)
+      FixedInt xd3 = xd1 + fixedInt1;
+      FixedInt yd3 = yd1 + (fixedInt1 - 1);
+      FixedInt fixedInt11 = (FixedInt) 524288L - xd3 * xd3 - yd3 * yd3;
+      if (fixedInt11 > 0)
       {
-        FixedInt fixedInt10 = fixedInt8 * fixedInt8 * (fixedInt8 * fixedInt8);
+        FixedInt fixedInt12 = fixedInt11 * fixedInt11 * (fixedInt11 * fixedInt11);
         FixedInt xo;
         FixedInt yo;
         if (outGradOnly)
           MyPerlin.GradCoordOut(seed, xPrimed, yPrimed + 1136930381, out xo, out yo);
         else
-          MyPerlin.GradCoordDual(seed, xPrimed, yPrimed + 1136930381, xd2, yd2, out xo, out yo);
-        fixedInt6 += fixedInt10 * xo;
-        fixedInt5 += fixedInt10 * yo;
+          MyPerlin.GradCoordDual(seed, xPrimed, yPrimed + 1136930381, xd3, yd3, out xo, out yo);
+        fixedInt6 += fixedInt12 * xo;
+        fixedInt5 += fixedInt12 * yo;
       }
     }
     else
     {
-      FixedInt xd2 = xd1 + (fixedInt1 - 1);
-      FixedInt yd2 = yd1 + fixedInt1;
-      FixedInt fixedInt8 = (FixedInt) 524288L - xd2 * xd2 - yd2 * yd2;
-      if (fixedInt8 > 0)
+      FixedInt xd4 = xd1 + (fixedInt1 - 1);
+      FixedInt yd4 = yd1 + fixedInt1;
+      FixedInt fixedInt13 = (FixedInt) 524288L - xd4 * xd4 - yd4 * yd4;
+      if (fixedInt13 > 0)
       {
-        FixedInt fixedInt10 = fixedInt8 * fixedInt8 * (fixedInt8 * fixedInt8);
+        FixedInt fixedInt14 = fixedInt13 * fixedInt13 * (fixedInt13 * fixedInt13);
         FixedInt xo;
         FixedInt yo;
         if (outGradOnly)
           MyPerlin.GradCoordOut(seed, xPrimed + 501125321, yPrimed, out xo, out yo);
         else
-          MyPerlin.GradCoordDual(seed, xPrimed + 501125321, yPrimed, xd2, yd2, out xo, out yo);
-        fixedInt6 += fixedInt10 * xo;
-        fixedInt5 += fixedInt10 * yo;
+          MyPerlin.GradCoordDual(seed, xPrimed + 501125321, yPrimed, xd4, yd4, out xo, out yo);
+        fixedInt6 += fixedInt14 * xo;
+        fixedInt5 += fixedInt14 * yo;
       }
     }
     xr += fixedInt6 * warpAmp;
@@ -3875,8 +3829,8 @@ public class MyPerlin
       }
       if (fixedInt11 > 1)
       {
-        FixedInt fixedInt9 = fixedInt11 - 1;
-        FixedInt fixedInt12 = fixedInt9 * fixedInt9 * (fixedInt9 * fixedInt9);
+        FixedInt fixedInt12 = fixedInt11 - 1;
+        FixedInt fixedInt13 = fixedInt12 * fixedInt12 * (fixedInt12 * fixedInt12);
         FixedInt xo;
         FixedInt yo;
         FixedInt zo;
@@ -3884,9 +3838,9 @@ public class MyPerlin
           MyPerlin.GradCoordOut(seed, xPrimed2, yPrimed2, zPrimed2, out xo, out yo, out zo);
         else
           MyPerlin.GradCoordDual(seed, xPrimed2, yPrimed2, zPrimed2, xd2, yd2, zd2, out xo, out yo, out zo);
-        fixedInt7 += fixedInt12 * xo;
-        fixedInt6 += fixedInt12 * yo;
-        fixedInt5 += fixedInt12 * zo;
+        fixedInt7 += fixedInt13 * xo;
+        fixedInt6 += fixedInt13 * yo;
+        fixedInt5 += fixedInt13 * zo;
       }
       if (num7 != 1)
       {

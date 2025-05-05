@@ -1,11 +1,12 @@
 
 using UnityEngine;
 
+#nullable disable
 public class AnimateLineRenderer : MonoBehaviour
 {
+  public LineRenderer line;
   public float startDelay = 3f;
   public float speed = 1f;
-  public LineRenderer line;
   private float cur;
 
   private void Update()

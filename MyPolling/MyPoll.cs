@@ -13,18 +13,18 @@ using System.Text;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
+#nullable disable
 namespace MyPolling
 {
   [Serializable]
   public class MyPoll
   {
-    private static Regex sanitize = new Regex("[\\s|\\0|\\00]", RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant);
     public string name = "";
+    public int id;
     public List<MyPoll.Item> items = new List<MyPoll.Item>();
     [MoonSharpHidden]
     [JsonIgnore]
     public bool onGoing = true;
-    public int id;
     [MoonSharpHidden]
     [JsonIgnore]
     public int totalSubmissions;
@@ -33,6 +33,7 @@ namespace MyPolling
     public const byte MsgSubmit = 2;
     public const byte MsgCreate = 3;
     public const byte MsgResults = 4;
+    private static Regex sanitize = new Regex("[\\s|\\0|\\00]", RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
     [MoonSharpHidden]
     public void Intitialize()
@@ -113,22 +114,22 @@ namespace MyPolling
         }
         else
         {
-          for (int index2 = 0; index2 < obj.answers.Count; ++index2)
+          for (int index3 = 0; index3 < obj.answers.Count; ++index3)
           {
-            MyPoll.Answer answer1 = obj.answers[index2];
-            MyPoll.Answer answer2 = p.items[index1].answers[index2];
-            if (answer1.checkable && answer2.isChecked)
+            MyPoll.Answer answer3 = obj.answers[index3];
+            MyPoll.Answer answer4 = p.items[index1].answers[index3];
+            if (answer3.checkable && answer4.isChecked)
             {
-              if (answer1.allowUserInput && !string.IsNullOrWhiteSpace(answer2.userInput))
-                stringBuilder.Append(answer1.text).Append(": ").Append(answer2.userInput);
+              if (answer3.allowUserInput && !string.IsNullOrWhiteSpace(answer4.userInput))
+                stringBuilder.Append(answer3.text).Append(": ").Append(answer4.userInput);
               else
-                stringBuilder.Append(answer1.text);
+                stringBuilder.Append(answer3.text);
               stringBuilder.Append("\n");
               break;
             }
-            if (answer1.allowUserInput && !string.IsNullOrWhiteSpace(answer2.userInput))
+            if (answer3.allowUserInput && !string.IsNullOrWhiteSpace(answer4.userInput))
             {
-              stringBuilder.Append(answer1.text).Append(": ").Append(answer2.userInput);
+              stringBuilder.Append(answer3.text).Append(": ").Append(answer4.userInput);
               stringBuilder.Append("\n");
               break;
             }
@@ -144,20 +145,20 @@ namespace MyPolling
     {
       if (p.items.Count != this.items.Count || p.Verify() != -1)
         return;
-      for (int index = 0; index < this.items.Count; ++index)
+      for (int index1 = 0; index1 < this.items.Count; ++index1)
       {
-        MyPoll.Item obj = this.items[index];
+        MyPoll.Item obj = this.items[index1];
         if (obj.multipleSelection)
         {
-          for (int key = 0; key < obj.answers.Count; ++key)
+          for (int index2 = 0; index2 < obj.answers.Count; ++index2)
           {
-            MyPoll.Answer answer1 = obj.answers[key];
-            MyPoll.Answer answer2 = p.items[index].answers[key];
+            MyPoll.Answer answer1 = obj.answers[index2];
+            MyPoll.Answer answer2 = p.items[index1].answers[index2];
             if (answer1.checkable && answer2.isChecked)
             {
               if (answer1.allowUserInput && !string.IsNullOrWhiteSpace(answer2.userInput))
                 obj.AddUserData(answer1.text + " • " + answer2.userInput);
-              obj.AddResponse(key);
+              obj.AddResponse(index2);
             }
             else if (answer1.allowUserInput && !string.IsNullOrWhiteSpace(answer2.userInput))
               obj.AddUserData(answer1.text + " • " + answer2.userInput);
@@ -165,20 +166,20 @@ namespace MyPolling
         }
         else
         {
-          for (int key = 0; key < obj.answers.Count; ++key)
+          for (int index3 = 0; index3 < obj.answers.Count; ++index3)
           {
-            MyPoll.Answer answer1 = obj.answers[key];
-            MyPoll.Answer answer2 = p.items[index].answers[key];
-            if (answer1.checkable && answer2.isChecked)
+            MyPoll.Answer answer3 = obj.answers[index3];
+            MyPoll.Answer answer4 = p.items[index1].answers[index3];
+            if (answer3.checkable && answer4.isChecked)
             {
-              if (answer1.allowUserInput && !string.IsNullOrWhiteSpace(answer2.userInput))
-                obj.AddUserData(answer1.text + " • " + answer2.userInput);
-              obj.AddResponse(key);
+              if (answer3.allowUserInput && !string.IsNullOrWhiteSpace(answer4.userInput))
+                obj.AddUserData(answer3.text + " • " + answer4.userInput);
+              obj.AddResponse(index3);
               break;
             }
-            if (answer1.allowUserInput && !string.IsNullOrWhiteSpace(answer2.userInput))
+            if (answer3.allowUserInput && !string.IsNullOrWhiteSpace(answer4.userInput))
             {
-              obj.AddUserData(answer1.text + " • " + answer2.userInput);
+              obj.AddUserData(answer3.text + " • " + answer4.userInput);
               break;
             }
           }
@@ -204,7 +205,7 @@ namespace MyPolling
                 flag = true;
                 break;
               }
-              if (!answer.checkable && answer.allowUserInput && (answer.userInput.Length < 501 && !string.IsNullOrWhiteSpace(answer.userInput)))
+              if (!answer.checkable && answer.allowUserInput && answer.userInput.Length < 501 && !string.IsNullOrWhiteSpace(answer.userInput))
               {
                 flag = true;
                 break;
@@ -220,7 +221,7 @@ namespace MyPolling
             {
               if (answer.checkable && answer.isChecked)
                 ++num2;
-              else if (!answer.checkable && answer.allowUserInput && (answer.userInput.Length < 501 && !string.IsNullOrWhiteSpace(answer.userInput)) && num2 == 0)
+              else if (!answer.checkable && answer.allowUserInput && answer.userInput.Length < 501 && !string.IsNullOrWhiteSpace(answer.userInput) && num2 == 0)
                 ++num2;
             }
             if (num2 != 1)
@@ -249,15 +250,9 @@ namespace MyPolling
       return new MyPoll() { name = name };
     }
 
-    public override string ToString()
-    {
-      return JsonUtility.ToJson((object) this);
-    }
+    public override string ToString() => JsonUtility.ToJson((object) this);
 
-    public static MyPoll fromString(string s)
-    {
-      return JsonUtility.FromJson<MyPoll>(s);
-    }
+    public static MyPoll fromString(string s) => JsonUtility.FromJson<MyPoll>(s);
 
     public void sendToServer()
     {
@@ -274,7 +269,7 @@ namespace MyPolling
           Client.PollMake(this);
           Tutorial.Print("Sent to server...");
         }), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
-        myContextMenu.Rebuild(false);
+        myContextMenu.Rebuild();
       }
     }
 
@@ -287,13 +282,10 @@ namespace MyPolling
         Client.PollMake((MyPoll) null);
         Tutorial.Print("Closed....");
       }), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
-      myContextMenu.Rebuild(false);
+      myContextMenu.Rebuild();
     }
 
-    public void test()
-    {
-      MyPollUI.Create(this, true);
-    }
+    public void test() => MyPollUI.Create(this, true);
 
     [MoonSharpHidden]
     public static MyPoll FromFile()
@@ -338,12 +330,12 @@ namespace MyPolling
     {
       using (MemoryStream memoryStream = new MemoryStream(sent))
       {
-        using (BsonReader bsonReader = new BsonReader((Stream) memoryStream))
+        using (BsonReader reader = new BsonReader((Stream) memoryStream))
           return new JsonSerializer()
           {
             TypeNameHandling = TypeNameHandling.Auto,
             Binder = ((SerializationBinder) new PollCustomJsonSerializationBinder("MyPolling"))
-          }.Deserialize<T>((JsonReader) bsonReader);
+          }.Deserialize<T>((JsonReader) reader);
       }
     }
 
@@ -367,13 +359,13 @@ namespace MyPolling
     {
       using (MemoryStream memoryStream = new MemoryStream(sent))
       {
-        using (BsonReader bsonReader = new BsonReader((Stream) memoryStream))
+        using (BsonReader reader = new BsonReader((Stream) memoryStream))
           return new JsonSerializer()
           {
             ContractResolver = ((IContractResolver) new IgnoreJsonAttributesResolver()),
             TypeNameHandling = TypeNameHandling.Auto,
             Binder = ((SerializationBinder) new PollCustomJsonSerializationBinder("MyPolling"))
-          }.Deserialize<T>((JsonReader) bsonReader);
+          }.Deserialize<T>((JsonReader) reader);
       }
     }
 
@@ -381,15 +373,15 @@ namespace MyPolling
     public class Item
     {
       public string question = "";
+      public bool multipleSelection;
       public bool requiresAnswer = true;
       public List<MyPoll.Answer> answers = new List<MyPoll.Answer>();
       [JsonIgnore]
       [MoonSharpHidden]
-      public List<string> userData = new List<string>();
-      public bool multipleSelection;
+      public int[] responses;
       [JsonIgnore]
       [MoonSharpHidden]
-      public int[] responses;
+      public List<string> userData = new List<string>();
 
       public MyPoll.Answer addAnswer(string answer, bool checkable = true, bool allowUserInput = false)
       {
@@ -412,25 +404,19 @@ namespace MyPolling
       }
 
       [MoonSharpHidden]
-      public void AddResponse(int key)
-      {
-        ++this.responses[key];
-      }
+      public void AddResponse(int key) => ++this.responses[key];
 
       [MoonSharpHidden]
-      public void AddUserData(string d)
-      {
-        this.userData.Add(d);
-      }
+      public void AddUserData(string d) => this.userData.Add(d);
     }
 
     [Serializable]
     public class Answer
     {
       public string text = "";
+      public bool allowUserInput;
       public bool checkable = true;
       public string userInput = "";
-      public bool allowUserInput;
       public bool isChecked;
     }
   }

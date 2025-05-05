@@ -1,6 +1,7 @@
 
 using System.Net.WebSockets;
 
+#nullable disable
 namespace Ninja.WebSockets.Internal
 {
   internal class WebSocketFrame

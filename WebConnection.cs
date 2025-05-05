@@ -8,13 +8,14 @@ using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
 
+#nullable disable
 public class WebConnection : Connection
 {
-  public bool NoDelay = true;
   public int id;
   private const int MaxMessageSize = 2097152;
   internal WebSocket webSocket;
   internal CancellationTokenSource cancellation;
+  public bool NoDelay = true;
   private Uri uri;
 
   public override void Connect(byte[] bytes = null, int timeout = 5000)
@@ -32,21 +33,15 @@ public class WebConnection : Connection
     this._SendBytes(this.Encrypt(bytes));
   }
 
-  public override void SendBytesUnencrypted(byte[] bytes)
-  {
-    this._SendBytes(bytes);
-  }
+  public override void SendBytesUnencrypted(byte[] bytes) => this._SendBytes(bytes);
 
   public WebConnection()
   {
   }
 
-  public event System.Action<Exception> ReceivedError;
+  public event Action<Exception> ReceivedError;
 
-  public void SetDisconnected()
-  {
-    this.State = ConnectionState.Disconnecting;
-  }
+  public void SetDisconnected() => this.State = ConnectionState.Disconnecting;
 
   public async void Connect(Uri uri)
   {
@@ -93,7 +88,7 @@ public class WebConnection : Connection
       {
         CancellationToken token = webConnection.cancellation.Token;
         webConnection.State = ConnectionState.Connected;
-        UnityThreadHelper.Dispatcher.Dispatch2((System.Action) (() => {}));
+        UnityThreadHelper.Dispatcher.Dispatch2((System.Action) (() => { }));
         await webConnection.ReceiveLoop(webConnection.webSocket, token);
       }
     }
@@ -117,7 +112,7 @@ public class WebConnection : Connection
       return;
     UnityThreadHelper.Dispatcher.Dispatch2((System.Action) (() =>
     {
-      System.Action<Exception> receivedError = this.ReceivedError;
+      Action<Exception> receivedError = this.ReceivedError;
       if (receivedError == null)
         return;
       receivedError(ex);
@@ -173,9 +168,9 @@ label_8:;
       result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer, count, 2097152 - count), CancellationToken.None);
       count += result.Count;
     }
-    byte[] numArray = new byte[count];
-    System.Buffer.BlockCopy((Array) buffer, 0, (Array) numArray, 0, count);
-    return numArray;
+    byte[] dst = new byte[count];
+    System.Buffer.BlockCopy((Array) buffer, 0, (Array) dst, 0, count);
+    return dst;
   }
 
   public void Disconnect()
@@ -243,10 +238,7 @@ label_8:;
     }
   }
 
-  public override void HandleDisconnect(HazelException e = null)
-  {
-    this.Disconnect();
-  }
+  public override void HandleDisconnect(HazelException e = null) => this.Disconnect();
 
   public override string ToString()
   {

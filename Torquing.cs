@@ -1,10 +1,11 @@
 
 using UnityEngine;
 
+#nullable disable
 public class Torquing : MonoBehaviour
 {
-  internal float speed = 300f;
   public ZCreature creature;
+  internal float speed = 300f;
   private int framesToStop;
   private Torquing.State state;
   public bool goback;

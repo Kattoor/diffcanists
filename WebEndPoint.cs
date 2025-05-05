@@ -1,6 +1,7 @@
 
 using Hazel;
 
+#nullable disable
 public class WebEndPoint : ConnectionEndPoint
 {
   private string e = "";
@@ -14,8 +15,5 @@ public class WebEndPoint : ConnectionEndPoint
       this.e = e;
   }
 
-  public override string ToString()
-  {
-    return this.e;
-  }
+  public override string ToString() => this.e;
 }

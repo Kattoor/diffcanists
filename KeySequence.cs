@@ -1,15 +1,13 @@
 
 using UnityEngine;
 
+#nullable disable
 public class KeySequence
 {
   public KeyCode[] sequence;
   private int cur;
 
-  public KeySequence(KeyCode[] k)
-  {
-    this.sequence = k;
-  }
+  public KeySequence(KeyCode[] k) => this.sequence = k;
 
   public bool Complete()
   {
@@ -30,8 +28,5 @@ public class KeySequence
     return false;
   }
 
-  public void Reset()
-  {
-    this.cur = 0;
-  }
+  public void Reset() => this.cur = 0;
 }

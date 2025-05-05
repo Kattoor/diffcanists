@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+#nullable disable
 public class PanelPlayer : MonoBehaviour
 {
   public bool newLayout;
@@ -26,13 +27,17 @@ public class PanelPlayer : MonoBehaviour
   public Image bgStar;
   public GameObject summonObj;
   public TextMeshProUGUI summonText;
+  [Header("Familiar")]
+  public Image imgFamiliar;
+  public Image imgElemental;
+  public TMP_Text txtFamiliar;
   private bool disposable;
   private bool resigned;
   [NonSerialized]
   public bool left;
   private bool defeated;
 
-  public void Copy(PanelPlayer other)
+  public void Copy(PanelPlayer other, ZPerson p)
   {
     this.disposable = other.disposable;
     other.disposable = false;
@@ -66,9 +71,20 @@ public class PanelPlayer : MonoBehaviour
     this.nameText.overflowMode = other.nameText.overflowMode;
     if (this.newLayout && this.nameText.overflowMode != TextOverflowModes.Ellipsis)
       this.nameText.rectTransform.anchoredPosition = new Vector2(this.nameText.rectTransform.anchoredPosition.x, 0.0f);
-    if (other.head.gameObject.activeInHierarchy)
+    if (!other.head.gameObject.activeInHierarchy)
+      this.Disable();
+    this.SetFamiliar(p);
+    this.Resize();
+  }
+
+  public void Resize()
+  {
+    if (this.newLayout)
       return;
-    this.Disable();
+    RectTransform transform = (RectTransform) this.transform;
+    int num1 = this.imgElemental.gameObject.activeSelf ? 40 : 0;
+    int num2 = num1 + (this.imgFamiliar.gameObject.activeSelf ? 50 + (num1 < 0 ? 10 : 0) : 0);
+    transform.sizeDelta = new Vector2((float) (200 + num2), transform.sizeDelta.y);
   }
 
   private void Copy(Image a, Image b)
@@ -105,10 +121,7 @@ public class PanelPlayer : MonoBehaviour
     }
   }
 
-  public void OnDestroy()
-  {
-    this.Dispose();
-  }
+  public void OnDestroy() => this.Dispose();
 
   private void FindCenterPivet(Image a, Sprite s)
   {
@@ -129,38 +142,38 @@ public class PanelPlayer : MonoBehaviour
         }
       }
     }
-    for (int index1 = s.texture.height - 1; index1 > 0; --index1)
+    for (int index3 = s.texture.height - 1; index3 > 0; --index3)
     {
-      for (int index2 = 0; index2 < s.texture.width; ++index2)
+      for (int index4 = 0; index4 < s.texture.width; ++index4)
       {
-        if (pixels32[index2 + index1 * s.texture.width].a > (byte) 0)
+        if (pixels32[index4 + index3 * s.texture.width].a > (byte) 0)
         {
-          num1 = index1;
-          index1 = 0;
+          num1 = index3;
+          index3 = 0;
           break;
         }
       }
     }
-    for (int index1 = 0; index1 < s.texture.width; ++index1)
+    for (int index5 = 0; index5 < s.texture.width; ++index5)
     {
-      for (int index2 = 0; index2 < s.texture.height; ++index2)
+      for (int index6 = 0; index6 < s.texture.height; ++index6)
       {
-        if (pixels32[index1 + index2 * s.texture.width].a > (byte) 0)
+        if (pixels32[index5 + index6 * s.texture.width].a > (byte) 0)
         {
-          x = index1;
-          index1 = s.texture.width;
+          x = index5;
+          index5 = s.texture.width;
           break;
         }
       }
     }
-    for (int index1 = s.texture.width - 1; index1 > 0; --index1)
+    for (int index7 = s.texture.width - 1; index7 > 0; --index7)
     {
-      for (int index2 = 0; index2 < s.texture.height; ++index2)
+      for (int index8 = 0; index8 < s.texture.height; ++index8)
       {
-        if (pixels32[index1 + index2 * s.texture.width].a > (byte) 0)
+        if (pixels32[index7 + index8 * s.texture.width].a > (byte) 0)
         {
-          num2 = index1;
-          index1 = 0;
+          num2 = index7;
+          index7 = 0;
           break;
         }
       }
@@ -174,10 +187,7 @@ public class PanelPlayer : MonoBehaviour
     a.rectTransform.pivot = new Vector2(0.5f, 0.5f);
   }
 
-  public void UpdateColors()
-  {
-    this.Colorize(this.bgStar.color);
-  }
+  public void UpdateColors() => this.Colorize(this.bgStar.color);
 
   private void Colorize(Color c)
   {
@@ -338,12 +348,32 @@ public class PanelPlayer : MonoBehaviour
   public void SetSummons(ZPerson p)
   {
     int num1 = p.GetMinionCount() - 1;
-    int num2 = 4 + (p.GetLevel(BookOf.Arcane) + 1) / 2 - p.stolenMinions.Count;
+    int num2 = p.GetMaxMinions() - 1;
     if (num1 <= 0 && num2 >= 4)
       this.summonObj.SetActive(false);
     else
       this.summonObj.SetActive(true);
     this.summonText.text = num1.ToString() + "/" + (object) num2;
+  }
+
+  public void SetFamiliar(ZPerson p)
+  {
+    if (p.ActivateableFamiliar != BookOf.Nothing && p.familiarLevels[(int) p.ActivateableFamiliar] > 0)
+    {
+      this.imgFamiliar.sprite = HUD.GetFullBookIcon(p.ActivateableFamiliar, p);
+      this.txtFamiliar.text = p.familiarLevels[(int) p.ActivateableFamiliar].ToString();
+      this.imgFamiliar.gameObject.SetActive(true);
+    }
+    else
+      this.imgFamiliar.gameObject.SetActive(false);
+    if (p.game.isElementals && p.familiarLevels[(int) p.ElementalFamiliar] > 0)
+    {
+      this.imgElemental.sprite = HUD.GetFullBookIcon(p.ElementalFamiliar, p);
+      this.imgElemental.gameObject.SetActive(true);
+    }
+    else
+      this.imgElemental.gameObject.SetActive(false);
+    this.Resize();
   }
 
   public void SetHP(int i, int towerHealth = 0, float maxHealth = 250f)
@@ -424,6 +454,8 @@ public class PanelPlayer : MonoBehaviour
     this.nameText.gameObject.SetActive(true);
     this.nameText.enableWordWrapping = false;
     this.nameText.overflowMode = TextOverflowModes.Overflow;
+    this.imgFamiliar.gameObject.SetActive(false);
+    this.imgElemental.gameObject.SetActive(false);
     if (!this.newLayout)
       return;
     this.nameText.rectTransform.anchoredPosition = new Vector2(this.nameText.rectTransform.anchoredPosition.x, 0.0f);

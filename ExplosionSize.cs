@@ -1,6 +1,7 @@
 
 using UnityEngine;
 
+#nullable disable
 public static class ExplosionSize
 {
   public static int GetRadius(ExplosionCutout e)

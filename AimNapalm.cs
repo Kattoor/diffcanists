@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+#nullable disable
 public class AimNapalm : MonoBehaviour
 {
   public List<Transform> childern;

@@ -1,6 +1,7 @@
 
 using System;
 
+#nullable disable
 namespace Telepathy
 {
   public static class Logger

@@ -8,14 +8,9 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 
+#nullable disable
 public class BoatSpectators : MonoBehaviour
 {
-  public static Vector3 maxStart = new Vector3(138f, -127f);
-  public static Vector3 minStart = new Vector3(-180f, -146f);
-  public Dictionary<int, BoatSpectators.Character> spectators = new Dictionary<int, BoatSpectators.Character>();
-  public Dictionary<string, BoatSpectators.Character> byName = new Dictionary<string, BoatSpectators.Character>();
-  private BoatSpectators.PathFinding pathfinding = new BoatSpectators.PathFinding();
-  private float lastMove = -1f;
   public List<Sprite> _flagPole;
   public List<Sprite> _postBack;
   public List<Sprite> _postFront;
@@ -32,9 +27,15 @@ public class BoatSpectators : MonoBehaviour
   public SpriteRenderer[] _clouds;
   public AudioClip clipCreate;
   public MyCollider myCollider;
+  public Dictionary<int, BoatSpectators.Character> spectators = new Dictionary<int, BoatSpectators.Character>();
+  public Dictionary<string, BoatSpectators.Character> byName = new Dictionary<string, BoatSpectators.Character>();
+  private BoatSpectators.PathFinding pathfinding = new BoatSpectators.PathFinding();
   public bool isSpectator;
   private BoatSpectators.Character cur;
+  public static Vector3 maxStart = new Vector3(138f, -127f);
+  public static Vector3 minStart = new Vector3(-180f, -146f);
   private bool showNames;
+  private float lastMove = -1f;
 
   public static BoatSpectators Instance { get; set; }
 
@@ -121,10 +122,7 @@ public class BoatSpectators : MonoBehaviour
     return (Vector2) new Vector3(Random.Range(BoatSpectators.minStart.x, BoatSpectators.maxStart.x), Random.Range(BoatSpectators.minStart.y, BoatSpectators.maxStart.y));
   }
 
-  private void OnMouseDown()
-  {
-    this.OnClick();
-  }
+  private void OnMouseDown() => this.OnClick();
 
   private void Update()
   {
@@ -137,7 +135,7 @@ public class BoatSpectators : MonoBehaviour
 
   public void OnClick()
   {
-    if (!this.isSpectator || Player.IsPointerOverGameObject(0))
+    if (!this.isSpectator || Player.IsPointerOverGameObject())
       return;
     Vector3 vector3 = Camera.main.ScreenToWorldPoint(Input.mousePosition) - this.transform.position;
     vector3.x -= (float) this.myCollider.GetRectMinX();
@@ -156,7 +154,7 @@ public class BoatSpectators : MonoBehaviour
   public void MoveCharacter(int id, int x, int y)
   {
     BoatSpectators.PathFinding.Tile closestOpen = this.pathfinding.GetClosestOpen(x, y);
-    this.MoveCharacter(id, closestOpen, false);
+    this.MoveCharacter(id, closestOpen);
   }
 
   public void OnTomato(int id, int tIndex, float angle, float power)
@@ -165,7 +163,7 @@ public class BoatSpectators : MonoBehaviour
       return;
     if (Client.game.isClient && !Client.game.resyncing)
       AudioManager.Play(HUD.instance.specSpells[tIndex].spell.castClip);
-    ZSpell.FireSpectator(HUD.instance.specSpells[tIndex].spell, this.cur.cre, (MyLocation) this.cur.obj.transform.position, (FixedInt) angle, Mathd.Clamp01((FixedInt) power), 0);
+    ZSpell.FireSpectator(HUD.instance.specSpells[tIndex].spell, this.cur.cre, (MyLocation) this.cur.obj.transform.position, (FixedInt) angle, Mathd.Clamp01((FixedInt) power));
   }
 
   public void OnTomatoEmoji(int id, int tIndex, float angle, float power)
@@ -403,7 +401,7 @@ public class BoatSpectators : MonoBehaviour
       else if ((double) v.x < (double) character.obj.transform.localPosition.x && (double) character.obj.transform.localScale.x > 0.0)
         this.Scale(character, new Vector3(-1f, 1f, 1f));
       Vector3 localPosition = character.obj.transform.localPosition;
-      while ((double) Vector3.Distance(character.obj.transform.localPosition, v) > 7.55000019073486)
+      while ((double) Vector3.Distance(character.obj.transform.localPosition, v) > 7.5500001907348633)
       {
         character.obj.transform.localPosition += (v - character.obj.transform.localPosition).normalized * 6f * 10f * Mathf.Min(Time.deltaTime, 0.0333f);
         character.animator?.Play(AnimateState.Walk, 0.05f, this.isSpectator);
@@ -413,7 +411,7 @@ public class BoatSpectators : MonoBehaviour
       x = (BoatSpectators.PathFinding.Tile) null;
       v = new Vector3();
     }
-    character.animator?.Play(AnimateState.Stop, 0.0f, true);
+    character.animator?.Play(AnimateState.Stop);
     character.Walking = (Coroutine) null;
   }
 
@@ -453,14 +451,14 @@ public class BoatSpectators : MonoBehaviour
 
   public class Character
   {
-    public List<Creature.NotScaled> notScaled = new List<Creature.NotScaled>();
-    public List<SpriteRenderer> sprites = new List<SpriteRenderer>();
     public int id;
     public string name;
     public SettingsPlayer sp;
     public GameObject obj;
     public IAnimator animator;
     public Coroutine Walking;
+    public List<Creature.NotScaled> notScaled = new List<Creature.NotScaled>();
+    public List<SpriteRenderer> sprites = new List<SpriteRenderer>();
     public Canvas overheadCanvas;
     public int curRenderOffset;
     public Color color;
@@ -469,13 +467,13 @@ public class BoatSpectators : MonoBehaviour
 
   public class PathFinding
   {
+    private BoatSpectators.PathFinding.Tile[] tiles;
+    internal int width;
+    internal int height;
     private SimplePriorityQueue<BoatSpectators.PathFinding.Tile, float> openSet = new SimplePriorityQueue<BoatSpectators.PathFinding.Tile, float>();
     private HashSet<BoatSpectators.PathFinding.Tile> closedSet = new HashSet<BoatSpectators.PathFinding.Tile>();
     private Dictionary<BoatSpectators.PathFinding.Tile, BoatSpectators.PathFinding.Tile> cameFrom = new Dictionary<BoatSpectators.PathFinding.Tile, BoatSpectators.PathFinding.Tile>();
     private SimplePriorityQueue<BoatSpectators.PathFinding.Tile, float> gScore = new SimplePriorityQueue<BoatSpectators.PathFinding.Tile, float>();
-    private BoatSpectators.PathFinding.Tile[] tiles;
-    internal int width;
-    internal int height;
 
     public void InitGrid(ZMyCollider collider)
     {
@@ -569,12 +567,12 @@ public class BoatSpectators : MonoBehaviour
       while (this.openSet.Count > 0)
       {
         double priority1 = (double) this.openSet.GetPriority(this.openSet.First);
-        BoatSpectators.PathFinding.Tile tile = this.openSet.Dequeue();
-        if (tile == end)
+        BoatSpectators.PathFinding.Tile tile1 = this.openSet.Dequeue();
+        if (tile1 == end)
         {
           if ((double) this.gScore.GetPriority(end) > 1000.0)
           {
-            this.closedSet.Add(tile);
+            this.closedSet.Add(tile1);
             flag = true;
           }
           else
@@ -592,87 +590,87 @@ public class BoatSpectators : MonoBehaviour
         }
         else
         {
-          this.closedSet.Add(tile);
-          int num1 = tile.index % this.width;
-          int num2 = tile.index / this.width;
+          this.closedSet.Add(tile1);
+          int num1 = tile1.index % this.width;
+          int num2 = tile1.index / this.width;
           for (int index = 0; index < 8; ++index)
           {
-            BoatSpectators.PathFinding.Tile b = (BoatSpectators.PathFinding.Tile) null;
+            BoatSpectators.PathFinding.Tile tile2 = (BoatSpectators.PathFinding.Tile) null;
             if (index == 0)
             {
               if (num1 + 1 < this.width)
-                b = this.tiles[tile.index + 1];
+                tile2 = this.tiles[tile1.index + 1];
             }
             else if (index == 1)
             {
               if (num1 - 1 >= 0)
-                b = this.tiles[tile.index - 1];
+                tile2 = this.tiles[tile1.index - 1];
             }
             else if (index == 2)
             {
               if (num2 + 1 < this.height)
-                b = this.tiles[tile.index + this.width];
+                tile2 = this.tiles[tile1.index + this.width];
             }
             else if (index == 3)
             {
               if (num2 - 1 >= 0)
-                b = this.tiles[tile.index - this.width];
+                tile2 = this.tiles[tile1.index - this.width];
             }
             else if (index == 4)
             {
               int num3 = num2 - 1;
               int num4 = num1 + 1;
               if (num3 >= 0 && num4 < this.width)
-                b = this.tiles[tile.index - this.width + 1];
+                tile2 = this.tiles[tile1.index - this.width + 1];
             }
             else if (index == 5)
             {
-              int num3 = num1 + 1;
-              int num4 = num2 + 1;
+              int num5 = num1 + 1;
+              int num6 = num2 + 1;
               int width = this.width;
-              if (num3 < width && num4 < this.height)
-                b = this.tiles[tile.index + 1 + this.width];
+              if (num5 < width && num6 < this.height)
+                tile2 = this.tiles[tile1.index + 1 + this.width];
             }
             else if (index == 6)
             {
-              int num3 = num1 - 1;
-              int num4 = num2 - 1;
-              if (num3 >= 0 && num4 >= 0)
-                b = this.tiles[tile.index - 1 - this.width];
+              int num7 = num1 - 1;
+              int num8 = num2 - 1;
+              if (num7 >= 0 && num8 >= 0)
+                tile2 = this.tiles[tile1.index - 1 - this.width];
             }
             else
             {
-              int num3 = num2 + 1;
-              int num4 = num1 - 1;
+              int num9 = num2 + 1;
+              int num10 = num1 - 1;
               int height = this.height;
-              if (num3 < height && num4 >= 0)
-                b = this.tiles[tile.index + this.width - 1];
+              if (num9 < height && num10 >= 0)
+                tile2 = this.tiles[tile1.index + this.width - 1];
             }
-            if (b != null && !b.blocked)
+            if (tile2 != null && !tile2.blocked)
             {
-              float num3 = (float) BoatSpectators.PathFinding.distance(end, b);
-              float priority2 = this.gScore.GetPriority(tile) + num3;
-              if (this.closedSet.Contains(b))
+              float num11 = (float) BoatSpectators.PathFinding.distance(end, tile2);
+              float priority2 = this.gScore.GetPriority(tile1) + num11;
+              if (this.closedSet.Contains(tile2))
               {
-                if ((double) priority2 < (double) this.gScore.GetPriority(b))
+                if ((double) priority2 < (double) this.gScore.GetPriority(tile2))
                 {
-                  this.gScore.UpdatePriority(b, priority2);
-                  if (!this.openSet.Contains(b))
-                    this.openSet.Enqueue(b, priority2);
-                  this.cameFrom[b] = tile;
+                  this.gScore.UpdatePriority(tile2, priority2);
+                  if (!this.openSet.Contains(tile2))
+                    this.openSet.Enqueue(tile2, priority2);
+                  this.cameFrom[tile2] = tile1;
                 }
               }
               else
               {
-                if (!this.openSet.Contains(b))
-                  this.openSet.Enqueue(b, priority2);
-                else if ((double) priority2 >= (double) this.gScore.GetPriority(b))
+                if (!this.openSet.Contains(tile2))
+                  this.openSet.Enqueue(tile2, priority2);
+                else if ((double) priority2 >= (double) this.gScore.GetPriority(tile2))
                   continue;
-                this.cameFrom[b] = tile;
-                if (this.gScore.Contains(b))
-                  this.gScore.UpdatePriority(b, priority2);
+                this.cameFrom[tile2] = tile1;
+                if (this.gScore.Contains(tile2))
+                  this.gScore.UpdatePriority(tile2, priority2);
                 else
-                  this.gScore.Enqueue(b, priority2);
+                  this.gScore.Enqueue(tile2, priority2);
               }
             }
           }

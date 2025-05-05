@@ -7,52 +7,32 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
+#nullable disable
 namespace ChessConsole
 {
   public class CheckersBoard : IMiniGame
   {
     public string reason = "";
+    public PlayerColor firstPlayer;
+    public PlayerColor secondPlayer;
+    public PlayerColor whosTurn;
     public List<ChessMove> previousMoves = new List<ChessMove>();
+    public CheckersUI ui;
     public IMiniGame.GameSettings gameSettings = new IMiniGame.GameSettings();
     private List<CheckersBoard.CheckersPiece> pieces = new List<CheckersBoard.CheckersPiece>();
     private HashSet<CheckersBoard.CheckersPiece> whiteKills = new HashSet<CheckersBoard.CheckersPiece>();
     private HashSet<CheckersBoard.CheckersPiece> blackKills = new HashSet<CheckersBoard.CheckersPiece>();
-    public PlayerColor firstPlayer;
-    public PlayerColor secondPlayer;
-    public PlayerColor whosTurn;
-    public CheckersUI ui;
     private bool inCheck;
     private IMiniGame.Player cur;
     private CheckersBoard.Cell[,] cells;
 
-    public override string GetGameType()
-    {
-      return "Checkers";
-    }
+    public override string GetGameType() => "Checkers";
 
-    public override IMiniGame.GameType gameType
-    {
-      get
-      {
-        return IMiniGame.GameType.Checkers;
-      }
-    }
+    public override IMiniGame.GameType gameType => IMiniGame.GameType.Checkers;
 
-    public string firstColor
-    {
-      get
-      {
-        return this.firstPlayer != PlayerColor.White ? "Black" : "Red";
-      }
-    }
+    public string firstColor => this.firstPlayer != PlayerColor.White ? "Black" : "Red";
 
-    public string secondColor
-    {
-      get
-      {
-        return this.secondPlayer != PlayerColor.White ? "Black" : "Red";
-      }
-    }
+    public string secondColor => this.secondPlayer != PlayerColor.White ? "Black" : "Red";
 
     public void AddKiller(CheckersBoard.CheckersPiece p)
     {
@@ -67,28 +47,16 @@ namespace ChessConsole
       return p.Color == PlayerColor.White ? this.whiteKills.Contains(p) : this.blackKills.Contains(p);
     }
 
-    public CheckersBoard.Cell[,] AllCells
-    {
-      get
-      {
-        return this.cells;
-      }
-    }
+    public CheckersBoard.Cell[,] AllCells => this.cells;
 
-    public CheckersBoard.Cell FromIndex(int i)
-    {
-      return this.cells[i / 8, i % 8];
-    }
+    public CheckersBoard.Cell FromIndex(int i) => this.cells[i / 8, i % 8];
 
     public CheckersBoard.Cell GetCell(int x, int y)
     {
-      return x < 0 || this.cells.GetLength(0) <= x || (y < 0 || this.cells.GetLength(1) <= y) ? (CheckersBoard.Cell) null : this.cells[x, y];
+      return x < 0 || this.cells.GetLength(0) <= x || y < 0 || this.cells.GetLength(1) <= y ? (CheckersBoard.Cell) null : this.cells[x, y];
     }
 
-    public CheckersBoard()
-    {
-      this.Reset();
-    }
+    public CheckersBoard() => this.Reset();
 
     public CheckersBoard(bool init)
     {
@@ -128,7 +96,7 @@ namespace ChessConsole
           w.Write((byte) 2);
           this.Serialize(w);
         }
-        c.SendBytes(memoryStream.ToArray(), SendOption.None);
+        c.SendBytes(memoryStream.ToArray());
       }
     }
 
@@ -194,7 +162,7 @@ namespace ChessConsole
       {
         if (!flag1 && !flag2)
           return;
-        if (tag != (byte) 4 && tag != (byte) 5 && (tag != (byte) 8 && tag != (byte) 12) && tag != (byte) 13)
+        if (tag != (byte) 4 && tag != (byte) 5 && tag != (byte) 8 && tag != (byte) 12 && tag != (byte) 13)
         {
           if (flag1)
           {
@@ -218,7 +186,7 @@ namespace ChessConsole
           this.cur = this.GetPlayer(this.whosTurn);
           if ((double) Mathf.Abs(chessMove.time - this.cur.curTime) > 0.5)
             chessMove.time = this.cur.curTime + 0.5f;
-          if ((double) this.cur.startTurnTime - (double) chessMove.time < 0.200000002980232)
+          if ((double) this.cur.startTurnTime - (double) chessMove.time < 0.20000000298023224)
             chessMove.time = this.cur.startTurnTime - 0.2f;
           this.cur.curTime = chessMove.time;
           if ((double) this.cur.curTime <= 0.0)
@@ -228,7 +196,7 @@ namespace ChessConsole
           }
           this.cur.startTurnTime = this.cur.curTime;
           this.previousMoves.Add(chessMove);
-          if (this.Move(from, cell, chessMove.promotion, chessMove, true))
+          if (this.Move(from, cell, chessMove.promotion, chessMove))
           {
             this.SendServerMove(chessMove);
             break;
@@ -312,8 +280,8 @@ namespace ChessConsole
     private void Cheat(myBinaryReader r)
     {
       CheckersBoard.Cell cell = this.FromIndex(r.ReadInt32());
-      int num = r.ReadInt32();
-      if (num == -1)
+      int c = r.ReadInt32();
+      if (c == -1)
       {
         if (cell.Piece != null)
         {
@@ -330,7 +298,7 @@ namespace ChessConsole
           this.pieces.Remove(cell.Piece);
           cell.Piece = (CheckersBoard.CheckersPiece) null;
         }
-        this.addPiece(cell, CheckersBoard.FromChar((ChessPiece) num, this.whosTurn, this));
+        this.addPiece(cell, CheckersBoard.FromChar((ChessPiece) c, this.whosTurn, this));
       }
       this.TurnStart(this.whosTurn);
     }
@@ -396,7 +364,7 @@ namespace ChessConsole
           ChessMove chessMove = ChessMove.Deserialize(r);
           this.GetPlayer(this.whosTurn).curTime = chessMove.time;
           this.previousMoves.Add(chessMove);
-          if (this.Move(this.FromIndex(chessMove.from), this.FromIndex((int) chessMove.to), chessMove.promotion, chessMove, true))
+          if (this.Move(this.FromIndex(chessMove.from), this.FromIndex((int) chessMove.to), chessMove.promotion, chessMove))
           {
             this.ui?.poolMoved.SpawnBehind((Vector3) this.ui.GetAnchoredPosition(this.FromIndex((int) chessMove.to)), new Color(1f, 0.0f, 1f, 0.5f));
             bool? playingAsBlack = CheckersUI.Instance?.playingAsBlack;
@@ -427,7 +395,7 @@ namespace ChessConsole
           {
             if (!((UnityEngine.Object) ChatBox.Instance != (UnityEngine.Object) null))
               return;
-            ChatBox.Instance.NewChatMsg("[Checkers] " + str1, str2, (Color) ColorScheme.GetColor(Global.ColorMiniGameText), str1, ChatOrigination.MiniGame, ContentType.STRING, (object) null);
+            ChatBox.Instance.NewChatMsg("[Checkers] " + str1, str2, (Color) ColorScheme.GetColor(Global.ColorMiniGameText), str1, ChatOrigination.MiniGame);
           }));
           break;
         case 8:
@@ -529,10 +497,10 @@ namespace ChessConsole
         for (int index2 = index1 % 2; index2 < 8; index2 += 2)
           this.addPiece(this.cells[index2, index1], (CheckersBoard.CheckersPiece) new CheckersBoard.Pawn(PlayerColor.White, this));
       }
-      for (int index1 = 7; index1 > 4; --index1)
+      for (int index3 = 7; index3 > 4; --index3)
       {
-        for (int index2 = index1 % 2; index2 < 8; index2 += 2)
-          this.addPiece(this.cells[index2, index1], (CheckersBoard.CheckersPiece) new CheckersBoard.Pawn(PlayerColor.Black, this));
+        for (int index4 = index3 % 2; index4 < 8; index4 += 2)
+          this.addPiece(this.cells[index4, index3], (CheckersBoard.CheckersPiece) new CheckersBoard.Pawn(PlayerColor.Black, this));
       }
       this.whiteKills.Clear();
       this.blackKills.Clear();
@@ -857,15 +825,14 @@ namespace ChessConsole
             if (pawn.canHit(pawn.hits[i]))
             {
               yield return pawn.hits[i];
-              foreach (CheckersBoard.Cell cell in pawn.ContinueAttack(pawn.hits[i]))
-                yield return cell;
+              foreach (CheckersBoard.Cell possibleMove in pawn.ContinueAttack(pawn.hits[i]))
+                yield return possibleMove;
             }
           }
         }
       }
 
-      public IEnumerable<CheckersBoard.Cell> ContinueAttack(
-        CheckersBoard.Cell z)
+      public IEnumerable<CheckersBoard.Cell> ContinueAttack(CheckersBoard.Cell z)
       {
         CheckersBoard.Pawn pawn = this;
         CheckersBoard.Cell cell1 = z.Open(-1, pawn.Color == PlayerColor.White ? 1 : -1);
@@ -878,9 +845,9 @@ namespace ChessConsole
         }
         if (b != null && b.Piece != null && b.Piece.Color != pawn.Color)
         {
-          CheckersBoard.Cell cell2 = b.Open(1, pawn.Color == PlayerColor.White ? 1 : -1);
-          if (cell2 != null && cell2.Piece == null)
-            yield return cell2;
+          CheckersBoard.Cell cell3 = b.Open(1, pawn.Color == PlayerColor.White ? 1 : -1);
+          if (cell3 != null && cell3.Piece == null)
+            yield return cell3;
         }
       }
 
@@ -919,18 +886,9 @@ namespace ChessConsole
         this.hits[0] = (CheckersBoard.Cell) null;
       }
 
-      public override ChessPiece Char
-      {
-        get
-        {
-          return ChessPiece.Pawn;
-        }
-      }
+      public override ChessPiece Char => ChessPiece.Pawn;
 
-      protected override bool canHit(CheckersBoard.Cell cell)
-      {
-        return base.canHit(cell);
-      }
+      protected override bool canHit(CheckersBoard.Cell cell) => base.canHit(cell);
     }
 
     public class King : CheckersBoard.CheckersPiece
@@ -966,15 +924,14 @@ namespace ChessConsole
             if ((i < 4 || i > 5) && king.canHit(king.hits[i]))
             {
               yield return king.hits[i];
-              foreach (CheckersBoard.Cell cell in king.ContinueAttack(king.hits[i]))
-                yield return cell;
+              foreach (CheckersBoard.Cell possibleMove in king.ContinueAttack(king.hits[i]))
+                yield return possibleMove;
             }
           }
         }
       }
 
-      public IEnumerable<CheckersBoard.Cell> ContinueAttack(
-        CheckersBoard.Cell z)
+      public IEnumerable<CheckersBoard.Cell> ContinueAttack(CheckersBoard.Cell z)
       {
         CheckersBoard.King king = this;
         CheckersBoard.Cell cell1 = z.Open(-1, king.Color == PlayerColor.White ? 1 : -1);
@@ -989,21 +946,21 @@ namespace ChessConsole
         }
         if (b != null && b.Piece != null && b.Piece.Color != king.Color)
         {
-          CheckersBoard.Cell cell2 = b.Open(1, king.Color == PlayerColor.White ? 1 : -1);
-          if (cell2 != null && cell2.Piece == null)
-            yield return cell2;
+          CheckersBoard.Cell cell3 = b.Open(1, king.Color == PlayerColor.White ? 1 : -1);
+          if (cell3 != null && cell3.Piece == null)
+            yield return cell3;
         }
         if (c != null && c.Piece != null && c.Piece.Color != king.Color)
         {
-          CheckersBoard.Cell cell2 = c.Open(-1, king.Color != PlayerColor.White ? 1 : -1);
-          if (cell2 != null && cell2.Piece == null)
-            yield return cell2;
+          CheckersBoard.Cell cell4 = c.Open(-1, king.Color != PlayerColor.White ? 1 : -1);
+          if (cell4 != null && cell4.Piece == null)
+            yield return cell4;
         }
         if (d != null && d.Piece != null && d.Piece.Color != king.Color)
         {
-          CheckersBoard.Cell cell2 = d.Open(1, king.Color != PlayerColor.White ? 1 : -1);
-          if (cell2 != null && cell2.Piece == null)
-            yield return cell2;
+          CheckersBoard.Cell cell5 = d.Open(1, king.Color != PlayerColor.White ? 1 : -1);
+          if (cell5 != null && cell5.Piece == null)
+            yield return cell5;
         }
       }
 
@@ -1069,18 +1026,9 @@ namespace ChessConsole
         this.hits[5] = (CheckersBoard.Cell) null;
       }
 
-      public override ChessPiece Char
-      {
-        get
-        {
-          return ChessPiece.Bishop;
-        }
-      }
+      public override ChessPiece Char => ChessPiece.Bishop;
 
-      protected override bool canHit(CheckersBoard.Cell cell)
-      {
-        return base.canHit(cell);
-      }
+      protected override bool canHit(CheckersBoard.Cell cell) => base.canHit(cell);
     }
 
     public class Cell
@@ -1129,10 +1077,7 @@ namespace ChessConsole
 
       public bool SetMoved
       {
-        set
-        {
-          this.Moved = value;
-        }
+        set => this.Moved = value;
       }
 
       public abstract IEnumerable<CheckersBoard.Cell> PossibleMoves { get; }
@@ -1160,16 +1105,13 @@ namespace ChessConsole
                   this.image.SetSiblingIndex(index2);
                 break;
               }
-              for (int index2 = index1 + 1; index2 < this.image.parent.childCount && (double) this.image.parent.GetChild(index2).localPosition.z > (double) z2; ++index2)
-                this.image.SetSiblingIndex(index2);
+              for (int index3 = index1 + 1; index3 < this.image.parent.childCount && (double) this.image.parent.GetChild(index3).localPosition.z > (double) z2; ++index3)
+                this.image.SetSiblingIndex(index3);
               break;
             }
           }
         }
-        get
-        {
-          return this._parent;
-        }
+        get => this._parent;
       }
 
       public void Destroy()
@@ -1186,10 +1128,7 @@ namespace ChessConsole
         this.LegalMoves = new List<CheckersBoard.Cell>();
       }
 
-      public void OnPlace(CheckersBoard.Cell cell)
-      {
-        this.Parent = cell;
-      }
+      public void OnPlace(CheckersBoard.Cell cell) => this.Parent = cell;
 
       public void OnMove(CheckersBoard.Cell cell)
       {
@@ -1201,10 +1140,7 @@ namespace ChessConsole
 
       public abstract ChessPiece Char { get; }
 
-      protected virtual bool canHit(CheckersBoard.Cell cell)
-      {
-        return cell != null;
-      }
+      protected virtual bool canHit(CheckersBoard.Cell cell) => cell != null;
     }
   }
 }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+#nullable disable
 public static class EmojiInfo
 {
   public static EmojiInfo.Cat allEmoji = new EmojiInfo.Cat();
@@ -51,10 +52,10 @@ public static class EmojiInfo
 
   public static Emoji FindByName(string n)
   {
-    foreach (Emoji emoji in EmojiInfo.allEmoji.list)
+    foreach (Emoji byName in EmojiInfo.allEmoji.list)
     {
-      if (string.Equals(emoji.name, n))
-        return emoji;
+      if (string.Equals(byName.name, n))
+        return byName;
     }
     return (Emoji) null;
   }

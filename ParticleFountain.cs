@@ -1,13 +1,14 @@
 
 using UnityEngine;
 
+#nullable disable
 public class ParticleFountain : MonoBehaviour
 {
-  private Color white = Color.white;
   public SpriteRenderer ray;
   public SpriteRenderer circle1;
   private Vector2 raySize;
   private Vector2 circleSize;
+  private Color white = Color.white;
   private float f;
 
   private void Start()

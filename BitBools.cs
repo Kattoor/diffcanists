@@ -2,6 +2,7 @@
 using System;
 using System.Text;
 
+#nullable disable
 [Serializable]
 public class BitBools
 {
@@ -22,10 +23,7 @@ public class BitBools
 
   public bool this[int index]
   {
-    get
-    {
-      return (uint) (this.array[index >> 5] & 1 << index) > 0U;
-    }
+    get => (this.array[index >> 5] & 1 << index) != 0;
     set
     {
       if (value)
@@ -75,7 +73,7 @@ public class BitBools
 
   public bool UsedAllSpells()
   {
-    return this.GetChunk(0) == -1 && this.GetChunk(1) == -1 && (this.GetChunk(2) == -1 && this.GetChunk(3) == -1) && this.GetChunk(4) == -1 && this.GetChunk(5) == 1048575;
+    return this.GetChunk(0) == -1 && this.GetChunk(1) == -1 && this.GetChunk(2) == -1 && this.GetChunk(3) == -1 && this.GetChunk(4) == -1 && this.GetChunk(5) == 1048575;
   }
 
   public bool AllOGSpellsMinusCogs()
@@ -83,10 +81,7 @@ public class BitBools
     return this.GetChunk(0) == -1 && this.GetChunk(1) == -1 && this.GetChunk(2) == -1 && this.GetChunk(3) == 4095;
   }
 
-  public int GetChunk(int i)
-  {
-    return this.array[i];
-  }
+  public int GetChunk(int i) => this.array[i];
 
   public override string ToString()
   {

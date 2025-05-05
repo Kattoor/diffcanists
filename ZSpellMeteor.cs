@@ -2,130 +2,131 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+#nullable disable
 public class ZSpellMeteor : ZSpell
 {
   public override IEnumerator<float> SpellMove(bool gotoStatic = false, bool checkEffectors = true)
   {
-    ZSpellMeteor zspellMeteor = this;
-    zspellMeteor.isMoving = true;
-    zspellMeteor.zb = MapGenerator.getOutlineArray(zspellMeteor.radius);
-    MyLocation velocity = zspellMeteor.velocity;
+    ZSpellMeteor spell = this;
+    spell.isMoving = true;
+    spell.zb = MapGenerator.getOutlineArray(spell.radius);
+    MyLocation velocity = spell.velocity;
     if (gotoStatic)
       yield return 0.0f;
 label_43:
-    while (!zspellMeteor.isDead)
+    while (!spell.isDead)
     {
-      zspellMeteor.pX = zspellMeteor.position.x;
-      zspellMeteor.pY = zspellMeteor.position.y;
-      FixedInt fixedInt1 = zspellMeteor.position.x + zspellMeteor.velocity.x;
-      FixedInt fixedInt2 = zspellMeteor.position.y + zspellMeteor.velocity.y;
-      zspellMeteor.validX = zspellMeteor.pX;
-      zspellMeteor.validY = zspellMeteor.pY;
-      zspellMeteor.steps = 1;
-      FixedInt x1 = zspellMeteor.velocity.x;
-      FixedInt y1 = zspellMeteor.velocity.y;
-      FixedInt fixedInt3 = zspellMeteor.velocity.x;
-      FixedInt fixedInt4 = zspellMeteor.velocity.y;
-      if (x1 > 1 || x1 < -1 || (y1 > 1 || y1 < -1))
+      spell.pX = spell.position.x;
+      spell.pY = spell.position.y;
+      FixedInt fixedInt1 = spell.position.x + spell.velocity.x;
+      FixedInt fixedInt2 = spell.position.y + spell.velocity.y;
+      spell.validX = spell.pX;
+      spell.validY = spell.pY;
+      spell.steps = 1;
+      FixedInt x1 = spell.velocity.x;
+      FixedInt y1 = spell.velocity.y;
+      FixedInt fixedInt3 = spell.velocity.x;
+      FixedInt fixedInt4 = spell.velocity.y;
+      if (x1 > 1 || x1 < -1 || y1 > 1 || y1 < -1)
       {
         if (FixedInt.Abs(x1) > FixedInt.Abs(y1))
-          zspellMeteor.steps = (int) FixedInt.Abs(x1) + 1;
+          spell.steps = (int) FixedInt.Abs(x1) + 1;
         else
-          zspellMeteor.steps = (int) FixedInt.Abs(y1) + 1;
-        fixedInt3 = zspellMeteor.velocity.x / zspellMeteor.steps;
-        fixedInt4 = zspellMeteor.velocity.y / zspellMeteor.steps;
+          spell.steps = (int) FixedInt.Abs(y1) + 1;
+        fixedInt3 = spell.velocity.x / spell.steps;
+        fixedInt4 = spell.velocity.y / spell.steps;
       }
       bool flag1 = false;
       bool flag2 = false;
-      while (zspellMeteor.steps > 0)
+      while (spell.steps > 0)
       {
-        if (zspellMeteor.map.SpellCheckEffectors(zspellMeteor.toCollideCheck, (ZSpell) zspellMeteor, (int) zspellMeteor.validX, (int) zspellMeteor.validY))
+        if (spell.map.SpellCheckEffectors(spell.toCollideCheck, (ZSpell) spell, (int) spell.validX, (int) spell.validY))
         {
-          zspellMeteor.position = new MyLocation(zspellMeteor.validX, zspellMeteor.validY);
+          spell.position = new MyLocation(spell.validX, spell.validY);
           yield return 0.0f;
           goto label_43;
         }
         else
         {
-          --zspellMeteor.steps;
-          int num1 = (int) (((FixedInt) 360 - (Inert.AngleOfVelocity(zspellMeteor.velocity) - 90)) * FixedInt.ThreeSixtyBy1 * zspellMeteor.zb.Count) - zspellMeteor.radius;
+          --spell.steps;
+          int num1 = (int) (((FixedInt) 360 - (Inert.AngleOfVelocity(spell.velocity) - 90)) * FixedInt.ThreeSixtyBy1 * spell.zb.Count) - spell.radius;
           if (num1 < 0)
-            num1 += zspellMeteor.zb.Count;
-          for (int index1 = 0; index1 < zspellMeteor.radius * 2; ++index1)
+            num1 += spell.zb.Count;
+          for (int index1 = 0; index1 < spell.radius * 2; ++index1)
           {
-            int index2 = (index1 + num1) % zspellMeteor.zb.Count;
-            if (!zspellMeteor.map.SpellCheckPosition((int) (fixedInt3 + zspellMeteor.pX) + zspellMeteor.zb[index2].x, (int) (fixedInt4 + zspellMeteor.pY) + zspellMeteor.zb[index2].y, zspellMeteor.toCollideCheck, Inert.mask_spell_movement))
+            int index2 = (index1 + num1) % spell.zb.Count;
+            if (!spell.map.SpellCheckPosition((int) (fixedInt3 + spell.pX) + spell.zb[index2].x, (int) (fixedInt4 + spell.pY) + spell.zb[index2].y, spell.toCollideCheck, Inert.mask_spell_movement))
             {
-              int num2 = (int) (fixedInt3 + zspellMeteor.pX);
-              int num3 = (int) (fixedInt4 + zspellMeteor.pY);
-              if (!flag1 || !zspellMeteor.map.CheckPositionOnlyMap(num2 + zspellMeteor.zb[index2].x, num3 + zspellMeteor.zb[index2].y))
+              int num2 = (int) (fixedInt3 + spell.pX);
+              int num3 = (int) (fixedInt4 + spell.pY);
+              if (!flag1 || !spell.map.CheckPositionOnlyMap(num2 + spell.zb[index2].x, num3 + spell.zb[index2].y))
               {
-                int x2 = num2 + zspellMeteor.zb[index2].x;
-                int y2 = num3 + zspellMeteor.zb[index2].y;
-                ++zspellMeteor.timesBounced;
-                zspellMeteor.map.ServerBitBlt((int) zspellMeteor.explosionCutout, (int) zspellMeteor.validX, (int) zspellMeteor.validY, true, true);
-                zspellMeteor.OnExplosion();
-                zspellMeteor.MoveSurroundings(zspellMeteor.EXORADIUS + 5);
-                zspellMeteor.ApplyExplosionForce(zspellMeteor.position, 0, true, (ISpellBridge) null, (ZCreature) null);
-                if ((Object) zspellMeteor.toSummon != (Object) null && zspellMeteor.spellEnum != SpellEnum.Arcane_Meteor)
+                int x2 = num2 + spell.zb[index2].x;
+                int y2 = num3 + spell.zb[index2].y;
+                ++spell.timesBounced;
+                spell.map.ServerBitBlt((int) spell.explosionCutout, (int) spell.validX, (int) spell.validY);
+                spell.OnExplosion();
+                spell.MoveSurroundings(spell.EXORADIUS + 5);
+                spell.ApplyExplosionForce(spell.position);
+                if ((Object) spell.toSummon != (Object) null && spell.spellEnum != SpellEnum.Arcane_Meteor)
                 {
-                  Spell component = zspellMeteor.toSummon.GetComponent<Spell>();
+                  Spell component = spell.toSummon.GetComponent<Spell>();
                   for (int index3 = 0; index3 < 4; ++index3)
                   {
-                    MyLocation power = Inert.Velocity(zspellMeteor.game.RandomFixedInt(0, 360), 15);
-                    ZSpell.BaseFire(component, zspellMeteor.parent, zspellMeteor.position, Quaternion.identity, power, true, false, true);
+                    MyLocation power = Inert.Velocity(spell.game.RandomFixedInt(0, 360), 15);
+                    ZSpell.BaseFire(component, spell.parent, spell.position, Quaternion.identity, power);
                   }
                 }
-                if (zspellMeteor.spellEnum == SpellEnum.Fire_Cannon)
+                if (spell.spellEnum == SpellEnum.Fire_Cannon)
                 {
-                  ZCreature zcreature = zspellMeteor.map.PhysicsCollideCreature((ZCreature) null, x2, y2, 0);
+                  ZCreature zcreature = spell.map.PhysicsCollideCreature((ZCreature) null, x2, y2);
                   if ((ZComponent) zcreature != (object) null && (ZComponent) zcreature.tower != (object) null)
                     flag2 = true;
                 }
-                AudioManager.Play(zspellMeteor.explosionClip);
+                AudioManager.Play(spell.explosionClip);
               }
               flag1 = true;
             }
           }
-          zspellMeteor.validX = zspellMeteor.pX;
-          zspellMeteor.validY = zspellMeteor.pY;
-          zspellMeteor.pX = zspellMeteor.pX + fixedInt3;
-          zspellMeteor.pY = zspellMeteor.pY + fixedInt4;
+          spell.validX = spell.pX;
+          spell.validY = spell.pY;
+          spell.pX = spell.pX + fixedInt3;
+          spell.pY = spell.pY + fixedInt4;
         }
       }
       if (flag2)
-        zspellMeteor.position = zspellMeteor.position + zspellMeteor.velocity * 419430L;
+        spell.position = spell.position + spell.velocity * 419430L;
       else
-        zspellMeteor.position = zspellMeteor.position + zspellMeteor.velocity;
-      if (zspellMeteor.position.y < zspellMeteor.radius)
+        spell.position = spell.position + spell.velocity;
+      if (spell.position.y < spell.radius)
       {
-        zspellMeteor.moving = (IEnumerator<float>) null;
-        zspellMeteor.velocity = MyLocation.zero;
-        zspellMeteor.isMoving = false;
-        zspellMeteor.Splash();
-        zspellMeteor.DestroyDelay();
+        spell.moving = (IEnumerator<float>) null;
+        spell.velocity = MyLocation.zero;
+        spell.isMoving = false;
+        spell.Splash();
+        spell.DestroyDelay();
         break;
       }
-      if (zspellMeteor.addVelocity)
+      if (spell.addVelocity)
       {
-        zspellMeteor.addVelocity = false;
-        zspellMeteor.velocity = zspellMeteor.velocity + zspellMeteor.addedVelocity;
-        zspellMeteor.velocity.x = Mathd.Clamp(zspellMeteor.velocity.x, (FixedInt) -50, (FixedInt) 50);
-        zspellMeteor.velocity.y = Mathd.Clamp(zspellMeteor.velocity.y, (FixedInt) -50, (FixedInt) 50);
-        zspellMeteor.addedVelocity.x = (FixedInt) 0;
-        zspellMeteor.addedVelocity.y = (FixedInt) 0;
+        spell.addVelocity = false;
+        spell.velocity = spell.velocity + spell.addedVelocity;
+        spell.velocity.x = Mathd.Clamp(spell.velocity.x, (FixedInt) -50, (FixedInt) 50);
+        spell.velocity.y = Mathd.Clamp(spell.velocity.y, (FixedInt) -50, (FixedInt) 50);
+        spell.addedVelocity.x = (FixedInt) 0;
+        spell.addedVelocity.y = (FixedInt) 0;
       }
-      else if (zspellMeteor.affectedByGravity && zspellMeteor.velocity.y > -ZMap.MaxSpeed)
-        zspellMeteor.velocity.y += zspellMeteor.map.Gravity;
-      else if (!zspellMeteor.affectedByGravity && zspellMeteor.velocity.y > -10 && zspellMeteor.maxDuration > 150)
-        zspellMeteor.affectedByGravity = true;
-      zspellMeteor.Wind();
-      ++zspellMeteor.curDuration;
-      zspellMeteor.Undie();
-      if (zspellMeteor.curDuration >= zspellMeteor.maxDuration || zspellMeteor.timesBounced >= zspellMeteor.amount)
+      else if (spell.affectedByGravity && spell.velocity.y > -ZMap.MaxSpeed)
+        spell.velocity.y += spell.map.Gravity;
+      else if (!spell.affectedByGravity && spell.velocity.y > -10 && spell.maxDuration > 150)
+        spell.affectedByGravity = true;
+      spell.Wind();
+      ++spell.curDuration;
+      spell.Undie();
+      if (spell.curDuration >= spell.maxDuration || spell.timesBounced >= spell.amount)
       {
-        zspellMeteor.Explode();
-        zspellMeteor.DestroyDelay();
+        spell.Explode();
+        spell.DestroyDelay();
         break;
       }
       yield return 0.0f;

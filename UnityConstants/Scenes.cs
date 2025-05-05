@@ -1,4 +1,5 @@
 
+#nullable disable
 namespace UnityConstants
 {
   public static class Scenes

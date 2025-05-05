@@ -1,4 +1,5 @@
 
+#nullable disable
 namespace SevenZip.CommandLineParser
 {
   public enum SwitchType

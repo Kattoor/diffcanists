@@ -1,6 +1,7 @@
 
 using System.Collections.Generic;
 
+#nullable disable
 namespace InGameCodeEditor.Lexer
 {
   public abstract class MatchLexer
@@ -37,7 +38,7 @@ namespace InGameCodeEditor.Lexer
         lexer.Commit();
         return num != 0;
       }
-      lexer.Rollback(-1);
+      lexer.Rollback();
       return num != 0;
     }
   }

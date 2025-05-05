@@ -1,6 +1,7 @@
 
 using UnityEngine;
 
+#nullable disable
 public class Colors
 {
   public static readonly Color AliceBlue = (Color) new Color32((byte) 240, (byte) 248, byte.MaxValue, byte.MaxValue);

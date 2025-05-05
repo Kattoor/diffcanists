@@ -1,4 +1,5 @@
 
+#nullable disable
 public class CachedPolygon
 {
   public int offset;
@@ -26,6 +27,6 @@ public class CachedPolygon
   {
     x += this.half_width;
     y += this.half_height;
-    return x >= 0 && x < this.width && (y >= 0 && y < this.height) && this._grid[y, x];
+    return x >= 0 && x < this.width && y >= 0 && y < this.height && this._grid[y, x];
   }
 }

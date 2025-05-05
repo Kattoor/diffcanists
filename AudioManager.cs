@@ -2,10 +2,9 @@
 using System.Collections;
 using UnityEngine;
 
+#nullable disable
 public class AudioManager : MonoBehaviour
 {
-  private float volumeSound = 0.5f;
-  private float volumeMusic = 0.5f;
   [Header("Per Spellbook")]
   public AudioClip[] clipSelectSpell;
   public AudioClip[] clipChargeFamiliar;
@@ -44,12 +43,15 @@ public class AudioManager : MonoBehaviour
   public AudioClip[] turnStart;
   public AudioClip turnEnd;
   public AudioClip turnEndCountdown;
+  public AudioClip[] ping;
   [Header("Music")]
   public AudioClip musicMainMenu;
   public AudioClip musicCredits;
   public AudioClip musicCharacterCreation;
   public AudioClip[] musicGame;
   public AudioClip[] additionalMusic;
+  private float volumeSound = 0.5f;
+  private float volumeMusic = 0.5f;
   private AudioClip clipPausedMusic;
   private float pausedTime;
   [Header("Cached Audio Sources")]
@@ -95,14 +97,14 @@ public class AudioManager : MonoBehaviour
 
   public static void PlayNapalm(AudioClip clip)
   {
-    if (Client.game == null || !Client.game.isClient || (Client.game.resyncing || !((Object) AudioManager.instance != (Object) null)))
+    if (Client.game == null || !Client.game.isClient || Client.game.resyncing || !((Object) AudioManager.instance != (Object) null))
       return;
     AudioManager.instance.InstancePlayNapalm(clip);
   }
 
   public static void Play(AudioClip clip)
   {
-    if (Client.game == null || !Client.game.isClient || (Client.game.resyncing || !((Object) AudioManager.instance != (Object) null)))
+    if (Client.game == null || !Client.game.isClient || Client.game.resyncing || !((Object) AudioManager.instance != (Object) null))
       return;
     AudioManager.instance.InstancePlay(clip);
   }
@@ -128,28 +130,28 @@ public class AudioManager : MonoBehaviour
       return;
     AudioManager.instance.clipPausedMusic = AudioManager.instance.sourceMusic.clip;
     AudioManager.instance.pausedTime = AudioManager.instance.sourceMusic.time;
-    AudioManager.instance._PlayMusic(music, 0.0f);
+    AudioManager.instance._PlayMusic(music);
   }
 
   public static void PlayMusicMainMenu()
   {
     if (!((Object) AudioManager.instance != (Object) null))
       return;
-    AudioManager.instance._PlayMusic(AudioManager.instance.musicMainMenu, 0.0f);
+    AudioManager.instance._PlayMusic(AudioManager.instance.musicMainMenu);
   }
 
   public static void PlayMusicCharacterCreation()
   {
     if (!((Object) AudioManager.instance != (Object) null))
       return;
-    AudioManager.instance._PlayMusic(AudioManager.instance.musicCharacterCreation, 0.0f);
+    AudioManager.instance._PlayMusic(AudioManager.instance.musicCharacterCreation);
   }
 
   public static void PlayGameMusic(int i)
   {
     if (!((Object) AudioManager.instance != (Object) null) || i < 0 || i >= AudioManager.instance.musicGame.Length)
       return;
-    AudioManager.instance._PlayMusic(AudioManager.instance.musicGame[i], 0.0f);
+    AudioManager.instance._PlayMusic(AudioManager.instance.musicGame[i]);
   }
 
   public void InstancePlay(AudioClip clip, float volume)
@@ -263,10 +265,7 @@ public class AudioManager : MonoBehaviour
     AudioManager.instance.sourceMusic.volume = f;
   }
 
-  private void OnDestroy()
-  {
-    AudioManager.instance = (AudioManager) null;
-  }
+  private void OnDestroy() => AudioManager.instance = (AudioManager) null;
 
   public static void Timer(float f)
   {

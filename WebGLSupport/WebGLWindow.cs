@@ -2,6 +2,7 @@
 using AOT;
 using System;
 
+#nullable disable
 namespace WebGLSupport
 {
   public static class WebGLWindow
@@ -10,11 +11,11 @@ namespace WebGLSupport
 
     public static bool Focus { get; private set; }
 
-    public static event Action OnFocusEvent = () => {};
+    public static event Action OnFocusEvent = () => { };
 
-    public static event Action OnBlurEvent = () => {};
+    public static event Action OnBlurEvent = () => { };
 
-    public static event Action OnResizeEvent = () => {};
+    public static event Action OnResizeEvent = () => { };
 
     private static void Init()
     {
@@ -40,15 +41,9 @@ namespace WebGLSupport
     }
 
     [MonoPInvokeCallback(typeof (Action))]
-    private static void OnWindowResize()
-    {
-      WebGLWindow.OnResizeEvent();
-    }
+    private static void OnWindowResize() => WebGLWindow.OnResizeEvent();
 
     [UnityEngine.RuntimeInitializeOnLoadMethod]
-    private static void RuntimeInitializeOnLoadMethod()
-    {
-      WebGLWindow.Init();
-    }
+    private static void RuntimeInitializeOnLoadMethod() => WebGLWindow.Init();
   }
 }

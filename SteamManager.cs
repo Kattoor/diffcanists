@@ -5,16 +5,17 @@ using System;
 using System.Text;
 using UnityEngine;
 
+#nullable disable
 [DisallowMultipleComponent]
 public class SteamManager : MonoBehaviour
 {
-  protected AppId_t appid = (AppId_t) 2901550U;
   public static bool startedFromSteam;
   protected static bool s_EverInitialized;
   protected static SteamManager s_instance;
   public GetTicketForWebApiResponse_t? ticket;
   protected Callback<GetTicketForWebApiResponse_t> _receivedTicket;
   protected Callback<MicroTxnAuthorizationResponse_t> _microTxn;
+  protected AppId_t appid = (AppId_t) 2901550U;
   protected bool m_bInitialized;
   protected SteamAPIWarningMessageHook_t m_SteamAPIWarningMessageHook;
 
@@ -35,13 +36,7 @@ public class SteamManager : MonoBehaviour
     }
   }
 
-  public static bool Initialized
-  {
-    get
-    {
-      return SteamManager.Instance.m_bInitialized;
-    }
-  }
+  public static bool Initialized => SteamManager.Instance.m_bInitialized;
 
   [MonoPInvokeCallback(typeof (SteamAPIWarningMessageHook_t))]
   protected static void SteamAPIDebugTextHook(int nSeverity, StringBuilder pchDebugText)
@@ -103,10 +98,7 @@ public class SteamManager : MonoBehaviour
     }
   }
 
-  public static string ByteArrayToString(byte[] ba)
-  {
-    return BitConverter.ToString(ba).Replace("-", "");
-  }
+  public static string ByteArrayToString(byte[] ba) => BitConverter.ToString(ba).Replace("-", "");
 
   private void MicroTxnResponse(MicroTxnAuthorizationResponse_t t)
   {

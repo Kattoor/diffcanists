@@ -1,4 +1,5 @@
 
+#nullable disable
 public enum PlayersPerTeam
 {
   Dont_Mind = -1, // 0xFFFFFFFF

@@ -1,6 +1,7 @@
 
 using System;
 
+#nullable disable
 namespace Hazel.Tcp
 {
   internal struct StateObject

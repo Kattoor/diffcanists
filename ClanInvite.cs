@@ -1,4 +1,5 @@
 
+#nullable disable
 public class ClanInvite
 {
   public string clan;

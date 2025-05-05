@@ -2,16 +2,15 @@
 using System;
 using System.Text;
 
+#nullable disable
 public class StringBuilderPlus
 {
+  public StringBuilder _stringBuilder;
   public string _subtraction = ",";
   public string _multiplication = " ";
   public string _division = "\n";
-  public StringBuilder _stringBuilder;
 
-  public static StringBuilderPlus operator +(
-    StringBuilderPlus a,
-    StringBuilderPlus b)
+  public static StringBuilderPlus operator +(StringBuilderPlus a, StringBuilderPlus b)
   {
     a._stringBuilder.Append(b.ToString());
     return a;
@@ -101,9 +100,7 @@ public class StringBuilderPlus
     return a;
   }
 
-  public static StringBuilderPlus operator /(
-    StringBuilderPlus a,
-    StringBuilderPlus b)
+  public static StringBuilderPlus operator /(StringBuilderPlus a, StringBuilderPlus b)
   {
     a._stringBuilder.Append(a._division).Append(b.ToString());
     return a;
@@ -193,9 +190,7 @@ public class StringBuilderPlus
     return a;
   }
 
-  public static StringBuilderPlus operator *(
-    StringBuilderPlus a,
-    StringBuilderPlus b)
+  public static StringBuilderPlus operator *(StringBuilderPlus a, StringBuilderPlus b)
   {
     a._stringBuilder.Append(a._multiplication).Append(b.ToString());
     return a;
@@ -285,9 +280,7 @@ public class StringBuilderPlus
     return a;
   }
 
-  public static StringBuilderPlus operator -(
-    StringBuilderPlus a,
-    StringBuilderPlus b)
+  public static StringBuilderPlus operator -(StringBuilderPlus a, StringBuilderPlus b)
   {
     a._stringBuilder.Append(a._subtraction).Append(b.ToString());
     return a;
@@ -405,11 +398,7 @@ public class StringBuilderPlus
     return this;
   }
 
-  public StringBuilderPlus Append(
-    string value,
-    int startIndex,
-    int count,
-    int repeatCount)
+  public StringBuilderPlus Append(string value, int startIndex, int count, int repeatCount)
   {
     for (int index = 0; index < repeatCount; ++index)
       this._stringBuilder.Append(value, startIndex, count);
@@ -451,11 +440,7 @@ public class StringBuilderPlus
     return this;
   }
 
-  public StringBuilderPlus Append(
-    char[] value,
-    int startIndex,
-    int charCount,
-    int repeatCount)
+  public StringBuilderPlus Append(char[] value, int startIndex, int charCount, int repeatCount)
   {
     for (int index = 0; index < repeatCount; ++index)
       this._stringBuilder.Append(value, startIndex, charCount);
@@ -476,10 +461,7 @@ public class StringBuilderPlus
     return this;
   }
 
-  public unsafe StringBuilderPlus Append(
-    char* value,
-    int valueCount,
-    int repeatCount)
+  public unsafe StringBuilderPlus Append(char* value, int valueCount, int repeatCount)
   {
     for (int index = 0; index < repeatCount; ++index)
       this._stringBuilder.Append(value, valueCount);
@@ -614,10 +596,7 @@ public class StringBuilderPlus
     return this;
   }
 
-  public StringBuilderPlus Append(
-    Decimal value,
-    string separator,
-    int repeatCount)
+  public StringBuilderPlus Append(Decimal value, string separator, int repeatCount)
   {
     for (int index = 0; index < repeatCount; ++index)
       this._stringBuilder.Append(separator).Append(value);
@@ -663,20 +642,11 @@ public class StringBuilderPlus
     return this;
   }
 
-  public StringBuilderPlus()
-  {
-    this._stringBuilder = new StringBuilder();
-  }
+  public StringBuilderPlus() => this._stringBuilder = new StringBuilder();
 
-  public StringBuilderPlus(int capacity)
-  {
-    this._stringBuilder = new StringBuilder(capacity);
-  }
+  public StringBuilderPlus(int capacity) => this._stringBuilder = new StringBuilder(capacity);
 
-  public StringBuilderPlus(string value)
-  {
-    this._stringBuilder = new StringBuilder(value);
-  }
+  public StringBuilderPlus(string value) => this._stringBuilder = new StringBuilder(value);
 
   public StringBuilderPlus(int capacity, int maxCapacity)
   {
@@ -695,47 +665,23 @@ public class StringBuilderPlus
 
   public char this[int index]
   {
-    get
-    {
-      return this._stringBuilder[index];
-    }
-    set
-    {
-      this._stringBuilder[index] = value;
-    }
+    get => this._stringBuilder[index];
+    set => this._stringBuilder[index] = value;
   }
 
   public int Capacity
   {
-    get
-    {
-      return this._stringBuilder.Capacity;
-    }
-    set
-    {
-      this._stringBuilder.Capacity = value;
-    }
+    get => this._stringBuilder.Capacity;
+    set => this._stringBuilder.Capacity = value;
   }
 
   public int Length
   {
-    get
-    {
-      return this._stringBuilder.Length;
-    }
-    set
-    {
-      this._stringBuilder.Length = value;
-    }
+    get => this._stringBuilder.Length;
+    set => this._stringBuilder.Length = value;
   }
 
-  public int MaxCapacity
-  {
-    get
-    {
-      return this._stringBuilder.MaxCapacity;
-    }
-  }
+  public int MaxCapacity => this._stringBuilder.MaxCapacity;
 
   public StringBuilderPlus Append(char value, int repeatCount)
   {
@@ -857,10 +803,7 @@ public class StringBuilderPlus
     return this;
   }
 
-  public StringBuilderPlus AppendFormat(
-    IFormatProvider provider,
-    string format,
-    object arg0)
+  public StringBuilderPlus AppendFormat(IFormatProvider provider, string format, object arg0)
   {
     this._stringBuilder.AppendFormat(provider, format, arg0);
     return this;
@@ -897,11 +840,7 @@ public class StringBuilderPlus
     return this;
   }
 
-  public StringBuilderPlus AppendFormat(
-    string format,
-    object arg0,
-    object arg1,
-    object arg2)
+  public StringBuilderPlus AppendFormat(string format, object arg0, object arg1, object arg2)
   {
     this._stringBuilder.AppendFormat(format, arg0, arg1, arg2);
     return this;
@@ -947,21 +886,11 @@ public class StringBuilderPlus
     this._stringBuilder.CopyTo(sourceIndex, destination, destinationIndex, count);
   }
 
-  public int EnsureCapacity(int capacity)
-  {
-    return this._stringBuilder.EnsureCapacity(capacity);
-  }
+  public int EnsureCapacity(int capacity) => this._stringBuilder.EnsureCapacity(capacity);
 
-  public bool Equals(StringBuilderPlus sb)
-  {
-    return this._stringBuilder.Equals(sb._stringBuilder);
-  }
+  public bool Equals(StringBuilderPlus sb) => this._stringBuilder.Equals(sb._stringBuilder);
 
-  public StringBuilderPlus Insert(
-    int index,
-    char[] value,
-    int startIndex,
-    int charCount)
+  public StringBuilderPlus Insert(int index, char[] value, int startIndex, int charCount)
   {
     this._stringBuilder.Insert(index, value, startIndex, charCount);
     return this;
@@ -1081,11 +1010,7 @@ public class StringBuilderPlus
     return this;
   }
 
-  public StringBuilderPlus Replace(
-    char oldChar,
-    char newChar,
-    int startIndex,
-    int count)
+  public StringBuilderPlus Replace(char oldChar, char newChar, int startIndex, int count)
   {
     this._stringBuilder.Replace(oldChar, newChar, startIndex, count);
     return this;
@@ -1097,20 +1022,13 @@ public class StringBuilderPlus
     return this;
   }
 
-  public StringBuilderPlus Replace(
-    string oldValue,
-    string newValue,
-    int startIndex,
-    int count)
+  public StringBuilderPlus Replace(string oldValue, string newValue, int startIndex, int count)
   {
     this._stringBuilder.Replace(oldValue, newValue, startIndex, count);
     return this;
   }
 
-  public override string ToString()
-  {
-    return this._stringBuilder.ToString();
-  }
+  public override string ToString() => this._stringBuilder.ToString();
 
   public string ToString(int startIndex, int length)
   {

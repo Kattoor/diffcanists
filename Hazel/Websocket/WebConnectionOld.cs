@@ -1,19 +1,21 @@
 
+using System;
 using System.Net.WebSockets;
 
+#nullable disable
 namespace Hazel.Websocket
 {
   public class WebConnectionOld
   {
-    public player_info player = new player_info();
-    public string EndPoint = "";
-    public int checkMessagesReceived = -1;
     public WebSocket socket;
+    public player_info player = new player_info();
     public bool Connected;
+    public string EndPoint = "";
     public int id;
     public int messagesReceived;
+    public int checkMessagesReceived = -1;
 
-    public event System.Action<WebConnectionOld, byte[]> ReceivedData;
+    public event Action<WebConnectionOld, byte[]> ReceivedData;
 
     public WebConnectionOld(WebSocket ws, string e, int id)
     {
@@ -25,7 +27,7 @@ namespace Hazel.Websocket
 
     public void DataReceived(byte[] b)
     {
-      System.Action<WebConnectionOld, byte[]> receivedData = this.ReceivedData;
+      Action<WebConnectionOld, byte[]> receivedData = this.ReceivedData;
       if (receivedData == null)
         return;
       receivedData(this, b);
@@ -37,26 +39,14 @@ namespace Hazel.Websocket
 
     public string name
     {
-      get
-      {
-        return this.player.account.name;
-      }
-      set
-      {
-        this.player.account.name = value;
-      }
+      get => this.player.account.name;
+      set => this.player.account.name = value;
     }
 
     public Account account
     {
-      get
-      {
-        return this.player.account;
-      }
-      set
-      {
-        this.player.account = value;
-      }
+      get => this.player.account;
+      set => this.player.account = value;
     }
   }
 }

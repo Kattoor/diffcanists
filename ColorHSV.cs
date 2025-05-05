@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+#nullable disable
 public struct ColorHSV : IEquatable<ColorHSV>
 {
   public float h;
@@ -39,21 +40,9 @@ public struct ColorHSV : IEquatable<ColorHSV>
     this.a = Mathf.Clamp01(c.a);
   }
 
-  public float HueAngle
-  {
-    get
-    {
-      return this.h * 360f;
-    }
-  }
+  public float HueAngle => this.h * 360f;
 
-  public ColorHSV normalized
-  {
-    get
-    {
-      return ColorHSV.Normalize(this);
-    }
-  }
+  public ColorHSV normalized => ColorHSV.Normalize(this);
 
   public static Color LowerHigher(Color c, float val)
   {
@@ -75,6 +64,8 @@ public struct ColorHSV : IEquatable<ColorHSV>
 
   public static Color AdjustColor(Color c, float hue)
   {
+    if ((double) hue == 1.0)
+      return c;
     ColorHSV hsv = new ColorHSV(c);
     hsv.h += hue;
     hsv.h %= 1f;
@@ -85,6 +76,8 @@ public struct ColorHSV : IEquatable<ColorHSV>
 
   public static Color AdjustColor(Color c, float hue, float sat)
   {
+    if ((double) hue == 1.0)
+      return c;
     ColorHSV hsv = new ColorHSV(c);
     hsv.h += hue;
     hsv.s += sat;
@@ -93,6 +86,32 @@ public struct ColorHSV : IEquatable<ColorHSV>
     if ((double) hsv.h < 0.0)
       ++hsv.h;
     return ColorHSV.ToColor(hsv);
+  }
+
+  public static Color32 AdjustColor(Color32 c, float hue)
+  {
+    if ((double) hue == 1.0)
+      return c;
+    ColorHSV hsv = new ColorHSV((Color) c);
+    hsv.h += hue;
+    hsv.h %= 1f;
+    if ((double) hsv.h < 0.0)
+      ++hsv.h;
+    return (Color32) ColorHSV.ToColor(hsv);
+  }
+
+  public static Color32 AdjustColor(Color32 c, float hue, float sat)
+  {
+    if ((double) hue == 1.0)
+      return c;
+    ColorHSV hsv = new ColorHSV((Color) c);
+    hsv.h += hue;
+    hsv.s += sat;
+    hsv.h %= 1f;
+    hsv.s = Mathf.Clamp01(hsv.s);
+    if ((double) hsv.h < 0.0)
+      ++hsv.h;
+    return (Color32) ColorHSV.ToColor(hsv);
   }
 
   public void AdjustHue(float v)
@@ -146,35 +165,20 @@ public struct ColorHSV : IEquatable<ColorHSV>
     }
   }
 
-  public bool Equals(ColorHSV b)
-  {
-    return this == b;
-  }
+  public bool Equals(ColorHSV b) => this == b;
 
   public override int GetHashCode()
   {
     return this.h.GetHashCode() ^ this.s.GetHashCode() << 2 ^ this.v.GetHashCode() >> 2 ^ this.a.GetHashCode() >> 1;
   }
 
-  public static explicit operator ColorHSV(Color c)
-  {
-    return new ColorHSV(c);
-  }
+  public static explicit operator ColorHSV(Color c) => new ColorHSV(c);
 
-  public static explicit operator Color(ColorHSV hsv)
-  {
-    return ColorHSV.ToColor(hsv);
-  }
+  public static explicit operator Color(ColorHSV hsv) => ColorHSV.ToColor(hsv);
 
-  public static implicit operator ColorHSV(Vector4 c)
-  {
-    return new ColorHSV(c.x, c.y, c.z, c.w);
-  }
+  public static implicit operator ColorHSV(Vector4 c) => new ColorHSV(c.x, c.y, c.z, c.w);
 
-  public static implicit operator Vector4(ColorHSV hsv)
-  {
-    return new Vector4(hsv.h, hsv.s, hsv.v, hsv.a);
-  }
+  public static implicit operator Vector4(ColorHSV hsv) => new Vector4(hsv.h, hsv.s, hsv.v, hsv.a);
 
   public static ColorHSV operator +(ColorHSV a, ColorHSV b)
   {
@@ -334,75 +338,21 @@ public struct ColorHSV : IEquatable<ColorHSV>
     return colorHsv;
   }
 
-  public static ColorHSV black
-  {
-    get
-    {
-      return new ColorHSV(0.0f, 0.0f, 0.0f);
-    }
-  }
+  public static ColorHSV black => new ColorHSV(0.0f, 0.0f, 0.0f);
 
-  public static ColorHSV white
-  {
-    get
-    {
-      return new ColorHSV(0.0f, 0.0f, 1f);
-    }
-  }
+  public static ColorHSV white => new ColorHSV(0.0f, 0.0f, 1f);
 
-  public static ColorHSV red
-  {
-    get
-    {
-      return new ColorHSV(0.0f, 1f, 1f);
-    }
-  }
+  public static ColorHSV red => new ColorHSV(0.0f, 1f, 1f);
 
-  public static ColorHSV green
-  {
-    get
-    {
-      return new ColorHSV(0.3333333f, 1f, 1f);
-    }
-  }
+  public static ColorHSV green => new ColorHSV(0.333333343f, 1f, 1f);
 
-  public static ColorHSV blue
-  {
-    get
-    {
-      return new ColorHSV(0.6666667f, 1f, 1f);
-    }
-  }
+  public static ColorHSV blue => new ColorHSV(0.6666667f, 1f, 1f);
 
-  public static ColorHSV cyan
-  {
-    get
-    {
-      return new ColorHSV(0.5f, 1f, 1f);
-    }
-  }
+  public static ColorHSV cyan => new ColorHSV(0.5f, 1f, 1f);
 
-  public static ColorHSV magenta
-  {
-    get
-    {
-      return new ColorHSV(-0.1666667f, 1f, 1f);
-    }
-  }
+  public static ColorHSV magenta => new ColorHSV(-0.1666667f, 1f, 1f);
 
-  public static ColorHSV gray
-  {
-    get
-    {
-      return new ColorHSV(0.0f, 0.0f, 0.5f);
-    }
-  }
+  public static ColorHSV gray => new ColorHSV(0.0f, 0.0f, 0.5f);
 
-  public static ColorHSV grey
-  {
-    get
-    {
-      return new ColorHSV(0.0f, 0.0f, 0.5f);
-    }
-  }
+  public static ColorHSV grey => new ColorHSV(0.0f, 0.0f, 0.5f);
 }

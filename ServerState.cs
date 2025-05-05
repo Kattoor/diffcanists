@@ -1,17 +1,15 @@
 
+#nullable disable
 public class ServerState
 {
-  public byte playersTurn = byte.MaxValue;
   public float turnTime;
   public float countdown;
+  public byte playersTurn = byte.MaxValue;
   public ServerState.Busy changeBusy;
 
   public ServerState.Busy busy
   {
-    get
-    {
-      return this.changeBusy;
-    }
+    get => this.changeBusy;
     set
     {
       if (this.changeBusy == ServerState.Busy.Ended)

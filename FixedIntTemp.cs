@@ -2,13 +2,15 @@
 using System;
 using UnityS.Mathematics;
 
-public struct FixedIntTemp
+#nullable disable
+public struct FixedIntTemp(long value)
 {
   public static FixedIntTemp OneF = FixedIntTemp.Create(1);
   public static FixedIntTemp TwoF = FixedIntTemp.Create(2);
   public static FixedIntTemp ZeroF = FixedIntTemp.Create(0);
   public static FixedIntTemp HalfF = FixedIntTemp.Create(524288L);
   public static FixedIntTemp MaxValue = FixedIntTemp.Create(int.MaxValue);
+  public sfloat RawValue = (sfloat) ((float) value / 1048576f);
   public static FixedIntTemp ThreeSixtyBy1 = (FixedIntTemp) 0.002777f;
   public static FixedIntTemp Point_Two_Eight = (FixedIntTemp) 0.28f;
   public static FixedIntTemp Rad2Deg = (FixedIntTemp) 57.29578f;
@@ -16,23 +18,11 @@ public struct FixedIntTemp
   public static FixedIntTemp Pi = (FixedIntTemp) 3.14159f;
   public static FixedIntTemp PiOver2 = (FixedIntTemp) 1.570795f;
   public static FixedIntTemp PiTimes2 = (FixedIntTemp) 6.28318f;
-  private static readonly FixedIntTemp LutInterval = (FixedIntTemp) 205886 / FixedIntTemp.PiOver2;
-  public sfloat RawValue;
   private const int LUT_SIZE = 205887;
+  private static readonly FixedIntTemp LutInterval = (FixedIntTemp) 205886 / FixedIntTemp.PiOver2;
   private const int FRACTIONAL_PLACES = 20;
 
-  public static FixedIntTemp MAX_VALUE
-  {
-    get
-    {
-      return FixedIntTemp.Create(sfloat.MaxValue);
-    }
-  }
-
-  public FixedIntTemp(long value)
-  {
-    this.RawValue = (sfloat) ((float) value / 1048576f);
-  }
+  public static FixedIntTemp MAX_VALUE => FixedIntTemp.Create(sfloat.MaxValue);
 
   public static FixedIntTemp Create(sfloat StartingValue)
   {
@@ -106,15 +96,9 @@ public struct FixedIntTemp
     return one;
   }
 
-  public bool BiggerThenOrEqualToZero()
-  {
-    return this.RawValue >= (sfloat) 0;
-  }
+  public bool BiggerThenOrEqualToZero() => this.RawValue >= (sfloat) 0;
 
-  public bool SmallerThenOrEqualToOne()
-  {
-    return this.RawValue <= (sfloat) 1;
-  }
+  public bool SmallerThenOrEqualToOne() => this.RawValue <= (sfloat) 1;
 
   public void Divide(long OtherRawValue, out FixedIntTemp ret)
   {
@@ -192,20 +176,11 @@ public struct FixedIntTemp
     return one;
   }
 
-  public static bool operator ==(FixedIntTemp one, int other)
-  {
-    return one.RawValue == (sfloat) other;
-  }
+  public static bool operator ==(FixedIntTemp one, int other) => one.RawValue == (sfloat) other;
 
-  public override bool Equals(object o)
-  {
-    return base.Equals(o);
-  }
+  public override bool Equals(object o) => base.Equals(o);
 
-  public static bool operator !=(FixedIntTemp one, int other)
-  {
-    return one.RawValue != (sfloat) other;
-  }
+  public static bool operator !=(FixedIntTemp one, int other) => one.RawValue != (sfloat) other;
 
   public static FixedIntTemp operator +(FixedIntTemp one, int other)
   {
@@ -213,25 +188,13 @@ public struct FixedIntTemp
     return one;
   }
 
-  public static bool operator <(FixedIntTemp one, int other)
-  {
-    return one.RawValue < (sfloat) other;
-  }
+  public static bool operator <(FixedIntTemp one, int other) => one.RawValue < (sfloat) other;
 
-  public static bool operator >(FixedIntTemp one, int other)
-  {
-    return one.RawValue > (sfloat) other;
-  }
+  public static bool operator >(FixedIntTemp one, int other) => one.RawValue > (sfloat) other;
 
-  public static bool operator >=(FixedIntTemp one, int other)
-  {
-    return one.RawValue >= (sfloat) other;
-  }
+  public static bool operator >=(FixedIntTemp one, int other) => one.RawValue >= (sfloat) other;
 
-  public static bool operator <=(FixedIntTemp one, int other)
-  {
-    return one.RawValue <= (sfloat) other;
-  }
+  public static bool operator <=(FixedIntTemp one, int other) => one.RawValue <= (sfloat) other;
 
   public static bool operator >=(FixedIntTemp one, FixedIntTemp other)
   {
@@ -320,10 +283,7 @@ public struct FixedIntTemp
     return this.RawValue < (sfloat) ((float) OtherRawValue / 1048576f);
   }
 
-  public static bool InvalidAngle(FixedIntTemp x)
-  {
-    return x.RawValue.IsNaN();
-  }
+  public static bool InvalidAngle(FixedIntTemp x) => x.RawValue.IsNaN();
 
   public static FixedIntTemp Angle(MyLocation a, MyLocation b)
   {
@@ -357,40 +317,19 @@ public struct FixedIntTemp
     return fixedIntTemp;
   }
 
-  public static FixedIntTemp TempFloat(float f)
-  {
-    return FixedIntTemp.Create(f);
-  }
+  public static FixedIntTemp TempFloat(float f) => FixedIntTemp.Create(f);
 
-  public static float Float(FixedIntTemp f)
-  {
-    return f.ToFloat();
-  }
+  public static float Float(FixedIntTemp f) => f.ToFloat();
 
-  public static explicit operator FixedIntTemp(Decimal v)
-  {
-    return FixedIntTemp.Create(v);
-  }
+  public static explicit operator FixedIntTemp(Decimal v) => FixedIntTemp.Create(v);
 
-  public static explicit operator int(FixedIntTemp v)
-  {
-    return v.ToInt();
-  }
+  public static explicit operator int(FixedIntTemp v) => v.ToInt();
 
-  public static implicit operator FixedIntTemp(int v)
-  {
-    return FixedIntTemp.Create(v);
-  }
+  public static implicit operator FixedIntTemp(int v) => FixedIntTemp.Create(v);
 
-  public static implicit operator FixedIntTemp(long v)
-  {
-    return FixedIntTemp.Create(v);
-  }
+  public static implicit operator FixedIntTemp(long v) => FixedIntTemp.Create(v);
 
-  public static implicit operator FixedIntTemp(float v)
-  {
-    return FixedIntTemp.Create(v);
-  }
+  public static implicit operator FixedIntTemp(float v) => FixedIntTemp.Create(v);
 
   public bool AbsoluteValueMoreThan(long OtherRawValue)
   {
@@ -415,10 +354,7 @@ public struct FixedIntTemp
       this.RawValue = -FixedIntTemp.OneF.RawValue;
   }
 
-  public void Inverse(out FixedIntTemp ret)
-  {
-    ret.RawValue = this.RawValue * (sfloat) -1;
-  }
+  public void Inverse(out FixedIntTemp ret) => ret.RawValue = this.RawValue * (sfloat) -1;
 
   public static FixedIntTemp operator -(FixedIntTemp src)
   {
@@ -434,40 +370,19 @@ public struct FixedIntTemp
     return x;
   }
 
-  public float ToFloat()
-  {
-    return (float) this.RawValue;
-  }
+  public float ToFloat() => (float) this.RawValue;
 
-  public int ToInt()
-  {
-    return (int) this.RawValue;
-  }
+  public int ToInt() => (int) this.RawValue;
 
-  public double ToDouble()
-  {
-    return (double) (float) this.RawValue;
-  }
+  public double ToDouble() => (double) (float) this.RawValue;
 
-  public short ToRoundedShort()
-  {
-    return (short) (int) this.RawValue;
-  }
+  public short ToRoundedShort() => (short) (int) this.RawValue;
 
-  public override int GetHashCode()
-  {
-    return this.RawValue.GetHashCode();
-  }
+  public override int GetHashCode() => this.RawValue.GetHashCode();
 
-  public override string ToString()
-  {
-    return this.RawValue.ToString();
-  }
+  public override string ToString() => this.RawValue.ToString();
 
-  public static FixedIntTemp FastMul(FixedIntTemp x, FixedIntTemp y)
-  {
-    return x * y;
-  }
+  public static FixedIntTemp FastMul(FixedIntTemp x, FixedIntTemp y) => x * y;
 
   public static int Sign(FixedIntTemp x)
   {
@@ -490,15 +405,9 @@ public struct FixedIntTemp
     return fixedIntTemp;
   }
 
-  public static FixedIntTemp Max(FixedIntTemp a, FixedIntTemp b)
-  {
-    return !(a > b) ? b : a;
-  }
+  public static FixedIntTemp Max(FixedIntTemp a, FixedIntTemp b) => !(a > b) ? b : a;
 
-  public static FixedIntTemp Min(FixedIntTemp a, FixedIntTemp b)
-  {
-    return !(a < b) ? b : a;
-  }
+  public static FixedIntTemp Min(FixedIntTemp a, FixedIntTemp b) => !(a < b) ? b : a;
 
   public static FixedIntTemp Clamp(FixedIntTemp x, FixedIntTemp a, FixedIntTemp b)
   {

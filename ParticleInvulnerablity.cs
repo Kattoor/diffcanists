@@ -1,11 +1,12 @@
 
 using UnityEngine;
 
+#nullable disable
 public class ParticleInvulnerablity : MonoBehaviour
 {
-  private Vector3 a = Vector3.zero;
   public Creature c;
   public float speed;
+  private Vector3 a = Vector3.zero;
 
   private void Update()
   {

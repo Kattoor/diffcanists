@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
+#nullable disable
 public class pfabBoolJsonItem : MonoBehaviour
 {
   public TMP_Text text;

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 
+#nullable disable
 namespace mattmc3.dotmore.Collections.Generic
 {
   public class EqualityComparer2<T> : EqualityComparer<T>
@@ -24,14 +25,8 @@ namespace mattmc3.dotmore.Collections.Generic
       this._hashFunction = hashFunction;
     }
 
-    public override bool Equals(T x, T y)
-    {
-      return this._equalsFunction(x, y);
-    }
+    public override bool Equals(T x, T y) => this._equalsFunction(x, y);
 
-    public override int GetHashCode(T obj)
-    {
-      return this._hashFunction(obj);
-    }
+    public override int GetHashCode(T obj) => this._hashFunction(obj);
   }
 }

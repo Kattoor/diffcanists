@@ -2,24 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+#nullable disable
 public class ColorLerp : MonoBehaviour
 {
   public List<SpriteRenderer> rends = new List<SpriteRenderer>();
+  public ZCreature _creature;
   public float min = 0.2f;
   public float max = 0.5f;
   public float speed = 1f;
-  private bool up = true;
-  private float c = 0.5f;
-  public ZCreature _creature;
   public bool randomOffset;
   private float cur;
+  private bool up = true;
+  private float c = 0.5f;
 
   public void Kill()
   {
     for (int index = 0; index < this.rends.Count; ++index)
     {
-      Color color = this.rends[index].color;
-      color.a = 1f;
+      Color color = this.rends[index].color with { a = 1f };
       this.rends[index].color = color;
     }
     this.enabled = false;
@@ -77,8 +77,10 @@ public class ColorLerp : MonoBehaviour
       }
       else
       {
-        Color color = this.rends[index].color;
-        color.a = this.c;
+        Color color = this.rends[index].color with
+        {
+          a = this.c
+        };
         this.rends[index].color = color;
       }
     }

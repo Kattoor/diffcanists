@@ -4,12 +4,10 @@ using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
+#nullable disable
 public static class ClipboardExtension
 {
-  public static void CopyToClipboard(this string str)
-  {
-    Global.systemCopyBuffer = str;
-  }
+  public static void CopyToClipboard(this string str) => Global.systemCopyBuffer = str;
 
   public static bool IsNull(this UnityEvent x)
   {

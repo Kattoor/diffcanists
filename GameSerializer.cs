@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using UnityEngine;
 
+#nullable disable
 public static class GameSerializer
 {
   public static void Serialize(ZGame game, ZPerson x, myBinaryWriter writer)
@@ -32,7 +33,6 @@ public static class GameSerializer
     writer.Write(x.drainable);
     writer.Write(x.waterMultipler);
     writer.Write(x.hasCastTheFourSeasons);
-    writer.Write(x.seasonISHoliday);
     writer.Write(x.FullArcane);
     writer.Write(x.didResign);
     writer.Write(x.didLeave);
@@ -48,6 +48,9 @@ public static class GameSerializer
     game.SerializeList(writer, x.stolenMinions);
     game.SerializeList(writer, x.takenMinions);
     writer.Write(ZGame.GetID(x.bloodBank));
+    writer.Write(x.armaWarnings.Count);
+    foreach (int armaWarning in x.armaWarnings)
+      writer.Write(armaWarning);
     if (x.familiars == null)
     {
       writer.Write(0);
@@ -69,19 +72,22 @@ public static class GameSerializer
     game.DeserializeList(reader, x.stolenMinions);
     game.DeserializeList(reader, x.takenMinions);
     x.bloodBank = game.helper.GetCreature(reader.ReadInt32());
-    int num = reader.ReadInt32();
-    for (int index = 0; index < num; ++index)
+    int num1 = reader.ReadInt32();
+    for (int index = 0; index < num1; ++index)
+      x.armaWarnings.Enqueue(reader.ReadInt32());
+    int num2 = reader.ReadInt32();
+    for (int index = 0; index < num2; ++index)
     {
       if (reader.ReadBoolean())
         ZFamiliar.Deserialize(reader, x.first());
     }
     if (!((ZComponent) x.first() != (object) null))
       return;
-    for (int index = 0; index < x.familiarLevels.Length; ++index)
+    for (int book = 0; book < x.familiarLevels.Length; ++book)
     {
-      if (x.familiarLevels[index] > 0 && index != 5 && (ZComponent) x.GetFamiliar((BookOf) index) == (object) null && (index != 10 || !x.seasonISHoliday))
+      if (x.familiarLevels[book] > 0 && book != 5 && (ZComponent) x.GetFamiliar((BookOf) book) == (object) null && (book != 10 || !x.seasonISHoliday))
       {
-        Familiar component = Inert.Instance.familiars[index].GetComponent<Familiar>();
+        Familiar component = Inert.Instance.familiars[book].GetComponent<Familiar>();
         ZFamiliar zfamiliar = ZFamiliar.Create(x.first(), component);
         if (x.familiars == null)
           x.familiars = new List<ZFamiliar>();
@@ -124,7 +130,6 @@ public static class GameSerializer
     x.drainable = reader.ReadBoolean();
     x.waterMultipler = reader.ReadInt32();
     x.hasCastTheFourSeasons = reader.ReadBoolean();
-    x.seasonISHoliday = reader.ReadBoolean();
     x.FullArcane = reader.ReadBoolean();
     x.didResign = reader.ReadBoolean();
     x.didLeave = reader.ReadBoolean();
@@ -181,8 +186,8 @@ public static class GameSerializer
     x.colliderB?.Serialize(x.game, writer);
     x.collider?.Serialize(x.game, writer);
     if (!fromEffector)
-      x.effector?.Serialize(writer, false);
-    x.effector2?.Serialize(writer, false);
+      x.effector?.Serialize(writer);
+    x.effector2?.Serialize(writer);
   }
 
   public static ZSpell DeserializeSpell(ZGame game, myBinaryReader reader, ZCreature cre)
@@ -193,7 +198,7 @@ public static class GameSerializer
       return game.helper.Getspell(num2);
     Spell spell = Inert.GetSpell(reader.ReadString());
     MyLocation myLocation = reader.ReadMyLocation();
-    ZSpell z = !((Object) spell != (Object) null) ? new ZSpell() : (!(typeof (FlameWallSpell) == spell.GetType()) ? ZSpell.Create(game, spell, (Vector3) myLocation.ToSinglePrecision(), Quaternion.identity, game.GetMapTransform(), cre, true) : (ZSpell) ZSpell.Create(game, (FlameWallSpell) spell, (Vector3) myLocation.ToSinglePrecision(), Quaternion.identity, game.GetMapTransform(), cre, true));
+    ZSpell z = !((Object) spell != (Object) null) ? new ZSpell() : (!(typeof (FlameWallSpell) == ((object) spell).GetType()) ? ZSpell.Create(game, spell, (Vector3) myLocation.ToSinglePrecision(), Quaternion.identity, game.GetMapTransform(), cre, true) : (ZSpell) ZSpell.Create(game, (FlameWallSpell) spell, (Vector3) myLocation.ToSinglePrecision(), Quaternion.identity, game.GetMapTransform(), cre, true));
     game.helper.spellID.Add(num2, z);
     z.id = num2;
     z.position = myLocation;
@@ -245,7 +250,7 @@ public static class GameSerializer
       z.effector2 = ZEffector.Deserialze(game, game.helper.GetCreature(num3), reader, z.effector2);
     if (num4 != 0)
     {
-      IEnumerator<float> enumerator = z.SpellMove(true, true);
+      IEnumerator<float> enumerator = z.SpellMove(true);
       enumerator.MoveNext();
       z.moving = enumerator;
     }
@@ -280,16 +285,29 @@ public static class GameSerializer
         {
           ZCreatureBeehive zcreatureBeehive = (ZCreatureBeehive) c;
           writer.Write(zcreatureBeehive.bees.Count);
-          for (int index = 0; index < zcreatureBeehive.bees.Count; ++index)
+          for (int index1 = 0; index1 < zcreatureBeehive.bees.Count; ++index1)
           {
-            if ((ZComponent) zcreatureBeehive.bees[index] == (object) null)
+            if ((ZComponent) zcreatureBeehive.bees[index1] == (object) null)
             {
               writer.Write(false);
             }
             else
             {
               writer.Write(true);
-              ZCreatureCreate.Serialize(zcreatureBeehive.bees[index], writer, true);
+              ZCreatureCreate.Serialize(zcreatureBeehive.bees[index1], writer);
+              writer.Write(zcreatureBeehive.bees[index1].effectors.Count);
+              for (int index2 = 0; index2 < zcreatureBeehive.bees[index1].effectors.Count; ++index2)
+              {
+                if ((ZComponent) zcreatureBeehive.bees[index1].effectors[index2] == (object) null)
+                {
+                  writer.Write(false);
+                }
+                else
+                {
+                  writer.Write(true);
+                  zcreatureBeehive.bees[index1].effectors[index2].Serialize(writer);
+                }
+              }
             }
           }
         }
@@ -307,7 +325,7 @@ public static class GameSerializer
           else
           {
             writer.Write(true);
-            c.effectors[index].Serialize(writer, false);
+            c.effectors[index].Serialize(writer);
           }
         }
         writer.Write(c.destroyableEffectors.Count);
@@ -320,7 +338,7 @@ public static class GameSerializer
           else
           {
             writer.Write(true);
-            c.destroyableEffectors[index].Serialize(writer, false);
+            c.destroyableEffectors[index].Serialize(writer);
           }
         }
         writer.Write(c.followingColliders.Count);
@@ -354,90 +372,103 @@ public static class GameSerializer
     {
       if (reader.ReadBoolean())
       {
-        ZCreature zcreature = ZCreatureCreate.Deserialize(zperson, reader, i);
-        zcreature.parent = zperson;
-        if (!zcreature.isPawn)
+        ZCreature zcreature1 = ZCreatureCreate.Deserialize(zperson, reader, i);
+        zcreature1.parent = zperson;
+        if (!zcreature1.isPawn)
         {
-          if (zcreature.FullArcane)
-            HUD.ClientFullArcane(game, zperson, zcreature, i);
+          if (zcreature1.FullArcane)
+            HUD.ClientFullArcane(game, zperson, zcreature1, i);
         }
         else
-          ZSpell.ApplyEffectors(game, zcreature, zcreature.position, -1, (Spell) null, zperson.first(), true);
-        if (zcreature.spellEnum != SpellEnum.Summon_Tutorial_Target)
-          zperson.controlled.Add(zcreature);
-        zcreature.SetScaleOnResync(zcreature.transformscale);
+          ZSpell.ApplyEffectors(game, zcreature1, zcreature1.position, cre: zperson.first(), isDeserialization: true);
+        if (zcreature1.spellEnum != SpellEnum.Summon_Tutorial_Target)
+          zperson.controlled.Add(zcreature1);
+        zcreature1.SetScaleOnResync(zcreature1.transformscale);
         if ((Object) HUD.instance != (Object) null && HUD.instance.hideOverheadIcons)
-          zcreature.overheadCanvas?.gameObject.SetActive(false);
-        if (zcreature.type == CreatureType.Fresh_Water_Troll)
-          zcreature.ClientTransformWaterTroll();
-        else if (zcreature.type == CreatureType.Hard_Water_Troll)
-          zcreature.ClientTransformFreshWaterTroll();
-        if (zcreature.race == CreatureRace.Undead && zcreature.baseCreature.race != CreatureRace.Undead)
-          zcreature.ClientTurnUndead();
-        else if (zcreature.race == CreatureRace.Bear)
-          ZSpell.CreateWerewolfObj(Inert.GetSpell(SpellEnum.Bear_Form), zcreature);
-        if (zcreature.flying && !zcreature.baseCreature.flying)
-          ZSpell.ClientFireFlight(Inert.GetSpell(zcreature.flightSpell), zcreature);
-        if (zcreature.hasDarkDefenses && zcreature.game.isClient && (Object) zcreature.transform != (Object) null)
-          Object.Instantiate<GameObject>(Inert.GetSpell(SpellEnum.Dark_Defences).toSummon, zcreature.transform.position, Quaternion.identity, zcreature.transform).GetComponent<ParticleDarkDefenses>().c = zcreature.clientObj;
-        if (zcreature.shield > 0)
-          zcreature.CreateProtectionShield(true);
-        if (zcreature.gravitionalPull)
-          zcreature.CreateGravityObj(true);
-        if (zcreature.entangled)
-          zcreature.CreateEntangleObj(true);
-        if (zcreature.stunned)
+          zcreature1.overheadCanvas?.gameObject.SetActive(false);
+        if (zcreature1.type == CreatureType.Fresh_Water_Troll)
+          zcreature1.ClientTransformWaterTroll();
+        else if (zcreature1.type == CreatureType.Hard_Water_Troll)
+          zcreature1.ClientTransformFreshWaterTroll();
+        else if (zcreature1.type == CreatureType.Flesh_Golem)
+          zcreature1.ClientTransformFleshGolem();
+        if (zcreature1.race == CreatureRace.Undead && zcreature1.baseCreature.race != CreatureRace.Undead)
+          zcreature1.ClientTurnUndead();
+        else if (zcreature1.race == CreatureRace.Bear)
+          ZSpell.CreateWerewolfObj(Inert.GetSpell(SpellEnum.Bear_Form), zcreature1);
+        if (zcreature1.flying && !zcreature1.baseCreature.flying)
+          ZSpell.ClientFireFlight(Inert.GetSpell(zcreature1.flightSpell), zcreature1);
+        if (zcreature1.hasDarkDefenses && zcreature1.game.isClient && (Object) zcreature1.transform != (Object) null)
+          Object.Instantiate<GameObject>(Inert.GetSpell(SpellEnum.Dark_Defences).toSummon, zcreature1.transform.position, Quaternion.identity, zcreature1.transform).GetComponent<ParticleDarkDefenses>().c = zcreature1.clientObj;
+        if (zcreature1.shield > 0)
+          zcreature1.CreateProtectionShield(true);
+        if (zcreature1.gravitionalPull)
+          zcreature1.CreateGravityObj(true);
+        if (zcreature1.entangled)
+          zcreature1.CreateEntangleObj(true);
+        if (zcreature1.stunned)
         {
-          zcreature.ClientStunned();
-          zcreature.OnStunned();
+          zcreature1.ClientStunned();
+          zcreature1.OnStunned();
         }
-        if (zcreature.type == CreatureType.Beehive)
+        if (zcreature1.type == CreatureType.Beehive)
         {
-          ZCreatureBeehive zcreatureBeehive = (ZCreatureBeehive) zcreature;
+          ZCreatureBeehive cre = (ZCreatureBeehive) zcreature1;
           int num3 = reader.ReadInt32();
           for (int index2 = 0; index2 < num3; ++index2)
           {
             if (reader.ReadBoolean())
             {
-              ZCreature sum = ZCreatureCreate.Deserialize(zperson, reader, i);
-              zcreatureBeehive.bees.Add(sum);
-              sum.parent = zperson;
-              ZSpell.ApplyEffectors(game, sum, sum.position, -1, (Spell) null, (ZCreature) zcreatureBeehive, false);
+              ZCreature zcreature2 = ZCreatureCreate.Deserialize(zperson, reader, i);
+              cre.bees.Add(zcreature2);
+              zcreature2.parent = zperson;
+              ZSpell.ApplyEffectors(game, zcreature2, zcreature2.position, cre: (ZCreature) cre);
+              zcreature2.UpdateHealthTxt();
+              int num4 = reader.ReadInt32();
+              for (int index3 = 0; index3 < num4; ++index3)
+              {
+                if (reader.ReadBoolean())
+                {
+                  ZEffector zeffector = ZEffector.Deserialze(game, zcreature2, reader, (ZEffector) null);
+                  if ((ZComponent) zeffector != (object) null && !zeffector.doNotCreateObjectOnResync)
+                    zcreature2.effectors.Add(zeffector);
+                }
+              }
             }
           }
         }
         if (reader.ReadBoolean())
-          ZTower.Deserialize(reader, game, zcreature);
+          ZTower.Deserialize(reader, game, zcreature1);
         if (reader.ReadBoolean())
-          MinerMarket.Deserialize(reader, zcreature);
-        if (zcreature.type == CreatureType.Gargoyle && !zcreature.flying && (Object) zcreature.gameObject != (Object) null)
-          zcreature.gameObject.GetComponent<GargoyalObj>()?.SetColor(zcreature.flying, zcreature.flying ? 0.0f : -1f);
-        if (zcreature.type == CreatureType.Wisp && zcreature.phantom && (Object) zcreature.gameObject != (Object) null)
-          ZSpell.ChangeSprites(zcreature, ClientResources.Instance.wispPhantomSprites);
-        zcreature.UpdateHealthTxt();
-        int num4 = reader.ReadInt32();
-        for (int index2 = 0; index2 < num4; ++index2)
-        {
-          if (reader.ReadBoolean())
-          {
-            ZEffector zeffector = ZEffector.Deserialze(game, zcreature, reader, (ZEffector) null);
-            if ((ZComponent) zeffector != (object) null && !zeffector.doNotCreateObjectOnResync)
-              zcreature.effectors.Add(zeffector);
-          }
-        }
+          MinerMarket.Deserialize(reader, zcreature1);
+        if (zcreature1.type == CreatureType.Gargoyle && !zcreature1.flying && (Object) zcreature1.gameObject != (Object) null)
+          zcreature1.gameObject.GetComponent<GargoyalObj>()?.SetColor(zcreature1.flying, zcreature1.flying ? 0.0f : -1f);
+        if (zcreature1.type == CreatureType.Wisp && zcreature1.phantom && (Object) zcreature1.gameObject != (Object) null)
+          ZSpell.ChangeSprites(zcreature1, ClientResources.Instance.wispPhantomSprites);
+        zcreature1.UpdateHealthTxt();
         int num5 = reader.ReadInt32();
-        for (int index2 = 0; index2 < num5; ++index2)
+        for (int index4 = 0; index4 < num5; ++index4)
         {
           if (reader.ReadBoolean())
           {
-            ZEffector zeffector = ZEffector.Deserialze(game, zcreature, reader, (ZEffector) null);
+            ZEffector zeffector = ZEffector.Deserialze(game, zcreature1, reader, (ZEffector) null);
             if ((ZComponent) zeffector != (object) null && !zeffector.doNotCreateObjectOnResync)
-              zcreature.destroyableEffectors.Add(zeffector);
+              zcreature1.effectors.Add(zeffector);
           }
         }
         int num6 = reader.ReadInt32();
-        for (int index2 = 0; index2 < num6; ++index2)
-          game.helper.id_followColliders.Add(new ZGame.ID2(zcreature, reader.ReadInt32()));
+        for (int index5 = 0; index5 < num6; ++index5)
+        {
+          if (reader.ReadBoolean())
+          {
+            ZEffector zeffector = ZEffector.Deserialze(game, zcreature1, reader, (ZEffector) null);
+            if ((ZComponent) zeffector != (object) null && !zeffector.doNotCreateObjectOnResync)
+              zcreature1.destroyableEffectors.Add(zeffector);
+          }
+        }
+        int num7 = reader.ReadInt32();
+        for (int index6 = 0; index6 < num7; ++index6)
+          game.helper.id_followColliders.Add(new ZGame.ID2(zcreature1, reader.ReadInt32()));
       }
     }
     return zperson;

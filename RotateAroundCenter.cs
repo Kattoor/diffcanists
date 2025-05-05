@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+#nullable disable
 public class RotateAroundCenter : MonoBehaviour
 {
   public float speed = 60f;
@@ -11,10 +12,7 @@ public class RotateAroundCenter : MonoBehaviour
   public List<Transform> _transforms;
   private float v;
 
-  public void Awake()
-  {
-    this.Update();
-  }
+  public void Awake() => this.Update();
 
   private void Update()
   {

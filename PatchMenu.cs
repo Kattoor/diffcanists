@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
+#nullable disable
 public class PatchMenu : MonoBehaviour
 {
   public static PatchMenu Instance;
@@ -11,10 +12,7 @@ public class PatchMenu : MonoBehaviour
   public TMP_Dropdown dropdown;
   public const string prefLastOpened = "";
 
-  private void Awake()
-  {
-    PatchMenu.Instance = this;
-  }
+  private void Awake() => PatchMenu.Instance = this;
 
   private void OnDestroy()
   {
@@ -63,8 +61,5 @@ public class PatchMenu : MonoBehaviour
     this.txtNotes.text = ChangeLog.list[i].notes;
   }
 
-  public void ClickMainMenu()
-  {
-    Object.Destroy((Object) this.gameObject);
-  }
+  public void ClickMainMenu() => Object.Destroy((Object) this.gameObject);
 }

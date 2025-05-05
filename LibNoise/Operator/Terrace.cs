@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+#nullable disable
 namespace LibNoise.Operator
 {
   public class Terrace : ModuleBase
@@ -28,32 +29,14 @@ namespace LibNoise.Operator
       this.IsInverted = inverted;
     }
 
-    public int ControlPointCount
-    {
-      get
-      {
-        return this._data.Count;
-      }
-    }
+    public int ControlPointCount => this._data.Count;
 
-    public List<double> ControlPoints
-    {
-      get
-      {
-        return this._data;
-      }
-    }
+    public List<double> ControlPoints => this._data;
 
     public bool IsInverted
     {
-      get
-      {
-        return this._inverted;
-      }
-      set
-      {
-        this._inverted = value;
-      }
+      get => this._inverted;
+      set => this._inverted = value;
     }
 
     public void Add(double input)
@@ -63,10 +46,7 @@ namespace LibNoise.Operator
       this._data.Sort((Comparison<double>) ((lhs, rhs) => lhs.CompareTo(rhs)));
     }
 
-    public void Clear()
-    {
-      this._data.Clear();
-    }
+    public void Clear() => this._data.Clear();
 
     public void Generate(int steps)
     {

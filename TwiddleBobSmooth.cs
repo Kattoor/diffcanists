@@ -1,6 +1,7 @@
 
 using UnityEngine;
 
+#nullable disable
 public class TwiddleBobSmooth : MonoBehaviour
 {
   public float speed = 1f;
@@ -29,8 +30,9 @@ public class TwiddleBobSmooth : MonoBehaviour
       }
       this.curTime += Time.deltaTime * this.speed;
     }
-    Vector3 localPosition = this.transform.localPosition;
-    localPosition.y = Mathf.SmoothStep(this.minY, this.maxY, this.curTime);
-    this.transform.localPosition = localPosition;
+    this.transform.localPosition = this.transform.localPosition with
+    {
+      y = Mathf.SmoothStep(this.minY, this.maxY, this.curTime)
+    };
   }
 }

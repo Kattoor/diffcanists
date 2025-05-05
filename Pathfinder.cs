@@ -3,6 +3,7 @@ using Priority_Queue;
 using System.Collections.Generic;
 using UnityEngine;
 
+#nullable disable
 public class Pathfinder
 {
   public Pathfinder.Node[,] Tiles;
@@ -172,21 +173,9 @@ public class Pathfinder
     public int x;
     public int y;
 
-    public Vector3 Position
-    {
-      get
-      {
-        return new Vector3((float) this.x, 0.0f, (float) this.y);
-      }
-    }
+    public Vector3 Position => new Vector3((float) this.x, 0.0f, (float) this.y);
 
-    public Vector2Int PositionInt
-    {
-      get
-      {
-        return new Vector2Int(this.x, this.y);
-      }
-    }
+    public Vector2Int PositionInt => new Vector2Int(this.x, this.y);
 
     public GridTile()
     {
@@ -198,10 +187,7 @@ public class Pathfinder
       this.y = y;
     }
 
-    public GridTile(Vector3 position)
-    {
-      this.SetGridTile(position);
-    }
+    public GridTile(Vector3 position) => this.SetGridTile(position);
 
     public void SetGridTile(Vector3 position)
     {

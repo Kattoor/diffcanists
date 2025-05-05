@@ -3,21 +3,12 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+#nullable disable
 public class ZEntity : ZComponent
 {
-  public int radius = 5;
-  public bool affectedByGravity = true;
-  public bool isPawn = true;
-  [NonSerialized]
-  public FixedInt validX = FixedInt.ZeroF;
-  [NonSerialized]
-  public FixedInt validY = FixedInt.ZeroF;
-  [NonSerialized]
-  public FixedInt pX = FixedInt.ZeroF;
-  [NonSerialized]
-  public FixedInt pY = FixedInt.ZeroF;
   public int id;
   public ZGame game;
+  public int radius = 5;
   [NonSerialized]
   public ZMyCollider collider;
   public int randomNumber;
@@ -30,32 +21,27 @@ public class ZEntity : ZComponent
   public bool addVelocity;
   [NonSerialized]
   public bool isDead;
+  public bool affectedByGravity = true;
   public IEnumerator<float> moving;
   public bool isMoving;
+  public bool isPawn = true;
+  [NonSerialized]
+  public FixedInt validX = FixedInt.ZeroF;
+  [NonSerialized]
+  public FixedInt validY = FixedInt.ZeroF;
+  [NonSerialized]
+  public FixedInt pX = FixedInt.ZeroF;
+  [NonSerialized]
+  public FixedInt pY = FixedInt.ZeroF;
   public List<Coords> zb;
 
-  public ZMyWorld world
-  {
-    get
-    {
-      return this.game?.world;
-    }
-  }
+  public ZMyWorld world => this.game?.world;
 
-  public ZMap map
-  {
-    get
-    {
-      return this.game?.map;
-    }
-  }
+  public ZMap map => this.game?.map;
 
   public MyLocation position
   {
-    get
-    {
-      return this._position;
-    }
+    get => this._position;
     set
     {
       this._position = value;
@@ -67,10 +53,7 @@ public class ZEntity : ZComponent
 
   public MyLocation GetPositionAI
   {
-    get
-    {
-      return new MyLocation(this._position.x, Mathd.Max(this._position.y, (FixedInt) 0));
-    }
+    get => new MyLocation(this._position.x, Mathd.Max(this._position.y, (FixedInt) 0));
   }
 
   public ZCreature asCreature
@@ -83,36 +66,18 @@ public class ZEntity : ZComponent
 
   public ZSpell asSpell
   {
-    get
-    {
-      return !typeof (ZSpell).IsAssignableFrom(this.GetType()) ? (ZSpell) null : (ZSpell) this;
-    }
+    get => !typeof (ZSpell).IsAssignableFrom(this.GetType()) ? (ZSpell) null : (ZSpell) this;
   }
 
-  public void SetOffsetStaticBall(MyLocation sb)
-  {
-    this._position -= sb;
-  }
+  public void SetOffsetStaticBall(MyLocation sb) => this._position -= sb;
 
-  public void SetOffsetShockBomb(int x)
-  {
-    this._position.y += x;
-  }
+  public void SetOffsetShockBomb(int x) => this._position.y += x;
 
-  public int GetX()
-  {
-    return (int) this._position.x;
-  }
+  public int GetX() => (int) this._position.x;
 
-  public int GetY()
-  {
-    return (int) this._position.y;
-  }
+  public int GetY() => (int) this._position.y;
 
-  public virtual void SetPosition(MyLocation p)
-  {
-    this.position = p;
-  }
+  public virtual void SetPosition(MyLocation p) => this.position = p;
 
   public void KillMovement()
   {

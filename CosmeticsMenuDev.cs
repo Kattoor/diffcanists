@@ -1,5 +1,4 @@
 
-using Hazel;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -8,6 +7,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
+#nullable disable
 public class CosmeticsMenuDev : MonoBehaviour
 {
   public RectTransform pfabItem;
@@ -180,14 +180,11 @@ public class CosmeticsMenuDev : MonoBehaviour
           myBinaryWriter.Write(cosmeticDataList[index].on ? (byte) 1 : (byte) 0);
         }
       }
-      Client.connection?.SendBytes(memoryStream.ToArray(), SendOption.None);
+      Client.connection?.SendBytes(memoryStream.ToArray());
     }
   }
 
-  public void ClickClose()
-  {
-    Object.Destroy((Object) this.gameObject);
-  }
+  public void ClickClose() => Object.Destroy((Object) this.gameObject);
 
   public void ClickIndex(int e)
   {
@@ -231,14 +228,14 @@ public class CosmeticsMenuDev : MonoBehaviour
     }
     if (num < 0)
       num = sprites != null ? sprites.Length : sprites2.Length;
-    for (int index = 0; index < num; ++index)
+    for (int x = 0; x < num; ++x)
     {
       RectTransform rectTransform = Object.Instantiate<RectTransform>(this.pfabItem, (Transform) this.container);
-      rectTransform.anchoredPosition = new Vector2((float) (index % 30 * 33 + 5), (float) (index / 30 * -33 - 5));
-      rectTransform.GetComponent<Image>().sprite = sprites != null ? (Sprite) sprites[index] : sprites2[index];
+      rectTransform.anchoredPosition = new Vector2((float) (x % 30 * 33 + 5), (float) (x / 30 * -33 - 5));
+      rectTransform.GetComponent<Image>().sprite = sprites != null ? (Sprite) sprites[x] : sprites2[x];
       rectTransform.gameObject.SetActive(true);
       UIOnHover u = rectTransform.GetComponent<UIOnHover>();
-      byte y = (byte) index;
+      byte y = (byte) x;
       u.onClick.AddListener((UnityAction) (() =>
       {
         bool flag = !this.cosmetics.array[this.arrayIndex][(int) y];
@@ -246,7 +243,7 @@ public class CosmeticsMenuDev : MonoBehaviour
         u.AlwaysOn = spells ? !flag : flag;
         this.DisplayUpdated();
       }));
-      u.onEnter.AddListener((UnityAction) (() => MyToolTip.Show(sprites != null ? sprites[(int) y].name : sprites2[(int) y].name, -1f)));
+      u.onEnter.AddListener((UnityAction) (() => MyToolTip.Show(sprites != null ? sprites[(int) y].name : sprites2[(int) y].name)));
       u.onExit.AddListener((UnityAction) (() => MyToolTip.Close()));
       u.AlwaysOn = spells ? !this.cosmetics.array[this.arrayIndex][(int) y] : this.cosmetics.array[this.arrayIndex][(int) y];
     }

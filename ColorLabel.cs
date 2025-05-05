@@ -3,21 +3,19 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
+#nullable disable
 [RequireComponent(typeof (TextMeshProUGUI))]
 public class ColorLabel : MonoBehaviour
 {
-  public string prefix = "R: ";
-  public float maxValue = (float) byte.MaxValue;
   public ColorPicker picker;
   public ColorValues type;
+  public string prefix = "R: ";
   public float minValue;
+  public float maxValue = (float) byte.MaxValue;
   public int precision;
   private TextMeshProUGUI label;
 
-  private void Awake()
-  {
-    this.label = this.GetComponent<TextMeshProUGUI>();
-  }
+  private void Awake() => this.label = this.GetComponent<TextMeshProUGUI>();
 
   private void OnEnable()
   {
@@ -35,15 +33,9 @@ public class ColorLabel : MonoBehaviour
     this.picker.onHSVChanged.RemoveListener(new UnityAction<float, float, float>(this.HSVChanged));
   }
 
-  private void ColorChanged(Color color)
-  {
-    this.UpdateValue();
-  }
+  private void ColorChanged(Color color) => this.UpdateValue();
 
-  private void HSVChanged(float hue, float sateration, float value)
-  {
-    this.UpdateValue();
-  }
+  private void HSVChanged(float hue, float sateration, float value) => this.UpdateValue();
 
   private void UpdateValue()
   {

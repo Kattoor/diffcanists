@@ -7,11 +7,17 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+#nullable disable
 [RequireComponent(typeof (Image))]
-public class UIHoldButton : MonoBehaviour, IPointerDownHandler, IEventSystemHandler, IPointerUpHandler
+public class UIHoldButton : 
+  MonoBehaviour,
+  IPointerDownHandler,
+  IEventSystemHandler,
+  IPointerUpHandler
 {
   internal Color normalColor;
   public Color colorDown;
+  public Image overrideImage;
   public UIHoldButton.OnClick onDown;
   public UIHoldButton.OnClick onUp;
   public UIHoldButton.OnClick onHold;
@@ -22,7 +28,7 @@ public class UIHoldButton : MonoBehaviour, IPointerDownHandler, IEventSystemHand
 
   private void Awake()
   {
-    this.image = this.GetComponent<Image>();
+    this.image = this.overrideImage ?? this.GetComponent<Image>();
     this.normalColor = this.image.color;
   }
 

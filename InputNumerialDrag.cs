@@ -3,19 +3,17 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+#nullable disable
 [RequireComponent(typeof (TMP_InputField))]
 public class InputNumerialDrag : MonoBehaviour, IDragHandler, IEventSystemHandler, IBeginDragHandler
 {
+  private TMP_InputField input;
   public int max = (int) sbyte.MaxValue;
   public int min = (int) sbyte.MinValue;
-  private TMP_InputField input;
   private int startValue;
   private Vector2 startPos;
 
-  private void Awake()
-  {
-    this.input = this.GetComponent<TMP_InputField>();
-  }
+  private void Awake() => this.input = this.GetComponent<TMP_InputField>();
 
   public void OnBeginDrag(PointerEventData d)
   {

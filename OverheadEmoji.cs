@@ -2,12 +2,13 @@
 using TMPro;
 using UnityEngine;
 
+#nullable disable
 public class OverheadEmoji : MonoBehaviour
 {
-  public float speed = 10f;
   public AnimationCurve curve;
   public TMP_Text text;
   public float cur;
+  public float speed = 10f;
   private int state;
 
   private void Start()

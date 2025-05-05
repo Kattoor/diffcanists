@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
+#nullable disable
 public class KeyBindMenu : MonoBehaviour
 {
   public UIOnHover toggleMouseX;
@@ -28,15 +29,9 @@ public class KeyBindMenu : MonoBehaviour
 
   public static KeyBindMenu Instance { get; private set; }
 
-  public void ClickBack()
-  {
-    Object.Destroy((Object) this.gameObject);
-  }
+  public void ClickBack() => Object.Destroy((Object) this.gameObject);
 
-  private void Awake()
-  {
-    KeyBindMenu.Instance = this;
-  }
+  private void Awake() => KeyBindMenu.Instance = this;
 
   private void OnDestroy()
   {
@@ -97,10 +92,7 @@ public class KeyBindMenu : MonoBehaviour
     }));
   }
 
-  public void ToggleHotkeys()
-  {
-    this.panelHotkeys.SetActive(!this.panelHotkeys.activeSelf);
-  }
+  public void ToggleHotkeys() => this.panelHotkeys.SetActive(!this.panelHotkeys.activeSelf);
 
   public void ToggleControls()
   {
@@ -112,10 +104,7 @@ public class KeyBindMenu : MonoBehaviour
     HUD.instance?.buttonPing.gameObject.SetActive(b && !Client.game.isSandbox && Client.game.isTeam);
   }
 
-  public void ResetControls()
-  {
-    hardInput.ResetAllBindings();
-  }
+  public void ResetControls() => hardInput.ResetAllBindings();
 
   public void ToggleMouseX()
   {
@@ -233,8 +222,5 @@ public class KeyBindMenu : MonoBehaviour
     }
   }
 
-  public void OnControllerConnected(bool v)
-  {
-    this.controllerStuff.SetActive(v);
-  }
+  public void OnControllerConnected(bool v) => this.controllerStuff.SetActive(v);
 }

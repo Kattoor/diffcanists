@@ -9,24 +9,12 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+#nullable disable
 public class Inert : MonoBehaviour
 {
-  public static string Version = "v7.91";
+  public static string Version = "v8.0";
   public static int _Version = 62;
-  public static int mask_Jar = 262144;
-  public static int mask_ButterflyJar = 2097152;
-  public static int mask_Phantom = 65536;
-  public static int mask_entity_movement = 47872;
-  public static int mask_spell_movement = 12544;
-  public static int mask_movement_NoEffector = 12544;
-  public static int mask_all = Inert.mask_movement_NoEffector | 1024 | 2048 | 512 | 65536 | Inert.mask_Jar;
   public string achievement = "";
-  internal Dictionary<string, Creature> Creatures = new Dictionary<string, Creature>();
-  internal Dictionary<string, Tower> Towers = new Dictionary<string, Tower>();
-  public OrderedDictionary<string, Spell> spells = new OrderedDictionary<string, Spell>((IEqualityComparer<string>) Server._caseInsensitiveComparer);
-  public OrderedDictionary<SpellEnum, Spell> spellsEnums = new OrderedDictionary<SpellEnum, Spell>();
-  public OrderedDictionary<string, Effector> baseEffectors = new OrderedDictionary<string, Effector>((IEqualityComparer<string>) Server._caseInsensitiveComparer);
-  public OrderedDictionary<string, MyCollider> baseColliders = new OrderedDictionary<string, MyCollider>((IEqualityComparer<string>) Server._caseInsensitiveComparer);
   public KnownServersList servers;
   public ClientResources clientResources;
   public OutfitDataList _characterBody;
@@ -40,7 +28,7 @@ public class Inert : MonoBehaviour
   public OutfitDataList _characterMouths;
   public Store Store;
   public Spell[] _spells;
-  public Spell[] holidaySpells;
+  public Spell[] altSpells;
   public Spell[] MinionSpells;
   [Tooltip("Spells that can be added by name, but not in a spellbook")]
   public Spell[] _Additionalspells;
@@ -48,6 +36,8 @@ public class Inert : MonoBehaviour
   public Creature[] _creatures;
   public Tower[] _towers;
   public GameObject[] _otherObjects;
+  internal Dictionary<string, Creature> Creatures = new Dictionary<string, Creature>();
+  internal Dictionary<string, Tower> Towers = new Dictionary<string, Tower>();
   public Spell[] ArmageddonObjects;
   public Sprite[] ArmageddonIcons;
   public MyCollider basicCircleCollider;
@@ -63,6 +53,7 @@ public class Inert : MonoBehaviour
   public GameObject overheadCanvas;
   public Texture2D[] _volcanoTex;
   public Creature bee;
+  public Creature undeadBee;
   public SpellSlot waterGate;
   public GameObject electricityPool;
   public Effector moneyBags;
@@ -112,13 +103,16 @@ public class Inert : MonoBehaviour
   public GameObject auraOfArcaneExplosion;
   public GameObject auraOfBloodExplosion;
   public GameObject auraOfSeasonsExplosion;
+  public GameObject auraOfNecromancyExplosion;
   public GameObject oceanWaves;
   public GameObject oceanSplash;
   public GameObject vineExplosion;
   public GameObject fountain;
   public GameObject protectionShieldObj;
   public Sprite megaBoulderSprite;
+  public SerializedResources classMaps;
   public GameObject[] familiars;
+  public GameObject[] altFamiliars;
   public FixedAnimationCurve genericCurveFixed;
   public FixedAnimationCurve genericCurveMin50;
   public FixedAnimationCurve NoneCurveFixed;
@@ -127,13 +121,21 @@ public class Inert : MonoBehaviour
   public FixedAnimationCurve DropOffFixed;
   public FixedAnimationCurve ZeroDamage;
   internal int presentIndex;
+  public OrderedDictionary<string, Spell> spells = new OrderedDictionary<string, Spell>((IEqualityComparer<string>) Server._caseInsensitiveComparer);
+  public OrderedDictionary<SpellEnum, Spell> spellsEnums = new OrderedDictionary<SpellEnum, Spell>();
+  public OrderedDictionary<string, Effector> baseEffectors = new OrderedDictionary<string, Effector>((IEqualityComparer<string>) Server._caseInsensitiveComparer);
+  public OrderedDictionary<string, MyCollider> baseColliders = new OrderedDictionary<string, MyCollider>((IEqualityComparer<string>) Server._caseInsensitiveComparer);
   public static byte[] Version_As_Bytes;
   public List<MinerMarket.Item> minerMarket;
+  public static int mask_Jar = 262144;
+  public static int mask_ButterflyJar = 2097152;
+  public static int mask_Phantom = 65536;
+  public static int mask_entity_movement = 47872;
+  public static int mask_spell_movement = 12544;
+  public static int mask_movement_NoEffector = 12544;
+  public static int mask_all = Inert.mask_movement_NoEffector | 1024 | 2048 | 512 | 65536 | Inert.mask_Jar;
 
-  public void QuickLink_Inert()
-  {
-    this.QuickLink_InertExtra();
-  }
+  public void QuickLink_Inert() => this.QuickLink_InertExtra();
 
   public IEnumerable<OutfitDataList> GetOutfitData()
   {
@@ -237,18 +239,18 @@ public class Inert : MonoBehaviour
 
   public static MyCollider GetBaseCollider(string n)
   {
-    MyCollider myCollider;
-    Inert.Instance.baseColliders.TryGetValue(n, out myCollider);
-    return myCollider;
+    MyCollider baseCollider;
+    Inert.Instance.baseColliders.TryGetValue(n, out baseCollider);
+    return baseCollider;
   }
 
   public static Effector GetBaseEffector(string n)
   {
     if (string.IsNullOrEmpty(n))
       return (Effector) null;
-    Effector effector;
-    Inert.Instance.baseEffectors.TryGetValue(n, out effector);
-    return effector;
+    Effector baseEffector;
+    Inert.Instance.baseEffectors.TryGetValue(n, out baseEffector);
+    return baseEffector;
   }
 
   public static Creature GetCreature(string n)
@@ -288,13 +290,13 @@ public class Inert : MonoBehaviour
       x.spells.Add(x._Additionalspells[index].name, x._Additionalspells[index]);
       x.spellsEnums.Add(x._Additionalspells[index].spellEnum, x._Additionalspells[index]);
     }
-    for (int index = 0; index < x.holidaySpells.Length; ++index)
+    for (int index = 0; index < x.altSpells.Length; ++index)
     {
-      if (!x.spells.ContainsKey(x.holidaySpells[index].name))
+      if (!((UnityEngine.Object) x.altSpells[index] == (UnityEngine.Object) null) && !x.spells.ContainsKey(x.altSpells[index].name))
       {
-        x.holidaySpells[index].spellIndex = index + x._spells.Length + x._Additionalspells.Length;
-        x.spells.Add(x.holidaySpells[index].name, x.holidaySpells[index]);
-        x.spellsEnums.Add(x.holidaySpells[index].spellEnum, x.holidaySpells[index]);
+        x.altSpells[index].spellIndex = index + x._spells.Length + x._Additionalspells.Length;
+        x.spells.Add(x.altSpells[index].name, x.altSpells[index]);
+        x.spellsEnums.Add(x.altSpells[index].spellEnum, x.altSpells[index]);
       }
     }
     x.presentIndex = x.spells.Count;
@@ -460,10 +462,7 @@ public class Inert : MonoBehaviour
     this.DestroyAllSprites();
   }
 
-  private void OnDestroy()
-  {
-    Inert.Instance = (Inert) null;
-  }
+  private void OnDestroy() => Inert.Instance = (Inert) null;
 
   public static FixedAnimationCurve GetCurve(Curve v)
   {
@@ -509,8 +508,7 @@ public class Inert : MonoBehaviour
     sum.bg.color = sum.parent.clientColor;
     if ((double) sum.bg.color.a < 1.0)
     {
-      Color color = sum.bg.color;
-      color.a = 1f;
+      Color color = sum.bg.color with { a = 1f };
       sum.bg.color = color;
     }
     if ((UnityEngine.Object) sum.miniMapBg != (UnityEngine.Object) null)
@@ -607,7 +605,7 @@ public class Inert : MonoBehaviour
     bool first,
     bool destroyOld = true)
   {
-    if ((int) sp.indexBody == SettingsPlayer.sno_body2 || sp.indexRightHand == (byte) 54 && p.account.discord == 247247946557423616UL || ((int) sp.indexRightHand == SettingsPlayer.sno_pHand || sp.indexLeftHand == (byte) 67 || (sp.indexRightHand == (byte) 103 || sp.indexRightHand == (byte) 104)))
+    if ((int) sp.indexBody == SettingsPlayer.sno_body2 || sp.indexRightHand == (byte) 54 && p.account.discord == 247247946557423616UL || (int) sp.indexRightHand == SettingsPlayer.sno_pHand || sp.indexLeftHand == (byte) 67 || sp.indexRightHand == (byte) 103 || sp.indexRightHand == (byte) 104)
     {
       GameObject gameObject = creature.transform.GetChild(0).gameObject;
       gameObject.transform.rotation = Quaternion.identity;
@@ -684,16 +682,14 @@ public class Inert : MonoBehaviour
     bool noSpells = false)
   {
     Inert.SetClientColor(p, index);
-    ZCreature creature = ZCreatureCreate.CreateCreature(p, Inert.Instance.Player_Character_GO.GetComponent<Creature>(), pos.ToSinglePrecision(), Quaternion.identity, p.game.GetMapTransform(), true);
+    ZCreature creature = ZCreatureCreate.CreateCreature(p, Inert.Instance.Player_Character_GO.GetComponent<Creature>(), pos.ToSinglePrecision(), Quaternion.identity, p.game.GetMapTransform());
     creature.game = p.game;
     creature.parent = p;
     creature.collider.Initialize(pos, p.game.world);
     creature.collider.creature = creature;
     creature.position = pos;
     sp.indexMouth = sp.indexHead == (byte) 106 ? (byte) p.game.RandomInt(25, 28) : (byte) p.game.RandomInt(0, 24);
-    if (sp._spells.SeasonsIsHoliday)
-      p.seasonISHoliday = true;
-    Inert.CreateStuff(creature, p, sp, true);
+    Inert.CreateStuff(creature, p, sp);
     if (p.game.isClient && onPlayerPanel)
       HUD.instance.AddPanelPlayer(creature);
     if (noSpells)
@@ -702,79 +698,79 @@ public class Inert : MonoBehaviour
     {
       if (sp.spells[index1] < byte.MaxValue && Inert.Instance._spells.Length > (int) sp.spells[index1])
       {
-        SpellSlot spellSlot = new SpellSlot(!p.seasonISHoliday || sp.spells[index1] < (byte) 120 || sp.spells[index1] > (byte) 131 ? Inert.Instance._spells[(int) sp.spells[index1]] : Inert.Instance.holidaySpells[(int) sp.spells[index1] - 120]);
+        SpellSlot spellSlot = new SpellSlot(sp._spells.IsAlt((int) sp.spells[index1]) ? Inert.Instance.altSpells[(int) sp.spells[index1]] : Inert.Instance._spells[(int) sp.spells[index1]]);
         creature.spells.Add(spellSlot);
       }
     }
     if (p.game.gameFacts.GetStyle().HasStyle(GameStyle.Random_Spells))
     {
-      for (int index1 = creature.spells.Count - 1; index1 >= 0; --index1)
+      for (int index2 = creature.spells.Count - 1; index2 >= 0; --index2)
       {
-        if (creature.spells[index1].spell.spellEnum == SpellEnum.Flurry)
+        if (creature.spells[index2].spell.spellEnum == SpellEnum.Flurry)
         {
           if (!creature.HasSpell(SpellEnum.Summon_Elves))
           {
             SpellSlot spellSlot = new SpellSlot(Inert.Instance.spells["Summon Elves"]);
-            creature.spells.Insert(index1, spellSlot);
+            creature.spells.Insert(index2, spellSlot);
           }
         }
-        else if (creature.spells[index1].spell.spellEnum == SpellEnum.Vine_Bloom)
+        else if (creature.spells[index2].spell.spellEnum == SpellEnum.Vine_Bloom)
         {
           if (!creature.HasSpell(SpellEnum.Summon_Man_Trap))
           {
             SpellSlot spellSlot = new SpellSlot(Inert.Instance.spells["Summon Man-Trap"]);
-            creature.spells.Insert(index1, spellSlot);
+            creature.spells.Insert(index2, spellSlot);
           }
         }
-        else if (creature.spells[index1].spell.spellEnum == SpellEnum.Calling_Bell)
+        else if (creature.spells[index2].spell.spellEnum == SpellEnum.Calling_Bell)
         {
           if (!creature.HasSpell(SpellEnum.Recall_Device))
           {
             SpellSlot spellSlot = new SpellSlot(Inert.Instance.spells["Recall Device"]);
-            creature.spells.Insert(index1, spellSlot);
+            creature.spells.Insert(index2, spellSlot);
           }
         }
-        else if (creature.spells[index1].spell.spellEnum == SpellEnum.Summon_Elves)
+        else if (creature.spells[index2].spell.spellEnum == SpellEnum.Summon_Elves)
         {
           if (!creature.HasSpell(SpellEnum.Flurry))
           {
             SpellSlot spellSlot = new SpellSlot(Inert.Instance.spells["Flurry"]);
-            creature.spells.Insert(index1 + 1, spellSlot);
+            creature.spells.Insert(index2 + 1, spellSlot);
           }
         }
-        else if (creature.spells[index1].spell.spellEnum == SpellEnum.Summon_Man_Trap)
+        else if (creature.spells[index2].spell.spellEnum == SpellEnum.Summon_Man_Trap)
         {
           if (!creature.HasSpell(SpellEnum.Vine_Bloom))
           {
             SpellSlot spellSlot = new SpellSlot(Inert.Instance.spells["Vine Bloom"]);
-            creature.spells.Insert(index1 + 1, spellSlot);
+            creature.spells.Insert(index2 + 1, spellSlot);
           }
         }
-        else if (creature.spells[index1].spell.spellEnum == SpellEnum.Recall_Device)
+        else if (creature.spells[index2].spell.spellEnum == SpellEnum.Recall_Device)
         {
           if (!creature.HasSpell(SpellEnum.Calling_Bell))
           {
             SpellSlot spellSlot = new SpellSlot(Inert.Instance.spells["Calling Bell"]);
-            creature.spells.Insert(index1 + 1, spellSlot);
+            creature.spells.Insert(index2 + 1, spellSlot);
           }
         }
-        else if (creature.spells[index1].spell.spellEnum == SpellEnum.Imp_Destruction)
+        else if (creature.spells[index2].spell.spellEnum == SpellEnum.Imp_Destruction)
         {
           if (!creature.HasSpell(SpellEnum.Summon_Imps))
           {
             SpellSlot spellSlot = new SpellSlot(Inert.Instance.spells["Summon Imps"]);
-            creature.spells.Insert(index1, spellSlot);
+            creature.spells.Insert(index2, spellSlot);
           }
         }
-        else if (creature.spells[index1].spell.spellEnum == SpellEnum.Arcane_Energiser)
+        else if (creature.spells[index2].spell.spellEnum == SpellEnum.Arcane_Energiser)
         {
           if (!creature.HasSpell(SpellEnum.Arcane_Arrow))
           {
             SpellSlot spellSlot = new SpellSlot(Inert.Instance.spells["Arcane Arrow"]);
-            creature.spells.Insert(index1, spellSlot);
+            creature.spells.Insert(index2, spellSlot);
           }
         }
-        else if (creature.spells[index1].spell.spellEnum == SpellEnum.Sandbag)
+        else if (creature.spells[index2].spell.spellEnum == SpellEnum.Sandbag)
         {
           bool flag = false;
           foreach (SpellSlot spell in creature.spells)
@@ -787,14 +783,14 @@ public class Inert : MonoBehaviour
           }
           if (!flag)
           {
-            int index2 = creature.game.RandomInt(0, Inert.Instance._towers.Length - 1);
-            if (index2 >= 10)
-              ++index2;
-            Spell fromSpell = Inert.Instance._towers[index2].FromSpell;
+            int index3 = creature.game.RandomInt(0, Inert.Instance._towers.Length - 1);
+            if (index3 >= 10)
+              ++index3;
+            Spell fromSpell = Inert.Instance._towers[index3].FromSpell;
             if ((UnityEngine.Object) fromSpell != (UnityEngine.Object) null)
             {
               SpellSlot spellSlot = new SpellSlot(fromSpell);
-              creature.spells.Insert(index1, spellSlot);
+              creature.spells.Insert(index2, spellSlot);
             }
           }
         }
@@ -866,7 +862,7 @@ public class Inert : MonoBehaviour
       using (myBinaryWriter w = new myBinaryWriter((Stream) memoryStream))
       {
         Client.settingsPlayer.Serialize(w);
-        Client._ratedFacts.Serialize(w, true);
+        Client._ratedFacts.Serialize(w);
         w.Write((byte) 5);
         Client._gameSettings.Serialize(w);
       }
@@ -890,8 +886,5 @@ public class Inert : MonoBehaviour
     }
   }
 
-  public void QuickLink_InertExtra()
-  {
-    this.QuickLink_Inert();
-  }
+  public void QuickLink_InertExtra() => this.QuickLink_Inert();
 }

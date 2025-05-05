@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
+#nullable disable
 public class OptionsMenu : Catalogue
 {
   public Toggle toggleFollowSpells;
@@ -42,26 +43,14 @@ public class OptionsMenu : Catalogue
 
   public static bool SeasonalThemes
   {
-    get
-    {
-      return Global.GetPrefBool("useseasonalthemes", true);
-    }
-    set
-    {
-      Global.SetPrefBool("useseasonalthemes", value);
-    }
+    get => Global.GetPrefBool("useseasonalthemes", true);
+    set => Global.SetPrefBool("useseasonalthemes", value);
   }
 
   public static bool Disco
   {
-    get
-    {
-      return Global.GetPrefBool("disco", true);
-    }
-    set
-    {
-      Global.SetPrefBool("disco", value);
-    }
+    get => Global.GetPrefBool("disco", true);
+    set => Global.SetPrefBool("disco", value);
   }
 
   private void Awake()
@@ -74,7 +63,7 @@ public class OptionsMenu : Catalogue
     this.sliderSound.onPointerUp.AddListener((UnityAction<float>) (v => AudioManager.instance.InstancePlay(AudioManager.instance.spellBounce, PlayerPrefs.GetFloat("prefvolsound", 0.5f))));
     this.sliderTurnStartVolume.onPointerUp.AddListener((UnityAction<float>) (v => AudioManager.PlayTurnStart()));
     this.sliderTurnEndVolume.onPointerUp.AddListener((UnityAction<float>) (v => AudioManager._TestTurnEnd()));
-    if (!((UnityEngine.Object) ClientResources.Instance != (UnityEngine.Object) null) || MainMenu.bigIndex <= -1 || (!((UnityEngine.Object) this.bigImage != (UnityEngine.Object) null) || MainMenu.bigIndex >= ClientResources.Instance.MainMenuSprites.Length))
+    if (!((UnityEngine.Object) ClientResources.Instance != (UnityEngine.Object) null) || MainMenu.bigIndex <= -1 || !((UnityEngine.Object) this.bigImage != (UnityEngine.Object) null) || MainMenu.bigIndex >= ClientResources.Instance.MainMenuSprites.Length)
       return;
     this.bigImage.sprite = ClientResources.Instance.MainMenuSprites[MainMenu.bigIndex];
   }
@@ -232,7 +221,7 @@ public class OptionsMenu : Catalogue
       Global.SetPrefBool("prefcolorednames", flag);
       HUD.ToggleColoredNames(flag);
     }), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
-    myContextMenu.Rebuild(false);
+    myContextMenu.Rebuild();
   }
 
   private void OnDestroy()
@@ -242,15 +231,9 @@ public class OptionsMenu : Catalogue
     OptionsMenu.Instance = (OptionsMenu) null;
   }
 
-  public void Tooltip(string s)
-  {
-    MyToolTip.Show(s, -1f);
-  }
+  public void Tooltip(string s) => MyToolTip.Show(s);
 
-  public void HideTooltip()
-  {
-    MyToolTip.Close();
-  }
+  public void HideTooltip() => MyToolTip.Close();
 
   public void ToggleFPS(bool v)
   {
@@ -283,10 +266,7 @@ public class OptionsMenu : Catalogue
     Player.Instance.LockMeter = v;
   }
 
-  public void ToggleMapPing(bool v)
-  {
-    Global.SetPrefBool("prefmapping", v);
-  }
+  public void ToggleMapPing(bool v) => Global.SetPrefBool("prefmapping", v);
 
   public void ToggleMapPingSound()
   {
@@ -303,10 +283,7 @@ public class OptionsMenu : Catalogue
     CameraMovement.Instance.SetBounds();
   }
 
-  public void ToggleSkipIntro(bool v)
-  {
-    Global.SetPrefBool("prefSkipIntro", v);
-  }
+  public void ToggleSkipIntro(bool v) => Global.SetPrefBool("prefSkipIntro", v);
 
   public void UpdateVolumeSound(float f)
   {
@@ -320,25 +297,13 @@ public class OptionsMenu : Catalogue
     AudioManager.UpdateVolumeMusic(f);
   }
 
-  public void UpdateVolumeTurnStart(float f)
-  {
-    PlayerPrefs.SetFloat("prefturnstartvolume", f);
-  }
+  public void UpdateVolumeTurnStart(float f) => PlayerPrefs.SetFloat("prefturnstartvolume", f);
 
-  public void UpdateVolumeTurnEnd(float f)
-  {
-    PlayerPrefs.SetFloat("turnendsound", f);
-  }
+  public void UpdateVolumeTurnEnd(float f) => PlayerPrefs.SetFloat("turnendsound", f);
 
-  public void ClickScreenSize()
-  {
-    Controller.ShowScreenSizeMenu();
-  }
+  public void ClickScreenSize() => Controller.ShowScreenSizeMenu();
 
-  public void ClickChatBoxOnly()
-  {
-    ChatBox._ShowFilterOptions();
-  }
+  public void ClickChatBoxOnly() => ChatBox._ShowFilterOptions();
 
   public void ClickMainMenu()
   {
@@ -349,43 +314,19 @@ public class OptionsMenu : Catalogue
     ColorSchemeUI.ForceApply = false;
   }
 
-  public void ClickControls()
-  {
-    Controller.ShowControlsMenu();
-  }
+  public void ClickControls() => Controller.ShowControlsMenu();
 
-  public void ClickPatchNotes()
-  {
-    Controller.ShowPopup(Controller.Instance.MenuPatchNotes);
-  }
+  public void ClickPatchNotes() => Controller.ShowPopup(Controller.Instance.MenuPatchNotes);
 
-  public void ClickCredits()
-  {
-    Controller.ShowPopup(CreditsMenu.Type.Credits, (string) null);
-  }
+  public void ClickCredits() => Controller.ShowPopup(CreditsMenu.Type.Credits);
 
-  public void ClickRules()
-  {
-    Controller.ShowPopup(CreditsMenu.Type.Rules, (string) null);
-  }
+  public void ClickRules() => Controller.ShowPopup(CreditsMenu.Type.Rules);
 
-  public void ClickDiscordLink()
-  {
-    Global.OpenURL(Server.discordLink);
-  }
+  public void ClickDiscordLink() => Global.OpenURL(Server.discordLink);
 
-  public void ClicWebsiteLink()
-  {
-    Global.OpenURL(Server.websiteLink);
-  }
+  public void ClicWebsiteLink() => Global.OpenURL(Server.websiteLink);
 
-  public void ClicWikiLink()
-  {
-    Global.OpenURL(Server.wikiLink);
-  }
+  public void ClicWikiLink() => Global.OpenURL(Server.wikiLink);
 
-  public void ClickColorScheme()
-  {
-    ColorSchemeUI.Create(Client.colorScheme);
-  }
+  public void ClickColorScheme() => ColorSchemeUI.Create(Client.colorScheme);
 }

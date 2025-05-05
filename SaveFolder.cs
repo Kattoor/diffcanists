@@ -2,6 +2,7 @@
 using System.IO;
 using UnityEngine;
 
+#nullable disable
 public static class SaveFolder
 {
   public static string persistentDataPath

@@ -2,6 +2,7 @@
 using System;
 using System.Runtime.InteropServices;
 
+#nullable disable
 public class FileAssociations
 {
   private const int SHCNE_ASSOCCHANGED = 134217728;
@@ -33,8 +34,5 @@ public class FileAssociations
     return (0 | (FileAssociations.SetKeyDefaultValue("Software\\Classes\\" + extension, progId) ? 1 : 0) | (FileAssociations.SetKeyDefaultValue("Software\\Classes\\" + progId, fileTypeDescription) ? 1 : 0) | (FileAssociations.SetKeyDefaultValue("Software\\Classes\\" + progId + "\\shell\\open\\command", "\"" + applicationFilePath + "\" \"%1\"") ? 1 : 0)) != 0;
   }
 
-  private static bool SetKeyDefaultValue(string keyPath, string value)
-  {
-    return false;
-  }
+  private static bool SetKeyDefaultValue(string keyPath, string value) => false;
 }

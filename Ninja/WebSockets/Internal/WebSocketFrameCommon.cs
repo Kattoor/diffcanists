@@ -1,6 +1,7 @@
 
 using System;
 
+#nullable disable
 namespace Ninja.WebSockets.Internal
 {
   internal static class WebSocketFrameCommon

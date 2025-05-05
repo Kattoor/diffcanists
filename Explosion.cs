@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+#nullable disable
 public class Explosion : MonoBehaviour
 {
   public float Duration = 3f;

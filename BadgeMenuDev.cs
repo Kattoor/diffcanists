@@ -1,5 +1,4 @@
 
-using Hazel;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -8,6 +7,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
+#nullable disable
 public class BadgeMenuDev : MonoBehaviour
 {
   public RectTransform pfabItem;
@@ -91,14 +91,11 @@ public class BadgeMenuDev : MonoBehaviour
           myBinaryWriter.Write(valueTupleList[index].Item2 ? (byte) 1 : (byte) 0);
         }
       }
-      Client.connection?.SendBytes(memoryStream.ToArray(), SendOption.None);
+      Client.connection?.SendBytes(memoryStream.ToArray());
     }
   }
 
-  public void ClickClose()
-  {
-    Object.Destroy((Object) this.gameObject);
-  }
+  public void ClickClose() => Object.Destroy((Object) this.gameObject);
 
   public void ClickIndex(int e)
   {
@@ -123,16 +120,13 @@ public class BadgeMenuDev : MonoBehaviour
         u.AlwaysOn = spells ? !flag : flag;
         this.DisplayUpdated();
       }));
-      u.onEnter.AddListener((UnityAction) (() => MyToolTip.Show(ClientResources.Instance.badges[(int) y].name, -1f)));
+      u.onEnter.AddListener((UnityAction) (() => MyToolTip.Show(ClientResources.Instance.badges[(int) y].name)));
       u.onExit.AddListener((UnityAction) (() => MyToolTip.Close()));
       u.AlwaysOn = spells ? !this.cosmetics[(int) y] : this.cosmetics[(int) y];
     }
   }
 
-  private void Awake()
-  {
-    BadgeMenuDev.Instance = this;
-  }
+  private void Awake() => BadgeMenuDev.Instance = this;
 
   private void OnDestroy()
   {

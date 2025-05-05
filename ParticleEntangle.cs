@@ -1,12 +1,13 @@
 
 using UnityEngine;
 
+#nullable disable
 public class ParticleEntangle : MonoBehaviour
 {
+  private Creature c;
   public float speed = 10f;
   private Vector3 a = Vector3.zero;
   public bool entangle = true;
-  private Creature c;
 
   public void SetCreature(Creature c, bool rotate)
   {

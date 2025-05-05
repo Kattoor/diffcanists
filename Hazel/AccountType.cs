@@ -1,4 +1,5 @@
 
+#nullable disable
 namespace Hazel
 {
   public enum AccountType
@@ -34,5 +35,6 @@ namespace Hazel
     Tournament_Director = 134217728, // 0x08000000
     Press_Account = 268435456, // 0x10000000
     Tourny_Participate = 536870912, // 0x20000000
+    Concept_Director = 1073741824, // 0x40000000
   }
 }

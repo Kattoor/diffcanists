@@ -6,23 +6,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
+#nullable disable
 public class Clan
 {
-  [JsonIgnore]
-  [NonSerialized]
-  private static List<string> outdated = new List<string>();
+  private const byte Version = 1;
   public string name = "";
   public string description = "";
   public List<string> log = new List<string>();
-  public Dictionary<string, Clan.Roles> members = new Dictionary<string, Clan.Roles>();
-  [JsonIgnore]
-  [NonSerialized]
-  public Dictionary<string, Connection> activeConnections = new Dictionary<string, Connection>();
-  [JsonIgnore]
-  [NonSerialized]
-  public Dictionary<string, (float time, string who)> activeInvites = new Dictionary<string, (float, string)>((IEqualityComparer<string>) Server._caseInsensitiveComparer);
-  private const byte Version = 1;
   public long creationDate;
+  public Dictionary<string, Clan.Roles> members = new Dictionary<string, Clan.Roles>();
   public ClanOutfit outfit;
   public const byte MsgCreatedClan = 1;
   public const byte MsgMemberJoin = 2;
@@ -38,15 +30,18 @@ public class Clan
   public const byte MsgLog = 12;
   [JsonIgnore]
   [NonSerialized]
+  public Dictionary<string, Connection> activeConnections = new Dictionary<string, Connection>();
+  [JsonIgnore]
+  [NonSerialized]
+  public Dictionary<string, (float time, string who)> activeInvites = new Dictionary<string, (float, string)>((IEqualityComparer<string>) Server._caseInsensitiveComparer);
+  [JsonIgnore]
+  [NonSerialized]
+  private static List<string> outdated = new List<string>();
+  [JsonIgnore]
+  [NonSerialized]
   internal int clientMemberCount;
 
-  public string key
-  {
-    get
-    {
-      return this.name.ToLower();
-    }
-  }
+  public string key => this.name.ToLower();
 
   public void TryToJoin(Connection c)
   {
@@ -80,10 +75,7 @@ public class Clan
   {
   }
 
-  private async Task<bool> PromoteLeader(Clan.Roles toCheck)
-  {
-    return false;
-  }
+  private async Task<bool> PromoteLeader(Clan.Roles toCheck) => false;
 
   public async Task RemoveMember(Account acc, bool update = true, bool allowDisband = false, string reason = null)
   {
@@ -93,10 +85,7 @@ public class Clan
   {
   }
 
-  public bool AddMember(Account acc, Clan.Roles role, string inviter)
-  {
-    return false;
-  }
+  public bool AddMember(Account acc, Clan.Roles role, string inviter) => false;
 
   public void AddLog(string s)
   {

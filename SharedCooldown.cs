@@ -1,9 +1,11 @@
 
+#nullable disable
 public enum SharedCooldown
 {
   None,
-  Portal,
-  Aura,
-  Hurricane,
+  Portals,
+  Auras,
+  Hurricanes,
   Monarchs,
+  Flying,
 }

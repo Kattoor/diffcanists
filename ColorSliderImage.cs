@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
+#nullable disable
 [RequireComponent(typeof (RawImage))]
 [ExecuteInEditMode]
 public class ColorSliderImage : MonoBehaviour
@@ -13,13 +14,7 @@ public class ColorSliderImage : MonoBehaviour
   public Slider.Direction direction;
   private RawImage image;
 
-  private RectTransform rectTransform
-  {
-    get
-    {
-      return this.transform as RectTransform;
-    }
-  }
+  private RectTransform rectTransform => this.transform as RectTransform;
 
   private void Awake()
   {
@@ -81,9 +76,9 @@ public class ColorSliderImage : MonoBehaviour
   private void RegenerateTexture()
   {
     Color32 color32 = (Color32) ((UnityEngine.Object) this.picker != (UnityEngine.Object) null ? this.picker.CurrentColor : Color.black);
-    float num1 = (UnityEngine.Object) this.picker != (UnityEngine.Object) null ? this.picker.H : 0.0f;
-    float num2 = (UnityEngine.Object) this.picker != (UnityEngine.Object) null ? this.picker.S : 0.0f;
-    float num3 = (UnityEngine.Object) this.picker != (UnityEngine.Object) null ? this.picker.V : 0.0f;
+    float num = (UnityEngine.Object) this.picker != (UnityEngine.Object) null ? this.picker.H : 0.0f;
+    float s = (UnityEngine.Object) this.picker != (UnityEngine.Object) null ? this.picker.S : 0.0f;
+    float v = (UnityEngine.Object) this.picker != (UnityEngine.Object) null ? this.picker.V : 0.0f;
     bool flag1 = this.direction == Slider.Direction.BottomToTop || this.direction == Slider.Direction.TopToBottom;
     bool flag2 = this.direction == Slider.Direction.TopToBottom || this.direction == Slider.Direction.RightToLeft;
     int length;
@@ -127,16 +122,16 @@ public class ColorSliderImage : MonoBehaviour
           colors[flag2 ? length - 1 - (int) index : (int) index] = new Color32(index, index, index, byte.MaxValue);
         break;
       case ColorValues.Hue:
-        for (int index = 0; index < length; ++index)
-          colors[flag2 ? length - 1 - index : index] = (Color32) HSVUtil.ConvertHsvToRgb((double) index, 1.0, 1.0, 1f);
+        for (int h = 0; h < length; ++h)
+          colors[flag2 ? length - 1 - h : h] = (Color32) HSVUtil.ConvertHsvToRgb((double) h, 1.0, 1.0, 1f);
         break;
       case ColorValues.Saturation:
         for (int index = 0; index < length; ++index)
-          colors[flag2 ? length - 1 - index : index] = (Color32) HSVUtil.ConvertHsvToRgb((double) num1 * 360.0, (double) index / (double) length, (double) num3, 1f);
+          colors[flag2 ? length - 1 - index : index] = (Color32) HSVUtil.ConvertHsvToRgb((double) num * 360.0, (double) index / (double) length, (double) v, 1f);
         break;
       case ColorValues.Value:
         for (int index = 0; index < length; ++index)
-          colors[flag2 ? length - 1 - index : index] = (Color32) HSVUtil.ConvertHsvToRgb((double) num1 * 360.0, (double) num2, (double) index / (double) length, 1f);
+          colors[flag2 ? length - 1 - index : index] = (Color32) HSVUtil.ConvertHsvToRgb((double) num * 360.0, (double) s, (double) index / (double) length, 1f);
         break;
       default:
         throw new NotImplementedException("");

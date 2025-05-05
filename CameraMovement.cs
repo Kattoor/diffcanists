@@ -6,38 +6,52 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+#nullable disable
 public class CameraMovement : MonoBehaviour
 {
-  public static Queue<IFollowTarget> followTargets = new Queue<IFollowTarget>();
-  public static bool FOLLOWTARGETS = true;
-  public static bool reversedX = false;
-  public static bool reversedY = false;
-  public static bool allowscrollwheel = true;
-  public static bool refollowCamera = true;
+  private Camera _camera;
   public CameraState state = CameraState.Stationary;
   public Vector3 target_lastFrame = Vector3.zero;
-  public Vector3 offset = new Vector3(0.0f, 0.0f, -200f);
-  private Vector3 lerpFrom = Vector3.zero;
-  private Vector3 lerpOffset = Vector3.zero;
-  private Camera _camera;
   public Transform _background;
   public ZCreature target;
+  public Vector3 offset = new Vector3(0.0f, 0.0f, -200f);
   public float sizeX;
   public float sizeY;
   private float bgMinX;
   private float bgMinY;
   private float bgMaxX;
   private float bgMaxY;
+  public static Queue<IFollowTarget> followTargets = new Queue<IFollowTarget>();
   public IFollowTarget activeTarget;
+  public static bool FOLLOWTARGETS = true;
+  public static bool reversedX = false;
+  public static bool reversedY = false;
+  public static bool allowscrollwheel = true;
+  public static bool refollowCamera = true;
   public float mapXmin;
   public float mapXmax;
   public float mapYmin;
   public float mapYmax;
   private float horz;
   private float vert;
+  private Vector3 lerpFrom = Vector3.zero;
+  private Vector3 lerpOffset = Vector3.zero;
   private float lerpF;
   private bool wasFollowingTarget;
   private bool wasChatting;
+  public static readonly int[] zoomLevels = new int[10]
+  {
+    15,
+    50,
+    150,
+    250,
+    350,
+    450,
+    550,
+    650,
+    750,
+    850
+  };
 
   public static CameraMovement Instance { get; private set; }
 
@@ -98,10 +112,7 @@ public class CameraMovement : MonoBehaviour
     this._camera.transform.GetChild(1).localScale = new Vector3(num, num, 1f);
   }
 
-  private void Awake()
-  {
-    CameraMovement.Instance = this;
-  }
+  private void Awake() => CameraMovement.Instance = this;
 
   private void OnDestroy()
   {
@@ -119,8 +130,7 @@ public class CameraMovement : MonoBehaviour
     else
     {
       float num1 = Mathf.Clamp01(PlayerPrefs.GetFloat("prefblackBg", 1f));
-      Color white = Color.white;
-      white.a = num1;
+      Color white = Color.white with { a = num1 };
       CameraMovement.Instance._background.GetComponent<SpriteRenderer>().color = white;
       float t = Mathf.Clamp01(PlayerPrefs.GetFloat("prefblackFg", 1f));
       white.a = 1f;
@@ -225,6 +235,16 @@ public class CameraMovement : MonoBehaviour
   {
   }
 
+  public static int FindNextZoom(int x, bool v)
+  {
+    for (int index = 0; index < CameraMovement.zoomLevels.Length; ++index)
+    {
+      if (CameraMovement.zoomLevels[index] == x)
+        return v ? CameraMovement.zoomLevels[Mathf.Clamp(index + 1, 0, CameraMovement.zoomLevels.Length - 1)] : CameraMovement.zoomLevels[Mathf.Clamp(index - 1, 0, CameraMovement.zoomLevels.Length - 1)];
+    }
+    return 250;
+  }
+
   public void LateUpdate()
   {
     if (Client.game == null || !Client.game.AllowInput || Input.anyKey && this.wasChatting)
@@ -233,13 +253,15 @@ public class CameraMovement : MonoBehaviour
       this.wasChatting = false;
     if ((Object) HUD.instance != (Object) null && HUD.instance.Chatting() && !string.IsNullOrEmpty(Global.InputString))
       this.wasChatting = true;
-    if ((Object) HUD.instance == (Object) null || HUD.instance.chatInput.gameObject.activeSelf)
+    if (((Object) HUD.instance == (Object) null || HUD.instance.chatInput.gameObject.activeSelf) && (Object) MapEditor.Instance == (Object) null)
       return;
-    Vector3 position = this.transform.position;
-    position.z = 0.0f;
+    Vector3 position = this.transform.position with
+    {
+      z = 0.0f
+    };
     if (HUD.UseTouchControls)
     {
-      float pinchRatio = LeanGesture.GetPinchRatio(0.0f);
+      float pinchRatio = LeanGesture.GetPinchRatio();
       if ((double) pinchRatio != 1.0)
       {
         this._camera.orthographicSize = Mathf.Clamp(this._camera.orthographicSize + (float) ((1.0 - (double) pinchRatio) * 500.0), 15f, 850f);
@@ -247,7 +269,7 @@ public class CameraMovement : MonoBehaviour
         this.SetBounds();
       }
     }
-    if (Input.touchCount != 0 && (Input.touchCount != 1 || Player.IsPointerOverGameObject(0) || !((Object) Player.Instance?.selectedSpell == (Object) null)))
+    if (Input.touchCount != 0 && (Input.touchCount != 1 || Player.IsPointerOverGameObject() || !((Object) Player.Instance?.selectedSpell == (Object) null)))
     {
       switch (Input.touchCount)
       {
@@ -266,28 +288,28 @@ public class CameraMovement : MonoBehaviour
           goto label_39;
       }
     }
-    float num1 = (Object) HUD.instance != (Object) null && !HUD.instance.Chatting() || Global.InputString.Length == 0 ? (float) ((hardInput.GetKeyDown("ZoomIn") ? 1 : 0) + (hardInput.GetKeyDown("ZoomOut") ? -1 : 0)) : 0.0f;
+    float num = (Object) HUD.instance != (Object) null && !HUD.instance.Chatting() || Global.InputString.Length == 0 ? (float) ((hardInput.GetKeyDown("ZoomIn") ? 1 : 0) + (hardInput.GetKeyDown("ZoomOut") ? -1 : 0)) : 0.0f;
     if (CameraMovement.allowscrollwheel)
-      num1 += Global.IsMouseOverGameWindow ? Input.GetAxis("Mouse ScrollWheel") : 0.0f;
-    if ((double) num1 == 0.0 && hardManager.IsUsingController() && (hardInput.GetKeyDown("ZoomIn") || hardInput.GetKeyDown("ZoomOut")))
-      num1 = hardInput.GetKey("Extended Shot") ? 1f : -1f;
-    if ((double) num1 != 0.0 && !EventSystem.current.IsPointerOverGameObject())
+      num += Global.IsMouseOverGameWindow ? Input.GetAxis("Mouse ScrollWheel") : 0.0f;
+    if ((double) num == 0.0 && hardManager.IsUsingController() && (hardInput.GetKeyDown("ZoomIn") || hardInput.GetKeyDown("ZoomOut")))
+      num = hardInput.GetKey("Extended Shot") ? 1f : -1f;
+    if ((double) num != 0.0 && !EventSystem.current.IsPointerOverGameObject())
     {
-      float num2 = this.ClampZoom(this._camera.orthographicSize - ((double) num1 > 0.0 ? 1f : -1f) * 100f);
-      if ((double) num2 != (double) this._camera.orthographicSize)
+      float nextZoom = (float) CameraMovement.FindNextZoom((int) this._camera.orthographicSize, (double) num < 0.0);
+      if ((double) nextZoom != (double) this._camera.orthographicSize)
       {
         if ((double) Input.GetAxis("Mouse ScrollWheel") != 0.0 && Global.GetPrefBool("prefZoomMouse", false))
         {
           Vector3 worldPoint1 = this._camera.ScreenToWorldPoint(Input.mousePosition);
-          this._camera.orthographicSize = num2;
+          this._camera.orthographicSize = nextZoom;
           Vector3 worldPoint2 = this._camera.ScreenToWorldPoint(Input.mousePosition);
           position.x += worldPoint1.x - worldPoint2.x;
           position.y += worldPoint1.y - worldPoint2.y;
           this.state = CameraState.Stationary;
         }
         else
-          this._camera.orthographicSize = num2;
-        PlayerPrefs.SetFloat("prefZoom", num2);
+          this._camera.orthographicSize = nextZoom;
+        PlayerPrefs.SetFloat("prefZoom", nextZoom);
         this.SetBounds();
       }
     }
@@ -309,7 +331,8 @@ public class CameraMovement : MonoBehaviour
         position.y += this.vert * 1000f * Time.deltaTime;
       }
     }
-    if ((MyInput.GetMouseButton(1) || MyInput.GetMouseButton(2) || Input.touchCount == 1 && !Player.IsPointerOverGameObject(0) && (Object) Player.Instance?.selectedSpell == (Object) null) && (!HUD.UseTouchControls || (double) Input.GetAxis("Mouse X") != 0.0 || (double) Input.GetAxis("Mouse Y") != 0.0))
+    bool flag = (Object) MapEditor.Instance != (Object) null;
+    if ((MyInput.GetMouseButton(1) && !flag || MyInput.GetMouseButton(2) || Input.touchCount == 1 && !Player.IsPointerOverGameObject() && (Object) Player.Instance?.selectedSpell == (Object) null && !flag) && (!HUD.UseTouchControls || (double) Input.GetAxis("Mouse X") != 0.0 || (double) Input.GetAxis("Mouse Y") != 0.0))
     {
       this.KillMovement();
       if (CameraMovement.reversedX)
@@ -335,7 +358,7 @@ label_39:
         this.wasFollowingTarget = false;
         this.activeTarget = (IFollowTarget) null;
         if ((ZComponent) this.target != (object) null)
-          this.LerpToTransform(this.target, false);
+          this.LerpToTransform(this.target);
       }
       if (this.state == CameraState.Stationary)
       {
@@ -359,10 +382,7 @@ label_39:
     }
   }
 
-  public float ClampZoom(float vertExtent)
-  {
-    return Mathf.Clamp(vertExtent, 15f, 850f);
-  }
+  public float ClampZoom(float vertExtent) => Mathf.Clamp(vertExtent, 15f, 850f);
 
   public void SetZoom(float vertExtent)
   {
@@ -370,10 +390,7 @@ label_39:
     this.SetBounds();
   }
 
-  public float GetZoom()
-  {
-    return this._camera.orthographicSize;
-  }
+  public float GetZoom() => this._camera.orthographicSize;
 
   public void GotoPosition(Vector3 v)
   {
@@ -418,7 +435,7 @@ label_39:
 
   public void LerpToTransform(ZCreature v, bool force = false)
   {
-    if (!force && (!CameraMovement.refollowCamera && this.state != CameraState.Follow && this.state != CameraState.MoveTo || (MyInput.GetMouseButton(1) || Client.game.resyncing) || ((ZComponent) this.target == (object) v && (this.state == CameraState.MoveTo || this.state == CameraState.Follow) || (Object) Player.Instance != (Object) null && (Object) Player.Instance.selectedSpell != (Object) null)))
+    if (!force && (!CameraMovement.refollowCamera && this.state != CameraState.Follow && this.state != CameraState.MoveTo || MyInput.GetMouseButton(1) || Client.game.resyncing || (ZComponent) this.target == (object) v && (this.state == CameraState.MoveTo || this.state == CameraState.Follow) || (Object) Player.Instance != (Object) null && (Object) Player.Instance.selectedSpell != (Object) null))
       return;
     Timing.KillCoroutines("Camera");
     Timing.RunCoroutine(this.LerpTransform(v, force), Segment.Update, "Camera");
@@ -428,8 +445,7 @@ label_39:
   {
     CameraMovement cameraMovement = this;
     cameraMovement.state = CameraState.MoveTo;
-    Vector3 v = Vector3.zero;
-    v.z = -100f;
+    Vector3 v = Vector3.zero with { z = -100f };
     Vector3 start = cameraMovement.transform.position;
     cameraMovement.target = t;
     float scale = force ? 5f : 2f;
@@ -474,6 +490,8 @@ label_39:
   {
     if ((Object) this._background == (Object) null)
       return;
-    this._background.position = new Vector3(Mathf.Lerp(this.bgMinX, this.bgMaxX, Mathf.InverseLerp(this.mapXmin, this.mapXmax, this.transform.position.x)), Mathf.Lerp(this.bgMinY, this.bgMaxY, Mathf.InverseLerp(this.mapYmin, this.mapYmax, this.transform.position.y)));
+    float t1 = Mathf.InverseLerp(this.mapXmin, this.mapXmax, this.transform.position.x);
+    float t2 = Mathf.InverseLerp(this.mapYmin, this.mapYmax, this.transform.position.y);
+    this._background.position = new Vector3(Mathf.Lerp(this.bgMinX, this.bgMaxX, t1), Mathf.Lerp(this.bgMinY, this.bgMaxY, t2));
   }
 }

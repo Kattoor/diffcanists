@@ -2,25 +2,20 @@
 using System;
 using UnityEngine;
 
+#nullable disable
 namespace InGameCodeEditor.Lexer
 {
   [Serializable]
   public sealed class NumberGroupMatch : MatchLexer
   {
+    [NonSerialized]
+    private string htmlColor;
     [Tooltip("Should numbers be highlighted")]
     public bool highlightNumbers = true;
     [Tooltip("The color that all numbers will be highlighted with")]
     public Color highlightColor = Color.black;
-    [NonSerialized]
-    private string htmlColor;
 
-    public bool HasNumberHighlighting
-    {
-      get
-      {
-        return this.highlightNumbers;
-      }
-    }
+    public bool HasNumberHighlighting => this.highlightNumbers;
 
     public override string HTMLColor
     {
@@ -32,10 +27,7 @@ namespace InGameCodeEditor.Lexer
       }
     }
 
-    public override void Invalidate()
-    {
-      this.htmlColor = (string) null;
-    }
+    public override void Invalidate() => this.htmlColor = (string) null;
 
     public override bool IsImplicitMatch(ILexer lexer)
     {
@@ -51,7 +43,7 @@ namespace InGameCodeEditor.Lexer
         }
         else
         {
-          lexer.Rollback(-1);
+          lexer.Rollback();
           break;
         }
       }

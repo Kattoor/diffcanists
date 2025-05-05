@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+#nullable disable
 namespace UnityThreading
 {
   public static class TaskExtension
@@ -324,10 +325,10 @@ namespace UnityThreading
 
     public static Task Then(this Task that, Task followingTask)
     {
-      TaskDistributor taskDistributor = (TaskDistributor) null;
+      TaskDistributor target = (TaskDistributor) null;
       if (ThreadBase.CurrentThread is TaskWorker)
-        taskDistributor = ((TaskWorker) ThreadBase.CurrentThread).TaskDistributor;
-      return that.Then(followingTask, (DispatcherBase) taskDistributor);
+        target = ((TaskWorker) ThreadBase.CurrentThread).TaskDistributor;
+      return that.Then(followingTask, (DispatcherBase) target);
     }
 
     public static Task Then(this Task that, Task followingTask, DispatcherBase target)
@@ -357,10 +358,7 @@ namespace UnityThreading
       return that;
     }
 
-    public static Task<T> As<T>(this Task that)
-    {
-      return (Task<T>) that;
-    }
+    public static Task<T> As<T>(this Task that) => (Task<T>) that;
 
     public static IEnumerable<Task> ContinueWhenAnyEnded(
       this IEnumerable<Task> tasks,

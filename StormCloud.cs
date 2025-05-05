@@ -2,12 +2,13 @@
 using System;
 using UnityEngine;
 
+#nullable disable
 public class StormCloud : MonoBehaviour
 {
-  public float speed = 1f;
   public StormCloud.CloudUpdate[] clouds;
   private bool back;
   private float t;
+  public float speed = 1f;
 
   private void Start()
   {

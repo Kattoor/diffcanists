@@ -1,6 +1,7 @@
 
 using System;
 
+#nullable disable
 [Serializable]
 public enum ExplosionCutout
 {
@@ -83,4 +84,5 @@ public enum ExplosionCutout
   Pyramid,
   Sandy_Shores,
   Entomb,
+  Sacrifcial_Altar,
 }

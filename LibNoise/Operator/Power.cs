@@ -1,6 +1,7 @@
 
 using System;
 
+#nullable disable
 namespace LibNoise.Operator
 {
   public class Power : ModuleBase

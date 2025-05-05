@@ -1,4 +1,5 @@
 
+#nullable disable
 namespace WebGLSupport
 {
   public enum LineType

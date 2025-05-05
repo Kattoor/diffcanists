@@ -1,4 +1,5 @@
 
+#nullable disable
 namespace ChessConsole
 {
   public struct ChessMove
@@ -7,21 +8,9 @@ namespace ChessConsole
     public byte combined;
     public float time;
 
-    public int from
-    {
-      get
-      {
-        return (int) this.combined & 63;
-      }
-    }
+    public int from => (int) this.combined & 63;
 
-    public PromoteOptions promotion
-    {
-      get
-      {
-        return (PromoteOptions) (((int) this.combined & 192) >> 6);
-      }
-    }
+    public PromoteOptions promotion => (PromoteOptions) (((int) this.combined & 192) >> 6);
 
     public void Serialize(myBinaryWriter w)
     {
@@ -40,9 +29,6 @@ namespace ChessConsole
       };
     }
 
-    public bool Same(ChessMove b)
-    {
-      return (int) this.combined == (int) b.combined;
-    }
+    public bool Same(ChessMove b) => (int) this.combined == (int) b.combined;
   }
 }

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
+#nullable disable
 namespace Ninja.WebSockets.Internal
 {
   internal static class WebSocketFrameReader

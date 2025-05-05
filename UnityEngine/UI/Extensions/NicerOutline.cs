@@ -1,6 +1,7 @@
 
 using System.Collections.Generic;
 
+#nullable disable
 namespace UnityEngine.UI.Extensions
 {
   [AddComponentMenu("UI/Effects/Extensions/Nicer Outline")]
@@ -15,10 +16,7 @@ namespace UnityEngine.UI.Extensions
 
     public Color effectColor
     {
-      get
-      {
-        return this.m_EffectColor;
-      }
+      get => this.m_EffectColor;
       set
       {
         this.m_EffectColor = value;
@@ -30,10 +28,7 @@ namespace UnityEngine.UI.Extensions
 
     public Vector2 effectDistance
     {
-      get
-      {
-        return this.m_EffectDistance;
-      }
+      get => this.m_EffectDistance;
       set
       {
         if ((double) value.x > 600.0)
@@ -55,10 +50,7 @@ namespace UnityEngine.UI.Extensions
 
     public bool useGraphicAlpha
     {
-      get
-      {
-        return this.m_UseGraphicAlpha;
-      }
+      get => this.m_UseGraphicAlpha;
       set
       {
         this.m_UseGraphicAlpha = value;

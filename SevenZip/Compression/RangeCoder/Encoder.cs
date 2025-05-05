@@ -1,6 +1,7 @@
 
 using System.IO;
 
+#nullable disable
 namespace SevenZip.Compression.RangeCoder
 {
   internal class Encoder
@@ -13,15 +14,9 @@ namespace SevenZip.Compression.RangeCoder
     private byte _cache;
     private long StartPosition;
 
-    public void SetStream(Stream stream)
-    {
-      this.Stream = stream;
-    }
+    public void SetStream(Stream stream) => this.Stream = stream;
 
-    public void ReleaseStream()
-    {
-      this.Stream = (Stream) null;
-    }
+    public void ReleaseStream() => this.Stream = (Stream) null;
 
     public void Init()
     {
@@ -38,15 +33,9 @@ namespace SevenZip.Compression.RangeCoder
         this.ShiftLow();
     }
 
-    public void FlushStream()
-    {
-      this.Stream.Flush();
-    }
+    public void FlushStream() => this.Stream.Flush();
 
-    public void CloseStream()
-    {
-      this.Stream.Close();
-    }
+    public void CloseStream() => this.Stream.Close();
 
     public void Encode(uint start, uint size, uint total)
     {

@@ -2,6 +2,7 @@
 using System;
 using System.Net;
 
+#nullable disable
 namespace Hazel.Udp
 {
   public class BroadcastPacket
@@ -17,9 +18,6 @@ namespace Hazel.Udp
       this.ReceiveTime = DateTime.Now;
     }
 
-    public string GetAddress()
-    {
-      return this.Sender.Address.ToString();
-    }
+    public string GetAddress() => this.Sender.Address.ToString();
   }
 }

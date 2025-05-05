@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+#nullable disable
 public class ButtonSteamStore : MonoBehaviour
 {
   public UIOnHover uiOnHover;
@@ -21,6 +22,6 @@ public class ButtonSteamStore : MonoBehaviour
 
   public static string ConvertCentsToDollars(int cents)
   {
-    return ((Decimal) cents / new Decimal(1000, 0, 0, false, (byte) 1)).ToString("C2");
+    return ((Decimal) cents / 100.0M).ToString("C2");
   }
 }

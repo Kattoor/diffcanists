@@ -1,6 +1,7 @@
 
 using System;
 
+#nullable disable
 namespace Hazel
 {
   public class DataReceivedEventArgs : EventArgs, IRecyclable
@@ -26,9 +27,6 @@ namespace Hazel
       this.SendOption = sendOption;
     }
 
-    public void Recycle()
-    {
-      DataReceivedEventArgs.objectPool.PutObject(this);
-    }
+    public void Recycle() => DataReceivedEventArgs.objectPool.PutObject(this);
   }
 }

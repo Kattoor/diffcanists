@@ -1,4 +1,5 @@
 
+#nullable disable
 namespace Ninja.WebSockets.Internal
 {
   internal enum WebSocketOpCode

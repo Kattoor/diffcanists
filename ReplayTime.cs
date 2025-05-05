@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+#nullable disable
 public class ReplayTime : MonoBehaviour
 {
   private byte lastPlayersTurn = byte.MaxValue;

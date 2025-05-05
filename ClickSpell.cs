@@ -7,10 +7,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+#nullable disable
 public class ClickSpell : MonoBehaviour
 {
-  public static float curAlpha = 1f;
-  public static bool isTransparent = false;
   public TMP_Text selectedSpellNameText;
   public Image staffIcon;
   public Image bar_bg;
@@ -22,6 +21,8 @@ public class ClickSpell : MonoBehaviour
   public RectTransform backdrop;
   public List<Image> allImages;
   public List<TMP_Text> allText;
+  public static float curAlpha = 1f;
+  public static bool isTransparent = false;
   private SpellButton active;
   private int elementalOffset;
 
@@ -148,7 +149,7 @@ public class ClickSpell : MonoBehaviour
     string text = a.txtName.text;
     if (string.IsNullOrEmpty(text))
       return;
-    (HUD.instance.textSpellDescription.text, HUD.instance.textSpellExtraText.text) = Descriptions.GetSpellDescription(text, slot, false);
+    (HUD.instance.textSpellDescription.text, HUD.instance.textSpellExtraText.text) = Descriptions.GetSpellDescription(text, slot);
     HUD.instance.ShowPanelDescription();
   }
 
@@ -176,10 +177,7 @@ public class ClickSpell : MonoBehaviour
     this.OnPointerExit(this.active);
   }
 
-  public static void Unselect()
-  {
-    ClickSpell.Instance.OnClickIndex(-1);
-  }
+  public static void Unselect() => ClickSpell.Instance.OnClickIndex(-1);
 
   public bool OnClickIndex(int i)
   {
@@ -222,7 +220,7 @@ public class ClickSpell : MonoBehaviour
     if ((UnityEngine.Object) Player.Instance == (UnityEngine.Object) null)
       return;
     byte spellIndex = 0;
-    string spellName = ClickSpell.GetSpellName(Player.Instance.selected.inWater ? Player.Instance.person.first()?.GetAvailableGate(ref spellIndex, 0)?.spell ?? Inert.Instance.waterGate.spell : Player.Instance.selected.spells[i].spell, Player.Instance.selected);
+    string spellName = ClickSpell.GetSpellName(Player.Instance.selected.inWater ? Player.Instance.person.first()?.GetAvailableGate(ref spellIndex)?.spell ?? Inert.Instance.waterGate.spell : Player.Instance.selected.spells[i].spell, Player.Instance.selected);
     this.selectedSpellNameText.text = spellName;
     this.selectedSpellImage.SetVisual(spellName);
     AudioManager.Play(AudioManager.instance.clipSelectSpell[(int) Player.Instance.selected.spells[i].spell.bookOf]);
@@ -284,32 +282,32 @@ public class ClickSpell : MonoBehaviour
   public void SetSpells()
   {
     this.elementalOffset = 0;
-    int i = 0;
-    if ((UnityEngine.Object) Player.Instance == (UnityEngine.Object) null || (ZComponent) Player.Instance.selected == (object) null || (Player.Instance.person.controlled.Count == 0 || Player.Instance.selected.isDead))
+    int num = 0;
+    if ((UnityEngine.Object) Player.Instance == (UnityEngine.Object) null || (ZComponent) Player.Instance.selected == (object) null || Player.Instance.person.controlled.Count == 0 || Player.Instance.selected.isDead)
       return;
     this.secondSpellLine.anchoredPosition = Player.Instance.selected.inWater || Player.Instance.selected.spells.Count <= 20 ? new Vector2(0.0f, 91f) : (Player.Instance.selected.spells.Count <= 32 ? new Vector2(0.0f, 137f) : new Vector2(0.0f, 198f));
     if (Player.Instance.selected.inWater)
     {
       this.ExtraEffectsInWater();
-      i = 1;
+      num = 1;
     }
     else if (Client.game.ArcaneZero)
     {
-      for (; i < Player.Instance.selected.spells.Count; ++i)
+      for (; num < Player.Instance.selected.spells.Count; ++num)
       {
-        Spell spell = Player.Instance.selected.spells[i].spell;
-        this.ExtraEffects(i);
+        Spell spell = Player.Instance.selected.spells[num].spell;
+        this.ExtraEffects(num);
         if (spell.damage > 0 || spell.spellEnum == SpellEnum.Snowball)
-          this.spellButtons[i].ArcaneZero();
+          this.spellButtons[num].ArcaneZero();
       }
     }
     else
     {
-      for (; i < Player.Instance.selected.spells.Count; ++i)
-        this.ExtraEffects(i);
+      for (; num < Player.Instance.selected.spells.Count; ++num)
+        this.ExtraEffects(num);
     }
-    for (; i < this.spellButtons.Count; ++i)
-      this.spellButtons[i].Hide();
+    for (; num < this.spellButtons.Count; ++num)
+      this.spellButtons[num].Hide();
   }
 
   public void ExtraEffectsInWater()
@@ -381,6 +379,11 @@ public class ClickSpell : MonoBehaviour
       num4 = spell1.TurnsTillFirstUse - localTurn;
     if (spell1.LastTurnFired == localTurn || (spell1.RechargeTime > 0 || spell1.LastTurnFired > localTurn) && spell1.LastTurnFired + spell1.RechargeTime >= localTurn && (spell1.TurnsTillFirstUse > localTurn || spell1.LastTurnFired > -1))
       num4 = Mathf.Max(num4, spell1.LastTurnFired >= 0 ? spell1.RechargeTime - (localTurn - (spell1.LastTurnFired + 1)) : -1);
+    else if (spell1.LastTurnFired > localTurn)
+    {
+      num4 = Mathf.Max(spell1.LastTurnFired - localTurn);
+      Debug.Log((object) ("HI: " + (object) num4));
+    }
     bool maxedSummons = false;
     if (spell2.type == CastType.Placement && spell2.amount > 0 && Player.Instance.selected.parent.GetMinionCount() + spell2.amount > Player.Instance.selected.parent.GetMaxMinions())
     {
@@ -413,7 +416,7 @@ public class ClickSpell : MonoBehaviour
         return;
       }
     }
-    else if (spell2.type == CastType.Tower && (Player.Instance.selected.flying || (ZComponent) Player.Instance.selected.mount != (object) null || (Player.Instance.selected.FullArcane || Player.Instance.selected.radius > 30)))
+    else if (spell2.type == CastType.Tower && (Player.Instance.selected.flying || (ZComponent) Player.Instance.selected.mount != (object) null || Player.Instance.selected.FullArcane || Player.Instance.selected.radius > 30))
     {
       if (Player.Instance.selected.flying)
         this.spellButtons[i].error = 3;
@@ -425,14 +428,14 @@ public class ClickSpell : MonoBehaviour
     }
     if (!maxedSummons)
     {
-      int num3 = ClickSpell.Level3(spell2, spell2.spellEnum, Player.Instance.selected, spell1);
-      if (num3 != 0)
-        this.spellButtons[i].error = num3;
-      maxedSummons = (uint) num3 > 0U;
+      int num5 = ClickSpell.Level3(spell2, spell2.spellEnum, Player.Instance.selected, spell1);
+      if (num5 != 0)
+        this.spellButtons[i].error = num5;
+      maxedSummons = num5 != 0;
     }
     if (Player.Instance.selected.phantom)
     {
-      if (spell2.bookOf != BookOf.Arcane && spell2.bookOf != BookOf.Illusion && (!spell1.isPresent && spell2.spellEnum != SpellEnum.Spirit_Link) && spell2.spellEnum != SpellEnum.Spirit_Walk)
+      if (spell2.bookOf != BookOf.Arcane && spell2.bookOf != BookOf.Illusion && !spell1.isPresent && spell2.spellEnum != SpellEnum.Spirit_Link && spell2.spellEnum != SpellEnum.Spirit_Walk)
       {
         this.spellButtons[i].error = 104;
         maxedSummons = true;
@@ -597,7 +600,7 @@ public class ClickSpell : MonoBehaviour
   {
     if (c.inWater)
       return 0;
-    if (c.collider.gameObjectLayer == 21 && (s == SpellEnum.Arcane_Gate || s == SpellEnum.Santas_Magic || (s == SpellEnum.Blink || s == SpellEnum.The_ol_swaparoo) || s == SpellEnum.Sands_of_Time))
+    if (c.collider.gameObjectLayer == 21 && (s == SpellEnum.Arcane_Gate || s == SpellEnum.Santas_Magic || s == SpellEnum.Blink || s == SpellEnum.The_ol_swaparoo || s == SpellEnum.Sands_of_Time))
       return 135;
     if (c.type == CreatureType.Gargoyle && (!c.canMove && s != SpellEnum.Stone_Form || s == SpellEnum.Stone_Form && c.race == CreatureRace.Undead && c.canMove))
       return c.race == CreatureRace.Undead ? 7 : 112;
@@ -617,7 +620,7 @@ public class ClickSpell : MonoBehaviour
         return 4;
       return c.flying ? 6 : 0;
     }
-    if (s == SpellEnum.Shining_Power || s == SpellEnum.Lichdom || (s == SpellEnum.Apparition || s == SpellEnum.Bear_Form))
+    if (s == SpellEnum.Shining_Power || s == SpellEnum.Lichdom || s == SpellEnum.Apparition || s == SpellEnum.Bear_Form)
     {
       if ((ZComponent) c.tower != (object) null)
         return 1;
@@ -655,73 +658,82 @@ label_44:
       case SpellEnum.Social_Distancing:
         return c.socialDistancing ? 11 : 0;
       default:
-        if (s == SpellEnum.Arcane_Gate || s == SpellEnum.Santas_Magic || (s == SpellEnum.The_ol_swaparoo || s == SpellEnum.Blink) || s == SpellEnum.Sands_of_Time)
+        if (s == SpellEnum.Arcane_Gate || s == SpellEnum.Santas_Magic || s == SpellEnum.The_ol_swaparoo || s == SpellEnum.Blink || s == SpellEnum.Sands_of_Time)
           return c.entangled ? 12 : 0;
         if (s == SpellEnum.Charge || s == SpellEnum.Mine || s == SpellEnum.Rampage)
           return c.stunned ? 13 : 0;
-        if (s == SpellEnum.Arcane_Energiser)
-          return c.HasArcaneEnergizer ? 14 : 0;
-        if (s == SpellEnum.Frost_Leap)
-          return !((ZComponent) c.tower == (object) null) ? 1 : 0;
-        if (s == SpellEnum.Dark_Defences)
-          return !ZComponent.IsNull((ZComponent) c.pact) && !c.pact.isDead ? 15 : 0;
-        if (s == SpellEnum.Blood_Pact)
-          return c.hasDarkDefenses ? 16 : 0;
-        if (s == SpellEnum.Summon_Bees)
-          return !(c.GetType() == typeof (ZCreatureBeehive)) ? (c.parent.GetMaxMinions() <= c.parent.controlled.Count ? 101 : 0) : (((ZCreatureBeehive) c).bees.Count >= 3 ? (int) sbyte.MaxValue : 0);
-        if (s == SpellEnum.Blood_Pact)
-          return c.health > 25 ? 0 : 128;
-        if (s == SpellEnum.Resurrection)
-          return c.game.lastMinionToDie.Count <= 0 ? 113 : 0;
-        if (s == SpellEnum.Summon_Titan)
-          return c.parent.minionBookTitans.Count <= 0 ? 113 : 0;
-        if (s == SpellEnum.Drone_Strike)
-          return !slot.isPresent && c.familiarLevelCosmos < 5 ? 129 : 0;
-        if (s == SpellEnum.Summon_Dragon_Egg)
-          return !c.game.originalSpellsOnly ? 0 : 114;
-        if (s == SpellEnum.Seasonal)
-          return c.game.currentSeason == GameSeason.None ? 117 : 0;
-        if (s == SpellEnum.Faiere_Jump && ((ZComponent) c.rider != (object) null || (ZComponent) c.mount != (object) null || c.flying))
+        switch (s)
         {
-          if (c.flying)
-            return 3;
-          return !((ZComponent) c.rider != (object) null) ? 126 : 125;
-        }
-        if (s == SpellEnum.Faiere_Jump && (ZComponent) c.tower != (object) null)
-          return 1;
-        if (s == SpellEnum.Protection_Shield && c.shield >= 150 && !c.game.originalSpellsOnly)
-          return 131;
-        if (s == SpellEnum.Retribution && c.retribution > 0)
-          return 132;
-        if (s == SpellEnum.Sandbag)
-        {
-          if ((ZComponent) c.tower == (object) null && c.GetSpellSlot(SpellEnum.Sand_Castle) == null)
-            return 139;
-          break;
-        }
-        if (theSpell.MaxMinionCount > 0)
-        {
-          int num = 0;
-          using (List<ZCreature>.Enumerator enumerator = c.parent.controlled.GetEnumerator())
-          {
-            while (enumerator.MoveNext())
+          case SpellEnum.Arcane_Energiser:
+            return c.HasArcaneEnergizer ? 14 : 0;
+          case SpellEnum.Dark_Defences:
+            return !ZComponent.IsNull((ZComponent) c.pact) && !c.pact.isDead ? 15 : 0;
+          case SpellEnum.Frost_Leap:
+            return !((ZComponent) c.tower == (object) null) ? 1 : 0;
+          case SpellEnum.Blood_Pact:
+            return c.hasDarkDefenses ? 16 : 0;
+          default:
+            if (s == SpellEnum.Summon_Bees || s == SpellEnum.Summon_Undead_Bees)
+              return !(c.GetType() == typeof (ZCreatureBeehive)) ? (c.parent.GetMaxMinions() <= c.parent.controlled.Count ? 101 : 0) : (((ZCreatureBeehive) c).bees.Count >= 3 ? (int) sbyte.MaxValue : 0);
+            switch (s)
             {
-              ZCreature current = enumerator.Current;
-              if ((ZComponent) current != (object) null && current.spellEnum == s)
-              {
-                ++num;
-                if (num >= theSpell.MaxMinionCount)
-                  return 133;
-              }
+              case SpellEnum.Summon_Dragon_Egg:
+                return !c.game.originalSpellsOnly ? 0 : 114;
+              case SpellEnum.Blood_Pact:
+                return c.health > 25 ? 0 : 128;
+              case SpellEnum.Resurrection:
+                return c.game.lastMinionToDie.Count <= 0 ? 113 : 0;
+              case SpellEnum.Seasonal:
+                return c.game.currentSeason == GameSeason.None ? 117 : 0;
+              case SpellEnum.Drone_Strike:
+                return !slot.isPresent && c.isPawn && c.familiarLevelCosmos < 5 ? 129 : 0;
+              case SpellEnum.Summon_Titan:
+                return c.parent.minionBookTitans.Count <= 0 ? 113 : 0;
+              default:
+                if (s == SpellEnum.Faiere_Jump && ((ZComponent) c.rider != (object) null || (ZComponent) c.mount != (object) null || c.flying))
+                {
+                  if (c.flying)
+                    return 3;
+                  return !((ZComponent) c.rider != (object) null) ? 126 : 125;
+                }
+                if (s == SpellEnum.Faiere_Jump && (ZComponent) c.tower != (object) null)
+                  return 1;
+                if (s == SpellEnum.Protection_Shield && c.shield >= 150 && !c.game.originalSpellsOnly)
+                  return 131;
+                if (s == SpellEnum.Retribution && c.retribution > 0)
+                  return 132;
+                if (s == SpellEnum.Sandbag)
+                {
+                  if ((ZComponent) c.tower == (object) null && c.GetSpellSlot(SpellEnum.Sand_Castle) == null)
+                    return 139;
+                  break;
+                }
+                if (theSpell.MaxMinionCount > 0)
+                {
+                  int num = 0;
+                  using (List<ZCreature>.Enumerator enumerator = c.parent.controlled.GetEnumerator())
+                  {
+                    while (enumerator.MoveNext())
+                    {
+                      ZCreature current = enumerator.Current;
+                      if ((ZComponent) current != (object) null && current.spellEnum == s)
+                      {
+                        ++num;
+                        if (num >= theSpell.MaxMinionCount)
+                          return 133;
+                      }
+                    }
+                    break;
+                  }
+                }
+                else
+                {
+                  if (s == SpellEnum.Storm_Shield && (ZComponent) c.stormShield != (object) null && c.stormShield.MaxTurnsAlive > 1000)
+                    return 136;
+                  break;
+                }
             }
             break;
-          }
-        }
-        else
-        {
-          if (s == SpellEnum.Storm_Shield && (ZComponent) c.stormShield != (object) null && c.stormShield.MaxTurnsAlive > 1000)
-            return 136;
-          break;
         }
     }
     return 0;
@@ -730,7 +742,6 @@ label_44:
   [Serializable]
   public class bg_image
   {
-    private static Color DarkGray = new Color(0.3f, 0.3f, 0.3f);
     public GameObject bg;
     public GameObject zero;
     public Image bgColor;
@@ -738,6 +749,7 @@ label_44:
     public TMP_Text txtName;
     public TMP_Text txtText;
     public string nameOfSpell;
+    private static Color DarkGray = new Color(0.3f, 0.3f, 0.3f);
 
     public void SetVisual(string s)
     {

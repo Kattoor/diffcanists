@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+#nullable disable
 namespace LibNoise.Generator
 {
   public class RidgedMultifractal : ModuleBase
@@ -13,8 +14,8 @@ namespace LibNoise.Generator
     private double _exponent = 1.0;
     private double _gain = 2.0;
     private double _offset = 1.0;
-    private readonly double[] _weights = new double[30];
     private int _seed;
+    private readonly double[] _weights = new double[30];
 
     public RidgedMultifractal()
       : base(0)
@@ -39,22 +40,13 @@ namespace LibNoise.Generator
 
     public double Frequency
     {
-      get
-      {
-        return this._frequency;
-      }
-      set
-      {
-        this._frequency = value;
-      }
+      get => this._frequency;
+      set => this._frequency = value;
     }
 
     public double Lacunarity
     {
-      get
-      {
-        return this._lacunarity;
-      }
+      get => this._lacunarity;
       set
       {
         this._lacunarity = value;
@@ -64,74 +56,38 @@ namespace LibNoise.Generator
 
     public LibNoise.QualityMode Quality
     {
-      get
-      {
-        return this._quality;
-      }
-      set
-      {
-        this._quality = value;
-      }
+      get => this._quality;
+      set => this._quality = value;
     }
 
     public int OctaveCount
     {
-      get
-      {
-        return this._octaveCount;
-      }
-      set
-      {
-        this._octaveCount = Mathf.Clamp(value, 1, 30);
-      }
+      get => this._octaveCount;
+      set => this._octaveCount = Mathf.Clamp(value, 1, 30);
     }
 
     public double SpectralWeightsExponent
     {
-      get
-      {
-        return this._exponent;
-      }
-      set
-      {
-        this._exponent = value;
-      }
+      get => this._exponent;
+      set => this._exponent = value;
     }
 
     public double Gain
     {
-      get
-      {
-        return this._gain;
-      }
-      set
-      {
-        this._gain = value;
-      }
+      get => this._gain;
+      set => this._gain = value;
     }
 
     public double Offset
     {
-      get
-      {
-        return this._offset;
-      }
-      set
-      {
-        this._offset = value;
-      }
+      get => this._offset;
+      set => this._offset = value;
     }
 
     public int Seed
     {
-      get
-      {
-        return this._seed;
-      }
-      set
-      {
-        this._seed = value;
-      }
+      get => this._seed;
+      set => this._seed = value;
     }
 
     private void UpdateWeights()

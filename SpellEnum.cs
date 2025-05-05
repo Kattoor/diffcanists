@@ -1,4 +1,5 @@
 
+#nullable disable
 public enum SpellEnum
 {
   Player = -2, // 0xFFFFFFFE
@@ -329,4 +330,28 @@ public enum SpellEnum
   Entomb = 323, // 0x00000143
   Tomato_Emoji = 324, // 0x00000144
   Zombie_Dragon = 325, // 0x00000145
+  Screaming_Skull = 326, // 0x00000146
+  Tombstone_Curse = 327, // 0x00000147
+  Flesh_Bomb = 328, // 0x00000148
+  Consume_Soul = 329, // 0x00000149
+  Plague_Hive = 330, // 0x0000014A
+  Infectious_Bite = 331, // 0x0000014B
+  Beckoning_Dead = 332, // 0x0000014C
+  Catacombs_of_the_Dead = 333, // 0x0000014D
+  Conjure_Reaper = 334, // 0x0000014E
+  Commander_of_Undeath = 335, // 0x0000014F
+  Sudden_Death = 336, // 0x00000150
+  Curse_of_Haute = 337, // 0x00000151
+  Passage_Ways = 338, // 0x00000152
+  Summon_Zombie = 339, // 0x00000153
+  Sacrificial_Altar = 340, // 0x00000154
+  Reap = 341, // 0x00000155
+  Cleave = 342, // 0x00000156
+  Sudden_Death_Shrapnel = 343, // 0x00000157
+  Summon_Undead_Bees = 344, // 0x00000158
+  Summon_Queen_Bee = 345, // 0x00000159
+  Summon_Flesh_Golem = 346, // 0x0000015A
+  Call_of_the_Dead = 347, // 0x0000015B
+  Deaths_Doorway = 348, // 0x0000015C
+  Zombie_Charge = 349, // 0x0000015D
 }

@@ -3,21 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+#nullable disable
 public class GargoyalObj : MonoBehaviour
 {
-  private bool flying = true;
-  private bool up = true;
   public List<SpriteRenderer> sprites;
   public float wingStartRot;
   public float wingStartRotEnd;
   public Transform leftWing;
   public Transform rightWing;
+  private bool flying = true;
   private float f;
+  private bool up = true;
 
-  private void Awake()
-  {
-    this.ToggleFlying(true);
-  }
+  private void Awake() => this.ToggleFlying(true);
 
   public void SetColor(bool flying, float v)
   {

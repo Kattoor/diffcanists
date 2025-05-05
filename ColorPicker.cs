@@ -2,25 +2,23 @@
 using System;
 using UnityEngine;
 
+#nullable disable
 public class ColorPicker : MonoBehaviour
 {
-  private float _alpha = 1f;
-  public ColorChangedEvent onValueChangedPUBLIC = new ColorChangedEvent();
-  public ColorChangedEvent onValueChanged = new ColorChangedEvent();
-  public HSVChangedEvent onHSVChanged = new HSVChangedEvent();
   private float _hue;
   private float _saturation;
   private float _brightness;
   private float _red;
   private float _green;
   private float _blue;
+  private float _alpha = 1f;
+  public ColorChangedEvent onValueChangedPUBLIC = new ColorChangedEvent();
+  public ColorChangedEvent onValueChanged = new ColorChangedEvent();
+  public HSVChangedEvent onHSVChanged = new HSVChangedEvent();
 
   public Color CurrentColor
   {
-    get
-    {
-      return new Color(this._red, this._green, this._blue, this._alpha);
-    }
+    get => new Color(this._red, this._green, this._blue, this._alpha);
     set
     {
       if (this.CurrentColor == value)
@@ -49,17 +47,11 @@ public class ColorPicker : MonoBehaviour
     }
   }
 
-  private void Start()
-  {
-    this.SendChangedEventNoNotify();
-  }
+  private void Start() => this.SendChangedEventNoNotify();
 
   public float H
   {
-    get
-    {
-      return this._hue;
-    }
+    get => this._hue;
     set
     {
       if ((double) this._hue == (double) value)
@@ -72,10 +64,7 @@ public class ColorPicker : MonoBehaviour
 
   public float S
   {
-    get
-    {
-      return this._saturation;
-    }
+    get => this._saturation;
     set
     {
       if ((double) this._saturation == (double) value)
@@ -88,10 +77,7 @@ public class ColorPicker : MonoBehaviour
 
   public float V
   {
-    get
-    {
-      return this._brightness;
-    }
+    get => this._brightness;
     set
     {
       if ((double) this._brightness == (double) value)
@@ -104,10 +90,7 @@ public class ColorPicker : MonoBehaviour
 
   public float R
   {
-    get
-    {
-      return this._red;
-    }
+    get => this._red;
     set
     {
       if ((double) this._red == (double) value)
@@ -120,10 +103,7 @@ public class ColorPicker : MonoBehaviour
 
   public float G
   {
-    get
-    {
-      return this._green;
-    }
+    get => this._green;
     set
     {
       if ((double) this._green == (double) value)
@@ -136,10 +116,7 @@ public class ColorPicker : MonoBehaviour
 
   public float B
   {
-    get
-    {
-      return this._blue;
-    }
+    get => this._blue;
     set
     {
       if ((double) this._blue == (double) value)
@@ -152,10 +129,7 @@ public class ColorPicker : MonoBehaviour
 
   private float A
   {
-    get
-    {
-      return this._alpha;
-    }
+    get => this._alpha;
     set
     {
       if ((double) this._alpha == (double) value)

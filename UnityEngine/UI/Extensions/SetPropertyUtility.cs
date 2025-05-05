@@ -1,11 +1,12 @@
 
+#nullable disable
 namespace UnityEngine.UI.Extensions
 {
   internal static class SetPropertyUtility
   {
     public static bool SetColor(ref Color currentValue, Color newValue)
     {
-      if ((double) currentValue.r == (double) newValue.r && (double) currentValue.g == (double) newValue.g && ((double) currentValue.b == (double) newValue.b && (double) currentValue.a == (double) newValue.a))
+      if ((double) currentValue.r == (double) newValue.r && (double) currentValue.g == (double) newValue.g && (double) currentValue.b == (double) newValue.b && (double) currentValue.a == (double) newValue.a)
         return false;
       currentValue = newValue;
       return true;

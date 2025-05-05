@@ -8,19 +8,17 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
+#nullable disable
 public class ChooseJsonDialog : MonoBehaviour
 {
-  public static ChooseJsonDialog Instance = (ChooseJsonDialog) null;
-  private static string prefCustom = "prefcustomtut2";
-  private string selectedBook = "";
-  internal string selectedFilePath = "";
-  private int selectedDefault = -1;
-  private string subDir = "";
   public GameObject buttonOpenFileExplorer;
   public InputFieldPlus input;
   public RectTransform container;
   public GameObject pfabBook;
   public UIOnHover buttonSelect;
+  private string selectedBook = "";
+  internal string selectedFilePath = "";
+  private int selectedDefault = -1;
   private GameObject selectedGameObject;
   public UIOnHover buttonDelete;
   public UIOnHover buttonRename;
@@ -36,10 +34,13 @@ public class ChooseJsonDialog : MonoBehaviour
   [Header("Folders")]
   public RectTransform containerFolder;
   public GameObject pfabFolder;
+  public static ChooseJsonDialog Instance = (ChooseJsonDialog) null;
   private float lastClick;
   internal ChooseJsonDialog.Viewing custom;
   private Action<string, Tutorial, int> onEnd;
   private Action<string, string, int> onEnd2;
+  private static string prefCustom = "prefcustomtut2";
+  private string subDir = "";
 
   public static void Create(
     bool saving,
@@ -61,7 +62,7 @@ public class ChooseJsonDialog : MonoBehaviour
     {
       andApply.input.onEnd.AddListener(new UnityAction<string>(andApply.OnEndEdit));
       andApply.input.gameObject.SetActive(true);
-      andApply.input.SetAsActive(true);
+      andApply.input.SetAsActive();
     }
     else
     {
@@ -79,20 +80,20 @@ public class ChooseJsonDialog : MonoBehaviour
     if (this.custom != ChooseJsonDialog.Viewing.Default || this.selectedDefault < 0)
       return;
     int selectedDefault = this.selectedDefault;
-    this.Load("");
+    this.Load();
     this.selectedDefault = -1;
     this.PreviewDefaultBook(selectedDefault);
   }
 
   public static bool HasCustomTutorials()
   {
-    return Directory.Exists(ChooseJsonDialog.GetPath) && (uint) Directory.GetFiles(ChooseJsonDialog.GetPath, "*", SearchOption.AllDirectories).Length > 0U;
+    return Directory.Exists(ChooseJsonDialog.GetPath) && Directory.GetFiles(ChooseJsonDialog.GetPath, "*", SearchOption.AllDirectories).Length != 0;
   }
 
   public void UpdateCustomButtons()
   {
     foreach (GameObject gameObject in this.hideCustom)
-      gameObject.SetActive((uint) this.custom > 0U);
+      gameObject.SetActive(this.custom != 0);
     GameObject openFileExplorer = this.buttonOpenFileExplorer;
     if (openFileExplorer != null)
       openFileExplorer.HideIfWebGL();
@@ -125,7 +126,7 @@ public class ChooseJsonDialog : MonoBehaviour
     this.selectedFilePath = "";
     this.buttonSelect.Interactable(false);
     this.UpdateCustomButtons();
-    this.Load("");
+    this.Load();
   }
 
   public void Awake()
@@ -139,10 +140,7 @@ public class ChooseJsonDialog : MonoBehaviour
     openFileExplorer.HideIfWebGL();
   }
 
-  private void Start()
-  {
-    this.Load("");
-  }
+  private void Start() => this.Load();
 
   private void OnDestroy()
   {
@@ -192,7 +190,7 @@ public class ChooseJsonDialog : MonoBehaviour
       gameObject.GetComponent<TextMeshProUGUI>().text = ss;
       gameObject.GetComponent<UIOnHover>().onRightClick.AddListener((UnityAction) (() => this.OnRightClick(dir, gameObject)));
     });
-    myContextMenu.AddInput(a, (string) null, false);
+    myContextMenu.AddInput(a);
   }
 
   public void OnRightClick(string s, GameObject gameObject)
@@ -200,10 +198,9 @@ public class ChooseJsonDialog : MonoBehaviour
     if (!File.Exists(s))
       return;
     MyContextMenu myContextMenu = MyContextMenu.Show();
-    myContextMenu.AddSeperator("--------------------------");
+    myContextMenu.AddSeperator();
     myContextMenu.AddItem("Rename", (Action) (() => MyContextMenu.Show().AddInput((Action<string>) (ss =>
     {
-      ChooseJsonDialog.\u003C\u003Ec__DisplayClass40_0 cDisplayClass400 = this;
       if (string.IsNullOrEmpty(ss))
         return;
       string dir = s.Substring(0, s.Length - Path.GetFileName(s).Length) + ss + Path.GetExtension(s);
@@ -212,14 +209,14 @@ public class ChooseJsonDialog : MonoBehaviour
       gameObject.GetComponent<UIOnHover>().onRightClick.RemoveAllListeners();
       gameObject.name = dir;
       gameObject.GetComponent<TextMeshProUGUI>().text = ss;
-      gameObject.GetComponent<UIOnHover>().onRightClick.AddListener((UnityAction) (() => cDisplayClass400.\u003C\u003E4__this.OnRightClick(dir, cDisplayClass400.gameObject)));
-    }), (string) null, false)), (Color) ColorScheme.GetColor(MyContextMenu.ColorYellow));
+      gameObject.GetComponent<UIOnHover>().onRightClick.AddListener((UnityAction) (() => this.OnRightClick(dir, gameObject)));
+    }))), (Color) ColorScheme.GetColor(MyContextMenu.ColorYellow));
     myContextMenu.AddItem("Delete " + Path.GetFileNameWithoutExtension(s), (Action) (() =>
     {
       Global.DeleteFile(s);
       UnityEngine.Object.Destroy((UnityEngine.Object) gameObject);
     }), (Color) ColorScheme.GetColor(MyContextMenu.ColorRed));
-    myContextMenu.Rebuild(false);
+    myContextMenu.Rebuild();
   }
 
   private static string GetPath
@@ -303,7 +300,7 @@ public class ChooseJsonDialog : MonoBehaviour
           UIOnHover component1 = gameObject1.GetComponent<UIOnHover>();
           component1.textNormalColor = Color.green;
           gameObject1.GetComponent<TMP_Text>().color = Color.green;
-          component1.onClick.AddListener((UnityAction) (() => this.Load("")));
+          component1.onClick.AddListener((UnityAction) (() => this.Load()));
           gameObject1.SetActive(true);
           GameObject gameObject2 = UnityEngine.Object.Instantiate<GameObject>(this.pfabFolder, (Transform) this.containerFolder);
           RectTransform rect = (RectTransform) gameObject2.transform;
@@ -340,11 +337,11 @@ public class ChooseJsonDialog : MonoBehaviour
           rect.localScale = new Vector3(1f, 1f, 1f);
           rect.GetComponent<TMP_Text>().text = directories[index].Substring(getPath.Length);
           RectTransform rectTransform = rect;
-          string str1 = directories[index].Substring(length);
+          string str4 = directories[index].Substring(length);
           directorySeparatorChar = Path.DirectorySeparatorChar;
-          string str2 = directorySeparatorChar.ToString();
-          string str3 = str1 + str2;
-          rectTransform.name = str3;
+          string str5 = directorySeparatorChar.ToString();
+          string str6 = str4 + str5;
+          rectTransform.name = str6;
           gameObject.GetComponent<UIOnHover>().onClick.AddListener((UnityAction) (() => this.Load(rect.name)));
           gameObject.SetActive(true);
         }
@@ -378,7 +375,7 @@ public class ChooseJsonDialog : MonoBehaviour
       UnityEngine.Object.Destroy((UnityEngine.Object) this.container.GetChild(index).gameObject);
     for (int index = this.containerFolder.childCount - 1; index > 0; --index)
       UnityEngine.Object.Destroy((UnityEngine.Object) this.containerFolder.GetChild(index).gameObject);
-    TutorialFileRetriever.Get(false);
+    TutorialFileRetriever.Get();
     float y = 0.0f;
     foreach (TutorialFileRetriever.Tuts tuts in TutorialFileRetriever.List)
     {
@@ -393,7 +390,7 @@ public class ChooseJsonDialog : MonoBehaviour
       g.GetComponent<UIOnHover>().onClick.AddListener((UnityAction) (() =>
       {
         this.selectedGameObject = g;
-        this.PreviewPublicBook(x, true);
+        this.PreviewPublicBook(x);
       }));
       y -= transform.sizeDelta.y * transform.localScale.y;
       g.SetActive(true);
@@ -416,14 +413,16 @@ public class ChooseJsonDialog : MonoBehaviour
   {
     if (this.custom == ChooseJsonDialog.Viewing.Default)
     {
+      if (this.selectedDefault == -1)
+        return;
       int selectedDefault = this.selectedDefault;
-      Tutorial tutorial = Tutorial.FromCodeOnly(ClientResources.Instance._tutorials[this.selectedDefault].data.text);
+      Tutorial tutorial = Tutorial.FromCodeOnly(ClientResources.Instance._tutorials[this.selectedDefault].data.text, Path.GetFullPath(Global.GetTutorialPath + ClientResources.Instance._tutorials[this.selectedDefault].name + ".arcTutorial2"));
       Action<string, Tutorial, int> onEnd = this.onEnd;
       if (onEnd != null)
         onEnd(Global.GetTutorialPath + ClientResources.Instance._tutorials[this.selectedDefault].name + ".arcTutorial2", tutorial, selectedDefault);
       Action<string, string, int> onEnd2 = this.onEnd2;
       if (onEnd2 != null)
-        onEnd2(Global.GetTutorialPath + ClientResources.Instance._tutorials[this.selectedDefault].name + ".arcTutorial2", tutorial.ToCodeOnly(-1), -1);
+        onEnd2(Global.GetTutorialPath + ClientResources.Instance._tutorials[this.selectedDefault].name + ".arcTutorial2", tutorial.ToCodeOnly(), -1);
       this.Cancel();
     }
     else
@@ -565,10 +564,7 @@ public class ChooseJsonDialog : MonoBehaviour
     this.Cancel();
   }
 
-  public void OpenFileLocation()
-  {
-    Global.OpenFileLocation("Tutorials");
-  }
+  public void OpenFileLocation() => Global.OpenFileLocation("Tutorials");
 
   public void OnTouch()
   {

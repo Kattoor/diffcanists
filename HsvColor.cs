@@ -1,51 +1,27 @@
 
-public struct HsvColor
+#nullable disable
+public struct HsvColor(double h, double s, double v)
 {
-  public double H;
-  public double S;
-  public double V;
+  public double H = h;
+  public double S = s;
+  public double V = v;
 
   public float normalizedH
   {
-    get
-    {
-      return (float) this.H / 360f;
-    }
-    set
-    {
-      this.H = (double) value * 360.0;
-    }
+    get => (float) this.H / 360f;
+    set => this.H = (double) value * 360.0;
   }
 
   public float normalizedS
   {
-    get
-    {
-      return (float) this.S;
-    }
-    set
-    {
-      this.S = (double) value;
-    }
+    get => (float) this.S;
+    set => this.S = (double) value;
   }
 
   public float normalizedV
   {
-    get
-    {
-      return (float) this.V;
-    }
-    set
-    {
-      this.V = (double) value;
-    }
-  }
-
-  public HsvColor(double h, double s, double v)
-  {
-    this.H = h;
-    this.S = s;
-    this.V = v;
+    get => (float) this.V;
+    set => this.V = (double) value;
   }
 
   public override string ToString()

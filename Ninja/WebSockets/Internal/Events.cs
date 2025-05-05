@@ -4,9 +4,10 @@ using System.Diagnostics.Tracing;
 using System.Net.Security;
 using System.Net.WebSockets;
 
+#nullable disable
 namespace Ninja.WebSockets.Internal
 {
-  [EventSource(Guid = "7DE1A071-4F85-4DBD-8FB1-EE8D3845E087", Name = "Ninja-WebSockets")]
+  [EventSource(Name = "Ninja-WebSockets", Guid = "7DE1A071-4F85-4DBD-8FB1-EE8D3845E087")]
   internal sealed class Events : EventSource
   {
     public static Events Log = new Events();

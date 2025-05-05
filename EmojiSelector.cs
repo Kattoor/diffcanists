@@ -7,14 +7,12 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
+#nullable disable
 public class EmojiSelector : MonoBehaviour
 {
+  public InputFieldPlus targetInput;
   public int width = 6;
   public int height = 6;
-  private List<TMP_Text> items = new List<TMP_Text>();
-  private EmojiInfo.Cat favorites = new EmojiInfo.Cat();
-  private bool destroyOnEnd = true;
-  public InputFieldPlus targetInput;
   public TMP_Text pfabIcon;
   public TMP_InputField searchBox;
   public ScrollRect _chatScrollbar;
@@ -22,6 +20,8 @@ public class EmojiSelector : MonoBehaviour
   public RectTransform containerHidden;
   public UIOnHover buttonLocked;
   public UIOnHover buttonUnlocked;
+  private List<TMP_Text> items = new List<TMP_Text>();
+  private EmojiInfo.Cat favorites = new EmojiInfo.Cat();
   private bool initialized;
   private EmojiInfo.Cat active;
   private int first;
@@ -31,6 +31,7 @@ public class EmojiSelector : MonoBehaviour
   private int curStep;
   private EmojiInfo.Category curCategory;
   private Action<string> onend;
+  private bool destroyOnEnd = true;
   private bool isContextMenu;
   public const string prefLocked = "emojilocked";
 
@@ -120,7 +121,7 @@ public class EmojiSelector : MonoBehaviour
     }
     this.active = cat;
     this.curCategory = category;
-    this.SetSize(-1);
+    this.SetSize();
     this.Render(0, true);
     this._chatScrollbar.normalizedPosition = new Vector2(0.0f, 1f);
   }
@@ -176,7 +177,7 @@ public class EmojiSelector : MonoBehaviour
     }
     int f = Mathf.Clamp(num1, 0, this.active.list.Count - 1);
     this.curStep = f / this.width;
-    this.Render(f, false);
+    this.Render(f);
   }
 
   public void ClickLock()
@@ -195,10 +196,7 @@ public class EmojiSelector : MonoBehaviour
     this.buttonUnlocked.gameObject.SetActive(!v);
   }
 
-  public void RightClickEmoji(TMP_Text t)
-  {
-    this.AddToFavorites(t.name, t.text);
-  }
+  public void RightClickEmoji(TMP_Text t) => this.AddToFavorites(t.name, t.text);
 
   public void ClickEmoji(TMP_Text t)
   {
@@ -220,15 +218,9 @@ public class EmojiSelector : MonoBehaviour
     }
   }
 
-  public void OnHover(TMP_Text t)
-  {
-    MyToolTip.Show(t.name, -1f);
-  }
+  public void OnHover(TMP_Text t) => MyToolTip.Show(t.name);
 
-  public void OnLeave()
-  {
-    MyToolTip.Close();
-  }
+  public void OnLeave() => MyToolTip.Close();
 
   public void AddToFavorites(string n, string emoji)
   {
@@ -249,7 +241,7 @@ public class EmojiSelector : MonoBehaviour
     }
     if (this.curCategory == EmojiInfo.Category.Favorites)
     {
-      this.SetSize(-1);
+      this.SetSize();
       this.Render(this.first, true);
     }
     this.SaveFavorites();
@@ -269,10 +261,7 @@ public class EmojiSelector : MonoBehaviour
     }
   }
 
-  public void ClickDestroy()
-  {
-    UnityEngine.Object.Destroy((UnityEngine.Object) this.gameObject);
-  }
+  public void ClickDestroy() => UnityEngine.Object.Destroy((UnityEngine.Object) this.gameObject);
 
   public void LoadFavorites()
   {

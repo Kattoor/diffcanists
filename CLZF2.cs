@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+#nullable disable
 public static class CLZF2
 {
   private static readonly uint HLOG = 14;
@@ -22,9 +23,9 @@ public static class CLZF2
       length *= 2;
       output = new byte[length];
     }
-    byte[] numArray = new byte[count];
-    Buffer.BlockCopy((Array) output, 0, (Array) numArray, 0, count);
-    return numArray;
+    byte[] dst = new byte[count];
+    Buffer.BlockCopy((Array) output, 0, (Array) dst, 0, count);
+    return dst;
   }
 
   public static byte[] Decompress(byte[] inputBytes)
@@ -37,9 +38,9 @@ public static class CLZF2
       length *= 2;
       output = new byte[length];
     }
-    byte[] numArray = new byte[count];
-    Buffer.BlockCopy((Array) output, 0, (Array) numArray, 0, count);
-    return numArray;
+    byte[] dst = new byte[count];
+    Buffer.BlockCopy((Array) output, 0, (Array) dst, 0, count);
+    return dst;
   }
 
   public static int lzf_compress(byte[] input, ref byte[] output)
@@ -47,111 +48,111 @@ public static class CLZF2
     int length1 = input.Length;
     int length2 = output.Length;
     Array.Clear((Array) CLZF2.HashTable, 0, (int) CLZF2.HSIZE);
+    uint index1 = 0;
     uint num1 = 0;
-    uint num2 = 0;
-    uint num3 = (uint) input[(int) num1] << 8 | (uint) input[(int) num1 + 1];
-    int num4 = 0;
+    uint num2 = (uint) input[(int) index1] << 8 | (uint) input[(int) index1 + 1];
+    int num3 = 0;
 label_1:
     do
     {
-      if ((long) num1 < (long) (length1 - 2))
+      if ((long) index1 < (long) (length1 - 2))
       {
-        num3 = num3 << 8 | (uint) input[(int) num1 + 2];
-        long index1 = (long) ((num3 ^ num3 << 5) >> 24 - (int) CLZF2.HLOG - (int) num3 * 5 & CLZF2.HSIZE - 1U);
-        long index2 = CLZF2.HashTable[index1];
-        CLZF2.HashTable[index1] = (long) num1;
-        long num5;
-        if ((num5 = (long) num1 - index2 - 1L) < (long) CLZF2.MAX_OFF && (long) (num1 + 4U) < (long) length1 && (index2 > 0L && (int) input[index2] == (int) input[(int) num1]) && ((int) input[index2 + 1L] == (int) input[(int) num1 + 1] && (int) input[index2 + 2L] == (int) input[(int) num1 + 2]))
+        num2 = num2 << 8 | (uint) input[(int) index1 + 2];
+        long index2 = (long) ((num2 ^ num2 << 5) >> 24 - (int) CLZF2.HLOG - (int) num2 * 5 & CLZF2.HSIZE - 1U);
+        long index3 = CLZF2.HashTable[index2];
+        CLZF2.HashTable[index2] = (long) index1;
+        long num4;
+        if ((num4 = (long) index1 - index3 - 1L) < (long) CLZF2.MAX_OFF && (long) (index1 + 4U) < (long) length1 && index3 > 0L && (int) input[index3] == (int) input[(int) index1] && (int) input[index3 + 1L] == (int) input[(int) index1 + 1] && (int) input[index3 + 2L] == (int) input[(int) index1 + 2])
         {
-          uint num6 = 2;
-          uint num7 = (uint) length1 - num1 - num6;
-          uint num8 = num7 > CLZF2.MAX_REF ? CLZF2.MAX_REF : num7;
-          if ((long) num2 + (long) num4 + 1L + 3L >= (long) length2)
+          uint num5 = 2;
+          uint num6 = (uint) length1 - index1 - num5;
+          uint num7 = num6 > CLZF2.MAX_REF ? CLZF2.MAX_REF : num6;
+          if ((long) num1 + (long) num3 + 1L + 3L >= (long) length2)
             return 0;
           do
           {
-            ++num6;
+            ++num5;
           }
-          while (num6 < num8 && (int) input[index2 + (long) num6] == (int) input[(int) num1 + (int) num6]);
-          if (num4 != 0)
+          while (num5 < num7 && (int) input[index3 + (long) num5] == (int) input[(int) index1 + (int) num5]);
+          if (num3 != 0)
           {
-            output[(int) num2++] = (byte) (num4 - 1);
-            num4 = -num4;
+            output[(int) num1++] = (byte) (num3 - 1);
+            num3 = -num3;
             do
             {
-              output[(int) num2++] = input[(long) num1 + (long) num4];
+              output[(int) num1++] = input[(long) index1 + (long) num3];
             }
-            while (++num4 != 0);
+            while (++num3 != 0);
           }
-          uint num9 = num6 - 2U;
-          uint num10 = num1 + 1U;
-          uint num11;
-          if (num9 < 7U)
+          uint num8 = num5 - 2U;
+          uint num9 = index1 + 1U;
+          uint num10;
+          if (num8 < 7U)
           {
             byte[] numArray = output;
-            int index3 = (int) num2;
-            num11 = (uint) (index3 + 1);
-            int num12 = (int) (byte) ((ulong) (num5 >> 8) + (ulong) (num9 << 5));
-            numArray[index3] = (byte) num12;
+            int index4 = (int) num1;
+            num10 = (uint) (index4 + 1);
+            int num11 = (int) (byte) ((ulong) (num4 >> 8) + (ulong) (num8 << 5));
+            numArray[index4] = (byte) num11;
           }
           else
           {
             byte[] numArray1 = output;
-            int index3 = (int) num2;
-            uint num12 = (uint) (index3 + 1);
-            int num13 = (int) (byte) ((ulong) (num5 >> 8) + 224UL);
-            numArray1[index3] = (byte) num13;
+            int index5 = (int) num1;
+            uint num12 = (uint) (index5 + 1);
+            int num13 = (int) (byte) ((ulong) (num4 >> 8) + 224UL);
+            numArray1[index5] = (byte) num13;
             byte[] numArray2 = output;
-            int index4 = (int) num12;
-            num11 = (uint) (index4 + 1);
-            int num14 = (int) (byte) (num9 - 7U);
-            numArray2[index4] = (byte) num14;
+            int index6 = (int) num12;
+            num10 = (uint) (index6 + 1);
+            int num14 = (int) (byte) (num8 - 7U);
+            numArray2[index6] = (byte) num14;
           }
           byte[] numArray3 = output;
-          int index5 = (int) num11;
-          num2 = (uint) (index5 + 1);
-          int num15 = (int) (byte) num5;
-          numArray3[index5] = (byte) num15;
-          uint num16 = num10 + (num9 - 1U);
-          uint num17 = ((uint) input[(int) num16] << 8 | (uint) input[(int) num16 + 1]) << 8 | (uint) input[(int) num16 + 2];
-          CLZF2.HashTable[(int) ((num17 ^ num17 << 5) >> 24 - (int) CLZF2.HLOG - (int) num17 * 5) & (int) CLZF2.HSIZE - 1] = (long) num16;
-          uint num18 = num16 + 1U;
-          num3 = num17 << 8 | (uint) input[(int) num18 + 2];
-          CLZF2.HashTable[(int) ((num3 ^ num3 << 5) >> 24 - (int) CLZF2.HLOG - (int) num3 * 5) & (int) CLZF2.HSIZE - 1] = (long) num18;
-          num1 = num18 + 1U;
+          int index7 = (int) num10;
+          num1 = (uint) (index7 + 1);
+          int num15 = (int) (byte) num4;
+          numArray3[index7] = (byte) num15;
+          uint index8 = num9 + (num8 - 1U);
+          uint num16 = ((uint) input[(int) index8] << 8 | (uint) input[(int) index8 + 1]) << 8 | (uint) input[(int) index8 + 2];
+          CLZF2.HashTable[(int) ((num16 ^ num16 << 5) >> 24 - (int) CLZF2.HLOG - (int) num16 * 5) & (int) CLZF2.HSIZE - 1] = (long) index8;
+          uint num17 = index8 + 1U;
+          num2 = num16 << 8 | (uint) input[(int) num17 + 2];
+          CLZF2.HashTable[(int) ((num2 ^ num2 << 5) >> 24 - (int) CLZF2.HLOG - (int) num2 * 5) & (int) CLZF2.HSIZE - 1] = (long) num17;
+          index1 = num17 + 1U;
           continue;
         }
       }
-      else if ((long) num1 == (long) length1)
+      else if ((long) index1 == (long) length1)
         goto label_19;
-      ++num4;
-      ++num1;
+      ++num3;
+      ++index1;
     }
-    while ((long) num4 != (long) CLZF2.MAX_LIT);
-    if ((long) (num2 + 1U + CLZF2.MAX_LIT) >= (long) length2)
+    while ((long) num3 != (long) CLZF2.MAX_LIT);
+    if ((long) (num1 + 1U + CLZF2.MAX_LIT) >= (long) length2)
       return 0;
-    output[(int) num2++] = (byte) (CLZF2.MAX_LIT - 1U);
-    num4 = -num4;
+    output[(int) num1++] = (byte) (CLZF2.MAX_LIT - 1U);
+    num3 = -num3;
     do
     {
-      output[(int) num2++] = input[(long) num1 + (long) num4];
+      output[(int) num1++] = input[(long) index1 + (long) num3];
     }
-    while (++num4 != 0);
+    while (++num3 != 0);
     goto label_1;
 label_19:
-    if (num4 != 0)
+    if (num3 != 0)
     {
-      if ((long) num2 + (long) num4 + 1L >= (long) length2)
+      if ((long) num1 + (long) num3 + 1L >= (long) length2)
         return 0;
-      output[(int) num2++] = (byte) (num4 - 1);
-      int num5 = -num4;
+      output[(int) num1++] = (byte) (num3 - 1);
+      int num18 = -num3;
       do
       {
-        output[(int) num2++] = input[(long) num1 + (long) num5];
+        output[(int) num1++] = input[(long) index1 + (long) num18];
       }
-      while (++num5 != 0);
+      while (++num18 != 0);
     }
-    return (int) num2;
+    return (int) num1;
   }
 
   public static int lzf_decompress(byte[] input, ref byte[] output)
@@ -176,34 +177,34 @@ label_19:
       }
       else
       {
-        uint num4 = num3 >> 5;
-        int num5 = (int) num2 - (((int) num3 & 31) << 8) - 1;
-        if (num4 == 7U)
-          num4 += (uint) input[(int) num1++];
-        int num6 = num5 - (int) input[(int) num1++];
-        if ((long) (uint) ((int) num2 + (int) num4 + 2) > (long) length2 || num6 < 0)
+        uint num5 = num3 >> 5;
+        int num6 = (int) num2 - (((int) num3 & 31) << 8) - 1;
+        if (num5 == 7U)
+          num5 += (uint) input[(int) num1++];
+        int num7 = num6 - (int) input[(int) num1++];
+        if ((long) (uint) ((int) num2 + (int) num5 + 2) > (long) length2 || num7 < 0)
           return 0;
         byte[] numArray1 = output;
         int index1 = (int) num2;
-        uint num7 = (uint) (index1 + 1);
+        uint num8 = (uint) (index1 + 1);
         byte[] numArray2 = output;
-        int index2 = num6;
-        int num8 = index2 + 1;
-        int num9 = (int) numArray2[index2];
-        numArray1[index1] = (byte) num9;
+        int index2 = num7;
+        int num9 = index2 + 1;
+        int num10 = (int) numArray2[index2];
+        numArray1[index1] = (byte) num10;
         byte[] numArray3 = output;
-        int index3 = (int) num7;
+        int index3 = (int) num8;
         num2 = (uint) (index3 + 1);
         byte[] numArray4 = output;
-        int index4 = num8;
-        int num10 = index4 + 1;
-        int num11 = (int) numArray4[index4];
-        numArray3[index3] = (byte) num11;
+        int index4 = num9;
+        int num11 = index4 + 1;
+        int num12 = (int) numArray4[index4];
+        numArray3[index3] = (byte) num12;
         do
         {
-          output[(int) num2++] = output[num10++];
+          output[(int) num2++] = output[num11++];
         }
-        while (--num4 != 0U);
+        while (--num5 != 0U);
       }
     }
     while ((long) num1 < (long) length1);

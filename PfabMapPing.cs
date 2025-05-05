@@ -2,20 +2,23 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
+#nullable disable
 public class PfabMapPing : MonoBehaviour
 {
   public float duration = 2f;
-  public int segments = 100;
-  public float curRadius = 2f;
-  public float maxRadius = 30f;
-  public float minRadius = 2f;
-  public float speed = 1f;
   public SpriteRenderer img;
   public TMP_Text txt;
   public LineRenderer line;
   public SpriteRenderer imgMiniMap;
   public LineRenderer lineMiniMap;
+  public Image icon;
+  public int segments = 100;
+  public float curRadius = 2f;
+  public float maxRadius = 30f;
+  public float minRadius = 2f;
+  public float speed = 1f;
   private Vector3[] points;
   private Vector3[] points2;
 
@@ -51,8 +54,7 @@ public class PfabMapPing : MonoBehaviour
 
   private void Fade()
   {
-    Color color = this.txt.color;
-    color.a = this.duration;
+    Color color = this.txt.color with { a = this.duration };
     this.txt.color = color;
     this.img.color = color;
     this.line.startColor = color;
@@ -60,6 +62,10 @@ public class PfabMapPing : MonoBehaviour
     this.imgMiniMap.color = color;
     this.lineMiniMap.startColor = color;
     this.lineMiniMap.endColor = color;
+    this.icon.color = this.icon.color with
+    {
+      a = this.duration
+    };
   }
 
   private void DrawCircle()

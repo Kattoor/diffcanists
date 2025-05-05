@@ -2,9 +2,11 @@
 using System;
 using System.Collections.Generic;
 
+#nullable disable
 [Serializable]
 public class SpellsOnly
 {
+  public const byte _version = 2;
   public byte[] spells = new byte[16]
   {
     (byte) 0,
@@ -25,36 +27,42 @@ public class SpellsOnly
     (byte) 15
   };
   public byte fullBook;
-  public byte extraInfo;
+  public int altBooks;
 
-  public BookOf Elemental
+  public BookOf Elemental => (BookOf) ((int) this.fullBook - 1);
+
+  public bool UsingAltBook(BookOf b) => (this.altBooks & 1 << (int) (b & (BookOf) 31) & 1056) != 0;
+
+  public void ToggleAlt(BookOf b, bool v)
   {
-    get
-    {
-      return (BookOf) ((int) this.fullBook - 1);
-    }
+    if (v)
+      this.altBooks |= 1 << (int) (b & (BookOf) 31);
+    else
+      this.altBooks &= ~(1 << (int) (b & (BookOf) 31));
   }
 
   public bool SeasonsIsHoliday
   {
-    get
-    {
-      return ((uint) this.extraInfo & 1U) > 0U;
-    }
-    set
-    {
-      if (value)
-        this.extraInfo |= (byte) 1;
-      else
-        this.extraInfo &= (byte) 254;
-    }
+    get => this.UsingAltBook(BookOf.Seasons);
+    set => this.ToggleAlt(BookOf.Seasons, value);
+  }
+
+  public bool IsAlt(int spellIndex)
+  {
+    return spellIndex < (int) byte.MaxValue && spellIndex >= 0 && this.UsingAltBook((BookOf) (spellIndex / 12)) && Inert.Instance.altSpells.Length > spellIndex && (UnityEngine.Object) Inert.Instance.altSpells[spellIndex] != (UnityEngine.Object) null;
   }
 
   public static SpellsOnly Deserialize(myBinaryReader r)
   {
     SpellsOnly spellsOnly = new SpellsOnly();
     spellsOnly.fullBook = r.ReadByte();
-    spellsOnly.extraInfo = r.ReadByte();
+    if (r.ReadByte() < (byte) 2)
+    {
+      byte num = r.ReadByte();
+      spellsOnly.altBooks |= ((int) num & 1) != 0 ? 1024 : 0;
+    }
+    else
+      spellsOnly.altBooks = r.ReadInt32();
     for (int index = 0; index < 16; ++index)
       spellsOnly.spells[index] = r.ReadByte();
     return spellsOnly;
@@ -72,7 +80,8 @@ public class SpellsOnly
   public void Serialize(myBinaryWriter w)
   {
     w.Write(this.fullBook);
-    w.Write(this.extraInfo);
+    w.Write((byte) 2);
+    w.Write(this.altBooks);
     for (int index = 0; index < 16; ++index)
       w.Write(this.spells[index]);
   }
@@ -80,7 +89,7 @@ public class SpellsOnly
   public SpellsOnly Copy(SettingsPlayer b)
   {
     this.fullBook = b.fullBook;
-    this.extraInfo = b.extraInfo;
+    this.altBooks = b.altBooks;
     for (int index = 0; index < 16; ++index)
       this.spells[index] = b.spells[index];
     return this;

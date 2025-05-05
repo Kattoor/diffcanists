@@ -8,22 +8,31 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
+#nullable disable
 public class PopupRestrictions : MonoBehaviour
 {
   private List<Image> pool = new List<Image>();
   private List<UIOnHover> buttons = new List<UIOnHover>();
   private List<Image> ele = new List<Image>();
   private List<UIOnHover> ele_buttons = new List<UIOnHover>();
+  private List<Image> alt_pool = new List<Image>();
+  private List<UIOnHover> alt_buttons = new List<UIOnHover>();
+  private List<Image> alt_ele = new List<Image>();
+  private List<UIOnHover> alt_ele_buttons = new List<UIOnHover>();
   private Restrictions restrictions;
   public Image pfabImage;
   public Image pfabBook;
   public RectTransform containerBook;
+  public RectTransform containerAltBook;
   public RectTransform containerElementals;
+  public RectTransform containerAltElementals;
   public RectTransform container;
+  public RectTransform containerAlt;
   public TMP_Dropdown dropSpellType;
   public TMP_Dropdown dropCastType;
   public GameObject panelOptions;
   public GameObject butApply;
+  public TMP_Text txtViewing;
   private bool editing;
 
   public static PopupRestrictions Instance { get; private set; }
@@ -43,24 +52,34 @@ public class PopupRestrictions : MonoBehaviour
     andApply.CreateElementals();
   }
 
+  public void ToggleAltSpellVisibility()
+  {
+    bool activeSelf = this.container.gameObject.activeSelf;
+    this.container.gameObject.SetActive(!activeSelf);
+    this.containerBook.gameObject.SetActive(!activeSelf);
+    this.containerElementals.gameObject.SetActive(!activeSelf);
+    this.containerAlt.gameObject.SetActive(activeSelf);
+    this.containerAltBook.gameObject.SetActive(activeSelf);
+    this.containerAltElementals.gameObject.SetActive(activeSelf);
+    this.txtViewing.text = activeSelf ? "Normal Books" : "Alt Books";
+  }
+
   public void UpdateData(Restrictions r)
   {
     this.restrictions.Copy(r);
     for (int index = 0; index < this.pool.Count; ++index)
-      this.SpellEnabled(index, this.restrictions.availableSpells[index]);
+      this.SpellEnabled(index, this.restrictions.availableSpells[index], false);
     for (int index = 0; index < this.ele.Count; ++index)
-      this.ElementalEnabled(index, (uint) (this.restrictions.elementals & 1 << index) > 0U);
+      this.ElementalEnabled(index, (this.restrictions.elementals & 1 << index) != 0, false);
+    for (int index = 0; index < this.alt_pool.Count; ++index)
+      this.SpellEnabled(index, this.restrictions.altSpells[index], true);
+    for (int index = 0; index < this.alt_ele.Count; ++index)
+      this.ElementalEnabled(index, (this.restrictions.alternateEle & 1 << index) != 0, true);
   }
 
-  private void Edited()
-  {
-    this.butApply.SetActive(true);
-  }
+  private void Edited() => this.butApply.SetActive(true);
 
-  private void Awake()
-  {
-    PopupRestrictions.Instance = this;
-  }
+  private void Awake() => PopupRestrictions.Instance = this;
 
   private void OnDestroy()
   {
@@ -79,15 +98,15 @@ public class PopupRestrictions : MonoBehaviour
       if (Server._restrictions == null)
         Server._restrictions = new Restrictions();
       Server._restrictions.Copy(this.restrictions);
-      Client.connection.SendBytes(ClientResources.SerializeRestricitons(), SendOption.None);
+      Client.connection.SendBytes(ClientResources.SerializeRestricitons());
       ChatBox.SystemMessage("Restrictions Sent");
     }), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
     myContextMenu.AddItem("Random Restrictions", (Action) (() => this.SendRandomRestrictions(false, false)), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
     myContextMenu.AddItem("Casino Restrictions", (Action) (() => this.SendRandomRestrictions(false, true)), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
-    myContextMenu.AddSeperator("--------------------------");
+    myContextMenu.AddSeperator();
     myContextMenu.AddItem("Retrieve Random", (Action) (() => this.SendRandomRestrictions(true, false)), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
     myContextMenu.AddItem("Retrieve Casino", (Action) (() => this.SendRandomRestrictions(true, true)), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
-    myContextMenu.Rebuild(false);
+    myContextMenu.Rebuild();
   }
 
   public void SendRandomRestrictions(bool retrieve, bool casino)
@@ -102,11 +121,11 @@ public class PopupRestrictions : MonoBehaviour
         else if (!this.restrictions.AnyRestricted())
           w.Write(0);
         else
-          w.Write(1);
+          w.Write(2);
         w.Write(casino);
         this.restrictions.Serialize(w);
       }
-      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
+      Client.connection.SendBytes(memoryStream.ToArray());
       if (retrieve)
         ChatBox.SystemMessage("Retrieving..." + (casino ? "Casino" : "Random") + " restrictions");
       else
@@ -114,10 +133,7 @@ public class PopupRestrictions : MonoBehaviour
     }
   }
 
-  public void Close()
-  {
-    UnityEngine.Object.Destroy((UnityEngine.Object) this.gameObject);
-  }
+  public void Close() => UnityEngine.Object.Destroy((UnityEngine.Object) this.gameObject);
 
   public void ClickApply()
   {
@@ -163,14 +179,18 @@ public class PopupRestrictions : MonoBehaviour
   {
     this.restrictions.availableSpells.ResetAll();
     for (int index = 0; index < this.pool.Count; ++index)
-      this.SpellEnabled(index, false);
+      this.SpellEnabled(index, false, false);
+    for (int index = 0; index < this.alt_pool.Count; ++index)
+      this.SpellEnabled(index, false, true);
   }
 
   public void ClickEnableAll()
   {
     this.restrictions.availableSpells.SetAll();
     for (int index = 0; index < this.pool.Count; ++index)
-      this.SpellEnabled(index, true);
+      this.SpellEnabled(index, true, false);
+    for (int index = 0; index < this.alt_pool.Count; ++index)
+      this.SpellEnabled(index, true, true);
   }
 
   public void OnSpellType(int i)
@@ -207,54 +227,103 @@ public class PopupRestrictions : MonoBehaviour
 
   public void CreateHeaders()
   {
-    int num1 = 5;
-    int num2 = 0;
-    int num3 = (int) (RandomExtensions.LastBook() + 1);
-    for (int index = 0; index < num3; ++index)
+    int x1 = 5;
+    int y1 = 0;
+    int num = (int) (RandomExtensions.LastBook() + 1);
+    for (int index = 0; index < num; ++index)
     {
       Image image = UnityEngine.Object.Instantiate<Image>(this.pfabBook, (Transform) this.containerBook);
-      ((RectTransform) image.transform).anchoredPosition = new Vector2((float) num1, (float) num2);
+      ((RectTransform) image.transform).anchoredPosition = new Vector2((float) x1, (float) y1);
       image.sprite = ClientResources.Instance.spellBookIcons[index + 1];
       UIOnHover component = image.GetComponent<UIOnHover>();
       int e = index;
-      component.onEnter.AddListener((UnityAction) (() => this.Hover("Book of " + ((BookOf) e).ToString())));
+      component.onEnter.AddListener((UnityAction) (() => this.Hover("Book of " + ((BookOf) e).ToStringX())));
       component.onClick.AddListener((UnityAction) (() =>
       {
         if (!this.editing)
           return;
-        this.restrictions.ToggleBook(e);
+        this.restrictions.ToggleBook(e, false);
         this.Edited();
       }));
-      num1 += 42;
+      x1 += 42;
+      image.gameObject.SetActive(true);
+    }
+    int x2 = 5;
+    int y2 = 0;
+    for (int index = 0; index < num; ++index)
+    {
+      Image image = UnityEngine.Object.Instantiate<Image>(this.pfabBook, (Transform) this.containerAltBook);
+      ((RectTransform) image.transform).anchoredPosition = new Vector2((float) x2, (float) y2);
+      image.sprite = ClientResources.Instance.altSpellBookIcons[index + 1];
+      UIOnHover component = image.GetComponent<UIOnHover>();
+      int e = index;
+      if ((UnityEngine.Object) image.sprite != (UnityEngine.Object) ClientResources.Instance.clear)
+      {
+        component.onEnter.AddListener((UnityAction) (() => this.Hover("Book of " + ((BookOf) e).ToStringX(true))));
+        component.onClick.AddListener((UnityAction) (() =>
+        {
+          if (!this.editing)
+            return;
+          this.restrictions.ToggleBook(e, true);
+          this.Edited();
+        }));
+      }
+      x2 += 42;
       image.gameObject.SetActive(true);
     }
   }
 
   public void CreateElementals()
   {
-    int num1 = 5;
-    int num2 = 0;
-    int num3 = (int) (RandomExtensions.LastBook() + 1);
-    for (int index = 0; index < num3; ++index)
+    int x1 = 5;
+    int y1 = 0;
+    int num = (int) (RandomExtensions.LastBook() + 1);
+    for (int index = 0; index < num; ++index)
     {
       Image image = UnityEngine.Object.Instantiate<Image>(this.pfabBook, (Transform) this.containerElementals);
-      ((RectTransform) image.transform).anchoredPosition = new Vector2((float) num1, (float) num2);
+      ((RectTransform) image.transform).anchoredPosition = new Vector2((float) x1, (float) y1);
       image.sprite = ClientResources.Instance.spellBookIcons[index + 1];
       UIOnHover component = image.GetComponent<UIOnHover>();
       int e = index;
-      component.onEnter.AddListener((UnityAction) (() => this.Hover(((BookOf) e).ToString() + " Elemental")));
+      component.onEnter.AddListener((UnityAction) (() => this.Hover(((BookOf) e).ToStringX() + " Elemental")));
       component.onClick.AddListener((UnityAction) (() =>
       {
         if (!this.editing)
           return;
-        this.restrictions.ToggleElemental(e);
+        this.restrictions.ToggleElemental(e, false);
         this.Edited();
       }));
-      num1 += 42;
+      x1 += 42;
       image.gameObject.SetActive(true);
       this.ele.Add(image);
       this.ele_buttons.Add(component);
-      this.ElementalEnabled(e, (uint) (this.restrictions.elementals & 1 << e) > 0U);
+      this.ElementalEnabled(e, (this.restrictions.elementals & 1 << e) != 0, false);
+    }
+    int x2 = 5;
+    int y2 = 0;
+    for (int index = 0; index < num; ++index)
+    {
+      Image image = UnityEngine.Object.Instantiate<Image>(this.pfabBook, (Transform) this.containerAltElementals);
+      ((RectTransform) image.transform).anchoredPosition = new Vector2((float) x2, (float) y2);
+      image.sprite = ClientResources.Instance.altSpellBookIcons[index + 1];
+      UIOnHover component = image.GetComponent<UIOnHover>();
+      int e = index;
+      if ((UnityEngine.Object) image.sprite != (UnityEngine.Object) ClientResources.Instance.clear)
+      {
+        component.onEnter.AddListener((UnityAction) (() => this.Hover(((BookOf) e).ToStringX(true) + " Elemental")));
+        component.onClick.AddListener((UnityAction) (() =>
+        {
+          if (!this.editing)
+            return;
+          this.restrictions.ToggleElemental(e, true);
+          this.Edited();
+        }));
+      }
+      x2 += 42;
+      image.gameObject.SetActive(true);
+      this.alt_ele.Add(image);
+      this.alt_ele_buttons.Add(component);
+      this.ElementalEnabled(e, (this.restrictions.alternateEle & 1 << e) != 0, true);
     }
   }
 
@@ -262,57 +331,101 @@ public class PopupRestrictions : MonoBehaviour
   {
     int num1 = 0;
     int num2 = (int) (RandomExtensions.LastBook() + 1) * 12;
-    int num3 = 5;
-    int num4 = -5;
+    int x1 = 5;
+    int y1 = -5;
     for (int index = 0; index < num2; ++index)
     {
       Image g = UnityEngine.Object.Instantiate<Image>(this.pfabImage, (Transform) this.container);
       UIOnHover component = g.GetComponent<UIOnHover>();
-      g.rectTransform.anchoredPosition = new Vector2((float) num3, (float) num4);
+      g.rectTransform.anchoredPosition = new Vector2((float) x1, (float) y1);
       g.sprite = ClientResources.Instance._spellicons[index];
       int e = index;
       component.onClick.AddListener((UnityAction) (() =>
       {
         if (!this.editing)
           return;
-        this.restrictions.ToggleSpell(e);
+        this.restrictions.ToggleSpell(e, false);
         this.Edited();
       }));
       component.onEnter.AddListener((UnityAction) (() => this.Hover(g.sprite.name)));
       g.gameObject.SetActive(true);
       this.pool.Add(g);
       this.buttons.Add(component);
-      this.SpellEnabled(index, this.restrictions.availableSpells[index]);
+      this.SpellEnabled(index, this.restrictions.availableSpells[index], false);
       ++num1;
       if (index % 12 == 11)
       {
-        num3 += 42;
-        num4 = -5;
+        x1 += 42;
+        y1 = -5;
       }
       else
-        num4 -= 42;
+        y1 -= 42;
+    }
+    int num3 = 0;
+    int x2 = 5;
+    int y2 = -5;
+    for (int index = 0; index < num2; ++index)
+    {
+      Image g = UnityEngine.Object.Instantiate<Image>(this.pfabImage, (Transform) this.containerAlt);
+      UIOnHover component = g.GetComponent<UIOnHover>();
+      g.rectTransform.anchoredPosition = new Vector2((float) x2, (float) y2);
+      g.sprite = !((UnityEngine.Object) Inert.Instance.altSpells[index] == (UnityEngine.Object) null) ? ClientResources.Instance.GetSpellIcon(Inert.Instance.altSpells[index].name) : ClientResources.Instance.clear;
+      int e = index;
+      if ((UnityEngine.Object) g.sprite != (UnityEngine.Object) ClientResources.Instance.clear)
+      {
+        component.onClick.AddListener((UnityAction) (() =>
+        {
+          if (!this.editing)
+            return;
+          this.restrictions.ToggleSpell(e, true);
+          this.Edited();
+        }));
+        component.onEnter.AddListener((UnityAction) (() => this.Hover(g.sprite.name)));
+      }
+      g.gameObject.SetActive(true);
+      this.alt_pool.Add(g);
+      this.alt_buttons.Add(component);
+      this.SpellEnabled(index, this.restrictions.altSpells[index], true);
+      ++num3;
+      if (index % 12 == 11)
+      {
+        x2 += 42;
+        y2 = -5;
+      }
+      else
+        y2 -= 42;
     }
   }
 
-  public void SpellEnabled(int index, bool v)
+  public void SpellEnabled(int index, bool v, bool alt)
   {
-    this.pool[index].color = v ? Color.white : new Color(1f, 1f, 1f, 0.15f);
-    this.buttons[index].NormalColor = this.pool[index].color;
+    if (alt)
+    {
+      this.alt_pool[index].color = v ? Color.white : new Color(1f, 1f, 1f, 0.15f);
+      this.alt_buttons[index].NormalColor = this.alt_pool[index].color;
+    }
+    else
+    {
+      this.pool[index].color = v ? Color.white : new Color(1f, 1f, 1f, 0.15f);
+      this.buttons[index].NormalColor = this.pool[index].color;
+    }
   }
 
-  public void ElementalEnabled(int index, bool v)
+  public void ElementalEnabled(int index, bool v, bool alt)
   {
-    this.ele[index].color = v ? Color.white : new Color(1f, 1f, 1f, 0.15f);
-    this.ele_buttons[index].NormalColor = this.pool[index].color;
+    if (alt)
+    {
+      this.alt_ele[index].color = v ? Color.white : new Color(1f, 1f, 1f, 0.15f);
+      this.alt_ele_buttons[index].NormalColor = this.alt_pool[index].color;
+    }
+    else
+    {
+      this.ele[index].color = v ? Color.white : new Color(1f, 1f, 1f, 0.15f);
+      this.ele_buttons[index].NormalColor = this.pool[index].color;
+    }
   }
 
-  public void Hover(string s)
-  {
-    MyToolTip.Show(s, -1f);
-  }
+  public void Hover(string s) => MyToolTip.Show(s);
 
-  public void HoverLeave()
-  {
-    MyToolTip.Close();
-  }
+  public void HoverLeave() => MyToolTip.Close();
 }

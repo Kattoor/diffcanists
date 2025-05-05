@@ -1,4 +1,5 @@
 
+#nullable disable
 public class QuickCorrection
 {
   public static QuickCorrection Serialize(ZGame game, myBinaryWriter w)

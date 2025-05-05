@@ -3,10 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+#nullable disable
 public class ChatFade : MonoBehaviour
 {
-  private List<PfabChatMsgFade> que = new List<PfabChatMsgFade>();
   public PfabChatMsgFade pfab;
+  private List<PfabChatMsgFade> que = new List<PfabChatMsgFade>();
   private bool yourTurn;
 
   public void Add(string msg, Color c)

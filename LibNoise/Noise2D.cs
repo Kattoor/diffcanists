@@ -3,6 +3,7 @@ using System;
 using System.Xml.Serialization;
 using UnityEngine;
 
+#nullable disable
 namespace LibNoise
 {
   public class Noise2D : IDisposable
@@ -17,14 +18,14 @@ namespace LibNoise
     public static readonly double Right = 1.0;
     public static readonly double Top = -1.0;
     public static readonly double Bottom = 1.0;
-    private int _ucBorder = 1;
-    private float _borderValue = float.NaN;
     private int _width;
     private int _height;
     private float[,] _data;
     private readonly int _ucWidth;
     private readonly int _ucHeight;
+    private int _ucBorder = 1;
     private readonly float[,] _ucData;
+    private float _borderValue = float.NaN;
     private ModuleBase _generator;
     [XmlIgnore]
     [NonSerialized]
@@ -35,7 +36,7 @@ namespace LibNoise
     }
 
     public Noise2D(int size)
-      : this(size, size, (ModuleBase) null)
+      : this(size, size)
     {
     }
 
@@ -96,43 +97,19 @@ namespace LibNoise
 
     public float Border
     {
-      get
-      {
-        return this._borderValue;
-      }
-      set
-      {
-        this._borderValue = value;
-      }
+      get => this._borderValue;
+      set => this._borderValue = value;
     }
 
     public ModuleBase Generator
     {
-      get
-      {
-        return this._generator;
-      }
-      set
-      {
-        this._generator = value;
-      }
+      get => this._generator;
+      set => this._generator = value;
     }
 
-    public int Height
-    {
-      get
-      {
-        return this._height;
-      }
-    }
+    public int Height => this._height;
 
-    public int Width
-    {
-      get
-      {
-        return this._width;
-      }
-    }
+    public int Width => this._width;
 
     public float[,] GetNormalizedData(bool isCropped = true, int xCrop = 0, int yCrop = 0)
     {
@@ -143,31 +120,31 @@ namespace LibNoise
     {
       int num1;
       int num2;
-      float[,] numArray1;
+      float[,] numArray;
       if (isCropped)
       {
         num1 = this._width;
         num2 = this._height;
-        numArray1 = this._data;
+        numArray = this._data;
       }
       else
       {
         num1 = this._ucWidth;
         num2 = this._ucHeight;
-        numArray1 = this._ucData;
+        numArray = this._ucData;
       }
       int length1 = num1 - xCrop;
       int length2 = num2 - yCrop;
-      float[,] numArray2 = new float[length1, length2];
+      float[,] data = new float[length1, length2];
       for (int index1 = 0; index1 < length1; ++index1)
       {
         for (int index2 = 0; index2 < length2; ++index2)
         {
-          float num3 = !isNormalized ? numArray1[index1, index2] : (float) (((double) numArray1[index1, index2] + 1.0) / 2.0);
-          numArray2[index1, index2] = num3;
+          float num3 = !isNormalized ? numArray[index1, index2] : (float) (((double) numArray[index1, index2] + 1.0) / 2.0);
+          data[index1, index2] = num3;
         }
       }
-      return numArray2;
+      return data;
     }
 
     public void Clear(float value = 0.0f)
@@ -179,10 +156,7 @@ namespace LibNoise
       }
     }
 
-    private double GeneratePlanar(double x, double y)
-    {
-      return this._generator.GetValue(x, 0.0, y);
-    }
+    private double GeneratePlanar(double x, double y) => this._generator.GetValue(x, 0.0, y);
 
     public void GeneratePlanar(
       double left,
@@ -223,7 +197,7 @@ namespace LibNoise
             num5 = (float) Utils.InterpolateLinear(Utils.InterpolateLinear(planar1, b, position3), Utils.InterpolateLinear(planar3, planar4, position1), position2);
           }
           this._ucData[index1, index2] = num5;
-          if (index1 >= this._ucBorder && index2 >= this._ucBorder && (index1 < this._width + this._ucBorder && index2 < this._height + this._ucBorder))
+          if (index1 >= this._ucBorder && index2 >= this._ucBorder && index1 < this._width + this._ucBorder && index2 < this._height + this._ucBorder)
             this._data[index1 - this._ucBorder, index2 - this._ucBorder] = num5;
           y += num4;
         }
@@ -258,7 +232,7 @@ namespace LibNoise
         for (int index2 = 0; index2 < this._ucHeight; ++index2)
         {
           this._ucData[index1, index2] = (float) this.GenerateCylindrical(angle, height);
-          if (index1 >= this._ucBorder && index2 >= this._ucBorder && (index1 < this._width + this._ucBorder && index2 < this._height + this._ucBorder))
+          if (index1 >= this._ucBorder && index2 >= this._ucBorder && index1 < this._width + this._ucBorder && index2 < this._height + this._ucBorder)
             this._data[index1 - this._ucBorder, index2 - this._ucBorder] = (float) this.GenerateCylindrical(angle, height);
           height += num5;
         }
@@ -290,7 +264,7 @@ namespace LibNoise
         for (int index2 = 0; index2 < this._ucHeight; ++index2)
         {
           this._ucData[index1, index2] = (float) this.GenerateSpherical(lat, lon);
-          if (index1 >= this._ucBorder && index2 >= this._ucBorder && (index1 < this._width + this._ucBorder && index2 < this._height + this._ucBorder))
+          if (index1 >= this._ucBorder && index2 >= this._ucBorder && index1 < this._width + this._ucBorder && index2 < this._height + this._ucBorder)
             this._data[index1 - this._ucBorder, index2 - this._ucBorder] = (float) this.GenerateSpherical(lat, lon);
           lat += num5;
         }
@@ -298,32 +272,29 @@ namespace LibNoise
       }
     }
 
-    public Texture2D GetTexture()
-    {
-      return this.GetTexture(GradientPresets.Grayscale);
-    }
+    public Texture2D GetTexture() => this.GetTexture(GradientPresets.Grayscale);
 
     public Texture2D GetTexture(Gradient gradient)
     {
-      Texture2D texture2D = new Texture2D(this._width, this._height);
+      Texture2D texture = new Texture2D(this._width, this._height);
       Color[] colors = new Color[this._width * this._height];
       for (int index1 = 0; index1 < this._width; ++index1)
       {
         for (int index2 = 0; index2 < this._height; ++index2)
         {
-          float num = float.IsNaN(this._borderValue) || index1 != 0 && index1 != this._width - this._ucBorder && (index2 != 0 && index2 != this._height - this._ucBorder) ? this._data[index1, index2] : this._borderValue;
+          float num = float.IsNaN(this._borderValue) || index1 != 0 && index1 != this._width - this._ucBorder && index2 != 0 && index2 != this._height - this._ucBorder ? this._data[index1, index2] : this._borderValue;
           colors[index1 + index2 * this._width] = gradient.Evaluate((float) (((double) num + 1.0) / 2.0));
         }
       }
-      texture2D.SetPixels(colors);
-      texture2D.wrapMode = TextureWrapMode.Clamp;
-      texture2D.Apply();
-      return texture2D;
+      texture.SetPixels(colors);
+      texture.wrapMode = TextureWrapMode.Clamp;
+      texture.Apply();
+      return texture;
     }
 
     public Texture2D GetNormalMap(float intensity)
     {
-      Texture2D texture2D = new Texture2D(this._width, this._height);
+      Texture2D normalMap = new Texture2D(this._width, this._height);
       Color[] colors = new Color[this._width * this._height];
       for (int index1 = 0; index1 < this._ucWidth; ++index1)
       {
@@ -333,27 +304,23 @@ namespace LibNoise
           float num2 = (float) (((double) this._ucData[index1, Mathf.Max(0, index2 - this._ucBorder)] - (double) this._ucData[index1, Mathf.Min(index2 + this._ucBorder, this._height + this._ucBorder)]) / 2.0);
           Vector3 vector3 = new Vector3(num1 * intensity, 0.0f, 1f) + new Vector3(0.0f, num2 * intensity, 1f);
           vector3.Normalize();
-          Vector3 zero = Vector3.zero;
-          zero.x = (float) (((double) vector3.x + 1.0) / 2.0);
-          zero.y = (float) (((double) vector3.y + 1.0) / 2.0);
-          zero.z = (float) (((double) vector3.z + 1.0) / 2.0);
-          if (index1 >= this._ucBorder && index2 >= this._ucBorder && (index1 < this._width + this._ucBorder && index2 < this._height + this._ucBorder))
+          Vector3 zero = Vector3.zero with
+          {
+            x = (float) (((double) vector3.x + 1.0) / 2.0),
+            y = (float) (((double) vector3.y + 1.0) / 2.0),
+            z = (float) (((double) vector3.z + 1.0) / 2.0)
+          };
+          if (index1 >= this._ucBorder && index2 >= this._ucBorder && index1 < this._width + this._ucBorder && index2 < this._height + this._ucBorder)
             colors[index1 - this._ucBorder + (index2 - this._ucBorder) * this._width] = new Color(zero.x, zero.y, zero.z);
         }
       }
-      texture2D.SetPixels(colors);
-      texture2D.wrapMode = TextureWrapMode.Clamp;
-      texture2D.Apply();
-      return texture2D;
+      normalMap.SetPixels(colors);
+      normalMap.wrapMode = TextureWrapMode.Clamp;
+      normalMap.Apply();
+      return normalMap;
     }
 
-    public bool IsDisposed
-    {
-      get
-      {
-        return this._disposed;
-      }
-    }
+    public bool IsDisposed => this._disposed;
 
     public void Dispose()
     {

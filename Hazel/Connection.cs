@@ -5,38 +5,30 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Threading;
 
+#nullable disable
 namespace Hazel
 {
   public abstract class Connection : IDisposable
   {
-    public player_info player = new player_info();
-    private object encryptionLock = new object();
-    private ManualResetEvent connectWaitLock = new ManualResetEvent(false);
     public Stopwatch stopwatch;
     public IMiniGame miniGame;
     public int randomRatedFactsID;
+    public player_info player = new player_info();
     public byte[] randomBytes;
     public AesManaged myAes;
     public EncryptionType encryptionType;
+    private object encryptionLock = new object();
     public string hwid;
     private volatile ConnectionState state;
+    private ManualResetEvent connectWaitLock = new ManualResetEvent(false);
 
-    public string name
-    {
-      get
-      {
-        return this.player.account.name;
-      }
-    }
+    public string name => this.player.account.name;
 
     public void OnResign(ZPerson p)
     {
     }
 
-    public string GetChatMessages()
-    {
-      return (string) null;
-    }
+    public string GetChatMessages() => (string) null;
 
     public void OnChat(string s)
     {
@@ -122,10 +114,7 @@ namespace Hazel
 
     public ConnectionState State
     {
-      get
-      {
-        return this.state;
-      }
+      get => this.state;
       protected set
       {
         this.state = value;
@@ -164,7 +153,7 @@ namespace Hazel
           }
           catch (Exception ex)
           {
-            this.HandleDisconnect((HazelException) null);
+            this.HandleDisconnect();
             return;
           }
         }
@@ -191,21 +180,15 @@ namespace Hazel
 
     public abstract void HandleDisconnect(HazelException e = null);
 
-    protected bool WaitOnConnect(int timeout)
-    {
-      return this.connectWaitLock.WaitOne(timeout);
-    }
+    protected bool WaitOnConnect(int timeout) => this.connectWaitLock.WaitOne(timeout);
 
     public virtual void Close()
     {
-      this.InvokeDisconnected((Exception) null);
+      this.InvokeDisconnected();
       this.Dispose();
     }
 
-    public void Dispose()
-    {
-      this.Dispose(true);
-    }
+    public void Dispose() => this.Dispose(true);
 
     protected virtual void Dispose(bool disposing)
     {

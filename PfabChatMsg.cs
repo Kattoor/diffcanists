@@ -6,10 +6,17 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class PfabChatMsg : MonoBehaviour, IPointerClickHandler, IEventSystemHandler, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
+#nullable disable
+public class PfabChatMsg : 
+  MonoBehaviour,
+  IPointerClickHandler,
+  IEventSystemHandler,
+  IPointerEnterHandler,
+  IPointerExitHandler,
+  IPointerDownHandler
 {
-  public string nameOfPlayer = "";
   public TMP_Text _msg;
+  public string nameOfPlayer = "";
   public Image highlight;
   private PfabChatMsg.contain t;
   private bool hovering;
@@ -67,11 +74,11 @@ public class PfabChatMsg : MonoBehaviour, IPointerClickHandler, IEventSystemHand
           ChatBox.Instance.NewChatMsg("Saved @ " + file, (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
         }), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
         myContextMenu1.AddItem("Equip", (Action) (() => Client.AskToChangeOutfit(sp)), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
-        myContextMenu1.Rebuild(false);
+        myContextMenu1.Rebuild();
         this.DisplayOutfit(myContextMenu1.transform, sp);
         break;
       case ContentType.SpellBook:
-        SpellLobbyChange.Create((SettingsPlayer) this.t.obj, (Action<SettingsPlayer>) (s => Client.AskToChangeSpells(s)), false, Validation.Default, false, (Action) null);
+        SpellLobbyChange.Create((SettingsPlayer) this.t.obj, (Action<SettingsPlayer>) (s => Client.AskToChangeSpells(s)));
         break;
       case ContentType.ArcTutorial:
         MyContextMenu myContextMenu2 = MyContextMenu.Show();
@@ -83,19 +90,19 @@ public class PfabChatMsg : MonoBehaviour, IPointerClickHandler, IEventSystemHand
           Global.SaveTutorial("Downloads/" + this.nameOfPlayer, ((Tutorial) this.t.obj).ToJson().ToString());
           ChatBox.Instance.NewChatMsg("Saved @ Downloads/" + this.nameOfPlayer, (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
         }), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
-        myContextMenu2.Rebuild(false);
+        myContextMenu2.Rebuild();
         this.DisplayTutorial(myContextMenu2.transform, (Tutorial) this.t.obj);
         break;
       case ContentType.ClanInvite:
         MyContextMenu myContextMenu3 = MyContextMenu.Show();
         ClanInvite z1 = (ClanInvite) this.t.obj;
         if ((double) z1.expire < (double) Time.realtimeSinceStartup)
-          myContextMenu3.AddItem("Invitation expired", (Action) (() => {}), (Color) ColorScheme.GetColor(MyContextMenu.ColorRed));
+          myContextMenu3.AddItem("Invitation expired", (Action) (() => { }), (Color) ColorScheme.GetColor(MyContextMenu.ColorRed));
         else if (!string.IsNullOrEmpty(Client.MyAccount.clan))
-          myContextMenu3.AddItem(string.Equals(Client.MyAccount.clan, z1.clan) ? "You've already joined the clan" : "You're already in a clan", (Action) (() => {}), (Color) ColorScheme.GetColor(MyContextMenu.ColorRed));
+          myContextMenu3.AddItem(string.Equals(Client.MyAccount.clan, z1.clan) ? "You've already joined the clan" : "You're already in a clan", (Action) (() => { }), (Color) ColorScheme.GetColor(MyContextMenu.ColorRed));
         else
           myContextMenu3.AddItem("Accept invite from the clan [" + z1.clan + "]", (Action) (() => Client.AcceptClanInvite(z1.clan)), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
-        myContextMenu3.Rebuild(false);
+        myContextMenu3.Rebuild();
         break;
       case ContentType.MiniGameInvite:
         MyContextMenu myContextMenu4 = MyContextMenu.Show();
@@ -109,10 +116,10 @@ public class PfabChatMsg : MonoBehaviour, IPointerClickHandler, IEventSystemHand
         else
         {
           myContextMenu4.AddItem("Spectate " + z2.from + "'s " + (object) (IMiniGame.GameType) z2.miniGameType + " game", (Action) (() => Client.AcceptSpectateMiniGame(z2.minigameID, true)), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
-          myContextMenu4.AddSeperator("--------------------------");
+          myContextMenu4.AddSeperator();
           myContextMenu4.AddItem("Join " + z2.from + "'s " + (object) (IMiniGame.GameType) z2.miniGameType + " game (Spectate if full)", (Action) (() => Client.AcceptSpectateMiniGame(z2.minigameID, false)), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
         }
-        myContextMenu4.Rebuild(false);
+        myContextMenu4.Rebuild();
         break;
       case ContentType.ColorScheme:
         ColorSchemeUI.Create((ColorScheme) this.t.obj);
@@ -152,34 +159,29 @@ public class PfabChatMsg : MonoBehaviour, IPointerClickHandler, IEventSystemHand
       HUD.instance.InitPrivateChat(this.nameOfPlayer);
   }
 
-  private void RightClick()
-  {
-    this.ContextMenu();
-  }
+  private void RightClick() => this.ContextMenu();
 
   public void OnPointerEnter(PointerEventData eventData)
   {
     this.hovering = true;
     if ((UnityEngine.Object) this.highlight != (UnityEngine.Object) null)
-    {
-      Color color = this.highlight.color;
-      color.a = 0.075f;
-      this.highlight.color = color;
-    }
+      this.highlight.color = this.highlight.color with
+      {
+        a = 0.075f
+      };
     if (!this._msg.isTextTruncated && !((UnityEngine.Object) ColorSchemeUI.Instance != (UnityEngine.Object) null))
       return;
-    MyToolTip.Show(this._msg.text, -1f);
+    MyToolTip.Show(this._msg.text);
   }
 
   public void OnPointerExit(PointerEventData eventData)
   {
     this.hovering = false;
     if ((UnityEngine.Object) this.highlight != (UnityEngine.Object) null)
-    {
-      Color color = this.highlight.color;
-      color.a = 0.0f;
-      this.highlight.color = color;
-    }
+      this.highlight.color = this.highlight.color with
+      {
+        a = 0.0f
+      };
     MyToolTip.Close();
   }
 

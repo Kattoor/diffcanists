@@ -1,6 +1,7 @@
 
 using System;
 
+#nullable disable
 namespace WebGLSupport
 {
   internal static class WebGLWindowPlugin

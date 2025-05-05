@@ -2,21 +2,19 @@
 using System;
 using UnityEngine;
 
+#nullable disable
 namespace Educative
 {
   [Serializable]
   public class LuaColor
   {
-    public static readonly LuaColor white = LuaColor.construct(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue);
     public byte r;
     public byte g;
     public byte b;
     public byte a;
+    public static readonly LuaColor white = LuaColor.construct(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue);
 
-    public string toHex()
-    {
-      return "#" + ColorUtility.ToHtmlStringRGBA((Color) LuaColor.From(this));
-    }
+    public string toHex() => "#" + ColorUtility.ToHtmlStringRGBA((Color) LuaColor.From(this));
 
     public static LuaColor construct(byte r, byte g, byte b, byte a)
     {

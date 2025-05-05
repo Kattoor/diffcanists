@@ -1,4 +1,5 @@
 
+#nullable disable
 public enum Outfit
 {
   None = -1, // 0xFFFFFFFF

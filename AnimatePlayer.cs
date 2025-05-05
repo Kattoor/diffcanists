@@ -3,9 +3,15 @@ using System;
 using System.Collections;
 using UnityEngine;
 
+#nullable disable
 public class AnimatePlayer : IAnimator
 {
   public bool playAudio = true;
+  public Transform leftHand;
+  public Transform rightHand;
+  public Transform leftFoot;
+  public Transform rightFoot;
+  public Transform head;
   public float walkSpeed = 20f;
   public float jumpSpeed = 8f;
   public float stopSpeed = 16f;
@@ -16,11 +22,6 @@ public class AnimatePlayer : IAnimator
   public float footRadiusX = 7f;
   public float footRadiusY = 4f;
   public float handRadius = 2f;
-  public Transform leftHand;
-  public Transform rightHand;
-  public Transform leftFoot;
-  public Transform rightFoot;
-  public Transform head;
   private Vector3 startLeftHand;
   private Vector3 startRightHand;
   private Vector3 startLeftFoot;
@@ -93,7 +94,7 @@ public class AnimatePlayer : IAnimator
 
   public override void Play(AnimateState anim, float duration = 0.0f, bool sound = true)
   {
-    if (Client.game == null || !Client.game.isClient || Client.game.resyncing || !ZComponent.IsNull((ZComponent) this.creature) && this.creature.parent != null && ((UnityEngine.Object) this.creature.parent.torquing != (UnityEngine.Object) null && (ZComponent) this.creature.parent.torquing.creature == (object) this.creature) || (ZComponent) this.creature != (object) null && this.creature.flying && !this.creature.entangledOrGravity)
+    if (Client.game == null || !Client.game.isClient || Client.game.resyncing || !ZComponent.IsNull((ZComponent) this.creature) && this.creature.parent != null && (UnityEngine.Object) this.creature.parent.torquing != (UnityEngine.Object) null && (ZComponent) this.creature.parent.torquing.creature == (object) this.creature || (ZComponent) this.creature != (object) null && this.creature.flying && !this.creature.entangledOrGravity)
       return;
     if (anim == AnimateState.Swing)
     {

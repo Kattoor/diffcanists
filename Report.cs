@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using UnityEngine;
 
+#nullable disable
 public class Report
 {
   public int id;
@@ -24,16 +25,12 @@ public class Report
 
   public static int GetID()
   {
-    int num = PlayerPrefs.GetInt("reportcount", 0);
-    PlayerPrefs.SetInt("reportcount", num + 1);
-    return num;
+    int id = PlayerPrefs.GetInt("reportcount", 0);
+    PlayerPrefs.SetInt("reportcount", id + 1);
+    return id;
   }
 
-  public static Report RequestReport(
-    string reporter,
-    string reported,
-    string command,
-    Report org = null)
+  public static Report RequestReport(string reporter, string reported, string command, Report org = null)
   {
     return new Report()
     {

@@ -2,6 +2,7 @@
 using MoonSharp.Interpreter;
 using UnityEngine;
 
+#nullable disable
 namespace Educative
 {
   public class ContainerPlayer
@@ -20,50 +21,26 @@ namespace Educative
 
     public int localTurn
     {
-      get
-      {
-        return this.person.localTurn;
-      }
-      set
-      {
-        this.person.localTurn = Mathf.Clamp(value, 0, int.MaxValue);
-      }
+      get => this.person.localTurn;
+      set => this.person.localTurn = Mathf.Clamp(value, 0, int.MaxValue);
     }
 
-    public string name
-    {
-      get
-      {
-        return this.person.name;
-      }
-    }
+    public string name => this.person.name;
 
-    public int team
-    {
-      get
-      {
-        return (int) this.person.id;
-      }
-    }
+    public int team => (int) this.person.id;
 
-    public bool yourTurn
-    {
-      get
-      {
-        return this.person.yourTurn;
-      }
-    }
+    public bool yourTurn => this.person.yourTurn;
 
     public Table getCreatures(Script script)
     {
-      Table table = new Table(script);
-      int num = 1;
+      Table creatures = new Table(script);
+      int key = 1;
       foreach (ZCreature c in this.person.controlled)
       {
-        table[(object) num] = (object) new ContainerCreature(c);
-        ++num;
+        creatures[(object) key] = (object) new ContainerCreature(c);
+        ++key;
       }
-      return table;
+      return creatures;
     }
 
     public ContainerCreature getCreature(int index)
@@ -71,14 +48,8 @@ namespace Educative
       return new ContainerCreature(this.person.controlled[index - 1]);
     }
 
-    public int getMinionCount()
-    {
-      return this.person.GetMinionCount();
-    }
+    public int getMinionCount() => this.person.GetMinionCount();
 
-    public override int GetHashCode()
-    {
-      return this._hashCode;
-    }
+    public override int GetHashCode() => this._hashCode;
   }
 }

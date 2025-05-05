@@ -1,6 +1,7 @@
 
 using UnityEngine;
 
+#nullable disable
 public class RotateTransformZ : MonoBehaviour, IClientOnly
 {
   public float speed;

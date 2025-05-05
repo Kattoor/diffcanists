@@ -2,160 +2,161 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+#nullable disable
 public class ZSpellEntangle : ZSpell
 {
   public override IEnumerator<float> SpellMove(bool gotoStatic = false, bool checkEffectors = true)
   {
-    ZSpellEntangle zspellEntangle = this;
-    zspellEntangle.isMoving = true;
-    zspellEntangle.zb = MapGenerator.getOutlineArray(zspellEntangle.radius);
+    ZSpellEntangle spell = this;
+    spell.isMoving = true;
+    spell.zb = MapGenerator.getOutlineArray(spell.radius);
     if (gotoStatic)
       yield return 0.0f;
 label_44:
-    while (!zspellEntangle.isDead)
+    while (!spell.isDead)
     {
-      zspellEntangle.pX = zspellEntangle.position.x;
-      zspellEntangle.pY = zspellEntangle.position.y;
-      FixedInt fixedInt1 = zspellEntangle.position.x + zspellEntangle.velocity.x;
-      FixedInt fixedInt2 = zspellEntangle.position.y + zspellEntangle.velocity.y;
-      zspellEntangle.validX = zspellEntangle.pX;
-      zspellEntangle.validY = zspellEntangle.pY;
-      zspellEntangle.steps = 1;
-      FixedInt x1 = zspellEntangle.velocity.x;
-      FixedInt y = zspellEntangle.velocity.y;
-      FixedInt fixedInt3 = zspellEntangle.velocity.x;
-      FixedInt fixedInt4 = zspellEntangle.velocity.y;
-      if (x1 > 1 || x1 < -1 || (y > 1 || y < -1))
+      spell.pX = spell.position.x;
+      spell.pY = spell.position.y;
+      FixedInt fixedInt1 = spell.position.x + spell.velocity.x;
+      FixedInt fixedInt2 = spell.position.y + spell.velocity.y;
+      spell.validX = spell.pX;
+      spell.validY = spell.pY;
+      spell.steps = 1;
+      FixedInt x1 = spell.velocity.x;
+      FixedInt y = spell.velocity.y;
+      FixedInt fixedInt3 = spell.velocity.x;
+      FixedInt fixedInt4 = spell.velocity.y;
+      if (x1 > 1 || x1 < -1 || y > 1 || y < -1)
       {
         if (FixedInt.Abs(x1) > FixedInt.Abs(y))
-          zspellEntangle.steps = (int) FixedInt.Abs(x1) + 1;
+          spell.steps = (int) FixedInt.Abs(x1) + 1;
         else
-          zspellEntangle.steps = (int) FixedInt.Abs(y) + 1;
-        fixedInt3 = zspellEntangle.velocity.x / zspellEntangle.steps;
-        fixedInt4 = zspellEntangle.velocity.y / zspellEntangle.steps;
+          spell.steps = (int) FixedInt.Abs(y) + 1;
+        fixedInt3 = spell.velocity.x / spell.steps;
+        fixedInt4 = spell.velocity.y / spell.steps;
       }
-      while (zspellEntangle.steps > 0)
+      while (spell.steps > 0)
       {
-        if (zspellEntangle.map.SpellCheckEffectors(zspellEntangle.toCollideCheck, (ZSpell) zspellEntangle, (int) zspellEntangle.validX, (int) zspellEntangle.validY))
+        if (spell.map.SpellCheckEffectors(spell.toCollideCheck, (ZSpell) spell, (int) spell.validX, (int) spell.validY))
         {
-          zspellEntangle.position = new MyLocation(zspellEntangle.validX, zspellEntangle.validY);
+          spell.position = new MyLocation(spell.validX, spell.validY);
           yield return 0.0f;
           goto label_44;
         }
         else
         {
-          --zspellEntangle.steps;
-          int num1 = (int) (((FixedInt) 360 - (Inert.AngleOfVelocity(zspellEntangle.velocity) - 90)) * FixedInt.ThreeSixtyBy1 * zspellEntangle.zb.Count) - zspellEntangle.radius;
+          --spell.steps;
+          int num1 = (int) (((FixedInt) 360 - (Inert.AngleOfVelocity(spell.velocity) - 90)) * FixedInt.ThreeSixtyBy1 * spell.zb.Count) - spell.radius;
           if (num1 < 0)
-            num1 += zspellEntangle.zb.Count;
-          for (int index1 = 0; index1 < zspellEntangle.radius * 2; ++index1)
+            num1 += spell.zb.Count;
+          for (int index1 = 0; index1 < spell.radius * 2; ++index1)
           {
-            int index2 = (index1 + num1) % zspellEntangle.zb.Count;
-            if (!zspellEntangle.map.SpellCheckPosition((int) (fixedInt3 + zspellEntangle.pX) + zspellEntangle.zb[index2].x, (int) (fixedInt4 + zspellEntangle.pY) + zspellEntangle.zb[index2].y, zspellEntangle.toCollideCheck, Inert.mask_spell_movement))
+            int index2 = (index1 + num1) % spell.zb.Count;
+            if (!spell.map.SpellCheckPosition((int) (fixedInt3 + spell.pX) + spell.zb[index2].x, (int) (fixedInt4 + spell.pY) + spell.zb[index2].y, spell.toCollideCheck, Inert.mask_spell_movement))
             {
-              int num2 = (int) (fixedInt3 + zspellEntangle.pX);
-              int num3 = (int) (fixedInt4 + zspellEntangle.pY);
-              AudioManager.Play(zspellEntangle.explosionClip);
-              int x2 = zspellEntangle.zb[index2].x;
+              int num2 = (int) (fixedInt3 + spell.pX);
+              int num3 = (int) (fixedInt4 + spell.pY);
+              AudioManager.Play(spell.explosionClip);
+              int x2 = spell.zb[index2].x;
               int num4 = num2 + x2;
-              int num5 = num3 + zspellEntangle.zb[index2].y;
-              if (!zspellEntangle.map.CheckPositionOnlyMap(num4, num5))
+              int num5 = num3 + spell.zb[index2].y;
+              if (!spell.map.CheckPositionOnlyMap(num4, num5))
               {
-                zspellEntangle.velocity.y = (FixedInt) 0;
-                zspellEntangle.velocity.x = (FixedInt) 0;
-                zspellEntangle.moving = (IEnumerator<float>) null;
-                zspellEntangle.isMoving = false;
-                zspellEntangle.map.ServerBitBlt((int) zspellEntangle.explosionCutout, num4, num5, true, true);
-                zspellEntangle.ApplyExplosionForce(new MyLocation(num4, num5), 0, true, (ISpellBridge) null, (ZCreature) null);
-                zspellEntangle.isDead = true;
-                zspellEntangle.isNull = true;
-                if (zspellEntangle.game.isClient && !zspellEntangle.game.resyncing)
-                  ZComponent.Instantiate<GameObject>(zspellEntangle.explosion, new Vector3((float) num4, (float) num5), Quaternion.identity, zspellEntangle.game.GetMapTransform());
-                ZComponent.Destroy<GameObject>(zspellEntangle.gameObject);
+                spell.velocity.y = (FixedInt) 0;
+                spell.velocity.x = (FixedInt) 0;
+                spell.moving = (IEnumerator<float>) null;
+                spell.isMoving = false;
+                spell.map.ServerBitBlt((int) spell.explosionCutout, num4, num5);
+                spell.ApplyExplosionForce(new MyLocation(num4, num5));
+                spell.isDead = true;
+                spell.isNull = true;
+                if (spell.game.isClient && !spell.game.resyncing)
+                  ZComponent.Instantiate<GameObject>(spell.explosion, new Vector3((float) num4, (float) num5), Quaternion.identity, spell.game.GetMapTransform());
+                ZComponent.Destroy<GameObject>(spell.gameObject);
                 yield break;
               }
               else
               {
-                ZCreature zcreature = zspellEntangle.map.PhysicsCollideCreature(zspellEntangle.toCollideCheck, num4, num5, Inert.mask_spell_movement);
+                ZCreature zcreature = spell.map.PhysicsCollideCreature(spell.toCollideCheck, num4, num5, Inert.mask_spell_movement);
                 if ((ZComponent) zcreature != (object) null && (ZComponent) zcreature.mount != (object) null)
                   zcreature = zcreature.mount;
-                if ((ZComponent) zcreature != (object) null && zcreature.race != CreatureRace.Effector && (!zcreature.entangled && !ZEffector.InSanctuary(zcreature.game.world, zcreature.position)))
+                if ((ZComponent) zcreature != (object) null && zcreature.race != CreatureRace.Effector && !zcreature.entangled && !ZEffector.InSanctuary(zcreature.game.world, zcreature.position))
                 {
                   zcreature.entangledShield = zcreature.shield;
                   zcreature.entangled = true;
-                  zspellEntangle.velocity.y = (FixedInt) 0;
-                  zspellEntangle.velocity.x = (FixedInt) 0;
-                  zspellEntangle.position = new MyLocation(zspellEntangle.validX, zspellEntangle.validY);
-                  zspellEntangle.moving = (IEnumerator<float>) null;
-                  zspellEntangle.isMoving = false;
-                  zspellEntangle.map.ServerBitBlt((int) zspellEntangle.explosionCutout, num4, num5, true, true);
-                  zspellEntangle.ApplyExplosionForce(new MyLocation(num4, num5), 0, true, (ISpellBridge) null, (ZCreature) null);
-                  zspellEntangle.isDead = true;
-                  zspellEntangle.isNull = true;
-                  if (zspellEntangle.game.isClient && (Object) zcreature.transform != (Object) null)
+                  spell.velocity.y = (FixedInt) 0;
+                  spell.velocity.x = (FixedInt) 0;
+                  spell.position = new MyLocation(spell.validX, spell.validY);
+                  spell.moving = (IEnumerator<float>) null;
+                  spell.isMoving = false;
+                  spell.map.ServerBitBlt((int) spell.explosionCutout, num4, num5);
+                  spell.ApplyExplosionForce(new MyLocation(num4, num5));
+                  spell.isDead = true;
+                  spell.isNull = true;
+                  if (spell.game.isClient && (Object) zcreature.transform != (Object) null)
                   {
-                    ZComponent.Instantiate<GameObject>(zspellEntangle.explosion, new Vector3((float) num4, (float) num5), Quaternion.identity, zspellEntangle.game.GetMapTransform());
-                    ZComponent.Instantiate<GameObject>(zspellEntangle.toSummon, zcreature.transform.position, Quaternion.identity, zcreature.transform).GetComponent<ParticleEntangle>().SetCreature(zcreature.clientObj, zspellEntangle.spellEnum != SpellEnum.Entangle_Kraken);
+                    ZComponent.Instantiate<GameObject>(spell.explosion, new Vector3((float) num4, (float) num5), Quaternion.identity, spell.game.GetMapTransform());
+                    ZComponent.Instantiate<GameObject>(spell.toSummon, zcreature.transform.position, Quaternion.identity, zcreature.transform).GetComponent<ParticleEntangle>().SetCreature(zcreature.clientObj, spell.spellEnum != SpellEnum.Entangle_Kraken);
                   }
-                  ZComponent.Destroy<GameObject>(zspellEntangle.gameObject);
+                  ZComponent.Destroy<GameObject>(spell.gameObject);
                   yield break;
                 }
                 else
                 {
-                  zspellEntangle.velocity.y = (FixedInt) 0;
-                  zspellEntangle.velocity.x = (FixedInt) 0;
-                  zspellEntangle.moving = (IEnumerator<float>) null;
-                  zspellEntangle.isMoving = false;
-                  zspellEntangle.map.ServerBitBlt((int) zspellEntangle.explosionCutout, num4, num5, true, true);
-                  zspellEntangle.ApplyExplosionForce(new MyLocation(num4, num5), 0, true, (ISpellBridge) null, (ZCreature) null);
-                  zspellEntangle.isDead = true;
-                  zspellEntangle.isNull = true;
-                  if (zspellEntangle.game.isClient && !zspellEntangle.game.resyncing)
-                    ZComponent.Instantiate<GameObject>(zspellEntangle.explosion, new Vector3((float) num4, (float) num5), Quaternion.identity, zspellEntangle.game.GetMapTransform());
-                  ZComponent.Destroy<GameObject>(zspellEntangle.gameObject);
+                  spell.velocity.y = (FixedInt) 0;
+                  spell.velocity.x = (FixedInt) 0;
+                  spell.moving = (IEnumerator<float>) null;
+                  spell.isMoving = false;
+                  spell.map.ServerBitBlt((int) spell.explosionCutout, num4, num5);
+                  spell.ApplyExplosionForce(new MyLocation(num4, num5));
+                  spell.isDead = true;
+                  spell.isNull = true;
+                  if (spell.game.isClient && !spell.game.resyncing)
+                    ZComponent.Instantiate<GameObject>(spell.explosion, new Vector3((float) num4, (float) num5), Quaternion.identity, spell.game.GetMapTransform());
+                  ZComponent.Destroy<GameObject>(spell.gameObject);
                   yield break;
                 }
               }
             }
           }
-          zspellEntangle.validX = zspellEntangle.pX;
-          zspellEntangle.validY = zspellEntangle.pY;
-          zspellEntangle.pX = zspellEntangle.pX + fixedInt3;
-          zspellEntangle.pY = zspellEntangle.pY + fixedInt4;
+          spell.validX = spell.pX;
+          spell.validY = spell.pY;
+          spell.pX = spell.pX + fixedInt3;
+          spell.pY = spell.pY + fixedInt4;
         }
       }
-      zspellEntangle.position = zspellEntangle.position + zspellEntangle.velocity;
-      if (zspellEntangle.position.y < zspellEntangle.radius)
+      spell.position = spell.position + spell.velocity;
+      if (spell.position.y < spell.radius)
       {
-        zspellEntangle.moving = (IEnumerator<float>) null;
-        zspellEntangle.velocity = MyLocation.zero;
-        zspellEntangle.isMoving = false;
-        zspellEntangle.Splash();
-        zspellEntangle.DestroyDelay();
+        spell.moving = (IEnumerator<float>) null;
+        spell.velocity = MyLocation.zero;
+        spell.isMoving = false;
+        spell.Splash();
+        spell.DestroyDelay();
         break;
       }
-      if (zspellEntangle.addVelocity)
+      if (spell.addVelocity)
       {
-        zspellEntangle.addVelocity = false;
-        zspellEntangle.velocity = zspellEntangle.velocity + zspellEntangle.addedVelocity;
-        zspellEntangle.velocity.x = Mathd.Clamp(zspellEntangle.velocity.x, (FixedInt) -50, (FixedInt) 50);
-        zspellEntangle.velocity.y = Mathd.Clamp(zspellEntangle.velocity.y, (FixedInt) -50, (FixedInt) 50);
-        zspellEntangle.addedVelocity.x = (FixedInt) 0;
-        zspellEntangle.addedVelocity.y = (FixedInt) 0;
+        spell.addVelocity = false;
+        spell.velocity = spell.velocity + spell.addedVelocity;
+        spell.velocity.x = Mathd.Clamp(spell.velocity.x, (FixedInt) -50, (FixedInt) 50);
+        spell.velocity.y = Mathd.Clamp(spell.velocity.y, (FixedInt) -50, (FixedInt) 50);
+        spell.addedVelocity.x = (FixedInt) 0;
+        spell.addedVelocity.y = (FixedInt) 0;
       }
-      else if (zspellEntangle.affectedByGravity && zspellEntangle.velocity.y > -ZMap.MaxSpeed)
-        zspellEntangle.velocity.y += zspellEntangle.map.Gravity;
-      else if (!zspellEntangle.affectedByGravity && zspellEntangle.velocity.y > -10 && zspellEntangle.maxDuration > 150)
-        zspellEntangle.affectedByGravity = true;
-      zspellEntangle.Wind();
-      ++zspellEntangle.curDuration;
-      if (zspellEntangle.curDuration >= zspellEntangle.maxDuration)
+      else if (spell.affectedByGravity && spell.velocity.y > -ZMap.MaxSpeed)
+        spell.velocity.y += spell.map.Gravity;
+      else if (!spell.affectedByGravity && spell.velocity.y > -10 && spell.maxDuration > 150)
+        spell.affectedByGravity = true;
+      spell.Wind();
+      ++spell.curDuration;
+      if (spell.curDuration >= spell.maxDuration)
       {
-        zspellEntangle.DestroyDelay();
+        spell.DestroyDelay();
         break;
       }
-      if (zspellEntangle.game.isClient && zspellEntangle.Rotates && (Object) zspellEntangle.transform != (Object) null)
-        zspellEntangle.transform.rotation = Quaternion.Euler(0.0f, 0.0f, Mathf.Atan2(zspellEntangle.velocity.y.ToFloat(), zspellEntangle.velocity.x.ToFloat()) * 57.29578f);
+      if (spell.game.isClient && spell.Rotates && (Object) spell.transform != (Object) null)
+        spell.transform.rotation = Quaternion.Euler(0.0f, 0.0f, Mathf.Atan2(spell.velocity.y.ToFloat(), spell.velocity.x.ToFloat()) * 57.29578f);
       yield return 0.0f;
     }
   }

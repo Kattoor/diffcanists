@@ -2,6 +2,7 @@
 using MoonSharp.Interpreter;
 using System;
 
+#nullable disable
 namespace Educative
 {
   public class ContainerEffector
@@ -17,36 +18,18 @@ namespace Educative
       this._hashCode = (ZComponent) s != (object) null ? s.GetHashCode() : 0;
     }
 
-    public bool isDead
-    {
-      get
-      {
-        return (ZComponent) this.effector == (object) null || this.effector.dead;
-      }
-    }
+    public bool isDead => (ZComponent) this.effector == (object) null || this.effector.dead;
 
     public int x
     {
-      get
-      {
-        return this.effector.position.x.ToInt();
-      }
-      set
-      {
-        this.effector.position = new MyLocation((FixedInt) value, this.effector.position.y);
-      }
+      get => this.effector.position.x.ToInt();
+      set => this.effector.position = new MyLocation((FixedInt) value, this.effector.position.y);
     }
 
     public int y
     {
-      get
-      {
-        return this.effector.position.y.ToInt();
-      }
-      set
-      {
-        this.effector.position = new MyLocation(this.effector.position.x, (FixedInt) value);
-      }
+      get => this.effector.position.y.ToInt();
+      set => this.effector.position = new MyLocation(this.effector.position.x, (FixedInt) value);
     }
 
     public Point position
@@ -67,34 +50,19 @@ namespace Educative
 
     public int turnsAlive
     {
-      get
-      {
-        return this.effector.GetTurnsAlive();
-      }
-      set
-      {
-        this.effector.SetTurnsAlive(value);
-      }
+      get => this.effector.GetTurnsAlive();
+      set => this.effector.SetTurnsAlive(value);
     }
 
     public int maxTurnsAlive
     {
-      get
-      {
-        return this.effector.MaxTurnsAlive;
-      }
-      set
-      {
-        this.effector.MaxTurnsAlive = value;
-      }
+      get => this.effector.MaxTurnsAlive;
+      set => this.effector.MaxTurnsAlive = value;
     }
 
     public bool active
     {
-      get
-      {
-        return this.effector.active;
-      }
+      get => this.effector.active;
       set
       {
         this.effector.active = value;
@@ -102,13 +70,7 @@ namespace Educative
       }
     }
 
-    public EffectorType type
-    {
-      get
-      {
-        return this.effector.type;
-      }
-    }
+    public EffectorType type => this.effector.type;
 
     public void destroy()
     {
@@ -135,9 +97,6 @@ namespace Educative
       this.effector.TurnPassed(indexInParent, index1 >= 0, index2 >= 0);
     }
 
-    public override int GetHashCode()
-    {
-      return this._hashCode;
-    }
+    public override int GetHashCode() => this._hashCode;
   }
 }

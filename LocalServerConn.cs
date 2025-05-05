@@ -1,6 +1,5 @@
 
 using Educative;
-using Hazel;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -18,24 +17,15 @@ using UnityEngine.Networking;
 using UnityEngine.UI;
 using UnityThreading;
 
+#nullable disable
 public class LocalServerConn : Catalogue
 {
-  public static bool CreatingAccount = false;
-  public static bool PasswordChange = false;
-  public static bool UseEncryption = true;
-  public static AuthenticationMethod authenticationMethod = AuthenticationMethod.Arcanists;
-  private string ipstring = "";
-  private bool showOrb = true;
-  private List<PfabServerButton> serverButtons = new List<PfabServerButton>();
-  public string filePath = "";
-  private float lastPress = -3000f;
-  private string lastPass = "";
-  private string lastName = "";
   public UnityEngine.UI.Text yourip;
   public TMP_InputField input_name;
   public TMP_InputField input_pass;
   public TMP_InputField input_ip;
   public GameObject buttonLocalIp;
+  private string ipstring = "";
   public UnityEngine.UI.Text errorTxt;
   public GameObject downloadButton;
   public GameObject updateButton;
@@ -72,23 +62,27 @@ public class LocalServerConn : Catalogue
   [Header("Orb")]
   public GameObject panelOrb;
   public Button toggleOrb;
+  public static bool CreatingAccount = false;
+  public static bool PasswordChange = false;
   public Toggle testing;
   private bool local;
   private bool localEncryption;
+  public static bool UseEncryption = true;
+  private bool showOrb = true;
+  private List<PfabServerButton> serverButtons = new List<PfabServerButton>();
   public TMP_Text txtCurServer;
+  public static AuthenticationMethod authenticationMethod = AuthenticationMethod.Arcanists;
+  public string filePath = "";
+  private float lastPress = -3000f;
+  private string lastPass = "";
+  private string lastName = "";
   public List<UIElectricity> electricities;
   private float t;
   private int other;
 
   public static LocalServerConn Instance { get; private set; }
 
-  public TMP_InputField temp
-  {
-    get
-    {
-      return this.input_pass;
-    }
-  }
+  public TMP_InputField temp => this.input_pass;
 
   private IEnumerator FindServers(bool secure = true)
   {
@@ -172,7 +166,7 @@ public class LocalServerConn : Catalogue
     this.toggleOrb.onClick.AddListener(new UnityAction(this.ToggleOrb));
     Dispatcher dispatcher = UnityThreadHelper.Dispatcher;
     Global.persistentDataPath = Application.persistentDataPath;
-    this.StartCoroutine(this.FindServers(true));
+    this.StartCoroutine(this.FindServers());
   }
 
   [ContextMenu("Play replay")]
@@ -203,15 +197,9 @@ public class LocalServerConn : Catalogue
     this.panelReset.SetActive(false);
   }
 
-  public void ClickOpenPasswordReset()
-  {
-    this.panelReset.SetActive(true);
-  }
+  public void ClickOpenPasswordReset() => this.panelReset.SetActive(true);
 
-  public void CancelPasswordReset()
-  {
-    this.panelReset.SetActive(false);
-  }
+  public void CancelPasswordReset() => this.panelReset.SetActive(false);
 
   private void Start()
   {
@@ -231,7 +219,7 @@ public class LocalServerConn : Catalogue
       }
       if (commandLineArg.EndsWith(".arcTutorial2", StringComparison.OrdinalIgnoreCase))
       {
-        Tutorial tutorial = Tutorial.FromCodeOnly(System.IO.File.ReadAllText(commandLineArg));
+        Tutorial tutorial = Tutorial.FromCodeOnly(System.IO.File.ReadAllText(commandLineArg), Path.GetFullPath(commandLineArg));
         tutorial.debugLog = true;
         tutorial.ClickSandbox(true, ChooseJsonDialog.Viewing.Custom);
         return;
@@ -241,6 +229,18 @@ public class LocalServerConn : Catalogue
         Tutorial tutorial = Tutorial.FromJson(System.IO.File.ReadAllText(commandLineArg));
         tutorial.debugLog = true;
         tutorial.ClickSandbox(true, ChooseJsonDialog.Viewing.Custom);
+        return;
+      }
+      if (commandLineArg.EndsWith(".png", StringComparison.OrdinalIgnoreCase))
+      {
+        Controller.Instance.OpenMenu(Controller.Instance.MenuMapEditor, false);
+        MapEditor.Instance._open(commandLineArg);
+        return;
+      }
+      if (commandLineArg.EndsWith(".arcpng", StringComparison.OrdinalIgnoreCase))
+      {
+        Controller.Instance.OpenMenu(Controller.Instance.MenuMapEditor, false);
+        MapEditor.Instance._open(commandLineArg);
         return;
       }
     }
@@ -313,15 +313,9 @@ public class LocalServerConn : Catalogue
     Application.Quit();
   }
 
-  public void clickDiscord()
-  {
-    Global.OpenURL(Server.discordLink);
-  }
+  public void clickDiscord() => Global.OpenURL(Server.discordLink);
 
-  public void Cancel()
-  {
-    Application.Quit();
-  }
+  public void Cancel() => Application.Quit();
 
   public void Error(string s)
   {
@@ -362,7 +356,7 @@ public class LocalServerConn : Catalogue
       acc.cosmetics = Client.cosmetics;
       acc.cosmetics.spells.ResetAll();
       Prestige.Unlock(acc, BookOf.Arcane, true, true);
-      Prestige.Unlock(acc, BookOf.Flame, true, false);
+      Prestige.Unlock(acc, BookOf.Flame, true);
       Client._accounts[acc.name] = acc;
       Client.MyAccount = acc;
     }
@@ -458,20 +452,20 @@ public class LocalServerConn : Catalogue
 
   public static string getIpAddress()
   {
-    string str = "<color=red>No Internet Connection could be found</color>";
+    string ipAddress = "<color=red>No Internet Connection could be found</color>";
     try
     {
       using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.IP))
       {
         socket.Connect("8.8.8.8", 65530);
-        str = (socket.LocalEndPoint as IPEndPoint).Address.ToString();
+        ipAddress = (socket.LocalEndPoint as IPEndPoint).Address.ToString();
       }
     }
     catch (Exception ex)
     {
       UnityEngine.Debug.LogError((object) ex);
     }
-    return str;
+    return ipAddress;
   }
 
   private void OnDestroy()
@@ -591,10 +585,7 @@ public class LocalServerConn : Catalogue
     this.Error(s1);
   }
 
-  public void ValidatePassword(string s)
-  {
-    this.Error(Account.ValidPassword(s));
-  }
+  public void ValidatePassword(string s) => this.Error(Account.ValidPassword(s));
 
   public void ValidateSecondPassword(string s)
   {
@@ -626,7 +617,7 @@ public class LocalServerConn : Catalogue
         myBinaryWriter.Write(this.inputPassSteam.gameObject.activeSelf);
         myBinaryWriter.Write(Client.randomBytes);
       }
-      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
+      Client.connection.SendBytes(memoryStream.ToArray());
     }
   }
 
@@ -636,10 +627,7 @@ public class LocalServerConn : Catalogue
     this.panelSteam.SetActive(false);
   }
 
-  public void ToggleSteamLinkAccount(bool v)
-  {
-    this.inputPassSteam.gameObject.SetActive(v);
-  }
+  public void ToggleSteamLinkAccount(bool v) => this.inputPassSteam.gameObject.SetActive(v);
 
   private void Update()
   {
@@ -705,45 +693,42 @@ public class LocalServerConn : Catalogue
 
   public float getAngle(Vector2 me, Vector2 target)
   {
-    return Mathf.Atan2(target.y - me.y, target.x - me.x) * 57.29578f;
+    return Mathf.Atan2(target.y - me.y, target.x - me.x) * 57.2957764f;
   }
 
-  public float getAngle(Vector2 target)
-  {
-    return Mathf.Atan2(target.y, target.x) * 57.29578f;
-  }
+  public float getAngle(Vector2 target) => Mathf.Atan2(target.y, target.x) * 57.2957764f;
 
   public static Vector2 projectToRectEdgeRad(float angle, float width, float height)
   {
-    float num1 = 6.283185f;
-    float f = (float) ((double) angle * 3.14159274101257 / 180.0);
-    while ((double) f < -3.14159274101257)
+    float num1 = 6.28318548f;
+    float f = (float) ((double) angle * 3.1415927410125732 / 180.0);
+    while ((double) f < -3.1415927410125732)
       f += num1;
-    while ((double) f > 3.14159274101257)
+    while ((double) f > 3.1415927410125732)
       f -= num1;
     float num2 = Mathf.Atan2(height, width);
     float num3 = Mathf.Tan(f);
-    Vector2 vector2;
+    Vector2 rectEdgeRad;
     if ((double) f > -(double) num2 && (double) f <= (double) num2)
     {
-      vector2.x = width / 2f;
-      vector2.y = width / 2f * num3;
+      rectEdgeRad.x = width / 2f;
+      rectEdgeRad.y = width / 2f * num3;
     }
-    else if ((double) f > (double) num2 && (double) f <= 3.14159274101257 - (double) num2)
+    else if ((double) f > (double) num2 && (double) f <= 3.1415927410125732 - (double) num2)
     {
-      vector2.x = height / 2f / num3;
-      vector2.y = height / 2f;
+      rectEdgeRad.x = height / 2f / num3;
+      rectEdgeRad.y = height / 2f;
     }
-    else if (((double) f > 3.14159274101257 - (double) num2 || (double) f <= 3.14159274101257 + (double) num2) && (double) Mathf.Abs((float) (-(double) width / 2.0) * num3) < (double) height / 2.0)
+    else if (((double) f > 3.1415927410125732 - (double) num2 || (double) f <= 3.1415927410125732 + (double) num2) && (double) Mathf.Abs((float) (-(double) width / 2.0) * num3) < (double) height / 2.0)
     {
-      vector2.x = (float) (-(double) width / 2.0);
-      vector2.y = (float) (-(double) width / 2.0) * num3;
+      rectEdgeRad.x = (float) (-(double) width / 2.0);
+      rectEdgeRad.y = (float) (-(double) width / 2.0) * num3;
     }
     else
     {
-      vector2.x = (float) (-(double) height / 2.0) / num3;
-      vector2.y = (float) (-(double) height / 2.0);
+      rectEdgeRad.x = (float) (-(double) height / 2.0) / num3;
+      rectEdgeRad.y = (float) (-(double) height / 2.0);
     }
-    return vector2;
+    return rectEdgeRad;
   }
 }

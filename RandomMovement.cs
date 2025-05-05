@@ -1,6 +1,7 @@
 
 using UnityEngine;
 
+#nullable disable
 public class RandomMovement : MonoBehaviour
 {
   public Vector3 Amount = new Vector3(5f, 5f, 0.0f);
@@ -10,10 +11,7 @@ public class RandomMovement : MonoBehaviour
   protected Vector3 lastPos;
   protected Vector3 nextPos;
 
-  private void Awake()
-  {
-    this.time = (float) Random.Range(-100, 100);
-  }
+  private void Awake() => this.time = (float) Random.Range(-100, 100);
 
   private void LateUpdate()
   {

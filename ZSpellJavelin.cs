@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+#nullable disable
 public class ZSpellJavelin : ZSpell
 {
-  public void RemoveFake(ZCreature fake)
-  {
-    fake.collider.Disable(true);
-  }
+  public void RemoveFake(ZCreature fake) => fake.collider.Disable();
 
   public override IEnumerator<float> SpellMove(bool gotoStatic = false, bool checkEffectors = true)
   {
@@ -44,7 +42,7 @@ label_60:
       FixedInt y = zspellJavelin.velocity.y;
       FixedInt fixedInt3 = zspellJavelin.velocity.x;
       FixedInt fixedInt4 = zspellJavelin.velocity.y;
-      if (x > 1 || x < -1 || (y > 1 || y < -1))
+      if (x > 1 || x < -1 || y > 1 || y < -1)
       {
         if (FixedInt.Abs(x) > FixedInt.Abs(y))
           zspellJavelin.steps = (int) FixedInt.Abs(x) + 1;
@@ -127,19 +125,19 @@ label_60:
               }
               else
               {
-                zspellJavelin.hitCreature = zspellJavelin.map.PhysicsCollideCreature(zspellJavelin.toCollideCheck, num4, num5, 0);
+                zspellJavelin.hitCreature = zspellJavelin.map.PhysicsCollideCreature(zspellJavelin.toCollideCheck, num4, num5);
                 if ((ZComponent) zspellJavelin.hitCreature != (object) null && zspellJavelin.hitCreature.GetType() != typeof (ZCreatureJavelin))
                 {
-                  int num6 = zspellJavelin.damage / 2;
-                  int num7 = MyLocation.Distance(zspellJavelin.target, MyLocation.zero);
-                  if (num7 < 45)
-                    zspellJavelin.damage -= (int) Mathd.Lerp((FixedInt) 0, (FixedInt) num6, (FixedInt) (45 - num7) / (FixedInt) 45);
+                  int v1 = zspellJavelin.damage / 2;
+                  int num6 = MyLocation.Distance(zspellJavelin.target, MyLocation.zero);
+                  if (num6 < 45)
+                    zspellJavelin.damage -= (int) Mathd.Lerp((FixedInt) 0, (FixedInt) v1, (FixedInt) (45 - num6) / (FixedInt) 45);
                   zspellJavelin.velocity.y = (FixedInt) 0;
                   zspellJavelin.velocity.x = (FixedInt) 0;
                   zspellJavelin.position = new MyLocation(num2 + zspellJavelin.zb[index2].x, num3 + zspellJavelin.zb[index2].y);
                   zspellJavelin.moving = (IEnumerator<float>) null;
                   zspellJavelin.isMoving = false;
-                  zspellJavelin.hitCreature.ApplyDamage(zspellJavelin.spellEnum, zspellJavelin.damageType, zspellJavelin.damage, zspellJavelin.parent, zspellJavelin.game.turn, (ISpellBridge) zspellJavelin, false);
+                  zspellJavelin.hitCreature.ApplyDamage(zspellJavelin.spellEnum, zspellJavelin.damageType, zspellJavelin.damage, zspellJavelin.parent, zspellJavelin.game.turn, (ISpellBridge) zspellJavelin);
                   zspellJavelin.isDead = true;
                   zspellJavelin.isNull = true;
                   if ((Object) zspellJavelin.explosion != (Object) null)

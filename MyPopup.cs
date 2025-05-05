@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+#nullable disable
 public class MyPopup : MonoBehaviour
 {
   public GameObject item;
@@ -119,22 +120,19 @@ public class MyPopup : MonoBehaviour
     }
     for (int index = 2; index < child1.childCount; ++index)
     {
-      ContentSizeFitter component2 = child1.GetChild(index).GetComponent<ContentSizeFitter>();
-      if (!((UnityEngine.Object) component2 == (UnityEngine.Object) null))
+      ContentSizeFitter component3 = child1.GetChild(index).GetComponent<ContentSizeFitter>();
+      if (!((UnityEngine.Object) component3 == (UnityEngine.Object) null))
       {
-        component2.enabled = false;
-        RectTransform child2 = (RectTransform) child1.GetChild(index);
-        child2.sizeDelta = new Vector2(x, child2.sizeDelta.y);
+        component3.enabled = false;
+        RectTransform child3 = (RectTransform) child1.GetChild(index);
+        child3.sizeDelta = new Vector2(x, child3.sizeDelta.y);
       }
     }
     component1.enabled = false;
     component1.enabled = true;
   }
 
-  public void _Close()
-  {
-    UnityEngine.Object.Destroy((UnityEngine.Object) this.gameObject);
-  }
+  public void _Close() => UnityEngine.Object.Destroy((UnityEngine.Object) this.gameObject);
 
   public void Update()
   {
@@ -155,7 +153,7 @@ public class MyPopup : MonoBehaviour
           if (ch == '\n')
             ++num3;
         }
-        float y = (float) (((double) ((RectTransform) this.container.GetChild(1)).sizeDelta.x / (double) num2 + 2.0 + (double) num3) * 28.4300003051758);
+        float y = (float) (((double) ((RectTransform) this.container.GetChild(1)).sizeDelta.x / (double) num2 + 2.0 + (double) num3) * 28.430000305175781);
         this.container.GetChild(1).GetComponent<ContentSizeFitter>().enabled = false;
         this.container.GetComponent<ContentSizeFitter>().enabled = false;
         ((RectTransform) this.container.GetChild(1)).sizeDelta = new Vector2(x, y);
@@ -165,17 +163,11 @@ public class MyPopup : MonoBehaviour
         return;
       this.shown = true;
       TextMeshProUGUI component1 = this.container.GetChild(1).GetComponent<TextMeshProUGUI>();
-      Color color1 = component1.color;
-      color1.a = 1f;
-      component1.color = color1;
+      component1.color = component1.color with { a = 1f };
       Image component2 = this.container.GetComponent<Image>();
-      Color color2 = component2.color;
-      color2.a = 1f;
-      component2.color = color2;
+      component2.color = component2.color with { a = 1f };
       Image component3 = this.container.GetChild(0).GetComponent<Image>();
-      Color color3 = component3.color;
-      color3.a = 1f;
-      component3.color = color3;
+      component3.color = component3.color with { a = 1f };
     }
   }
 }

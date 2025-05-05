@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+#nullable disable
 public class ProcessReportMenu : MonoBehaviour
 {
-  public int selectedCaseID = -1;
   public TextMeshProUGUI txtCaseNumber;
   public TextMeshProUGUI txtDate;
   public TextMeshProUGUI txtInfo;
@@ -15,13 +15,11 @@ public class ProcessReportMenu : MonoBehaviour
   public TextMeshProUGUI txtClipboard;
   public TMP_Dropdown dropRequest;
   public TMP_Dropdown dropCases;
+  public int selectedCaseID = -1;
 
   public static ProcessReportMenu instance { get; private set; }
 
-  private void Awake()
-  {
-    ProcessReportMenu.instance = this;
-  }
+  private void Awake() => ProcessReportMenu.instance = this;
 
   private void OnDestroy()
   {
@@ -43,25 +41,13 @@ public class ProcessReportMenu : MonoBehaviour
     this.SelectCaseIndex(-1);
   }
 
-  public void Close()
-  {
-    Object.Destroy((Object) this.gameObject);
-  }
+  public void Close() => Object.Destroy((Object) this.gameObject);
 
-  public void VerdictNotGulity()
-  {
-    this.SendReport("notguilty");
-  }
+  public void VerdictNotGulity() => this.SendReport("notguilty");
 
-  public void VerdictMute()
-  {
-    this.SendReport("mute");
-  }
+  public void VerdictMute() => this.SendReport("mute");
 
-  public void VerdictRequest()
-  {
-    this.SendReport(this.dropRequest.itemText.text);
-  }
+  public void VerdictRequest() => this.SendReport(this.dropRequest.itemText.text);
 
   public void SendReport(string x)
   {

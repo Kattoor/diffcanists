@@ -3,13 +3,14 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 
+#nullable disable
 namespace Hazel.Udp
 {
   public sealed class UdpClientConnection : UdpConnection
   {
+    private Socket socket;
     private object socketLock = new object();
     private byte[] dataBuffer = new byte[(int) ushort.MaxValue];
-    private Socket socket;
 
     public UdpClientConnection(NetworkEndPoint remoteEndPoint)
     {
@@ -70,15 +71,13 @@ namespace Hazel.Udp
     {
       lock (this.socketLock)
       {
-        if (this.State != ConnectionState.NotConnected)
-          throw new InvalidOperationException("Cannot connect as the Connection is already connected.");
-        this.State = ConnectionState.Connecting;
+        this.State = this.State == ConnectionState.NotConnected ? ConnectionState.Connecting : throw new InvalidOperationException("Cannot connect as the Connection is already connected.");
         try
         {
           if (this.IPMode == IPMode.IPv4)
-            this.socket.Bind((EndPoint) new IPEndPoint(IPAddress.Any, 0));
+            this.socket.Bind((System.Net.EndPoint) new IPEndPoint(IPAddress.Any, 0));
           else
-            this.socket.Bind((EndPoint) new IPEndPoint(IPAddress.IPv6Any, 0));
+            this.socket.Bind((System.Net.EndPoint) new IPEndPoint(IPAddress.IPv6Any, 0));
         }
         catch (SocketException ex)
         {

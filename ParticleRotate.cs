@@ -1,6 +1,7 @@
 
 using UnityEngine;
 
+#nullable disable
 public class ParticleRotate : MonoBehaviour
 {
   public float speed = 10f;

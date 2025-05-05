@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
+#nullable disable
 [RequireComponent(typeof (TMP_InputField))]
 public class HexColorField : MonoBehaviour
 {
@@ -51,54 +52,54 @@ public class HexColorField : MonoBehaviour
   {
     if (Regex.IsMatch(hex, "^#?(?:[0-9a-fA-F]{3,4}){1,2}$"))
     {
-      int startIndex = hex.StartsWith("#") ? 1 : 0;
-      if (hex.Length == startIndex + 8)
-        color = new Color32(byte.Parse(hex.Substring(startIndex, 2), NumberStyles.AllowHexSpecifier), byte.Parse(hex.Substring(startIndex + 2, 2), NumberStyles.AllowHexSpecifier), byte.Parse(hex.Substring(startIndex + 4, 2), NumberStyles.AllowHexSpecifier), byte.Parse(hex.Substring(startIndex + 6, 2), NumberStyles.AllowHexSpecifier));
-      else if (hex.Length == startIndex + 6)
-        color = new Color32(byte.Parse(hex.Substring(startIndex, 2), NumberStyles.AllowHexSpecifier), byte.Parse(hex.Substring(startIndex + 2, 2), NumberStyles.AllowHexSpecifier), byte.Parse(hex.Substring(startIndex + 4, 2), NumberStyles.AllowHexSpecifier), byte.MaxValue);
-      else if (hex.Length == startIndex + 4)
+      int num = hex.StartsWith("#") ? 1 : 0;
+      if (hex.Length == num + 8)
+        color = new Color32(byte.Parse(hex.Substring(num, 2), NumberStyles.AllowHexSpecifier), byte.Parse(hex.Substring(num + 2, 2), NumberStyles.AllowHexSpecifier), byte.Parse(hex.Substring(num + 4, 2), NumberStyles.AllowHexSpecifier), byte.Parse(hex.Substring(num + 6, 2), NumberStyles.AllowHexSpecifier));
+      else if (hex.Length == num + 6)
+        color = new Color32(byte.Parse(hex.Substring(num, 2), NumberStyles.AllowHexSpecifier), byte.Parse(hex.Substring(num + 2, 2), NumberStyles.AllowHexSpecifier), byte.Parse(hex.Substring(num + 4, 2), NumberStyles.AllowHexSpecifier), byte.MaxValue);
+      else if (hex.Length == num + 4)
       {
         ref Color32 local = ref color;
-        string str1 = hex[startIndex].ToString();
-        char ch = hex[startIndex];
+        string str1 = hex[num].ToString();
+        char ch = hex[num];
         string str2 = ch.ToString();
-        int num1 = (int) byte.Parse(str1 + str2, NumberStyles.AllowHexSpecifier);
-        ch = hex[startIndex + 1];
+        int r = (int) byte.Parse(str1 + str2, NumberStyles.AllowHexSpecifier);
+        ch = hex[num + 1];
         string str3 = ch.ToString();
-        ch = hex[startIndex + 1];
+        ch = hex[num + 1];
         string str4 = ch.ToString();
-        int num2 = (int) byte.Parse(str3 + str4, NumberStyles.AllowHexSpecifier);
-        ch = hex[startIndex + 2];
+        int g = (int) byte.Parse(str3 + str4, NumberStyles.AllowHexSpecifier);
+        ch = hex[num + 2];
         string str5 = ch.ToString();
-        ch = hex[startIndex + 2];
+        ch = hex[num + 2];
         string str6 = ch.ToString();
-        int num3 = (int) byte.Parse(str5 + str6, NumberStyles.AllowHexSpecifier);
-        ch = hex[startIndex + 3];
+        int b = (int) byte.Parse(str5 + str6, NumberStyles.AllowHexSpecifier);
+        ch = hex[num + 3];
         string str7 = ch.ToString();
-        ch = hex[startIndex + 3];
+        ch = hex[num + 3];
         string str8 = ch.ToString();
-        int num4 = (int) byte.Parse(str7 + str8, NumberStyles.AllowHexSpecifier);
-        Color32 color32 = new Color32((byte) num1, (byte) num2, (byte) num3, (byte) num4);
+        int a = (int) byte.Parse(str7 + str8, NumberStyles.AllowHexSpecifier);
+        Color32 color32 = new Color32((byte) r, (byte) g, (byte) b, (byte) a);
         local = color32;
       }
       else
       {
         ref Color32 local = ref color;
-        string str1 = hex[startIndex].ToString();
-        char ch = hex[startIndex];
-        string str2 = ch.ToString();
-        int num1 = (int) byte.Parse(str1 + str2, NumberStyles.AllowHexSpecifier);
-        ch = hex[startIndex + 1];
-        string str3 = ch.ToString();
-        ch = hex[startIndex + 1];
-        string str4 = ch.ToString();
-        int num2 = (int) byte.Parse(str3 + str4, NumberStyles.AllowHexSpecifier);
-        ch = hex[startIndex + 2];
-        string str5 = ch.ToString();
-        ch = hex[startIndex + 2];
-        string str6 = ch.ToString();
-        int num3 = (int) byte.Parse(str5 + str6, NumberStyles.AllowHexSpecifier);
-        Color32 color32 = new Color32((byte) num1, (byte) num2, (byte) num3, byte.MaxValue);
+        string str9 = hex[num].ToString();
+        char ch = hex[num];
+        string str10 = ch.ToString();
+        int r = (int) byte.Parse(str9 + str10, NumberStyles.AllowHexSpecifier);
+        ch = hex[num + 1];
+        string str11 = ch.ToString();
+        ch = hex[num + 1];
+        string str12 = ch.ToString();
+        int g = (int) byte.Parse(str11 + str12, NumberStyles.AllowHexSpecifier);
+        ch = hex[num + 2];
+        string str13 = ch.ToString();
+        ch = hex[num + 2];
+        string str14 = ch.ToString();
+        int b = (int) byte.Parse(str13 + str14, NumberStyles.AllowHexSpecifier);
+        Color32 color32 = new Color32((byte) r, (byte) g, (byte) b, byte.MaxValue);
         local = color32;
       }
       return true;

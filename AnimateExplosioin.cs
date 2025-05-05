@@ -1,6 +1,7 @@
 
 using UnityEngine;
 
+#nullable disable
 public class AnimateExplosioin : MonoBehaviour
 {
   public float timeToFinish = 1f;
@@ -13,6 +14,12 @@ public class AnimateExplosioin : MonoBehaviour
   private void Start()
   {
     this.sp = this.GetComponent<SpriteRenderer>();
+    this.timeBetweenFrames = this.timeToFinish / (float) this.sprites.Length;
+  }
+
+  internal void UpdateTimeToFinish(float f)
+  {
+    this.timeToFinish = f;
     this.timeBetweenFrames = this.timeToFinish / (float) this.sprites.Length;
   }
 

@@ -3,11 +3,12 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+#nullable disable
 [Serializable]
 public class PoolElectricity
 {
-  private List<ParticleElectricity> pool2 = new List<ParticleElectricity>();
   public GameObject o;
+  private List<ParticleElectricity> pool2 = new List<ParticleElectricity>();
 
   public void Spawn(Vector3 start, Vector3 end)
   {

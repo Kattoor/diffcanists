@@ -1,11 +1,12 @@
 
 using UnityEngine;
 
+#nullable disable
 public class ScrollUp : MonoBehaviour
 {
-  public float speed = 30f;
   public RectTransform parent;
   public RectTransform rect;
+  public float speed = 30f;
 
   private void Update()
   {

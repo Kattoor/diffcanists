@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
+#nullable disable
 namespace Ninja.WebSockets
 {
   public class WebSocketServerFactory : IWebSocketServerFactory

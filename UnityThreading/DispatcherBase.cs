@@ -4,25 +4,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
+#nullable disable
 namespace UnityThreading
 {
   public abstract class DispatcherBase : IDisposable
   {
+    protected int lockCount;
     protected object taskListSyncRoot = new object();
     protected Queue<Task> taskList = new Queue<Task>();
     protected Queue<Task> delayedTaskList = new Queue<Task>();
     protected ManualResetEvent dataEvent = new ManualResetEvent(false);
-    protected int lockCount;
     public bool AllowAccessLimitationChecks;
     public TaskSortingSystem TaskSortingSystem;
 
-    public bool IsWorking
-    {
-      get
-      {
-        return this.dataEvent.InterWaitOne(0);
-      }
-    }
+    public bool IsWorking => this.dataEvent.InterWaitOne(0);
 
     public virtual int TaskCount
     {
@@ -142,10 +137,7 @@ label_23:
       this.TasksAdded();
     }
 
-    internal virtual void TasksAdded()
-    {
-      this.dataEvent.Set();
-    }
+    internal virtual void TasksAdded() => this.dataEvent.Set();
 
     protected void ReorderTasks()
     {

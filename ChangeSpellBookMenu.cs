@@ -8,12 +8,9 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
+#nullable disable
 public class ChangeSpellBookMenu : MonoBehaviour
 {
-  private string selectedBook = "";
-  private string selectedFilePath = "";
-  private SettingsPlayer settingsPlayer = new SettingsPlayer();
-  private string subDir = "";
   public GameObject buttonOpenFileExplorer;
   public InputFieldPlus input;
   public RectTransform container;
@@ -28,6 +25,8 @@ public class ChangeSpellBookMenu : MonoBehaviour
   public TMP_Text textMouseoverSpell;
   public TMP_Text textMouseoverSpellExtra;
   public GameObject MouseoverObj;
+  private string selectedBook = "";
+  private string selectedFilePath = "";
   private GameObject selectedGameObject;
   public UIOnHover buttonDelete;
   public UIOnHover buttonRename;
@@ -36,9 +35,11 @@ public class ChangeSpellBookMenu : MonoBehaviour
   public GameObject pfabFolder;
   [Header("Share")]
   public UIOnHover buttonShare;
+  private SettingsPlayer settingsPlayer = new SettingsPlayer();
   private Action<SettingsPlayer> onEnd;
   public static ChangeSpellBookMenu Instance;
   private float lastClick;
+  private string subDir = "";
 
   public static void Create(bool saving, SettingsPlayer sp = null, Action<SettingsPlayer> onEnd = null)
   {
@@ -58,10 +59,10 @@ public class ChangeSpellBookMenu : MonoBehaviour
     {
       ChangeSpellBookMenu.Instance.input.onEnd.AddListener(new UnityAction<string>(ChangeSpellBookMenu.Instance.OnEndEdit));
       ChangeSpellBookMenu.Instance.input.gameObject.SetActive(true);
-      ChangeSpellBookMenu.Instance.input.SetAsActive(true);
+      ChangeSpellBookMenu.Instance.input.SetAsActive();
     }
     if (sp != null)
-      ChangeSpellBookMenu.Instance.settingsPlayer.CopySpells(sp, false);
+      ChangeSpellBookMenu.Instance.settingsPlayer.CopySpells(sp);
     if (!((UnityEngine.Object) LobbyMenu.instance != (UnityEngine.Object) null) && !((UnityEngine.Object) UnratedMenu.instance != (UnityEngine.Object) null) && (!((UnityEngine.Object) RatedMenu.instance != (UnityEngine.Object) null) || string.IsNullOrEmpty(Client.sharingWith)))
       return;
     ChangeSpellBookMenu.Instance.buttonShare.transform.gameObject.SetActive(true);
@@ -69,7 +70,7 @@ public class ChangeSpellBookMenu : MonoBehaviour
 
   public void ClickShare()
   {
-    Client.AskToShare(Path.GetFileNameWithoutExtension(this.selectedBook), ContentType.SpellBook, (object) this.settingsPlayer, false);
+    Client.AskToShare(Path.GetFileNameWithoutExtension(this.selectedBook), ContentType.SpellBook, (object) this.settingsPlayer);
     this.Cancel();
   }
 
@@ -78,18 +79,15 @@ public class ChangeSpellBookMenu : MonoBehaviour
     if ((UnityEngine.Object) ChangeSpellBookMenu.Instance != (UnityEngine.Object) null)
       UnityEngine.Object.Destroy((UnityEngine.Object) ChangeSpellBookMenu.Instance.gameObject);
     ChangeSpellBookMenu.Instance = this;
-    this.Load("");
-    this.settingsPlayer.CopySpells(Client.settingsPlayer, false);
+    this.Load();
+    this.settingsPlayer.CopySpells(Client.settingsPlayer);
     GameObject openFileExplorer = this.buttonOpenFileExplorer;
     if (openFileExplorer == null)
       return;
     openFileExplorer.HideIfWebGL();
   }
 
-  private void Start()
-  {
-    this.SetSpells();
-  }
+  private void Start() => this.SetSpells();
 
   private void OnDestroy()
   {
@@ -140,7 +138,7 @@ public class ChangeSpellBookMenu : MonoBehaviour
       gameObject.GetComponent<TextMeshProUGUI>().text = ss;
       gameObject.GetComponent<UIOnHover>().onRightClick.AddListener((UnityAction) (() => this.OnRightClick(dir, gameObject)));
     });
-    myContextMenu.AddInput(a, (string) null, false);
+    myContextMenu.AddInput(a);
   }
 
   public void OnRightClick(string s, GameObject gameObject)
@@ -148,10 +146,9 @@ public class ChangeSpellBookMenu : MonoBehaviour
     if (!File.Exists(s))
       return;
     MyContextMenu myContextMenu = MyContextMenu.Show();
-    myContextMenu.AddSeperator("--------------------------");
+    myContextMenu.AddSeperator();
     myContextMenu.AddItem("Rename", (Action) (() => MyContextMenu.Show().AddInput((Action<string>) (ss =>
     {
-      ChangeSpellBookMenu.\u003C\u003Ec__DisplayClass33_0 cDisplayClass330 = this;
       if (string.IsNullOrEmpty(ss))
         return;
       string dir = s.Substring(0, s.Length - Path.GetFileName(s).Length) + ss + Path.GetExtension(s);
@@ -160,14 +157,14 @@ public class ChangeSpellBookMenu : MonoBehaviour
       gameObject.GetComponent<UIOnHover>().onRightClick.RemoveAllListeners();
       gameObject.name = dir;
       gameObject.GetComponent<TextMeshProUGUI>().text = ss;
-      gameObject.GetComponent<UIOnHover>().onRightClick.AddListener((UnityAction) (() => cDisplayClass330.\u003C\u003E4__this.OnRightClick(dir, cDisplayClass330.gameObject)));
-    }), (string) null, false)), (Color) ColorScheme.GetColor(MyContextMenu.ColorYellow));
+      gameObject.GetComponent<UIOnHover>().onRightClick.AddListener((UnityAction) (() => this.OnRightClick(dir, gameObject)));
+    }))), (Color) ColorScheme.GetColor(MyContextMenu.ColorYellow));
     myContextMenu.AddItem("Delete " + Path.GetFileNameWithoutExtension(s), (Action) (() =>
     {
       Global.DeleteFile(s);
       UnityEngine.Object.Destroy((UnityEngine.Object) gameObject);
     }), (Color) ColorScheme.GetColor(MyContextMenu.ColorRed));
-    myContextMenu.Rebuild(false);
+    myContextMenu.Rebuild();
   }
 
   private void Load(string subFolder = "")
@@ -212,7 +209,7 @@ public class ChangeSpellBookMenu : MonoBehaviour
       UIOnHover component1 = gameObject1.GetComponent<UIOnHover>();
       component1.textNormalColor = Color.green;
       gameObject1.GetComponent<TMP_Text>().color = Color.green;
-      component1.onClick.AddListener((UnityAction) (() => this.Load("")));
+      component1.onClick.AddListener((UnityAction) (() => this.Load()));
       gameObject1.SetActive(true);
       GameObject gameObject2 = UnityEngine.Object.Instantiate<GameObject>(this.pfabFolder, (Transform) this.containerFolder);
       RectTransform rect = (RectTransform) gameObject2.transform;
@@ -221,19 +218,19 @@ public class ChangeSpellBookMenu : MonoBehaviour
       rect.GetComponent<TMP_Text>().text = "Up One Folder";
       string fullName = Directory.GetParent(Directory.GetParent(path).FullName).FullName;
       RectTransform rectTransform = rect;
-      string str3;
+      string str5;
       if (fullName.Length <= length)
       {
-        str3 = "";
+        str5 = "";
       }
       else
       {
-        string str4 = fullName.Substring(length);
+        string str6 = fullName.Substring(length);
         directorySeparatorChar = Path.DirectorySeparatorChar;
-        string str5 = directorySeparatorChar.ToString();
-        str3 = str4 + str5;
+        string str7 = directorySeparatorChar.ToString();
+        str5 = str6 + str7;
       }
-      rectTransform.name = str3;
+      rectTransform.name = str5;
       UIOnHover component2 = gameObject2.GetComponent<UIOnHover>();
       component2.textNormalColor = Color.green;
       gameObject2.GetComponent<TMP_Text>().color = Color.green;
@@ -249,11 +246,11 @@ public class ChangeSpellBookMenu : MonoBehaviour
       rect.localScale = new Vector3(1f, 1f, 1f);
       rect.GetComponent<TMP_Text>().text = directories[index].Substring(path.Length);
       RectTransform rectTransform = rect;
-      string str3 = directories[index].Substring(length);
+      string str8 = directories[index].Substring(length);
       directorySeparatorChar = Path.DirectorySeparatorChar;
-      string str4 = directorySeparatorChar.ToString();
-      string str5 = str3 + str4;
-      rectTransform.name = str5;
+      string str9 = directorySeparatorChar.ToString();
+      string str10 = str8 + str9;
+      rectTransform.name = str10;
       gameObject.GetComponent<UIOnHover>().onClick.AddListener((UnityAction) (() => this.Load(rect.name)));
       gameObject.SetActive(true);
     }
@@ -264,14 +261,14 @@ public class ChangeSpellBookMenu : MonoBehaviour
       numArray[index] = this.column[index].anchoredPosition.y;
     int index1 = 0;
     float num2 = 0.0f;
-    foreach (string str3 in list)
+    foreach (string str11 in list)
     {
       GameObject g = UnityEngine.Object.Instantiate<GameObject>(this.pfabBook, (Transform) this.container);
       RectTransform transform = (RectTransform) g.transform;
       transform.localScale = new Vector3(1f, 1f, 1f);
       transform.anchoredPosition = new Vector2(this.column[index1].anchoredPosition.x, numArray[index1]);
-      string s = str3;
-      g.name = str3;
+      string s = str11;
+      g.name = str11;
       g.GetComponent<TextMeshProUGUI>().text = Path.GetFileNameWithoutExtension(g.name);
       g.GetComponent<UIOnHover>().onClick.AddListener((UnityAction) (() =>
       {
@@ -307,7 +304,7 @@ public class ChangeSpellBookMenu : MonoBehaviour
         return;
       if ((UnityEngine.Object) SpellSelection.Instance != (UnityEngine.Object) null)
       {
-        Client.settingsPlayer.CopySpells(this.settingsPlayer, false);
+        Client.settingsPlayer.CopySpells(this.settingsPlayer);
         SpellSelection.Instance.RefreshList();
       }
       else
@@ -383,7 +380,7 @@ public class ChangeSpellBookMenu : MonoBehaviour
     {
       if (this.settingsPlayer.spells[index] != byte.MaxValue && (int) this.settingsPlayer.spells[index] < Inert.Instance._spells.Length)
       {
-        this.spellSlot[index].sprite = !this.settingsPlayer._spells.SeasonsIsHoliday || this.settingsPlayer.spells[index] < (byte) 120 || this.settingsPlayer.spells[index] >= (byte) 132 ? ClientResources.Instance.icons.GetItem((int) this.settingsPlayer.spells[index]).Value : ClientResources.Instance.icons[Inert.Instance.holidaySpells[(int) this.settingsPlayer.spells[index] % 12].name];
+        this.spellSlot[index].sprite = !this.settingsPlayer._spells.IsAlt((int) this.settingsPlayer.spells[index]) ? ClientResources.Instance.icons.GetItem((int) this.settingsPlayer.spells[index]).Value : ClientResources.Instance.icons[Inert.Instance.altSpells[(int) this.settingsPlayer.spells[index]].name];
         this.spellSlot[index].enabled = true;
         if (Client.viewSpellLocks.ViewLocked() && !Prestige.IsUnlocked(Client.MyAccount, (int) this.settingsPlayer.spells[index]))
         {
@@ -395,7 +392,7 @@ public class ChangeSpellBookMenu : MonoBehaviour
           if (Client.viewSpellLocks.ViewRestricted())
           {
             Restrictions restrictions = Server._restrictions;
-            if ((restrictions != null ? (restrictions.CheckRestricted((int) this.settingsPlayer.spells[index]) ? 1 : 0) : 0) != 0)
+            if ((restrictions != null ? (restrictions.CheckRestricted(this.settingsPlayer._spells, (int) this.settingsPlayer.spells[index]) ? 1 : 0) : 0) != 0)
             {
               this.restricted[index].gameObject.SetActive(true);
               this.restricted[index].sprite = ClientResources.Instance.imgRestricted;
@@ -444,10 +441,7 @@ public class ChangeSpellBookMenu : MonoBehaviour
     this.Cancel();
   }
 
-  public void OpenFileLocation()
-  {
-    Global.OpenFileLocation("SavedSpells");
-  }
+  public void OpenFileLocation() => Global.OpenFileLocation("SavedSpells");
 
   public void HoverElemental()
   {
@@ -464,14 +458,11 @@ public class ChangeSpellBookMenu : MonoBehaviour
       return;
     KeyValuePair<string, Spell> keyValuePair = Inert.Instance.spells.GetItem((int) this.settingsPlayer.spells[i]);
     this.headerMouseoverSpell.text = keyValuePair.Key;
-    (this.textMouseoverSpell.text, this.textMouseoverSpellExtra.text) = Descriptions.GetSpellDescription(keyValuePair.Key, (SpellSlot) null, false);
+    (this.textMouseoverSpell.text, this.textMouseoverSpellExtra.text) = Descriptions.GetSpellDescription(keyValuePair.Key);
     this.MouseoverObj.SetActive(true);
   }
 
-  public void Leave()
-  {
-    this.MouseoverObj.SetActive(false);
-  }
+  public void Leave() => this.MouseoverObj.SetActive(false);
 
   public void OnTouch()
   {

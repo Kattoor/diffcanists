@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+#nullable disable
 [Serializable]
 public class ClanOutfit
 {
@@ -39,7 +40,7 @@ public class ClanOutfit
 
   public bool OutfitNoMouth(int index)
   {
-    return this.outfits != null && this.outfits.Length > 1 && ((int) SettingsPlayer.clanOutfit[1] == index && this.outfits[1] != null) && this.outfits[1].effect == (byte) 1;
+    return this.outfits != null && this.outfits.Length > 1 && (int) SettingsPlayer.clanOutfit[1] == index && this.outfits[1] != null && this.outfits[1].effect == (byte) 1;
   }
 
   public Sprite GetSprite(int index, Outfit o)
@@ -105,9 +106,9 @@ public class ClanOutfit
   [Serializable]
   public class Meta
   {
-    public MyVector2 pivot = MyVector2.zero;
     public byte[] png;
     public byte effect;
+    public MyVector2 pivot = MyVector2.zero;
     [NonSerialized]
     public Sprite clientTexture;
 

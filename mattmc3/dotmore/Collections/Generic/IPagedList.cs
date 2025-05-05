@@ -1,4 +1,5 @@
 
+#nullable disable
 namespace mattmc3.dotmore.Collections.Generic
 {
   internal interface IPagedList

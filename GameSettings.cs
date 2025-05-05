@@ -4,36 +4,37 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
+#nullable disable
 [Serializable]
 public class GameSettings
 {
+  public ZGame.GameType gameType;
   public int gameModes = 1073808464;
   public int gameModes2 = 2097152;
+  public int gameModes3;
   public int gameModes4 = 32768;
   public byte elementalLevel = 5;
   public ushort startHealth = 250;
   public byte armageddonTurn = 10;
+  public short countdownTime;
   public byte countdownDelay = 5;
   public ushort customTime = 60;
   public byte customPlayerCount = 6;
-  public string description = "";
-  public byte mapWidth = 100;
-  public byte mapHeight = 100;
-  public int bansPerPhase = 5;
-  public int timerPerBanPhase = 20;
-  public int timerPerPickPhase = 60;
-  public ZGame.GameType gameType;
-  public int gameModes3;
-  public short countdownTime;
   public Restrictions restrictions;
+  public string description = "";
   public int mapSeed;
   public bool fixedMapSeed;
+  public byte mapWidth = 100;
+  public byte mapHeight = 100;
   public bool altGeneration;
   public WaterStyle water;
   public const byte Version = 5;
   public List<SpellEnum> customArmageddon;
   public List<SpellEnum> autoInclude;
   public int banPhases;
+  public int bansPerPhase = 5;
+  public int timerPerBanPhase = 20;
+  public int timerPerPickPhase = 60;
 
   public string FilteredDescription()
   {
@@ -77,7 +78,7 @@ public class GameSettings
         {
           b.Serialize(w);
           memoryStream.Position = 0L;
-          this.Deserialize(r, (byte) 5);
+          this.Deserialize(r);
         }
       }
     }
@@ -100,7 +101,7 @@ public class GameSettings
     w.Write((int) this.gameType);
     w.Write(this.altGeneration);
     w.Write((int) this.water);
-    w.Write(this.restrictions == null ? (byte) 0 : (byte) 1);
+    w.Write(this.restrictions == null ? (byte) 0 : (byte) 2);
     if (this.restrictions != null)
       this.restrictions.Serialize(w);
     w.Write(this.mapSeed);
@@ -156,7 +157,7 @@ public class GameSettings
     if (version1 > (byte) 0)
     {
       if (this.restrictions != null)
-        this.restrictions.DeserializeInstance(r);
+        this.restrictions.DeserializeInstance2(r);
       else
         this.restrictions = Restrictions.Deserialize(r, version1);
     }

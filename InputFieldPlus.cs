@@ -6,19 +6,19 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
+#nullable disable
 public class InputFieldPlus : MonoBehaviour
 {
+  public TMP_Text inputText;
+  public TMP_Text caretText;
+  public bool IsReportInput;
+  public bool NOCALLBACK;
   public string caretString = "|";
   public float blinkTime = 0.5f;
   public int maxChars = 20;
   public bool allowSpecialChars = true;
   public Color32 caretColor = (Color32) Color.cyan;
   public bool focused = true;
-  private string caretString2 = "";
-  public TMP_Text inputText;
-  public TMP_Text caretText;
-  public bool IsReportInput;
-  public bool NOCALLBACK;
   public bool allowEmoji;
   public TMP_Text txtDefault;
   internal bool suggestingEmoji;
@@ -28,15 +28,10 @@ public class InputFieldPlus : MonoBehaviour
   private int caretPos;
   private float curBlinkTime;
   private bool caretVisible;
+  private string caretString2 = "";
   private static InputFieldPlus active;
 
-  public int GetCaretPos
-  {
-    get
-    {
-      return this.caretPos;
-    }
-  }
+  public int GetCaretPos => this.caretPos;
 
   public static bool Active
   {
@@ -98,15 +93,9 @@ public class InputFieldPlus : MonoBehaviour
     this.caretVisible = false;
   }
 
-  public void ClickOk()
-  {
-    this.onEnd?.Invoke(this.inputText.text);
-  }
+  public void ClickOk() => this.onEnd?.Invoke(this.inputText.text);
 
-  public void OnTouch()
-  {
-    ClientResources.Instance.OnTouch(this);
-  }
+  public void OnTouch() => ClientResources.Instance.OnTouch(this);
 
   public void Init(Color32 c)
   {
@@ -146,13 +135,7 @@ public class InputFieldPlus : MonoBehaviour
     return false;
   }
 
-  public bool IsTheActiveInput
-  {
-    get
-    {
-      return (UnityEngine.Object) InputFieldPlus.active == (UnityEngine.Object) this;
-    }
-  }
+  public bool IsTheActiveInput => (UnityEngine.Object) InputFieldPlus.active == (UnityEngine.Object) this;
 
   public void ToggleEmoji()
   {
@@ -240,9 +223,9 @@ public class InputFieldPlus : MonoBehaviour
 
   private void Update()
   {
-    if ((UnityEngine.Object) InputFieldPlus.active != (UnityEngine.Object) null && (UnityEngine.Object) InputFieldPlus.active != (UnityEngine.Object) this || (this.ActiveInputField() || !this.focused) || QuickchatUI.Active)
+    if ((UnityEngine.Object) InputFieldPlus.active != (UnityEngine.Object) null && (UnityEngine.Object) InputFieldPlus.active != (UnityEngine.Object) this || this.ActiveInputField() || !this.focused || QuickchatUI.Active)
       return;
-    if (this.inputText.text.Length < this.maxChars && this.allowSpecialChars && (Input.GetKeyDown(KeyCode.Space) && Input.GetKey(KeyCode.LeftControl)) && !ChatBox.UsingMobileInput)
+    if (this.inputText.text.Length < this.maxChars && this.allowSpecialChars && Input.GetKeyDown(KeyCode.Space) && Input.GetKey(KeyCode.LeftControl) && !ChatBox.UsingMobileInput)
     {
       QuickchatUI.Create();
     }
@@ -253,7 +236,7 @@ public class InputFieldPlus : MonoBehaviour
         if (!((UnityEngine.Object) HUD.instance == (UnityEngine.Object) null) && !HUD.instance.Chatting())
         {
           ZGame game = Client.game;
-          if ((game != null ? (game.isSandbox ? 1 : 0) : 0) == 0 && !((UnityEngine.Object) SpellLobbyChange.Instance != (UnityEngine.Object) null) && (!((UnityEngine.Object) MyContextMenu.instance != (UnityEngine.Object) null) && !this.IsReportInput))
+          if ((game != null ? (game.isSandbox ? 1 : 0) : 0) == 0 && !((UnityEngine.Object) SpellLobbyChange.Instance != (UnityEngine.Object) null) && !((UnityEngine.Object) MyContextMenu.instance != (UnityEngine.Object) null) && !this.IsReportInput)
             goto label_12;
         }
         this.ProcessString(Global.InputString);
@@ -373,7 +356,7 @@ label_30:
           break;
         case '\n':
         case '\r':
-          if (this.suggestingEmoji && this.emojiSuggest.ActiveSelection || ((UnityEngine.Object) ReportMenu.instance != (UnityEngine.Object) null || this.NOCALLBACK))
+          if (this.suggestingEmoji && this.emojiSuggest.ActiveSelection || (UnityEngine.Object) ReportMenu.instance != (UnityEngine.Object) null || this.NOCALLBACK)
             return;
           if (this.onEnd != null)
             this.onEnd.Invoke(this.inputText.text.Trim());
@@ -385,7 +368,7 @@ label_30:
           this.emojiSuggest.gameObject.SetActive(false);
           return;
         default:
-          if (this.inputText.text.Length < this.maxChars && (this.allowSpecialChars || ch >= '0' && ch <= '9' || (ch >= 'A' && ch <= 'Z' || ch >= 'a' && ch <= 'z') || (ch == ' ' || ch == '_')))
+          if (this.inputText.text.Length < this.maxChars && (this.allowSpecialChars || ch >= '0' && ch <= '9' || ch >= 'A' && ch <= 'Z' || ch >= 'a' && ch <= 'z' || ch == ' ' || ch == '_'))
           {
             if (this.caretPos == this.inputText.text.Length)
             {
@@ -424,7 +407,7 @@ label_30:
     StringBuilder stringBuilder = new StringBuilder();
     foreach (char ch in str)
     {
-      if (ch >= '0' && ch <= '9' || ch >= 'A' && ch <= 'Z' || (ch >= 'a' && ch <= 'z' || (ch == ' ' || ch == '_')))
+      if (ch >= '0' && ch <= '9' || ch >= 'A' && ch <= 'Z' || ch >= 'a' && ch <= 'z' || ch == ' ' || ch == '_')
         stringBuilder.Append(ch);
     }
     return stringBuilder.ToString();
@@ -435,17 +418,14 @@ label_30:
     return "#" + c.r.ToString("X2") + c.g.ToString("X2") + c.b.ToString("X2") + c.a.ToString("X2");
   }
 
-  public void ProcessEvent(Event e)
-  {
-    this.KeyPressed(e);
-  }
+  public void ProcessEvent(Event e) => this.KeyPressed(e);
 
   protected bool KeyPressed(Event evt)
   {
     EventModifiers modifiers = evt.modifiers;
-    int num = SystemInfo.operatingSystemFamily == OperatingSystemFamily.MacOSX ? ((uint) (modifiers & EventModifiers.Command) > 0U ? 1 : 0) : ((uint) (modifiers & EventModifiers.Control) > 0U ? 1 : 0);
-    bool flag1 = (uint) (modifiers & EventModifiers.Shift) > 0U;
-    bool flag2 = (uint) (modifiers & EventModifiers.Alt) > 0U;
+    int num = SystemInfo.operatingSystemFamily == OperatingSystemFamily.MacOSX ? ((modifiers & EventModifiers.Command) != 0 ? 1 : 0) : ((modifiers & EventModifiers.Control) != 0 ? 1 : 0);
+    bool flag1 = (modifiers & EventModifiers.Shift) != 0;
+    bool flag2 = (modifiers & EventModifiers.Alt) != 0;
     bool flag3 = num != 0 && !flag2 && !flag1;
     switch (evt.keyCode)
     {
@@ -491,7 +471,7 @@ label_30:
 
   protected virtual bool IsValidChar(char c)
   {
-    if (c == char.MinValue || c == '\x007F')
+    if (c == char.MinValue || c == '\u007F')
       return false;
     if (c != '\t')
       ;

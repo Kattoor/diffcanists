@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+#nullable disable
 [Serializable]
 public class TeamColors
 {
@@ -26,10 +27,7 @@ public class TeamColors
     return ((IEnumerable<Color>) this.ffa_colors).Concat<Color>((IEnumerable<Color>) this.team_colors).Concat<Color>((IEnumerable<Color>) this.team2Colors).Concat<Color>((IEnumerable<Color>) this.team3Colors).Concat<Color>((IEnumerable<Color>) this.team4Colors).Concat<Color>((IEnumerable<Color>) this.team5Colors).Concat<Color>((IEnumerable<Color>) this.team6Colors).Concat<Color>((IEnumerable<Color>) this.team7Colors).Concat<Color>((IEnumerable<Color>) this.team8Colors).Concat<Color>((IEnumerable<Color>) this.team9Colors).Concat<Color>((IEnumerable<Color>) this.team10Colors).Concat<Color>((IEnumerable<Color>) this.team11Colors).Concat<Color>((IEnumerable<Color>) this.team12Colors);
   }
 
-  public static TeamColors GetBlindness(int i)
-  {
-    return ClientResources.Instance.colorsRegular;
-  }
+  public static TeamColors GetBlindness(int i) => ClientResources.Instance.colorsRegular;
 
   public static Color GetColor(int i)
   {

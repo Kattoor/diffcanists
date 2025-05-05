@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
+#nullable disable
 namespace InGameCodeEditor
 {
   [CreateAssetMenu(fileName = "Code Language Theme", menuName = "InGame Code Editor/Code Language Theme")]

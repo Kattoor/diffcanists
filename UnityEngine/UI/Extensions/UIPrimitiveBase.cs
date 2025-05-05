@@ -2,16 +2,17 @@
 using System;
 using System.Collections.Generic;
 
+#nullable disable
 namespace UnityEngine.UI.Extensions
 {
   public class UIPrimitiveBase : MaskableGraphic, ILayoutElement, ICanvasRaycastFilter
   {
-    internal float m_EventAlphaThreshold = 1f;
     protected static Material s_ETC1DefaultUI;
     [SerializeField]
     private Sprite m_Sprite;
     [NonSerialized]
     private Sprite m_OverrideSprite;
+    internal float m_EventAlphaThreshold = 1f;
     [SerializeField]
     private ResolutionMode m_improveResolution;
     [SerializeField]
@@ -21,10 +22,7 @@ namespace UnityEngine.UI.Extensions
 
     public Sprite sprite
     {
-      get
-      {
-        return this.m_Sprite;
-      }
+      get => this.m_Sprite;
       set
       {
         if (SetPropertyUtility.SetClass<Sprite>(ref this.m_Sprite, value))
@@ -35,10 +33,7 @@ namespace UnityEngine.UI.Extensions
 
     public Sprite overrideSprite
     {
-      get
-      {
-        return this.activeSprite;
-      }
+      get => this.activeSprite;
       set
       {
         if (SetPropertyUtility.SetClass<Sprite>(ref this.m_OverrideSprite, value))
@@ -57,22 +52,13 @@ namespace UnityEngine.UI.Extensions
 
     public float eventAlphaThreshold
     {
-      get
-      {
-        return this.m_EventAlphaThreshold;
-      }
-      set
-      {
-        this.m_EventAlphaThreshold = value;
-      }
+      get => this.m_EventAlphaThreshold;
+      set => this.m_EventAlphaThreshold = value;
     }
 
     public ResolutionMode ImproveResolution
     {
-      get
-      {
-        return this.m_improveResolution;
-      }
+      get => this.m_improveResolution;
       set
       {
         this.m_improveResolution = value;
@@ -82,10 +68,7 @@ namespace UnityEngine.UI.Extensions
 
     public float Resoloution
     {
-      get
-      {
-        return this.m_Resolution;
-      }
+      get => this.m_Resolution;
       set
       {
         this.m_Resolution = value;
@@ -95,10 +78,7 @@ namespace UnityEngine.UI.Extensions
 
     public bool UseNativeSize
     {
-      get
-      {
-        return this.m_useNativeSize;
-      }
+      get => this.m_useNativeSize;
       set
       {
         this.m_useNativeSize = value;
@@ -106,10 +86,7 @@ namespace UnityEngine.UI.Extensions
       }
     }
 
-    protected UIPrimitiveBase()
-    {
-      this.useLegacyMeshGeneration = false;
-    }
+    protected UIPrimitiveBase() => this.useLegacyMeshGeneration = false;
 
     public static Material defaultETC1GraphicMaterial
     {
@@ -161,10 +138,7 @@ namespace UnityEngine.UI.Extensions
           return this.m_Material;
         return (bool) (UnityEngine.Object) this.activeSprite && (UnityEngine.Object) this.activeSprite.associatedAlphaSplitTexture != (UnityEngine.Object) null ? UIPrimitiveBase.defaultETC1GraphicMaterial : this.defaultMaterial;
       }
-      set
-      {
-        base.material = value;
-      }
+      set => base.material = value;
     }
 
     protected UIVertex[] SetVbo(Vector2[] vertices, Vector2[] uvs)
@@ -172,10 +146,12 @@ namespace UnityEngine.UI.Extensions
       UIVertex[] uiVertexArray = new UIVertex[4];
       for (int index = 0; index < vertices.Length; ++index)
       {
-        UIVertex simpleVert = UIVertex.simpleVert;
-        simpleVert.color = (Color32) this.color;
-        simpleVert.position = (Vector3) vertices[index];
-        simpleVert.uv0 = uvs[index];
+        UIVertex simpleVert = UIVertex.simpleVert with
+        {
+          color = (Color32) this.color,
+          position = (Vector3) vertices[index],
+          uv0 = uvs[index]
+        };
         uiVertexArray[index] = simpleVert;
       }
       return uiVertexArray;
@@ -211,11 +187,11 @@ namespace UnityEngine.UI.Extensions
             Vector2 a = input[index1];
             vector2List.Add(a);
             Vector2 b = input[index1 + 1];
-            float num1 = Vector2.Distance(a, b) / num3;
-            float num2 = 1f / num1;
-            for (int index2 = 0; (double) index2 < (double) num1; ++index2)
+            float num5 = Vector2.Distance(a, b) / num3;
+            float num6 = 1f / num5;
+            for (int index2 = 0; (double) index2 < (double) num5; ++index2)
             {
-              vector2List.Add(Vector2.Lerp(a, b, (float) index2 * num2));
+              vector2List.Add(Vector2.Lerp(a, b, (float) index2 * num6));
               ++num4;
             }
             vector2List.Add(b);
@@ -241,13 +217,7 @@ namespace UnityEngine.UI.Extensions
     {
     }
 
-    public virtual float minWidth
-    {
-      get
-      {
-        return 0.0f;
-      }
-    }
+    public virtual float minWidth => 0.0f;
 
     public virtual float preferredWidth
     {
@@ -257,21 +227,9 @@ namespace UnityEngine.UI.Extensions
       }
     }
 
-    public virtual float flexibleWidth
-    {
-      get
-      {
-        return -1f;
-      }
-    }
+    public virtual float flexibleWidth => -1f;
 
-    public virtual float minHeight
-    {
-      get
-      {
-        return 0.0f;
-      }
-    }
+    public virtual float minHeight => 0.0f;
 
     public virtual float preferredHeight
     {
@@ -281,21 +239,9 @@ namespace UnityEngine.UI.Extensions
       }
     }
 
-    public virtual float flexibleHeight
-    {
-      get
-      {
-        return -1f;
-      }
-    }
+    public virtual float flexibleHeight => -1f;
 
-    public virtual int layoutPriority
-    {
-      get
-      {
-        return 0;
-      }
-    }
+    public virtual int layoutPriority => 0;
 
     public virtual bool IsRaycastLocationValid(Vector2 screenPoint, Camera eventCamera)
     {
@@ -320,7 +266,7 @@ namespace UnityEngine.UI.Extensions
       }
       catch (UnityException ex)
       {
-        Debug.LogError((object) ("Using clickAlphaThreshold lower than 1 on Image whose sprite texture cannot be read. " + ex.Message + " Also make sure to disable sprite packing for this sprite."), (UnityEngine.Object) this);
+        Debug.LogError((object) ("Using clickAlphaThreshold lower than 1 on Image whose sprite texture cannot be read. " + ((Exception) ex).Message + " Also make sure to disable sprite packing for this sprite."), (UnityEngine.Object) this);
         return true;
       }
     }

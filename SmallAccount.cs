@@ -1,11 +1,10 @@
 
 using Hazel;
 
+#nullable disable
 public class SmallAccount
 {
   public string name = "";
-  public string clan = "";
-  public string oldName = "";
   public short Rating;
   public short Rating1;
   public short Rating2;
@@ -14,9 +13,11 @@ public class SmallAccount
   public ulong discord;
   public int displayedIcon;
   public byte displayClanPrefix;
+  public string clan = "";
   public Clan.Roles clanRole;
   public Location location;
   public byte prestige;
+  public string oldName = "";
   public int server;
 
   public void Serialize(myBinaryWriter w)

@@ -1,6 +1,7 @@
 
 using UnityEngine;
 
+#nullable disable
 public static class Color32Helper
 {
   public static int ToInt(this Color32 color)
@@ -10,13 +11,13 @@ public static class Color32Helper
 
   public static Color32 ToColor(this int value)
   {
-    int num1 = (int) (byte) (value >> 24 & (int) byte.MaxValue);
-    byte num2 = (byte) (value >> 16 & (int) byte.MaxValue);
-    byte num3 = (byte) (value >> 8 & (int) byte.MaxValue);
-    byte num4 = (byte) (value & (int) byte.MaxValue);
-    int num5 = (int) num2;
-    int num6 = (int) num3;
-    int num7 = (int) num4;
-    return new Color32((byte) num1, (byte) num5, (byte) num6, (byte) num7);
+    int r = (int) (byte) (value >> 24 & (int) byte.MaxValue);
+    byte num1 = (byte) (value >> 16 & (int) byte.MaxValue);
+    byte num2 = (byte) (value >> 8 & (int) byte.MaxValue);
+    byte num3 = (byte) (value & (int) byte.MaxValue);
+    int g = (int) num1;
+    int b = (int) num2;
+    int a = (int) num3;
+    return new Color32((byte) r, (byte) g, (byte) b, (byte) a);
   }
 }

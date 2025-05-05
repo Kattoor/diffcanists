@@ -2,30 +2,25 @@
 using TMPro;
 using UnityEngine;
 
+#nullable disable
 namespace ntw.CurvedTextMeshPro
 {
   [ExecuteInEditMode]
   public abstract class TextProOnACurve : MonoBehaviour
   {
+    private TMP_Text m_TextComponent;
     private int ScreenSizeX = -1;
     private int ScreenSizeY = -1;
-    private TMP_Text m_TextComponent;
     private int delay;
     private bool m_forceUpdate;
 
-    private void Awake()
-    {
-      this.m_TextComponent = this.gameObject.GetComponent<TMP_Text>();
-    }
+    private void Awake() => this.m_TextComponent = this.gameObject.GetComponent<TMP_Text>();
 
-    private void OnEnable()
-    {
-      this.m_forceUpdate = true;
-    }
+    private void OnEnable() => this.m_forceUpdate = true;
 
     protected void Update()
     {
-      if (!this.m_forceUpdate && !this.m_TextComponent.havePropertiesChanged && (!this.ParametersHaveChanged() && this.ScreenSizeX == Screen.width) && (this.ScreenSizeY == Screen.height && this.delay <= 0))
+      if (!this.m_forceUpdate && !this.m_TextComponent.havePropertiesChanged && !this.ParametersHaveChanged() && this.ScreenSizeX == Screen.width && this.ScreenSizeY == Screen.height && this.delay <= 0)
         return;
       if (this.ScreenSizeX != Screen.width || this.ScreenSizeY != Screen.height)
         this.delay = 10;
@@ -33,7 +28,7 @@ namespace ntw.CurvedTextMeshPro
       this.ScreenSizeX = Screen.width;
       this.ScreenSizeY = Screen.height;
       this.m_forceUpdate = false;
-      this.m_TextComponent.ForceMeshUpdate(false, false);
+      this.m_TextComponent.ForceMeshUpdate();
       TMP_TextInfo textInfo = this.m_TextComponent.textInfo;
       int characterCount = textInfo.characterCount;
       if (characterCount == 0)

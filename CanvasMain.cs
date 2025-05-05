@@ -1,6 +1,7 @@
 
 using UnityEngine;
 
+#nullable disable
 [RequireComponent(typeof (Canvas))]
 public class CanvasMain : MonoBehaviour
 {
@@ -18,13 +19,7 @@ public class CanvasMain : MonoBehaviour
     }
   }
 
-  public static Transform GetTransform
-  {
-    get
-    {
-      return (Transform) CanvasMain.rectTransform;
-    }
-  }
+  public static Transform GetTransform => (Transform) CanvasMain.rectTransform;
 
   private void Awake()
   {
@@ -34,10 +29,7 @@ public class CanvasMain : MonoBehaviour
 
   public static int CanvasOrder
   {
-    set
-    {
-      CanvasMain.canvas.sortingOrder = value;
-    }
+    set => CanvasMain.canvas.sortingOrder = value;
   }
 
   public static Vector2 WorldToCanvasPositionWithCameraOffset(Vector3 position)

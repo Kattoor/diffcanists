@@ -3,6 +3,7 @@ using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+#nullable disable
 public class EmojiPicker : MonoBehaviour, IPointerDownHandler, IEventSystemHandler
 {
   [SerializeField]
@@ -11,10 +12,7 @@ public class EmojiPicker : MonoBehaviour, IPointerDownHandler, IEventSystemHandl
 
   public static EmojiPicker instance { get; private set; }
 
-  private void Awake()
-  {
-    EmojiPicker.instance = this;
-  }
+  private void Awake() => EmojiPicker.instance = this;
 
   private void OnDestroy()
   {
@@ -55,13 +53,13 @@ public class EmojiPicker : MonoBehaviour, IPointerDownHandler, IEventSystemHandl
     Vector2 localPoint;
     if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(this.container, ped.position, ped.pressEventCamera, out localPoint))
       return;
-    if ((double) localPoint.x < -5.0 || (double) localPoint.y < -5.0 || ((double) localPoint.x > 805.0 || (double) localPoint.y > 883.0))
+    if ((double) localPoint.x < -5.0 || (double) localPoint.y < -5.0 || (double) localPoint.x > 805.0 || (double) localPoint.y > 883.0)
     {
       EmojiPicker.Close();
     }
     else
     {
-      int num = (int) Mathf.Clamp(localPoint.x / 15.68627f, 0.0f, 51f) + 51 * (56 - (int) Mathf.Clamp(localPoint.y / 15.67857f, 0.0f, 56f)) - 51;
+      int num = (int) Mathf.Clamp(localPoint.x / 15.6862745f, 0.0f, 51f) + 51 * (56 - (int) Mathf.Clamp(localPoint.y / 15.6785717f, 0.0f, 56f)) - 51;
       Action<int> action = this.action;
       if (action != null)
         action(num);
@@ -69,8 +67,5 @@ public class EmojiPicker : MonoBehaviour, IPointerDownHandler, IEventSystemHandl
     }
   }
 
-  public void OnPointerDown(PointerEventData eventData)
-  {
-    this.DebugPoint(eventData);
-  }
+  public void OnPointerDown(PointerEventData eventData) => this.DebugPoint(eventData);
 }

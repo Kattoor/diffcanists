@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
+#nullable disable
 public class OutfitButton : MonoBehaviour
 {
   public Image image;
@@ -11,13 +12,7 @@ public class OutfitButton : MonoBehaviour
   private int index;
   private Outfit outfit;
 
-  internal int Index
-  {
-    get
-    {
-      return this.index;
-    }
-  }
+  internal int Index => this.index;
 
   public static Sprite GetPreview(Sprite s)
   {
@@ -46,10 +41,7 @@ public class OutfitButton : MonoBehaviour
     this.uihover.onExit.AddListener(new UnityAction(this.Leave));
   }
 
-  private string ExtraHoverInfo()
-  {
-    return "";
-  }
+  private string ExtraHoverInfo() => "";
 
   public void Hover()
   {
@@ -63,32 +55,34 @@ public class OutfitButton : MonoBehaviour
     if (viewing >= Outfit.LeftFoot || !CharacterCreation.Instance.optionNoTooltips.isOn || !outfitData.isLocked)
       return;
     if (outfitData.achievement != Achievement.None)
-      MyToolTip.Show("Achievement required: <#00FFFF>" + Achievements.list[(int) outfitData.achievement].name + this.ExtraHoverInfo(), -1f);
+      MyToolTip.Show("Achievement required: <#00FFFF>" + Achievements.list[(int) outfitData.achievement].name + this.ExtraHoverInfo());
     else if (outfitData.accountType != AccountType.None)
-      MyToolTip.Show("Account role required: <#FF0000>" + outfitData.accountType.GetFirstFlags().Replace("_", " ") + this.ExtraHoverInfo(), -1f);
+      MyToolTip.Show("Account role required: <#FF0000>" + outfitData.accountType.GetFirstFlags().Replace("_", " ") + this.ExtraHoverInfo());
+    else if (outfitData.badge != Badge.None)
+      MyToolTip.Show("Account role required: <#FF0000>" + ClientResources.Instance.badges[(int) outfitData.badge].name + this.ExtraHoverInfo());
     else if (outfitData.prestige > 0)
-      MyToolTip.Show(string.Format("Prestige: <#00FF00>{0}</color>", (object) outfitData.prestige) + this.ExtraHoverInfo(), -1f);
+      MyToolTip.Show(string.Format("Prestige: <#00FF00>{0}</color>", (object) outfitData.prestige) + this.ExtraHoverInfo());
     else if (outfitData.experience > 0)
-      MyToolTip.Show(string.Format("Experience Level: <#00FF00>{0}</color>", (object) outfitData.experience) + this.ExtraHoverInfo(), -1f);
+      MyToolTip.Show(string.Format("Experience Level: <#00FF00>{0}</color>", (object) outfitData.experience) + this.ExtraHoverInfo());
     else if (outfitData.tournament > 0)
-      MyToolTip.Show(string.Format("<sprite name=\"tcoin\"> Tournament Coins: <#00FF00>{0}</color>", (object) outfitData.tournament) + this.ExtraHoverInfo(), -1f);
+      MyToolTip.Show(string.Format("<sprite name=\"tcoin\"> Tournament Coins: <#00FF00>{0}</color>", (object) outfitData.tournament) + this.ExtraHoverInfo());
     else if (outfitData.season == Server.ServerSettings.Season.Halloween)
-      MyToolTip.Show("Seasonal login reward: <#FF8A00>Halloween</color>" + this.ExtraHoverInfo(), -1f);
+      MyToolTip.Show("Seasonal login reward: <#FF8A00>Halloween</color>" + this.ExtraHoverInfo());
     else if (outfitData.season == Server.ServerSettings.Season.Thanksgiving)
-      MyToolTip.Show("Seasonal login reward: <#874400>Thanksgiving</color>" + this.ExtraHoverInfo(), -1f);
+      MyToolTip.Show("Seasonal login reward: <#874400>Thanksgiving</color>" + this.ExtraHoverInfo());
     else if (outfitData.season == Server.ServerSettings.Season.Easter)
-      MyToolTip.Show("Seasonal login reward: <#4444FF>Easter</color>" + this.ExtraHoverInfo(), -1f);
+      MyToolTip.Show("Seasonal login reward: <#4444FF>Easter</color>" + this.ExtraHoverInfo());
     else if (outfitData.season == Server.ServerSettings.Season.Christmas)
-      MyToolTip.Show("Seasonal login reward: <#44FF00>Christmas</color>" + this.ExtraHoverInfo(), -1f);
+      MyToolTip.Show("Seasonal login reward: <#44FF00>Christmas</color>" + this.ExtraHoverInfo());
     else if (!string.IsNullOrEmpty(Inert.Instance.GetOutfit(viewing)[this.index].reason))
     {
-      MyToolTip.Show("Reward: " + Inert.Instance.GetOutfit(viewing)[this.index].reason + this.ExtraHoverInfo(), -1f);
+      MyToolTip.Show("Reward: " + Inert.Instance.GetOutfit(viewing)[this.index].reason + this.ExtraHoverInfo());
     }
     else
     {
       if (Client.cosmetics.array[(int) viewing][(int) (byte) this.index] || !Inert.Instance.GetOutfit(viewing)[this.index].isLocked)
         return;
-      MyToolTip.Show("Locked due to limited availability." + this.ExtraHoverInfo(), -1f);
+      MyToolTip.Show("Locked due to limited availability." + this.ExtraHoverInfo());
     }
   }
 

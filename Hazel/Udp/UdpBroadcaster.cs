@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
+#nullable disable
 namespace Hazel.Udp
 {
   public class UdpBroadcaster : IDisposable

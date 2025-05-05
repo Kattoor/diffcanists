@@ -1,4 +1,5 @@
 
+#nullable disable
 namespace SevenZip.Compression.LZMA
 {
   internal abstract class Base
@@ -41,10 +42,7 @@ namespace SevenZip.Compression.LZMA
     {
       public uint Index;
 
-      public void Init()
-      {
-        this.Index = 0U;
-      }
+      public void Init() => this.Index = 0U;
 
       public void UpdateChar()
       {
@@ -56,25 +54,13 @@ namespace SevenZip.Compression.LZMA
           this.Index -= 6U;
       }
 
-      public void UpdateMatch()
-      {
-        this.Index = this.Index < 7U ? 7U : 10U;
-      }
+      public void UpdateMatch() => this.Index = this.Index < 7U ? 7U : 10U;
 
-      public void UpdateRep()
-      {
-        this.Index = this.Index < 7U ? 8U : 11U;
-      }
+      public void UpdateRep() => this.Index = this.Index < 7U ? 8U : 11U;
 
-      public void UpdateShortRep()
-      {
-        this.Index = this.Index < 7U ? 9U : 11U;
-      }
+      public void UpdateShortRep() => this.Index = this.Index < 7U ? 9U : 11U;
 
-      public bool IsCharState()
-      {
-        return this.Index < 7U;
-      }
+      public bool IsCharState() => this.Index < 7U;
     }
   }
 }

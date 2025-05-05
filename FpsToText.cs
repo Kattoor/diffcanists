@@ -5,8 +5,34 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+#nullable disable
 public class FpsToText : MonoBehaviour
 {
+  [Header("Sample Groups of Data ")]
+  public bool GroupSampling = true;
+  public int SampleSize = 20;
+  public bool useColor = true;
+  [Header("Config ")]
+  public TMP_Text TargetText;
+  public TMP_Text HeaderText;
+  public int UpdateTextEvery = 1;
+  public bool Smoothed = true;
+  [Header("System FPS (updates once/sec)")]
+  public bool UseSystemTick;
+  public int OkayBelow = 60;
+  public int BadBelow = 30;
+  [Header("Ping ")]
+  public TMP_Text PingText;
+  public TMP_Text HeaderPingText;
+  protected float[] FpsSamples;
+  protected int SampleIndex;
+  protected int TextUpdateIndex;
+  private float _fps;
+  private int _sysLastSysTick;
+  private int _sysLastFrameRate;
+  private int _sysFrameRate;
+  private Ping ping;
+  public IEnumerator<float> IEPing;
   public static readonly string[] FpsStringMap = new string[2001]
   {
     "0",
@@ -2011,66 +2037,17 @@ public class FpsToText : MonoBehaviour
     "1999",
     "2000+"
   };
-  [Header("Sample Groups of Data ")]
-  public bool GroupSampling = true;
-  public int SampleSize = 20;
-  public bool useColor = true;
-  public int UpdateTextEvery = 1;
-  public bool Smoothed = true;
-  public int OkayBelow = 60;
-  public int BadBelow = 30;
-  [Header("Config ")]
-  public TMP_Text TargetText;
-  public TMP_Text HeaderText;
-  [Header("System FPS (updates once/sec)")]
-  public bool UseSystemTick;
-  [Header("Ping ")]
-  public TMP_Text PingText;
-  public TMP_Text HeaderPingText;
-  protected float[] FpsSamples;
-  protected int SampleIndex;
-  protected int TextUpdateIndex;
-  private float _fps;
-  private int _sysLastSysTick;
-  private int _sysLastFrameRate;
-  private int _sysFrameRate;
-  private Ping ping;
-  public IEnumerator<float> IEPing;
   private int pingErrors;
 
   public static FpsToText Instance { get; private set; }
 
-  public static Color Good
-  {
-    get
-    {
-      return Color.green;
-    }
-  }
+  public static Color Good => Color.green;
 
-  public static Color Okay
-  {
-    get
-    {
-      return Color.yellow;
-    }
-  }
+  public static Color Okay => Color.yellow;
 
-  public static Color Bad
-  {
-    get
-    {
-      return Color.red;
-    }
-  }
+  public static Color Bad => Color.red;
 
-  public float Framerate
-  {
-    get
-    {
-      return this._fps;
-    }
-  }
+  public float Framerate => this._fps;
 
   private void Awake()
   {
@@ -2087,15 +2064,9 @@ public class FpsToText : MonoBehaviour
     FpsToText.Instance = (FpsToText) null;
   }
 
-  private void OnEnable()
-  {
-    this.ToggleFPS(true);
-  }
+  private void OnEnable() => this.ToggleFPS(true);
 
-  private void OnDisable()
-  {
-    this.ToggleFPS(false);
-  }
+  private void OnDisable() => this.ToggleFPS(false);
 
   public void ToggleFPS(bool v)
   {

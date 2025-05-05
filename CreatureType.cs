@@ -1,4 +1,5 @@
 
+#nullable disable
 public enum CreatureType
 {
   Other,
@@ -39,4 +40,6 @@ public enum CreatureType
   Bear,
   Sphinx,
   Map_Bottom,
+  Zombie,
+  Flesh_Golem,
 }

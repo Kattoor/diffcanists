@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
+#nullable disable
 public class pfabEditJsonItem : MonoBehaviour
 {
   public TMP_Text text;

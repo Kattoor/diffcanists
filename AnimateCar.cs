@@ -1,11 +1,12 @@
 
 using UnityEngine;
 
+#nullable disable
 public class AnimateCar : IAnimator
 {
-  private Vector3 angles = Vector3.zero;
   public Transform wheel1;
   public Transform wheel2;
+  private Vector3 angles = Vector3.zero;
 
   public override void Play(AnimateState anim, float duration = 0.0f, bool sound = true)
   {
@@ -17,7 +18,7 @@ public class AnimateCar : IAnimator
 
   private void Update()
   {
-    if (Client.game == null || !Client.game.isClient || (Client.game.resyncing || (double) this.duration <= 0.0))
+    if (Client.game == null || !Client.game.isClient || Client.game.resyncing || (double) this.duration <= 0.0)
       return;
     this.duration -= Time.deltaTime;
     this.angles.z -= Time.deltaTime * 150f;

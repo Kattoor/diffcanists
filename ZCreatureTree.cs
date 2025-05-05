@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+#nullable disable
 public class ZCreatureTree : ZCreature
 {
+  public CreatureTree baseTree;
   internal static Coords[] coords = new Coords[279]
   {
     new Coords(-70, 27),
@@ -554,23 +556,10 @@ public class ZCreatureTree : ZCreature
     new Coords(69, 29),
     new Coords(70, 28)
   };
-  public CreatureTree baseTree;
 
-  public ExplosionCutout cutoutTexture
-  {
-    get
-    {
-      return this.baseTree.cutoutTexture;
-    }
-  }
+  public ExplosionCutout cutoutTexture => this.baseTree.cutoutTexture;
 
-  private Texture2D texture
-  {
-    get
-    {
-      return this.baseTree.texture;
-    }
-  }
+  private Texture2D texture => this.baseTree.texture;
 
   public override int ApplyDamage(
     SpellEnum spellEnum,
@@ -610,7 +599,7 @@ public class ZCreatureTree : ZCreature
           }
         }
       }
-      this.collider?.Disable(true);
+      this.collider?.Disable();
       this.isDead = true;
       this.isNull = true;
       this.auraOfDecay?.SetNull();
@@ -618,13 +607,13 @@ public class ZCreatureTree : ZCreature
       if ((Object) this.transform != (Object) null && !this.game.resyncing)
         ZComponent.Instantiate<GameObject>(this.baseCreature.deathExplosion, this.transform.position, Quaternion.identity, this.game.GetMapTransform());
       ZComponent.Destroy<GameObject>(this.gameObject);
-      ZSpell.ApplyExplosionForce(SpellEnum.Butterfly_Jar, this.world, this.position, 0, Curve.None, 10, 50, (FixedInt) 0, DamageType.None, (ZCreature) this, this.game.turn, Curve.Generic, (ISpellBridge) null, (ZCreature) null);
+      ZSpell.ApplyExplosionForce(SpellEnum.Butterfly_Jar, this.world, this.position, 0, Curve.None, 10, 50, (FixedInt) 0, DamageType.None, (ZCreature) this, this.game.turn);
       return 0;
     }
     if (dt == DamageType.Drain && (ZComponent) enemy != (object) null && !this.baseTree.isStructure)
     {
       damage = Mathf.Min(damage, enemy.health);
-      enemy.DoHeal(damage, dt, enemy, false);
+      enemy.DoHeal(damage, dt, enemy);
       if (enemy.health > Mathf.Max(enemy.maxHealth, 250))
         enemy.health = Mathf.Max(enemy.maxHealth, 250);
       enemy.UpdateHealthTxt();
@@ -648,9 +637,9 @@ public class ZCreatureTree : ZCreature
     if (this.health <= 0)
     {
       if ((Object) this.texture != (Object) null)
-        this.map.ServerBitBlt((int) this.cutoutTexture, (int) this.position.x, (int) this.position.y, false, true);
+        this.map.ServerBitBlt((int) this.cutoutTexture, (int) this.position.x, (int) this.position.y, false);
       this.game.forceRysncPause = true;
-      this.collider?.Disable(true);
+      this.collider?.Disable();
       this.isDead = true;
       this.isNull = true;
       this.auraOfDecay?.SetNull();
@@ -678,10 +667,7 @@ public class ZCreatureTree : ZCreature
   {
   }
 
-  public override bool ShouldFall(bool gliding = true, bool ignoreFlight = false)
-  {
-    return false;
-  }
+  public override bool ShouldFall(bool gliding = true, bool ignoreFlight = false) => false;
 
   public override IEnumerator<float> Move(bool fromSerialization = false)
   {
@@ -698,11 +684,11 @@ public class ZCreatureTree : ZCreature
 
   public override void StartMoving(bool fromInput = false)
   {
-    if (this.moving != null || this.isDead || (this.baseTree.isButterflyJar || !this.baseCreature.canMove) || this.baseTree.isStructure)
+    if (this.moving != null || this.isDead || this.baseTree.isButterflyJar || !this.baseCreature.canMove || this.baseTree.isStructure)
       return;
     if (this.map.CheckTexutureOnlyMap((int) this.position.x, (int) this.position.y, this.texture))
     {
-      this.moving = this.game.ongoing.RunSpell(this.TreeFall(), true);
+      this.moving = this.game.ongoing.RunSpell(this.TreeFall());
     }
     else
     {
@@ -718,44 +704,44 @@ public class ZCreatureTree : ZCreature
 
   private IEnumerator<float> TreeFall()
   {
-    ZCreatureTree zcreatureTree = this;
-    zcreatureTree.isMoving = true;
-    zcreatureTree.velocity.x = (FixedInt) 0;
-    zcreatureTree.velocity.y = (FixedInt) 1;
-    int x = (int) zcreatureTree.position.x;
-    while (!zcreatureTree.isDead && zcreatureTree.position.y > 20)
+    ZCreatureTree creature = this;
+    creature.isMoving = true;
+    creature.velocity.x = (FixedInt) 0;
+    creature.velocity.y = (FixedInt) 1;
+    int x = (int) creature.position.x;
+    while (!creature.isDead && creature.position.y > 20)
     {
-      int y1 = (int) zcreatureTree.velocity.y;
-      int y2 = (int) zcreatureTree.position.y;
+      int y1 = (int) creature.velocity.y;
+      int y2 = (int) creature.position.y;
       for (int index1 = 1; index1 <= y1; ++index1)
       {
         for (int index2 = 0; index2 < ZCreatureTree.coords.Length; ++index2)
         {
-          if (!zcreatureTree.map.CheckPosition(x + ZCreatureTree.coords[index2].x, y2 + ZCreatureTree.coords[index2].y - index1, (ZCreature) zcreatureTree, Inert.mask_entity_movement))
+          if (!creature.map.CheckPosition(x + ZCreatureTree.coords[index2].x, y2 + ZCreatureTree.coords[index2].y - index1, (ZCreature) creature, Inert.mask_entity_movement))
           {
-            if (!zcreatureTree.isDead)
+            if (!creature.isDead)
             {
-              zcreatureTree.position = new MyLocation(x, y2 - index1 + 1);
-              zcreatureTree.collider.Move(zcreatureTree.position);
+              creature.position = new MyLocation(x, y2 - index1 + 1);
+              creature.collider.Move(creature.position);
             }
-            zcreatureTree.Stop();
+            creature.Stop();
             yield break;
           }
-          else if (zcreatureTree.isDead)
+          else if (creature.isDead)
           {
-            zcreatureTree.Stop();
+            creature.Stop();
             yield break;
           }
         }
       }
-      zcreatureTree.position = new MyLocation(x, y2 - y1);
-      zcreatureTree.collider.Move(zcreatureTree.position);
-      if (zcreatureTree.velocity.y < 20)
-        zcreatureTree.velocity.y -= zcreatureTree.map.Gravity;
-      zcreatureTree.game.CreatureMoveSurroundings(zcreatureTree.position, zcreatureTree.radius, zcreatureTree.collider, false);
+      creature.position = new MyLocation(x, y2 - y1);
+      creature.collider.Move(creature.position);
+      if (creature.velocity.y < 20)
+        creature.velocity.y -= creature.map.Gravity;
+      creature.game.CreatureMoveSurroundings(creature.position, creature.radius, creature.collider);
       yield return 0.0f;
     }
-    zcreatureTree.ApplyDamage(SpellEnum.Fire_Ball, DamageType.Fire, 100, (ZCreature) null, zcreatureTree.game.turn, (ISpellBridge) null, false);
+    creature.ApplyDamage(SpellEnum.Fire_Ball, DamageType.Fire, 100, (ZCreature) null, creature.game.turn, (ISpellBridge) null, false);
   }
 
   private void Stop()

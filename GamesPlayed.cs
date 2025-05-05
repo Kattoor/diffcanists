@@ -6,31 +6,12 @@ using System.IO;
 using System.Text;
 using UnityEngine;
 
+#nullable disable
 [Serializable]
 public class GamesPlayed
 {
-  public short rating = 1000;
-  [JsonIgnore]
-  public byte[] lastSpellBook = new byte[16]
-  {
-    byte.MaxValue,
-    byte.MaxValue,
-    byte.MaxValue,
-    byte.MaxValue,
-    byte.MaxValue,
-    byte.MaxValue,
-    byte.MaxValue,
-    byte.MaxValue,
-    byte.MaxValue,
-    byte.MaxValue,
-    byte.MaxValue,
-    byte.MaxValue,
-    byte.MaxValue,
-    byte.MaxValue,
-    byte.MaxValue,
-    byte.MaxValue
-  };
   public const byte version = 3;
+  public short rating = 1000;
   public int totalUnratedGames;
   public int totalRatedGames;
   public int ratedGamesWon;
@@ -51,6 +32,26 @@ public class GamesPlayed
   public int spellbookWinningStreak;
   [JsonIgnore]
   public int spellbookWinningStreak_Maps;
+  [JsonIgnore]
+  public byte[] lastSpellBook = new byte[16]
+  {
+    byte.MaxValue,
+    byte.MaxValue,
+    byte.MaxValue,
+    byte.MaxValue,
+    byte.MaxValue,
+    byte.MaxValue,
+    byte.MaxValue,
+    byte.MaxValue,
+    byte.MaxValue,
+    byte.MaxValue,
+    byte.MaxValue,
+    byte.MaxValue,
+    byte.MaxValue,
+    byte.MaxValue,
+    byte.MaxValue,
+    byte.MaxValue
+  };
   [JsonIgnore]
   [NonSerialized]
   public int sessionWinningStreak;

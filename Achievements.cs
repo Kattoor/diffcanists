@@ -1,6 +1,7 @@
 
 using System.Collections.Generic;
 
+#nullable disable
 public class Achievements
 {
   public static List<Achievements.Container> list = new List<Achievements.Container>()
@@ -856,6 +857,76 @@ public class Achievements
       description = "Kill a player while dealing 120 or more damage with a single javelin",
       points = (ushort) 300,
       ratedOnly = true
+    },
+    new Achievements.Container()
+    {
+      name = "Walk the Plank",
+      description = "Sink 2 minions using mind control",
+      points = (ushort) 200,
+      ratedOnly = false
+    },
+    new Achievements.Container()
+    {
+      name = "Shifting Sands",
+      description = "Use sandbag 3 times on a 1 use tower",
+      points = (ushort) 200,
+      ratedOnly = true
+    },
+    new Achievements.Container()
+    {
+      name = "Must Ask the Question",
+      description = "Kill two Arcanists with the same cast of Enchanted Axes",
+      points = (ushort) 300,
+      ratedOnly = false
+    },
+    new Achievements.Container()
+    {
+      name = "Master of Necromancy",
+      description = "Win a Rated game with the full Book of Necromancy",
+      points = (ushort) 200,
+      ratedOnly = true
+    },
+    new Achievements.Container()
+    {
+      name = "Necromancy Arcanists",
+      description = "Win a rated game, over 1250 rating, with the Scribe familiar",
+      points = (ushort) 100,
+      ratedOnly = true
+    },
+    new Achievements.Container()
+    {
+      name = "Guardian of Styx",
+      description = "Use the catacomb's passage ways to finish off an enemy Arcanist",
+      points = (ushort) 200,
+      ratedOnly = false
+    },
+    new Achievements.Container()
+    {
+      name = "Lich No More",
+      description = "Kill a Lich while using the book of Necromancy",
+      points = (ushort) 200,
+      ratedOnly = false
+    },
+    new Achievements.Container()
+    {
+      name = "Pharaohs Monuments",
+      description = "Upgrade a Monolith and a Pyramid.",
+      points = (ushort) 100,
+      ratedOnly = true
+    },
+    new Achievements.Container()
+    {
+      name = "Ruler of Curses",
+      description = "Inflict 7 minions with curse of haute in a single cast",
+      points = (ushort) 300,
+      ratedOnly = false
+    },
+    new Achievements.Container()
+    {
+      name = "Undeath Unbound",
+      description = "Kill 3 or more enemies using Cleave in a single cast",
+      points = (ushort) 300,
+      ratedOnly = false
     }
   };
 
@@ -912,22 +983,22 @@ public class Achievements
 
   public static int CalculatePoints(Cosmetics c)
   {
-    int num = 0;
+    int points = 0;
     BitBools achievements = c.achievements;
     for (int index = 0; index < Achievements.list.Count; ++index)
     {
       if (achievements[index])
-        num += (int) Achievements.list[index].points;
+        points += (int) Achievements.list[index].points;
     }
-    return num;
+    return points;
   }
 
   public class Container
   {
-    public bool available = true;
     public string name;
     public string description;
     public ushort points;
     public bool ratedOnly;
+    public bool available = true;
   }
 }

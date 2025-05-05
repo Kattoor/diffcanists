@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+#nullable disable
 public class ZCreatureThorn : ZCreature
 {
   public ZSpell spell;
@@ -15,14 +16,14 @@ public class ZCreatureThorn : ZCreature
     ISpellBridge spellRef = null,
     bool isLoop = false)
   {
-    if (dt == DamageType.Heal || spellEnum == SpellEnum.Shock_Bomb || (spellEnum == SpellEnum.Rusty_Bomb || this.health == 0) || (this.isDead || ZComponent.IsNull((ZComponent) this) || spellRef != null && spellRef.GetExplosionCutout == ExplosionCutout.None))
+    if (dt == DamageType.Heal || spellEnum == SpellEnum.Shock_Bomb || spellEnum == SpellEnum.Rusty_Bomb || this.health == 0 || this.isDead || ZComponent.IsNull((ZComponent) this) || spellRef != null && spellRef.GetExplosionCutout == ExplosionCutout.None)
       return 0;
     this.isDead = true;
     this.isNull = true;
     this.health = 0;
-    this.collider.Disable(true);
+    this.collider.Disable();
     this.spell.OnExplosionGeneric();
-    this.spell.ApplyExplosionForce(this.position, 0, true, (ISpellBridge) null, (ZCreature) null);
+    this.spell.ApplyExplosionForce(this.position);
     AudioManager.Play(this.spell.explosionClip);
     ZComponent.Destroy<GameObject>(this.gameObject);
     this.game.forceRysncPause = true;
@@ -47,10 +48,7 @@ public class ZCreatureThorn : ZCreature
   {
   }
 
-  public override bool ShouldFall(bool gliding = true, bool ignoreFlight = false)
-  {
-    return false;
-  }
+  public override bool ShouldFall(bool gliding = true, bool ignoreFlight = false) => false;
 
   public override IEnumerator<float> Move(bool fromSerialization = false)
   {

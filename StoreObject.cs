@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+#nullable disable
 public class StoreObject : MonoBehaviour
 {
-  public ExplosionCutout SnowTexture = ExplosionCutout.None;
   public bool recolor;
   public bool recolorUndead;
   [Header("Animated")]
@@ -37,6 +37,7 @@ public class StoreObject : MonoBehaviour
   [Header("Spell Sprite")]
   public Sprite spellSprite;
   public Sprite altSpellSprite;
+  public ExplosionCutout SnowTexture = ExplosionCutout.None;
 
   public static SpellEnum RealEnum(SpellEnum s)
   {
@@ -272,6 +273,9 @@ public class StoreObject : MonoBehaviour
       this.Recolor(c.rightFoot, c);
       flag = true;
     }
+    SpinningAxe componentInChildren = c.transform.GetComponentInChildren<SpinningAxe>(true);
+    if ((UnityEngine.Object) componentInChildren != (UnityEngine.Object) null)
+      componentInChildren.GetComponent<SpriteRenderer>().sprite = c.leftArm.sprite;
     return this.AttachedObjects(c) | flag;
   }
 

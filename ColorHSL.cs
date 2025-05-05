@@ -1,6 +1,7 @@
 
 using UnityEngine;
 
+#nullable disable
 public class ColorHSL
 {
   public float h;
@@ -77,10 +78,10 @@ public class ColorHSL
     else
     {
       float q = (double) this.l < 0.5 ? this.l * (1f + this.s) : (float) ((double) this.l + (double) this.s - (double) this.l * (double) this.s);
-      double num = 2.0 * (double) this.l - (double) q;
-      r = ColorHSL.ColorCalc((float) num, q, this.h);
-      g = ColorHSL.ColorCalc((float) num, q, this.h);
-      b = ColorHSL.ColorCalc((float) num, q, this.h);
+      double p = 2.0 * (double) this.l - (double) q;
+      r = ColorHSL.ColorCalc((float) p, q, this.h);
+      g = ColorHSL.ColorCalc((float) p, q, this.h);
+      b = ColorHSL.ColorCalc((float) p, q, this.h);
     }
     return new Color(r, g, b);
   }
@@ -95,6 +96,6 @@ public class ColorHSL
       return p + (float) (((double) q - (double) p) * 6.0) * t;
     if ((double) t < 0.0)
       return q;
-    return (double) t < 0.0 ? p + (float) (((double) q - (double) p) * (0.666666686534882 - (double) t) * 6.0) : p;
+    return (double) t < 0.0 ? p + (float) (((double) q - (double) p) * (0.66666668653488159 - (double) t) * 6.0) : p;
   }
 }

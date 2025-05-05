@@ -2,12 +2,10 @@
 using System.Collections;
 using UnityEngine;
 
+#nullable disable
 public class CloseOnDiscordVerification : MonoBehaviour
 {
-  private void Start()
-  {
-    this.StartCoroutine(this.Close());
-  }
+  private void Start() => this.StartCoroutine(this.Close());
 
   private IEnumerator Close()
   {

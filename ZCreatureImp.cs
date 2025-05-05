@@ -1,4 +1,5 @@
 
+#nullable disable
 public class ZCreatureImp : ZCreature
 {
   public override int ApplyDamage(
@@ -11,7 +12,7 @@ public class ZCreatureImp : ZCreature
     bool isLoop = false)
   {
     if (dt != DamageType.Arcane)
-      return base.ApplyDamage(spellEnum, dt, damage, enemy, TurnCreated, spellRef, false);
+      return base.ApplyDamage(spellEnum, dt, damage, enemy, TurnCreated, spellRef);
     if ((ZComponent) this.tower != (object) null)
       this.tower.ApplyDamage(spellEnum, dt, damage, enemy, TurnCreated, spellRef);
     else
@@ -21,8 +22,8 @@ public class ZCreatureImp : ZCreature
 
   public override void OnDeath(bool playDeathClip = true)
   {
-    if (!this.isDead && this.parent != null && ((ZComponent) this.parent.first() != (object) null && this.parent.first().FullArcane) && (!this.parent.game.originalSpellsOnly && (this.spellEnum == SpellEnum.Summon_Imps || this.spellEnum == SpellEnum.Little_Devil)))
-      ZSpell.FireWhich(Inert.Instance.arcaneMist, this.parent.first(), this.position, (FixedInt) 0, (FixedInt) 0, this.position, NullMyLocation.Get(), 0, false, (SpellSlot) null, false);
+    if (!this.isDead && this.parent != null && (ZComponent) this.parent.first() != (object) null && this.parent.first().FullArcane && !this.parent.game.originalSpellsOnly && (this.spellEnum == SpellEnum.Summon_Imps || this.spellEnum == SpellEnum.Little_Devil))
+      ZSpell.FireWhich(Inert.Instance.arcaneMist, this.parent.first(), this.position, (FixedInt) 0, (FixedInt) 0, this.position, NullMyLocation.Get());
     base.OnDeath(true);
   }
 }

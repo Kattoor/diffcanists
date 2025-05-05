@@ -1,6 +1,7 @@
 
 using UnityEngine;
 
+#nullable disable
 public class SpinningSword : MonoBehaviour
 {
   public float _speed = 600f;

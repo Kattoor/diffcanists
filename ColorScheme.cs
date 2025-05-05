@@ -7,29 +7,24 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+#nullable disable
 public class ColorScheme
 {
-  public static Color32 DefBackgroundColor = new Color32((byte) 188, (byte) 188, (byte) 188, byte.MaxValue);
-  public static ColorScheme.ForcedGraphics forcedGraphics = ColorScheme.ForcedGraphics.Dynamic;
   public string name = "";
   public List<ColorValue> colors = new List<ColorValue>();
   public List<ColorText> text = new List<ColorText>();
   public Color backgroundColor = (Color) ColorScheme.DefBackgroundColor;
   internal Dictionary<Color32, Color32> textSet = new Dictionary<Color32, Color32>();
   internal List<ColorMaterial> _materials = new List<ColorMaterial>();
-  public Color highlightColor = (Color) new Color32(byte.MaxValue, (byte) 212, (byte) 0, byte.MaxValue);
-  public Color bgColor = Color.black;
   private const byte Version = 4;
   private Color32 temp;
+  public Color highlightColor = (Color) new Color32(byte.MaxValue, (byte) 212, (byte) 0, byte.MaxValue);
+  public Color bgColor = Color.black;
   public byte fontIndex;
+  public static Color32 DefBackgroundColor = new Color32((byte) 188, (byte) 188, (byte) 188, byte.MaxValue);
+  public static ColorScheme.ForcedGraphics forcedGraphics = ColorScheme.ForcedGraphics.Dynamic;
 
-  public Material _material
-  {
-    get
-    {
-      return ClientResources.Instance._matColorPalette;
-    }
-  }
+  public Material _material => ClientResources.Instance._matColorPalette;
 
   public void Serialize(myBinaryWriter w)
   {
@@ -119,13 +114,7 @@ public class ColorScheme
     }
   }
 
-  internal static string ext
-  {
-    get
-    {
-      return ".arcscheme";
-    }
-  }
+  internal static string ext => ".arcscheme";
 
   public void Save(string name)
   {
@@ -382,14 +371,14 @@ public class ColorScheme
           componentsInChild.textDisabledColor = (Color) color32;
         if (componentsInChild.gameObject.activeInHierarchy)
         {
-          if (componentsInChild.GetType() == typeof (UIOnHover))
+          if (((object) componentsInChild).GetType() == typeof (UIOnHover))
             ((UIOnHover) componentsInChild).ForceUpdate();
           else
             componentsInChild.GetComponentInParent<UIOnHover>()?.ForceUpdate();
         }
       }
     }
-    ColorScheme.Resolution(g, false);
+    ColorScheme.Resolution(g);
   }
 
   public static void Resolution(GameObject g, bool forced = false)

@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+#nullable disable
 public class pfabInvite : MonoBehaviour
 {
   public pfabName pfabName;
@@ -28,7 +29,7 @@ public class pfabInvite : MonoBehaviour
       else
         this.buttonImage.color = Color.white;
     }
-    this.pfabName.Setup(a, false);
+    this.pfabName.Setup(a);
   }
 
   private void SetButtons(int i)

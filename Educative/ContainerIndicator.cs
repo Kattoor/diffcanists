@@ -3,6 +3,7 @@ using MoonSharp.Interpreter;
 using System;
 using UnityEngine;
 
+#nullable disable
 namespace Educative
 {
   public class ContainerIndicator
@@ -17,10 +18,7 @@ namespace Educative
     private Tutorial tutorial;
 
     [MoonSharpHidden]
-    public ContainerIndicator(GameObject s)
-    {
-      throw new Exception("Notimplemented");
-    }
+    public ContainerIndicator(GameObject s) => throw new Exception("Notimplemented");
 
     [MoonSharpHidden]
     public ContainerIndicator(Tutorial t, GameObject s, IndicatorKind k, double radius)
@@ -31,20 +29,11 @@ namespace Educative
       this.tutorial = t;
     }
 
-    public bool isDead
-    {
-      get
-      {
-        return (UnityEngine.Object) this.indicator == (UnityEngine.Object) null;
-      }
-    }
+    public bool isDead => (UnityEngine.Object) this.indicator == (UnityEngine.Object) null;
 
     public int x
     {
-      get
-      {
-        return (int) this.indicator.transform.position.x;
-      }
+      get => (int) this.indicator.transform.position.x;
       set
       {
         this.indicator.transform.position = new Vector3((float) value, this.indicator.transform.position.y);
@@ -53,10 +42,7 @@ namespace Educative
 
     public int y
     {
-      get
-      {
-        return (int) this.indicator.transform.position.y;
-      }
+      get => (int) this.indicator.transform.position.y;
       set
       {
         this.indicator.transform.position = new Vector3(this.indicator.transform.position.x, (float) value);
@@ -65,10 +51,7 @@ namespace Educative
 
     public double radius
     {
-      get
-      {
-        return this._radius;
-      }
+      get => this._radius;
       set
       {
         this._radius = value;
@@ -84,22 +67,13 @@ namespace Educative
       {
         return new Point((double) (int) this.indicator.transform.position.x, (double) (int) this.indicator.transform.position.y);
       }
-      set
-      {
-        this.indicator.transform.position = new Vector3((float) value.x, (float) value.y);
-      }
+      set => this.indicator.transform.position = new Vector3((float) value.x, (float) value.y);
     }
 
     public double angle
     {
-      get
-      {
-        return (double) this.indicator.transform.localEulerAngles.z;
-      }
-      set
-      {
-        this.indicator.transform.localEulerAngles = new Vector3(0.0f, 0.0f, (float) value);
-      }
+      get => (double) this.indicator.transform.localEulerAngles.z;
+      set => this.indicator.transform.localEulerAngles = new Vector3(0.0f, 0.0f, (float) value);
     }
 
     public string color
@@ -119,27 +93,18 @@ namespace Educative
 
     public LuaColor color2
     {
-      get
-      {
-        return LuaColor.From((Color32) this.indicator.GetComponentInChildren<SpriteRenderer>().color);
-      }
+      get => LuaColor.From((Color32) this.indicator.GetComponentInChildren<SpriteRenderer>().color);
       set
       {
         this.indicator.GetComponentInChildren<SpriteRenderer>().color = (Color) LuaColor.From(value);
       }
     }
 
-    public IndicatorKind kind
-    {
-      get
-      {
-        return this._kind;
-      }
-    }
+    public IndicatorKind kind => this._kind;
 
     public void setIcon(object spellObj)
     {
-      Spell spell = ContainerGame.getSpell(spellObj, (ZCreature) null);
+      Spell spell = ContainerGame.getSpell(spellObj);
       if (!((UnityEngine.Object) spell != (UnityEngine.Object) null))
         return;
       this.indicator.GetComponentInChildren<SpriteRenderer>().sprite = ClientResources.Instance.GetSpellIcon(spell.name);

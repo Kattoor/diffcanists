@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+#nullable disable
 public class CCColorButton : MonoBehaviour
 {
   public UIOnHover button;

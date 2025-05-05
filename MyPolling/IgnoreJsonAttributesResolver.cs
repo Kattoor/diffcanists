@@ -4,6 +4,7 @@ using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 
+#nullable disable
 namespace MyPolling
 {
   internal class IgnoreJsonAttributesResolver : DefaultContractResolver

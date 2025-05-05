@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
+#nullable disable
 public class SpellSlotButton : MonoBehaviour
 {
   public Image image;
@@ -24,12 +25,12 @@ public class SpellSlotButton : MonoBehaviour
     {
       GameObject gameObject = this.restricted.gameObject;
       int num;
-      if (!Restrictions.IsSpellRestricted(index, (Restrictions) null))
+      if (!Restrictions.IsSpellRestricted(SpellLobbyChange.Instance.settingsPlayer._spells, index))
       {
         if (Client.viewSpellLocks.ViewRestricted())
         {
           Restrictions restrictions = Server._restrictions;
-          num = restrictions != null ? (restrictions.CheckRestricted(index) ? 1 : 0) : 0;
+          num = restrictions != null ? (restrictions.CheckRestricted(SpellLobbyChange.Instance.settingsPlayer._spells, index) ? 1 : 0) : 0;
         }
         else
           num = 0;
@@ -64,7 +65,7 @@ public class SpellSlotButton : MonoBehaviour
   public void RightClick()
   {
     Spell spell = this.GetSpell();
-    if ((Object) spell == (Object) null || (Object) spell.toSummon == (Object) null || (!((Object) spell.toSummon?.GetComponent<Creature>() != (Object) null) || !spell.IsMinionSpell()))
+    if ((Object) spell == (Object) null || (Object) spell.toSummon == (Object) null || !((Object) spell.toSummon?.GetComponent<Creature>() != (Object) null) || !spell.IsMinionSpell())
       return;
     SpellLobbyChange.Instance?.OpenMinion(spell, spell.toSummon.GetComponent<Creature>());
   }
@@ -85,10 +86,10 @@ public class SpellSlotButton : MonoBehaviour
 
   public Spell GetSpell()
   {
-    if (SpellLobbyChange.Instance.settingsPlayer._spells.SeasonsIsHoliday && SpellLobbyChange.Instance.openBook == BookOf.Seasons)
+    if (SpellLobbyChange.Instance.settingsPlayer._spells.IsAlt((int) SpellLobbyChange.Instance.settingsPlayer.spells[this.index]))
     {
-      if (SpellLobbyChange.Instance.settingsPlayer.spells[this.index] < byte.MaxValue && (int) SpellLobbyChange.Instance.settingsPlayer.spells[this.index] < Inert.Instance.spells.Count)
-        return Inert.Instance.spells.GetItem((int) SpellLobbyChange.Instance.settingsPlayer.spells[this.index]).Value;
+      if (SpellLobbyChange.Instance.settingsPlayer.spells[this.index] < byte.MaxValue && (int) SpellLobbyChange.Instance.settingsPlayer.spells[this.index] < Inert.Instance.altSpells.Length)
+        return Inert.Instance.altSpells[(int) SpellLobbyChange.Instance.settingsPlayer.spells[this.index]];
     }
     else if (SpellLobbyChange.Instance.settingsPlayer.spells[this.index] < byte.MaxValue && (int) SpellLobbyChange.Instance.settingsPlayer.spells[this.index] < Inert.Instance.spells.Count)
       return Inert.Instance.spells.GetItem((int) SpellLobbyChange.Instance.settingsPlayer.spells[this.index]).Value;

@@ -3,19 +3,20 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+#nullable disable
 public class ZMyCollider : ZComponent
 {
-  internal bool enabled = true;
-  public int layer = 256;
-  public int gameObjectLayer = 8;
-  public int radius = 1;
   public int id;
   public MyCollider baseCollider;
   internal bool ghosted;
   internal ZMap.GhostTerrain ghosting;
+  internal bool enabled = true;
   public ZMyWorld world;
+  public int _layer = 256;
+  public int gameObjectLayer = 8;
   public int x;
   public int y;
+  public int radius = 1;
   public int radiusY;
   private Coords _boundsMin;
   private Coords _boundsMax;
@@ -154,42 +155,21 @@ public class ZMyCollider : ZComponent
     this.ArbritaryInit();
   }
 
-  internal bool HasLayer(int x)
+  internal bool HasLayer(int x) => (this.layer & x) != 0;
+
+  public int layer
   {
-    return (uint) (this.layer & x) > 0U;
+    get => this._layer;
+    set => this._layer = value;
   }
 
-  public int offsetX
-  {
-    get
-    {
-      return this.baseCollider.offsetX;
-    }
-  }
+  public int offsetX => this.baseCollider.offsetX;
 
-  public int offsetY
-  {
-    get
-    {
-      return this.baseCollider.offsetY;
-    }
-  }
+  public int offsetY => this.baseCollider.offsetY;
 
-  public MyLocation position
-  {
-    get
-    {
-      return new MyLocation(this.x, this.y);
-    }
-  }
+  public MyLocation position => new MyLocation(this.x, this.y);
 
-  public Point positionAsPoint
-  {
-    get
-    {
-      return new Point(this.x, this.y);
-    }
-  }
+  public Point positionAsPoint => new Point(this.x, this.y);
 
   public int SetRadius
   {
@@ -200,45 +180,15 @@ public class ZMyCollider : ZComponent
     }
   }
 
-  public List<MyCollider.Vertex> polygon
-  {
-    get
-    {
-      return this.baseCollider.polygon;
-    }
-  }
+  public List<MyCollider.Vertex> polygon => this.baseCollider.polygon;
 
-  public MyLocation Center
-  {
-    get
-    {
-      return this.baseCollider.Center;
-    }
-  }
+  public MyLocation Center => this.baseCollider.Center;
 
-  public List<MyCollider.XY> points
-  {
-    get
-    {
-      return this.baseCollider.points;
-    }
-  }
+  public List<MyCollider.XY> points => this.baseCollider.points;
 
-  public MyCollider.Shape shape
-  {
-    get
-    {
-      return this.baseCollider.shape;
-    }
-  }
+  public MyCollider.Shape shape => this.baseCollider.shape;
 
-  public StaticPolygons.CachedPolygonEnums cachedPolygon
-  {
-    get
-    {
-      return this.baseCollider.cachedPolygon;
-    }
-  }
+  public StaticPolygons.CachedPolygonEnums cachedPolygon => this.baseCollider.cachedPolygon;
 
   private Coords boundsMin
   {
@@ -271,25 +221,13 @@ public class ZMyCollider : ZComponent
     };
   }
 
-  public int GetRectMinX()
-  {
-    return this.boundsMin.x;
-  }
+  public int GetRectMinX() => this.boundsMin.x;
 
-  public int GetRectMaxX()
-  {
-    return this.boundsMax.x;
-  }
+  public int GetRectMaxX() => this.boundsMax.x;
 
-  public int GetRectMinY()
-  {
-    return this.boundsMin.y;
-  }
+  public int GetRectMinY() => this.boundsMin.y;
 
-  public int GetRectMaxY()
-  {
-    return this.boundsMax.y;
-  }
+  public int GetRectMaxY() => this.boundsMax.y;
 
   internal ZEntity entity
   {
@@ -301,13 +239,7 @@ public class ZMyCollider : ZComponent
     }
   }
 
-  internal int HasNoRider
-  {
-    get
-    {
-      return !((ZComponent) this.creature?.rider != (object) null) ? 1 : 0;
-    }
-  }
+  internal int HasNoRider => !((ZComponent) this.creature?.rider != (object) null) ? 1 : 0;
 
   public void RectangleChangeBounds()
   {
@@ -433,14 +365,14 @@ public class ZMyCollider : ZComponent
     if (this.shape == MyCollider.Shape.Polygon)
     {
       MyCollider.Bounds bounds = this.GetBounds();
-      if (x < bounds.x1 || y < bounds.y1 || (x > bounds.x2 || y > bounds.y2))
+      if (x < bounds.x1 || y < bounds.y1 || x > bounds.x2 || y > bounds.y2)
         return false;
       if (this.cachedPolygon == StaticPolygons.CachedPolygonEnums.None)
         return this.IsPointInPolygon(x, y);
       if (StaticPolygons.Inside(this.cachedPolygon, x - this.x - this.offsetX, y - this.y - this.offsetY))
         return true;
     }
-    else if (this.shape == MyCollider.Shape.Rectangle && x > this.x + this.boundsMin.x && (y > this.y + this.boundsMin.y && x < this.x + this.boundsMax.x))
+    else if (this.shape == MyCollider.Shape.Rectangle && x > this.x + this.boundsMin.x && y > this.y + this.boundsMin.y && x < this.x + this.boundsMax.x)
       return y < this.y + this.boundsMax.y;
     return false;
   }
@@ -454,7 +386,7 @@ public class ZMyCollider : ZComponent
 
   private bool RectanglesOverlap(MyCollider.Bounds l, MyCollider.Bounds r)
   {
-    return l.x1 < r.x2 && l.x2 > r.x1 && (r.y2 > l.y1 && r.y1 < l.y2);
+    return l.x1 < r.x2 && l.x2 > r.x1 && r.y2 > l.y1 && r.y1 < l.y2;
   }
 
   private bool CircleRectangleOverlap(int X1, int Y1, int X2, int Y2)
@@ -481,7 +413,7 @@ public class ZMyCollider : ZComponent
     if (this.shape == MyCollider.Shape.Polygon)
     {
       MyCollider.Bounds bounds = this.GetBounds();
-      if (p.x + radius < bounds.x1 || p.y + radius < bounds.y1 || (p.x - radius > bounds.x2 || p.y - radius > bounds.y2))
+      if (p.x + radius < bounds.x1 || p.y + radius < bounds.y1 || p.x - radius > bounds.x2 || p.y - radius > bounds.y2)
         return false;
       if (this.cachedPolygon != StaticPolygons.CachedPolygonEnums.None)
       {
@@ -683,11 +615,7 @@ public class ZMyCollider : ZComponent
     return polygonCollisionResult;
   }
 
-  public FixedInt IntervalDistance(
-    FixedInt minA,
-    FixedInt maxA,
-    FixedInt minB,
-    FixedInt maxB)
+  public FixedInt IntervalDistance(FixedInt minA, FixedInt maxA, FixedInt minB, FixedInt maxB)
   {
     return minA < minB ? minB - maxA : minA - maxB;
   }

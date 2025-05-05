@@ -3,6 +3,7 @@ using System;
 using TMPro;
 using UnityEngine;
 
+#nullable disable
 public class VectorFieldContextMenu : MonoBehaviour
 {
   public TMP_InputField inputX;

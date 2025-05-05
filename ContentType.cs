@@ -1,4 +1,5 @@
 
+#nullable disable
 public enum ContentType
 {
   STRING,
@@ -12,4 +13,5 @@ public enum ContentType
   SpellOverrides,
   RatedSettings,
   RatedContainer,
+  ArcMap,
 }

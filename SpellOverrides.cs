@@ -9,6 +9,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using UnityEngine;
 
+#nullable disable
 [Serializable]
 public class SpellOverrides
 {
@@ -19,13 +20,7 @@ public class SpellOverrides
   public static SpellOverrides serverObj;
   public static SpellOverrides activeObj;
 
-  public static string EXT
-  {
-    get
-    {
-      return ".spellOverrides";
-    }
-  }
+  public static string EXT => ".spellOverrides";
 
   public static string PATH
   {
@@ -40,21 +35,9 @@ public class SpellOverrides
     }
   }
 
-  public static string SERVER_PATH
-  {
-    get
-    {
-      return SpellOverrides.PATH + "_Server" + SpellOverrides.EXT;
-    }
-  }
+  public static string SERVER_PATH => SpellOverrides.PATH + "_Server" + SpellOverrides.EXT;
 
-  public static string OLD
-  {
-    get
-    {
-      return SpellOverrides.PATH + "_outdated" + SpellOverrides.EXT;
-    }
-  }
+  public static string OLD => SpellOverrides.PATH + "_outdated" + SpellOverrides.EXT;
 
   public void SaveToFile(string name)
   {
@@ -79,10 +62,7 @@ public class SpellOverrides
     return (SpellOverrides) null;
   }
 
-  public void SaveServer()
-  {
-    this.SaveToFile(SpellOverrides.SERVER_PATH);
-  }
+  public void SaveServer() => this.SaveToFile(SpellOverrides.SERVER_PATH);
 
   public static SpellOverrides LoadServer()
   {
@@ -127,12 +107,12 @@ public class SpellOverrides
   {
     using (MemoryStream memoryStream = new MemoryStream(sent))
     {
-      using (BsonReader bsonReader = new BsonReader((Stream) memoryStream))
+      using (BsonReader reader = new BsonReader((Stream) memoryStream))
         return new JsonSerializer()
         {
           TypeNameHandling = TypeNameHandling.Auto,
           Binder = ((SerializationBinder) new CustomJsonSerializationBinder("Educative"))
-        }.Deserialize<SpellOverrides>((JsonReader) bsonReader);
+        }.Deserialize<SpellOverrides>((JsonReader) reader);
     }
   }
 

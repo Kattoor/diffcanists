@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 
+#nullable disable
 namespace Hazel.Udp
 {
   public class UdpConnectionListener : NetworkConnectionListener
   {
+    private Socket listener;
     private byte[] dataBuffer = new byte[(int) ushort.MaxValue];
     private Dictionary<EndPoint, UdpServerConnection> connections = new Dictionary<EndPoint, UdpServerConnection>();
-    private Socket listener;
 
     [Obsolete("Temporary constructor in beta only, use NetworkEndPoint constructor instead.")]
     public UdpConnectionListener(IPAddress IPAddress, int port, IPMode mode = IPMode.IPv4)
@@ -89,8 +90,8 @@ namespace Hazel.Udp
       }
       if (from == 0)
         return;
-      byte[] buffer = new byte[from];
-      Buffer.BlockCopy((Array) result.AsyncState, 0, (Array) buffer, 0, from);
+      byte[] numArray1 = new byte[from];
+      Buffer.BlockCopy((Array) result.AsyncState, 0, (Array) numArray1, 0, from);
       this.StartListeningForData();
       bool flag;
       UdpServerConnection serverConnection;
@@ -103,22 +104,22 @@ namespace Hazel.Udp
         }
         else
         {
-          if (buffer[0] != (byte) 8)
+          if (numArray1[0] != (byte) 8)
             return;
           serverConnection = new UdpServerConnection(this, endPoint, this.IPMode);
           this.connections.Add(endPoint, serverConnection);
-          serverConnection.SendAck(buffer[1], buffer[2]);
+          serverConnection.SendAck(numArray1[1], numArray1[2]);
         }
       }
       if (flag)
       {
-        serverConnection.InvokeDataReceived(buffer);
+        serverConnection.InvokeDataReceived(numArray1);
       }
       else
       {
-        byte[] bytes = new byte[buffer.Length - 1];
-        Buffer.BlockCopy((Array) buffer, 1, (Array) bytes, 0, buffer.Length - 1);
-        this.InvokeNewConnection(bytes, (Hazel.Connection) serverConnection);
+        byte[] numArray2 = new byte[numArray1.Length - 1];
+        Buffer.BlockCopy((Array) numArray1, 1, (Array) numArray2, 0, numArray1.Length - 1);
+        this.InvokeNewConnection(numArray2, (Hazel.Connection) serverConnection);
       }
     }
 

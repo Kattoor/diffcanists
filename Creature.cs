@@ -9,11 +9,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+#nullable disable
 public class Creature : Entity
 {
-  [NonSerialized]
-  public List<Creature.NotScaled> notScaled = new List<Creature.NotScaled>();
-  public bool isPawn = true;
   public CreatureStats stats;
   [NonSerialized]
   internal CreatureStats runTimeStats;
@@ -26,6 +24,7 @@ public class Creature : Entity
   public AudioClip clipHit;
   public AudioClip clipSelect;
   [Header("Effects")]
+  public bool recolor;
   public GameObject deathExplosion;
   public Sprite undeadHead;
   public Sprite undeadBody;
@@ -53,7 +52,10 @@ public class Creature : Entity
   internal GameObject selectedSpellPanel;
   internal Image selectedSpellIcon;
   [NonSerialized]
+  public List<Creature.NotScaled> notScaled = new List<Creature.NotScaled>();
+  [NonSerialized]
   public StoreObject activeStoreObject;
+  public bool isPawn = true;
   [NonSerialized]
   public Canvas overheadCanvas;
   [NonSerialized]
@@ -65,13 +67,7 @@ public class Creature : Entity
   internal ParticleDucks myducks;
   internal GameObject gravityObj;
 
-  public MyLocation position
-  {
-    get
-    {
-      return this.serverObj.position;
-    }
-  }
+  public MyLocation position => this.serverObj.position;
 
   public SpriteRenderer GetSprite(Outfit f)
   {
@@ -143,13 +139,13 @@ public class Creature : Entity
         break;
     }
     bool flag2 = false;
-    for (int index1 = t.width - 1; index1 >= 0; --index1)
+    for (int index3 = t.width - 1; index3 >= 0; --index3)
     {
-      for (int index2 = 0; index2 < t.height; ++index2)
+      for (int index4 = 0; index4 < t.height; ++index4)
       {
-        if (pixels32_2[index1 + index2 * t.width].a != (byte) 0)
+        if (pixels32_2[index3 + index4 * t.width].a != (byte) 0)
         {
-          rect.width = (float) index1 - rect.x;
+          rect.width = (float) index3 - rect.x;
           flag2 = true;
           break;
         }
@@ -158,13 +154,13 @@ public class Creature : Entity
         break;
     }
     bool flag3 = false;
-    for (int index1 = 0; index1 < t.height; ++index1)
+    for (int index5 = 0; index5 < t.height; ++index5)
     {
-      for (int index2 = t.width - 1; index2 >= 0; --index2)
+      for (int index6 = t.width - 1; index6 >= 0; --index6)
       {
-        if (pixels32_2[index2 + index1 * t.width].a != (byte) 0)
+        if (pixels32_2[index6 + index5 * t.width].a != (byte) 0)
         {
-          rect.y = (float) index1;
+          rect.y = (float) index5;
           flag3 = true;
           break;
         }
@@ -173,13 +169,13 @@ public class Creature : Entity
         break;
     }
     bool flag4 = false;
-    for (int index1 = t.height - 1; index1 >= 0; --index1)
+    for (int index7 = t.height - 1; index7 >= 0; --index7)
     {
-      for (int index2 = t.width - 1; index2 >= 0; --index2)
+      for (int index8 = t.width - 1; index8 >= 0; --index8)
       {
-        if (pixels32_2[index2 + index1 * t.width].a != (byte) 0)
+        if (pixels32_2[index8 + index7 * t.width].a != (byte) 0)
         {
-          rect.height = (float) index1 - rect.y;
+          rect.height = (float) index7 - rect.y;
           flag4 = true;
           break;
         }
@@ -190,13 +186,13 @@ public class Creature : Entity
     ++rect.width;
     ++rect.height;
     Color32[] colors = new Color32[(int) ((double) rect.width * (double) rect.height)];
-    int index3 = 0;
+    int index9 = 0;
     for (int y = (int) rect.y; y < (int) ((double) rect.y + (double) rect.height); ++y)
     {
       for (int x = (int) rect.x; x < (int) ((double) rect.x + (double) rect.width); ++x)
       {
-        colors[index3] = pixels32_2[x + y * t.width];
-        ++index3;
+        colors[index9] = pixels32_2[x + y * t.width];
+        ++index9;
       }
     }
     Texture2D tex = new Texture2D((int) rect.width, (int) rect.height);
@@ -236,231 +232,78 @@ public class Creature : Entity
       Surface src = new Surface(pixels32, width2, height2);
       int x = centerX + (int) (((double) me.x - (double) parent.x + 0.5) * (double) pixelsPerUnit);
       int y = centerY + (int) (((double) me.y - (double) parent.y + 0.5) * (double) pixelsPerUnit);
-      RotateImage.RenderOverlay(dst, src, x, y, 0.0f, 0, true, false, 1f);
+      RotateImage.RenderOverlay(dst, src, x, y, 0.0f, 0, true, false);
     }
     else
     {
       Surface dst = new Surface(t);
       Color32[] c = color32Array;
       rect = s.sprite.rect;
-      int width2 = (int) rect.width;
+      int width3 = (int) rect.width;
       rect = s.sprite.rect;
-      int height2 = (int) rect.height;
-      Surface src = new Surface(c, width2, height2);
+      int height3 = (int) rect.height;
+      Surface src = new Surface(c, width3, height3);
       int x = centerX + (int) (((double) me.x - (double) parent.x + 0.5) * (double) pixelsPerUnit);
       int y = centerY + (int) (((double) me.y - (double) parent.y + 0.5) * (double) pixelsPerUnit);
-      RotateImage.RenderOverlay(dst, src, x, y, 0.0f, 0, true, false, 1f);
+      RotateImage.RenderOverlay(dst, src, x, y, 0.0f, 0, true, false);
     }
   }
 
-  public virtual ZCreature Get()
-  {
-    return new ZCreature();
-  }
+  public virtual ZCreature Get() => new ZCreature();
 
-  public ZPerson parent
-  {
-    get
-    {
-      return this.serverObj.parent;
-    }
-  }
+  public ZPerson parent => this.serverObj.parent;
 
-  public ZPerson originalParent
-  {
-    get
-    {
-      return this.serverObj.parent;
-    }
-  }
+  public ZPerson originalParent => this.serverObj.parent;
 
-  public int radius
-  {
-    get
-    {
-      return this.runTimeStats.radius;
-    }
-  }
+  public int radius => this.runTimeStats.radius;
 
-  public bool affectedByGravity
-  {
-    get
-    {
-      return this.runTimeStats.affectedByGravity;
-    }
-  }
+  public bool affectedByGravity => this.runTimeStats.affectedByGravity;
 
-  public int health
-  {
-    get
-    {
-      return this.runTimeStats.health;
-    }
-  }
+  public int health => this.runTimeStats.health;
 
-  public int maxHealth
-  {
-    get
-    {
-      return this.runTimeStats.maxHealth;
-    }
-  }
+  public int maxHealth => this.runTimeStats.maxHealth;
 
-  public FixedInt speed
-  {
-    get
-    {
-      return this.runTimeStats.speed;
-    }
-  }
+  public FixedInt speed => this.runTimeStats.speed;
 
-  public EditorFixedInt massMulti
-  {
-    get
-    {
-      return this.runTimeStats.massMulti;
-    }
-  }
+  public EditorFixedInt massMulti => this.runTimeStats.massMulti;
 
-  public EditorFixedInt minAngle
-  {
-    get
-    {
-      return this.runTimeStats.minAngle;
-    }
-  }
+  public EditorFixedInt minAngle => this.runTimeStats.minAngle;
 
-  public EditorFixedInt maxAngle
-  {
-    get
-    {
-      return this.runTimeStats.maxAngle;
-    }
-  }
+  public EditorFixedInt maxAngle => this.runTimeStats.maxAngle;
 
-  public bool flying
-  {
-    get
-    {
-      return this.runTimeStats.flying;
-    }
-  }
+  public bool flying => this.runTimeStats.flying;
 
-  public bool mountable
-  {
-    get
-    {
-      return this.runTimeStats.mountable;
-    }
-  }
+  public bool mountable => this.runTimeStats.mountable;
 
-  public bool canMount
-  {
-    get
-    {
-      return this.runTimeStats.canMount;
-    }
-  }
+  public bool canMount => this.runTimeStats.canMount;
 
-  public bool phantom
-  {
-    get
-    {
-      return this.runTimeStats.phantom;
-    }
-  }
+  public bool phantom => this.runTimeStats.phantom;
 
-  public bool gliding
-  {
-    get
-    {
-      return this.runTimeStats.gliding;
-    }
-  }
+  public bool gliding => this.runTimeStats.gliding;
 
-  public bool canMove
-  {
-    get
-    {
-      return this.runTimeStats.canMove;
-    }
-  }
+  public bool canMove => this.runTimeStats.canMove;
 
-  public bool usingGlide
-  {
-    get
-    {
-      return this.runTimeStats.usingGlide;
-    }
-  }
+  public bool usingGlide => this.runTimeStats.usingGlide;
 
-  public EditorVector2 LongJumpData
-  {
-    get
-    {
-      return this.runTimeStats.LongJumpData;
-    }
-  }
+  public EditorVector2 LongJumpData => this.runTimeStats.LongJumpData;
 
-  public EditorVector2 HighJumpData
-  {
-    get
-    {
-      return this.runTimeStats.HighJumpData;
-    }
-  }
+  public EditorVector2 HighJumpData => this.runTimeStats.HighJumpData;
 
-  public CreatureType type
-  {
-    get
-    {
-      return this.runTimeStats.type;
-    }
-  }
+  public CreatureType type => this.runTimeStats.type;
 
-  public CreatureRace race
-  {
-    get
-    {
-      return this.runTimeStats.race;
-    }
-  }
+  public CreatureRace race => this.runTimeStats.race;
 
-  public bool waterWalking
-  {
-    get
-    {
-      return this.runTimeStats.waterWalking;
-    }
-  }
+  public bool waterWalking => this.runTimeStats.waterWalking;
 
-  public bool frostWalking
-  {
-    get
-    {
-      return this.runTimeStats.frostWalking;
-    }
-  }
+  public bool frostWalking => this.runTimeStats.frostWalking;
 
-  public List<SpellSlot> spells
-  {
-    get
-    {
-      return this.runTimeStats.spells;
-    }
-  }
+  public List<SpellSlot> spells => this.runTimeStats.spells;
 
-  internal int shield
-  {
-    get
-    {
-      return this.serverObj.shield;
-    }
-  }
+  internal int shield => this.serverObj.shield;
 
   public void OnEmoji(int index, bool spectator = false)
   {
-    if (!Client.renderEmoji || !Client.renderEmojiSpectator & spectator || (!((UnityEngine.Object) this.overheadCanvas != (UnityEngine.Object) null) || !((UnityEngine.Object) this.overheadEmoji == (UnityEngine.Object) null)))
+    if (!Client.renderEmoji || !Client.renderEmojiSpectator & spectator || !((UnityEngine.Object) this.overheadCanvas != (UnityEngine.Object) null) || !((UnityEngine.Object) this.overheadEmoji == (UnityEngine.Object) null))
       return;
     this.overheadEmoji = UnityEngine.Object.Instantiate<OverheadEmoji>(ClientResources.Instance.overheadEmoji, this.overheadCanvas.transform.position + new Vector3(0.0f, spectator ? 20f : 40f), Quaternion.identity, this.transform);
     this.overheadEmoji.OnEmoji(index);
@@ -469,10 +312,7 @@ public class Creature : Entity
     AudioManager.Play(AudioManager.instance.emojiShow);
   }
 
-  private void OnDestroy()
-  {
-    this.Cleanup();
-  }
+  private void OnDestroy() => this.Cleanup();
 
   public void Cleanup()
   {
@@ -531,11 +371,11 @@ public class Creature : Entity
 
   public class NotScaled
   {
-    public Outfit outfit = Outfit.None;
     public Transform transform;
     public Vector3 normalPositoin;
     public Vector3 leftPosition;
     public IAnimator animator;
+    public Outfit outfit = Outfit.None;
 
     public NotScaled(IAnimator c, SpriteRenderer s, float offset, Outfit o)
     {

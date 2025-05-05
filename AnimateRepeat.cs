@@ -1,6 +1,7 @@
 
 using UnityEngine;
 
+#nullable disable
 public class AnimateRepeat : MonoBehaviour
 {
   public float timeToFinish = 1f;
@@ -11,13 +12,7 @@ public class AnimateRepeat : MonoBehaviour
   private SpriteRenderer sp;
   internal bool deleteOnDestroy;
 
-  public SpriteRenderer GetSpriteRenderer
-  {
-    get
-    {
-      return this.sp ?? this.GetComponent<SpriteRenderer>();
-    }
-  }
+  public SpriteRenderer GetSpriteRenderer => this.sp ?? this.GetComponent<SpriteRenderer>();
 
   private void Start()
   {
@@ -36,6 +31,12 @@ public class AnimateRepeat : MonoBehaviour
       if ((Object) sprite != (Object) null)
         Global.DestroySprite(sprite);
     }
+  }
+
+  internal void UpdateTimeToFinish(float f)
+  {
+    this.timeToFinish = f;
+    this.timeBetweenFrames = this.timeToFinish / (float) this.sprites.Length;
   }
 
   internal void UpdateFPS(float f)

@@ -5,36 +5,28 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
+#nullable disable
 public class RecycledScrollViewGeneric : MonoBehaviour
 {
+  public GameObject pfabChat;
+  public RectTransform chatContainer;
+  public RectTransform chatContainerScroller;
+  public ScrollRect _chatScrollbar;
+  public Scrollbar _bar;
   public float itemSize = 28f;
   public int MaxVisible = 29;
   public int MaxSize = 200;
   private bool notmaxed = true;
   private List<IRecycledScrollViewGenericItem> pfabs = new List<IRecycledScrollViewGenericItem>();
   private List<object> list = new List<object>();
-  private int lastRender = -1;
-  public GameObject pfabChat;
-  public RectTransform chatContainer;
-  public RectTransform chatContainerScroller;
-  public ScrollRect _chatScrollbar;
-  public Scrollbar _bar;
   public Action<IRecycledScrollViewGenericItem> onScrolled;
   private int firstVisible;
   private int nextindex;
+  private int lastRender = -1;
 
-  public List<IRecycledScrollViewGenericItem> GetPfabs
-  {
-    get
-    {
-      return this.pfabs;
-    }
-  }
+  public List<IRecycledScrollViewGenericItem> GetPfabs => this.pfabs;
 
-  private void Awake()
-  {
-    this._bar.onValueChanged.AddListener(new UnityAction<float>(this.Scroll));
-  }
+  private void Awake() => this._bar.onValueChanged.AddListener(new UnityAction<float>(this.Scroll));
 
   public int GetIndex(int i)
   {
@@ -61,10 +53,7 @@ public class RecycledScrollViewGeneric : MonoBehaviour
     this.Render();
   }
 
-  private int lastIndex()
-  {
-    return this.nextindex == 0 ? this.list.Count - 1 : this.nextindex - 1;
-  }
+  private int lastIndex() => this.nextindex == 0 ? this.list.Count - 1 : this.nextindex - 1;
 
   private int firstIndex()
   {

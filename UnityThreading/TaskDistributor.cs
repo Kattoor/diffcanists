@@ -4,42 +4,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
+#nullable disable
 namespace UnityThreading
 {
   public class TaskDistributor : DispatcherBase
   {
-    private ThreadPriority priority = ThreadPriority.BelowNormal;
     private TaskWorker[] workerThreads;
     private static TaskDistributor mainTaskDistributor;
     public int MaxAdditionalWorkerThreads;
     private string name;
     private bool isDisposed;
+    private ThreadPriority priority = ThreadPriority.BelowNormal;
 
-    internal WaitHandle NewDataWaitHandle
-    {
-      get
-      {
-        return (WaitHandle) this.dataEvent;
-      }
-    }
+    internal WaitHandle NewDataWaitHandle => (WaitHandle) this.dataEvent;
 
     public static TaskDistributor Main
     {
       get
       {
-        if (TaskDistributor.mainTaskDistributor == null)
-          throw new InvalidOperationException("No default TaskDistributor found, please create a new TaskDistributor instance before calling this property.");
-        return TaskDistributor.mainTaskDistributor;
+        return TaskDistributor.mainTaskDistributor != null ? TaskDistributor.mainTaskDistributor : throw new InvalidOperationException("No default TaskDistributor found, please create a new TaskDistributor instance before calling this property.");
       }
     }
 
-    public static TaskDistributor MainNoThrow
-    {
-      get
-      {
-        return TaskDistributor.mainTaskDistributor;
-      }
-    }
+    public static TaskDistributor MainNoThrow => TaskDistributor.mainTaskDistributor;
 
     public TaskDistributor(string name)
       : this(name, 0)
@@ -106,14 +93,11 @@ namespace UnityThreading
       }
     }
 
-    internal void FillTasks(Dispatcher target)
-    {
-      target.AddTasks(this.IsolateTasks(1));
-    }
+    internal void FillTasks(Dispatcher target) => target.AddTasks(this.IsolateTasks(1));
 
     protected override void CheckAccessLimitation()
     {
-      if (this.MaxAdditionalWorkerThreads <= 0 && this.AllowAccessLimitationChecks && (ThreadBase.CurrentThread != null && ThreadBase.CurrentThread is TaskWorker) && ((TaskWorker) ThreadBase.CurrentThread).TaskDistributor == this)
+      if (this.MaxAdditionalWorkerThreads <= 0 && this.AllowAccessLimitationChecks && ThreadBase.CurrentThread != null && ThreadBase.CurrentThread is TaskWorker && ((TaskWorker) ThreadBase.CurrentThread).TaskDistributor == this)
         throw new InvalidOperationException("Access to TaskDistributor prohibited when called from inside a TaskDistributor thread. Dont dispatch new Tasks through the same TaskDistributor. If you want to distribute new tasks create a new TaskDistributor and use the new created instance. Remember to dispose the new instance to prevent thread spamming.");
     }
 
@@ -158,10 +142,7 @@ namespace UnityThreading
 
     public ThreadPriority Priority
     {
-      get
-      {
-        return this.priority;
-      }
+      get => this.priority;
       set
       {
         this.priority = value;

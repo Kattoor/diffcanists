@@ -1,4 +1,5 @@
 
+#nullable disable
 namespace Educative
 {
   public class CLoopWhileTrue : Command
@@ -9,10 +10,7 @@ namespace Educative
     public Comparison comparison;
     internal int indexEnded;
 
-    public CLoopWhileTrue()
-    {
-      this.type = Command.Type.LoopWhileTrue;
-    }
+    public CLoopWhileTrue() => this.type = Command.Type.LoopWhileTrue;
 
     public bool Evaulate()
     {

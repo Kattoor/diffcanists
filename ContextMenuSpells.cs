@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
+#nullable disable
 public class ContextMenuSpells : MonoBehaviour
 {
   public Image p;
@@ -25,10 +26,7 @@ public class ContextMenuSpells : MonoBehaviour
   {
   }
 
-  private IEnumerator DelayMake(
-    UnityAction<SpellEnum> a,
-    Func<Spell, bool> f,
-    bool allowMultiple = false)
+  private IEnumerator DelayMake(UnityAction<SpellEnum> a, Func<Spell, bool> f, bool allowMultiple = false)
   {
     HashSet<SpellEnum> spellEnumSet = new HashSet<SpellEnum>();
     List<KeyValuePair<string, Spell>> spell = new List<KeyValuePair<string, Spell>>();
@@ -53,7 +51,7 @@ public class ContextMenuSpells : MonoBehaviour
           return;
         MyContextMenu.CloseInstance();
       }));
-      component.onEnter.AddListener((UnityAction) (() => MyToolTip.Show(x.Key, -1f)));
+      component.onEnter.AddListener((UnityAction) (() => MyToolTip.Show(x.Key)));
       component.onExit.AddListener((UnityAction) (() => MyToolTip.Close()));
       image.gameObject.SetActive(true);
       if (sw.ElapsedMilliseconds > 16L)

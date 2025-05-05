@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 
+#nullable disable
 [Serializable]
 public class ExtraStuff
 {
@@ -31,13 +32,10 @@ public class ExtraStuff
     if (!(obj is ExtraStuff))
       return base.Equals(obj);
     ExtraStuff extraStuff = obj as ExtraStuff;
-    return this.spellbookWinningStreak_Maps == extraStuff.spellbookWinningStreak_Maps && this.spellbookWinningStreak == extraStuff.spellbookWinningStreak && (Global.CompareByteArrays(this.lastSpellBook, extraStuff.lastSpellBook) && this.outfitLocked == extraStuff.outfitLocked);
+    return this.spellbookWinningStreak_Maps == extraStuff.spellbookWinningStreak_Maps && this.spellbookWinningStreak == extraStuff.spellbookWinningStreak && Global.CompareByteArrays(this.lastSpellBook, extraStuff.lastSpellBook) && this.outfitLocked == extraStuff.outfitLocked;
   }
 
-  public override int GetHashCode()
-  {
-    return base.GetHashCode();
-  }
+  public override int GetHashCode() => base.GetHashCode();
 
   [JsonProperty("a")]
   public int spellbookWinningStreak { get; set; }

@@ -2,21 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+#nullable disable
 public class ZComponent
 {
   internal bool isNull;
   public Transform _transform;
   public GameObject _gameObject;
 
-  public static bool IsNull(ZComponent z)
-  {
-    return (object) z == null || z.isNull;
-  }
+  public static bool IsNull(ZComponent z) => (object) z == null || z.isNull;
 
-  public void SetNull()
-  {
-    this.isNull = true;
-  }
+  public void SetNull() => this.isNull = true;
 
   public static bool operator ==(ZComponent a, object b)
   {
@@ -32,15 +27,9 @@ public class ZComponent
     return (object) a != null && !a.isNull;
   }
 
-  public override bool Equals(object obj)
-  {
-    return base.Equals(obj);
-  }
+  public override bool Equals(object obj) => base.Equals(obj);
 
-  public override int GetHashCode()
-  {
-    return base.GetHashCode();
-  }
+  public override int GetHashCode() => base.GetHashCode();
 
   public static T Instantiate<T>(T t, Vector3 l, Quaternion q, Transform p) where T : Object
   {
@@ -60,7 +49,7 @@ public class ZComponent
   public static ZCreature Instantiate(ZCreature t, Vector2 l, Quaternion q, Transform p)
   {
     ZCreature z = new ZCreature();
-    z.Clone(t, false);
+    z.Clone(t);
     z.clientObj = ZComponent.Instantiate<Creature>(t.clientObj, l, q, p);
     return z;
   }
@@ -100,25 +89,13 @@ public class ZComponent
 
   public Transform transform
   {
-    get
-    {
-      return (Object) this._transform == (Object) null ? (Transform) null : this._transform;
-    }
-    set
-    {
-      this._transform = value;
-    }
+    get => (Object) this._transform == (Object) null ? (Transform) null : this._transform;
+    set => this._transform = value;
   }
 
   public GameObject gameObject
   {
-    get
-    {
-      return (Object) this._gameObject == (Object) null ? (GameObject) null : this._gameObject;
-    }
-    set
-    {
-      this._gameObject = value;
-    }
+    get => (Object) this._gameObject == (Object) null ? (GameObject) null : this._gameObject;
+    set => this._gameObject = value;
   }
 }

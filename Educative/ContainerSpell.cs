@@ -1,6 +1,7 @@
 
 using MoonSharp.Interpreter;
 
+#nullable disable
 namespace Educative
 {
   public class ContainerSpell
@@ -9,173 +10,77 @@ namespace Educative
     public SpellSlot slot;
 
     [MoonSharpHidden]
-    public ContainerSpell(SpellSlot s)
-    {
-      this.slot = s;
-    }
+    public ContainerSpell(SpellSlot s) => this.slot = s;
 
     public int uses
     {
-      get
-      {
-        return this.slot.UsedUses;
-      }
-      set
-      {
-        this.slot.SetUses = value;
-      }
+      get => this.slot.UsedUses;
+      set => this.slot.SetUses = value;
     }
 
     public int maxUses
     {
-      get
-      {
-        return this.slot.MaxUses;
-      }
-      set
-      {
-        this.slot.MaxUses = value;
-      }
+      get => this.slot.MaxUses;
+      set => this.slot.MaxUses = value;
     }
 
     public int rechargeTime
     {
-      get
-      {
-        return this.slot.RechargeTime;
-      }
-      set
-      {
-        this.slot.RechargeTime = value;
-      }
+      get => this.slot.RechargeTime;
+      set => this.slot.RechargeTime = value;
     }
 
     public int lastTurnFired
     {
-      get
-      {
-        return this.slot.LastTurnFired;
-      }
-      set
-      {
-        this.slot.SetTurnFired = value;
-      }
+      get => this.slot.LastTurnFired;
+      set => this.slot.SetTurnFired = value;
     }
 
     public bool isPresent
     {
-      get
-      {
-        return this.slot.isPresent;
-      }
-      set
-      {
-        this.slot.isPresent = value;
-      }
+      get => this.slot.isPresent;
+      set => this.slot.isPresent = value;
     }
 
     public bool locked
     {
-      get
-      {
-        return this.slot.disabledturn == 999;
-      }
-      set
-      {
-        this.slot.disabledturn = value ? 999 : 0;
-      }
+      get => this.slot.disabledturn == 999;
+      set => this.slot.disabledturn = value ? 999 : 0;
     }
 
     public int turnsTillFirstUse
     {
-      get
-      {
-        return this.slot.TurnsTillFirstUse;
-      }
-      set
-      {
-        this.slot.TurnsTillFirstUse = value;
-      }
+      get => this.slot.TurnsTillFirstUse;
+      set => this.slot.TurnsTillFirstUse = value;
     }
 
-    public SpellEnum spellEnum
-    {
-      get
-      {
-        return this.slot.spell.spellEnum;
-      }
-    }
+    public SpellEnum spellEnum => this.slot.spell.spellEnum;
 
-    public CastType castType
-    {
-      get
-      {
-        return this.slot.spell.type;
-      }
-    }
+    public CastType castType => this.slot.spell.type;
 
-    public DamageType damageType
-    {
-      get
-      {
-        return this.slot.spell.damageType;
-      }
-    }
+    public DamageType damageType => this.slot.spell.damageType;
 
-    public BookOf book
-    {
-      get
-      {
-        return this.slot.spell.bookOf;
-      }
-    }
+    public BookOf book => this.slot.spell.bookOf;
 
-    public int damage
-    {
-      get
-      {
-        return this.slot.spell.damage;
-      }
-    }
+    public int damage => this.slot.spell.damage;
 
-    public int explosionRadius
-    {
-      get
-      {
-        return this.slot.spell.EXORADIUS;
-      }
-    }
+    public int explosionRadius => this.slot.spell.EXORADIUS;
 
     public string description
     {
-      get
-      {
-        return Descriptions.GetSpellDescription(this.slot.spell.name, this.slot, true).description;
-      }
+      get => Descriptions.GetSpellDescription(this.slot.spell.name, this.slot, true).description;
     }
 
     public string descriptionOnly
     {
-      get
-      {
-        return Descriptions.GetSpellDescription(this.slot.spell.name, this.slot, false).description;
-      }
+      get => Descriptions.GetSpellDescription(this.slot.spell.name, this.slot).description;
     }
 
     public string descriptionExtra
     {
-      get
-      {
-        return Descriptions.GetSpellDescription(this.slot.spell.name, this.slot, false).extra;
-      }
+      get => Descriptions.GetSpellDescription(this.slot.spell.name, this.slot).extra;
     }
 
-    public string name
-    {
-      get
-      {
-        return this.slot.spell.name;
-      }
-    }
+    public string name => this.slot.spell.name;
   }
 }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+#nullable disable
 namespace LibNoise.Operator
 {
   public class Curve : ModuleBase
@@ -20,21 +21,9 @@ namespace LibNoise.Operator
       this.Modules[0] = input;
     }
 
-    public int ControlPointCount
-    {
-      get
-      {
-        return this._data.Count;
-      }
-    }
+    public int ControlPointCount => this._data.Count;
 
-    public List<KeyValuePair<double, double>> ControlPoints
-    {
-      get
-      {
-        return this._data;
-      }
-    }
+    public List<KeyValuePair<double, double>> ControlPoints => this._data;
 
     public void Add(double input, double output)
     {
@@ -44,10 +33,7 @@ namespace LibNoise.Operator
       this._data.Sort((Comparison<KeyValuePair<double, double>>) ((lhs, rhs) => lhs.Key.CompareTo(rhs.Key)));
     }
 
-    public void Clear()
-    {
-      this._data.Clear();
-    }
+    public void Clear() => this._data.Clear();
 
     public override double GetValue(double x, double y, double z)
     {

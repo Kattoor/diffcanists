@@ -1,4 +1,5 @@
 
+#nullable disable
 namespace LibNoise.Generator
 {
   public class Const : ModuleBase
@@ -18,19 +19,10 @@ namespace LibNoise.Generator
 
     public double Value
     {
-      get
-      {
-        return this._value;
-      }
-      set
-      {
-        this._value = value;
-      }
+      get => this._value;
+      set => this._value = value;
     }
 
-    public override double GetValue(double x, double y, double z)
-    {
-      return this._value;
-    }
+    public override double GetValue(double x, double y, double z) => this._value;
   }
 }

@@ -1,6 +1,7 @@
 
 using UnityEngine;
 
+#nullable disable
 namespace WebGLSupport.Detail
 {
   public class RebuildChecker
@@ -11,10 +12,7 @@ namespace WebGLSupport.Detail
     private int beforeSelectionFocusPosition;
     private int beforeSelectionAnchorPosition;
 
-    public RebuildChecker(IInputField input)
-    {
-      this.input = input;
-    }
+    public RebuildChecker(IInputField input) => this.input = input;
 
     public bool NeedRebuild(bool debug = false)
     {

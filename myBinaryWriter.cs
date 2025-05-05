@@ -4,15 +4,10 @@ using System.IO;
 using System.Text;
 using UnityEngine;
 
+#nullable disable
 public class myBinaryWriter : BinaryWriter
 {
-  private long Length
-  {
-    get
-    {
-      return this.BaseStream.Length;
-    }
-  }
+  private long Length => this.BaseStream.Length;
 
   public myBinaryWriter()
     : base((Stream) new MemoryStream(256))
@@ -54,10 +49,7 @@ public class myBinaryWriter : BinaryWriter
       this.Write(num);
   }
 
-  public void WriteFixed(FixedInt value)
-  {
-    this.Write(value.RawValue);
-  }
+  public void WriteFixed(FixedInt value) => this.Write(value.RawValue);
 
   public void Write(MyLocation value)
   {

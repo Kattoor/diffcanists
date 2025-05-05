@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+#nullable disable
 public class Newsfeed : MonoBehaviour
 {
-  private List<(NewsType type, NewsfeedItem item)> list = new List<(NewsType, NewsfeedItem)>();
   public NewsfeedItem pfab;
   public RectTransform container;
+  private List<(NewsType type, NewsfeedItem item)> list = new List<(NewsType, NewsfeedItem)>();
 
   public static Newsfeed Instance { get; private set; }
 
@@ -17,15 +18,9 @@ public class Newsfeed : MonoBehaviour
     Newsfeed.Instance = Controller.Instance.CreateAndApply<Newsfeed>(Controller.Instance.newsfeed, Controller.Instance.transform);
   }
 
-  public static void Add(NewsType t, string s)
-  {
-    Newsfeed.Create();
-  }
+  public static void Add(NewsType t, string s) => Newsfeed.Create();
 
-  public static void Remove(NewsType t)
-  {
-    Newsfeed.Instance._Remove(t);
-  }
+  public static void Remove(NewsType t) => Newsfeed.Instance._Remove(t);
 
   private void _Remove(NewsType t)
   {

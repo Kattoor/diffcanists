@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 
+#nullable disable
 [Serializable]
 public class KnownServersList
 {

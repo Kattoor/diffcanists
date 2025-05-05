@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
+#nullable disable
 public class ColorPresets : MonoBehaviour
 {
   public ColorPicker picker;
@@ -18,20 +19,22 @@ public class ColorPresets : MonoBehaviour
     string path = SaveFolder.persistentDataPath + Path.DirectorySeparatorChar.ToString() + "PresetColors.pcolors";
     if (File.Exists(path))
     {
-      using (MemoryStream memoryStream = new MemoryStream(File.ReadAllBytes(path)))
+      using (MemoryStream input = new MemoryStream(File.ReadAllBytes(path)))
       {
-        using (BinaryReader binaryReader = new BinaryReader((Stream) memoryStream))
+        using (BinaryReader binaryReader = new BinaryReader((Stream) input))
         {
           int num = binaryReader.ReadInt32();
           for (int index = 0; index < num; ++index)
           {
             if (index < this.presets.Count)
             {
-              Color white = Color.white;
-              white.r = binaryReader.ReadSingle();
-              white.g = binaryReader.ReadSingle();
-              white.b = binaryReader.ReadSingle();
-              white.a = binaryReader.ReadSingle();
+              Color white = Color.white with
+              {
+                r = binaryReader.ReadSingle(),
+                g = binaryReader.ReadSingle(),
+                b = binaryReader.ReadSingle(),
+                a = binaryReader.ReadSingle()
+              };
               this.presets[index].gameObject.SetActive(true);
               this.presets[index].color = white;
             }
@@ -51,13 +54,13 @@ public class ColorPresets : MonoBehaviour
 
   public void CreatePresetButton()
   {
-    for (int i = 0; i < this.presets.Count; ++i)
+    for (int index = 0; index < this.presets.Count; ++index)
     {
-      if (!this.presets[i].gameObject.activeSelf)
+      if (!this.presets[index].gameObject.activeSelf)
       {
-        this.presets[i].gameObject.SetActive(true);
-        this.presets[i].GetComponent<Image>().color = this.picker.CurrentColor;
-        this.Save(i);
+        this.presets[index].gameObject.SetActive(true);
+        this.presets[index].GetComponent<Image>().color = this.picker.CurrentColor;
+        this.Save(index);
         break;
       }
     }
@@ -66,9 +69,9 @@ public class ColorPresets : MonoBehaviour
   private void Save(int i)
   {
     string path = SaveFolder.persistentDataPath + Path.DirectorySeparatorChar.ToString() + "PresetColors.pcolors";
-    using (MemoryStream memoryStream = new MemoryStream())
+    using (MemoryStream output = new MemoryStream())
     {
-      using (BinaryWriter binaryWriter = new BinaryWriter((Stream) memoryStream))
+      using (BinaryWriter binaryWriter = new BinaryWriter((Stream) output))
       {
         binaryWriter.Write(i + 1);
         for (int index = 0; index <= i; ++index)
@@ -80,7 +83,7 @@ public class ColorPresets : MonoBehaviour
           binaryWriter.Write(color.a);
         }
       }
-      File.WriteAllBytes(path, memoryStream.ToArray());
+      File.WriteAllBytes(path, output.ToArray());
     }
   }
 
@@ -109,7 +112,7 @@ public class ColorPresets : MonoBehaviour
     MyContextMenu myContextMenu = MyContextMenu.Show();
     myContextMenu.AddItem("Delete (Hotkey: Ctrl+Click)", (Action) (() => this.Delete(i)), (Color) ColorScheme.GetColor(MyContextMenu.ColorRed));
     myContextMenu.AddItem("Update (Hotkey: Shift+Click)", (Action) (() => this.UpdateItem(i)), (Color) ColorScheme.GetColor(MyContextMenu.ColorYellow));
-    myContextMenu.Rebuild(false);
+    myContextMenu.Rebuild();
   }
 
   private void Delete(int index)
@@ -134,8 +137,5 @@ public class ColorPresets : MonoBehaviour
     this.Save(this.presets.Count - 1);
   }
 
-  private void ColorChanged(Color color)
-  {
-    this.createPresetImage.color = color;
-  }
+  private void ColorChanged(Color color) => this.createPresetImage.color = color;
 }

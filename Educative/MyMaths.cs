@@ -1,4 +1,5 @@
 
+#nullable disable
 namespace Educative
 {
   public enum MyMaths

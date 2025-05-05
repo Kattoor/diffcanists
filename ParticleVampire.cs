@@ -3,14 +3,15 @@ using System;
 using System.Collections;
 using UnityEngine;
 
+#nullable disable
 public class ParticleVampire : MonoBehaviour
 {
-  private bool last = true;
   public SpriteRenderer spriteRenderer;
   [NonSerialized]
   public Creature target;
   public ZCreature x;
   private MyLocation lastPos;
+  private bool last = true;
   private int last2;
   private float cur;
 
@@ -22,7 +23,7 @@ public class ParticleVampire : MonoBehaviour
 
   private void Update()
   {
-    if ((bool) (UnityEngine.Object) this.target && (ZComponent) this.x != (object) null && (!this.x.isDead && (bool) (UnityEngine.Object) this.target.transform) && (UnityEngine.Object) CharacterCreation.Instance == (UnityEngine.Object) null && (this.lastPos != this.target.position || this.last2 != this.x.game.numExplosionsAndMovement || (double) this.cur > 3.0))
+    if ((bool) (UnityEngine.Object) this.target && (ZComponent) this.x != (object) null && !this.x.isDead && (bool) (UnityEngine.Object) this.target.transform && (UnityEngine.Object) CharacterCreation.Instance == (UnityEngine.Object) null && (this.lastPos != this.target.position || this.last2 != this.x.game.numExplosionsAndMovement || (double) this.cur > 3.0))
     {
       this.cur = 0.0f;
       this.lastPos = this.target.position;

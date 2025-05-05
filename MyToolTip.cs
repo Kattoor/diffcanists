@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+#nullable disable
 public class MyToolTip : MonoBehaviour
 {
   public GameObject item;
@@ -14,10 +15,7 @@ public class MyToolTip : MonoBehaviour
 
   public static MyToolTip instance { get; private set; }
 
-  private void Awake()
-  {
-    MyToolTip.instance = this;
-  }
+  private void Awake() => MyToolTip.instance = this;
 
   private void OnDestroy()
   {
@@ -56,7 +54,7 @@ public class MyToolTip : MonoBehaviour
     if ((UnityEngine.Object) MyToolTip.instance != (UnityEngine.Object) null)
       MyToolTip.instance._Close();
     MyToolTip andApply = Controller.Instance.CreateAndApply<MyToolTip>(Controller.Instance.MenuToolTip, Controller.Instance.transform);
-    andApply.Position(false);
+    andApply.Position();
     andApply.AddItem(s, (Action) null, Color.white);
     andApply.Rebuild();
     if ((double) time <= 0.0)
@@ -69,7 +67,7 @@ public class MyToolTip : MonoBehaviour
     if ((UnityEngine.Object) MyToolTip.instance != (UnityEngine.Object) null)
       MyToolTip.instance._Close();
     MyToolTip andApply = Controller.Instance.CreateAndApply<MyToolTip>(Controller.Instance.MenuToolTip, Controller.Instance.transform);
-    andApply.Position(false);
+    andApply.Position();
     andApply.AddItem(s, (Action) null, Color.white).horizontalAlignment = align;
     andApply.Rebuild();
     if ((double) time <= 0.0)
@@ -107,22 +105,16 @@ public class MyToolTip : MonoBehaviour
     for (int index = 2; index < child1.childCount; ++index)
     {
       child1.GetChild(index).GetComponent<ContentSizeFitter>().enabled = false;
-      RectTransform child2 = (RectTransform) child1.GetChild(index);
-      child2.sizeDelta = new Vector2(x, child2.sizeDelta.y);
+      RectTransform child3 = (RectTransform) child1.GetChild(index);
+      child3.sizeDelta = new Vector2(x, child3.sizeDelta.y);
     }
     component.enabled = false;
     component.enabled = true;
   }
 
-  public static void Close()
-  {
-    MyToolTip.instance?._Close();
-  }
+  public static void Close() => MyToolTip.instance?._Close();
 
-  public void _Close()
-  {
-    UnityEngine.Object.Destroy((UnityEngine.Object) this.gameObject);
-  }
+  public void _Close() => UnityEngine.Object.Destroy((UnityEngine.Object) this.gameObject);
 
   public void Update()
   {
@@ -140,16 +132,13 @@ public class MyToolTip : MonoBehaviour
       this.CalculateBounds(((RectTransform) this.container.GetChild(1)).sizeDelta.x + 1f);
       this.shown = true;
       TextMeshProUGUI component1 = this.container.GetChild(1).GetComponent<TextMeshProUGUI>();
-      Color color = component1.color;
-      color.a = 1f;
+      Color color = component1.color with { a = 1f };
       component1.color = color;
       Image component2 = this.container.GetComponent<Image>();
-      color = component2.color;
-      color.a = 1f;
+      color = component2.color with { a = 1f };
       component2.color = color;
       Image component3 = this.container.GetChild(0).GetComponent<Image>();
-      color = component3.color;
-      color.a = 1f;
+      color = component3.color with { a = 1f };
       component3.color = color;
     }
   }
@@ -176,7 +165,7 @@ public class MyToolTip : MonoBehaviour
       }
       int num3 = num2 + text.AllIndexesOf("<br>").Count;
       float num4 = ((RectTransform) this.container.GetChild(1)).sizeDelta.x / maxX;
-      float y = (float) ((num3 > 0 || (double) num4 > 1.0 ? (double) num4 + (double) num3 + 2.0 : 1.0) * 28.4300003051758);
+      float y = (float) ((num3 > 0 || (double) num4 > 1.0 ? (double) num4 + (double) num3 + 2.0 : 1.0) * 28.430000305175781);
       this.container.GetChild(1).GetComponent<ContentSizeFitter>().enabled = false;
       this.container.GetComponent<ContentSizeFitter>().enabled = false;
       ((RectTransform) this.container.GetChild(1)).sizeDelta = new Vector2(num1 + 2f, y);

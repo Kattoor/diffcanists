@@ -9,32 +9,30 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 
+#nullable disable
 namespace ChessConsole
 {
   public class ChessBoard : IMiniGame
   {
+    private PlayerColor _turn;
     public List<ChessMove> previousMoves = new List<ChessMove>();
+    public ChessUI ui;
     public IMiniGame.GameSettings gameSettings = new IMiniGame.GameSettings();
+    public PlayerColor firstPlayer;
     public PlayerColor secondPlayer = PlayerColor.Black;
     public string reason = "New Game";
     public HashSet<ChessBoard.Cell> whiteKingStillInCheckCells = new HashSet<ChessBoard.Cell>();
     public HashSet<ChessBoard.Cell> blackKingStillInCheckCells = new HashSet<ChessBoard.Cell>();
     public List<string> notation = new List<string>();
-    private List<Piece> pieces = new List<Piece>();
-    public string note = "";
-    private PlayerColor _turn;
-    public ChessUI ui;
-    public PlayerColor firstPlayer;
     private ChessBoard.Cell[,] cells;
+    private List<Piece> pieces = new List<Piece>();
     private Piece blackKing;
     private Piece whiteKing;
     private bool inCheck;
     private IMiniGame.Player cur;
+    public string note = "";
 
-    public override string GetGameType()
-    {
-      return "Chess";
-    }
+    public override string GetGameType() => "Chess";
 
     public static void Create(Connection c)
     {
@@ -67,7 +65,7 @@ namespace ChessConsole
           w.Write((byte) 1);
           this.Serialize(w);
         }
-        c.SendBytes(memoryStream.ToArray(), SendOption.None);
+        c.SendBytes(memoryStream.ToArray());
       }
     }
 
@@ -133,7 +131,7 @@ namespace ChessConsole
       {
         if (!flag1 && !flag2)
           return;
-        if (tag != (byte) 4 && tag != (byte) 5 && (tag != (byte) 8 && tag != (byte) 12) && tag != (byte) 13)
+        if (tag != (byte) 4 && tag != (byte) 5 && tag != (byte) 8 && tag != (byte) 12 && tag != (byte) 13)
         {
           if (flag1)
           {
@@ -157,7 +155,7 @@ namespace ChessConsole
           this.cur = this.GetPlayer(this.whosTurn);
           if ((double) Mathf.Abs(chessMove.time - this.cur.curTime) > 0.5)
             chessMove.time = this.cur.curTime + 0.5f;
-          if ((double) this.cur.startTurnTime - (double) chessMove.time < 0.200000002980232)
+          if ((double) this.cur.startTurnTime - (double) chessMove.time < 0.20000000298023224)
             chessMove.time = this.cur.startTurnTime - 0.2f;
           this.cur.curTime = chessMove.time;
           if ((double) this.cur.curTime <= 0.0)
@@ -167,14 +165,14 @@ namespace ChessConsole
           }
           this.cur.startTurnTime = this.cur.curTime;
           this.previousMoves.Add(chessMove);
-          this.Move(from, cell, chessMove.promotion, chessMove, true);
+          this.Move(from, cell, chessMove.promotion, chessMove);
           int num = this.TurnStart(this.whosTurn == PlayerColor.White ? PlayerColor.Black : PlayerColor.White) ? 1 : 0;
           this.notation.Add(this.note);
           this.GetPlayer(this.whosTurn).curDelay = this.whosTurn == this.firstPlayer ? this.gameSettings.player1Delay : this.gameSettings.player2Delay;
           this.SendServerMove(chessMove);
           if (num == 0)
           {
-            if (this.IsInCheck(this.whosTurn, true))
+            if (this.IsInCheck(this.whosTurn))
             {
               this.SendGameOver(this.whosTurn == PlayerColor.White ? "Black Wins" : "White Wins", this.whosTurn == this.firstPlayer ? 1 : 0);
               break;
@@ -253,8 +251,8 @@ namespace ChessConsole
     private void Cheat(myBinaryReader r)
     {
       ChessBoard.Cell cell = this.FromIndex(r.ReadInt32());
-      int num = r.ReadInt32();
-      if (num == -1)
+      int c = r.ReadInt32();
+      if (c == -1)
       {
         if (cell.Piece != null)
         {
@@ -271,7 +269,7 @@ namespace ChessConsole
           this.pieces.Remove(cell.Piece);
           cell.Piece = (Piece) null;
         }
-        this.addPiece(cell, ChessBoard.FromChar((ChessPiece) num, this.whosTurn));
+        this.addPiece(cell, ChessBoard.FromChar((ChessPiece) c, this.whosTurn));
       }
       this.TurnStart(this.whosTurn);
     }
@@ -337,7 +335,7 @@ namespace ChessConsole
           ChessMove chessMove = ChessMove.Deserialize(r);
           this.GetPlayer(this.whosTurn).curTime = chessMove.time;
           this.previousMoves.Add(chessMove);
-          this.Move(this.FromIndex(chessMove.from), this.FromIndex((int) chessMove.to), chessMove.promotion, chessMove, true);
+          this.Move(this.FromIndex(chessMove.from), this.FromIndex((int) chessMove.to), chessMove.promotion, chessMove);
           AudioManager.PlayChess(this.ui.playingAsBlack == (this.whosTurn == PlayerColor.Black) ? this.ui.chessMove : this.ui.chessMoveEnemy);
           this.TurnStart(this.whosTurn == PlayerColor.White ? PlayerColor.Black : PlayerColor.White);
           this.notation.Add(this.note);
@@ -360,7 +358,7 @@ namespace ChessConsole
           {
             if (!((UnityEngine.Object) ChatBox.Instance != (UnityEngine.Object) null))
               return;
-            ChatBox.Instance.NewChatMsg("[Chess] " + str1, str2, (Color) ColorScheme.GetColor(Global.ColorMiniGameText), str1, ChatOrigination.MiniGame, ContentType.STRING, (object) null);
+            ChatBox.Instance.NewChatMsg("[Chess] " + str1, str2, (Color) ColorScheme.GetColor(Global.ColorMiniGameText), str1, ChatOrigination.MiniGame);
           }));
           break;
         case 8:
@@ -438,37 +436,19 @@ namespace ChessConsole
 
     public PlayerColor whosTurn
     {
-      get
-      {
-        return this._turn;
-      }
-      set
-      {
-        this._turn = value;
-      }
+      get => this._turn;
+      set => this._turn = value;
     }
 
-    public ChessBoard.Cell[,] AllCells
-    {
-      get
-      {
-        return this.cells;
-      }
-    }
+    public ChessBoard.Cell[,] AllCells => this.cells;
 
-    public ChessBoard.Cell FromIndex(int i)
-    {
-      return this.cells[i / 8, i % 8];
-    }
+    public ChessBoard.Cell FromIndex(int i) => this.cells[i / 8, i % 8];
 
     public ChessBoard.Cell EnPassant { private set; get; }
 
     public ChessBoard.Cell EnPassantCapture { private set; get; }
 
-    public ChessBoard()
-    {
-      this.Reset();
-    }
+    public ChessBoard() => this.Reset();
 
     public ChessBoard(bool init)
     {
@@ -636,7 +616,7 @@ namespace ChessConsole
 
     public ChessBoard.Cell GetCell(int x, int y)
     {
-      return x < 0 || this.cells.GetLength(0) <= x || (y < 0 || this.cells.GetLength(1) <= y) ? (ChessBoard.Cell) null : this.cells[x, y];
+      return x < 0 || this.cells.GetLength(0) <= x || y < 0 || this.cells.GetLength(1) <= y ? (ChessBoard.Cell) null : this.cells[x, y];
     }
 
     private void addPiece(ChessBoard.Cell cell, Piece piece)
@@ -796,9 +776,9 @@ namespace ChessConsole
         {
           if (this.inCheck)
             return false;
-          foreach (Piece piece2 in this.GetCell(move.X > piece.Parent.X ? move.X - 1 : move.X + 1, move.Y).HitBy)
+          foreach (Piece piece3 in this.GetCell(move.X > piece.Parent.X ? move.X - 1 : move.X + 1, move.Y).HitBy)
           {
-            if (piece2.Color != piece.Color)
+            if (piece3.Color != piece.Color)
               return false;
           }
         }
@@ -807,15 +787,15 @@ namespace ChessConsole
       {
         if (this.inCheck)
         {
-          foreach (Piece piece2 in piece1.Parent.HitBy)
+          foreach (Piece piece4 in piece1.Parent.HitBy)
           {
-            if (piece2.Color != piece1.Color && piece2.Parent != move && !piece2.IsBlockedIfMove(piece.Parent, move, piece1.Parent))
+            if (piece4.Color != piece1.Color && piece4.Parent != move && !piece4.IsBlockedIfMove(piece.Parent, move, piece1.Parent))
               return false;
           }
         }
-        foreach (Piece piece2 in piece.Parent.HitBy)
+        foreach (Piece piece5 in piece.Parent.HitBy)
         {
-          if (piece2.Color != piece1.Color && piece2.Parent != move && !piece2.IsBlockedIfMove(piece.Parent, move, piece1.Parent))
+          if (piece5.Color != piece1.Color && piece5.Parent != move && !piece5.IsBlockedIfMove(piece.Parent, move, piece1.Parent))
             return false;
         }
       }
@@ -843,7 +823,7 @@ namespace ChessConsole
       string str1 = this.PieceToChar(from.Piece.Char);
       foreach (Piece piece in this.pieces)
       {
-        if (from.Piece != piece && piece.Color == from.Piece.Color && (piece.Char == from.Piece.Char && piece.LegalMoves.Contains(to)))
+        if (from.Piece != piece && piece.Color == from.Piece.Color && piece.Char == from.Piece.Char && piece.LegalMoves.Contains(to))
           str1 = piece.Parent.X == from.X ? str1 + (to.Y + 1).ToString() : str1 + ((char) (from.X + 97)).ToString();
       }
       if (to.Piece != null)

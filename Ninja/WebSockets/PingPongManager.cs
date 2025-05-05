@@ -6,6 +6,7 @@ using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
 
+#nullable disable
 namespace Ninja.WebSockets
 {
   public class PingPongManager : IPingPongManager

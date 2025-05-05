@@ -5,44 +5,45 @@ using System;
 using TMPro;
 using UnityEngine;
 
+#nullable disable
 namespace Educative
 {
   public class GenerateScript
   {
     public static Script GetScript(Tutorial t = null)
     {
-      UserData.RegisterProxyType<ContainerGame, ZGame>((Func<ZGame, ContainerGame>) (r => new ContainerGame(r, t)), InteropAccessMode.Default, (string) null);
-      UserData.RegisterProxyType<ContainerPlayer, ZPerson>((Func<ZPerson, ContainerPlayer>) (r => new ContainerPlayer(r)), InteropAccessMode.Default, (string) null);
-      UserData.RegisterProxyType<ContainerCreature, ZCreature>((Func<ZCreature, ContainerCreature>) (r => new ContainerCreature(r)), InteropAccessMode.Default, (string) null);
-      UserData.RegisterProxyType<ContainerEffector, ZEffector>((Func<ZEffector, ContainerEffector>) (r => new ContainerEffector(r)), InteropAccessMode.Default, (string) null);
-      UserData.RegisterProxyType<ContainerIndicator, GameObject>((Func<GameObject, ContainerIndicator>) (r => new ContainerIndicator(r)), InteropAccessMode.Default, (string) null);
-      UserData.RegisterProxyType<ContainerSpell, SpellSlot>((Func<SpellSlot, ContainerSpell>) (r => new ContainerSpell(r)), InteropAccessMode.Default, (string) null);
-      UserData.RegisterProxyType<ContainerTower, ZTower>((Func<ZTower, ContainerTower>) (r => new ContainerTower(r)), InteropAccessMode.Default, (string) null);
+      UserData.RegisterProxyType<ContainerGame, ZGame>((Func<ZGame, ContainerGame>) (r => new ContainerGame(r, t)));
+      UserData.RegisterProxyType<ContainerPlayer, ZPerson>((Func<ZPerson, ContainerPlayer>) (r => new ContainerPlayer(r)));
+      UserData.RegisterProxyType<ContainerCreature, ZCreature>((Func<ZCreature, ContainerCreature>) (r => new ContainerCreature(r)));
+      UserData.RegisterProxyType<ContainerEffector, ZEffector>((Func<ZEffector, ContainerEffector>) (r => new ContainerEffector(r)));
+      UserData.RegisterProxyType<ContainerIndicator, GameObject>((Func<GameObject, ContainerIndicator>) (r => new ContainerIndicator(r)));
+      UserData.RegisterProxyType<ContainerSpell, SpellSlot>((Func<SpellSlot, ContainerSpell>) (r => new ContainerSpell(r)));
+      UserData.RegisterProxyType<ContainerTower, ZTower>((Func<ZTower, ContainerTower>) (r => new ContainerTower(r)));
       Script.GlobalOptions.RethrowExceptionNested = true;
-      UserData.RegisterType<Point>(InteropAccessMode.Default, (string) null);
-      UserData.RegisterType<Summon>(InteropAccessMode.Default, (string) null);
-      UserData.RegisterType<UIElement>(InteropAccessMode.Default, (string) null);
-      UserData.RegisterType<KeyCode>(InteropAccessMode.Default, (string) null);
-      UserData.RegisterType<KeyBinds>(InteropAccessMode.Default, (string) null);
-      UserData.RegisterType<SpellEnum>(InteropAccessMode.Default, (string) null);
-      UserData.RegisterType<CastType>(InteropAccessMode.Default, (string) null);
-      UserData.RegisterType<DamageType>(InteropAccessMode.Default, (string) null);
-      UserData.RegisterType<BookOf>(InteropAccessMode.Default, (string) null);
-      UserData.RegisterType<Anchor>(InteropAccessMode.Default, (string) null);
-      UserData.RegisterType<HorizontalAlignmentOptions>(InteropAccessMode.Default, (string) null);
-      UserData.RegisterType<VerticalAlignmentOptions>(InteropAccessMode.Default, (string) null);
-      UserData.RegisterType<IndicatorKind>(InteropAccessMode.Default, (string) null);
-      UserData.RegisterType<MapEnum>(InteropAccessMode.Default, (string) null);
-      UserData.RegisterType<EffectorType>(InteropAccessMode.Default, (string) null);
-      UserData.RegisterType<TowerType>(InteropAccessMode.Default, (string) null);
-      UserData.RegisterType<CreatureType>(InteropAccessMode.Default, (string) null);
-      UserData.RegisterType<CreatureRace>(InteropAccessMode.Default, (string) null);
-      UserData.RegisterType<ExplosionCutout>(InteropAccessMode.Default, (string) null);
-      UserData.RegisterType<MyPoll>(InteropAccessMode.Default, (string) null);
-      UserData.RegisterType<MyPoll.Item>(InteropAccessMode.Default, (string) null);
-      UserData.RegisterType<MyPoll.Answer>(InteropAccessMode.Default, (string) null);
-      UserData.RegisterType<LuaColor>(InteropAccessMode.Default, (string) null);
-      UserData.RegisterType<TalkOptions>(InteropAccessMode.Default, (string) null);
+      UserData.RegisterType<Point>();
+      UserData.RegisterType<Summon>();
+      UserData.RegisterType<UIElement>();
+      UserData.RegisterType<KeyCode>();
+      UserData.RegisterType<KeyBinds>();
+      UserData.RegisterType<SpellEnum>();
+      UserData.RegisterType<CastType>();
+      UserData.RegisterType<DamageType>();
+      UserData.RegisterType<BookOf>();
+      UserData.RegisterType<Anchor>();
+      UserData.RegisterType<HorizontalAlignmentOptions>();
+      UserData.RegisterType<VerticalAlignmentOptions>();
+      UserData.RegisterType<IndicatorKind>();
+      UserData.RegisterType<MapEnum>();
+      UserData.RegisterType<EffectorType>();
+      UserData.RegisterType<TowerType>();
+      UserData.RegisterType<CreatureType>();
+      UserData.RegisterType<CreatureRace>();
+      UserData.RegisterType<ExplosionCutout>();
+      UserData.RegisterType<MyPoll>();
+      UserData.RegisterType<MyPoll.Item>();
+      UserData.RegisterType<MyPoll.Answer>();
+      UserData.RegisterType<LuaColor>();
+      UserData.RegisterType<TalkOptions>();
       return new Script(CoreModules.Preset_SoftSandbox)
       {
         Globals = {

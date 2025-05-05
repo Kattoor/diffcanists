@@ -3,6 +3,7 @@ using System;
 using TMPro;
 using UnityEngine;
 
+#nullable disable
 namespace ntw.CurvedTextMeshPro
 {
   [ExecuteInEditMode]
@@ -42,12 +43,12 @@ namespace ntw.CurvedTextMeshPro
       int charIdx)
     {
       float num1 = Mathf.Min(this.m_arcDegrees, (float) (textInfo.characterCount / textInfo.lineCount * this.m_maxDegreesPerLetter));
-      double num2 = (((double) zeroToOnePos - 0.5) * (double) num1 + (double) this.m_angularOffset) * (Math.PI / 180.0);
-      float x = Mathf.Cos((float) num2);
-      float y = Mathf.Sin((float) num2);
-      float num3 = this.m_radius - textInfo.lineInfo[0].lineExtents.max.y * (float) textInfo.characterInfo[charIdx].lineNumber;
-      Vector2 vector2 = new Vector2(x * num3, -y * num3);
-      return Matrix4x4.TRS(new Vector3(vector2.x, vector2.y, 0.0f), Quaternion.AngleAxis((float) (-(double) Mathf.Atan2(y, x) * 57.2957801818848 - 90.0), Vector3.forward), Vector3.one);
+      double f = (((double) zeroToOnePos - 0.5) * (double) num1 + (double) this.m_angularOffset) * (Math.PI / 180.0);
+      float x = Mathf.Cos((float) f);
+      float y = Mathf.Sin((float) f);
+      float num2 = this.m_radius - textInfo.lineInfo[0].lineExtents.max.y * (float) textInfo.characterInfo[charIdx].lineNumber;
+      Vector2 vector2 = new Vector2(x * num2, -y * num2);
+      return Matrix4x4.TRS(new Vector3(vector2.x, vector2.y, 0.0f), Quaternion.AngleAxis((float) (-(double) Mathf.Atan2(y, x) * 57.295780181884766 - 90.0), Vector3.forward), Vector3.one);
     }
   }
 }

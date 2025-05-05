@@ -1,13 +1,14 @@
 
 using UnityEngine;
 
+#nullable disable
 public class BigBubble : MonoBehaviour
 {
-  private float cur = 1f;
-  public float speed = 1f;
   public ZCreature creature;
   private Vector3 _target;
   private Vector3 _start;
+  private float cur = 1f;
+  public float speed = 1f;
 
   private void Update()
   {

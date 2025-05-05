@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
+#nullable disable
 public class pfabRankingLine : MonoBehaviour, IRecycledScrollViewGenericItem
 {
   public TMP_Text txtName;
@@ -36,21 +37,21 @@ public class pfabRankingLine : MonoBehaviour, IRecycledScrollViewGenericItem
   public void ToggleItems(int x)
   {
     for (int i = 0; i <= 7; ++i)
-      this.IndexToItem(i).gameObject.SetActive((uint) (x & 1 << i) > 0U);
+      this.IndexToItem(i).gameObject.SetActive((x & 1 << i) != 0);
   }
 
   private void OnChanged(int i, bool v)
   {
     int num1 = PlayerPrefs.GetInt("prefshowrankings", 0);
     int num2 = !v ? num1 & ~(1 << i) : num1 | 1 << i;
-    this.IndexToItem(i).gameObject.SetActive((uint) (num2 & 1 << i) > 0U);
-    RatingsMenu.Instance.spacers.IndexToItem(i).gameObject.SetActive((uint) (num2 & 1 << i) > 0U);
-    RatingsMenu.Instance.headers.IndexToItem(i).gameObject.SetActive((uint) (num2 & 1 << i) > 0U);
+    this.IndexToItem(i).gameObject.SetActive((num2 & 1 << i) != 0);
+    RatingsMenu.Instance.spacers.IndexToItem(i).gameObject.SetActive((num2 & 1 << i) != 0);
+    RatingsMenu.Instance.headers.IndexToItem(i).gameObject.SetActive((num2 & 1 << i) != 0);
     foreach (IRecycledScrollViewGenericItem getPfab in RatingsMenu.Instance.recycled.GetPfabs)
     {
       pfabRankingLine pfabRankingLine = getPfab as pfabRankingLine;
       if ((Object) pfabRankingLine != (Object) null)
-        pfabRankingLine.IndexToItem(i).gameObject.SetActive((uint) (num2 & 1 << i) > 0U);
+        pfabRankingLine.IndexToItem(i).gameObject.SetActive((num2 & 1 << i) != 0);
     }
     PlayerPrefs.SetInt("prefshowrankings", num2);
     RatingsMenu.Instance.ResizeContainer();
@@ -63,9 +64,9 @@ public class pfabRankingLine : MonoBehaviour, IRecycledScrollViewGenericItem
     for (int i = 0; i <= 7; ++i)
     {
       int z = i;
-      myContextMenu.AddToggle((UnityAction<bool>) (v => this.OnChanged(z, v)), this.IndexToItem(i).gameObject.name, (uint) (num & 1 << i) > 0U, (Color) ColorScheme.GetColor(MyContextMenu.ColorCream));
+      myContextMenu.AddToggle((UnityAction<bool>) (v => this.OnChanged(z, v)), this.IndexToItem(i).gameObject.name, (num & 1 << i) != 0, (Color) ColorScheme.GetColor(MyContextMenu.ColorCream));
     }
-    myContextMenu.Rebuild(false);
+    myContextMenu.Rebuild();
   }
 
   public TMP_Text IndexToItem(int i)
@@ -113,8 +114,5 @@ public class pfabRankingLine : MonoBehaviour, IRecycledScrollViewGenericItem
   }
 
   [SpecialName]
-  GameObject IRecycledScrollViewGenericItem.get_gameObject()
-  {
-    return this.gameObject;
-  }
+  GameObject IRecycledScrollViewGenericItem.get_gameObject() => this.gameObject;
 }

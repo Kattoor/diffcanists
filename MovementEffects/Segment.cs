@@ -1,4 +1,5 @@
 
+#nullable disable
 namespace MovementEffects
 {
   public enum Segment

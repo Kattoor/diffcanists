@@ -3,6 +3,7 @@ using Discord;
 using System;
 using UnityEngine;
 
+#nullable disable
 public class DiscordIntergration : MonoBehaviour
 {
   private Discord.Discord discord;
@@ -15,10 +16,7 @@ public class DiscordIntergration : MonoBehaviour
 
   public static DiscordIntergration Instance { get; private set; }
 
-  private void Awake()
-  {
-    DiscordIntergration.Instance = this;
-  }
+  private void Awake() => DiscordIntergration.Instance = this;
 
   private void Start()
   {
@@ -88,10 +86,7 @@ public class DiscordIntergration : MonoBehaviour
     return (long) (DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds;
   }
 
-  private void NonGame()
-  {
-    this.activity.Party = new ActivityParty();
-  }
+  private void NonGame() => this.activity.Party = new ActivityParty();
 
   private void UpdateActivity()
   {

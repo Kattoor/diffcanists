@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using WebGLSupport.Detail;
 
+#nullable disable
 namespace WebGLSupport
 {
   internal class WrappedTMPInputField : IInputField
@@ -13,24 +14,12 @@ namespace WebGLSupport
     private RebuildChecker checker;
     private Coroutine delayedGraphicRebuild;
 
-    public bool ReadOnly
-    {
-      get
-      {
-        return this.input.readOnly;
-      }
-    }
+    public bool ReadOnly => this.input.readOnly;
 
     public string text
     {
-      get
-      {
-        return this.input.text;
-      }
-      set
-      {
-        this.input.text = this.FixContentTypeByInputField(value);
-      }
+      get => this.input.text;
+      set => this.input.text = this.FixContentTypeByInputField(value);
     }
 
     private string FixContentTypeByInputField(string inText)
@@ -61,85 +50,31 @@ namespace WebGLSupport
       }
     }
 
-    public int fontSize
-    {
-      get
-      {
-        return (int) this.input.textComponent.fontSize;
-      }
-    }
+    public int fontSize => (int) this.input.textComponent.fontSize;
 
-    public ContentType contentType
-    {
-      get
-      {
-        return (ContentType) this.input.contentType;
-      }
-    }
+    public ContentType contentType => (ContentType) this.input.contentType;
 
-    public LineType lineType
-    {
-      get
-      {
-        return (LineType) this.input.lineType;
-      }
-    }
+    public LineType lineType => (LineType) this.input.lineType;
 
-    public int characterLimit
-    {
-      get
-      {
-        return this.input.characterLimit;
-      }
-    }
+    public int characterLimit => this.input.characterLimit;
 
-    public int caretPosition
-    {
-      get
-      {
-        return this.input.caretPosition;
-      }
-    }
+    public int caretPosition => this.input.caretPosition;
 
-    public bool isFocused
-    {
-      get
-      {
-        return this.input.isFocused;
-      }
-    }
+    public bool isFocused => this.input.isFocused;
 
     public int selectionFocusPosition
     {
-      get
-      {
-        return this.input.selectionStringFocusPosition;
-      }
-      set
-      {
-        this.input.selectionStringFocusPosition = value;
-      }
+      get => this.input.selectionStringFocusPosition;
+      set => this.input.selectionStringFocusPosition = value;
     }
 
     public int selectionAnchorPosition
     {
-      get
-      {
-        return this.input.selectionStringAnchorPosition;
-      }
-      set
-      {
-        this.input.selectionStringAnchorPosition = value;
-      }
+      get => this.input.selectionStringAnchorPosition;
+      set => this.input.selectionStringAnchorPosition = value;
     }
 
-    public bool OnFocusSelectAll
-    {
-      get
-      {
-        return this.input.onFocusSelectAll;
-      }
-    }
+    public bool OnFocusSelectAll => this.input.onFocusSelectAll;
 
     public WrappedTMPInputField(TMP_InputField input)
     {
@@ -147,30 +82,23 @@ namespace WebGLSupport
       this.checker = new RebuildChecker((IInputField) this);
     }
 
-    public UnityEngine.RectTransform RectTransform()
-    {
-      return this.input.GetComponent<UnityEngine.RectTransform>();
-    }
+    public UnityEngine.RectTransform RectTransform() => this.input.GetComponent<UnityEngine.RectTransform>();
 
-    public void ActivateInputField()
-    {
-      this.input.ActivateInputField();
-    }
+    public void ActivateInputField() => this.input.ActivateInputField();
 
-    public void DeactivateInputField()
-    {
-      this.input.DeactivateInputField(false);
-    }
+    public void DeactivateInputField() => this.input.DeactivateInputField();
 
     public void Rebuild()
     {
-      if (this.input.textComponent.enabled && this.checker.NeedRebuild(false))
+      if (this.input.textComponent.enabled && this.checker.NeedRebuild())
       {
         UnityEngine.RectTransform component = this.input.textComponent.GetComponent<UnityEngine.RectTransform>();
         if ((double) this.input.textComponent.GetPreferredValues().x < (double) component.rect.xMax)
         {
-          Vector2 anchoredPosition = component.anchoredPosition;
-          anchoredPosition.x = 0.0f;
+          Vector2 anchoredPosition = component.anchoredPosition with
+          {
+            x = 0.0f
+          };
           component.anchoredPosition = anchoredPosition;
           this.input.GetComponentInChildren<TMP_SelectionCaret>().GetComponent<UnityEngine.RectTransform>().anchoredPosition = component.anchoredPosition;
         }

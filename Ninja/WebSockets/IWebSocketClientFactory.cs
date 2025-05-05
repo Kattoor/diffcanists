@@ -5,16 +5,14 @@ using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
 
+#nullable disable
 namespace Ninja.WebSockets
 {
   public interface IWebSocketClientFactory
   {
     Task<WebSocket> ConnectAsync(Uri uri, CancellationToken token = default (CancellationToken));
 
-    Task<WebSocket> ConnectAsync(
-      Uri uri,
-      WebSocketClientOptions options,
-      CancellationToken token = default (CancellationToken));
+    Task<WebSocket> ConnectAsync(Uri uri, WebSocketClientOptions options, CancellationToken token = default (CancellationToken));
 
     Task<WebSocket> ConnectAsync(
       Stream responseStream,

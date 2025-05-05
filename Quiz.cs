@@ -2,6 +2,7 @@
 using TMPro;
 using UnityEngine;
 
+#nullable disable
 public class Quiz
 {
   public GameSeason target;

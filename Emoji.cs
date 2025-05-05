@@ -1,4 +1,5 @@
 
+#nullable disable
 public class Emoji
 {
   public string name;

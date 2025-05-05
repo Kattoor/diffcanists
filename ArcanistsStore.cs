@@ -3,16 +3,14 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+#nullable disable
 [Serializable]
 public class ArcanistsStore
 {
   public ArcanistsStore.Which which;
   public List<ArcanistsStore.Item> items;
 
-  public static bool OnlyOneActive(ArcanistsStore.Which w)
-  {
-    return w == ArcanistsStore.Which.Pet;
-  }
+  public static bool OnlyOneActive(ArcanistsStore.Which w) => w == ArcanistsStore.Which.Pet;
 
   public static bool IsToggleable(ArcanistsStore.Which w)
   {
@@ -49,7 +47,7 @@ public class ArcanistsStore
     Icon,
   }
 
-  [System.Flags]
+  [Flags]
   [Serializable]
   public enum Tag
   {

@@ -1,6 +1,7 @@
 
 using UnityEngine;
 
+#nullable disable
 public class RotateTransformX : MonoBehaviour
 {
   public float speed;

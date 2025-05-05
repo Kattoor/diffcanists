@@ -2,21 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+#nullable disable
 public class WerewolfObject : MonoBehaviour
 {
-  private List<Sprite> sprites = new List<Sprite>();
   public SpriteRenderer body;
   public SpriteRenderer leftArm;
   public SpriteRenderer rightArm;
+  private List<Sprite> sprites = new List<Sprite>();
 
   internal void Init(ZPerson p, ZCreature creature, SettingsPlayer settingsPlayer, string name)
   {
     Color32 gray = settingsPlayer.coloring.colors[0].gray;
     settingsPlayer.coloring.colors[0].gray = settingsPlayer.coloring.colors[0].red;
-    ClanOutfit clanOutfit = ClientResources.Instance.GetClanOutfit(Client.GetAccount(name, false).clan);
-    this.leftArm.sprite = ConfigurePlayer.GetSprite(settingsPlayer.indexLeftHand, Inert.Instance._characterLeftHand, settingsPlayer, Outfit.LeftHand, settingsPlayer.textures?[2] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexLeftHand, Outfit.LeftHand));
-    this.rightArm.sprite = ConfigurePlayer.GetSprite(settingsPlayer.indexRightHand, Inert.Instance._characterRightHand, settingsPlayer, Outfit.RightHand, settingsPlayer.textures?[3] ?? clanOutfit?.GetSprite((int) settingsPlayer.indexRightHand, Outfit.RightHand));
-    foreach (SpriteRenderer componentsInChild in this.GetComponentsInChildren<SpriteRenderer>())
+    foreach (SpriteRenderer componentsInChild in this.GetComponentsInChildren<SpriteRenderer>(true))
     {
       if ((Object) componentsInChild.sprite != (Object) null && componentsInChild.sprite.texture.isReadable)
       {
@@ -25,7 +23,6 @@ public class WerewolfObject : MonoBehaviour
       }
     }
     settingsPlayer.coloring.colors[2].gray = gray;
-    Inert.AddTorquingAndOrArchStaffs(p, creature, settingsPlayer, true, false);
   }
 
   private void OnDestroy()

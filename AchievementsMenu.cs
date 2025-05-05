@@ -5,10 +5,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+#nullable disable
 public class AchievementsMenu : Catalogue
 {
-  public List<GameObject> outfitImages = new List<GameObject>();
-  public int _viewing = -1;
   public RectTransform container;
   public AchievementButton pfabItem;
   public Image img;
@@ -21,7 +20,9 @@ public class AchievementsMenu : Catalogue
   public GameObject statsPanel;
   public TMP_Text txtAmount;
   public Image outfitImage;
+  public List<GameObject> outfitImages = new List<GameObject>();
   public bool isStatic;
+  public int _viewing = -1;
   private AchievementButton activeButton;
 
   public static AchievementsMenu Instance { get; private set; }
@@ -51,7 +52,11 @@ public class AchievementsMenu : Catalogue
     int index1 = (int) e;
     bool achievement = Client.cosmetics.achievements[index1];
     Achievements.Container container = Achievements.list[index1];
-    this.img.sprite = achievement ? ClientResources.Instance._achievementIcons[index1] : ClientResources.Instance._achievementNotObtained;
+    this.img.sprite = ClientResources.Instance._achievementIcons[index1];
+    if (!Client.cosmetics.achievements[index1])
+      this.img.color = (Color) new Color32(byte.MaxValue, (byte) 0, (byte) 200, byte.MaxValue);
+    else
+      this.img.color = Color.white;
     this.txtName.text = container.name;
     this.txtDescription.text = container.description;
     this.txtObtained.text = (achievement ? "Obtained!" : "<color=#FF0000FF>Not yet achieved</color>") + (container.ratedOnly ? "\n<color=#555500FF>Rated Only</color>" : "");
@@ -94,10 +99,8 @@ public class AchievementsMenu : Catalogue
 
   private void Start()
   {
-    int num1 = 5;
-    int num2 = -5;
-    int num3 = 0;
-    int num4 = 0;
+    int num1 = 0;
+    int num2 = 0;
     int index = -1;
     foreach (Achievement achievement in (Achievement[]) Enum.GetValues(typeof (Achievement)))
     {
@@ -108,29 +111,20 @@ public class AchievementsMenu : Catalogue
         {
           AchievementButton achievementButton = UnityEngine.Object.Instantiate<AchievementButton>(this.pfabItem, (Transform) this.container);
           achievementButton.achievement = achievement;
-          achievementButton.rect.anchoredPosition = new Vector2((float) num1, (float) num2);
           if (Client.cosmetics.achievements[index])
-            ++num4;
-          achievementButton.image.sprite = Client.cosmetics.achievements[index] ? ClientResources.Instance._achievementIcons[index] : ClientResources.Instance._achievementNotObtained;
+            ++num2;
+          achievementButton.image.sprite = ClientResources.Instance._achievementIcons[index];
+          if (!Client.cosmetics.achievements[index])
+            achievementButton.image.color = (Color) new Color32(byte.MaxValue, (byte) 0, (byte) 200, byte.MaxValue);
           achievementButton.gameObject.SetActive(true);
-          ++num3;
-          if (num3 % 10 == 0)
-          {
-            num1 = 5;
-            num2 -= 110;
-          }
-          else
-            num1 += 110;
+          ++num1;
         }
       }
     }
-    this.txtAmount.text = num4.ToString() + "/" + (object) num3;
+    this.txtAmount.text = num2.ToString() + "/" + (object) num1;
   }
 
-  public void ClickMainMenu()
-  {
-    UnityEngine.Object.Destroy((UnityEngine.Object) this.gameObject);
-  }
+  public void ClickMainMenu() => UnityEngine.Object.Destroy((UnityEngine.Object) this.gameObject);
 
   private void OnDestroy()
   {

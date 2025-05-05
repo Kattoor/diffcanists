@@ -3,13 +3,14 @@ using System;
 using System.Collections;
 using UnityEngine;
 
+#nullable disable
 public class AnimateCrab : IAnimator
 {
+  public Transform[] feet;
   public float walkSpeed = 20f;
   public float stopSpeed = 16f;
   public float footRadiusX = 2.5f;
   public float footRadiusY = 1.5f;
-  public Transform[] feet;
   private Vector3[] start;
   private Vector3[] joint;
   private Vector3[] stop;
@@ -48,7 +49,7 @@ public class AnimateCrab : IAnimator
 
   public override void Play(AnimateState anim, float duration = 0.0f, bool sound = true)
   {
-    if (Client.game == null || !Client.game.isClient || Client.game.resyncing || !ZComponent.IsNull((ZComponent) this.creature) && this.creature.parent != null && ((UnityEngine.Object) this.creature.parent.torquing != (UnityEngine.Object) null && (ZComponent) this.creature.parent.torquing.creature == (object) this.creature) || (ZComponent) this.creature != (object) null && this.creature.flying && !this.creature.entangledOrGravity)
+    if (Client.game == null || !Client.game.isClient || Client.game.resyncing || !ZComponent.IsNull((ZComponent) this.creature) && this.creature.parent != null && (UnityEngine.Object) this.creature.parent.torquing != (UnityEngine.Object) null && (ZComponent) this.creature.parent.torquing.creature == (object) this.creature || (ZComponent) this.creature != (object) null && this.creature.flying && !this.creature.entangledOrGravity)
       return;
     this.duration = duration;
     if (this.currentState == anim)

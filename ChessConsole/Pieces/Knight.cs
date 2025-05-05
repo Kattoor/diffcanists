@@ -1,6 +1,7 @@
 
 using System.Collections.Generic;
 
+#nullable disable
 namespace ChessConsole.Pieces
 {
   public class Knight : Piece
@@ -28,9 +29,9 @@ namespace ChessConsole.Pieces
         ChessBoard.Cell[] cellArray = knight.possibleCells;
         for (int index = 0; index < cellArray.Length; ++index)
         {
-          ChessBoard.Cell cell = cellArray[index];
-          if (cell != null && (cell.Piece == null || cell.Piece.Color != knight.Color))
-            yield return cell;
+          ChessBoard.Cell possibleMove = cellArray[index];
+          if (possibleMove != null && (possibleMove.Piece == null || possibleMove.Piece.Color != knight.Color))
+            yield return possibleMove;
         }
         cellArray = (ChessBoard.Cell[]) null;
       }
@@ -66,12 +67,6 @@ namespace ChessConsole.Pieces
       return true;
     }
 
-    public override ChessPiece Char
-    {
-      get
-      {
-        return ChessPiece.Knight;
-      }
-    }
+    public override ChessPiece Char => ChessPiece.Knight;
   }
 }

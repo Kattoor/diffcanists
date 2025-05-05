@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 
+#nullable disable
 namespace Hazel
 {
   internal sealed class ObjectPool<T> where T : IRecyclable
@@ -9,10 +10,7 @@ namespace Hazel
     private Queue<T> pool = new Queue<T>();
     private Func<T> objectFactory;
 
-    internal ObjectPool(Func<T> objectFactory)
-    {
-      this.objectFactory = objectFactory;
-    }
+    internal ObjectPool(Func<T> objectFactory) => this.objectFactory = objectFactory;
 
     internal T GetObject()
     {

@@ -1,4 +1,5 @@
 
+#nullable disable
 namespace Telepathy
 {
   public enum EventType

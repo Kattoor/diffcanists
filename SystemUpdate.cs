@@ -4,15 +4,16 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+#nullable disable
 public class SystemUpdate : MonoBehaviour
 {
-  private int lastS = -1;
   public static SystemUpdate Instance;
   public TMP_Text txt;
   public TMP_Text overTxt;
   public ContentSizeFitter contentSizeFitter;
   private float cur;
   private string t;
+  private int lastS = -1;
 
   public static void Create(string txt, float time)
   {
@@ -28,10 +29,7 @@ public class SystemUpdate : MonoBehaviour
     }
   }
 
-  private void Awake()
-  {
-    SystemUpdate.Instance = this;
-  }
+  private void Awake() => SystemUpdate.Instance = this;
 
   private void OnDestroy()
   {

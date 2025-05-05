@@ -4,6 +4,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 
+#nullable disable
 public static class Helpers
 {
   public static X509Certificate2 GetCertificateFromPEMstring(
@@ -41,8 +42,7 @@ public static class Helpers
     return Convert.FromBase64String(pemString.Substring(startIndex, length));
   }
 
-  public static RSACryptoServiceProvider DecodeRsaPrivateKey(
-    byte[] privateKeyBytes)
+  public static RSACryptoServiceProvider DecodeRsaPrivateKey(byte[] privateKeyBytes)
   {
     BinaryReader rd = new BinaryReader((Stream) new MemoryStream(privateKeyBytes));
     try

@@ -1,4 +1,5 @@
 
+#nullable disable
 namespace LibNoise.Operator
 {
   public class Cache : ModuleBase
@@ -22,10 +23,7 @@ namespace LibNoise.Operator
 
     public override ModuleBase this[int index]
     {
-      get
-      {
-        return base[index];
-      }
+      get => base[index];
       set
       {
         base[index] = value;
@@ -35,7 +33,7 @@ namespace LibNoise.Operator
 
     public override double GetValue(double x, double y, double z)
     {
-      if (!this._cached || this._x != x || (this._y != y || this._z != z))
+      if (!this._cached || this._x != x || this._y != y || this._z != z)
       {
         this._value = this.Modules[0].GetValue(x, y, z);
         this._x = x;

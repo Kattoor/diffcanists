@@ -2,34 +2,23 @@
 using System;
 using System.Collections.Generic;
 
+#nullable disable
 namespace InGameCodeEditor.Lexer
 {
   internal class InputStringLexer : ILexer
   {
+    private string inputString;
+    private MatchLexer[] matchers;
     private HashSet<char> specialStartSymbols = new HashSet<char>();
     private HashSet<char> specialEndSymbols = new HashSet<char>();
     private char current = ' ';
     private char previous = ' ';
-    private string inputString;
-    private MatchLexer[] matchers;
     private int currentIndex;
     private int currentLookaheadIndex;
 
-    public bool EndOfStream
-    {
-      get
-      {
-        return this.currentLookaheadIndex >= this.inputString.Length;
-      }
-    }
+    public bool EndOfStream => this.currentLookaheadIndex >= this.inputString.Length;
 
-    public char Previous
-    {
-      get
-      {
-        return this.previous;
-      }
-    }
+    public char Previous => this.previous;
 
     public void UseMatchers(char[] delimiters, MatchLexer[] matchers)
     {
@@ -63,8 +52,7 @@ namespace InGameCodeEditor.Lexer
       }
     }
 
-    public IEnumerable<InputStringMatchInfo> LexInputString(
-      string input)
+    public IEnumerable<InputStringMatchInfo> LexInputString(string input)
     {
       InputStringLexer inputStringLexer = this;
       if (input == null)
@@ -130,10 +118,7 @@ namespace InGameCodeEditor.Lexer
         this.previous = ' ';
     }
 
-    public void Commit()
-    {
-      this.currentIndex = this.currentLookaheadIndex;
-    }
+    public void Commit() => this.currentIndex = this.currentLookaheadIndex;
 
     public bool IsSpecialSymbol(char character, SpecialCharacterPosition position = SpecialCharacterPosition.Start)
     {

@@ -2,6 +2,7 @@
 using System;
 using System.Runtime.InteropServices;
 
+#nullable disable
 public class FileOperationAPIWrapper
 {
   [DllImport("shell32.dll", CharSet = CharSet.Auto)]

@@ -1,6 +1,7 @@
 
 using System.Collections.Generic;
 
+#nullable disable
 namespace ChessConsole.Pieces
 {
   public class King : Piece
@@ -24,7 +25,7 @@ namespace ChessConsole.Pieces
         Direction[] directionArray = king.directions;
         for (int index = 0; index < directionArray.Length; ++index)
         {
-          foreach (ChessBoard.Cell possibleMove in directionArray[index].GetPossibleMoves(true))
+          foreach (ChessBoard.Cell possibleMove in directionArray[index].GetPossibleMoves())
             yield return possibleMove;
           if (king.canCastleLeft && !king.Moved)
             yield return king.Parent.Parent.GetCell(2, king.Color == PlayerColor.White ? 0 : 7);
@@ -41,7 +42,7 @@ namespace ChessConsole.Pieces
       {
         this.canCastleLeft = true;
         ChessBoard.Cell cell1 = this.Parent.Parent.GetCell(0, this.Color == PlayerColor.White ? 0 : 7);
-        if (cell1.Piece == null || !(cell1.Piece is Rook) || (cell1.Piece.Color != this.Color || cell1.Piece.Moved))
+        if (cell1.Piece == null || !(cell1.Piece is Rook) || cell1.Piece.Color != this.Color || cell1.Piece.Moved)
         {
           this.canCastleLeft = false;
         }
@@ -55,7 +56,7 @@ namespace ChessConsole.Pieces
         }
         this.canCastleRight = true;
         ChessBoard.Cell cell2 = this.Parent.Parent.GetCell(7, this.Color == PlayerColor.White ? 0 : 7);
-        if (cell2.Piece == null || !(cell2.Piece is Rook) || (cell2.Piece.Color != this.Color || cell2.Piece.Moved))
+        if (cell2.Piece == null || !(cell2.Piece is Rook) || cell2.Piece.Color != this.Color || cell2.Piece.Moved)
         {
           this.canCastleRight = false;
         }
@@ -73,14 +74,14 @@ namespace ChessConsole.Pieces
         this.canCastleLeft = false;
         this.canCastleRight = false;
       }
-      this.directions[0] = new Direction((Piece) this, 0, 1, 1, true);
-      this.directions[1] = new Direction((Piece) this, 0, -1, 1, true);
-      this.directions[2] = new Direction((Piece) this, -1, 0, 1, true);
-      this.directions[3] = new Direction((Piece) this, 1, 0, 1, true);
-      this.directions[4] = new Direction((Piece) this, -1, 1, 1, true);
-      this.directions[5] = new Direction((Piece) this, 1, 1, 1, true);
-      this.directions[6] = new Direction((Piece) this, -1, -1, 1, true);
-      this.directions[7] = new Direction((Piece) this, 1, -1, 1, true);
+      this.directions[0] = new Direction((Piece) this, 0, 1, 1);
+      this.directions[1] = new Direction((Piece) this, 0, -1, 1);
+      this.directions[2] = new Direction((Piece) this, -1, 0, 1);
+      this.directions[3] = new Direction((Piece) this, 1, 0, 1);
+      this.directions[4] = new Direction((Piece) this, -1, 1, 1);
+      this.directions[5] = new Direction((Piece) this, 1, 1, 1);
+      this.directions[6] = new Direction((Piece) this, -1, -1, 1);
+      this.directions[7] = new Direction((Piece) this, 1, -1, 1);
     }
 
     public override bool IsBlockedIfMove(
@@ -96,12 +97,6 @@ namespace ChessConsole.Pieces
       return true;
     }
 
-    public override ChessPiece Char
-    {
-      get
-      {
-        return ChessPiece.King;
-      }
-    }
+    public override ChessPiece Char => ChessPiece.King;
   }
 }

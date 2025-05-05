@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+#nullable disable
 public static class Descriptions
 {
   private static Dictionary<string, string> bookHeader = new Dictionary<string, string>()
@@ -75,25 +76,29 @@ public static class Descriptions
     {
       "Sands",
       "Sand spells focus on area denial and crowd control."
+    },
+    {
+      "Necromancy",
+      "Necromancy spells focus on amassing an army of the undead and overwhelming your opponent."
     }
   };
   private static Dictionary<string, string> bookDesriptions = new Dictionary<string, string>()
   {
     {
       "Arcane",
-      "Unstable Portal:\n(drains 20 health per cast)\n Every other level increases your max summons by 1. At level 1: Learn the spell Little Devil. At level 2: Learn the spell Arcane Mist. At level 3: Arcane Tower starts with 50hp. At level 5: Arcane Energiser is permanent (once used) and Arcane Tower starts at 75hp"
+      "Unstable Portal:\n(drains 20 health per cast)\n Every other level increases your max summons by 1. At level 3: Arcane Tower starts with 50hp. At level 5: Arcane Energiser is permanent (once used) and Arcane Tower starts at 75hp.\nSpells Gained: Little Devil (level 1), Arcane Mist (level 2)."
     },
     {
       "Flame",
-      "Harpy Flame\n(drains 20 health per cast)\nAt maximum power, your flame spells will do 50% more damage.\nAt Level 5: Learn the spell Fire Wave."
+      "Harpy Flame\n(drains 20 health per cast)\nAt maximum power, your flame spells will do 50% more damage.\nSpells Gained: Fire Wave (level 5)."
     },
     {
       "Stone",
-      "Pet Rock\n(drains 20 health per cast)\nProvides you and your minions with damage resistance. This damage resistance will only be applied to towers on their initial cast <sprite name=\"Resistance\"> (Subsequent casts of the same tower will not have it). Learn the spell Stepping Stone which has reduced cooldown per familiar level.\nAt Level 3: Learn the spell Summon Mountain Goat."
+      "Pet Rock\n(drains 20 health per cast)\nProvides you and your minions with damage resistance. This damage resistance will only be applied to towers on their initial cast <sprite name=\"Resistance\"> (Subsequent casts of the same tower will not have it).\nSpells Gained: Stepping Stone (reduced cooldown per familiar level), Summon Mountain Goat (level 3)."
     },
     {
       "Storm",
-      "Storm Cloud\n(drains 20 health per cast)\nAllows you to cast Storm faster, increases the power of Thunder Shock and increases the maximum damage potential of Conductor Rod.\nAt Level 5: Wind Shield has a 7 turn cooldown. Also learn the spells Electrostatic Charge and Whistling Winds."
+      "Storm Cloud\n(drains 20 health per cast)\nAllows you to cast Storm faster, increases the power of Thunder Shock and increases the maximum damage potential of Conductor Rod and flight lasts an extra turn.\nAt Level 5: Wind Shield has a 7 turn cooldown and flight lasts until you take damage.\nSpells Gained: Electrostatic Charge and Whistling Winds (level 1)."
     },
     {
       "Frost",
@@ -109,11 +114,11 @@ public static class Descriptions
     },
     {
       "Nature",
-      "Fungus\n(drains 20 health per cast)\nIncreases the effects of Vine and Thorn Bombs and also lets your Elves fire larger volleys of arrows and Vine bridge's max distance increases.\nAt level 5: Learn the spell Forestation."
+      "Fungus\n(drains 20 health per cast)\nIncreases the effects of Vine and Thorn Bombs and also lets your Elves fire larger volleys of arrows and Vine bridge's max distance increases.\nSpells Gained: Forestation (level 5)."
     },
     {
       "Seas",
-      "Seahorse\n(drains 20 health per cast)\nAllows you and your minions to swim within the confines of the arena as well as reducing any water damage taken.\nAt level 5: Gain the ability to summon the mighty Kraken."
+      "Seahorse\n(drains 20 health per cast)\nAllows you and your minions to swim within the confines of the arena as well as reducing any fresh water damage taken (salt water damage is unaffected!).\nSpells Gained: Brine Burst (level 1), Summon Kraken (level 5)."
     },
     {
       "Cogs",
@@ -121,31 +126,35 @@ public static class Descriptions
     },
     {
       "Holiday",
-      "Ho! Ho! Ho!\n(drains 20 health per cast)\nBecome Santa, Eat Cookies, Grow in size, weigh more, long jump further, and be merry....Increases all Holiday use spells' max uses. Snowmen get 5 more max health.\nAt level 5: Learn the spell Gift of Giving. Reindeer get 1 use of Santa's Magic (each)."
+      "Ho! Ho! Ho!\n(drains 20 health per cast)\nBecome Santa, Eat Cookies, Grow in size, weigh more, long jump further, and be merry....Increases all Holiday use spells' max uses. Snowmen get 5 more max health.\nAt level 5 reindeer get 1 use of Santa's Magic (each).\nSpells Gained: Gift of Giving (level 5)."
     },
     {
       "Seasons",
-      "Tranquility\n(drains 20 health per cast)\nLearn the spell Butterfly Jar. Each level of Tranquility gives an extra cast of Life Dew, makes Breeze last longer, causes more Autumn Leaves to fall, The Four Seasons lasts an extra turn before needing to be cast again or forever at level 5, and Snowmen get 5 more max health per level."
+      "Tranquility\n(drains 20 health per cast)\nEach level of Tranquility gives an extra cast of Life Dew, makes Breeze last longer, causes more Autumn Leaves to fall, The Four Seasons lasts an extra turn before needing to be cast again or forever at level 5, and Snowmen get 5 more max health per level.\nSpells Gained: Butterfly Jar (level 1)."
     },
     {
       "Illusion",
-      "Allusion\n(drains 20 health per cast)\nWho needs health, just give it away! (to a hurt ally/minion) Highest missing health takes priority. Learn the Spell Blink. Makes you significantly smaller.\nAt level 5: Duplicates have no expiration and spawn with 75% health - Vortex is buffed. Glide is available 1 turn."
+      "Allusion\n(drains 20 health per cast)\nWho needs health, just give it away! (to a hurt ally/minion) Highest missing health takes priority. Makes you significantly smaller.\nAt level 5: Duplicates have no expiration and spawn with 75% health - Vortex is buffed. Glide is available 1 turn.\nSpells Gained: Blink (level 1)."
     },
     {
       "Blood",
-      "Lifeless\n(drains 20 health per cast)\nIn order of level required: Each Level applies a stack of bleed to all Ball/Bolt/Bomb blood spells (stacks do not stack with each other but can refresh the duration). Learn the spell Blood Craze. Infections through contact last a minimum of your familiar level and cannot be spread to you. Resurrected minions start with more health. Level 3: Blood Mist. Level 5: Blood Pact - Barrage of Bones recharges one turn faster."
+      "Lifeless\n(drains 20 health per cast)\nIn order of level required: Each Level applies a stack of bleed to all Ball/Bolt/Bomb blood spells (stacks do not stack with each other but can refresh the duration). Learn the spell Blood Craze. Infections through contact last a minimum of your familiar level and cannot be spread to you. Resurrected minions start with more health.\nSpells Gained: Blood Mist (level 3), Blood Pact (level 5). Barrage of Bones recharges one turn faster at level 5."
     },
     {
       "Druidism",
-      "Raven\n(drains 20 health per cast)\nEach Level provides +2 minion health, +4 Enchanted Axes max bonus damage, and +15% base minion/Druidism cast range. Tiger gets the Compete! spell."
+      "Raven\n(drains 20 health per cast)\nEach Level provides +2 minion health, +2 max damage per enchanted Axe, and +15% base minion/Druidism cast range. Tiger gets the Compete! spell."
     },
     {
       "Cosmos",
-      "Gravitation\n(drains 20 health per cast)\nAt level 1 Learn the spell Gravity Well. Each level makes you weigh slightly more, making you more resistant to knockback. Lessens the affect of the Gravity debuff. Increases the digging capabilities of Collision Course and Shooting Stars. Increases Supernova's potential damage."
+      "Gravitation\n(drains 20 health per cast)\nEach level makes you weigh slightly more, making you more resistant to knockback. Lessens the affect of the Gravity debuff. Increases the digging capabilities of Collision Course and Shooting Stars. Increases Supernova's potential damage.\nSpells Gained: Gravity Well (level 1)."
     },
     {
       "Sands",
-      "Crab\n(drains 20 health per cast)\nLearn the spells Entomb, Summon Sand Mite, and Sand Trap at levels 1, 3, and 5. For each familiar level create more sand with a wider area of effect and sand structures will also be more durable."
+      "Crab\n(drains 20 health per cast)\nFor each familiar level create more sand with a wider area of effect and sand structures will also be more durable.\nSpells Gained: Entomb (level 1), Summon Sand Mite (level 3), Sand Trap (level 5)."
+    },
+    {
+      "Necromancy",
+      "Scribe\n(drains 20 health per cast)\nEvery other level increases your max summons by 1.\nSpells Gained: Sacrificial Altar (level 1), Death's Doorway (level 5)."
     }
   };
   private static Dictionary<string, string> deathMessages = new Dictionary<string, string>()
@@ -1225,6 +1234,86 @@ public static class Descriptions
     {
       "Retribution",
       "{0} was punished by {1}'s vengeance."
+    },
+    {
+      "Screaming Skull",
+      "{0} was deafened by {1}'s screaming skulls."
+    },
+    {
+      "Tombstone Curse",
+      "{0} was robbed by {1}'s tombstone curse."
+    },
+    {
+      "Flesh Bomb",
+      "{0} was freshly baked by {1}'s flesh bomb."
+    },
+    {
+      "Consume Soul",
+      "{0} was drained of life by {1}'s consume soul."
+    },
+    {
+      "Plague Hive",
+      "{0} was plagued by {1}'s hive."
+    },
+    {
+      "Infectious Bite",
+      "{0} was diseased by {1}'s infectious bite"
+    },
+    {
+      "Beckoning Dead",
+      "{0} was dragged down by {1}'s beckoning dead."
+    },
+    {
+      "Catacombs of the Dead",
+      "{0}"
+    },
+    {
+      "Conjure Reaper",
+      "{0}"
+    },
+    {
+      "Commander of Undeath",
+      "{0}"
+    },
+    {
+      "Sudden Death",
+      "{0} was suddenly dead due to {1}."
+    },
+    {
+      "Curse of Haute",
+      "{0}"
+    },
+    {
+      "Sacrificial Altar",
+      "{0}"
+    },
+    {
+      "Cleave",
+      "{0} was a casualty of {1}'s cleave."
+    },
+    {
+      "Reap",
+      "{0} did not reap the same rewards of {1}."
+    },
+    {
+      "Passage Ways",
+      "{0}"
+    },
+    {
+      "Death's Doorway",
+      "{0}"
+    },
+    {
+      "Call of the Dead",
+      "{0} was overrun by {1}'s call of the dead."
+    },
+    {
+      "Zombie Charge",
+      "{0} was overrun by {1}'s call of the dead."
+    },
+    {
+      "Summon Zombie",
+      "{0} was to slow to get out of the way of {1}'s zombie charge."
     }
   };
   private static Dictionary<string, string> spellDescriptions = new Dictionary<string, string>()
@@ -1335,7 +1424,7 @@ public static class Descriptions
     },
     {
       "Scatter Rock",
-      "Ball: up to 65 damage\n{0}\nGreat for shattering towers that are further away and for causing general mayhem."
+      "Ball: up to 70 damage\n{0}\nGreat for shattering towers that are further away and for causing general mayhem."
     },
     {
       "Quake",
@@ -1407,7 +1496,7 @@ public static class Descriptions
     },
     {
       "Storm Shield",
-      "Personal: up to 25 damage per turn\n{0}\nThis dangerous little shield lasts for five turns and is good to zap anyone who gets too close."
+      "Personal: up to 25 damage per turn\n{0}\nThis dangerous little shield lasts for five turns and is good to zap anyone who gets too close. Damage is dealt in 5 separate instances and therefore can be triggered on multiple units. If a unit dies by this damage all of its charges for that turn will be expended."
     },
     {
       "Summon Cyclops",
@@ -1583,7 +1672,7 @@ public static class Descriptions
     },
     {
       "Thorn Bomb",
-      "Bomb: up to 1,000 damage\n{0}\nWhen this bomb explodes, it leaves a dangerous ring of thorns behind, which makes staying around a very dangerous proposition."
+      "Bomb: up to 415 damage\n{0}\nWhen this bomb explodes, it leaves a dangerous ring of thorns behind, which makes staying around a very dangerous proposition."
     },
     {
       "Vine Whip",
@@ -1655,7 +1744,7 @@ public static class Descriptions
     },
     {
       "Brine Bomb",
-      "Bomb: up to 445 damage\n{0}\nMake enemies scream in pain and anger by covering them with spiky salt rocks that scatter sea salt all over the area."
+      "Bomb: up to 340 damage\n{0}\nMake enemies scream in pain and anger by covering them with spiky salt rocks that scatter sea salt all over the area."
     },
     {
       "Brine Burst",
@@ -1831,7 +1920,7 @@ public static class Descriptions
     },
     {
       "Firecrackers",
-      "Bolt: up to 90 damage\n{0}\nHard to use effectively, but can cause lots of mayhem."
+      "Bomb: up to 90 damage\n{0}\nPower controls how long until it explodes. Launch speed is always the same, much like a bolt."
     },
     {
       "Christmas Tree",
@@ -1871,7 +1960,7 @@ public static class Descriptions
     },
     {
       "Summon Monarchs",
-      "Soulbound Minion: x2 flying minions; 40 health each\n{0}\nButterflies are beautiful little creatures, until they fly into your face and bite your head off!"
+      "Minion: flying; 50 health\n{0}\nButterflies are beautiful little creatures, until they fly into your face and bite your head off!"
     },
     {
       "Erosion",
@@ -1883,7 +1972,11 @@ public static class Descriptions
     },
     {
       "Acorn",
-      "Ball: 25 damage\n{0}\nPlants an oak tree wherever it lands, which grows for the next three turns. Will spawn a beehive if you have an open minion slot, which subsequently heals itself 15 health and spawns bees each turn that are controlled by the hive."
+      "Ball: 25 damage\n{0}\nPlants an oak tree wherever it lands, which grows for the next three turns. Will also spawn a queen bee if you have an open minion slot."
+    },
+    {
+      "Summon Beehive",
+      "Arcane Minion: 30 health\n{0}\n, Heals itself 15 health each turn and can spawns bees that are controlled by the hive."
     },
     {
       "Breeze",
@@ -1899,7 +1992,7 @@ public static class Descriptions
     },
     {
       "Autumn Leaves",
-      "Targeted: up to 210 damage\n{0}\nLeaf piles are fun to play in, just don't play in someone else's. Extending the spell (alt) will instead create old dead leaves which will damage friend or foe and create terrain."
+      "Targeted: up to 210 damage\n{0}\nLeaf piles are fun to play in, just don't play in someone else's. When not using the Tranquility familiar and/or using Extended shot (alt): the leaves will damage friend or foe and become solid terrain. While using the Tranquility familiar the leaves will instead behave more akin to napalm and not damage friendly units."
     },
     {
       "Summon Snowman",
@@ -2015,7 +2108,7 @@ public static class Descriptions
     },
     {
       "Summon Blood Bank",
-      "Arcane Minion: 25\n{0}\nA small fleshy minion that makes all attacks from the player and their minions heal for 20% of the damage dealt. Any damage the blood bank takes is given to the caster as health if not pacted."
+      "Arcane Minion: 25-75 health\n{0}\nA small fleshy minion that makes all attacks from the player and their minions heal the bank for 20% of the damage dealt. Any damage the blood bank takes is given to the caster as health if not pacted."
     },
     {
       "Summon Gargoyle",
@@ -2231,7 +2324,7 @@ public static class Descriptions
     },
     {
       "Enchanted Axes",
-      "Bolt: {1}x2 damage\n{0}\nThrow two axes in the directions of your choosing. These axes will deal +2 damage (per axe, up to a maximum of +30) for each turn since the last time they were used. This bonus damage does not begin until after the first cast of axes. The axes also ignore effectors which would influence its velocity: Flame Shield/Wind Shield/Spirit Shield/Vortex/Magical Barrier/Static Shield/Wrath/Clouds and any other movement inhibiting effector..."
+      "Bolt: {1}x2 damage\n{0}\nThrow two axes in the directions of your choosing. These axes will deal +2 damage per axe (up to a maximum of +30) for each turn since the last time they were used. This bonus damage does not begin until after the first cast of axes. The axes also ignore effectors which would influence its velocity: Flame Shield/Wind Shield/Spirit Shield/Vortex/Magical Barrier/Static Shield/Wrath/Clouds and any other spell movement inhibiting effector..."
     },
     {
       "Summon Will o' the Wisp",
@@ -2488,13 +2581,82 @@ public static class Descriptions
     {
       "Mind Control",
       "Targeted: enemy units\n{0}\nTake control of the target minion until it's owners next turn."
+    },
+    {
+      "Screaming Skull",
+      "Arrow: 15 damage\n{0}\nFor each minion you control another skull is fired, increasing the damage by 15."
+    },
+    {
+      "Tombstone Curse",
+      "Ball: 25 death damage\n{0}\nUpon contact with terrain it'll create a spectral tombstone which lasts 5 turns. If it hits an enemy it will instead immediately raise a zombie at that location. If the tombstone is destroyed by spell damage or walked over by an enemy it'll raise a zombie and destroy the tombstone."
+    },
+    {
+      "Flesh Bomb",
+      "Bomb: 60 death damage\n{0}\nIf it deals damage to a zombie, it'll instead morph the zombie into a flesh golem. Giving it more health and more damage potential. A finely sewn bomb of the flesh which makes great zombie chow!"
+    },
+    {
+      "Consume Soul",
+      "Targeted: 30 damage\n{0}\nDrain the soul of a target, healing for the damage dealt. For each active buff the target has, the damage is increased by 15."
+    },
+    {
+      "Plague Hive",
+      "Undead Minion: 30 health\n{0}\nPlague Hives can only be cast on zombies and grave sites, just don't get to close...Spawns 3 flies each turn which have 1 hitpoint and die on contact."
+    },
+    {
+      "Infectious Bite",
+      "Melee: 40 damage\n{0}\nHeals the caster for half the damage dealt. Killing a minion will apply Curse of Haute to it, turning it into a zombie if applicable. To raise the dead, you must first think like the dead!"
+    },
+    {
+      "Beckoning Dead",
+      "Targeted: 40 damage\n{0}\nSkeleton's reach out from the ground, pulling in the unlucky target to their grave!"
+    },
+    {
+      "Catacombs of the Dead",
+      "Tower: 75 hitpoints\n{0}\nWhile in this tower you gain the ability to teleport minions next to you."
+    },
+    {
+      "Conjure Reaper",
+      "Undead Minion: 50 hitpoints, flying\n{0}\nThe Wraith's melee focused cousin. Watch him Reap in the life of the enemy."
+    },
+    {
+      "Commander of Undeath",
+      "Minion: 100 hitpoints\n{0}\nCan cast Cleave and Call of the dead."
+    },
+    {
+      "Sudden Death",
+      "Targeted: x damage\n{0}\nExplodes the targeted minion in a shower of gore, dealing more damage the more health it has. Base explosion will be centered at the targeted location and will do between 1 and 50 damage with additional shrapnel for every 20 health the minion had dealing 10 damage each."
+    },
+    {
+      "Curse of Haute",
+      "Arena: \n{0}\nAll minions in play that can become undead come under the influence of a vile curse of undeath for when they die they'll be yours."
+    },
+    {
+      "Sacrificial Altar",
+      "Structure: 100 hitpoints\n{0}\nAny minion who touches this structure will become a sacrifice, healing the structure by the same amount (up to 250) and replenishing the casters used spells at random. Has its own aura which deals 20 damage to itself and those around it."
+    },
+    {
+      "Cleave",
+      "Melee: 75 damage\n{0}\nAttacks 3 times for 25 damage each. For each unit this kills it will attack an additional time for that attack sequence."
+    },
+    {
+      "Reap",
+      "Melee: 40 damage\n{0}\nIf this kills a unit, it spawns a spectral tombstone."
+    },
+    {
+      "Passage Ways",
+      "Targeted: \n{0}\nTeleport a target friendly minion to an area beside you. This does not end your turn."
+    },
+    {
+      "Death's Doorway",
+      "Targeted:\n{0}\nTeleport to a tombstone destroying the tombstone in the process."
+    },
+    {
+      "Call of the Dead",
+      "Targeted:\n{0}\nAt the end of your turn all your undead minions will charge at the targeted location dealing 30 damage if they hit an enemy. This does not end your turn."
     }
   };
 
-  public static string GetDrownMessage(ZCreature died)
-  {
-    return died.parent.name + " drowned.";
-  }
+  public static string GetDrownMessage(ZCreature died) => died.parent.name + " drowned.";
 
   public static string GetDeathMessage(
     SpellEnum spellEnum,
@@ -2502,11 +2664,16 @@ public static class Descriptions
     ZCreature died,
     ZCreature enemy)
   {
-    if ((ZComponent) died == (object) null)
+    if (died.Equals((object) null))
       return "";
-    if (spellEnum == SpellEnum.Mine && (ZComponent) enemy != (object) null && enemy.type == CreatureType.Boar)
+    if (spellEnum == SpellEnum.Mine && !enemy.Equals((object) null) && enemy.type == CreatureType.Boar)
     {
       spellEnum = SpellEnum.Summon_Boar;
+      spell = (ISpellBridge) null;
+    }
+    else if (spellEnum == SpellEnum.Mine && !enemy.Equals((object) null) && enemy.type == CreatureType.Zombie)
+    {
+      spellEnum = SpellEnum.Summon_Zombie;
       spell = (ISpellBridge) null;
     }
     string format = (string) null;
@@ -2519,7 +2686,7 @@ public static class Descriptions
           format = "{0} tried to get the high ground.";
           break;
         case SpellEnum.PowerOfLight:
-          format = (ZComponent) enemy != (object) null ? (enemy.parent == died.parent ? "{0} was attempting to harness the power of light." : "{0} was taught the power of light by {1}.") : "{0} witnessed the power of light.";
+          format = !enemy.Equals((object) null) ? (enemy.parent == died.parent ? "{0} was attempting to harness the power of light." : "{0} was taught the power of light by {1}.") : "{0} witnessed the power of light.";
           break;
         default:
           string key2 = spellEnum.ToString().Replace('_', ' ');
@@ -2527,8 +2694,8 @@ public static class Descriptions
           break;
       }
     }
-    format = !string.IsNullOrEmpty(format) ? string.Format(format, (object) died.parent.name, (ZComponent) enemy != (object) null ? (enemy.parent == died.parent ? (object) "their own" : (object) enemy.parent.name) : (object) "a") : string.Format("{0} died to {1}'s " + key1 + ".", (object) died.parent.name, (ZComponent) enemy != (object) null ? (enemy.parent == died.parent ? (object) "their own" : (object) enemy.parent.name) : (object) "a");
-    if ((ZComponent) enemy == (object) null)
+    format = !string.IsNullOrEmpty(format) ? string.Format(format, (object) died.parent.name, !enemy.Equals((object) null) ? (enemy.parent == died.parent ? (object) "their own" : (object) enemy.parent.name) : (object) "a") : string.Format("{0} died to {1}'s " + key1 + ".", (object) died.parent.name, !enemy.Equals((object) null) ? (enemy.parent == died.parent ? (object) "their own" : (object) enemy.parent.name) : (object) "a");
+    if (enemy.Equals((object) null))
       return format.Replace("a's", "a");
     if (enemy.parent != died.parent)
       return format;
@@ -2565,6 +2732,8 @@ public static class Descriptions
       spell = Inert.Instance._otherspells.Find((Predicate<Spell>) (x => string.Equals(x.name, name)));
     if (!((UnityEngine.Object) spell != (UnityEngine.Object) null))
       return (s, "");
+    if (spell.type == CastType.Tower && spell.MaxUses < 0)
+      s += "\n\n*Rechargable towers cannot be cast on the same turn another one of your rechargable towers was destroyed*";
     string str;
     if (slot != null)
     {
@@ -2620,7 +2789,7 @@ public static class Descriptions
       {
         if (str.Length > 0)
           str += "\n";
-        str = str + "Available: Turn " + (object) (float) ((double) (spell.TurnsTillFirstUse + 1) + (spell.halfFirstTurn ? -0.5 : 0.0));
+        str = str + "Available: Turn " + (object) (float) ((double) (spell.TurnsTillFirstUse + 1) + (spell.halfFirstTurn ? -1.0 : 0.0));
         if (spell.spellEnum == SpellEnum.Forest_Seed)
           str += " (0 if time < 21s)";
       }
@@ -2659,45 +2828,36 @@ public static class Descriptions
     return combined ? (string.Format(s, (object) str), str) : (string.Format(s, (object) ""), str);
   }
 
-  public static string GetBookDescription(BookOf b)
+  public static string GetBookDescription(BookOf b, bool alt = false)
   {
     if (b == BookOf.Arcane && Client.MyAccount.accountType.has(AccountType.Developer | AccountType.Admin | AccountType.Arcane_Monster | AccountType.Game_Director))
       return "Arcane Neutrality:\n(drains 100 health at casting)\nRemoves familiar effects from the game.\n" + Descriptions.bookDesriptions["Arcane"];
-    if (b == BookOf.Seasons)
+    int b1 = (int) b;
+    int num;
+    if (!alt)
     {
       Player instance = Player.Instance;
-      int num;
       if (instance == null)
       {
         num = 0;
       }
       else
       {
-        bool? seasonIsHoliday = instance.person?.seasonISHoliday;
+        bool? nullable = instance.person?.settingsPlayer._spells.UsingAltBook(b);
         bool flag = true;
-        num = seasonIsHoliday.GetValueOrDefault() == flag & seasonIsHoliday.HasValue ? 1 : 0;
+        num = nullable.GetValueOrDefault() == flag & nullable.HasValue ? 1 : 0;
       }
-      if (num != 0)
-        return Descriptions.bookDesriptions["Holiday"];
     }
-    string stringX = b.ToStringX();
+    else
+      num = 1;
+    string stringX = ((BookOf) b1).ToStringX(num != 0);
     string str;
     return Descriptions.bookDesriptions.TryGetValue(stringX, out str) ? str : "Missing Description";
   }
 
-  public static string GetBookHolidayDescription()
+  public static string GetBookHeader(BookOf b, bool alt = false)
   {
-    return Descriptions.bookDesriptions["Holiday"];
-  }
-
-  public static string GetHolidayHeader()
-  {
-    return Descriptions.bookHeader["Holiday"];
-  }
-
-  public static string GetBookHeader(BookOf b)
-  {
-    string stringX = b.ToStringX();
+    string stringX = b.ToStringX(alt);
     string str;
     return Descriptions.bookHeader.TryGetValue(stringX, out str) ? str : "Missing Description";
   }

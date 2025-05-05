@@ -1,6 +1,7 @@
 
 using System.Collections.Generic;
 
+#nullable disable
 namespace ChessConsole.Pieces
 {
   public class Rook : Piece
@@ -27,7 +28,7 @@ namespace ChessConsole.Pieces
         Direction[] directionArray = this.directions;
         for (int index = 0; index < directionArray.Length; ++index)
         {
-          foreach (ChessBoard.Cell possibleMove in directionArray[index].GetPossibleMoves(true))
+          foreach (ChessBoard.Cell possibleMove in directionArray[index].GetPossibleMoves())
             yield return possibleMove;
         }
         directionArray = (Direction[]) null;
@@ -36,10 +37,10 @@ namespace ChessConsole.Pieces
 
     public override void Recalculate()
     {
-      this.directions[0] = new Direction((Piece) this, 0, 1, 8, true);
-      this.directions[1] = new Direction((Piece) this, 0, -1, 8, true);
-      this.directions[2] = new Direction((Piece) this, -1, 0, 8, true);
-      this.directions[3] = new Direction((Piece) this, 1, 0, 8, true);
+      this.directions[0] = new Direction((Piece) this, 0, 1);
+      this.directions[1] = new Direction((Piece) this, 0, -1);
+      this.directions[2] = new Direction((Piece) this, -1, 0);
+      this.directions[3] = new Direction((Piece) this, 1, 0);
     }
 
     public override bool IsBlockedIfMove(
@@ -55,12 +56,6 @@ namespace ChessConsole.Pieces
       return true;
     }
 
-    public override ChessPiece Char
-    {
-      get
-      {
-        return ChessPiece.Rook;
-      }
-    }
+    public override ChessPiece Char => ChessPiece.Rook;
   }
 }

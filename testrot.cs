@@ -1,6 +1,7 @@
 
 using UnityEngine;
 
+#nullable disable
 public class testrot : MonoBehaviour
 {
   public EditorFixedInt ang = (EditorFixedInt) 0;

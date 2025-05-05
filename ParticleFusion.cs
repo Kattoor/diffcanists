@@ -1,6 +1,7 @@
 
 using UnityEngine;
 
+#nullable disable
 public class ParticleFusion : MonoBehaviour
 {
   internal ZCreature creature;

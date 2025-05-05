@@ -9,24 +9,19 @@ using System.Security.Cryptography;
 using TMPro;
 using UnityEngine;
 
+#nullable disable
 public class Controller : MonoBehaviour
 {
-  public static float realtimeSinceStartup = 0.0f;
-  public static List<GameObject> _gameObjects = new List<GameObject>();
-  public static string OperatingSystem = "None";
-  public static string HWID = "None";
-  public static bool ApplicationFocused = true;
-  public bool isActive = true;
-  private int lastScreenHeight = -1;
-  private int lastScreenWidth = -1;
-  internal List<Controller.Stack> stack = new List<Controller.Stack>();
   public hardManager keysKeyboard;
   public hardManager keysController;
+  private List<UnityEngine.Object> deleteOnExit = new List<UnityEngine.Object>();
   public GameObject TransitionObj;
   public Material _Radial;
   public float _RadialSpeed;
+  public bool isActive = true;
   public bool useColorScheme;
   public Controller schemeController;
+  public static float realtimeSinceStartup = 0.0f;
   public Inert inert;
   public ClientResources clientResources;
   public RectTransform canvasRect;
@@ -56,6 +51,7 @@ public class Controller : MonoBehaviour
   public GameObject MenuTutorialEditor;
   public GameObject MenuTutorialCodeEditor;
   public GameObject MenuColorScheme;
+  public GameObject MenuMapEditor;
   public ChessUI chessui;
   public CheckersUI checkersui;
   public Join31UI Join31ui;
@@ -94,7 +90,13 @@ public class Controller : MonoBehaviour
   public MyMessageBox messageBox;
   public KeyBoard mobileKeyboard;
   public static Camera miniCameraObj;
+  public static List<GameObject> _gameObjects = new List<GameObject>();
+  public static string OperatingSystem = "None";
+  public static string HWID = "None";
   private GameObject gameBG;
+  private int lastScreenHeight = -1;
+  private int lastScreenWidth = -1;
+  public static bool ApplicationFocused = true;
   public Controller otherController;
   [Header("Fonts")]
   public TMP_FontAsset fontArc;
@@ -104,8 +106,16 @@ public class Controller : MonoBehaviour
   private float _removeTempIgnored;
   private float _next;
   private float _cur;
+  internal List<Controller.Stack> stack = new List<Controller.Stack>();
   private GameObject openedMenu;
   private GameObject openHandle;
+  private Dictionary<GameObject, BetaButtons> menuMapping;
+
+  public static void DeleteLater(params UnityEngine.Object[] o)
+  {
+    for (int index = 0; index < o.Length; ++index)
+      Controller.Instance.deleteOnExit.Add(o[index]);
+  }
 
   public static Controller Instance { get; private set; }
 
@@ -156,10 +166,10 @@ public class Controller : MonoBehaviour
 
   public T CreateAndApply<T>(T t, Transform parent) where T : MonoBehaviour
   {
-    T obj = UnityEngine.Object.Instantiate<T>(t, parent);
+    T andApply = UnityEngine.Object.Instantiate<T>(t, parent);
     if (this.useColorScheme && t.name.Contains("2"))
-      Client.colorScheme?.Apply(obj.gameObject);
-    return obj;
+      Client.colorScheme?.Apply(andApply.gameObject);
+    return andApply;
   }
 
   public void ApplyScheme(GameObject t)
@@ -270,10 +280,7 @@ public class Controller : MonoBehaviour
     Controller.Instance = (Controller) null;
   }
 
-  public void RefreshKeepAliveTimer()
-  {
-    this._keepalive = Time.realtimeSinceStartup + 20f;
-  }
+  public void RefreshKeepAliveTimer() => this._keepalive = Time.realtimeSinceStartup + 20f;
 
   private void Update()
   {
@@ -293,7 +300,7 @@ public class Controller : MonoBehaviour
       this.lastScreenWidth = Screen.width;
       this.lastScreenHeight = Screen.height;
       if ((UnityEngine.Object) HUD.instance != (UnityEngine.Object) null)
-        HUD.instance.SetupMiniCamera();
+        HUD.SetupMiniCamera();
       if (this.useColorScheme)
         ColorScheme.Resolution(this.gameObject, true);
     }
@@ -305,20 +312,17 @@ public class Controller : MonoBehaviour
     if (Client.isConnected && (double) this._keepalive < (double) Time.realtimeSinceStartup)
     {
       this._keepalive = Time.realtimeSinceStartup + 20f;
-      Client.connection.SendBytes(new byte[1]
-      {
-        (byte) 34
-      }, SendOption.None);
+      Client.connection.SendBytes(new byte[1]{ (byte) 34 });
       UnityEngine.ClusterModule.Resources.Release();
       if (Spectator.isConnected)
         Spectator.connection.SendBytes(new byte[1]
         {
           (byte) 34
-        }, SendOption.None);
+        });
     }
     if (this.stack.Count > 0 && Input.GetKeyDown(KeyCode.Escape))
       this.Pop();
-    if (!Input.GetKeyDown(KeyCode.F12) || !Input.GetKey(KeyCode.LeftShift) || (!Client.MyAccount.accountType.isDev() || !((UnityEngine.Object) HUD.instance == (UnityEngine.Object) null)))
+    if (!Input.GetKeyDown(KeyCode.F12) || !Input.GetKey(KeyCode.LeftShift) || !Client.MyAccount.accountType.isDev() || !((UnityEngine.Object) HUD.instance == (UnityEngine.Object) null))
       return;
     SpellOverridesUI.Create();
   }
@@ -415,18 +419,159 @@ public class Controller : MonoBehaviour
       return;
     List<PfabChatMsg.contain> getList = ChatBox.Instance.recycled.GetList;
     this.DestroyChatBox();
-    this.ShowChatBox(true);
+    this.ShowChatBox();
     foreach (PfabChatMsg.contain contain in getList)
       ChatBox.Instance.recycled.Add(contain);
+  }
+
+  private void _Start()
+  {
+    this.menuMapping = new Dictionary<GameObject, BetaButtons>()
+    {
+      {
+        this.MenuStore,
+        BetaButtons.MenuStore
+      },
+      {
+        this.MenuLogin,
+        BetaButtons.MenuLogin
+      },
+      {
+        this.MenuMain,
+        BetaButtons.MenuMain
+      },
+      {
+        this.MenuLobby,
+        BetaButtons.MenuLobby
+      },
+      {
+        this.MenuUnrated,
+        BetaButtons.MenuUnrated
+      },
+      {
+        this.MenuRated,
+        BetaButtons.MenuRated
+      },
+      {
+        this.MenuCharacterCreation,
+        BetaButtons.MenuCharacterCreation
+      },
+      {
+        this.MenuSpellSelection,
+        BetaButtons.MenuSpellSelection
+      },
+      {
+        this.MenuOptions,
+        BetaButtons.MenuOptions
+      },
+      {
+        this.MenuHUD,
+        BetaButtons.MenuHUD
+      },
+      {
+        this.MenuScreenSize,
+        BetaButtons.MenuScreenSize
+      },
+      {
+        this.MenuReplay,
+        BetaButtons.MenuReplay
+      },
+      {
+        this.MenuControls,
+        BetaButtons.MenuControls
+      },
+      {
+        this.MenuRatings,
+        BetaButtons.MenuRatings
+      },
+      {
+        this.MenuAchievements,
+        BetaButtons.MenuAchievements
+      },
+      {
+        this.MenuPrestige,
+        BetaButtons.MenuPrestige
+      },
+      {
+        this.PopupSavedSpells,
+        BetaButtons.PopupSavedSpells
+      },
+      {
+        this.PopupSavedOutfits,
+        BetaButtons.PopupSavedOutfits
+      },
+      {
+        this.RewindingPanel,
+        BetaButtons.RewindingPanel
+      },
+      {
+        this.MenuPatchNotes,
+        BetaButtons.MenuPatchNotes
+      },
+      {
+        this.MenuCredits,
+        BetaButtons.MenuCredits
+      },
+      {
+        this.MenuClanList,
+        BetaButtons.MenuClanList
+      },
+      {
+        this.MenuTutorialEditor,
+        BetaButtons.MenuTutorialEditor
+      },
+      {
+        this.MenuTutorialCodeEditor,
+        BetaButtons.MenuTutorialCodeEditor
+      },
+      {
+        this.MenuColorScheme,
+        BetaButtons.MenuColorScheme
+      }
+    };
+  }
+
+  public void HandleMenu(GameObject m)
+  {
+    if (this.menuMapping == null)
+      this._Start();
+    BetaButtons button;
+    if (this.menuMapping.TryGetValue(m, out button))
+    {
+      if ((UnityEngine.Object) this.openedMenu == (UnityEngine.Object) this.MenuLogin)
+        BetaLogging.ClientClicked(BetaButtons.MenuLogin);
+      else
+        BetaLogging.ClientClicked(button);
+      BetaLogging.ClientClicked(button);
+    }
+    else
+      Debug.LogWarning((object) ("Unknown menu: " + m.name));
   }
 
   public void OpenMenu(GameObject m, bool showchatbox)
   {
     if ((UnityEngine.Object) this.openedMenu == (UnityEngine.Object) m)
       return;
+    if (this.deleteOnExit.Count > 0)
+    {
+      try
+      {
+        foreach (UnityEngine.Object @object in this.deleteOnExit)
+          UnityEngine.Object.Destroy(@object);
+      }
+      catch (Exception ex)
+      {
+        Debug.LogError((object) ex.ToString());
+      }
+      finally
+      {
+        this.deleteOnExit.Clear();
+      }
+    }
+    this.HandleMenu(m);
     MyContextMenu.CloseInstance();
     MyToolTip.Close();
-    this.DestroyMap(false, true);
+    this.DestroyMap();
     Controller.CloseDialogs();
     if ((UnityEngine.Object) this.gameBG == (UnityEngine.Object) null)
       this.gameBG = Camera.main.transform.GetChild(0).gameObject;
@@ -443,7 +588,7 @@ public class Controller : MonoBehaviour
     this.openHandle = Controller.Instance.CreateAndApply(m, (Transform) this.canvasRect);
     this.openHandle.transform.SetAsFirstSibling();
     if (showchatbox)
-      this.ShowChatBox(true);
+      this.ShowChatBox();
     else
       this.DestroyChatBox();
     if ((UnityEngine.Object) ChessUI.Instance != (UnityEngine.Object) null)
@@ -467,12 +612,12 @@ public class Controller : MonoBehaviour
     return (UnityEngine.Object) child.GetComponent<MyToolTip>() != (UnityEngine.Object) null || (UnityEngine.Object) child.GetComponent<MyContextMenu>() != (UnityEngine.Object) null;
   }
 
-  public void InitMap(bool sandbox, bool tutorial = false)
+  public void InitMap(bool sandbox, bool tutorial = false, bool openHUD = true)
   {
     Controller.CloseDialogs();
     if (!tutorial)
       Client._tutorial = (Tutorial) null;
-    if ((UnityEngine.Object) this.openHandle != (UnityEngine.Object) null)
+    if ((UnityEngine.Object) this.openHandle != (UnityEngine.Object) null & openHUD)
     {
       Catalogue component = this.openHandle.GetComponent<Catalogue>();
       if ((UnityEngine.Object) component != (UnityEngine.Object) null)
@@ -490,9 +635,12 @@ public class Controller : MonoBehaviour
     Controller._gameObjects.Add(Controller.miniCameraObj.gameObject);
     if (!sandbox)
       this.ShowChatBox(false);
-    this.openedMenu = this.MenuHUD;
-    this.openHandle = UnityEngine.Object.Instantiate<GameObject>(this.MenuHUD, (Transform) this.canvasRect);
-    this.openHandle.transform.SetAsFirstSibling();
+    if (openHUD)
+    {
+      this.openedMenu = this.MenuHUD;
+      this.openHandle = UnityEngine.Object.Instantiate<GameObject>(this.MenuHUD, (Transform) this.canvasRect);
+      this.openHandle.transform.SetAsFirstSibling();
+    }
     if (!((UnityEngine.Object) ProcessReportMenu.instance != (UnityEngine.Object) null))
       return;
     ProcessReportMenu.instance.Close();
@@ -529,8 +677,8 @@ public class Controller : MonoBehaviour
     if ((UnityEngine.Object) ChatBox.Instance == (UnityEngine.Object) null)
       Controller.Instance.CreateAndApply(this.chatBox, (Transform) this.canvasRect);
     ChatBox.Instance.UpdatePostion(defaultPosition);
-    ChatBox.Instance.SetActive(defaultPosition || (Client.game != null && Client.game.isSandbox || Global.GetPrefBool("prefChatHIdden", false)));
-    ChatBox.Instance.AllowInput(defaultPosition || (Client.game.isSpectator && ChatBox.Instance.Active || Client.game.isSandbox && !Client.game.isTutorial));
+    ChatBox.Instance.SetActive(defaultPosition || Client.game != null && Client.game.isSandbox || Global.GetPrefBool("prefChatHIdden", false));
+    ChatBox.Instance.AllowInput(defaultPosition || Client.game.isSpectator && ChatBox.Instance.Active && !Client.game.isReplay || Client.game.isSandbox && !Client.game.isTutorial);
     ChatBox.Instance.transform.SetAsLastSibling();
   }
 

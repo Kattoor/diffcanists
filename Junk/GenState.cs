@@ -1,4 +1,5 @@
 
+#nullable disable
 namespace Junk
 {
   public class GenState

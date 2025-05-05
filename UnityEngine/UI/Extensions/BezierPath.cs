@@ -1,6 +1,7 @@
 
 using System.Collections.Generic;
 
+#nullable disable
 namespace UnityEngine.UI.Extensions
 {
   public class BezierPath
@@ -11,10 +12,7 @@ namespace UnityEngine.UI.Extensions
     private List<Vector2> controlPoints;
     private int curveCount;
 
-    public BezierPath()
-    {
-      this.controlPoints = new List<Vector2>();
-    }
+    public BezierPath() => this.controlPoints = new List<Vector2>();
 
     public void SetControlPoints(List<Vector2> newControlPoints)
     {
@@ -30,10 +28,7 @@ namespace UnityEngine.UI.Extensions
       this.curveCount = (this.controlPoints.Count - 1) / 3;
     }
 
-    public List<Vector2> GetControlPoints()
-    {
-      return this.controlPoints;
-    }
+    public List<Vector2> GetControlPoints() => this.controlPoints;
 
     public void Interpolate(List<Vector2> segmentPoints, float scale)
     {
@@ -60,15 +55,15 @@ namespace UnityEngine.UI.Extensions
         }
         else
         {
-          Vector2 segmentPoint1 = segmentPoints[index - 1];
-          Vector2 segmentPoint2 = segmentPoints[index];
-          Vector2 segmentPoint3 = segmentPoints[index + 1];
-          Vector2 normalized = (segmentPoint3 - segmentPoint1).normalized;
-          Vector2 vector2_1 = segmentPoint2 - scale * normalized * (segmentPoint2 - segmentPoint1).magnitude;
-          Vector2 vector2_2 = segmentPoint2 + scale * normalized * (segmentPoint3 - segmentPoint2).magnitude;
-          this.controlPoints.Add(vector2_1);
-          this.controlPoints.Add(segmentPoint2);
-          this.controlPoints.Add(vector2_2);
+          Vector2 segmentPoint3 = segmentPoints[index - 1];
+          Vector2 segmentPoint4 = segmentPoints[index];
+          Vector2 segmentPoint5 = segmentPoints[index + 1];
+          Vector2 normalized = (segmentPoint5 - segmentPoint3).normalized;
+          Vector2 vector2_3 = segmentPoint4 - scale * normalized * (segmentPoint4 - segmentPoint3).magnitude;
+          Vector2 vector2_4 = segmentPoint4 + scale * normalized * (segmentPoint5 - segmentPoint4).magnitude;
+          this.controlPoints.Add(vector2_3);
+          this.controlPoints.Add(segmentPoint4);
+          this.controlPoints.Add(vector2_4);
         }
       }
       this.curveCount = (this.controlPoints.Count - 1) / 3;
@@ -82,8 +77,8 @@ namespace UnityEngine.UI.Extensions
     {
       if (sourcePoints.Count < 2)
         return;
-      Stack<Vector2> vector2Stack = new Stack<Vector2>();
-      vector2Stack.Push(sourcePoints[0]);
+      Stack<Vector2> collection = new Stack<Vector2>();
+      collection.Push(sourcePoints[0]);
       Vector2 sourcePoint = sourcePoints[1];
       Vector2 vector2_1;
       for (int index = 2; index < sourcePoints.Count; ++index)
@@ -91,14 +86,14 @@ namespace UnityEngine.UI.Extensions
         vector2_1 = sourcePoint - sourcePoints[index];
         if ((double) vector2_1.sqrMagnitude > (double) minSqrDistance)
         {
-          vector2_1 = vector2Stack.Peek() - sourcePoints[index];
+          vector2_1 = collection.Peek() - sourcePoints[index];
           if ((double) vector2_1.sqrMagnitude > (double) maxSqrDistance)
-            vector2Stack.Push(sourcePoint);
+            collection.Push(sourcePoint);
         }
         sourcePoint = sourcePoints[index];
       }
-      Vector2 vector2_2 = vector2Stack.Pop();
-      Vector2 vector2_3 = vector2Stack.Peek();
+      Vector2 vector2_2 = collection.Pop();
+      Vector2 vector2_3 = collection.Peek();
       vector2_1 = vector2_3 - sourcePoint;
       Vector2 normalized = vector2_1.normalized;
       vector2_1 = sourcePoint - vector2_2;
@@ -106,9 +101,9 @@ namespace UnityEngine.UI.Extensions
       vector2_1 = vector2_2 - vector2_3;
       float magnitude2 = vector2_1.magnitude;
       Vector2 vector2_4 = vector2_2 + normalized * (float) (((double) magnitude2 - (double) magnitude1) / 2.0);
-      vector2Stack.Push(vector2_4);
-      vector2Stack.Push(sourcePoint);
-      this.Interpolate(new List<Vector2>((IEnumerable<Vector2>) vector2Stack), scale);
+      collection.Push(vector2_4);
+      collection.Push(sourcePoint);
+      this.Interpolate(new List<Vector2>((IEnumerable<Vector2>) collection), scale);
     }
 
     public Vector2 CalculateBezierPoint(int curveIndex, float t)
@@ -123,23 +118,23 @@ namespace UnityEngine.UI.Extensions
 
     public List<Vector2> GetDrawingPoints0()
     {
-      List<Vector2> vector2List = new List<Vector2>();
+      List<Vector2> drawingPoints0 = new List<Vector2>();
       for (int curveIndex = 0; curveIndex < this.curveCount; ++curveIndex)
       {
         if (curveIndex == 0)
-          vector2List.Add(this.CalculateBezierPoint(curveIndex, 0.0f));
+          drawingPoints0.Add(this.CalculateBezierPoint(curveIndex, 0.0f));
         for (int index = 1; index <= this.SegmentsPerCurve; ++index)
         {
           float t = (float) index / (float) this.SegmentsPerCurve;
-          vector2List.Add(this.CalculateBezierPoint(curveIndex, t));
+          drawingPoints0.Add(this.CalculateBezierPoint(curveIndex, t));
         }
       }
-      return vector2List;
+      return drawingPoints0;
     }
 
     public List<Vector2> GetDrawingPoints1()
     {
-      List<Vector2> vector2List = new List<Vector2>();
+      List<Vector2> drawingPoints1 = new List<Vector2>();
       for (int index1 = 0; index1 < this.controlPoints.Count - 3; index1 += 3)
       {
         Vector2 controlPoint1 = this.controlPoints[index1];
@@ -147,27 +142,27 @@ namespace UnityEngine.UI.Extensions
         Vector2 controlPoint3 = this.controlPoints[index1 + 2];
         Vector2 controlPoint4 = this.controlPoints[index1 + 3];
         if (index1 == 0)
-          vector2List.Add(this.CalculateBezierPoint(0.0f, controlPoint1, controlPoint2, controlPoint3, controlPoint4));
+          drawingPoints1.Add(this.CalculateBezierPoint(0.0f, controlPoint1, controlPoint2, controlPoint3, controlPoint4));
         for (int index2 = 1; index2 <= this.SegmentsPerCurve; ++index2)
         {
           float t = (float) index2 / (float) this.SegmentsPerCurve;
-          vector2List.Add(this.CalculateBezierPoint(t, controlPoint1, controlPoint2, controlPoint3, controlPoint4));
+          drawingPoints1.Add(this.CalculateBezierPoint(t, controlPoint1, controlPoint2, controlPoint3, controlPoint4));
         }
       }
-      return vector2List;
+      return drawingPoints1;
     }
 
     public List<Vector2> GetDrawingPoints2()
     {
-      List<Vector2> vector2List = new List<Vector2>();
+      List<Vector2> drawingPoints2 = new List<Vector2>();
       for (int curveIndex = 0; curveIndex < this.curveCount; ++curveIndex)
       {
         List<Vector2> drawingPoints = this.FindDrawingPoints(curveIndex);
         if (curveIndex != 0)
           drawingPoints.RemoveAt(0);
-        vector2List.AddRange((IEnumerable<Vector2>) drawingPoints);
+        drawingPoints2.AddRange((IEnumerable<Vector2>) drawingPoints);
       }
-      return vector2List;
+      return drawingPoints2;
     }
 
     private List<Vector2> FindDrawingPoints(int curveIndex)
@@ -194,7 +189,7 @@ namespace UnityEngine.UI.Extensions
         return 0;
       float num1 = (float) (((double) t0 + (double) t1) / 2.0);
       Vector2 bezierPoint3 = this.CalculateBezierPoint(curveIndex, num1);
-      if ((double) Vector2.Dot((bezierPoint1 - bezierPoint3).normalized, (bezierPoint2 - bezierPoint3).normalized) <= (double) this.DIVISION_THRESHOLD && (double) Mathf.Abs(num1 - 0.5f) >= 9.99999974737875E-05)
+      if ((double) Vector2.Dot((bezierPoint1 - bezierPoint3).normalized, (bezierPoint2 - bezierPoint3).normalized) <= (double) this.DIVISION_THRESHOLD && (double) Mathf.Abs(num1 - 0.5f) >= 9.9999997473787516E-05)
         return 0;
       int num2 = 0 + this.FindDrawingPoints(curveIndex, t0, num1, pointList, insertionIndex);
       pointList.Insert(insertionIndex + num2, bezierPoint3);
@@ -202,12 +197,7 @@ namespace UnityEngine.UI.Extensions
       return num3 + this.FindDrawingPoints(curveIndex, num1, t1, pointList, insertionIndex + num3);
     }
 
-    private Vector2 CalculateBezierPoint(
-      float t,
-      Vector2 p0,
-      Vector2 p1,
-      Vector2 p2,
-      Vector2 p3)
+    private Vector2 CalculateBezierPoint(float t, Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3)
     {
       float num1 = 1f - t;
       float num2 = t * t;

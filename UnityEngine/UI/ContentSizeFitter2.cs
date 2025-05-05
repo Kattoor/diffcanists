@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
 
+#nullable disable
 namespace UnityEngine.UI
 {
   [ExecuteInEditMode]
@@ -19,10 +20,7 @@ namespace UnityEngine.UI
 
     public ContentSizeFitter.FitMode horizontalFit
     {
-      get
-      {
-        return this.m_HorizontalFit;
-      }
+      get => this.m_HorizontalFit;
       set
       {
         if (!ContentSizeFitter2.SetStruct<ContentSizeFitter.FitMode>(ref this.m_HorizontalFit, value))
@@ -33,10 +31,7 @@ namespace UnityEngine.UI
 
     public ContentSizeFitter.FitMode verticalFit
     {
-      get
-      {
-        return this.m_VerticalFit;
-      }
+      get => this.m_VerticalFit;
       set
       {
         if (!ContentSizeFitter2.SetStruct<ContentSizeFitter.FitMode>(ref this.m_VerticalFit, value))
@@ -80,10 +75,7 @@ namespace UnityEngine.UI
       base.OnDisable();
     }
 
-    protected override void OnRectTransformDimensionsChange()
-    {
-      this.SetDirty();
-    }
+    protected override void OnRectTransformDimensionsChange() => this.SetDirty();
 
     private void HandleSelfFittingAlongAxis(int axis)
     {
@@ -115,10 +107,7 @@ namespace UnityEngine.UI
       this.HandleSelfFittingAlongAxis(0);
     }
 
-    public virtual void SetLayoutVertical()
-    {
-      this.HandleSelfFittingAlongAxis(1);
-    }
+    public virtual void SetLayoutVertical() => this.HandleSelfFittingAlongAxis(1);
 
     protected void SetDirty()
     {

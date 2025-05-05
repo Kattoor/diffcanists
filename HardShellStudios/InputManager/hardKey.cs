@@ -2,18 +2,19 @@
 using System;
 using UnityEngine;
 
+#nullable disable
 namespace HardShellStudios.InputManager
 {
   public class hardKey : IComparable<hardKey>
   {
-    [NonSerialized]
-    public int pressedFrame = -1;
     public string keyName;
     public KeyCode keyInput;
     public KeyCode keyInput2;
     public int keyWheelState;
     public int keyWheelState2;
     public float keyValue;
+    [NonSerialized]
+    public int pressedFrame = -1;
     public bool saveKey;
 
     public hardKey(
@@ -33,10 +34,7 @@ namespace HardShellStudios.InputManager
       this.saveKey = saveKeyGIVE;
     }
 
-    public int CompareTo(hardKey other)
-    {
-      return 1;
-    }
+    public int CompareTo(hardKey other) => 1;
 
     public enum controllerMap
     {

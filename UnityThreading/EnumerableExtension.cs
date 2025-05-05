@@ -2,13 +2,12 @@
 using System;
 using System.Collections.Generic;
 
+#nullable disable
 namespace UnityThreading
 {
   public static class EnumerableExtension
   {
-    public static IEnumerable<Task> ParallelForEach<T>(
-      this IEnumerable<T> that,
-      Action<T> action)
+    public static IEnumerable<Task> ParallelForEach<T>(this IEnumerable<T> that, Action<T> action)
     {
       return that.ParallelForEach<T>(action, (TaskDistributor) null);
     }
@@ -47,9 +46,7 @@ namespace UnityThreading
       return (IEnumerable<Task<TResult>>) taskList;
     }
 
-    public static IEnumerable<Task> SequentialForEach<T>(
-      this IEnumerable<T> that,
-      Action<T> action)
+    public static IEnumerable<Task> SequentialForEach<T>(this IEnumerable<T> that, Action<T> action)
     {
       return that.SequentialForEach<T>(action, (TaskDistributor) null);
     }

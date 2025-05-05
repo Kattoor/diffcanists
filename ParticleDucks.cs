@@ -1,12 +1,13 @@
 
 using UnityEngine;
 
+#nullable disable
 public class ParticleDucks : MonoBehaviour
 {
+  public Creature c;
   public float speed = 10f;
   private Vector3 a = Vector3.zero;
   private Vector3 b = Vector3.zero;
-  public Creature c;
   public Transform[] ducks;
   public Transform[] duckParents;
 

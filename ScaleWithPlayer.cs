@@ -1,14 +1,12 @@
 
 using UnityEngine;
 
+#nullable disable
 public class ScaleWithPlayer : MonoBehaviour
 {
   public Vector2 localScale;
 
-  private void Start()
-  {
-    this.localScale = (Vector2) this.transform.localScale;
-  }
+  private void Start() => this.localScale = (Vector2) this.transform.localScale;
 
   private void Update()
   {
@@ -18,8 +16,5 @@ public class ScaleWithPlayer : MonoBehaviour
     this.transform.localScale = (Vector3) this.localScale;
   }
 
-  private bool Sign(float f)
-  {
-    return (double) f > 0.0;
-  }
+  private bool Sign(float f) => (double) f > 0.0;
 }

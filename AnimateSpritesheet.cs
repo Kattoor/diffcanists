@@ -2,9 +2,9 @@
 using System.Collections;
 using UnityEngine;
 
+#nullable disable
 public class AnimateSpritesheet : IAnimator
 {
-  public bool playAudio = true;
   public SpriteRenderer rend;
   public float walkSpeed;
   public float jumpSpeed;
@@ -12,6 +12,7 @@ public class AnimateSpritesheet : IAnimator
   public Sprite[] jumpFrames;
   public Sprite idleFrame;
   private float nextWalkSound;
+  public bool playAudio = true;
 
   public override void Play(AnimateState anim, float duration = 0.0f, bool sound = true)
   {

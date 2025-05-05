@@ -1,4 +1,5 @@
 
+#nullable disable
 namespace Hazel
 {
   public enum ConnectionState

@@ -7,50 +7,30 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
+#nullable disable
 namespace ChessConsole
 {
   public class RPSTBGBoard : IMiniGame
   {
     public string reason = "";
-    public List<ChessMove> previousMoves = new List<ChessMove>();
-    public IMiniGame.GameSettings gameSettings = new IMiniGame.GameSettings();
-    private List<RPSTBGBoard.CheckersPiece> pieces = new List<RPSTBGBoard.CheckersPiece>();
     public PlayerColor firstPlayer;
     public PlayerColor secondPlayer;
     public PlayerColor whosTurn;
+    public List<ChessMove> previousMoves = new List<ChessMove>();
     public RPSTBGUI ui;
+    public IMiniGame.GameSettings gameSettings = new IMiniGame.GameSettings();
+    private List<RPSTBGBoard.CheckersPiece> pieces = new List<RPSTBGBoard.CheckersPiece>();
     private bool inCheck;
     private IMiniGame.Player cur;
     private RPSTBGBoard.Cell[,] cells;
 
-    public override string GetGameType()
-    {
-      return "RPS The Board Game";
-    }
+    public override string GetGameType() => "RPS The Board Game";
 
-    public override IMiniGame.GameType gameType
-    {
-      get
-      {
-        return IMiniGame.GameType.RPSTBG;
-      }
-    }
+    public override IMiniGame.GameType gameType => IMiniGame.GameType.RPSTBG;
 
-    public string firstColor
-    {
-      get
-      {
-        return this.firstPlayer != PlayerColor.White ? "Red" : "Blue";
-      }
-    }
+    public string firstColor => this.firstPlayer != PlayerColor.White ? "Red" : "Blue";
 
-    public string secondColor
-    {
-      get
-      {
-        return this.secondPlayer != PlayerColor.White ? "Red" : "Blue";
-      }
-    }
+    public string secondColor => this.secondPlayer != PlayerColor.White ? "Red" : "Blue";
 
     public RPSTBGBoard.Cell RedPiece(ChessPiece p)
     {
@@ -86,28 +66,16 @@ namespace ChessConsole
       }
     }
 
-    public RPSTBGBoard.Cell[,] AllCells
-    {
-      get
-      {
-        return this.cells;
-      }
-    }
+    public RPSTBGBoard.Cell[,] AllCells => this.cells;
 
-    public RPSTBGBoard.Cell FromIndex(int i)
-    {
-      return this.cells[i / 6, i % 6];
-    }
+    public RPSTBGBoard.Cell FromIndex(int i) => this.cells[i / 6, i % 6];
 
     public RPSTBGBoard.Cell GetCell(int x, int y)
     {
-      return x < 0 || this.cells.GetLength(0) <= x || (y < 0 || this.cells.GetLength(1) <= y) ? (RPSTBGBoard.Cell) null : this.cells[x, y];
+      return x < 0 || this.cells.GetLength(0) <= x || y < 0 || this.cells.GetLength(1) <= y ? (RPSTBGBoard.Cell) null : this.cells[x, y];
     }
 
-    public RPSTBGBoard()
-    {
-      this.Reset();
-    }
+    public RPSTBGBoard() => this.Reset();
 
     public RPSTBGBoard(bool init)
     {
@@ -147,7 +115,7 @@ namespace ChessConsole
           w.Write((byte) 4);
           this.Serialize(w);
         }
-        c.SendBytes(memoryStream.ToArray(), SendOption.None);
+        c.SendBytes(memoryStream.ToArray());
       }
     }
 
@@ -213,7 +181,7 @@ namespace ChessConsole
       {
         if (!flag1 && !flag2)
           return;
-        if (tag != (byte) 4 && tag != (byte) 5 && (tag != (byte) 8 && tag != (byte) 12) && tag != (byte) 13)
+        if (tag != (byte) 4 && tag != (byte) 5 && tag != (byte) 8 && tag != (byte) 12 && tag != (byte) 13)
         {
           if (flag1)
           {
@@ -237,7 +205,7 @@ namespace ChessConsole
           this.cur = this.GetPlayer(this.whosTurn);
           if ((double) Mathf.Abs(chessMove.time - this.cur.curTime) > 0.5)
             chessMove.time = this.cur.curTime + 0.5f;
-          if ((double) this.cur.startTurnTime - (double) chessMove.time < 0.200000002980232)
+          if ((double) this.cur.startTurnTime - (double) chessMove.time < 0.20000000298023224)
             chessMove.time = this.cur.startTurnTime - 0.2f;
           this.cur.curTime = chessMove.time;
           if ((double) this.cur.curTime <= 0.0)
@@ -247,7 +215,7 @@ namespace ChessConsole
           }
           this.cur.startTurnTime = this.cur.curTime;
           this.previousMoves.Add(chessMove);
-          if (this.Move(from, cell, chessMove.promotion, chessMove, true))
+          if (this.Move(from, cell, chessMove.promotion, chessMove))
           {
             this.SendServerMove(chessMove);
             this.SendGameOver("Win", this.whosTurn == this.firstPlayer ? 0 : 1);
@@ -320,8 +288,8 @@ namespace ChessConsole
     private void Cheat(myBinaryReader r)
     {
       RPSTBGBoard.Cell cell = this.FromIndex(r.ReadInt32());
-      int num = r.ReadInt32();
-      if (num == -1)
+      int c = r.ReadInt32();
+      if (c == -1)
       {
         if (cell.Piece != null)
         {
@@ -338,7 +306,7 @@ namespace ChessConsole
           this.pieces.Remove(cell.Piece);
           cell.Piece = (RPSTBGBoard.CheckersPiece) null;
         }
-        this.addPiece(cell, RPSTBGBoard.FromChar((ChessPiece) num, this.whosTurn, this));
+        this.addPiece(cell, RPSTBGBoard.FromChar((ChessPiece) c, this.whosTurn, this));
       }
       this.TurnStart(this.whosTurn);
     }
@@ -404,7 +372,7 @@ namespace ChessConsole
           ChessMove chessMove = ChessMove.Deserialize(r);
           this.GetPlayer(this.whosTurn).curTime = chessMove.time;
           this.previousMoves.Add(chessMove);
-          this.Move(this.FromIndex(chessMove.from), this.FromIndex((int) chessMove.to), chessMove.promotion, chessMove, true);
+          this.Move(this.FromIndex(chessMove.from), this.FromIndex((int) chessMove.to), chessMove.promotion, chessMove);
           AudioManager.PlayChess(this.ui.playingAsBlack == (this.whosTurn == PlayerColor.Black) ? this.ui.chessMove : this.ui.chessMoveEnemy);
           this.TurnStart(this.whosTurn == PlayerColor.White ? PlayerColor.Black : PlayerColor.White);
           if (this.inCheck)
@@ -425,7 +393,7 @@ namespace ChessConsole
           {
             if (!((UnityEngine.Object) ChatBox.Instance != (UnityEngine.Object) null))
               return;
-            ChatBox.Instance.NewChatMsg("[RPSTBG] " + str1, str2, (Color) ColorScheme.GetColor(Global.ColorMiniGameText), str1, ChatOrigination.MiniGame, ContentType.STRING, (object) null);
+            ChatBox.Instance.NewChatMsg("[RPSTBG] " + str1, str2, (Color) ColorScheme.GetColor(Global.ColorMiniGameText), str1, ChatOrigination.MiniGame);
           }));
           break;
         case 8:
@@ -683,10 +651,7 @@ namespace ChessConsole
       return b;
     }
 
-    public static RPSTBGBoard.CheckersPiece FromChar(
-      ChessPiece c,
-      PlayerColor p,
-      RPSTBGBoard b)
+    public static RPSTBGBoard.CheckersPiece FromChar(ChessPiece c, PlayerColor p, RPSTBGBoard b)
     {
       switch (c)
       {
@@ -835,18 +800,9 @@ namespace ChessConsole
       {
       }
 
-      public override ChessPiece Char
-      {
-        get
-        {
-          return ChessPiece.Pawn;
-        }
-      }
+      public override ChessPiece Char => ChessPiece.Pawn;
 
-      protected override bool canHit(RPSTBGBoard.Cell cell)
-      {
-        return base.canHit(cell);
-      }
+      protected override bool canHit(RPSTBGBoard.Cell cell) => base.canHit(cell);
     }
 
     public class Bishop : RPSTBGBoard.CheckersPiece
@@ -862,18 +818,9 @@ namespace ChessConsole
       {
       }
 
-      public override ChessPiece Char
-      {
-        get
-        {
-          return ChessPiece.Bishop;
-        }
-      }
+      public override ChessPiece Char => ChessPiece.Bishop;
 
-      protected override bool canHit(RPSTBGBoard.Cell cell)
-      {
-        return base.canHit(cell);
-      }
+      protected override bool canHit(RPSTBGBoard.Cell cell) => base.canHit(cell);
     }
 
     public class Knight : RPSTBGBoard.CheckersPiece
@@ -889,18 +836,9 @@ namespace ChessConsole
       {
       }
 
-      public override ChessPiece Char
-      {
-        get
-        {
-          return ChessPiece.Knight;
-        }
-      }
+      public override ChessPiece Char => ChessPiece.Knight;
 
-      protected override bool canHit(RPSTBGBoard.Cell cell)
-      {
-        return base.canHit(cell);
-      }
+      protected override bool canHit(RPSTBGBoard.Cell cell) => base.canHit(cell);
     }
 
     public class Rook : RPSTBGBoard.CheckersPiece
@@ -916,18 +854,9 @@ namespace ChessConsole
       {
       }
 
-      public override ChessPiece Char
-      {
-        get
-        {
-          return ChessPiece.Rook;
-        }
-      }
+      public override ChessPiece Char => ChessPiece.Rook;
 
-      protected override bool canHit(RPSTBGBoard.Cell cell)
-      {
-        return base.canHit(cell);
-      }
+      protected override bool canHit(RPSTBGBoard.Cell cell) => base.canHit(cell);
     }
 
     public class Cell
@@ -952,10 +881,7 @@ namespace ChessConsole
         return this.Parent.GetCell(this.X + x, this.Y + y) ?? (RPSTBGBoard.Cell) null;
       }
 
-      public int Distance(RPSTBGBoard.Cell b)
-      {
-        return Mathf.Abs(this.X - b.X) + Mathf.Abs(this.Y - b.Y);
-      }
+      public int Distance(RPSTBGBoard.Cell b) => Mathf.Abs(this.X - b.X) + Mathf.Abs(this.Y - b.Y);
 
       public RPSTBGBoard.Cell GetJump(RPSTBGBoard.Cell b)
       {
@@ -976,10 +902,7 @@ namespace ChessConsole
 
       public bool SetMoved
       {
-        set
-        {
-          this.Moved = value;
-        }
+        set => this.Moved = value;
       }
 
       public IEnumerable<RPSTBGBoard.Cell> FloodFill(
@@ -1002,20 +925,20 @@ namespace ChessConsole
             RPSTBGBoard.Cell cell3 = this.board.GetCell(c.X + 1, c.Y);
             if (cell3 != null && !visited.Contains(cell3))
             {
-              foreach (RPSTBGBoard.Cell cell2 in this.FloodFill(cell3, depth + 1, visited))
-                yield return cell2;
+              foreach (RPSTBGBoard.Cell cell4 in this.FloodFill(cell3, depth + 1, visited))
+                yield return cell4;
             }
-            RPSTBGBoard.Cell cell4 = this.board.GetCell(c.X, c.Y + 1);
-            if (cell4 != null && !visited.Contains(cell4))
-            {
-              foreach (RPSTBGBoard.Cell cell2 in this.FloodFill(cell4, depth + 1, visited))
-                yield return cell2;
-            }
-            RPSTBGBoard.Cell cell5 = this.board.GetCell(c.X, c.Y - 1);
+            RPSTBGBoard.Cell cell5 = this.board.GetCell(c.X, c.Y + 1);
             if (cell5 != null && !visited.Contains(cell5))
             {
-              foreach (RPSTBGBoard.Cell cell2 in this.FloodFill(cell5, depth + 1, visited))
-                yield return cell2;
+              foreach (RPSTBGBoard.Cell cell6 in this.FloodFill(cell5, depth + 1, visited))
+                yield return cell6;
+            }
+            RPSTBGBoard.Cell cell7 = this.board.GetCell(c.X, c.Y - 1);
+            if (cell7 != null && !visited.Contains(cell7))
+            {
+              foreach (RPSTBGBoard.Cell cell8 in this.FloodFill(cell7, depth + 1, visited))
+                yield return cell8;
             }
           }
         }
@@ -1029,27 +952,27 @@ namespace ChessConsole
           {
             if (this.Color == PlayerColor.White)
             {
-              RPSTBGBoard.Cell cell1 = this.board.BluePiece(ChessPiece.Pawn);
-              if (cell1.Piece == null)
-                yield return cell1;
-              RPSTBGBoard.Cell cell2 = this.board.BluePiece(ChessPiece.Bishop);
-              if (cell2.Piece == null)
-                yield return cell2;
-              RPSTBGBoard.Cell cell3 = this.board.BluePiece(ChessPiece.Knight);
-              if (cell3.Piece == null)
-                yield return cell3;
+              RPSTBGBoard.Cell possibleMove1 = this.board.BluePiece(ChessPiece.Pawn);
+              if (possibleMove1.Piece == null)
+                yield return possibleMove1;
+              RPSTBGBoard.Cell possibleMove2 = this.board.BluePiece(ChessPiece.Bishop);
+              if (possibleMove2.Piece == null)
+                yield return possibleMove2;
+              RPSTBGBoard.Cell possibleMove3 = this.board.BluePiece(ChessPiece.Knight);
+              if (possibleMove3.Piece == null)
+                yield return possibleMove3;
             }
             else
             {
-              RPSTBGBoard.Cell cell1 = this.board.RedPiece(ChessPiece.Pawn);
-              if (cell1.Piece == null)
-                yield return cell1;
-              RPSTBGBoard.Cell cell2 = this.board.RedPiece(ChessPiece.Bishop);
-              if (cell2.Piece == null)
-                yield return cell2;
-              RPSTBGBoard.Cell cell3 = this.board.RedPiece(ChessPiece.Knight);
-              if (cell3.Piece == null)
-                yield return cell3;
+              RPSTBGBoard.Cell possibleMove4 = this.board.RedPiece(ChessPiece.Pawn);
+              if (possibleMove4.Piece == null)
+                yield return possibleMove4;
+              RPSTBGBoard.Cell possibleMove5 = this.board.RedPiece(ChessPiece.Bishop);
+              if (possibleMove5.Piece == null)
+                yield return possibleMove5;
+              RPSTBGBoard.Cell possibleMove6 = this.board.RedPiece(ChessPiece.Knight);
+              if (possibleMove6.Piece == null)
+                yield return possibleMove6;
             }
           }
           else
@@ -1060,40 +983,40 @@ namespace ChessConsole
             RPSTBGBoard.Cell cell1 = this.board.GetCell(this.Parent.X - 1, this.Parent.Y);
             if (cell1 != null && !visited.Contains(cell1))
             {
-              foreach (RPSTBGBoard.Cell cell2 in this.FloodFill(cell1, 1, visited))
+              foreach (RPSTBGBoard.Cell possibleMove in this.FloodFill(cell1, 1, visited))
               {
-                if (sent.Add(cell2))
-                  yield return cell2;
+                if (sent.Add(possibleMove))
+                  yield return possibleMove;
               }
             }
             visited.Clear();
-            RPSTBGBoard.Cell cell3 = this.board.GetCell(this.Parent.X + 1, this.Parent.Y);
+            RPSTBGBoard.Cell cell2 = this.board.GetCell(this.Parent.X + 1, this.Parent.Y);
+            if (cell2 != null && !visited.Contains(cell2))
+            {
+              foreach (RPSTBGBoard.Cell possibleMove in this.FloodFill(cell2, 1, visited))
+              {
+                if (sent.Add(possibleMove))
+                  yield return possibleMove;
+              }
+            }
+            visited.Clear();
+            RPSTBGBoard.Cell cell3 = this.board.GetCell(this.Parent.X, this.Parent.Y + 1);
             if (cell3 != null && !visited.Contains(cell3))
             {
-              foreach (RPSTBGBoard.Cell cell2 in this.FloodFill(cell3, 1, visited))
+              foreach (RPSTBGBoard.Cell possibleMove in this.FloodFill(cell3, 1, visited))
               {
-                if (sent.Add(cell2))
-                  yield return cell2;
+                if (sent.Add(possibleMove))
+                  yield return possibleMove;
               }
             }
             visited.Clear();
-            RPSTBGBoard.Cell cell4 = this.board.GetCell(this.Parent.X, this.Parent.Y + 1);
+            RPSTBGBoard.Cell cell4 = this.board.GetCell(this.Parent.X, this.Parent.Y - 1);
             if (cell4 != null && !visited.Contains(cell4))
             {
-              foreach (RPSTBGBoard.Cell cell2 in this.FloodFill(cell4, 1, visited))
+              foreach (RPSTBGBoard.Cell possibleMove in this.FloodFill(cell4, 1, visited))
               {
-                if (sent.Add(cell2))
-                  yield return cell2;
-              }
-            }
-            visited.Clear();
-            RPSTBGBoard.Cell cell5 = this.board.GetCell(this.Parent.X, this.Parent.Y - 1);
-            if (cell5 != null && !visited.Contains(cell5))
-            {
-              foreach (RPSTBGBoard.Cell cell2 in this.FloodFill(cell5, 1, visited))
-              {
-                if (sent.Add(cell2))
-                  yield return cell2;
+                if (sent.Add(possibleMove))
+                  yield return possibleMove;
               }
             }
           }
@@ -1144,16 +1067,13 @@ namespace ChessConsole
                   this.image.SetSiblingIndex(index2);
                 break;
               }
-              for (int index2 = index1 + 1; index2 < this.image.parent.childCount && (double) this.image.parent.GetChild(index2).localPosition.z > (double) z2; ++index2)
-                this.image.SetSiblingIndex(index2);
+              for (int index3 = index1 + 1; index3 < this.image.parent.childCount && (double) this.image.parent.GetChild(index3).localPosition.z > (double) z2; ++index3)
+                this.image.SetSiblingIndex(index3);
               break;
             }
           }
         }
-        get
-        {
-          return this._parent;
-        }
+        get => this._parent;
       }
 
       public void Destroy()
@@ -1170,10 +1090,7 @@ namespace ChessConsole
         this.LegalMoves = new List<RPSTBGBoard.Cell>();
       }
 
-      public void OnPlace(RPSTBGBoard.Cell cell)
-      {
-        this.Parent = cell;
-      }
+      public void OnPlace(RPSTBGBoard.Cell cell) => this.Parent = cell;
 
       public void OnMove(RPSTBGBoard.Cell cell)
       {
@@ -1185,10 +1102,7 @@ namespace ChessConsole
 
       public abstract ChessPiece Char { get; }
 
-      protected virtual bool canHit(RPSTBGBoard.Cell cell)
-      {
-        return cell != null;
-      }
+      protected virtual bool canHit(RPSTBGBoard.Cell cell) => cell != null;
     }
   }
 }

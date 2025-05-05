@@ -1,18 +1,19 @@
 
 using UnityEngine;
 
+#nullable disable
 public class AnimateWyrm : IAnimator
 {
-  public float timeToFinish = 1f;
-  public float boost = 2f;
-  public float jumpSpeed = 1f;
-  public float fallSpeed = 1f;
   public SpriteRenderer sp;
+  public float timeToFinish = 1f;
   public Sprite[] sprites;
   public Sprite[] attackSprites;
   public Sprite[] jumpSprites;
   public Sprite[] burrowingSprites;
   public Sprite[] fallSprites;
+  public float boost = 2f;
+  public float jumpSpeed = 1f;
+  public float fallSpeed = 1f;
   private float curTime;
   private float timeBetweenFrames;
   private int index;

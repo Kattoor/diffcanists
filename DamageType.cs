@@ -1,6 +1,7 @@
 
 using System;
 
+#nullable disable
 [Serializable]
 public enum DamageType
 {
@@ -41,4 +42,5 @@ public enum DamageType
   Gravity,
   SunderLight,
   Sand,
+  StingUndead,
 }

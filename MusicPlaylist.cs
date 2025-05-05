@@ -7,10 +7,11 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
+#nullable disable
 public class MusicPlaylist
 {
-  private OrderedDictionary<string, MusicPlaylist.Track> AllMusic = new OrderedDictionary<string, MusicPlaylist.Track>();
   private static string PATH;
+  private OrderedDictionary<string, MusicPlaylist.Track> AllMusic = new OrderedDictionary<string, MusicPlaylist.Track>();
   private int customHeader;
   private int additionalHeader;
 

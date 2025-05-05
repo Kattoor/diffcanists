@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+#nullable disable
 public class ParticleProtectionShield : MonoBehaviour
 {
   [NonSerialized]
@@ -20,9 +21,10 @@ public class ParticleProtectionShield : MonoBehaviour
       if (this.lastshield == this.c.shield)
         return;
       this.lastshield = this.c.shield;
-      Color color = this.sp.color;
-      color.a = this.c.shield > 50 ? (float) Mathf.Clamp(175 + this.c.shield / 2, 175, (int) byte.MaxValue) / (float) byte.MaxValue : (float) (175 - (50 - this.c.shield)) / (float) byte.MaxValue;
-      this.sp.color = color;
+      this.sp.color = this.sp.color with
+      {
+        a = this.c.shield > 50 ? (float) Mathf.Clamp(175 + this.c.shield / 2, 175, (int) byte.MaxValue) / (float) byte.MaxValue : (float) (175 - (50 - this.c.shield)) / (float) byte.MaxValue
+      };
     }
   }
 }

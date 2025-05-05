@@ -1,16 +1,14 @@
 
 using UnityEngine;
 
+#nullable disable
 [AddComponentMenu("Hard Shell Studios/Examples/UI Manager")]
 public class UI_Manager : MonoBehaviour
 {
   public GameObject menu;
   private int num;
 
-  private void Start()
-  {
-    this.num = hardInput.GetControllerTypeIndex();
-  }
+  private void Start() => this.num = hardInput.GetControllerTypeIndex();
 
   private void Update()
   {

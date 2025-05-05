@@ -1,6 +1,7 @@
 
 using UnityEngine;
 
+#nullable disable
 public class ImbuedAxeRot : MonoBehaviour
 {
   public RotateTransformZ rotator;

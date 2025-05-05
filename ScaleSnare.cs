@@ -1,12 +1,13 @@
 
 using UnityEngine;
 
+#nullable disable
 public class ScaleSnare : MonoBehaviour
 {
+  public Effector effector;
   public float minScale = 0.5f;
   public float maxScale = 0.5f;
   public float speed = 2f;
-  public Effector effector;
   private float curT;
   private bool v;
 

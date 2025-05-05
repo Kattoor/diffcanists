@@ -1,4 +1,5 @@
 
+#nullable disable
 public enum EffectorType
 {
   None = -1, // 0xFFFFFFFF
@@ -89,4 +90,11 @@ public enum EffectorType
   Sand_Mite = 84, // 0x00000054
   Sand_Mite_Embeded = 85, // 0x00000055
   Sandstorm = 86, // 0x00000056
+  Flight = 87, // 0x00000057
+  Curse_of_Haute = 88, // 0x00000058
+  Tombstone = 89, // 0x00000059
+  Zombie_Charge = 90, // 0x0000005A
+  Sacrifical_Altar = 91, // 0x0000005B
+  Sacrifical_Altar_Aura = 92, // 0x0000005C
+  Mind_Control_Temp = 93, // 0x0000005D
 }

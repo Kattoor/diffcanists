@@ -3,16 +3,17 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
+#nullable disable
 public class SpectatorPlayer : MonoBehaviour
 {
-  public int selectedSpellIndex = -1;
-  private FixedInt rot_z = (FixedInt) 0;
   private GameObject meter;
   internal GameObject[] meter_subs;
   private Image meterFill;
   private bool LockMeter;
+  public int selectedSpellIndex = -1;
   public int selectedEmoji;
   private bool extendedShot;
+  private FixedInt rot_z = (FixedInt) 0;
   private Vector3 mouseWorldPos;
   private Vector3 diff;
   private float offset;
@@ -60,12 +61,12 @@ public class SpectatorPlayer : MonoBehaviour
     if (Client.MyAccount.tomatoes <= 0 && !Client.game.isSandbox)
     {
       this.UnselectSpell();
-      MyToolTip.Show("You can buy more tomatoes at the shop.", -1f);
+      MyToolTip.Show("You can buy more tomatoes at the shop.");
     }
     else if (i == 1 && Client.MyAccount.tomatoes <= 1 && !Client.game.isSandbox)
     {
       this.UnselectSpell();
-      MyToolTip.Show("You can buy more tomatoes at the shop. This spell costs 2 tomatoes to cast.", -1f);
+      MyToolTip.Show("You can buy more tomatoes at the shop. This spell costs 2 tomatoes to cast.");
     }
     else if (i == 1)
     {
@@ -79,7 +80,7 @@ public class SpectatorPlayer : MonoBehaviour
         m.Close();
         MyToolTip.Close();
       }));
-      m.Rebuild(false);
+      m.Rebuild();
     }
     else
       this.FinishSelectingSpell(i);
@@ -91,7 +92,7 @@ public class SpectatorPlayer : MonoBehaviour
     this.selectedSpellIndex = i;
     for (int index = 0; index < this.meter_subs.Length; ++index)
       this.meter_subs[index].SetActive(true);
-    CursorList.Instance.SetCursor(0, CursorMode.Auto);
+    CursorList.Instance.SetCursor(0);
     HUD.instance.panelFireControls.SetActive(true);
     HUD.instance.panelAimControls.SetActive(false);
   }
@@ -110,7 +111,7 @@ public class SpectatorPlayer : MonoBehaviour
 
   public void UpdateMouseWorldPos(bool force = false)
   {
-    if (!force && Player.IsPointerOverGameObject(0) || !force && HUD.UseTouchControls)
+    if (!force && Player.IsPointerOverGameObject() || !force && HUD.UseTouchControls)
       return;
     this.mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
     this.mouseWorldPos.z = 0.0f;
@@ -170,7 +171,7 @@ public class SpectatorPlayer : MonoBehaviour
         this.diff = this.mouseWorldPos - position;
         if (HUD.UseTouchControls)
         {
-          if (!Player.IsPointerOverGameObject(0) && (MyInput.GetMouseButton(0) || Input.touchCount == 1) && !HUD.instance.PressingOnScreenControl)
+          if (!Player.IsPointerOverGameObject() && (MyInput.GetMouseButton(0) || Input.touchCount == 1) && !HUD.instance.PressingOnScreenControl)
             this.rot_z = MyInput.GetMouseButton(0) ? (FixedInt) (Mathf.Atan2(this.diff.y, this.diff.x) * 57.29578f) : this.rot_z;
         }
         else

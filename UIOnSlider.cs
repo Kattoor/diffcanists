@@ -6,12 +6,21 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UIOnSlider : UIOnHoverChild, IPointerDownHandler, IEventSystemHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler, IDragHandler, IEndDragHandler
+#nullable disable
+public class UIOnSlider : 
+  UIOnHoverChild,
+  IPointerDownHandler,
+  IEventSystemHandler,
+  IPointerUpHandler,
+  IPointerEnterHandler,
+  IPointerExitHandler,
+  IDragHandler,
+  IEndDragHandler
 {
-  public bool interactable = true;
   public RectTransform handle;
   public float minHandleX;
   public float maxHandleX;
+  public bool interactable = true;
   public bool OnEnterExitWhenDisabled;
   public UIOnSlider.OnClick onClick;
   public UIOnSlider.OnClick onPointerUp;
@@ -25,13 +34,7 @@ public class UIOnSlider : UIOnHoverChild, IPointerDownHandler, IEventSystemHandl
   public AudioClip audioClick;
   private RectTransform rectTransform;
 
-  public bool IsHovering
-  {
-    get
-    {
-      return this.gameObject.activeInHierarchy && this.isHovering;
-    }
-  }
+  public bool IsHovering => this.gameObject.activeInHierarchy && this.isHovering;
 
   private void Awake()
   {
@@ -71,17 +74,11 @@ public class UIOnSlider : UIOnHoverChild, IPointerDownHandler, IEventSystemHandl
       this.X();
   }
 
-  public void FindChildern()
-  {
-    this.uiChildern = this.GetComponentsInChildren<UIOnHoverChild>();
-  }
+  public void FindChildern() => this.uiChildern = this.GetComponentsInChildren<UIOnHoverChild>();
 
   public bool AlwaysOn
   {
-    get
-    {
-      return this.alwaysOn;
-    }
+    get => this.alwaysOn;
     set
     {
       this.alwaysOn = value;
@@ -137,15 +134,9 @@ public class UIOnSlider : UIOnHoverChild, IPointerDownHandler, IEventSystemHandl
       this.X();
   }
 
-  public void OnDrag(PointerEventData eventData)
-  {
-    this.CallBack((Vector3) eventData.position);
-  }
+  public void OnDrag(PointerEventData eventData) => this.CallBack((Vector3) eventData.position);
 
-  public void OnEndDrag(PointerEventData eventData)
-  {
-    this.CallBack((Vector3) eventData.position);
-  }
+  public void OnEndDrag(PointerEventData eventData) => this.CallBack((Vector3) eventData.position);
 
   public void OnPointerEnter(PointerEventData eventData)
   {
@@ -198,7 +189,7 @@ public class UIOnSlider : UIOnHoverChild, IPointerDownHandler, IEventSystemHandl
     foreach (UIOnHoverChild uiOnHoverChild in this.uiChildern)
     {
       if ((UnityEngine.Object) uiOnHoverChild != (UnityEngine.Object) null)
-        uiOnHoverChild.OnUp(false);
+        uiOnHoverChild.OnUp();
     }
   }
 
@@ -207,7 +198,7 @@ public class UIOnSlider : UIOnHoverChild, IPointerDownHandler, IEventSystemHandl
     foreach (UIOnHoverChild uiOnHoverChild in this.uiChildern)
     {
       if ((UnityEngine.Object) uiOnHoverChild != (UnityEngine.Object) null)
-        uiOnHoverChild.OnDown(false);
+        uiOnHoverChild.OnDown();
     }
   }
 
@@ -216,7 +207,7 @@ public class UIOnSlider : UIOnHoverChild, IPointerDownHandler, IEventSystemHandl
     foreach (UIOnHoverChild uiOnHoverChild in this.uiChildern)
     {
       if ((UnityEngine.Object) uiOnHoverChild != (UnityEngine.Object) null)
-        uiOnHoverChild.OnExit(false);
+        uiOnHoverChild.OnExit();
     }
   }
 
@@ -227,7 +218,7 @@ public class UIOnSlider : UIOnHoverChild, IPointerDownHandler, IEventSystemHandl
     foreach (UIOnHoverChild uiOnHoverChild in this.uiChildern)
     {
       if ((UnityEngine.Object) uiOnHoverChild != (UnityEngine.Object) null)
-        uiOnHoverChild.OnEnter(false);
+        uiOnHoverChild.OnEnter();
     }
   }
 
@@ -248,9 +239,10 @@ public class UIOnSlider : UIOnHoverChild, IPointerDownHandler, IEventSystemHandl
 
   public void SetValue(float f)
   {
-    Vector2 zero = Vector2.zero;
-    zero.x = Mathf.Lerp(this.minHandleX, this.maxHandleX, f);
-    this.handle.anchoredPosition = zero;
+    this.handle.anchoredPosition = Vector2.zero with
+    {
+      x = Mathf.Lerp(this.minHandleX, this.maxHandleX, f)
+    };
   }
 
   private void CallBack(Vector3 eventData)

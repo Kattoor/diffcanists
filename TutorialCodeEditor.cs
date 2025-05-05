@@ -10,17 +10,18 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
+#nullable disable
 public class TutorialCodeEditor : MonoBehaviour
 {
-  internal static string prefOpened = "preftutopened";
-  private string editing = "";
   public CodeEditor codeEditor;
   public GameObject panelPoint;
   public TMP_Text txt_editing;
   public TMP_Dropdown mapDropdown;
   public Image imgMap;
   public Image imgMapBg;
+  private string editing = "";
   private bool edited;
+  internal static string prefOpened = "preftutopened";
   internal const string DefaultTutorial = "--NAME = Unnamed\r\n--DESCRIPTION = No Description\r\n--MAP = 0\r\n--SPELLS = {}\r\n--DEBUG = TRUE\r\n\r\n--CODE--\r\n\r\nfunction main()\r\n    while true do\r\n        --Some lua logic goes here\r\n        --Open the API github page for basic documentation and usage\r\n        coroutine.yield(0)\r\n    end\r\nend\r\n";
 
   public static TutorialCodeEditor Instance { get; private set; }
@@ -36,14 +37,8 @@ public class TutorialCodeEditor : MonoBehaviour
 
   private string MapName
   {
-    get
-    {
-      return this.Get("--MAP =");
-    }
-    set
-    {
-      this.Set("--MAP =", value.ToString(), true);
-    }
+    get => this.Get("--MAP =");
+    set => this.Set("--MAP =", value.ToString());
   }
 
   private void Awake()
@@ -51,7 +46,7 @@ public class TutorialCodeEditor : MonoBehaviour
     TutorialCodeEditor.Instance = this;
     if (Client.game == null)
       return;
-    Client.game.CleanUp(false);
+    Client.game.CleanUp();
     Client.game = (ZGame) null;
   }
 
@@ -131,10 +126,10 @@ public class TutorialCodeEditor : MonoBehaviour
       else
       {
         Tutorial tutorial = Tutorial.FromJson(File.ReadAllText(path));
-        tutorial.ToCodeOnly(-1);
+        tutorial.ToCodeOnly();
         string str = path + "2";
         s += "2";
-        this.codeEditor.Text = tutorial.ToCodeOnly(-1);
+        this.codeEditor.Text = tutorial.ToCodeOnly();
       }
     }
     if (string.IsNullOrEmpty(this.codeEditor.Text))
@@ -172,7 +167,7 @@ public class TutorialCodeEditor : MonoBehaviour
         s = s.Substring(Global.GetTutorialPath.Length);
       if (s.EndsWith(".arcTutorial", StringComparison.OrdinalIgnoreCase))
       {
-        string codeOnly = Tutorial.FromJson(text).ToCodeOnly(-1);
+        string codeOnly = Tutorial.FromJson(text).ToCodeOnly();
         s += "2";
         text = codeOnly;
       }
@@ -218,9 +213,14 @@ public class TutorialCodeEditor : MonoBehaviour
   {
     ChooseJsonDialog.Create(true, ChooseJsonDialog.Viewing.Custom, (Action<string, Tutorial, int>) ((s, tut, index) =>
     {
-      Global.SaveTutorialCode(s, this.codeEditor.Text, true);
+      Global.SaveTutorialCode(s, this.codeEditor.Text);
       this.Editing(s + ".arcTutorial2");
-    }), false, (Action<string, string, int>) null);
+    }));
+  }
+
+  public void ClickMapEditor()
+  {
+    Controller.Instance.OpenMenu(Controller.Instance.MenuMapEditor, false);
   }
 
   public void ClickTest()
@@ -240,7 +240,7 @@ public class TutorialCodeEditor : MonoBehaviour
     this.CheckSave();
     if (!this.editing.EndsWith("2"))
       this.editing += "2";
-    Tutorial tutorial1 = Tutorial.FromCodeOnly(this.codeEditor.Text);
+    Tutorial tutorial1 = Tutorial.FromCodeOnly(this.codeEditor.Text, Path.GetFullPath(Global.GetTutorialPath + this.editing));
     tutorial1.debugLog = true;
     tutorial1.ClickSandbox(true, ChooseJsonDialog.Viewing.Custom);
     Client.allowtutorialDebugging = true;
@@ -253,14 +253,14 @@ public class TutorialCodeEditor : MonoBehaviour
 
   public void ClickOutfit()
   {
-    ChangeOutfitMenu.Create(false, true, (SettingsPlayer) null, (Action<SettingsPlayer>) (set =>
+    ChangeOutfitMenu.Create(false, onEnd: (Action<SettingsPlayer>) (set =>
     {
       StringBuilder stringBuilder = new StringBuilder("sum.outfit = {");
-      for (int index = 0; index < 9; ++index)
+      for (int o = 0; o < 9; ++o)
       {
-        if (index > 0)
+        if (o > 0)
           stringBuilder.Append(", ");
-        stringBuilder.Append(set.GetOutfitIndex((Outfit) index));
+        stringBuilder.Append(set.GetOutfitIndex((Outfit) o));
       }
       stringBuilder.Append("} \nsum.colors = {");
       for (int i = 0; i < 4; ++i)
@@ -276,7 +276,7 @@ public class TutorialCodeEditor : MonoBehaviour
 
   public void ClickSpells()
   {
-    SpellLobbyChange.Create((SettingsPlayer) null, (Action<SettingsPlayer>) (set =>
+    SpellLobbyChange.Create(onEnd: (Action<SettingsPlayer>) (set =>
     {
       StringBuilder stringBuilder = new StringBuilder("sum.spells = {");
       foreach (byte spell in set.spells)
@@ -296,11 +296,13 @@ public class TutorialCodeEditor : MonoBehaviour
       if (set.Elemental != BookOf.Nothing)
         stringBuilder.Append("\n sum.elemental = BookOf.").Append((object) set.Elemental);
       Global.systemCopyBuffer = stringBuilder.ToString();
-    }), true, Validation.Default, false, (Action) null);
+    }), center: true);
   }
 
   public void ClickPoint()
   {
+    if (!string.Equals(this.MapName, this.imgMap.name))
+      this.FindMapImage();
     this.panelPoint.SetActive(!this.panelPoint.activeSelf);
   }
 
@@ -330,7 +332,7 @@ public class TutorialCodeEditor : MonoBehaviour
     if (!this.editing.EndsWith("2"))
       this.editing += 2.ToString();
     this.Editing(this.editing);
-    Global.SaveTutorialCode(this.editing, this.codeEditor.Text, true);
+    Global.SaveTutorialCode(this.editing, this.codeEditor.Text);
   }
 
   public void Edited()
@@ -343,6 +345,19 @@ public class TutorialCodeEditor : MonoBehaviour
   public void FindMapImage()
   {
     string mapName = this.MapName;
+    if (mapName.StartsWith("\"") && mapName.EndsWith("\""))
+    {
+      string path = Tutorial.FindPath(Path.GetFullPath(this.editing), mapName.Substring(1, mapName.Length - 2));
+      if (path != null && File.Exists(path))
+      {
+        Texture2D texture2D = new Texture2D(2, 2);
+        texture2D.LoadImage(File.ReadAllBytes(path));
+        this.imgMap.sprite = Sprite.Create(texture2D, new Rect(0.0f, 0.0f, (float) texture2D.width, (float) texture2D.height), new Vector2(0.5f, 0.5f));
+        Controller.DeleteLater((UnityEngine.Object) this.imgMap.sprite, (UnityEngine.Object) texture2D);
+        this.OnMapImageUpdate();
+      }
+      this.imgMap.name = mapName;
+    }
     for (int index = 0; index < this.mapDropdown.options.Count; ++index)
     {
       if (string.Equals(mapName, this.mapDropdown.options[index].text))
@@ -358,6 +373,12 @@ public class TutorialCodeEditor : MonoBehaviour
   public void UpdateMapImage(int i)
   {
     this.imgMap.sprite = ClientResources.Instance._maps[i];
+    this.imgMap.name = this.mapDropdown.options[i].text;
+    this.OnMapImageUpdate();
+  }
+
+  public void OnMapImageUpdate()
+  {
     float num1 = 1000f;
     float height = (float) this.imgMap.sprite.texture.height;
     float width = (float) this.imgMap.sprite.texture.width;

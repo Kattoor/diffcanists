@@ -1,4 +1,5 @@
 
+#nullable disable
 namespace Educative
 {
   public class CIfThen : Command
@@ -6,13 +7,10 @@ namespace Educative
     public TutInt leftValue = new TutInt();
     public TutInt rightValue = new TutInt();
     public MyHeader Comparision = new MyHeader();
-    internal int commandID = -1;
     public Comparison comparison;
+    internal int commandID = -1;
 
-    public CIfThen()
-    {
-      this.type = Command.Type.If;
-    }
+    public CIfThen() => this.type = Command.Type.If;
 
     public bool Evaulate()
     {

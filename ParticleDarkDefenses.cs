@@ -1,6 +1,7 @@
 
 using UnityEngine;
 
+#nullable disable
 public class ParticleDarkDefenses : MonoBehaviour
 {
   public Creature c;

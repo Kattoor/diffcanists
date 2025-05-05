@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+#nullable disable
 namespace LibNoise
 {
   public static class GradientPresets
@@ -28,7 +29,7 @@ namespace LibNoise
       List<GradientColorKey> gradientColorKeyList3 = new List<GradientColorKey>()
       {
         new GradientColorKey(Color.red, 0.0f),
-        new GradientColorKey(Color.green, 0.3333333f),
+        new GradientColorKey(Color.green, 0.333333343f),
         new GradientColorKey(Color.blue, 0.6666667f),
         new GradientColorKey(Color.black, 1f)
       };
@@ -64,44 +65,14 @@ namespace LibNoise
       GradientPresets._terrain.SetKeys(gradientColorKeyList4.ToArray(), gradientAlphaKeyList2.ToArray());
     }
 
-    public static Gradient Empty
-    {
-      get
-      {
-        return GradientPresets._empty;
-      }
-    }
+    public static Gradient Empty => GradientPresets._empty;
 
-    public static Gradient Grayscale
-    {
-      get
-      {
-        return GradientPresets._grayscale;
-      }
-    }
+    public static Gradient Grayscale => GradientPresets._grayscale;
 
-    public static Gradient RGB
-    {
-      get
-      {
-        return GradientPresets._rgb;
-      }
-    }
+    public static Gradient RGB => GradientPresets._rgb;
 
-    public static Gradient RGBA
-    {
-      get
-      {
-        return GradientPresets._rgba;
-      }
-    }
+    public static Gradient RGBA => GradientPresets._rgba;
 
-    public static Gradient Terrain
-    {
-      get
-      {
-        return GradientPresets._terrain;
-      }
-    }
+    public static Gradient Terrain => GradientPresets._terrain;
   }
 }

@@ -1,6 +1,7 @@
 
 using UnityEngine;
 
+#nullable disable
 public class HideInSeconds : MonoBehaviour
 {
   public float seconds = 0.2f;

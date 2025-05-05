@@ -8,9 +8,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+#nullable disable
 public class MainMenu : Catalogue
 {
-  public static int bigIndex = -1;
   public int mapX = 1000;
   public int mapY = 1000;
   public MapEnum mapType;
@@ -20,6 +20,7 @@ public class MainMenu : Catalogue
   public UIOnHover buttonRankings;
   public UIOnHover buttonClans;
   public Image bigImage;
+  public static int bigIndex = -1;
   public GameObject buttonVerifyDiscord;
   public GameObject test_server_overlay;
   [Header("Maps")]
@@ -50,7 +51,7 @@ public class MainMenu : Catalogue
       this.bigImage.sprite = ClientResources.Instance.MainMenuSprites[MainMenu.bigIndex];
     }
     Account account;
-    if (!Client.offlineMode && LocalServerConn.UseEncryption && (Client._accounts.TryGetValue(Client.Name, out account) && account.discord == 0UL))
+    if (!Client.offlineMode && LocalServerConn.UseEncryption && Client._accounts.TryGetValue(Client.Name, out account) && account.discord == 0UL)
       this.buttonVerifyDiscord.SetActive(true);
     this.butSteam.SetActive(false);
   }
@@ -89,20 +90,11 @@ public class MainMenu : Catalogue
     Controller.Instance.OpenMenu(Controller.Instance.MenuTutorialEditor, false);
   }
 
-  public void Hover(string s)
-  {
-    MyToolTip.Show(s, -1f);
-  }
+  public void Hover(string s) => MyToolTip.Show(s);
 
-  public void HoverExit()
-  {
-    MyToolTip.Close();
-  }
+  public void HoverExit() => MyToolTip.Close();
 
-  public void ClickTutorial()
-  {
-    MainMenu.OpenTutorialMenu();
-  }
+  public void ClickTutorial() => MainMenu.OpenTutorialMenu();
 
   public static void OpenTutorialMenu()
   {
@@ -110,7 +102,7 @@ public class MainMenu : Catalogue
     {
       tut._index = _index;
       MainMenu.StartTutorial(tut, false, ChooseJsonDialog.Instance.custom);
-    }), false, (Action<string, string, int>) null);
+    }));
   }
 
   public void PopulateAvailableMaps()
@@ -142,7 +134,7 @@ public class MainMenu : Catalogue
   {
     Client._gameFacts = new GameFacts();
     Client.joinedFrom = Client.JoinLocation.Mainmenu;
-    Controller.Instance.InitMap(true, false);
+    Controller.Instance.InitMap(true);
     DiscordIntergration.Instance?.UpdateActivitySandbox();
   }
 
@@ -167,20 +159,11 @@ public class MainMenu : Catalogue
       Client.AskToJoinLobby();
   }
 
-  public void ClickDiscordLink()
-  {
-    Global.OpenURL(Server.discordLink);
-  }
+  public void ClickDiscordLink() => Global.OpenURL(Server.discordLink);
 
-  public void ClicWebsiteLink()
-  {
-    Global.OpenURL(Server.websiteLink);
-  }
+  public void ClicWebsiteLink() => Global.OpenURL(Server.websiteLink);
 
-  public void ClicWikiLink()
-  {
-    Global.OpenURL(Server.wikiLink);
-  }
+  public void ClicWikiLink() => Global.OpenURL(Server.wikiLink);
 
   public void ClickCharacterCreation()
   {
@@ -192,60 +175,27 @@ public class MainMenu : Catalogue
     Controller.Instance.OpenMenu(Controller.Instance.MenuSpellSelection, false);
   }
 
-  public void ClickOptions()
-  {
-    Controller.ShowSettingsMenu(false);
-  }
+  public void ClickOptions() => Controller.ShowSettingsMenu();
 
-  public void ClickSwitchMenu()
-  {
-    Controller.Instance.ActivateOther(true);
-  }
+  public void ClickSwitchMenu() => Controller.Instance.ActivateOther();
 
-  public void ClickReplay()
-  {
-    Controller.Instance.OpenMenu(Controller.Instance.MenuReplay, false);
-  }
+  public void ClickReplay() => Controller.Instance.OpenMenu(Controller.Instance.MenuReplay, false);
 
-  public void ClickRatingsMenu()
-  {
-    Controller.ShowPopup(Controller.Instance.MenuRatings);
-  }
+  public void ClickRatingsMenu() => Controller.ShowPopup(Controller.Instance.MenuRatings);
 
-  public void ClickAchievements()
-  {
-    Controller.ShowPopup(Controller.Instance.MenuAchievements);
-  }
+  public void ClickAchievements() => Controller.ShowPopup(Controller.Instance.MenuAchievements);
 
-  public void ClickPatchNotes()
-  {
-    Controller.ShowPopup(Controller.Instance.MenuPatchNotes);
-  }
+  public void ClickPatchNotes() => Controller.ShowPopup(Controller.Instance.MenuPatchNotes);
 
-  public void ClickCredits()
-  {
-    Controller.ShowPopup(CreditsMenu.Type.Credits, (string) null);
-  }
+  public void ClickCredits() => Controller.ShowPopup(CreditsMenu.Type.Credits);
 
-  public void ClickRules()
-  {
-    Controller.ShowPopup(CreditsMenu.Type.Rules, (string) null);
-  }
+  public void ClickRules() => Controller.ShowPopup(CreditsMenu.Type.Rules);
 
-  public void ClickClans()
-  {
-    Controller.ShowPopup(Controller.Instance.MenuClanList);
-  }
+  public void ClickClans() => Controller.ShowPopup(Controller.Instance.MenuClanList);
 
-  public void ClickStore()
-  {
-    Controller.ShowPopup(Controller.Instance.MenuStore);
-  }
+  public void ClickStore() => Controller.ShowPopup(Controller.Instance.MenuStore);
 
-  public void ClickQuit()
-  {
-    Application.Quit();
-  }
+  public void ClickQuit() => Application.Quit();
 
   public void ClickLogout()
   {

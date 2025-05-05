@@ -4,32 +4,24 @@ using System.Collections.Concurrent;
 using System.Net.Sockets;
 using System.Threading;
 
+#nullable disable
 namespace Telepathy
 {
   public class Client : Common
   {
-    private SafeQueue<byte[]> sendQueue = new SafeQueue<byte[]>();
-    private ManualResetEvent sendPending = new ManualResetEvent(false);
     public TcpClient client;
     private Thread receiveThread;
     private Thread sendThread;
     private volatile bool _Connecting;
+    private SafeQueue<byte[]> sendQueue = new SafeQueue<byte[]>();
+    private ManualResetEvent sendPending = new ManualResetEvent(false);
 
     public bool Connected
     {
-      get
-      {
-        return this.client != null && this.client.Client != null && this.client.Client.Connected;
-      }
+      get => this.client != null && this.client.Client != null && this.client.Client.Connected;
     }
 
-    public bool Connecting
-    {
-      get
-      {
-        return this._Connecting;
-      }
-    }
+    public bool Connecting => this._Connecting;
 
     private void ReceiveThreadFunction(string ip, int port)
     {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+#nullable disable
 public class ZCreatureBeehive : ZCreature
 {
   public List<ZCreature> bees = new List<ZCreature>();
@@ -32,24 +33,28 @@ public class ZCreatureBeehive : ZCreature
             else
               bee.effectors[index2].TurnPassed(index2, false, false);
           }
-          for (int index2 = bee.destroyableEffectors.Count - 1; index2 >= 0; --index2)
+          for (int index3 = bee.destroyableEffectors.Count - 1; index3 >= 0; --index3)
           {
-            if (ZComponent.IsNull((ZComponent) bee.destroyableEffectors[index2]))
-              bee.destroyableEffectors.RemoveAt(index2);
+            if (ZComponent.IsNull((ZComponent) bee.destroyableEffectors[index3]))
+              bee.destroyableEffectors.RemoveAt(index3);
             else
-              bee.destroyableEffectors[index2].TurnPassed(index2, true, false);
+              bee.destroyableEffectors[index3].TurnPassed(index3, true, false);
           }
           if (bee.halfHealing > 0)
             --bee.halfHealing;
           if (bee.bleeding && bee.health > 1)
           {
             --bee.bleedCounter;
-            bee.DoDamage(Mathf.Min(bee.health - 1, 10), DamageType.None, (ZCreature) null, false);
+            bee.DoDamage(Mathf.Min(bee.health - 1, 10));
             ZSpell.RandomBlood(bee.game, bee.position);
           }
         }
       }
     }
+    if (this.race != CreatureRace.Undead)
+      return;
+    for (int count = this.bees.Count; count < 3; ++count)
+      this.CreateBee();
   }
 
   public override void OnDeath(bool playDeathClip = true)
@@ -65,53 +70,15 @@ public class ZCreatureBeehive : ZCreature
   public void CreateBee()
   {
     MyLocation position = this.position;
-    position.x += this.radius + Inert.Instance.bee.radius + 1;
-    position.y -= 19;
-    if (position.y < Inert.Instance.bee.radius)
-      position.y = (FixedInt) Inert.Instance.bee.radius;
-    if (position.x > this.game.map.Width - Inert.Instance.bee.radius)
-      position.x = (FixedInt) (this.game.map.Width - Inert.Instance.bee.radius);
-    if (this.bees.Count >= 3 || this.game.world.OverlapCircle(new Point((int) position.x, (int) position.y), Inert.Instance.bee.radius, this.collider, Inert.mask_movement_NoEffector))
-      return;
-    ZCreature creature = ZCreatureCreate.CreateCreature(this.parent, Inert.Instance.bee, position.ToSinglePrecision(), Quaternion.identity, this.game.GetMapTransform(), true);
-    this.bees.Add(creature);
-    creature.spellEnum = SpellEnum.Summon_Bees;
-    creature.game = this.game;
-    creature.parent = this.parent;
-    creature.collider.world = creature.world;
-    creature.collider.creature = creature;
-    creature.collider.Move(position);
-    creature.position = position;
-    ZEffector auraOfDecay = creature.auraOfDecay;
-    auraOfDecay.game = this.game;
-    auraOfDecay.whoSummoned = creature;
-    auraOfDecay.followParent = true;
-    auraOfDecay.collider.world = auraOfDecay.world;
-    creature.followingColliders.Add(auraOfDecay.collider);
-    auraOfDecay.collider.Move(creature.position);
-    creature.auraOfDecay = auraOfDecay;
-    creature.effectors.Add(auraOfDecay);
-    auraOfDecay.active = false;
-    auraOfDecay.TurnPassed(creature.effectors.Count - 1, false, false);
-    if (!this.game.isClient)
-      return;
-    GameObject gameObject1 = ZComponent.Instantiate<GameObject>(ClientResources.Instance.bg_glow, position.ToSinglePrecision(), Quaternion.identity, creature.transform);
-    GameObject gameObject2 = ZComponent.Instantiate<GameObject>(ClientResources.Instance.minimap_glow, position.ToSinglePrecision(), Quaternion.identity, creature.transform);
-    creature.miniMapBg = gameObject2.GetComponent<SpriteRenderer>();
-    creature.clientObj.bg = gameObject1.GetComponent<SpriteRenderer>();
-    creature.clientObj.bg.color = this.parent.clientColor;
-    if ((double) creature.bg.color.a < 1.0)
+    for (int index = 0; index < 50; ++index)
     {
-      Color color = creature.bg.color;
-      color.a = 1f;
-      creature.bg.color = color;
+      MyLocation target = this.position + new MyLocation(this.game.RandomInt(-50, 50), this.game.RandomInt(-50, 50));
+      if (this.bees.Count < 3 && this.game.map.CheckCircle((int) target.x, (int) target.y, Inert.Instance.undeadBee.radius, (ZCreature) null, Inert.mask_movement_NoEffector))
+      {
+        ZSpell.FireSummon(Inert.GetSpell(SpellEnum.Summon_Undead_Bees), this.game, (ZCreature) this, target, 1);
+        break;
+      }
     }
-    creature.miniMapBg.color = creature.bg.color;
-    float num1 = creature.BGScale();
-    gameObject1.transform.localScale = new Vector3(num1, num1, 1f);
-    float num2 = creature.MiniBGScale();
-    gameObject2.transform.localScale = new Vector3(num2, num2, 1f);
-    ZComponent.Instantiate<GameObject>(this.deathExplosion, position.ToSinglePrecision(), Quaternion.identity);
   }
 
   public override void DoFlipFlop(float scaleX)
@@ -145,10 +112,10 @@ public class ZCreatureBeehive : ZCreature
           {
             bee.velocity = new MyLocation((FixedInt) ((double) bee.transformscale < 0.0 ? -11010048L : -6291456L), (FixedInt) 0);
             bee.SetScale(-1f);
-            bee.moving = this.game.ongoing.RunCoroutine(bee.FlyMove(true), true);
+            bee.moving = this.game.ongoing.RunCoroutine(bee.FlyMove(true));
           }
           else
-            bee.MoveLeft(0);
+            bee.MoveLeft();
         }
       }
     }
@@ -170,10 +137,10 @@ public class ZCreatureBeehive : ZCreature
           {
             bee.velocity = new MyLocation((FixedInt) ((double) bee.transformscale > 0.0 ? 9437184L : 4194304L), (FixedInt) 0);
             bee.SetScale(1f);
-            bee.moving = this.game.ongoing.RunCoroutine(bee.FlyMove(true), true);
+            bee.moving = this.game.ongoing.RunCoroutine(bee.FlyMove(true));
           }
           else
-            bee.MoveRight(0);
+            bee.MoveRight();
         }
       }
     }

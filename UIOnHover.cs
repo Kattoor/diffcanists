@@ -7,12 +7,20 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UIOnHover : UIOnHoverChild, IPointerDownHandler, IEventSystemHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler
+#nullable disable
+public class UIOnHover : 
+  UIOnHoverChild,
+  IPointerDownHandler,
+  IEventSystemHandler,
+  IPointerUpHandler,
+  IPointerEnterHandler,
+  IPointerExitHandler
 {
   public bool interactable = true;
   public bool OnEnterExitWhenDisabled;
   public bool onEnterIsRightClick;
   public bool rightAsLeftWhenDisabled;
+  public bool pressedAlwaysOn = true;
   public UIOnHover.OnClick onClick;
   public UIOnHover.OnClick onRightClick;
   public UIOnHover.OnClick onEnter;
@@ -26,13 +34,7 @@ public class UIOnHover : UIOnHoverChild, IPointerDownHandler, IEventSystemHandle
   private bool _init;
   private float holdTime;
 
-  public bool IsHovering
-  {
-    get
-    {
-      return this.gameObject.activeInHierarchy && this.isHovering;
-    }
-  }
+  public bool IsHovering => this.gameObject.activeInHierarchy && this.isHovering;
 
   public void InitializeOnClick(UnityAction call)
   {
@@ -102,18 +104,12 @@ public class UIOnHover : UIOnHoverChild, IPointerDownHandler, IEventSystemHandle
 
   public bool AlwaysOnNoCallback
   {
-    set
-    {
-      this.alwaysOn = value;
-    }
+    set => this.alwaysOn = value;
   }
 
   public bool AlwaysOn
   {
-    get
-    {
-      return this.alwaysOn;
-    }
+    get => this.alwaysOn;
     set
     {
       this.alwaysOn = value;
@@ -298,6 +294,8 @@ public class UIOnHover : UIOnHoverChild, IPointerDownHandler, IEventSystemHandle
   private void D()
   {
     this.Intitialize();
+    if (this.pressedAlwaysOn && !this.alwaysOn)
+      return;
     foreach (UIOnHoverChild uiOnHoverChild in this.uiChildern)
     {
       if ((UnityEngine.Object) uiOnHoverChild != (UnityEngine.Object) null)

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+#nullable disable
 public class ZFamiliar : ZComponent
 {
   public Familiar baseFamiliar;
@@ -61,6 +62,8 @@ public class ZFamiliar : ZComponent
 
   public static ZFamiliar Create(ZCreature cre, Familiar f)
   {
+    if (cre.game.isReplay && cre.parent.familiars != null && (ZComponent) cre.parent.familiars.Find((Predicate<ZFamiliar>) (xx => string.Equals(xx.clientObj.name, cre.parent.name))) != (object) null)
+      return (ZFamiliar) null;
     ZFamiliar zfamiliar = new ZFamiliar();
     zfamiliar.Copy(f);
     zfamiliar.creature = cre;
@@ -70,7 +73,7 @@ public class ZFamiliar : ZComponent
     zfamiliar.clientObj.serverObj = zfamiliar;
     if (f.bookOf == BookOf.Seasons && cre.game.isClient)
       zfamiliar.clientObj.GetComponent<DryadTextureChange>().creature = cre.clientObj;
-    if (f.bookOf == BookOf.Underdark)
+    if (f.bookOf == BookOf.Underdark && cre.familiarLevelUnderdark > 0)
     {
       zfamiliar.soulJar = new ZSpellSoulJar();
       zfamiliar.soulJar.game = cre.game;
@@ -90,6 +93,8 @@ public class ZFamiliar : ZComponent
     if (!x.game.isClient)
       return;
     ZFamiliar zfamiliar = ZFamiliar.Create(x.controlled[0], ClientResources.Instance.minionMasterFamiliar.GetComponent<Familiar>());
+    if ((ZComponent) zfamiliar == (object) null)
+      return;
     if (x.familiars == null)
       x.familiars = new List<ZFamiliar>();
     x.familiars.Add(zfamiliar);
@@ -100,6 +105,8 @@ public class ZFamiliar : ZComponent
     if (!x.game.isClient)
       return;
     ZFamiliar zfamiliar = ZFamiliar.Create(x.controlled[0], ClientResources.Instance.bombMasterFamiliar.GetComponent<Familiar>());
+    if ((ZComponent) zfamiliar == (object) null)
+      return;
     if (x.familiars == null)
       x.familiars = new List<ZFamiliar>();
     x.familiars.Add(zfamiliar);

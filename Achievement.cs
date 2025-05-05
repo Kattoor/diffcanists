@@ -1,4 +1,5 @@
 
+#nullable disable
 public enum Achievement
 {
   Enchanter = 0,
@@ -127,5 +128,15 @@ public enum Achievement
   Supreme_Arch_Mage = 123, // 0x0000007B
   Natural_Spaghetti = 124, // 0x0000007C
   Target_Practice = 125, // 0x0000007D
+  Walk_the_Plank = 126, // 0x0000007E
+  Shifting_Sands = 127, // 0x0000007F
+  Must_Ask_the_Question = 128, // 0x00000080
+  Master_of_Necromancy = 129, // 0x00000081
+  Necromancy_Arcanists = 130, // 0x00000082
+  Guardian_of_Styx = 131, // 0x00000083
+  Lich_No_more = 132, // 0x00000084
+  Pharaohs_Monumenets = 133, // 0x00000085
+  Ruler_of_Curses = 134, // 0x00000086
+  Undeadth_Unbound = 135, // 0x00000087
   None = 255, // 0x000000FF
 }

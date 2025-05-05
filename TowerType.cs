@@ -1,4 +1,5 @@
 
+#nullable disable
 public enum TowerType
 {
   Arcane,
@@ -14,4 +15,5 @@ public enum TowerType
   Cosmos,
   Holiday,
   Sand,
+  Necromancy,
 }

@@ -1,14 +1,15 @@
 
 using UnityEngine;
 
+#nullable disable
 public class ParticleRitual : MonoBehaviour
 {
-  public bool up = true;
-  public float speed = 1f;
   public SpriteRenderer icon;
   public SpriteRenderer lightObj;
   public SpriteRenderer bg;
   private float cur;
+  public bool up = true;
+  public float speed = 1f;
 
   private void Update()
   {
@@ -30,14 +31,14 @@ public class ParticleRitual : MonoBehaviour
         return;
       }
     }
-    Color color1 = this.icon.color;
-    color1.a = this.cur;
-    this.icon.color = color1;
-    Color color2 = this.lightObj.color;
-    color2.a = Mathf.Lerp(0.0f, 0.6588f, this.cur);
-    this.lightObj.color = color2;
-    Color color3 = this.bg.color;
-    color3.a = Mathf.Lerp(0.0f, 0.6588f, this.cur);
-    this.bg.color = color3;
+    this.icon.color = this.icon.color with { a = this.cur };
+    this.lightObj.color = this.lightObj.color with
+    {
+      a = Mathf.Lerp(0.0f, 0.6588f, this.cur)
+    };
+    this.bg.color = this.bg.color with
+    {
+      a = Mathf.Lerp(0.0f, 0.6588f, this.cur)
+    };
   }
 }

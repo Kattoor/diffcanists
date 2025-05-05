@@ -1,6 +1,7 @@
 
 using System;
 
+#nullable disable
 namespace Hazel
 {
   public class DisconnectedEventArgs : EventArgs, IRecyclable
@@ -18,14 +19,8 @@ namespace Hazel
     {
     }
 
-    internal void Set(Exception e)
-    {
-      this.Exception = e;
-    }
+    internal void Set(Exception e) => this.Exception = e;
 
-    public void Recycle()
-    {
-      DisconnectedEventArgs.objectPool.PutObject(this);
-    }
+    public void Recycle() => DisconnectedEventArgs.objectPool.PutObject(this);
   }
 }

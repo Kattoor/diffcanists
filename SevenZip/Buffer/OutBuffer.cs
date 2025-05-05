@@ -1,6 +1,7 @@
 
 using System.IO;
 
+#nullable disable
 namespace SevenZip.Buffer
 {
   public class OutBuffer
@@ -17,25 +18,13 @@ namespace SevenZip.Buffer
       this.m_BufferSize = bufferSize;
     }
 
-    public void SetStream(Stream stream)
-    {
-      this.m_Stream = stream;
-    }
+    public void SetStream(Stream stream) => this.m_Stream = stream;
 
-    public void FlushStream()
-    {
-      this.m_Stream.Flush();
-    }
+    public void FlushStream() => this.m_Stream.Flush();
 
-    public void CloseStream()
-    {
-      this.m_Stream.Close();
-    }
+    public void CloseStream() => this.m_Stream.Close();
 
-    public void ReleaseStream()
-    {
-      this.m_Stream = (Stream) null;
-    }
+    public void ReleaseStream() => this.m_Stream = (Stream) null;
 
     public void Init()
     {
@@ -59,9 +48,6 @@ namespace SevenZip.Buffer
       this.m_Pos = 0U;
     }
 
-    public ulong GetProcessedSize()
-    {
-      return this.m_ProcessedSize + (ulong) this.m_Pos;
-    }
+    public ulong GetProcessedSize() => this.m_ProcessedSize + (ulong) this.m_Pos;
   }
 }

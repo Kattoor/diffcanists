@@ -1,6 +1,7 @@
 
 using UnityEngine;
 
+#nullable disable
 public class TwiddleRock : MonoBehaviour
 {
   public float speed = 1f;
@@ -29,8 +30,9 @@ public class TwiddleRock : MonoBehaviour
       }
       this.curTime += Time.deltaTime * this.speed;
     }
-    Vector3 localEulerAngles = this.transform.localEulerAngles;
-    localEulerAngles.z = Mathf.SmoothStep(this.minZ, this.maxZ, this.curTime);
-    this.transform.localEulerAngles = localEulerAngles;
+    this.transform.localEulerAngles = this.transform.localEulerAngles with
+    {
+      z = Mathf.SmoothStep(this.minZ, this.maxZ, this.curTime)
+    };
   }
 }

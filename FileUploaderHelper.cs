@@ -3,13 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
+#nullable disable
 public static class FileUploaderHelper
 {
+  private static Action<string> pathCallback;
   public static HashSet<string> unnotable = new HashSet<string>()
   {
     "clue_scroll"
   };
-  private static Action<string> pathCallback;
 
   static FileUploaderHelper()
   {
@@ -27,10 +28,7 @@ public static class FileUploaderHelper
     FileUploaderHelper.Dispose();
   }
 
-  private static void Dispose()
-  {
-    FileUploaderHelper.pathCallback = (Action<string>) null;
-  }
+  private static void Dispose() => FileUploaderHelper.pathCallback = (Action<string>) null;
 
   private static string MakeSafeForCode(string str)
   {

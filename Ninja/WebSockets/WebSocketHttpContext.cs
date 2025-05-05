@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
+#nullable disable
 namespace Ninja.WebSockets
 {
   public class WebSocketHttpContext

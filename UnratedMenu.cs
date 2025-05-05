@@ -9,16 +9,9 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
+#nullable disable
 public class UnratedMenu : Catalogue
 {
-  public static bool[] readyStates = new bool[0];
-  private float[] scrollValues = new float[4]
-  {
-    1f,
-    1f,
-    1f,
-    1f
-  };
   public UnratedTab unratedTab;
   public RectTransform _containerAccounts;
   public RectTransform _containerInvite;
@@ -39,6 +32,7 @@ public class UnratedMenu : Catalogue
   public UIOnHover butViewClan;
   public UIOnHover butAddFriend;
   internal Viewing viewing;
+  public static bool[] readyStates = new bool[0];
   public UIOnHover buttonAdvanced;
   [Header("Custom Armageddon")]
   public TMP_Text txtNumPlayers;
@@ -49,6 +43,13 @@ public class UnratedMenu : Catalogue
   public GameObject panelPlayersPerTeam;
   [Header("Preview")]
   public SpellImageList spellImageList;
+  private float[] scrollValues = new float[4]
+  {
+    1f,
+    1f,
+    1f,
+    1f
+  };
   [Header("Scroll")]
   public ScrollRect scrollRect;
   public GameObject panelPopup;
@@ -67,13 +68,7 @@ public class UnratedMenu : Catalogue
     this.scrollRect.verticalNormalizedPosition = this.scrollValues[LobbyMenu.GetScrollIndex(this.viewing)];
   }
 
-  public bool IsFirst
-  {
-    get
-    {
-      return this.isFirst;
-    }
-  }
+  public bool IsFirst => this.isFirst;
 
   public static bool IsViewingInvitePanel
   {
@@ -85,10 +80,7 @@ public class UnratedMenu : Catalogue
 
   public static bool CheckInvites
   {
-    get
-    {
-      return (UnityEngine.Object) UnratedMenu.instance != (UnityEngine.Object) null && UnratedMenu.instance.IsFirst;
-    }
+    get => (UnityEngine.Object) UnratedMenu.instance != (UnityEngine.Object) null && UnratedMenu.instance.IsFirst;
   }
 
   private void Awake()
@@ -208,54 +200,45 @@ public class UnratedMenu : Catalogue
       if (string.IsNullOrEmpty(s) || s.Length > 13)
         return;
       Client.AskToAddFriend(true, true, s);
-    }), (string) null, false);
-    myContextMenu.Rebuild(false);
+    }));
+    myContextMenu.Rebuild();
   }
 
   public void RightClickDescription()
   {
   }
 
-  public void ClickSettings()
-  {
-    Controller.ShowSettingsMenu(false);
-  }
+  public void ClickSettings() => Controller.ShowSettingsMenu();
 
-  public void ClickPrestige()
-  {
-    Controller.ShowPrestigeMenu();
-  }
+  public void ClickPrestige() => Controller.ShowPrestigeMenu();
 
   public void HoverSimiliarRating()
   {
-    MyToolTip.Show(Mathf.Max(1000, (int) Client.GetAccount(Client._gameFacts.players[0], false).similarRating).ToString() + "-" + (object) ((int) Client.GetAccount(Client._gameFacts.players[0], false).similarRating + 500), -1f);
+    MyToolTip.Show(Mathf.Max(1000, (int) Client.GetAccount(Client._gameFacts.players[0]).similarRating).ToString() + "-" + (object) ((int) Client.GetAccount(Client._gameFacts.players[0]).similarRating + 500));
   }
 
   public void OpenInvitePlayers()
   {
     int index1 = 0;
-    int num1 = 0;
-    int num2 = (int) ((RectTransform) this.pfabInvite.transform).sizeDelta.y + 2;
+    int x = 0;
+    int num1 = (int) ((RectTransform) this.pfabInvite.transform).sizeDelta.y + 2;
     for (; index1 < Client._lobby.Count && index1 < this._containerInvite.childCount; ++index1)
-      this._containerInvite.GetChild(index1).GetComponent<global::pfabInvite>().Setup(Client.GetAccount(Client._lobby.GetItem(index1).Key, false));
+      this._containerInvite.GetChild(index1).GetComponent<global::pfabInvite>().Setup(Client.GetAccount(Client._lobby.GetItem(index1).Key));
     for (; index1 < Client._lobby.Count; ++index1)
     {
-      Account account = Client.GetAccount(Client._lobby.GetItem(index1).Key, false);
+      Account account = Client.GetAccount(Client._lobby.GetItem(index1).Key);
       GameObject andApply = Controller.Instance.CreateAndApply(this.pfabInvite, (Transform) this._containerInvite);
-      ((RectTransform) andApply.transform).anchoredPosition = new Vector2((float) num1, (float) (-index1 * num2));
+      ((RectTransform) andApply.transform).anchoredPosition = new Vector2((float) x, (float) (-index1 * num1));
       andApply.GetComponent<global::pfabInvite>().Setup(account);
     }
-    int num3 = index1;
-    for (int index2 = this._containerInvite.childCount - 1; index2 >= num3; --index2)
+    int num2 = index1;
+    for (int index2 = this._containerInvite.childCount - 1; index2 >= num2; --index2)
       UnityEngine.Object.Destroy((UnityEngine.Object) this._containerInvite.GetChild(index2).gameObject);
-    this._containerInvite.sizeDelta = new Vector2(this._containerInvite.sizeDelta.x, (float) (num2 * num3));
+    this._containerInvite.sizeDelta = new Vector2(this._containerInvite.sizeDelta.x, (float) (num1 * num2));
     this.panelInvite.SetActive(true);
   }
 
-  public void HideInvitePlayers()
-  {
-    this.panelInvite.SetActive(false);
-  }
+  public void HideInvitePlayers() => this.panelInvite.SetActive(false);
 
   public void ToggleAll(UIOnHover[] group)
   {
@@ -268,7 +251,7 @@ public class UnratedMenu : Catalogue
 
   private void Update()
   {
-    if (!Input.GetKeyDown(KeyCode.F12) || !Input.GetKey(KeyCode.LeftControl) || !Client.MyAccount.accountType.isDev())
+    if (!Input.GetKeyDown(KeyCode.F12) || !Input.GetKey(KeyCode.LeftControl) || !Client.MyAccount.accountType.isDev() && !Client.MyAccount.accountType.has(AccountType.Tournament_Director))
       return;
     this.UploadToServer();
   }
@@ -279,21 +262,21 @@ public class UnratedMenu : Catalogue
       return;
     this.txtNumPlayers.text = "Friends " + (object) Client.friends.Count + " / 200";
     this.txtRateType.text = "";
-    int num1 = (int) ((RectTransform) this.pfabFriend.transform).sizeDelta.y + 2;
-    int num2 = 2;
+    int num = (int) ((RectTransform) this.pfabFriend.transform).sizeDelta.y + 2;
+    int x = 2;
     List<(string, int)> valueTupleList = new List<(string, int)>();
     foreach (string friend in Client.friends)
-      valueTupleList.Add((friend, Client.GetAccount(friend, false).location.Online() ? 1 : 0));
+      valueTupleList.Add((friend, Client.GetAccount(friend).location.Online() ? 1 : 0));
     valueTupleList.Sort((Comparison<(string, int)>) ((a, b) => a.online == b.online ? a.name.CompareTo(b.name) : b.online - a.online));
     this._containerAccounts.DestroyChildern();
-    this._containerAccounts.sizeDelta = new Vector2(this._containerAccounts.sizeDelta.x, (float) (num1 * valueTupleList.Count + 35));
+    this._containerAccounts.sizeDelta = new Vector2(this._containerAccounts.sizeDelta.x, (float) (num * valueTupleList.Count + 35));
     for (int index1 = 0; index1 < valueTupleList.Count; ++index1)
     {
       GameObject andApply = Controller.Instance.CreateAndApply(this.pfabFriend, (Transform) this._containerAccounts);
-      ((RectTransform) andApply.transform).anchoredPosition = new Vector2((float) num2, (float) (-index1 * num1 - 2 - 35));
+      ((RectTransform) andApply.transform).anchoredPosition = new Vector2((float) x, (float) (-index1 * num - 2 - 35));
       pfabName component = andApply.GetComponent<pfabName>();
-      component.Setup(valueTupleList[index1].Item1, false);
-      int server = Client.GetAccount(valueTupleList[index1].Item1, false).server;
+      component.Setup(valueTupleList[index1].Item1);
+      int server = Client.GetAccount(valueTupleList[index1].Item1).server;
       int index2 = valueTupleList[index1].Item2 == 1 ? (Client.MyAccount.server == server ? 1 : 2) : 0;
       if (server > 0)
         component.txtName.text += string.Format(" ({0})", (object) server);
@@ -311,8 +294,8 @@ public class UnratedMenu : Catalogue
       return;
     this.txtNumPlayers.text = "Ignored " + (object) Client.ignore.Count + " / 100";
     this.txtRateType.text = "";
-    int num1 = (int) ((RectTransform) this.pfabFriend.transform).sizeDelta.y + 2;
-    int num2 = 2;
+    int num = (int) ((RectTransform) this.pfabFriend.transform).sizeDelta.y + 2;
+    int x = 2;
     List<string> stringList = new List<string>();
     foreach (string str in Client.ignore)
       stringList.Add(str);
@@ -322,17 +305,17 @@ public class UnratedMenu : Catalogue
       whoList.Add(who);
     whoList.Sort((Comparison<Client.TempIgnored.Who>) ((a, b) => a.name.CompareTo(b.name)));
     this._containerAccounts.DestroyChildern();
-    this._containerAccounts.sizeDelta = new Vector2(this._containerAccounts.sizeDelta.x, (float) (num1 * (stringList.Count + whoList.Count)));
+    this._containerAccounts.sizeDelta = new Vector2(this._containerAccounts.sizeDelta.x, (float) (num * (stringList.Count + whoList.Count)));
     for (int index = 0; index < stringList.Count; ++index)
     {
       GameObject andApply = Controller.Instance.CreateAndApply(this.pfabFriend, (Transform) this._containerAccounts);
-      ((RectTransform) andApply.transform).anchoredPosition = new Vector2((float) num2, (float) (-index * num1 - 2));
-      andApply.GetComponent<pfabName>().Setup(stringList[index], false);
+      ((RectTransform) andApply.transform).anchoredPosition = new Vector2((float) x, (float) (-index * num - 2));
+      andApply.GetComponent<pfabName>().Setup(stringList[index]);
     }
     for (int index = 0; index < whoList.Count; ++index)
     {
       GameObject andApply = Controller.Instance.CreateAndApply(this.pfabFriend, (Transform) this._containerAccounts);
-      ((RectTransform) andApply.transform).anchoredPosition = new Vector2((float) num2, (float) ((-index - stringList.Count) * num1 - 2));
+      ((RectTransform) andApply.transform).anchoredPosition = new Vector2((float) x, (float) ((-index - stringList.Count) * num - 2));
       andApply.GetComponent<pfabName>().SetupIgnored(whoList[index].name, whoList[index].TimeTill());
     }
     if (!updatePos)
@@ -354,27 +337,27 @@ public class UnratedMenu : Catalogue
     else
     {
       this.txtNumPlayers.text = "Clan " + (object) Client.clan.members.Count + " / 100";
-      int num1 = (int) ((RectTransform) this.pfabFriend.transform).sizeDelta.y + 2;
-      int num2 = 2;
+      int num = (int) ((RectTransform) this.pfabFriend.transform).sizeDelta.y + 2;
+      int x = 2;
       List<Clan.MemberX> memberXList = new List<Clan.MemberX>();
       foreach (KeyValuePair<string, Clan.Roles> member in Client.clan.members)
         memberXList.Add(new Clan.MemberX()
         {
           name = member.Key,
           role = member.Value,
-          acc = Client.GetAccount(member.Key, false)
+          acc = Client.GetAccount(member.Key)
         });
       memberXList.Sort((Comparison<Clan.MemberX>) ((a, b) => b.acc.location.Online() == a.acc.location.Online() ? (b.role == a.role ? a.name.CompareTo(b.name) : (int) (b.role - a.role)) : (!b.acc.location.Online() ? -1 : 1)));
       this._containerAccounts.DestroyChildern();
-      this._containerAccounts.sizeDelta = new Vector2(this._containerAccounts.sizeDelta.x, (float) (num1 * memberXList.Count + 2));
+      this._containerAccounts.sizeDelta = new Vector2(this._containerAccounts.sizeDelta.x, (float) (num * memberXList.Count + 2));
       for (int index1 = 0; index1 < memberXList.Count; ++index1)
       {
         GameObject andApply = Controller.Instance.CreateAndApply(this.pfabFriend, (Transform) this._containerAccounts);
-        ((RectTransform) andApply.transform).anchoredPosition = new Vector2((float) num2, (float) (-index1 * num1 - 2));
+        ((RectTransform) andApply.transform).anchoredPosition = new Vector2((float) x, (float) (-index1 * num - 2));
         pfabName component = andApply.GetComponent<pfabName>();
-        component.Setup(memberXList[index1].name, false);
+        component.Setup(memberXList[index1].name);
         component.txtRating.text = "(" + memberXList[index1].role.ToString().Replace('_', ' ') + ")";
-        int server = Client.GetAccount(memberXList[index1].name, false).server;
+        int server = Client.GetAccount(memberXList[index1].name).server;
         int index2 = memberXList[index1].acc.location.Online() ? (Client.MyAccount.server == server ? 1 : 2) : 0;
         if (server > 0)
           component.txtName.text += string.Format(" ({0})", (object) server);
@@ -389,10 +372,10 @@ public class UnratedMenu : Catalogue
 
   public void RefreshActive()
   {
-    this.RefreshNames(false, false);
-    this.RefreshFriends(false);
-    this.RefreshIgnore(false);
-    this.RefreshClan(false);
+    this.RefreshNames(false);
+    this.RefreshFriends();
+    this.RefreshIgnore();
+    this.RefreshClan();
   }
 
   public void RefreshNames(bool setReadyStates = true, bool updatePos = false)
@@ -409,39 +392,30 @@ public class UnratedMenu : Catalogue
     this.UpdatePlayerCount();
     this.txtGameOwner.text = !(Client._gameFacts.players[0] == Client.Name) ? Client._gameFacts.players[0] + "'s Game" : "Your Game";
     int num1 = (int) ((RectTransform) this.pfabNames.transform).sizeDelta.y + 2;
-    int num2 = 2;
+    int x = 2;
     int index1 = 0;
     this._containerAccounts.sizeDelta = new Vector2(this._containerAccounts.sizeDelta.x, (float) (num1 * Client._gameFacts.players.Count));
     for (; index1 < Client._gameFacts.players.Count && index1 < this._containerAccounts.childCount; ++index1)
-      this._containerAccounts.GetChild(index1).GetComponent<pfabName>().Setup(Client.GetAccount(Client._gameFacts.players[index1], false), UnratedMenu.readyStates != null && UnratedMenu.readyStates.Length > index1 && UnratedMenu.readyStates[index1]);
+      this._containerAccounts.GetChild(index1).GetComponent<pfabName>().Setup(Client.GetAccount(Client._gameFacts.players[index1]), UnratedMenu.readyStates != null && UnratedMenu.readyStates.Length > index1 && UnratedMenu.readyStates[index1]);
     for (; index1 < Client._gameFacts.players.Count; ++index1)
     {
       GameObject andApply = Controller.Instance.CreateAndApply(this.pfabNames, (Transform) this._containerAccounts);
-      ((RectTransform) andApply.transform).anchoredPosition = new Vector2((float) num2, (float) (-index1 * num1 - 2));
-      andApply.GetComponent<pfabName>().Setup(Client.GetAccount(Client._gameFacts.players[index1], false), false);
+      ((RectTransform) andApply.transform).anchoredPosition = new Vector2((float) x, (float) (-index1 * num1 - 2));
+      andApply.GetComponent<pfabName>().Setup(Client.GetAccount(Client._gameFacts.players[index1]));
     }
-    int num3 = index1;
-    for (int index2 = this._containerAccounts.childCount - 1; index2 >= num3; --index2)
+    int num2 = index1;
+    for (int index2 = this._containerAccounts.childCount - 1; index2 >= num2; --index2)
       UnityEngine.Object.Destroy((UnityEngine.Object) this._containerAccounts.GetChild(index2).gameObject);
     if (!updatePos)
       return;
     this.SetScrollValue();
   }
 
-  public bool IsAdvanced()
-  {
-    return this.unratedTab.IsAdvanced();
-  }
+  public bool IsAdvanced() => this.unratedTab.IsAdvanced();
 
-  public void ClickToggleAdvanced()
-  {
-    this.ToggleAdvanced(!this.unratedTab.advanced);
-  }
+  public void ClickToggleAdvanced() => this.ToggleAdvanced(!this.unratedTab.advanced);
 
-  public void ToggleAdvanced(bool v)
-  {
-    this.unratedTab.ToggleAdvanced(v);
-  }
+  public void ToggleAdvanced(bool v) => this.unratedTab.ToggleAdvanced(v);
 
   public void AskToChangeElementalLevel(int x)
   {
@@ -458,15 +432,9 @@ public class UnratedMenu : Catalogue
     Client.AskToChangeGameMode(GameFacts.Message.ArmageddonTurn, x);
   }
 
-  public void AskToChangeMaxTime(int x)
-  {
-    Client.AskToChangeGameMode(GameFacts.Message.MaxTime, x);
-  }
+  public void AskToChangeMaxTime(int x) => Client.AskToChangeGameMode(GameFacts.Message.MaxTime, x);
 
-  public void AskToChangeDelay(int x)
-  {
-    Client.AskToChangeGameMode(GameFacts.Message.Delay, x);
-  }
+  public void AskToChangeDelay(int x) => Client.AskToChangeGameMode(GameFacts.Message.Delay, x);
 
   public void AskToChangeMapSize(int x)
   {
@@ -493,10 +461,7 @@ public class UnratedMenu : Catalogue
     Client.AskToChangeGameMode(GameFacts.Message.Remove_Custom_Armageddon, x);
   }
 
-  public void Ask(GameFacts.Message g, int x)
-  {
-    Client.AskToChangeGameMode(g, x);
-  }
+  public void Ask(GameFacts.Message g, int x) => Client.AskToChangeGameMode(g, x);
 
   [EnumAction(typeof (GameStyle))]
   public void AskToChangeGameStyle(int x)
@@ -548,10 +513,7 @@ public class UnratedMenu : Catalogue
   }
 
   [EnumAction(typeof (MapEnum))]
-  public void AskToChangeGameModeMap(int x)
-  {
-    Client.AskToChangeGameMode(GameFacts.Message.Map, x);
-  }
+  public void AskToChangeGameModeMap(int x) => Client.AskToChangeGameMode(GameFacts.Message.Map, x);
 
   [EnumAction(typeof (MapEnum))]
   public void AskToChangeArmageddon(int x)
@@ -593,7 +555,7 @@ public class UnratedMenu : Catalogue
     this.buttonStartGame.interactable = false;
     for (float i = this.isFirst ? 5.5f : 5f; (double) i > 0.0; i -= Time.deltaTime)
     {
-      this.buttonStartGameTxt.text = "Settings Changed " + (object) (int) ((double) i + 0.490000009536743);
+      this.buttonStartGameTxt.text = "Settings Changed " + (object) (int) ((double) i + 0.49000000953674316);
       yield return (object) new WaitForEndOfFrame();
     }
     bool flag = Client._gameFacts.GetTeamMode() && !Client._gameFacts.GetMultiTeamMode();
@@ -609,8 +571,8 @@ public class UnratedMenu : Catalogue
     this.isFirst = string.Equals(Client._gameFacts.players[0], Client.Name, StringComparison.OrdinalIgnoreCase);
     this.buttonInvite.interactable = true;
     bool flag1 = Client._gameFacts.GetTeamMode() && !Client._gameFacts.GetMultiTeamMode();
-    bool flag2 = !Client._gameFacts.GetMultiTeamMode() || (!Client._gameFacts.GetRatedMode() || Client._gameFacts.players.Count == 2);
-    this.buttonStartGame.interactable = (this.isFirst || Client._gameFacts.GetRatedMode() || (Client._gameFacts.GetMultiTeamMode() || Client._gameFacts.GetTournamentMode())) && (flag1 ? Client._gameFacts.players.Count % Client._gameFacts.GetNumberPlayersPerTeam() == 0 && Client._gameFacts.players.Count > Client._gameFacts.GetNumberPlayersPerTeam() : flag2);
+    bool flag2 = !Client._gameFacts.GetMultiTeamMode() || !Client._gameFacts.GetRatedMode() || Client._gameFacts.players.Count == 2;
+    this.buttonStartGame.interactable = (this.isFirst || Client._gameFacts.GetRatedMode() || Client._gameFacts.GetMultiTeamMode() || Client._gameFacts.GetTournamentMode()) && (flag1 ? Client._gameFacts.players.Count % Client._gameFacts.GetNumberPlayersPerTeam() == 0 && Client._gameFacts.players.Count > Client._gameFacts.GetNumberPlayersPerTeam() : flag2);
     this.SetStartButton();
   }
 
@@ -686,7 +648,7 @@ public class UnratedMenu : Catalogue
   {
     if (this.viewing != Viewing.Lobby)
       return;
-    this.RefreshNames(true, false);
+    this.RefreshNames();
   }
 
   public void ViewLobby()
@@ -699,7 +661,7 @@ public class UnratedMenu : Catalogue
     this.butViewClan.AlwaysOn = false;
     this.butAddFriend.gameObject.SetActive(this.butViewFriends.AlwaysOn);
     this._containerAccounts.DestroyChildern();
-    this.RefreshNames(false, false);
+    this.RefreshNames(false);
   }
 
   public void ViewFriends()
@@ -742,20 +704,17 @@ public class UnratedMenu : Catalogue
   {
     if (this.viewing == Viewing.Friends && Client.HasFriend(n))
     {
-      this.RefreshFriends(false);
+      this.RefreshFriends();
     }
     else
     {
       if (this.viewing != Viewing.Clan || Client.clan == null || !Client.clan.members.ContainsKey(n))
         return;
-      this.RefreshClan(false);
+      this.RefreshClan();
     }
   }
 
-  public void ClickLobby()
-  {
-    Client.AskToJoinLobby();
-  }
+  public void ClickLobby() => Client.AskToJoinLobby();
 
   public void ClickInvitePlayers()
   {
@@ -771,10 +730,7 @@ public class UnratedMenu : Catalogue
       Client.AskToStart();
   }
 
-  public void UpdateSpellIcons()
-  {
-    this.spellImageList.SetSpells();
-  }
+  public void UpdateSpellIcons() => this.spellImageList.SetSpells();
 
   public void UpdateOutfit()
   {
@@ -782,20 +738,14 @@ public class UnratedMenu : Catalogue
     PrestigeLobbyUI.Instance?.RefreshOutfit();
   }
 
-  public void ToolTip(string s)
-  {
-    MyToolTip.Show(s, -1f);
-  }
+  public void ToolTip(string s) => MyToolTip.Show(s);
 
   public void HoverCountdown()
   {
-    MyToolTip.Show("Countdown: " + Mathf.Abs((int) Client._gameFacts.countdownTime).ToString() + (Client._gameFacts.countdownTime > (short) 0 ? " seconds<br>If time runs out you will get 5 second turns from then on." : " seconds<br><#FF0000>If time runs out you lose</color><br>Turn time is still used."), -1f);
+    MyToolTip.Show("Countdown: " + Mathf.Abs((int) Client._gameFacts.countdownTime).ToString() + (Client._gameFacts.countdownTime > (short) 0 ? " seconds<br>If time runs out you will get 5 second turns from then on." : " seconds<br><#FF0000>If time runs out you lose</color><br>Turn time is still used."));
   }
 
-  public void HideToolTip()
-  {
-    MyToolTip.Close();
-  }
+  public void HideToolTip() => MyToolTip.Close();
 
   public void ClickMapSize(bool width)
   {
@@ -811,7 +761,7 @@ public class UnratedMenu : Catalogue
         if (string.IsNullOrEmpty(v) || !int.TryParse(v, out result))
           return;
         this.AskToChangeMapSize(CombineBytes.To((byte) result, Client._gameFacts.settings.mapHeight));
-      }), (string) null, false);
+      }));
     else
       myContextMenu.AddInput((Action<string>) (v =>
       {
@@ -819,8 +769,8 @@ public class UnratedMenu : Catalogue
         if (string.IsNullOrEmpty(v) || !int.TryParse(v, out result))
           return;
         this.AskToChangeMapSize(CombineBytes.To(Client._gameFacts.settings.mapWidth, (byte) result));
-      }), (string) null, false);
-    myContextMenu.Rebuild(false);
+      }));
+    myContextMenu.Rebuild();
   }
 
   public void ClickMapSeed()
@@ -835,10 +785,10 @@ public class UnratedMenu : Catalogue
       if (string.IsNullOrEmpty(v) || !int.TryParse(v, out result))
         return;
       this.AskToChangeMapSeed(result);
-    }), (string) null, false);
+    }));
     myContextMenu.AddSeperator("-------------------------------");
     myContextMenu.AddItem("Use Random Seed", (Action) (() => this.AskToDisableMapSeed()), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
-    myContextMenu.Rebuild(false);
+    myContextMenu.Rebuild();
   }
 
   public void ClickPickElementalLevel()
@@ -847,14 +797,14 @@ public class UnratedMenu : Catalogue
       return;
     MyContextMenu myContextMenu = MyContextMenu.Show();
     ButtonArrayContextmenu arrayContextmenu = myContextMenu.AddArray();
-    arrayContextmenu.AddItem("Off", (Action) (() => this.AskToChangeElementalLevel(-2)), (string) null);
-    arrayContextmenu.AddItem("0", (Action) (() => this.AskToChangeElementalLevel(0)), (string) null);
-    arrayContextmenu.AddItem("1", (Action) (() => this.AskToChangeElementalLevel(1)), (string) null);
-    arrayContextmenu.AddItem("2", (Action) (() => this.AskToChangeElementalLevel(2)), (string) null);
-    arrayContextmenu.AddItem("3", (Action) (() => this.AskToChangeElementalLevel(3)), (string) null);
-    arrayContextmenu.AddItem("4", (Action) (() => this.AskToChangeElementalLevel(4)), (string) null);
-    arrayContextmenu.AddItem("5", (Action) (() => this.AskToChangeElementalLevel(5)), (string) null);
-    myContextMenu.Rebuild(false);
+    arrayContextmenu.AddItem("Off", (Action) (() => this.AskToChangeElementalLevel(-2)));
+    arrayContextmenu.AddItem("0", (Action) (() => this.AskToChangeElementalLevel(0)));
+    arrayContextmenu.AddItem("1", (Action) (() => this.AskToChangeElementalLevel(1)));
+    arrayContextmenu.AddItem("2", (Action) (() => this.AskToChangeElementalLevel(2)));
+    arrayContextmenu.AddItem("3", (Action) (() => this.AskToChangeElementalLevel(3)));
+    arrayContextmenu.AddItem("4", (Action) (() => this.AskToChangeElementalLevel(4)));
+    arrayContextmenu.AddItem("5", (Action) (() => this.AskToChangeElementalLevel(5)));
+    myContextMenu.Rebuild();
   }
 
   public void ClickPickStartingHealth()
@@ -869,8 +819,8 @@ public class UnratedMenu : Catalogue
       if (!float.TryParse(s, out result))
         return;
       this.AskToChangeStartHealth((int) result);
-    }), (string) null, false);
-    myContextMenu.Rebuild(false);
+    }));
+    myContextMenu.Rebuild();
   }
 
   public void ClickArmageddonTurn()
@@ -885,8 +835,8 @@ public class UnratedMenu : Catalogue
       if (!float.TryParse(s, out result))
         return;
       this.AskToChangeArmageddonTurn((int) result);
-    }), (string) null, false);
-    myContextMenu.Rebuild(false);
+    }));
+    myContextMenu.Rebuild();
   }
 
   public void ClickMaxTime()
@@ -928,8 +878,8 @@ public class UnratedMenu : Catalogue
         float.TryParse(s, out result);
         this.AskToChangeMaxTime(num2 * (int) ((double) result * (double) num1));
       }
-    }), (string) null, false);
-    myContextMenu.Rebuild(false);
+    }));
+    myContextMenu.Rebuild();
   }
 
   public void ClickDelay()
@@ -944,8 +894,8 @@ public class UnratedMenu : Catalogue
       if (!float.TryParse(s, out result))
         return;
       this.AskToChangeDelay((int) result);
-    }), (string) null, false);
-    myContextMenu.Rebuild(false);
+    }));
+    myContextMenu.Rebuild();
   }
 
   public void ClickDescription()
@@ -976,7 +926,7 @@ public class UnratedMenu : Catalogue
           Client.AskToChangeDescription(Client._gameFacts.settings.description + ZGame.MoreGameOptions[z, 0]);
         }), MyContextMenu.ColorGreen);
     }
-    myContextMenu.Rebuild(false);
+    myContextMenu.Rebuild();
   }
 
   public void ClickCustomPlayers()
@@ -985,11 +935,11 @@ public class UnratedMenu : Catalogue
       return;
     MyContextMenu myContextMenu = MyContextMenu.Show();
     ButtonArrayContextmenu arrayContextmenu = myContextMenu.AddArray();
-    arrayContextmenu.AddItem("2", (Action) (() => this.AskToChangeGameModePlayers(67108864)), (string) null);
-    arrayContextmenu.AddItem("3", (Action) (() => this.AskToChangeGameModePlayers(134217728)), (string) null);
-    arrayContextmenu.AddItem("4", (Action) (() => this.AskToChangeGameModePlayers(268435456)), (string) null);
-    arrayContextmenu.AddItem("5", (Action) (() => this.AskToChangeGameModePlayers(536870912)), (string) null);
-    arrayContextmenu.AddItem("6", (Action) (() => this.AskToChangeGameModePlayers(1073741824)), (string) null);
+    arrayContextmenu.AddItem("2", (Action) (() => this.AskToChangeGameModePlayers(67108864)));
+    arrayContextmenu.AddItem("3", (Action) (() => this.AskToChangeGameModePlayers(134217728)));
+    arrayContextmenu.AddItem("4", (Action) (() => this.AskToChangeGameModePlayers(268435456)));
+    arrayContextmenu.AddItem("5", (Action) (() => this.AskToChangeGameModePlayers(536870912)));
+    arrayContextmenu.AddItem("6", (Action) (() => this.AskToChangeGameModePlayers(1073741824)));
     myContextMenu.AddSeperator("Players 1 - 24");
     myContextMenu.AddInput((Action<string>) (s =>
     {
@@ -997,8 +947,8 @@ public class UnratedMenu : Catalogue
       if (!float.TryParse(s, out result))
         return;
       this.AskToChangeCustomPlayers((int) result);
-    }), (string) null, false);
-    myContextMenu.Rebuild(false);
+    }));
+    myContextMenu.Rebuild();
   }
 
   public void ClickCustomTime()
@@ -1007,16 +957,16 @@ public class UnratedMenu : Catalogue
       return;
     MyContextMenu myContextMenu = MyContextMenu.Show();
     ButtonArrayContextmenu arrayContextmenu = myContextMenu.AddArray();
-    arrayContextmenu.AddItem("5", (Action) (() => this.AskToChangeGameModeTime(32)), (string) null);
-    arrayContextmenu.AddItem("7", (Action) (() => this.AskToChangeGameModeTime(262144)), (string) null);
-    arrayContextmenu.AddItem("10", (Action) (() => this.AskToChangeGameModeTime(16384)), (string) null);
-    arrayContextmenu.AddItem("15", (Action) (() => this.AskToChangeGameModeTime(1048576)), (string) null);
-    arrayContextmenu.AddItem("20", (Action) (() => this.AskToChangeGameModeTime(8192)), (string) null);
-    arrayContextmenu.AddItem("30", (Action) (() => this.AskToChangeGameModeTime(4096)), (string) null);
-    arrayContextmenu.AddItem("45", (Action) (() => this.AskToChangeGameModeTime(2048)), (string) null);
-    arrayContextmenu.AddItem("60", (Action) (() => this.AskToChangeGameModeTime(1024)), (string) null);
-    arrayContextmenu.AddItem("90", (Action) (() => this.AskToChangeGameModeTime(512)), (string) null);
-    arrayContextmenu.AddItem("120", (Action) (() => this.AskToChangeGameModeTime(256)), (string) null);
+    arrayContextmenu.AddItem("5", (Action) (() => this.AskToChangeGameModeTime(32)));
+    arrayContextmenu.AddItem("7", (Action) (() => this.AskToChangeGameModeTime(262144)));
+    arrayContextmenu.AddItem("10", (Action) (() => this.AskToChangeGameModeTime(16384)));
+    arrayContextmenu.AddItem("15", (Action) (() => this.AskToChangeGameModeTime(1048576)));
+    arrayContextmenu.AddItem("20", (Action) (() => this.AskToChangeGameModeTime(8192)));
+    arrayContextmenu.AddItem("30", (Action) (() => this.AskToChangeGameModeTime(4096)));
+    arrayContextmenu.AddItem("45", (Action) (() => this.AskToChangeGameModeTime(2048)));
+    arrayContextmenu.AddItem("60", (Action) (() => this.AskToChangeGameModeTime(1024)));
+    arrayContextmenu.AddItem("90", (Action) (() => this.AskToChangeGameModeTime(512)));
+    arrayContextmenu.AddItem("120", (Action) (() => this.AskToChangeGameModeTime(256)));
     myContextMenu.AddSeperator("5 - 120");
     myContextMenu.AddInput((Action<string>) (s =>
     {
@@ -1024,8 +974,8 @@ public class UnratedMenu : Catalogue
       if (!float.TryParse(s, out result))
         return;
       this.AskToChangeCustomTime((int) result);
-    }), (string) null, false);
-    myContextMenu.Rebuild(false);
+    }));
+    myContextMenu.Rebuild();
   }
 
   public void ClickMapOptions()
@@ -1034,13 +984,13 @@ public class UnratedMenu : Catalogue
       return;
     MyContextMenu myContextMenu = MyContextMenu.Show();
     myContextMenu.AddItem("Alternate Map Generation", (Action) (() => this.Ask(GameFacts.Message.Alternate_Generation, 0)), (Color) (Client._gameFacts.settings.altGeneration ? ColorScheme.GetColor(MyContextMenu.ColorRed) : ColorScheme.GetColor(MyContextMenu.ColorCream)));
-    myContextMenu.AddSeperator("--------------------------");
+    myContextMenu.AddSeperator();
     myContextMenu.AddSeperator("----Water Styles----");
     myContextMenu.AddItem("Map Default", (Action) (() => this.Ask(GameFacts.Message.Water, 0)), (Color) (Client._gameFacts.settings.water == WaterStyle.Default ? ColorScheme.GetColor(MyContextMenu.ColorRed) : ColorScheme.GetColor(MyContextMenu.ColorCream)));
     myContextMenu.AddItem("Water", (Action) (() => this.Ask(GameFacts.Message.Water, 3)), (Color) (Client._gameFacts.settings.water == WaterStyle.Water ? ColorScheme.GetColor(MyContextMenu.ColorRed) : ColorScheme.GetColor(MyContextMenu.ColorCream)));
     myContextMenu.AddItem("Ground", (Action) (() => this.Ask(GameFacts.Message.Water, 2)), (Color) (Client._gameFacts.settings.water == WaterStyle.Ground ? ColorScheme.GetColor(MyContextMenu.ColorRed) : ColorScheme.GetColor(MyContextMenu.ColorCream)));
     myContextMenu.AddItem("No Water", (Action) (() => this.Ask(GameFacts.Message.Water, 1)), (Color) (Client._gameFacts.settings.water == WaterStyle.No_Water ? ColorScheme.GetColor(MyContextMenu.ColorRed) : ColorScheme.GetColor(MyContextMenu.ColorCream)));
-    myContextMenu.Rebuild(false);
+    myContextMenu.Rebuild();
   }
 
   public void ClickArmageddonAdditionalOptions()
@@ -1049,20 +999,20 @@ public class UnratedMenu : Catalogue
       return;
     MyContextMenu myContextMenu1 = MyContextMenu.Show();
     myContextMenu1.AddItem("Mos Le'Harmless - Zombie Monkeys", (Action) (() => this.AskToChangeGameStyle(32768)), (Color) (Client._gameFacts.GetStyle().HasStyle(GameStyle.Zombie_Monkey) ? ColorScheme.GetColor(MyContextMenu.ColorRed) : ColorScheme.GetColor(MyContextMenu.ColorCream)));
-    myContextMenu1.AddSeperator("--------------------------");
+    myContextMenu1.AddSeperator();
     myContextMenu1.AddSeperator("----Custom Armageddon----(Not Compatible with normal Armageddons)");
     if (Client._gameFacts.settings.customArmageddon == null || Client._gameFacts.settings.customArmageddon.Count < 5)
       myContextMenu1.AddItem("Add Custom Armageddon", (Action) (() =>
       {
         MyContextMenu myContextMenu2 = MyContextMenu.Show();
-        myContextMenu2.AddSpellSelector((UnityAction<SpellEnum>) (s => this.AskAddCustomArmageddon((int) s)), (Func<Spell, bool>) (spell => spell.level > 3 && !GameFacts.AllowCustomArmageddon(spell.spellEnum)), false);
+        myContextMenu2.AddSpellSelector((UnityAction<SpellEnum>) (s => this.AskAddCustomArmageddon((int) s)), (Func<Spell, bool>) (spell => spell.level > 3 && !GameFacts.AllowCustomArmageddon(spell.spellEnum)));
         myContextMenu2.Rebuild(true);
       }), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
     List<SpellEnum> customArmageddon = Client._gameFacts.settings.customArmageddon;
     if ((customArmageddon != null ? (__nonvirtual (customArmageddon.Count) > 0 ? 1 : 0) : 0) != 0)
     {
       if (Client._gameFacts.settings.customArmageddon.Count < 5)
-        myContextMenu1.AddSeperator("--------------------------");
+        myContextMenu1.AddSeperator();
       for (int index = 0; index < Client._gameFacts.settings.customArmageddon.Count; ++index)
       {
         Spell spell = Inert.GetSpell(Client._gameFacts.settings.customArmageddon[index]);
@@ -1070,12 +1020,12 @@ public class UnratedMenu : Catalogue
         if ((UnityEngine.Object) spell == (UnityEngine.Object) null)
           myContextMenu1.AddItem("Invalid Spell", (Action) (() => this.AskRemoveCustomArmageddon((int) e)), (Color) ColorScheme.GetColor(MyContextMenu.ColorRed));
         else
-          myContextMenu1.AddItemWithImage(spell.name, ClientResources.Instance.GetSpellIcon(spell.name), (Action) (() => this.AskRemoveCustomArmageddon((int) e)), (Color) ColorScheme.GetColor(MyContextMenu.ColorRed), "");
+          myContextMenu1.AddItemWithImage(spell.name, ClientResources.Instance.GetSpellIcon(spell.name), (Action) (() => this.AskRemoveCustomArmageddon((int) e)), (Color) ColorScheme.GetColor(MyContextMenu.ColorRed));
       }
-      myContextMenu1.AddSeperator("--------------------------");
+      myContextMenu1.AddSeperator();
       myContextMenu1.AddItem("Remove all Armageddons", (Action) (() => this.AskRemoveCustomArmageddon(-1)), (Color) ColorScheme.GetColor(MyContextMenu.ColorRed));
     }
-    myContextMenu1.Rebuild(false);
+    myContextMenu1.Rebuild();
   }
 
   public void ClickAutoIncludeSpells()
@@ -1099,7 +1049,7 @@ public class UnratedMenu : Catalogue
     if ((autoInclude != null ? (__nonvirtual (autoInclude.Count) > 0 ? 1 : 0) : 0) != 0)
     {
       if (Client._gameFacts.settings.autoInclude.Count < 250)
-        myContextMenu1.AddSeperator("--------------------------");
+        myContextMenu1.AddSeperator();
       for (int index = 0; index < Client._gameFacts.settings.autoInclude.Count; ++index)
       {
         Spell spell = Inert.GetSpell(Client._gameFacts.settings.autoInclude[index]);
@@ -1107,27 +1057,35 @@ public class UnratedMenu : Catalogue
         if ((UnityEngine.Object) spell == (UnityEngine.Object) null)
           myContextMenu1.AddItem("Invalid Spell", (Action) (() => this.Ask(GameFacts.Message.AutoInclude, (int) e)), (Color) ColorScheme.GetColor(MyContextMenu.ColorRed));
         else
-          myContextMenu1.AddItemWithImage(spell.name, ClientResources.Instance.GetSpellIcon(spell.name), (Action) (() => this.Ask(GameFacts.Message.Remove_AutoInclude, (int) e)), (Color) ColorScheme.GetColor(MyContextMenu.ColorRed), "");
+          myContextMenu1.AddItemWithImage(spell.name, ClientResources.Instance.GetSpellIcon(spell.name), (Action) (() => this.Ask(GameFacts.Message.Remove_AutoInclude, (int) e)), (Color) ColorScheme.GetColor(MyContextMenu.ColorRed));
       }
-      myContextMenu1.AddSeperator("--------------------------");
+      myContextMenu1.AddSeperator();
       myContextMenu1.AddItem("Remove all spells", (Action) (() => this.Ask(GameFacts.Message.Remove_AutoInclude, -1)), (Color) ColorScheme.GetColor(MyContextMenu.ColorRed));
     }
-    myContextMenu1.Rebuild(false);
+    myContextMenu1.Rebuild();
   }
 
   public void UploadToServer()
   {
-    if (!Client.MyAccount.accountType.isDev())
+    if (!Client.MyAccount.accountType.isDev() && !Client.MyAccount.accountType.has(AccountType.Tournament_Director))
       return;
     MyContextMenu myContextMenu = MyContextMenu.Show();
     myContextMenu.AddSeperator("-----Send As------");
-    myContextMenu.AddItem("Low Time", (Action) (() => this._sendGameFactsToServer(1)), MyContextMenu.ColorGreen);
-    myContextMenu.AddItem("High Time", (Action) (() => this._sendGameFactsToServer(2)), MyContextMenu.ColorGreen);
-    myContextMenu.AddItem("Party Mode", (Action) (() => this._sendGameFactsToServer(3)), MyContextMenu.ColorGreen);
+    if (Client.MyAccount.accountType.isDev())
+    {
+      myContextMenu.AddItem("Low Time", (Action) (() => this._sendGameFactsToServer(1)), MyContextMenu.ColorGreen);
+      myContextMenu.AddItem("High Time", (Action) (() => this._sendGameFactsToServer(2)), MyContextMenu.ColorGreen);
+      myContextMenu.AddItem("Party Mode", (Action) (() => this._sendGameFactsToServer(3)), MyContextMenu.ColorGreen);
+    }
+    myContextMenu.AddItem("Tournament Settings", (Action) (() => this._sendTournamentSettings(false)), MyContextMenu.ColorGreen);
     myContextMenu.AddSeperator("-----Remove-----");
-    myContextMenu.AddItem("Low Time", (Action) (() => this._sendGameFactsToServer(-1)), MyContextMenu.ColorRed);
-    myContextMenu.AddItem("High Time", (Action) (() => this._sendGameFactsToServer(-2)), MyContextMenu.ColorRed);
-    myContextMenu.AddItem("Party Mode", (Action) (() => this._sendGameFactsToServer(-3)), MyContextMenu.ColorRed);
+    if (Client.MyAccount.accountType.isDev())
+    {
+      myContextMenu.AddItem("Low Time", (Action) (() => this._sendGameFactsToServer(-1)), MyContextMenu.ColorRed);
+      myContextMenu.AddItem("High Time", (Action) (() => this._sendGameFactsToServer(-2)), MyContextMenu.ColorRed);
+      myContextMenu.AddItem("Party Mode", (Action) (() => this._sendGameFactsToServer(-3)), MyContextMenu.ColorRed);
+    }
+    myContextMenu.AddItem("Tournament Settings", (Action) (() => this._sendTournamentSettings(true)), MyContextMenu.ColorRed);
   }
 
   private void _sendGameFactsToServer(int x)
@@ -1144,13 +1102,28 @@ public class UnratedMenu : Catalogue
       {
         writer.Write((byte) 109);
         writer.Write(x);
-        Client._gameFacts.ManualSerialize(writer, false);
+        Client._gameFacts.ManualSerialize(writer);
       }
-      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
+      Client.connection.SendBytes(memoryStream.ToArray());
     }
     Client._gameFacts.players = players;
     Client._gameFacts.connections = connections;
     Client._gameFacts.invitedPlayers = invitedPlayers;
+  }
+
+  private void _sendTournamentSettings(bool isNull)
+  {
+    using (MemoryStream memoryStream = new MemoryStream())
+    {
+      using (myBinaryWriter w = new myBinaryWriter((Stream) memoryStream))
+      {
+        w.Write((byte) 111);
+        w.Write(isNull);
+        if (!isNull)
+          Client._gameFacts.settings.Serialize(w);
+      }
+      Client.connection.SendBytes(memoryStream.ToArray());
+    }
   }
 
   public void ClickShowRestrictions()
@@ -1175,13 +1148,13 @@ public class UnratedMenu : Catalogue
       Client.AskAllSettings(Client._gameSettings);
       Inert.SaveSettingsPlayer();
       this.ToggleAdvanced(this.IsAdvanced() || Global.GetPrefBool("prefadvanced", false));
-    }), ContentType.GameSettings, false);
+    }));
   }
 
   public void SaveSettings()
   {
     GameSettings x = Global.Copy<GameSettings>(Client._gameFacts.settings);
-    MyFilePicker.Create("Save Settings", "GameSettings", ".gameSettings", true, (Action<string>) (s => x.SerializeToFile(s)), ContentType.GameSettings, false);
+    MyFilePicker.Create("Save Settings", "GameSettings", ".gameSettings", true, (Action<string>) (s => x.SerializeToFile(s)));
     Inert.SaveSettingsPlayer();
   }
 }

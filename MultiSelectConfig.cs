@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+#nullable disable
 public class MultiSelectConfig : MonoBehaviour
 {
   public SpellImageList spells;
@@ -13,7 +14,7 @@ public class MultiSelectConfig : MonoBehaviour
     {
       this.settings.CopySpells(s, true);
       this.spells.SetSpells(s);
-    }), false, Validation.Default, false, (Action) null);
+    }));
   }
 
   public void ClickResetSpells()
@@ -24,7 +25,7 @@ public class MultiSelectConfig : MonoBehaviour
 
   public void ClickChangeOutfit()
   {
-    ChangeOutfitMenu.Create(false, true, this.settings, (Action<SettingsPlayer>) (s =>
+    ChangeOutfitMenu.Create(false, sp: this.settings, onEnd: (Action<SettingsPlayer>) (s =>
     {
       this.settings.CopyOutfit(s);
       this.UpdateOutfit();
@@ -39,16 +40,16 @@ public class MultiSelectConfig : MonoBehaviour
 
   internal void UpdateOutfit()
   {
-    this.settings.VerifyOutfit(Client.cosmetics, (Account) null);
+    this.settings.VerifyOutfit(Client.cosmetics);
     ConfigurePlayer.EquipAll(Client.Name, this.spells.uIPlayerCharacter, this.settings);
   }
 
   public void ClickElementalIcon()
   {
-    ElementalSelection.Create((RectTransform) Controller.Instance.transform, this.settings._spells.SeasonsIsHoliday, (Action<BookOf>) (b =>
+    ElementalSelection.Create((RectTransform) Controller.Instance.transform, this.settings._spells, (Action<BookOf>) (b =>
     {
       this.settings.fullBook = (byte) (b + 1);
       this.spells.SetSpells(this.settings);
-    }), true);
+    }));
   }
 }

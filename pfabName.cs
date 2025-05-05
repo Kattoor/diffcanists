@@ -1,24 +1,27 @@
 
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+#nullable disable
 public class pfabName : MonoBehaviour, IPointerClickHandler, IEventSystemHandler, IPointerDownHandler
 {
-  public static Color[] colorStatus = new Color[3]
-  {
-    (Color) new Color32((byte) 73, (byte) 73, (byte) 73, byte.MaxValue),
-    (Color) new Color32((byte) 0, byte.MaxValue, (byte) 0, byte.MaxValue),
-    (Color) new Color32((byte) 115, (byte) 100, byte.MaxValue, byte.MaxValue)
-  };
   public TMP_Text txtName;
   public TMP_Text txtRating;
   public Image ready;
   public Image ratingType;
   public TMP_Text txtExperience;
   private Account account;
+  public static Color[] colorStatus = new Color[3]
+  {
+    (Color) new Color32((byte) 73, (byte) 73, (byte) 73, byte.MaxValue),
+    (Color) new Color32((byte) 0, byte.MaxValue, (byte) 0, byte.MaxValue),
+    (Color) new Color32((byte) 115, (byte) 100, byte.MaxValue, byte.MaxValue)
+  };
+  private bool inActive;
   private float clickTime;
 
   public void Setup(string name, bool ready = false)
@@ -43,11 +46,31 @@ public class pfabName : MonoBehaviour, IPointerClickHandler, IEventSystemHandler
     this.ratingType.gameObject.SetActive(false);
   }
 
+  public void RefreshActivity()
+  {
+    this.inActive = this.account.IsInactive();
+    this.txtName.text = (this.inActive ? "<sprite name=\"AFK\">" : "") + ChatBox.GetAccountIcons(this.account, true, true) + this.account.name;
+  }
+
+  private IEnumerator CheckActivity()
+  {
+    this.inActive = this.account.IsInactive();
+    while (true)
+    {
+      do
+      {
+        yield return (object) new WaitForSecondsRealtime(30f);
+      }
+      while (this.account.IsInactive() == this.inActive);
+      this.RefreshActivity();
+    }
+  }
+
   public void Setup(Account a, bool ready = false)
   {
+    a.pfabName = this;
     this.account = a;
     this.name = a.name;
-    this.txtName.text = ChatBox.GetAccountIcons(a, true, true, false) + a.name;
     this.txtRating.text = a.ratingString;
     if ((UnityEngine.Object) this.ratingType != (UnityEngine.Object) null)
     {
@@ -56,15 +79,13 @@ public class pfabName : MonoBehaviour, IPointerClickHandler, IEventSystemHandler
     }
     if ((UnityEngine.Object) this.txtExperience != (UnityEngine.Object) null)
       this.txtExperience.text = a.displayedIcon != 252 || a.accountType.IsMuted() ? "" : a.experience.ToString();
-    if (!ready)
-      return;
-    this.ready.gameObject.SetActive(true);
+    if (ready)
+      this.ready.gameObject.SetActive(true);
+    this.RefreshActivity();
+    this.StartCoroutine(this.CheckActivity());
   }
 
-  public void ContextMenu()
-  {
-    MyContextMenu.Show(this.name, (string) null);
-  }
+  public void ContextMenu() => MyContextMenu.Show(this.name);
 
   public void OnPointerDown(PointerEventData eventData)
   {
@@ -95,31 +116,22 @@ public class pfabName : MonoBehaviour, IPointerClickHandler, IEventSystemHandler
       HUD.instance.InitPrivateChat(this.name);
   }
 
-  private void RightClick()
-  {
-    this.ContextMenu();
-  }
+  private void RightClick() => this.ContextMenu();
 
-  public void ClickRatingIcon()
-  {
-    PrestigeLobbyUI.NextGameType();
-  }
+  public void ClickRatingIcon() => PrestigeLobbyUI.NextGameType();
 
   public void HoverRatingIcon()
   {
     if (this.account != null)
-      pfabName.HoverRatingIcon(this.account, (string) null);
+      pfabName.HoverRatingIcon(this.account);
     else
-      MyToolTip.Show(RatedFacts.GetGameTypeAsStringLong((int) Client.gameType) + " Rating", -1f);
+      MyToolTip.Show(RatedFacts.GetGameTypeAsStringLong((int) Client.gameType) + " Rating");
   }
 
   public static void HoverRatingIcon(Account account, string extra = null)
   {
-    MyToolTip.Show(account.name + "\n<sprite name=\"LTS\"> <#FF0050>" + (object) account.Rating + "</color>\n<sprite name=\"HTS\"> <#00FF1D>" + (object) account.Rating1 + "</color>\n<sprite name=\"PMO\"> <#00B2FF>" + (object) account.Rating2 + "</color>\n" + (extra != null ? (object) extra : (object) ""), -1f);
+    MyToolTip.Show(account.name + "\n<sprite name=\"LTS\"> <#FF0050>" + (object) account.Rating + "</color>\n<sprite name=\"HTS\"> <#00FF1D>" + (object) account.Rating1 + "</color>\n<sprite name=\"PMO\"> <#00B2FF>" + (object) account.Rating2 + "</color>\n" + (extra != null ? (object) extra : (object) ""));
   }
 
-  public void HideTooltip()
-  {
-    MyToolTip.Close();
-  }
+  public void HideTooltip() => MyToolTip.Close();
 }

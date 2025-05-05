@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
+#nullable disable
 public class ColorPickerTester : MonoBehaviour
 {
   public Renderer renderer;

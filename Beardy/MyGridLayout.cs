@@ -2,20 +2,15 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+#nullable disable
 namespace Beardy
 {
   [AddComponentMenu("Beardy/Beardy Grid Layout Group")]
   public class MyGridLayout : GridLayoutGroup
   {
-    public override void SetLayoutHorizontal()
-    {
-      this.SetCellsAlongAxis(0);
-    }
+    public override void SetLayoutHorizontal() => this.SetCellsAlongAxis(0);
 
-    public override void SetLayoutVertical()
-    {
-      this.SetCellsAlongAxis(1);
-    }
+    public override void SetLayoutVertical() => this.SetCellsAlongAxis(1);
 
     private void SetCellsAlongAxis(int axis)
     {
@@ -105,21 +100,21 @@ namespace Beardy
           vector2_6 = this.spacing;
           double num15 = (double) vector2_6[0];
           double num16 = (num14 + num15) * (double) num12;
-          double num17 = x2 + num16;
+          double pos1 = x2 + num16;
           vector2_6 = this.cellSize;
-          double num18 = (double) vector2_6[0];
-          this.SetChildAlongAxis(rectChild1, 0, (float) num17, (float) num18);
+          double size1 = (double) vector2_6[0];
+          this.SetChildAlongAxis(rectChild1, 0, (float) pos1, (float) size1);
           RectTransform rectChild2 = this.rectChildren[index];
           double y2 = (double) vector2_5.y;
           vector2_6 = this.cellSize;
-          double num19 = (double) vector2_6[1];
+          double num17 = (double) vector2_6[1];
           vector2_6 = this.spacing;
-          double num20 = (double) vector2_6[1];
-          double num21 = (num19 + num20) * (double) num13;
-          double num22 = y2 + num21;
+          double num18 = (double) vector2_6[1];
+          double num19 = (num17 + num18) * (double) num13;
+          double pos2 = y2 + num19;
           vector2_6 = this.cellSize;
-          double num23 = (double) vector2_6[1];
-          this.SetChildAlongAxis(rectChild2, 1, (float) num22, (float) num23);
+          double size2 = (double) vector2_6[1];
+          this.SetChildAlongAxis(rectChild2, 1, (float) pos2, (float) size2);
         }
       }
     }

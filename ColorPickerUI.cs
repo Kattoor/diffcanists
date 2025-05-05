@@ -3,10 +3,13 @@ using System;
 using UnityEngine;
 using UnityEngine.Events;
 
+#nullable disable
 public class ColorPickerUI : MonoBehaviour
 {
   public ColorPicker picker;
+  public GameObject but_onRemove;
   private Action<Color> onEnd;
+  private Action onRemove;
   private Color start;
 
   public static ColorPickerUI Instance { get; private set; }
@@ -14,7 +17,8 @@ public class ColorPickerUI : MonoBehaviour
   public static ColorPickerUI Create(
     Color c,
     Action<Color> onEnd,
-    Action<Color> onChange)
+    Action<Color> onChange,
+    Action onRemove = null)
   {
     if ((UnityEngine.Object) ColorPickerUI.Instance != (UnityEngine.Object) null)
       return ColorPickerUI.Instance;
@@ -22,6 +26,8 @@ public class ColorPickerUI : MonoBehaviour
     ColorPickerUI.Instance.picker.CurrentColor = c;
     ColorPickerUI.Instance.onEnd = onEnd;
     ColorPickerUI.Instance.start = c;
+    ColorPickerUI.Instance.onRemove = onRemove;
+    ColorPickerUI.Instance.but_onRemove.SetActive(onRemove != null);
     if (onChange != null)
       ColorPickerUI.Instance.picker.onValueChangedPUBLIC.AddListener((UnityAction<Color>) (col =>
       {
@@ -31,6 +37,14 @@ public class ColorPickerUI : MonoBehaviour
         action(col);
       }));
     return ColorPickerUI.Instance;
+  }
+
+  public void ClickRemove()
+  {
+    Action onRemove = this.onRemove;
+    if (onRemove != null)
+      onRemove();
+    UnityEngine.Object.Destroy((UnityEngine.Object) this.gameObject);
   }
 
   public void ClickOk()

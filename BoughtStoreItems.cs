@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
+#nullable disable
 public class BoughtStoreItems
 {
   public List<List<int>> list = new List<List<int>>();
@@ -40,7 +41,7 @@ public class BoughtStoreItems
   {
     int index1 = (int) (which - 1);
     int index2 = index / 32;
-    return index1 >= 0 && this.list.Count > index1 && this.list[index1].Count > index2 && (uint) (this.list[index1][index2] & 1 << index - index2 * 32) > 0U;
+    return index1 >= 0 && this.list.Count > index1 && this.list[index1].Count > index2 && (this.list[index1][index2] & 1 << index - index2 * 32) != 0;
   }
 
   public void Set(ArcanistsStore.Which which, int index)

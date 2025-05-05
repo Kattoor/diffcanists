@@ -1,4 +1,5 @@
 
+#nullable disable
 public class UniClipboard
 {
   private static IBoard _board;
@@ -13,13 +14,7 @@ public class UniClipboard
     }
   }
 
-  public static void SetText(string str)
-  {
-    UniClipboard.board.SetText(str);
-  }
+  public static void SetText(string str) => UniClipboard.board.SetText(str);
 
-  public static string GetText()
-  {
-    return UniClipboard.board.GetText();
-  }
+  public static string GetText() => UniClipboard.board.GetText();
 }

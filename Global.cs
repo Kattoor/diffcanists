@@ -15,6 +15,7 @@ using System.Xml.Serialization;
 using UnityEngine;
 using UnityEngine.Networking;
 
+#nullable disable
 public static class Global
 {
   public static MyLocation mountOffset = new MyLocation(-14, 18);
@@ -26,29 +27,10 @@ public static class Global
   public static MyLocation mountOffsetGoat = new MyLocation(-7, 21);
   public static MyLocation mountOffsetWaterLord = new MyLocation(-9, 36);
   public static MyLocation mountOffsetLeftWaterLord = new MyLocation(9, 36);
-  private static string _persistentDataPath = (string) null;
-  public static OperatingSystem OS = OperatingSystem.Windows;
-  public static HashSet<Sprite> _cachedSprites = new HashSet<Sprite>();
-  public static char[] BadChars = new char[4]
-  {
-    '\xF700',
-    '\xF703',
-    '\xF702',
-    '\xF701'
-  };
-  public static Color ColorLobbyText = (Color) new Color32(byte.MaxValue, (byte) 210, (byte) 83, byte.MaxValue);
-  public static Color ColorGameText = (Color) new Color32((byte) 85, (byte) 223, (byte) 85, byte.MaxValue);
-  public static Color ColorMiniGameText = (Color) new Color32((byte) 115, (byte) 180, (byte) 115, byte.MaxValue);
-  public static Color ColorSentPrivate = (Color) new Color32((byte) 115, (byte) 100, byte.MaxValue, byte.MaxValue);
-  public static Color ColorReceivedPrivate = (Color) new Color32((byte) 194, (byte) 80, (byte) 65, byte.MaxValue);
-  public static Color ColorGrayChat = new Color(0.5f, 0.5f, 0.5f);
-  public static Color ColorClanText = (Color) new Color32(byte.MaxValue, (byte) 142, (byte) 0, byte.MaxValue);
-  public static Color ColorSystem = Color.red;
-  public static Color ColorNotification = (Color) new Color32(byte.MaxValue, (byte) 0, (byte) 182, byte.MaxValue);
-  public static Color ColorTeamText = Color.cyan;
-  public static Color ColorNoteText = (Color) new Color32((byte) 150, byte.MaxValue, byte.MaxValue, byte.MaxValue);
-  public static Color ColorAnnoucement = Color.yellow;
-  public static Color ColorWhiteText = Color.white;
+  public static MyLocation mountOffsetZombie = new MyLocation(5, 11);
+  public static MyLocation mountOffsetLeftZombie = new MyLocation(-5, 11);
+  public static MyLocation mountOffsetFleshGolem = new MyLocation(6, 20);
+  public static MyLocation mountOffsetLeftFleshGolem = new MyLocation(-6, 20);
   public const byte MsgAuth = 1;
   public const byte MsgGameFrame = 2;
   public const byte ErrNameExists = 3;
@@ -157,6 +139,9 @@ public static class Global
   public const byte MsgAuthSteam = 107;
   public const byte MsgAuthDiscord = 108;
   public const byte MsgPreGameFacts = 109;
+  public const byte MsgBetaLogging = 110;
+  public const byte MsgTournySettings = 111;
+  public const byte MsgActivity = 112;
   public const byte MsgClanChat = 150;
   public const byte MsgPrivateChat = 151;
   public const byte MsgTeamChat = 152;
@@ -196,6 +181,16 @@ public static class Global
   public const byte SubSteamLogin = 2;
   public const byte SubSteamCreateAccount = 3;
   public const byte SubSteamLinkAccount = 4;
+  private static string _persistentDataPath = (string) null;
+  public static OperatingSystem OS = OperatingSystem.Windows;
+  public static HashSet<Sprite> _cachedSprites = new HashSet<Sprite>();
+  public static char[] BadChars = new char[4]
+  {
+    '\uF700',
+    '\uF703',
+    '\uF702',
+    '\uF701'
+  };
   public const string prefName = "prefName";
   public const string prefGameFacts = "prefGameFacts";
   public const string prefSpells = "prefSpells";
@@ -253,6 +248,19 @@ public static class Global
   public const string prefSpellBarTransparency = "prefSpellBarTransparency";
   public const string prefColoredNames = "prefcolorednames";
   public const string publicKey = "<RSAKeyValue><Modulus>mJbQP4q78dSvBUsCKXJXMnPQVVBtwEoC6IZH/n+jVWwT4P/AUw3pIGY69LzcLSjVErJmx2cTFHOk61mlqyQp0+51fUOkHL7Z9Xz7A486O9Sb85AtcUBfpyRuTdS9mgOVuXUeLzxwzuxiTqRRhLv7zOWPBze5nZG97luHkIWQ3AkjIdlurCIqeS2KHlwtdPgqzrAev/Qt38z/dug1bYJkxq3zVUBJR67JHR/WjBP6g8ZvU8dNTNNROU/gaaACnBOgx4IQOtJTAF4x9AWt3TG13opXlo/Pr5HD2FtWIcmPYf+cKLqtGd6tbN+GZvTgDsEic2w+HH9c5bRTHlBVcCvr3w==</Modulus><Exponent>AQAB</Exponent></RSAKeyValue>";
+  public static Color ColorLobbyText = (Color) new Color32(byte.MaxValue, (byte) 210, (byte) 83, byte.MaxValue);
+  public static Color ColorGameText = (Color) new Color32((byte) 85, (byte) 223, (byte) 85, byte.MaxValue);
+  public static Color ColorMiniGameText = (Color) new Color32((byte) 115, (byte) 180, (byte) 115, byte.MaxValue);
+  public static Color ColorSentPrivate = (Color) new Color32((byte) 115, (byte) 100, byte.MaxValue, byte.MaxValue);
+  public static Color ColorReceivedPrivate = (Color) new Color32((byte) 194, (byte) 80, (byte) 65, byte.MaxValue);
+  public static Color ColorGrayChat = new Color(0.5f, 0.5f, 0.5f);
+  public static Color ColorClanText = (Color) new Color32(byte.MaxValue, (byte) 142, (byte) 0, byte.MaxValue);
+  public static Color ColorSystem = Color.red;
+  public static Color ColorNotification = (Color) new Color32(byte.MaxValue, (byte) 0, (byte) 182, byte.MaxValue);
+  public static Color ColorTeamText = Color.cyan;
+  public static Color ColorNoteText = (Color) new Color32((byte) 150, byte.MaxValue, byte.MaxValue, byte.MaxValue);
+  public static Color ColorAnnoucement = Color.yellow;
+  public static Color ColorWhiteText = Color.white;
 
   public static MyLocation GetMountOffset(float x, CreatureType waterLord)
   {
@@ -266,6 +274,10 @@ public static class Global
         return (double) x < 0.0 ? Global.mountOffsetLeftReindeer : Global.mountOffsetReindeer;
       case CreatureType.Cogmobile:
         return Global.mountOffsetSteamEngine;
+      case CreatureType.Zombie:
+        return (double) x < 0.0 ? Global.mountOffsetLeftZombie : Global.mountOffsetZombie;
+      case CreatureType.Flesh_Golem:
+        return (double) x < 0.0 ? Global.mountOffsetLeftFleshGolem : Global.mountOffsetFleshGolem;
       default:
         return (double) x < 0.0 ? Global.mountOffsetLeft : Global.mountOffset;
     }
@@ -273,60 +285,36 @@ public static class Global
 
   public static string persistentDataPath
   {
-    get
-    {
-      return Global._persistentDataPath;
-    }
-    set
-    {
-      Global._persistentDataPath = value;
-    }
+    get => Global._persistentDataPath;
+    set => Global._persistentDataPath = value;
   }
 
-  public static bool IsGameMsg(byte x)
-  {
-    return x >= (byte) 175;
-  }
+  public static bool IsGameMsg(byte x) => x >= (byte) 175;
 
-  public static float Divide(float a, float b)
-  {
-    return (double) b == 0.0 ? 0.0f : a / b;
-  }
+  public static float Divide(float a, float b) => (double) b == 0.0 ? 0.0f : a / b;
 
-  public static int Divide(int a, int b)
-  {
-    return b == 0 ? 0 : a / b;
-  }
+  public static int Divide(int a, int b) => b == 0 ? 0 : a / b;
 
-  public static bool has(this AccountType a, AccountType b)
-  {
-    return (uint) (a & b) > 0U;
-  }
+  public static bool has(this AccountType a, AccountType b) => (a & b) != 0;
 
   public static bool IsMuted(this AccountType a)
   {
-    return (uint) (a & (AccountType.Muted | AccountType.Perm_Muted)) > 0U;
+    return (a & (AccountType.Muted | AccountType.Perm_Muted)) != 0;
   }
 
-  public static bool IsPermMuted(this AccountType a)
-  {
-    return (uint) (a & AccountType.Perm_Muted) > 0U;
-  }
+  public static bool IsPermMuted(this AccountType a) => (a & AccountType.Perm_Muted) != 0;
 
   public static bool IsChatMsg(byte b)
   {
-    return b == (byte) 153 || b == (byte) 152 || (b == (byte) 33 || b == (byte) 151) || (b == (byte) 150 || b == (byte) 51 || (b == (byte) 73 || b == (byte) 103)) || (b == (byte) 97 || b == (byte) 10 || (b == (byte) 58 || b == (byte) 56) || b == (byte) 155) || b == (byte) 157;
+    return b == (byte) 153 || b == (byte) 152 || b == (byte) 33 || b == (byte) 151 || b == (byte) 150 || b == (byte) 51 || b == (byte) 73 || b == (byte) 103 || b == (byte) 97 || b == (byte) 10 || b == (byte) 58 || b == (byte) 56 || b == (byte) 155 || b == (byte) 157;
   }
 
   public static bool NoPlayerID(byte b)
   {
-    return Global.IsChatMsg(b) || b == (byte) 42 || (b == (byte) 50 || b == (byte) 57) || (b == (byte) 55 || b == (byte) 1 || (b == (byte) 37 || b == (byte) 63)) || b == (byte) 72;
+    return Global.IsChatMsg(b) || b == (byte) 42 || b == (byte) 50 || b == (byte) 57 || b == (byte) 55 || b == (byte) 1 || b == (byte) 37 || b == (byte) 63 || b == (byte) 72;
   }
 
-  public static bool HasPlayerID(byte b)
-  {
-    return b >= (byte) 175;
-  }
+  public static bool HasPlayerID(byte b) => b >= (byte) 175;
 
   public static Sprite AddSprite(Sprite s)
   {
@@ -375,14 +363,8 @@ public static class Global
 
   public static string systemCopyBuffer
   {
-    get
-    {
-      return UniClipboard.GetText();
-    }
-    set
-    {
-      UniClipboard.SetText(value);
-    }
+    get => UniClipboard.GetText();
+    set => UniClipboard.SetText(value);
   }
 
   public static bool IsMouseOverGameWindow
@@ -401,15 +383,9 @@ public static class Global
     return lastPort;
   }
 
-  public static string ToJson(object o)
-  {
-    return JsonConvert.SerializeObject(o);
-  }
+  public static string ToJson(object o) => JsonConvert.SerializeObject(o);
 
-  public static T FromJson<T>(string j)
-  {
-    return JsonConvert.DeserializeObject<T>(j);
-  }
+  public static T FromJson<T>(string j) => JsonConvert.DeserializeObject<T>(j);
 
   public static void SaveCCJ(string name, byte[] sent)
   {
@@ -465,7 +441,7 @@ public static class Global
   {
     try
     {
-      return name.EndsWith(".arcTutorial2", StringComparison.OrdinalIgnoreCase) ? Tutorial.FromCodeOnly(File.ReadAllText(name)) : Tutorial.FromJson(File.ReadAllText(name));
+      return name.EndsWith(".arcTutorial2", StringComparison.OrdinalIgnoreCase) ? Tutorial.FromCodeOnly(File.ReadAllText(name), Path.GetFullPath(name)) : Tutorial.FromJson(File.ReadAllText(name));
     }
     catch (Exception ex)
     {
@@ -492,20 +468,11 @@ public static class Global
     }
   }
 
-  public static void SetPrefBool(string s, bool b)
-  {
-    PlayerPrefs.SetInt(s, b ? 1 : 0);
-  }
+  public static void SetPrefBool(string s, bool b) => PlayerPrefs.SetInt(s, b ? 1 : 0);
 
-  public static bool GetPrefBool(string s, bool b)
-  {
-    return PlayerPrefs.GetInt(s, b ? 1 : 0) == 1;
-  }
+  public static bool GetPrefBool(string s, bool b) => PlayerPrefs.GetInt(s, b ? 1 : 0) == 1;
 
-  public static void SetPrefUlong(string s, ulong b)
-  {
-    PlayerPrefs.SetString(s, b.ToString());
-  }
+  public static void SetPrefUlong(string s, ulong b) => PlayerPrefs.SetString(s, b.ToString());
 
   public static ulong GetPrefUlong(string s, ulong b)
   {
@@ -529,10 +496,7 @@ public static class Global
     return ColorUtility.TryParseHtmlString("#" + s, out color) ? color : Color.black;
   }
 
-  public static string ColorToString(Color c)
-  {
-    return ColorUtility.ToHtmlStringRGB(c);
-  }
+  public static string ColorToString(Color c) => ColorUtility.ToHtmlStringRGB(c);
 
   public static string ToTime(float cur)
   {
@@ -540,10 +504,7 @@ public static class Global
     return ((int) cur / 60).ToString("0") + ":" + num.ToString("00");
   }
 
-  public static string ToTime(int m, int s)
-  {
-    return m.ToString("0") + ":" + s.ToString("00");
-  }
+  public static string ToTime(int m, int s) => m.ToString("0") + ":" + s.ToString("00");
 
   public static float ParseTime(string t, float def, bool defMinutes = true)
   {
@@ -583,10 +544,7 @@ public static class Global
     return true;
   }
 
-  public static bool Sign(FixedInt f)
-  {
-    return f > 0;
-  }
+  public static bool Sign(FixedInt f) => f > 0;
 
   public static MyLocation Velocity(FixedInt angle)
   {
@@ -611,10 +569,17 @@ public static class Global
     return Mathf.Abs((int) a.r - (int) b.r) <= 1 && Mathf.Abs((int) a.b - (int) b.b) <= 1 && Mathf.Abs((int) a.g - (int) b.g) <= 1;
   }
 
+  public static bool CompareColorsAlpha(Color32 a, Color32 b)
+  {
+    return Mathf.Abs((int) a.r - (int) b.r) <= 1 && Mathf.Abs((int) a.b - (int) b.b) <= 1 && Mathf.Abs((int) a.g - (int) b.g) <= 1 && Mathf.Abs((int) a.a - (int) b.a) <= 1;
+  }
+
   public static Color32 CombineColors(Color a, Color b)
   {
-    Color black = Color.black;
-    black.a = (1f - b.a) * a.a + b.a;
+    Color black = Color.black with
+    {
+      a = (1f - b.a) * a.a + b.a
+    };
     black.r = (float) ((1.0 - (double) b.a) * (double) a.a * (double) a.r + (double) b.a * (double) b.r) / black.a;
     black.g = (float) ((1.0 - (double) b.a) * (double) a.a * (double) a.g + (double) b.a * (double) b.g) / black.a;
     black.b = (float) ((1.0 - (double) b.a) * (double) a.a * (double) a.b + (double) b.a * (double) b.b) / black.a;
@@ -650,11 +615,11 @@ public static class Global
   {
     using (MemoryStream memoryStream = new MemoryStream(sent))
     {
-      using (BsonReader bsonReader = new BsonReader((Stream) memoryStream))
+      using (BsonReader reader = new BsonReader((Stream) memoryStream))
         return new JsonSerializer()
         {
           TypeNameHandling = TypeNameHandling.Auto
-        }.Deserialize<T>((JsonReader) bsonReader);
+        }.Deserialize<T>((JsonReader) reader);
     }
   }
 
@@ -851,13 +816,10 @@ public static class Global
     float num3 = Math.Abs(a - b);
     if ((double) a == (double) b)
       return true;
-    return (double) a == 0.0 || (double) b == 0.0 || (double) num3 < 1.17549435082229E-38 ? (double) num3 < (double) epsilon * 1.17549435082229E-38 : (double) num3 / (double) Math.Min(num1 + num2, float.MaxValue) < (double) epsilon;
+    return (double) a == 0.0 || (double) b == 0.0 || (double) num3 < 1.1754943508222875E-38 ? (double) num3 < (double) epsilon * 1.1754943508222875E-38 : (double) num3 / (double) Math.Min(num1 + num2, float.MaxValue) < (double) epsilon;
   }
 
-  private static Sprite GetSandBoxSprite()
-  {
-    return ClientResources.Instance?._maps[0];
-  }
+  private static Sprite GetSandBoxSprite() => ClientResources.Instance?._maps[0];
 
   public static void CheckDirectoryExists(string path, string name)
   {

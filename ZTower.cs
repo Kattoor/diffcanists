@@ -3,18 +3,16 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+#nullable disable
 public class ZTower : ZComponent
 {
-  public int MaxHealth = 75;
-  public int Health = 75;
-  public bool firstCast = true;
-  [NonSerialized]
-  public int delayKillOffset = 1;
   public int id;
   public Tower baseTower;
   public Tower clientObj;
   internal ZEffector effector;
   internal int originX;
+  public int MaxHealth = 75;
+  public int Health = 75;
   public ZCreature creature;
   public ZEffector sanctuaryEffector;
   private List<Coords> fallPoints;
@@ -25,6 +23,9 @@ public class ZTower : ZComponent
   [NonSerialized]
   public bool dead;
   internal bool deaderThenDead;
+  public bool firstCast = true;
+  [NonSerialized]
+  public int delayKillOffset = 1;
   [NonSerialized]
   public int impdmg;
 
@@ -83,9 +84,9 @@ public class ZTower : ZComponent
 
   public static void Deserialize(myBinaryReader reader, ZGame game, ZCreature c)
   {
-    string index = reader.ReadString();
+    string key = reader.ReadString();
     MyLocation myLocation = reader.ReadMyLocation();
-    ZTower t = ZTower.Create(game, Inert.Instance.Towers[index], (Vector3) myLocation.ToSinglePrecision(), Quaternion.identity, game.GetMapTransform());
+    ZTower t = ZTower.Create(game, Inert.Instance.Towers[key], (Vector3) myLocation.ToSinglePrecision(), Quaternion.identity, game.GetMapTransform());
     t.creature = c;
     c.tower = t;
     t.collider.world = t.world;
@@ -97,124 +98,37 @@ public class ZTower : ZComponent
     t.OnHealthChanged();
   }
 
-  public ZGame game
-  {
-    get
-    {
-      return this.creature.game;
-    }
-  }
+  public ZGame game => this.creature.game;
 
-  public ZMyWorld world
-  {
-    get
-    {
-      return this.game.world;
-    }
-  }
+  public ZMyWorld world => this.game.world;
 
-  public ZMap map
-  {
-    get
-    {
-      return this.game.map;
-    }
-  }
+  public ZMap map => this.game.map;
 
-  public TowerType type
-  {
-    get
-    {
-      return this.baseTower.type;
-    }
-  }
+  public TowerType type => this.baseTower.type;
 
-  public int radius
-  {
-    get
-    {
-      return this.baseTower.radius;
-    }
-  }
+  public int radius => this.baseTower.radius;
 
-  public int lowerRadius
-  {
-    get
-    {
-      return this.baseTower.lowerRadius;
-    }
-  }
+  public int lowerRadius => this.baseTower.lowerRadius;
 
-  public int colliderOffset
-  {
-    get
-    {
-      return this.baseTower.colliderOffset;
-    }
-  }
+  public int colliderOffset => this.baseTower.colliderOffset;
 
-  public ExplosionCutout cutout
-  {
-    get
-    {
-      return this.baseTower.cutout;
-    }
-  }
+  public ExplosionCutout cutout => this.baseTower.cutout;
 
-  public int playerOffsetY
-  {
-    get
-    {
-      return this.baseTower.playerOffsetY;
-    }
-  }
+  public int playerOffsetY => this.baseTower.playerOffsetY;
 
-  public static FixedInt AddedOffsetY
-  {
-    get
-    {
-      return Tower.AddedOffsetY;
-    }
-  }
+  public static FixedInt AddedOffsetY => Tower.AddedOffsetY;
 
-  public int cutoutOffsetY
-  {
-    get
-    {
-      return this.baseTower.cutoutOffsetY;
-    }
-  }
+  public int cutoutOffsetY => this.baseTower.cutoutOffsetY;
 
-  public Texture2D texture
-  {
-    get
-    {
-      return this.baseTower.texture;
-    }
-  }
+  public Texture2D texture => this.baseTower.texture;
 
-  public int firstChildYOffset
-  {
-    get
-    {
-      return this.baseTower.firstChildYOffset;
-    }
-  }
+  public int firstChildYOffset => this.baseTower.firstChildYOffset;
 
-  private static FixedInt CogTowerRadius
-  {
-    get
-    {
-      return Tower.CogTowerRadius;
-    }
-  }
+  private static FixedInt CogTowerRadius => Tower.CogTowerRadius;
 
   public MyLocation position
   {
-    get
-    {
-      return this._position;
-    }
+    get => this._position;
     set
     {
       this._position = value;
@@ -275,7 +189,7 @@ public class ZTower : ZComponent
       this.Health = 0;
     this.dead = true;
     this.creature?.UpdateHealthTxt();
-    this.game.ongoing.RunCoroutine(this.killDelay(), true);
+    this.game.ongoing.RunCoroutine(this.killDelay());
   }
 
   private IEnumerator<float> killDelay()
@@ -283,9 +197,9 @@ public class ZTower : ZComponent
     yield return 0.0f;
     while (!ZComponent.IsNull((ZComponent) this.creature) && !this.creature.isDead && this.creature.isMoving)
       yield return 0.0f;
-    if (!ZComponent.IsNull((ZComponent) this.creature) && this.creature.inWater && (this.type == TowerType.Arcane && !this.deaderThenDead) && this.creature.health > 0)
+    if (!ZComponent.IsNull((ZComponent) this.creature) && this.creature.inWater && this.type == TowerType.Arcane && !this.deaderThenDead && this.creature.health > 0)
       this.dead = false;
-    else if (!ZComponent.IsNull((ZComponent) this.creature) && this.Health > 0 && (!this.deaderThenDead && this.creature.health > 0))
+    else if (!ZComponent.IsNull((ZComponent) this.creature) && this.Health > 0 && !this.deaderThenDead && this.creature.health > 0)
     {
       this.dead = false;
     }
@@ -293,7 +207,7 @@ public class ZTower : ZComponent
     {
       for (int i = 0; i < this.delayKillOffset; ++i)
         yield return 0.0f;
-      this.creature?.DestroyTower(false);
+      this.creature?.DestroyTower();
     }
   }
 
@@ -314,8 +228,8 @@ public class ZTower : ZComponent
         ZSpell.TreeHouse(this.creature, Inert.GetSpell(SpellEnum.Autumn_Leaves));
         break;
       case TowerType.Wooden:
-        ZSpell.ApplyExplosionForce(SpellEnum.Watchtower, this.creature.world, this.creature.position, 40, Curve.Generic, 50, 50, (FixedInt) 8, DamageType.Wallop, this.creature, this.creature.game.turn, Curve.Generic, (ISpellBridge) null, (ZCreature) null);
-        this.creature.DestroyTower(false);
+        ZSpell.ApplyExplosionForce(SpellEnum.Watchtower, this.creature.world, this.creature.position, 40, Curve.Generic, 50, 50, (FixedInt) 8, DamageType.Wallop, this.creature, this.creature.game.turn);
+        this.creature.DestroyTower();
         if (!this.game.isClient || !((UnityEngine.Object) this.creature.transform != (UnityEngine.Object) null))
           break;
         AudioManager.Play(AudioManager.instance.watchtowerDestroyed);
@@ -326,7 +240,7 @@ public class ZTower : ZComponent
         if (this.Health <= 0)
           this.Health = 1;
         this.OnHealthChanged();
-        this.game.CreatureMoveSurroundings(this.position, this.radius + 20, (ZMyCollider) null, true);
+        this.game.CreatureMoveSurroundings(this.position, this.radius + 20, forceLeaf: true);
         this.creature.UpdateHealthTxt();
         break;
     }
@@ -341,7 +255,7 @@ public class ZTower : ZComponent
           return 0;
         break;
       case DamageType.Heal:
-        this.creature.DoHeal(damage, dt, enemy, false);
+        this.creature.DoHeal(damage, dt, enemy);
         if (this.creature.health > this.creature.maxHealth)
         {
           damage -= this.creature.health - this.creature.maxHealth;
@@ -394,9 +308,9 @@ public class ZTower : ZComponent
     }
     else
     {
-      if ((dt == DamageType.Sunder || dt == DamageType.Rake || dt == DamageType.SunderLight) && ((ZComponent) enemy != (object) null && this.creature.team == enemy.team))
+      if ((dt == DamageType.Sunder || dt == DamageType.Rake || dt == DamageType.SunderLight) && (ZComponent) enemy != (object) null && this.creature.team == enemy.team)
         return;
-      if (dt == DamageType.Arcane && this.type == TowerType.Arcane && ((ZComponent) enemy != (object) null && enemy.FullArcane) && hitBySpell == SpellEnum.Arcane_Flash)
+      if (dt == DamageType.Arcane && this.type == TowerType.Arcane && (ZComponent) enemy != (object) null && enemy.FullArcane && hitBySpell == SpellEnum.Arcane_Flash)
       {
         damage = this.Health;
         this.Health = 0;
@@ -407,7 +321,7 @@ public class ZTower : ZComponent
         if (this.game.isClient && (UnityEngine.Object) this.creature.transform != (UnityEngine.Object) null)
           ZComponent.Instantiate<GameObject>(Inert.Instance.fountain, this.creature.transform.position, Quaternion.identity, this.game.GetMapTransform());
         MyLocation target = new MyLocation(this.creature.position.x, (FixedInt) (this.map.Height + 200));
-        this.game.ongoing.RunCoroutine(ZSpell.IEnumeratorArcaneArrows(Inert.Instance.spells["Arcane Arrow"], enemy, this.creature.position + new MyLocation(0, 50), Quaternion.identity, (FixedInt) 90, (FixedInt) 1, 25, target, 0, false), true);
+        this.game.ongoing.RunCoroutine(ZSpell.IEnumeratorArcaneArrows(Inert.Instance.spells["Arcane Arrow"], enemy, this.creature.position + new MyLocation(0, 50), Quaternion.identity, (FixedInt) 90, (FixedInt) 1, 25, target));
       }
       else if (dt == DamageType.Heal || dt == DamageType.Heal20)
       {
@@ -450,7 +364,7 @@ public class ZTower : ZComponent
             }
             break;
           case DamageType.Heal:
-            this.creature.DoHeal(damage, dt, enemy, false);
+            this.creature.DoHeal(damage, dt, enemy);
             if (this.creature.health > this.creature.maxHealth)
             {
               damage -= this.creature.health - this.creature.maxHealth;
@@ -513,26 +427,26 @@ public class ZTower : ZComponent
             return;
           int damage1 = Mathf.Min(damage, enemy.health);
           if (!this.creature.drainable)
-            enemy.DoHeal(damage1, DamageType.None, (ZCreature) null, false);
+            enemy.DoHeal(damage1);
           else
-            enemy.DoHeal(damage1, dt, enemy, false);
+            enemy.DoHeal(damage1, dt, enemy);
           if (enemy.health > Mathf.Max(enemy.maxHealth, this.game.MaxHealth(enemy)))
             enemy.health = Mathf.Max(enemy.maxHealth, this.game.MaxHealth(enemy));
           enemy.UpdateHealthTxt();
         }
-        if (!ZComponent.IsNull((ZComponent) enemy) && !enemy.isDead && (enemy.race == CreatureRace.Undead && !enemy.isPawn) && dt != DamageType.Drain)
+        if (!ZComponent.IsNull((ZComponent) enemy) && !enemy.isDead && enemy.race == CreatureRace.Undead && !enemy.isPawn && dt != DamageType.Drain)
         {
-          int damage1 = Mathf.Min(enemy.health, Mathf.Clamp(damage, 0, this.Health)) / 2;
-          if (damage1 < 1)
-            damage1 = 1;
+          int damage2 = Mathf.Min(enemy.health, Mathf.Clamp(damage, 0, this.Health)) / 2;
+          if (damage2 < 1)
+            damage2 = 1;
           if (this.creature.shield > 0)
-            damage1 -= this.creature.shield;
-          if (damage1 > 0)
+            damage2 -= this.creature.shield;
+          if (damage2 > 0)
           {
-            enemy.DoHeal(damage1, dt, enemy, false);
+            enemy.DoHeal(damage2, dt, enemy);
             if (enemy.health > enemy.maxHealth)
             {
-              int num2 = damage1 - (enemy.health - enemy.maxHealth);
+              int num2 = damage2 - (enemy.health - enemy.maxHealth);
               enemy.health = enemy.maxHealth;
             }
             enemy.UpdateHealthTxt();
@@ -545,19 +459,19 @@ public class ZTower : ZComponent
           {
             if (this.creature.type != CreatureType.Cosmic_Horror && this.creature.familiarLevelCosmos < 5)
             {
-              this.creature.CreateGravityObj(false);
+              this.creature.CreateGravityObj();
               this.creature.appliedGravity = this.creature.parent.localTurn + 3;
             }
           }
           else if (this.creature.type != CreatureType.Cosmic_Horror && this.creature.familiarLevelCosmos < 5)
           {
-            this.creature.CreateGravityObj(false);
+            this.creature.CreateGravityObj();
             this.creature.appliedGravity = this.creature.parent.localTurn + 2;
           }
         }
         else if (hitBySpell == SpellEnum.Gravity_Well && spellRef != null)
           ZSpell.FireEffector(spellRef.GetBaseSpell, this.creature, this.position, (FixedInt) 0, (FixedInt) 0, true);
-        if (this.creature.shield > 0 && dt != DamageType.IgnoreShield && (dt != DamageType.Percentage50 && hitBySpell != SpellEnum.Blood_Craze))
+        if (this.creature.shield > 0 && dt != DamageType.IgnoreShield && dt != DamageType.Percentage50 && hitBySpell != SpellEnum.Blood_Craze)
         {
           this.creature.HealBloodBank(enemy, Mathf.Min(this.creature.shield, damage), dt);
           if (this.creature.shield >= damage)
@@ -599,6 +513,10 @@ public class ZTower : ZComponent
         }
         if (enemy?.parent == this.creature.parent)
           this.creature.turnFriendlyDmg = this.game.turn;
+        if (dt == DamageType.SuperStun)
+          this.creature.superStunned = true;
+        if (this.creature.superStunned || damage > 0 && (this.game.serverState.busy == ServerState.Busy.No || this.game.serverState.busy == ServerState.Busy.Moving || this.game.serverState.busy == ServerState.Busy.Moving_NoCountdown))
+          this.creature.OnStunned();
         if (this.Health <= 0)
         {
           if ((ZComponent) enemy != (object) null)
@@ -610,22 +528,14 @@ public class ZTower : ZComponent
           this.DelayKill();
         }
         else
-        {
           this.creature.UpdateHealthTxt();
-          if (dt == DamageType.SuperStun)
-            this.creature.superStunned = true;
-          if (!this.creature.superStunned && (damage <= 0 || this.game.serverState.busy != ServerState.Busy.No && this.game.serverState.busy != ServerState.Busy.Moving && this.game.serverState.busy != ServerState.Busy.Moving_NoCountdown))
-            return;
-          this.creature.OnStunned();
-        }
       }
     }
   }
 
   private void SetPosition(FixedInt y)
   {
-    MyLocation position = this.position;
-    position.y = y;
+    MyLocation position = this.position with { y = y };
     this.position = position;
     if ((UnityEngine.Object) this.transform != (UnityEngine.Object) null)
       this.transform.position = (Vector3) position.ToSinglePrecision();
@@ -685,12 +595,12 @@ public class ZTower : ZComponent
 
   public bool ShouldFall()
   {
-    if (this.type == TowerType.Cosmos && !this.creature.entangledOrGravity || (this.creature.inWater || (ZComponent) this.creature.tower == (object) null))
+    if (this.type == TowerType.Cosmos && !this.creature.entangledOrGravity || this.creature.inWater || (ZComponent) this.creature.tower == (object) null)
       return false;
     if (this.Health <= 0)
       this.DelayKill();
     this.UpdateFallPoints();
-    if (this.creature.velocity.y != 0 || this.creature.isMoving || this.creature.waterWalking && this.position.y <= ZTower.CogTowerRadius && (this.position.x >= 0 && this.position.x < this.map.Width) && (this.type != TowerType.Illusion || this.creature.entangledOrGravity))
+    if (this.creature.velocity.y != 0 || this.creature.isMoving || this.creature.waterWalking && this.position.y <= ZTower.CogTowerRadius && this.position.x >= 0 && this.position.x < this.map.Width && (this.type != TowerType.Illusion || this.creature.entangledOrGravity))
       return false;
     int x = (int) this.position.x;
     int num = (int) this.position.y - 3;
@@ -705,7 +615,7 @@ public class ZTower : ZComponent
       this.SetPosition(this.position.y + 1);
     else
       this.SetPosition(this.position.y - 1);
-    this.creature.moving = this.game.ongoing.RunCoroutine(this.Fall(), true);
+    this.creature.moving = this.game.ongoing.RunCoroutine(this.Fall());
     return (ZComponent) this.creature.tower != (object) null;
   }
 
@@ -776,7 +686,7 @@ public class ZTower : ZComponent
                 this.SetPosition(y1);
                 this.creature.moving = (IEnumerator<float>) null;
                 this.creature.isMoving = false;
-                this.game.CreatureMoveSurroundings(this.position, this.radius + 20, (ZMyCollider) null, false);
+                this.game.CreatureMoveSurroundings(this.position, this.radius + 20);
                 if (this.Health > 0)
                 {
                   yield break;
@@ -791,9 +701,9 @@ public class ZTower : ZComponent
             y1 = x1;
             x1 += fixedInt;
           }
-          MyLocation position1 = this.position;
+          MyLocation position = this.position;
           this.SetPosition(this.position.y + this.creature.velocity.y);
-          this.game.CreatureMoveSurroundings(position1, this.radius + 20, (ZMyCollider) null, false);
+          this.game.CreatureMoveSurroundings(position, this.radius + 20);
           if (this.type == TowerType.Nature)
             this.sanctuaryEffector.CheckSanctuary();
           if (this.type == TowerType.Illusion && !this.creature.entangledOrGravity)
@@ -813,19 +723,21 @@ public class ZTower : ZComponent
             {
               if (this.position.x >= 0 && this.position.x <= this.map.Width)
               {
-                MyLocation position2 = this.position;
-                position2.y = ZTower.CogTowerRadius;
-                this.SetPosition(position2);
+                this.SetPosition(this.position with
+                {
+                  y = ZTower.CogTowerRadius
+                });
                 yield break;
               }
             }
-            else if ((this.type == TowerType.Frost || this.creature.parent.GetLevel(BookOf.Frost) > 0) && (this.position.x >= 0 && this.position.x <= this.map.Width) && this.game.waterType == WaterStyle.Water)
+            else if ((this.type == TowerType.Frost || this.creature.parent.GetLevel(BookOf.Frost) > 0) && this.position.x >= 0 && this.position.x <= this.map.Width && this.game.waterType == WaterStyle.Water)
             {
-              this.map.ServerBitBlt(54, (int) this.position.x, 4, false, true);
-              MyLocation position2 = this.position;
-              position2.y = ZTower.CogTowerRadius + 8;
-              this.SetPosition(position2);
-              this.creature.DoDamage(5, DamageType.None, (ZCreature) null, false);
+              this.map.ServerBitBlt(54, (int) this.position.x, 4, false);
+              this.SetPosition(this.position with
+              {
+                y = ZTower.CogTowerRadius + 8
+              });
+              this.creature.DoDamage(Mathf.Clamp(6 - this.creature.familiarLevelFrost, 1, 5));
               this.creature.UpdateHealthTxt();
               if (this.creature.health > 0)
               {
@@ -838,7 +750,7 @@ public class ZTower : ZComponent
               }
             }
             if (this.impdmg > 0)
-              this.creature.DoDamage(this.impdmg, DamageType.None, (ZCreature) null, false);
+              this.creature.DoDamage(this.impdmg);
             this.creature.EnteredWater();
             this.SetPosition(new MyLocation(this.position.x, (FixedInt) -1000));
             this.DelayKill();
@@ -850,9 +762,10 @@ public class ZTower : ZComponent
             this.creature.isMoving = false;
             this.creature.velocity.x = (FixedInt) 0;
             this.creature.velocity.y = (FixedInt) 0;
-            MyLocation position2 = this.position;
-            position2.y = (FixedInt) (this.map.Height - 56);
-            this.SetPosition(position2);
+            this.SetPosition(this.position with
+            {
+              y = (FixedInt) (this.map.Height - 56)
+            });
             yield break;
           }
           else
@@ -861,7 +774,7 @@ public class ZTower : ZComponent
       }
       this.creature.isMoving = false;
       if ((ZComponent) this.creature != (object) null && !this.creature.inWater)
-        this.creature.Fall(false);
+        this.creature.Fall();
     }
   }
 
@@ -905,10 +818,7 @@ public class ZTower : ZComponent
     }
   }
 
-  private bool BypassEntangle()
-  {
-    return false;
-  }
+  private bool BypassEntangle() => false;
 
   public bool TowerMoveDown()
   {
@@ -954,13 +864,7 @@ public class ZTower : ZComponent
     return !flag ? this.Check(1, 0) : flag;
   }
 
-  private int CosmosSpeed
-  {
-    get
-    {
-      return !this.creature.gravitionalPull ? 2 : 1;
-    }
-  }
+  private int CosmosSpeed => !this.creature.gravitionalPull ? 2 : 1;
 
   public bool Check(int offX, int offY)
   {
@@ -983,9 +887,9 @@ public class ZTower : ZComponent
       }
     }
     this.SetPosition(new MyLocation(this.position.x + offX, this.position.y + offY));
-    this.game.CreatureMoveSurroundings(this.position, this.radius + 20, this.collider, false);
+    this.game.CreatureMoveSurroundings(this.position, this.radius + 20, this.collider);
     if (!this.dead && ZEffector.InEffector(this.collider, EffectorType.Blackhole))
-      this.creature.DestroyTower(false);
+      this.creature.DestroyTower();
     return true;
   }
 
@@ -1033,16 +937,16 @@ public class ZTower : ZComponent
           if (!(pos.y < this.map.Height - this.radius))
             return;
           this.SetPosition(pos);
-          this.game.CreatureMoveSurroundings(this.position, this.radius + 20, (ZMyCollider) null, false);
+          this.game.CreatureMoveSurroundings(this.position, this.radius + 20);
           return;
         }
       }
-      if (coords == null && (!this.creature.waterWalking || this.position.y > ZTower.CogTowerRadius || (this.position.x <= 0 || this.position.x >= this.map.Width)))
+      if (coords == null && (!this.creature.waterWalking || this.position.y > ZTower.CogTowerRadius || this.position.x <= 0 || this.position.x >= this.map.Width))
       {
         if (this.ShouldFall())
           return;
         this.SetPosition(this.position + new MyLocation(-1, 0));
-        this.game.CreatureMoveSurroundings(this.position, this.radius + 20, (ZMyCollider) null, false);
+        this.game.CreatureMoveSurroundings(this.position, this.radius + 20);
         return;
       }
       if (num > 1)
@@ -1067,7 +971,7 @@ public class ZTower : ZComponent
       if (pos.y < this.map.Height - this.radius)
         this.SetPosition(pos);
     }
-    this.game.CreatureMoveSurroundings(this.position, this.radius + 20, (ZMyCollider) null, false);
+    this.game.CreatureMoveSurroundings(this.position, this.radius + 20);
   }
 
   public void MoveRight()
@@ -1114,16 +1018,16 @@ public class ZTower : ZComponent
           if (!(pos.y < this.map.Height - this.radius))
             return;
           this.SetPosition(pos);
-          this.game.CreatureMoveSurroundings(this.position, this.radius + 20, (ZMyCollider) null, false);
+          this.game.CreatureMoveSurroundings(this.position, this.radius + 20);
           return;
         }
       }
-      if (coords == null && (!this.creature.waterWalking || this.position.y > ZTower.CogTowerRadius || (this.position.x <= 0 || this.position.x >= this.map.Width)))
+      if (coords == null && (!this.creature.waterWalking || this.position.y > ZTower.CogTowerRadius || this.position.x <= 0 || this.position.x >= this.map.Width))
       {
         if (this.ShouldFall())
           return;
         this.SetPosition(this.position + new MyLocation(1, 0));
-        this.game.CreatureMoveSurroundings(this.position, this.radius + 20, (ZMyCollider) null, false);
+        this.game.CreatureMoveSurroundings(this.position, this.radius + 20);
         return;
       }
       if (num > 1)
@@ -1148,6 +1052,6 @@ public class ZTower : ZComponent
       if (pos.y < this.map.Height - this.radius)
         this.SetPosition(pos);
     }
-    this.game.CreatureMoveSurroundings(this.position, this.radius + 20, (ZMyCollider) null, false);
+    this.game.CreatureMoveSurroundings(this.position, this.radius + 20);
   }
 }

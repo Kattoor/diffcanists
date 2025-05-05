@@ -3,16 +3,14 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 
+#nullable disable
 public class PfabServerButton : MonoBehaviour
 {
   public TMP_Text txtName;
   public TMP_Text PingText;
   public UIOnHover uibutton;
 
-  public void Ping(string isp)
-  {
-    this.StartCoroutine(this._Ping(isp));
-  }
+  public void Ping(string isp) => this.StartCoroutine(this._Ping(isp));
 
   private IEnumerator _Ping(string isp)
   {

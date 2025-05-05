@@ -1,6 +1,7 @@
 
 using System;
 
+#nullable disable
 namespace Hazel
 {
   public abstract class ConnectionListener : IDisposable
@@ -21,15 +22,9 @@ namespace Hazel
       newConnection((object) this, e);
     }
 
-    public virtual void Close()
-    {
-      this.Dispose();
-    }
+    public virtual void Close() => this.Dispose();
 
-    public void Dispose()
-    {
-      this.Dispose(true);
-    }
+    public void Dispose() => this.Dispose(true);
 
     protected virtual void Dispose(bool disposing)
     {

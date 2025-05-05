@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 
+#nullable disable
 public static class Extensions<T> where T : Enum
 {
   public static bool AvailableGameMode(GameFacts.Message msg, out T map, params RatedFacts[] p)

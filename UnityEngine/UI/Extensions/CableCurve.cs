@@ -1,16 +1,12 @@
 
 using System;
 
+#nullable disable
 namespace UnityEngine.UI.Extensions
 {
   [Serializable]
   public class CableCurve
   {
-    private static Vector2[] emptyCurve = new Vector2[2]
-    {
-      new Vector2(0.0f, 0.0f),
-      new Vector2(0.0f, 0.0f)
-    };
     [SerializeField]
     private Vector2 m_start;
     [SerializeField]
@@ -21,27 +17,23 @@ namespace UnityEngine.UI.Extensions
     private int m_steps;
     [SerializeField]
     private bool m_regen;
+    private static Vector2[] emptyCurve = new Vector2[2]
+    {
+      new Vector2(0.0f, 0.0f),
+      new Vector2(0.0f, 0.0f)
+    };
     [SerializeField]
     private Vector2[] points;
 
     public bool regenPoints
     {
-      get
-      {
-        return this.m_regen;
-      }
-      set
-      {
-        this.m_regen = value;
-      }
+      get => this.m_regen;
+      set => this.m_regen = value;
     }
 
     public Vector2 start
     {
-      get
-      {
-        return this.m_start;
-      }
+      get => this.m_start;
       set
       {
         if (value != this.m_start)
@@ -52,10 +44,7 @@ namespace UnityEngine.UI.Extensions
 
     public Vector2 end
     {
-      get
-      {
-        return this.m_end;
-      }
+      get => this.m_end;
       set
       {
         if (value != this.m_end)
@@ -66,10 +55,7 @@ namespace UnityEngine.UI.Extensions
 
     public float slack
     {
-      get
-      {
-        return this.m_slack;
-      }
+      get => this.m_slack;
       set
       {
         if ((double) value != (double) this.m_slack)
@@ -80,10 +66,7 @@ namespace UnityEngine.UI.Extensions
 
     public int steps
     {
-      get
-      {
-        return this.m_steps;
-      }
+      get => this.m_steps;
       set
       {
         if (value != this.m_steps)
@@ -96,15 +79,15 @@ namespace UnityEngine.UI.Extensions
     {
       get
       {
-        Vector2 vector2 = Vector2.zero;
+        Vector2 midPoint = Vector2.zero;
         if (this.m_steps == 2)
           return (this.points[0] + this.points[1]) * 0.5f;
         if (this.m_steps > 2)
         {
           int index = this.m_steps / 2;
-          vector2 = this.m_steps % 2 != 0 ? this.points[index] : (this.points[index] + this.points[index + 1]) * 0.5f;
+          midPoint = this.m_steps % 2 != 0 ? this.points[index] : (this.points[index] + this.points[index + 1]) * 0.5f;
         }
-        return vector2;
+        return midPoint;
       }
     }
 
@@ -202,9 +185,11 @@ namespace UnityEngine.UI.Extensions
       for (int index = 0; index < this.m_steps; ++index)
       {
         float t = (float) index / num16;
-        Vector2 zero = Vector2.zero;
-        zero.x = Mathf.Lerp(this.start.x, this.end.x, t);
-        zero.y = num13 * (float) Math.Cosh(((double) t * (double) num2 - (double) num14) / (double) num13) + num15;
+        Vector2 zero = Vector2.zero with
+        {
+          x = Mathf.Lerp(this.start.x, this.end.x, t),
+          y = num13 * (float) Math.Cosh(((double) t * (double) num2 - (double) num14) / (double) num13) + num15
+        };
         this.points[index] = zero;
       }
       this.m_regen = false;

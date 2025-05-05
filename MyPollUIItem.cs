@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+#nullable disable
 public class MyPollUIItem : MonoBehaviour
 {
   public RectTransform rect;
@@ -25,13 +26,7 @@ public class MyPollUIItem : MonoBehaviour
     this.gameObject.SetActive(true);
   }
 
-  public void OnClick()
-  {
-    MyPollUI.Instance.SelectItem(this.myIndex);
-  }
+  public void OnClick() => MyPollUI.Instance.SelectItem(this.myIndex);
 
-  public void OnEdit(string s)
-  {
-    MyPollUI.Instance.OnEdit(this.myIndex, s);
-  }
+  public void OnEdit(string s) => MyPollUI.Instance.OnEdit(this.myIndex, s);
 }

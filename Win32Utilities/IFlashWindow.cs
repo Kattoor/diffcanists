@@ -1,4 +1,5 @@
 
+#nullable disable
 namespace Win32Utilities
 {
   public interface IFlashWindow

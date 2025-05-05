@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 
+#nullable disable
 namespace Ninja.WebSockets.Internal
 {
   internal static class WebSocketFrameWriter
@@ -26,14 +27,14 @@ namespace Ninja.WebSockets.Internal
       }
       else if (fromPayload.Count <= (int) ushort.MaxValue)
       {
-        byte num3 = (byte) ((uint) num2 | 126U);
-        memoryStream.WriteByte(num3);
+        byte num4 = (byte) ((uint) num2 | 126U);
+        memoryStream.WriteByte(num4);
         BinaryReaderWriter.WriteUShort((ushort) fromPayload.Count, (Stream) memoryStream, false);
       }
       else
       {
-        byte num3 = (byte) ((uint) num2 | (uint) sbyte.MaxValue);
-        memoryStream.WriteByte(num3);
+        byte num5 = (byte) ((uint) num2 | (uint) sbyte.MaxValue);
+        memoryStream.WriteByte(num5);
         BinaryReaderWriter.WriteULong((ulong) fromPayload.Count, (Stream) memoryStream, false);
       }
       if (isClient)

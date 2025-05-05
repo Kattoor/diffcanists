@@ -1,11 +1,10 @@
 
-using System.Net;
-
+#nullable disable
 namespace Hazel
 {
   public abstract class NetworkConnection : Connection
   {
-    public EndPoint RemoteEndPoint { get; protected set; }
+    public System.Net.EndPoint RemoteEndPoint { get; protected set; }
 
     public IPMode IPMode { get; protected set; }
   }

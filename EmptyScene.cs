@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+#nullable disable
 public class EmptyScene : MonoBehaviour
 {
   private void OnGUI()

@@ -4,14 +4,27 @@ using System.Runtime.CompilerServices;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
+#nullable disable
 namespace UnityEngine.UI
 {
   [AddComponentMenu("UI/BoxSlider", 35)]
   [RequireComponent(typeof (RectTransform))]
-  public class BoxSlider : Selectable, IDragHandler, IEventSystemHandler, IInitializePotentialDragHandler, ICanvasElement
+  public class BoxSlider : 
+    Selectable,
+    IDragHandler,
+    IEventSystemHandler,
+    IInitializePotentialDragHandler,
+    ICanvasElement
   {
     [SerializeField]
+    private RectTransform m_HandleRect;
+    [Space(6f)]
+    [SerializeField]
+    private float m_MinValue;
+    [SerializeField]
     private float m_MaxValue = 1f;
+    [SerializeField]
+    private bool m_WholeNumbers;
     [SerializeField]
     private float m_Value = 1f;
     [SerializeField]
@@ -19,24 +32,14 @@ namespace UnityEngine.UI
     [Space(6f)]
     [SerializeField]
     private BoxSlider.BoxSliderEvent m_OnValueChanged = new BoxSlider.BoxSliderEvent();
-    private Vector2 m_Offset = Vector2.zero;
-    [SerializeField]
-    private RectTransform m_HandleRect;
-    [Space(6f)]
-    [SerializeField]
-    private float m_MinValue;
-    [SerializeField]
-    private bool m_WholeNumbers;
     private Transform m_HandleTransform;
     private RectTransform m_HandleContainerRect;
+    private Vector2 m_Offset = Vector2.zero;
     private DrivenRectTransformTracker m_Tracker;
 
     public RectTransform handleRect
     {
-      get
-      {
-        return this.m_HandleRect;
-      }
+      get => this.m_HandleRect;
       set
       {
         if (!BoxSlider.SetClass<RectTransform>(ref this.m_HandleRect, value))
@@ -48,10 +51,7 @@ namespace UnityEngine.UI
 
     public float minValue
     {
-      get
-      {
-        return this.m_MinValue;
-      }
+      get => this.m_MinValue;
       set
       {
         if (!BoxSlider.SetStruct<float>(ref this.m_MinValue, value))
@@ -64,10 +64,7 @@ namespace UnityEngine.UI
 
     public float maxValue
     {
-      get
-      {
-        return this.m_MaxValue;
-      }
+      get => this.m_MaxValue;
       set
       {
         if (!BoxSlider.SetStruct<float>(ref this.m_MaxValue, value))
@@ -80,10 +77,7 @@ namespace UnityEngine.UI
 
     public bool wholeNumbers
     {
-      get
-      {
-        return this.m_WholeNumbers;
-      }
+      get => this.m_WholeNumbers;
       set
       {
         if (!BoxSlider.SetStruct<bool>(ref this.m_WholeNumbers, value))
@@ -96,14 +90,8 @@ namespace UnityEngine.UI
 
     public float value
     {
-      get
-      {
-        return this.wholeNumbers ? Mathf.Round(this.m_Value) : this.m_Value;
-      }
-      set
-      {
-        this.Set(value);
-      }
+      get => this.wholeNumbers ? Mathf.Round(this.m_Value) : this.m_Value;
+      set => this.Set(value);
     }
 
     public float normalizedValue
@@ -112,22 +100,13 @@ namespace UnityEngine.UI
       {
         return Mathf.Approximately(this.minValue, this.maxValue) ? 0.0f : Mathf.InverseLerp(this.minValue, this.maxValue, this.value);
       }
-      set
-      {
-        this.value = Mathf.Lerp(this.minValue, this.maxValue, value);
-      }
+      set => this.value = Mathf.Lerp(this.minValue, this.maxValue, value);
     }
 
     public float valueY
     {
-      get
-      {
-        return this.wholeNumbers ? Mathf.Round(this.m_ValueY) : this.m_ValueY;
-      }
-      set
-      {
-        this.SetY(value);
-      }
+      get => this.wholeNumbers ? Mathf.Round(this.m_ValueY) : this.m_ValueY;
+      set => this.SetY(value);
     }
 
     public float normalizedValueY
@@ -136,29 +115,20 @@ namespace UnityEngine.UI
       {
         return Mathf.Approximately(this.minValue, this.maxValue) ? 0.0f : Mathf.InverseLerp(this.minValue, this.maxValue, this.valueY);
       }
-      set
-      {
-        this.valueY = Mathf.Lerp(this.minValue, this.maxValue, value);
-      }
+      set => this.valueY = Mathf.Lerp(this.minValue, this.maxValue, value);
     }
 
     public BoxSlider.BoxSliderEvent onValueChanged
     {
-      get
-      {
-        return this.m_OnValueChanged;
-      }
-      set
-      {
-        this.m_OnValueChanged = value;
-      }
+      get => this.m_OnValueChanged;
+      set => this.m_OnValueChanged = value;
     }
 
     private float stepSize
     {
       get
       {
-        return !this.wholeNumbers ? (float) (((double) this.maxValue - (double) this.minValue) * 0.100000001490116) : 1f;
+        return !this.wholeNumbers ? (float) (((double) this.maxValue - (double) this.minValue) * 0.10000000149011612) : 1f;
       }
     }
 
@@ -222,10 +192,7 @@ namespace UnityEngine.UI
         this.m_HandleContainerRect = (RectTransform) null;
     }
 
-    private void Set(float input)
-    {
-      this.Set(input, true);
-    }
+    private void Set(float input) => this.Set(input, true);
 
     private void Set(float input, bool sendCallback)
     {
@@ -241,10 +208,7 @@ namespace UnityEngine.UI
       this.m_OnValueChanged.Invoke(f, this.valueY);
     }
 
-    private void SetY(float input)
-    {
-      this.SetY(input, true);
-    }
+    private void SetY(float input) => this.SetY(input, true);
 
     private void SetY(float input, bool sendCallback)
     {
@@ -337,10 +301,7 @@ namespace UnityEngine.UI
     }
 
     [SpecialName]
-    Transform ICanvasElement.get_transform()
-    {
-      return this.transform;
-    }
+    Transform ICanvasElement.get_transform() => this.transform;
 
     public enum Direction
     {

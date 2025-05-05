@@ -1,4 +1,5 @@
 
+#nullable disable
 namespace Educative
 {
   public class CWaitWhileTrue : Command
@@ -8,10 +9,7 @@ namespace Educative
     public MyHeader Comparision = new MyHeader();
     public Comparison comparison;
 
-    public CWaitWhileTrue()
-    {
-      this.type = Command.Type.WaitWhileTrue;
-    }
+    public CWaitWhileTrue() => this.type = Command.Type.WaitWhileTrue;
 
     public bool Evaulate()
     {

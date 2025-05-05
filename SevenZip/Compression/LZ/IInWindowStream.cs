@@ -1,6 +1,7 @@
 
 using System.IO;
 
+#nullable disable
 namespace SevenZip.Compression.LZ
 {
   internal interface IInWindowStream

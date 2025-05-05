@@ -1,11 +1,12 @@
 
 using UnityEngine;
 
+#nullable disable
 public class ScrollTexture : MonoBehaviour
 {
-  private Vector2 uvOffset = Vector2.zero;
   public float uvAnimationRate;
   public Material m;
+  private Vector2 uvOffset = Vector2.zero;
 
   private void Awake()
   {

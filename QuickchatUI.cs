@@ -8,19 +8,9 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+#nullable disable
 public class QuickchatUI : MonoBehaviour
 {
-  private static int targetMap = 0;
-  private static int targetTime = 0;
-  private static int targetStyle = 0;
-  private static int targetRanked = 0;
-  private static int targetCount = 0;
-  private static int targetMinion = 0;
-  private static int targetSpell = 0;
-  internal static string privateDM = "";
-  private List<ChatOrigination> valueDestionation = new List<ChatOrigination>();
-  private int selectedCategory = -1;
-  private string selectedEmoji = "";
   public TMP_Text pfab;
   public TMP_Text pfabItem;
   public RectTransform containerCategory;
@@ -40,8 +30,19 @@ public class QuickchatUI : MonoBehaviour
   public TMP_InputField inputPrivate;
   public TMP_Dropdown dropDestination;
   public TMP_Dropdown dropPrivate;
+  private List<ChatOrigination> valueDestionation = new List<ChatOrigination>();
   internal static ChatOrigination targetDestination;
+  private static int targetMap = 0;
+  private static int targetTime = 0;
+  private static int targetStyle = 0;
+  private static int targetRanked = 0;
+  private static int targetCount = 0;
+  private static int targetMinion = 0;
+  private static int targetSpell = 0;
+  internal static string privateDM = "";
+  private int selectedCategory = -1;
   private Quickchat.Command selectedCommand;
+  private string selectedEmoji = "";
 
   public static QuickchatUI Instance { get; private set; }
 
@@ -230,38 +231,38 @@ public class QuickchatUI : MonoBehaviour
   private int[] GetOptions()
   {
     Quickchat.Command selectedCommand = this.selectedCommand;
-    int[] numArray = new int[selectedCommand.options == null ? 0 : selectedCommand.options.Length];
-    for (int index = 0; index < numArray.Length; ++index)
+    int[] options = new int[selectedCommand.options == null ? 0 : selectedCommand.options.Length];
+    for (int index = 0; index < options.Length; ++index)
     {
       switch (selectedCommand.options[index])
       {
         case Quickchat.Options.Map:
-          numArray[index] = this.dropMaps.value;
+          options[index] = this.dropMaps.value;
           break;
         case Quickchat.Options.Time:
-          numArray[index] = this.dropTime.value;
+          options[index] = this.dropTime.value;
           break;
         case Quickchat.Options.Style:
-          numArray[index] = this.dropStyle.value;
+          options[index] = this.dropStyle.value;
           break;
         case Quickchat.Options.PlayerCount:
-          numArray[index] = this.dropCount.value;
+          options[index] = this.dropCount.value;
           break;
         case Quickchat.Options.Ranked:
-          numArray[index] = this.dropRanked.value;
+          options[index] = this.dropRanked.value;
           break;
         case Quickchat.Options.Spell:
-          numArray[index] = this.dropSpell.value;
+          options[index] = this.dropSpell.value;
           break;
         case Quickchat.Options.Minion:
-          numArray[index] = this.dropMinion.value;
+          options[index] = this.dropMinion.value;
           break;
         case Quickchat.Options.Emoji:
-          numArray[index] = EmojiInfo.allEmoji.list.FindIndex((Predicate<Emoji>) (z => string.Equals(z.realName, this.selectedEmoji)));
+          options[index] = EmojiInfo.allEmoji.list.FindIndex((Predicate<Emoji>) (z => string.Equals(z.realName, this.selectedEmoji)));
           break;
       }
     }
-    return numArray;
+    return options;
   }
 
   public void SendCommand()
@@ -274,10 +275,7 @@ public class QuickchatUI : MonoBehaviour
     this.Close();
   }
 
-  public void Close()
-  {
-    UnityEngine.Object.Destroy((UnityEngine.Object) this.gameObject);
-  }
+  public void Close() => UnityEngine.Object.Destroy((UnityEngine.Object) this.gameObject);
 
   public void InitMaps()
   {

@@ -1,4 +1,5 @@
 
+#nullable disable
 namespace LibNoise.Operator
 {
   public class ScaleBias : ModuleBase

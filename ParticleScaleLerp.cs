@@ -1,13 +1,14 @@
 
 using UnityEngine;
 
+#nullable disable
 public class ParticleScaleLerp : MonoBehaviour
 {
+  private bool back;
+  private float t;
   public float speed = 1f;
   public float maxScale = 1f;
   public float minScale = 1f;
-  private bool back;
-  private float t;
 
   private void Update()
   {

@@ -1,4 +1,5 @@
 
+#nullable disable
 namespace SevenZip.Compression.RangeCoder
 {
   internal struct BitDecoder
@@ -16,10 +17,7 @@ namespace SevenZip.Compression.RangeCoder
         this.Prob -= this.Prob >> numMoveBits;
     }
 
-    public void Init()
-    {
-      this.Prob = 1024U;
-    }
+    public void Init() => this.Prob = 1024U;
 
     public uint Decode(Decoder rangeDecoder)
     {

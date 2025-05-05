@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
+#nullable disable
 public class ElementalSelection : MonoBehaviour
 {
   public GameObject pfab;
@@ -15,10 +16,7 @@ public class ElementalSelection : MonoBehaviour
 
   public static ElementalSelection Instance { get; private set; }
 
-  private void Awake()
-  {
-    ElementalSelection.Instance = this;
-  }
+  private void Awake() => ElementalSelection.Instance = this;
 
   private void OnDestroy()
   {
@@ -29,7 +27,7 @@ public class ElementalSelection : MonoBehaviour
 
   public static void Create(
     RectTransform r,
-    bool seasonsIsHoliday,
+    SpellsOnly sp,
     Action<BookOf> a,
     bool allowNone = true,
     params BookOf[] excluded)
@@ -38,10 +36,10 @@ public class ElementalSelection : MonoBehaviour
       UnityEngine.Object.Destroy((UnityEngine.Object) ElementalSelection.Instance.gameObject);
     ElementalSelection elementalSelection = UnityEngine.Object.Instantiate<ElementalSelection>(ClientResources.Instance.elementalSelection, (Transform) r);
     elementalSelection.action = a;
-    elementalSelection.Setup(allowNone, seasonsIsHoliday, excluded);
+    elementalSelection.Setup(allowNone, sp, excluded);
   }
 
-  private void Setup(bool allowNone, bool seasonsIsHoliday, BookOf[] excluded)
+  private void Setup(bool allowNone, SpellsOnly sp, BookOf[] excluded)
   {
     if (excluded != null && excluded.Length != 0)
       this.infoTxt.text = "After prestiging you will have: Arcane, Fire Levels 1 & 2, Cogs, and the book of your choosing\n\nPick one";
@@ -53,13 +51,13 @@ public class ElementalSelection : MonoBehaviour
     float num3 = 300f;
     if (excluded != null && excluded.Length != 0)
       num1 += excluded.Length;
-    foreach (BookOf bookOf in values)
+    foreach (BookOf b in values)
     {
-      if ((bookOf != BookOf.Nothing || allowNone) && (excluded == null || !((IEnumerable<BookOf>) excluded).Contains<BookOf>(bookOf)))
+      if ((b != BookOf.Nothing || allowNone) && (excluded == null || !((IEnumerable<BookOf>) excluded).Contains<BookOf>(b)))
       {
         GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(this.pfab, this.transform);
         RectTransform transform = (RectTransform) gameObject.transform;
-        int z = (int) bookOf;
+        int z = (int) b;
         float f = (float) (360.0 / (double) (values.Length - num1) * (double) num2 * (Math.PI / 180.0));
         Vector2 vector2 = new Vector2(Mathf.Sin(f) * num3, (float) ((double) Mathf.Cos(f) * (double) num3 - 100.0));
         transform.anchoredPosition = vector2;
@@ -73,7 +71,7 @@ public class ElementalSelection : MonoBehaviour
           if (Client.viewSpellLocks.ViewRestricted())
           {
             Restrictions restrictions = Server._restrictions;
-            if ((restrictions != null ? (restrictions.CheckElemental(z) ? 1 : 0) : 0) != 0)
+            if ((restrictions != null ? (restrictions.CheckElemental(sp, z) ? 1 : 0) : 0) != 0)
             {
               gameObject.transform.GetChild(1).gameObject.SetActive(true);
               gameObject.transform.GetChild(1).GetComponent<Image>().sprite = ClientResources.Instance.imgRestricted;
@@ -86,7 +84,7 @@ public class ElementalSelection : MonoBehaviour
           if (Client.viewSpellLocks.ViewRestricted())
           {
             Restrictions restrictions = Server._restrictions;
-            if ((restrictions != null ? (restrictions.CheckElemental(z) ? 1 : 0) : 0) != 0)
+            if ((restrictions != null ? (restrictions.CheckElemental(sp, z) ? 1 : 0) : 0) != 0)
             {
               gameObject.transform.GetChild(1).gameObject.SetActive(true);
               gameObject.transform.GetChild(1).GetComponent<Image>().sprite = ClientResources.Instance.imgRestricted;
@@ -96,8 +94,8 @@ public class ElementalSelection : MonoBehaviour
           gameObject.transform.GetChild(1).gameObject.SetActive(true);
         }
 label_19:
-        gameObject.GetComponent<Image>().sprite = !(bookOf == BookOf.Seasons & seasonsIsHoliday) ? ClientResources.Instance.spellBookIcons[(int) (bookOf + 1)] : ClientResources.Instance.spellBookIconHoliday;
-        if ((excluded == null || excluded.Length == 0) && Restrictions.IsElementalRestricted(z, (Restrictions) null))
+        gameObject.GetComponent<Image>().sprite = !sp.UsingAltBook(b) ? ClientResources.Instance.spellBookIcons[(int) (b + 1)] : ClientResources.Instance.altSpellBookIcons[(int) (b + 1)];
+        if ((excluded == null || excluded.Length == 0) && Restrictions.IsElementalRestricted(sp, z))
           gameObject.transform.GetChild(0).gameObject.SetActive(true);
         gameObject.SetActive(true);
         ++num2;

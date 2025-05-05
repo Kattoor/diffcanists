@@ -2,14 +2,12 @@
 using MovementEffects;
 using System.Collections.Generic;
 
+#nullable disable
 public class EMPTY_AI : IAI
 {
   public bool stillDoTurn;
 
-  public override void DoTurn()
-  {
-    Timing.RunCoroutine(this.Loop());
-  }
+  public override void DoTurn() => Timing.RunCoroutine(this.Loop());
 
   private IEnumerator<float> Loop()
   {

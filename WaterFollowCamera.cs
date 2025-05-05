@@ -1,6 +1,7 @@
 
 using UnityEngine;
 
+#nullable disable
 public class WaterFollowCamera : MonoBehaviour
 {
   private Vector3 pos = Vector3.zero;

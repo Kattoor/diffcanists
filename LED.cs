@@ -6,29 +6,27 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+#nullable disable
 public class LED : MonoBehaviour
 {
   public int columnCount = 7;
   public int rowCount = 7;
+  public RectTransform gridContainer;
   private Color colorOn = Color.green;
   private Color colorOff = Color.grey;
   private List<Image> array = new List<Image>();
   private char c = 'a';
   private StringBuilder b = new StringBuilder();
-  public RectTransform gridContainer;
 
-  private void Start()
-  {
-    this.GenerateGrid();
-  }
+  private void Start() => this.GenerateGrid();
 
   private void GenerateGrid()
   {
     Rect rect = this.gridContainer.rect;
-    double num1 = (double) rect.width / (double) this.columnCount;
+    double a = (double) rect.width / (double) this.columnCount;
     rect = this.gridContainer.rect;
-    double num2 = (double) rect.height / (double) this.rowCount;
-    float num3 = Mathf.Min((float) num1, (float) num2);
+    double b = (double) rect.height / (double) this.rowCount;
+    float num1 = Mathf.Min((float) a, (float) b);
     GameObject original = new GameObject("ImagePrefab", new System.Type[1]
     {
       typeof (RectTransform)
@@ -38,12 +36,12 @@ public class LED : MonoBehaviour
     {
       for (int index2 = 0; index2 < this.columnCount; ++index2)
       {
-        int num4 = index1;
-        int num5 = index2;
+        int num2 = index1;
+        int num3 = index2;
         GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(original, (Transform) this.gridContainer);
         Image image = gameObject.GetComponent<Image>();
-        image.rectTransform.sizeDelta = new Vector2(num3, num3);
-        image.rectTransform.anchoredPosition = new Vector2((float) num5 * num3, (float) -num4 * num3);
+        image.rectTransform.sizeDelta = new Vector2(num1, num1);
+        image.rectTransform.anchoredPosition = new Vector2((float) num3 * num1, (float) -num2 * num1);
         this.array.Add(image);
         EventTrigger eventTrigger = gameObject.AddComponent<EventTrigger>();
         EventTrigger.Entry entry1 = new EventTrigger.Entry();
@@ -93,8 +91,5 @@ public class LED : MonoBehaviour
     Debug.Log((object) ("Now do " + this.c.ToString()));
   }
 
-  private bool IsOn(Image i)
-  {
-    return (double) i.color.r == 0.0;
-  }
+  private bool IsOn(Image i) => (double) i.color.r == 0.0;
 }

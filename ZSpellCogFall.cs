@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+#nullable disable
 public class ZSpellCogFall : ZSpell
 {
   public void Blit()
   {
-    this.map.ServerBitBlt((int) this.snowCutout, (int) this.position.x, (int) this.position.y, false, true);
+    this.map.ServerBitBlt((int) this.snowCutout, (int) this.position.x, (int) this.position.y, false);
     ZSpell.RemoveItemsOnBitBlt(this.game, (int) this.position.x, (int) this.position.y, this.snowTexture.width / 2 - 1);
   }
 
@@ -49,7 +50,7 @@ label_55:
       FixedInt y = zspellCogFall.velocity.y;
       FixedInt fixedInt3 = zspellCogFall.velocity.x;
       FixedInt fixedInt4 = zspellCogFall.velocity.y;
-      if (x > 1 || x < -1 || (y > 1 || y < -1))
+      if (x > 1 || x < -1 || y > 1 || y < -1)
       {
         if (FixedInt.Abs(x) > FixedInt.Abs(y))
           zspellCogFall.steps = (int) FixedInt.Abs(x) + 1;
@@ -123,7 +124,7 @@ label_55:
               }
               else
               {
-                zspellCogFall.hitCreature = zspellCogFall.map.PhysicsCollideCreature(zspellCogFall.toCollideCheck, num2 + zspellCogFall.zb[index2].x, num3 + zspellCogFall.zb[index2].y, 0);
+                zspellCogFall.hitCreature = zspellCogFall.map.PhysicsCollideCreature(zspellCogFall.toCollideCheck, num2 + zspellCogFall.zb[index2].x, num3 + zspellCogFall.zb[index2].y);
                 if ((ZComponent) zspellCogFall.hitCreature != (object) null)
                 {
                   zspellCogFall.addedDeathVector = Inert.Velocity(Inert.AngleOfVelocity(zspellCogFall.velocity), zspellCogFall.radius);
@@ -135,13 +136,13 @@ label_55:
                   zspellCogFall.velocity.x = (FixedInt) 0;
                   zspellCogFall.moving = (IEnumerator<float>) null;
                   zspellCogFall.isMoving = false;
-                  zspellCogFall.hitCreature.ApplyDamage(zspellCogFall.spellEnum, zspellCogFall.damageType, zspellCogFall.damage, zspellCogFall.parent, zspellCogFall.game.turn, (ISpellBridge) zspellCogFall, false);
+                  zspellCogFall.hitCreature.ApplyDamage(zspellCogFall.spellEnum, zspellCogFall.damageType, zspellCogFall.damage, zspellCogFall.parent, zspellCogFall.game.turn, (ISpellBridge) zspellCogFall);
                   if ((Object) zspellCogFall.explosion != (Object) null)
                     zspellCogFall.OnExplosion();
-                  zspellCogFall.map.ServerBitBlt(zspellCogFall.spellEnum == SpellEnum.Barrage_of_Bones ? (int) zspellCogFall.explosionCutout : 11, (int) zspellCogFall.position.x, (int) zspellCogFall.position.y, true, true);
-                  zspellCogFall.map.ServerBitBlt((int) zspellCogFall.snowCutout, (int) zspellCogFall.position.x, (int) zspellCogFall.position.y, false, true);
+                  zspellCogFall.map.ServerBitBlt(zspellCogFall.spellEnum == SpellEnum.Barrage_of_Bones ? (int) zspellCogFall.explosionCutout : 11, (int) zspellCogFall.position.x, (int) zspellCogFall.position.y);
+                  zspellCogFall.map.ServerBitBlt((int) zspellCogFall.snowCutout, (int) zspellCogFall.position.x, (int) zspellCogFall.position.y, false);
                   ZSpell.RemoveItemsOnBitBlt(zspellCogFall.game, (int) zspellCogFall.position.x, (int) zspellCogFall.position.y, zspellCogFall.snowTexture.width / 2 - 1);
-                  zspellCogFall.game.CreatureMoveSurroundings(zspellCogFall.position, zspellCogFall.EXORADIUS, (ZMyCollider) null, false);
+                  zspellCogFall.game.CreatureMoveSurroundings(zspellCogFall.position, zspellCogFall.EXORADIUS);
                   zspellCogFall.OnDeath(true);
                   yield break;
                 }

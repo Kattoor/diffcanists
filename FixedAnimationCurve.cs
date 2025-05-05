@@ -2,11 +2,12 @@
 using System;
 using UnityEngine;
 
+#nullable disable
 [Serializable]
 public class FixedAnimationCurve
 {
-  public EditorFixedInt[] fixedValues = new EditorFixedInt[100];
   public AnimationCurve curve;
+  public EditorFixedInt[] fixedValues = new EditorFixedInt[100];
 
   public void Apply()
   {

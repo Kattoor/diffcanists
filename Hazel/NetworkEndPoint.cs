@@ -1,6 +1,7 @@
 
 using System.Net;
 
+#nullable disable
 namespace Hazel
 {
   public sealed class NetworkEndPoint : ConnectionEndPoint
@@ -25,9 +26,6 @@ namespace Hazel
     {
     }
 
-    public override string ToString()
-    {
-      return this.EndPoint.ToString();
-    }
+    public override string ToString() => this.EndPoint.ToString();
   }
 }

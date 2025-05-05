@@ -2,19 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+#nullable disable
 public class ZMyWorld
 {
-  private List<ZMyWorld.Node> nodes = new List<ZMyWorld.Node>();
-  public ZMyWorld.ListPool listPool = new ZMyWorld.ListPool();
   private const int _block = 128;
   private int _numBlocksHorizontal;
   private int _numVertical;
+  private List<ZMyWorld.Node> nodes = new List<ZMyWorld.Node>();
   public ZMap map;
+  public ZMyWorld.ListPool listPool = new ZMyWorld.ListPool();
 
   public ZMyWorld.Node GetNode(int x, int y)
   {
     x += 7;
-    return x < 0 || y < 0 || (x >= this._numBlocksHorizontal || y >= this._numVertical) ? (ZMyWorld.Node) null : this.nodes[x + y * this._numBlocksHorizontal];
+    return x < 0 || y < 0 || x >= this._numBlocksHorizontal || y >= this._numVertical ? (ZMyWorld.Node) null : this.nodes[x + y * this._numBlocksHorizontal];
   }
 
   public void AddCollider(ZMyCollider c)
@@ -33,7 +34,7 @@ public class ZMyWorld
         {
           for (int y2 = num2; y2 <= num4; ++y2)
           {
-            if (x2 >= 0 && x2 < this._numBlocksHorizontal && (y2 >= 0 && y2 < this._numVertical))
+            if (x2 >= 0 && x2 < this._numBlocksHorizontal && y2 >= 0 && y2 < this._numVertical)
               this.GetNode(x2, y2)?.AddCollider(c);
           }
         }
@@ -80,16 +81,16 @@ public class ZMyWorld
       }
       if (c.shape == MyCollider.Shape.Rectangle)
       {
-        int num1 = c.x + c.GetRectMinX() >> 7;
-        int num2 = c.y + c.GetRectMinY() >> 7;
-        int num3 = c.x + c.GetRectMaxX() >> 7;
-        int num4 = c.y + c.GetRectMaxY() >> 7;
-        for (int x2 = num1; x2 <= num3; ++x2)
+        int num5 = c.x + c.GetRectMinX() >> 7;
+        int num6 = c.y + c.GetRectMinY() >> 7;
+        int num7 = c.x + c.GetRectMaxX() >> 7;
+        int num8 = c.y + c.GetRectMaxY() >> 7;
+        for (int x5 = num5; x5 <= num7; ++x5)
         {
-          for (int y2 = num2; y2 <= num4; ++y2)
+          for (int y5 = num6; y5 <= num8; ++y5)
           {
-            if (x2 >= 0 && x2 < this._numBlocksHorizontal && (y2 >= 0 && y2 < this._numVertical))
-              this.GetNode(x2, y2)?.AddCollider(c);
+            if (x5 >= 0 && x5 < this._numBlocksHorizontal && y5 >= 0 && y5 < this._numVertical)
+              this.GetNode(x5, y5)?.AddCollider(c);
           }
         }
         return;
@@ -98,10 +99,7 @@ public class ZMyWorld
     this.GetNode(x1, y1)?.AddCollider(c);
   }
 
-  public void Clear()
-  {
-    this.nodes.Clear();
-  }
+  public void Clear() => this.nodes.Clear();
 
   public void Init(int x, int y, int count)
   {
@@ -237,7 +235,7 @@ public class ZMyWorld
     {
       for (int y = num4; y <= num5; ++y)
       {
-        if (x >= 0 && x < this._numBlocksHorizontal && (y >= 0 && y < this._numVertical))
+        if (x >= 0 && x < this._numBlocksHorizontal && y >= 0 && y < this._numVertical)
           this.GetNode(x, y)?.OverlapRectangleAll(bounds, noCollision, layer, list, ref num1);
       }
     }
@@ -264,7 +262,7 @@ public class ZMyWorld
       {
         for (int y2 = num3; y2 <= num5; ++y2)
         {
-          if (x2 >= 0 && x2 < this._numBlocksHorizontal && (y2 >= 0 && y2 < this._numVertical))
+          if (x2 >= 0 && x2 < this._numBlocksHorizontal && y2 >= 0 && y2 < this._numVertical)
             this.GetNode(x2, y2)?.OverlapCircleAll(c, radius, noCollision, layer, list, ref num1);
         }
       }
@@ -316,7 +314,7 @@ public class ZMyWorld
       {
         for (int y2 = num3; y2 <= num5; ++y2)
         {
-          if (x2 >= 0 && x2 < this._numBlocksHorizontal && (y2 >= 0 && y2 < this._numVertical))
+          if (x2 >= 0 && x2 < this._numBlocksHorizontal && y2 >= 0 && y2 < this._numVertical)
             this.GetNode(x2, y2)?.OverlapCircleAll(c, radius, noCollision, layer, list, ref num1);
         }
       }
@@ -367,7 +365,7 @@ public class ZMyWorld
       {
         for (int y2 = num2; y2 <= num4; ++y2)
         {
-          if (x2 >= 0 && x2 < this._numBlocksHorizontal && (y2 >= 0 && y2 < this._numVertical))
+          if (x2 >= 0 && x2 < this._numBlocksHorizontal && y2 >= 0 && y2 < this._numVertical)
           {
             ZMyWorld.Node node = this.GetNode(x2, y2);
             if ((node != null ? (node.OverlapCircle(c, radius, noCollision, layer) ? 1 : 0) : 0) != 0)
@@ -397,24 +395,24 @@ public class ZMyWorld
     int x4 = c.x + radius >> 7;
     if (x4 != x1 && x4 != x1 && x4 < this._numBlocksHorizontal)
     {
-      ZMyWorld.Node node2 = this.GetNode(x4, y1);
-      if ((node2 != null ? (node2.OverlapCircle(c, radius, noCollision, layer) ? 1 : 0) : 0) != 0)
+      ZMyWorld.Node node5 = this.GetNode(x4, y1);
+      if ((node5 != null ? (node5.OverlapCircle(c, radius, noCollision, layer) ? 1 : 0) : 0) != 0)
         return true;
-      ZMyWorld.Node node3 = this.GetNode(x4, y3);
-      if ((node3 != null ? (node3.OverlapCircle(c, radius, noCollision, layer) ? 1 : 0) : 0) != 0)
+      ZMyWorld.Node node6 = this.GetNode(x4, y3);
+      if ((node6 != null ? (node6.OverlapCircle(c, radius, noCollision, layer) ? 1 : 0) : 0) != 0)
         return true;
-      ZMyWorld.Node node4 = this.GetNode(x4, c.y + radius >> 7);
-      if ((node4 != null ? (node4.OverlapCircle(c, radius, noCollision, layer) ? 1 : 0) : 0) != 0)
+      ZMyWorld.Node node7 = this.GetNode(x4, c.y + radius >> 7);
+      if ((node7 != null ? (node7.OverlapCircle(c, radius, noCollision, layer) ? 1 : 0) : 0) != 0)
         return true;
     }
-    ZMyWorld.Node node5 = this.GetNode(x1, y3);
-    if ((node5 != null ? (node5.OverlapCircle(c, radius, noCollision, layer) ? 1 : 0) : 0) != 0)
+    ZMyWorld.Node node8 = this.GetNode(x1, y3);
+    if ((node8 != null ? (node8.OverlapCircle(c, radius, noCollision, layer) ? 1 : 0) : 0) != 0)
       return true;
     int y4 = c.y + radius >> 7;
     if (y4 != y1)
     {
-      ZMyWorld.Node node2 = this.GetNode(x1, y4);
-      if ((node2 != null ? (node2.OverlapCircle(c, radius, noCollision, layer) ? 1 : 0) : 0) != 0)
+      ZMyWorld.Node node9 = this.GetNode(x1, y4);
+      if ((node9 != null ? (node9.OverlapCircle(c, radius, noCollision, layer) ? 1 : 0) : 0) != 0)
         return true;
     }
     return false;
@@ -463,10 +461,7 @@ public class ZMyWorld
     public int y;
     public ZMyWorld.Item item;
 
-    public override string ToString()
-    {
-      return "pos: (" + (object) this.x + " " + (object) this.y + ")";
-    }
+    public override string ToString() => "pos: (" + (object) this.x + " " + (object) this.y + ")";
 
     public bool ContainsPoint(Point p)
     {
@@ -536,7 +531,7 @@ public class ZMyWorld
     {
       for (ZMyWorld.Item next = this.item; next != null; next = next.next)
       {
-        if ((ZComponent) next.collider != (object) noCollision && (next.collider.layer & layer) != 0 && (next.collider.enabled && next.collider.OverlapCircle(p, radius)))
+        if ((ZComponent) next.collider != (object) noCollision && (next.collider.layer & layer) != 0 && next.collider.enabled && next.collider.OverlapCircle(p, radius))
           return true;
       }
       return false;
@@ -556,7 +551,7 @@ public class ZMyWorld
     {
       for (ZMyWorld.Item next = this.item; next != null; next = next.next)
       {
-        if ((next.collider.layer & layer) != 0 && (ZComponent) notThis != (object) next.collider.creature && (next.collider.enabled && next.collider.OverlapPoint(x, y)))
+        if ((next.collider.layer & layer) != 0 && (ZComponent) notThis != (object) next.collider.creature && next.collider.enabled && next.collider.OverlapPoint(x, y))
           return next.collider;
       }
       return (ZMyCollider) null;
@@ -601,7 +596,7 @@ public class ZMyWorld
     {
       for (ZMyWorld.Item next = this.item; next != null; next = next.next)
       {
-        if ((ZComponent) next.collider != (object) noCollision && (next.collider.layer & layer) != 0 && (next.collider.enabled && next.collider.shape == MyCollider.Shape.Circle) && noCollision.OverlapCircle((Point) next.collider.position, next.collider.radius))
+        if ((ZComponent) next.collider != (object) noCollision && (next.collider.layer & layer) != 0 && next.collider.enabled && next.collider.shape == MyCollider.Shape.Circle && noCollision.OverlapCircle((Point) next.collider.position, next.collider.radius))
         {
           bool flag = true;
           for (int index = 0; index < num; ++index)
@@ -630,7 +625,7 @@ public class ZMyWorld
     {
       for (ZMyWorld.Item next = this.item; next != null; next = next.next)
       {
-        if ((ZComponent) next.collider != (object) noCollision && (next.collider.layer & layer) != 0 && (next.collider.enabled && next.collider.OverlapRectangle(bounds)))
+        if ((ZComponent) next.collider != (object) noCollision && (next.collider.layer & layer) != 0 && next.collider.enabled && next.collider.OverlapRectangle(bounds))
         {
           bool flag = true;
           for (int index = 0; index < num; ++index)
@@ -660,7 +655,7 @@ public class ZMyWorld
     {
       for (ZMyWorld.Item next = this.item; next != null; next = next.next)
       {
-        if ((ZComponent) next.collider != (object) noCollision && (next.collider.layer & layer) != 0 && (next.collider.enabled && next.collider.OverlapCircle(p, radius)))
+        if ((ZComponent) next.collider != (object) noCollision && (next.collider.layer & layer) != 0 && next.collider.enabled && next.collider.OverlapCircle(p, radius))
         {
           bool flag = true;
           for (int index = 0; index < num; ++index)
@@ -690,7 +685,7 @@ public class ZMyWorld
     {
       for (ZMyWorld.Item next = this.item; next != null && num < list.Length; next = next.next)
       {
-        if ((ZComponent) next.collider != (object) noCollision && (next.collider.layer & layer) != 0 && (next.collider.enabled && next.collider.OverlapCircle(p, radius)))
+        if ((ZComponent) next.collider != (object) noCollision && (next.collider.layer & layer) != 0 && next.collider.enabled && next.collider.OverlapCircle(p, radius))
         {
           bool flag = true;
           for (int index = 0; index < num; ++index)

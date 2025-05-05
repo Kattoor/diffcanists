@@ -1,16 +1,17 @@
 
 using UnityEngine;
 
+#nullable disable
 public class IndicatorOfDecay : MonoBehaviour
 {
-  internal static ZMyCollider[] MyColliders = new ZMyCollider[20];
-  private static ContactFilter2D filter = IndicatorOfDecay.InitFilter();
   private ZCreature creature;
   private ZMyCollider col;
   private ZMyCollider colTower;
   private ZMyCollider fastCheck;
   public SpriteRenderer sp;
+  internal static ZMyCollider[] MyColliders = new ZMyCollider[20];
   private static int x;
+  private static ContactFilter2D filter = IndicatorOfDecay.InitFilter();
   private int counter;
 
   public void Setup(ZCreature c, ZEffector e)
@@ -21,15 +22,17 @@ public class IndicatorOfDecay : MonoBehaviour
     if ((ZComponent) this.creature.tower != (object) null)
       this.colTower = this.creature.tower.collider;
     if (e.damageType == DamageType.Arcane)
-      this.sp.color = new Color(1f, 0.0f, 1f, 0.5f);
+      this.sp.color = new Color(1f, 0.0f, 1f, 0.3f);
     else if (e.damageType == DamageType.Heal20)
-      this.sp.color = new Color(1f, 0.0f, 0.0f, 0.5f);
+      this.sp.color = new Color(1f, 0.0f, 0.0f, 0.3f);
     else if (e.damageType == DamageType.Infection)
-      this.sp.color = new Color(1f, 1f, 0.0f, 0.5f);
+      this.sp.color = new Color(1f, 1f, 0.0f, 0.3f);
     else if (e.damageType == DamageType.Sting)
-      this.sp.color = new Color(1f, 0.5647f, 0.0f, 0.5f);
+      this.sp.color = new Color(1f, 0.5647f, 0.0f, 0.3f);
+    else if (e.damageType == DamageType.StingUndead)
+      this.sp.color = new Color(0.169079f, 1f, 0.0f, 0.3f);
     else
-      this.sp.color = new Color(0.0f, 1f, 0.0f, 0.5f);
+      this.sp.color = new Color(0.0f, 1f, 0.0f, 0.3f);
   }
 
   private static ContactFilter2D InitFilter()
@@ -67,12 +70,21 @@ public class IndicatorOfDecay : MonoBehaviour
               }
               this.sp.color = new Color(1f, 0.5647f, 0.0f, 0.5f);
             }
+            else if (effector.damageType == DamageType.StingUndead)
+            {
+              if (this.creature.type == CreatureType.Bee || this.creature.type == CreatureType.Beehive || (ZComponent) this.creature.rider != (object) null && (ZComponent) this.creature.rider == (object) IndicatorOfDecay.x)
+              {
+                Object.Destroy((Object) this.gameObject);
+                return;
+              }
+              this.sp.color = new Color(0.169079f, 1f, 0.0f, 0.5f);
+            }
             else
               this.sp.color = new Color(0.0f, 1f, 0.0f, 0.5f);
             this.counter = 0;
             return;
           }
-          if ((effector.type == EffectorType.Lich_Aura_of_decay || effector.type == EffectorType.Dragon_Aura_of_Decay) && (ZComponent) effector.whoSummoned != (object) this.creature)
+          if ((effector.type == EffectorType.Lich_Aura_of_decay || effector.type == EffectorType.Dragon_Aura_of_Decay || effector.type == EffectorType.Sacrifical_Altar_Aura) && (ZComponent) effector.whoSummoned != (object) this.creature)
           {
             if (effector.damageType == DamageType.Arcane)
               this.sp.color = new Color(1f, 0.0f, 1f, 0.5f);
@@ -88,6 +100,15 @@ public class IndicatorOfDecay : MonoBehaviour
                 return;
               }
               this.sp.color = new Color(1f, 0.5647f, 0.0f, 0.5f);
+            }
+            else if (effector.damageType == DamageType.StingUndead)
+            {
+              if (this.creature.type == CreatureType.Bee || this.creature.type == CreatureType.Beehive || (ZComponent) this.creature.rider != (object) null && (ZComponent) this.creature.rider == (object) effector.whoSummoned)
+              {
+                Object.Destroy((Object) this.gameObject);
+                return;
+              }
+              this.sp.color = new Color(0.169079f, 1f, 0.0f, 0.5f);
             }
             else
             {

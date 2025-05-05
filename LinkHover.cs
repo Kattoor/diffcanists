@@ -4,10 +4,15 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class LinkHover : MonoBehaviour, IPointerEnterHandler, IEventSystemHandler, IPointerExitHandler
+#nullable disable
+public class LinkHover : 
+  MonoBehaviour,
+  IPointerEnterHandler,
+  IEventSystemHandler,
+  IPointerExitHandler
 {
-  private int linkIndex = -1;
   public TMP_Text pTextMeshPro;
+  private int linkIndex = -1;
 
   public void OnPointerEnter(PointerEventData eventData)
   {
@@ -26,7 +31,7 @@ public class LinkHover : MonoBehaviour, IPointerEnterHandler, IEventSystemHandle
   {
     int intersectingLink = TMP_TextUtilities.FindIntersectingLink(this.pTextMeshPro, Input.mousePosition, (Camera) null);
     if (intersectingLink != -1 && this.linkIndex != intersectingLink)
-      MyToolTip.Show(this.pTextMeshPro.textInfo.linkInfo[intersectingLink].GetLinkID(), -1f);
+      MyToolTip.Show(this.pTextMeshPro.textInfo.linkInfo[intersectingLink].GetLinkID());
     else if (intersectingLink == -1)
       MyToolTip.Close();
     this.linkIndex = intersectingLink;

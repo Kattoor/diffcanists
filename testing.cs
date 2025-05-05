@@ -6,6 +6,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
+#nullable disable
 public class testing : MonoBehaviour
 {
   [Header("perlin")]
@@ -50,7 +51,7 @@ public class testing : MonoBehaviour
   [ContextMenu("Paint")]
   public void paint()
   {
-    RotateImage.Render(new Surface(this.sr.sprite.texture, this.sr.sprite.texture.GetPixels32()), new Surface(this.texure, this.texure.GetPixels32()), this.x, this.y, this.angle, 1, true, true, 1f);
+    RotateImage.Render(new Surface(this.sr.sprite.texture, this.sr.sprite.texture.GetPixels32()), new Surface(this.texure, this.texure.GetPixels32()), this.x, this.y, this.angle, 1, true);
   }
 
   [ContextMenu("Arc Maps")]
@@ -170,10 +171,10 @@ public class testing : MonoBehaviour
             num6 += (int) pixels32_2[(coords2.y + num2) * tex.width + (coords2.x + num1)].g;
             num7 += (int) pixels32_2[(coords2.y + num2) * tex.width + (coords2.x + num1)].b;
           }
-          int num8 = num5 / coordsList3.Count;
-          int num9 = num7 / coordsList3.Count;
-          int num10 = num6 / coordsList3.Count;
-          pixels32_2[num4 * tex.width + num3] = new Color32((byte) num8, (byte) num10, (byte) num9, byte.MaxValue);
+          int r = num5 / coordsList3.Count;
+          int b1 = num7 / coordsList3.Count;
+          int g = num6 / coordsList3.Count;
+          pixels32_2[num4 * tex.width + num3] = new Color32((byte) r, (byte) g, (byte) b1, byte.MaxValue);
         }
       }
     }

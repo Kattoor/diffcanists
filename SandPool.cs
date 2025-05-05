@@ -1,30 +1,28 @@
 
 using UnityEngine;
 
+#nullable disable
 public class SandPool : MonoBehaviour
 {
-  private int cachedInstanceCount = -1;
-  private int cachedSubMeshIndex = -1;
-  private uint[] args = new uint[5];
-  private int killFrames = 100;
   internal IndirectRenderer rend;
   public SpriteRenderer spriteRenderer;
   public int instanceCount;
   public Mesh instanceMesh;
   public Material instanceMaterial;
   public int subMeshIndex;
+  private int cachedInstanceCount = -1;
+  private int cachedSubMeshIndex = -1;
   private ComputeBuffer positionBuffer;
   private ComputeBuffer argsBuffer;
+  private uint[] args = new uint[5];
+  private int killFrames = 100;
   private int curKillCount;
   public static bool NeedApply;
   private int delay;
 
   public static SandPool Instance { get; private set; }
 
-  public void Reset()
-  {
-    this.instanceCount = 0;
-  }
+  public void Reset() => this.instanceCount = 0;
 
   public static SandPool Create()
   {
@@ -146,8 +144,5 @@ public class SandPool : MonoBehaviour
     this.instanceMaterial = this.spriteRenderer.material;
   }
 
-  private void OnDestroy()
-  {
-    this.rend?.ReleaseBuffers(true);
-  }
+  private void OnDestroy() => this.rend?.ReleaseBuffers(true);
 }

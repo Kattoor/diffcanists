@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+#nullable disable
 public class ZSpellMegaBoulder : ZSpell
 {
   private const int lifetime = 30;
@@ -20,77 +21,77 @@ public class ZSpellMegaBoulder : ZSpell
 
   public override IEnumerator<float> SpellMove(bool gotoStatic = false, bool checkEffectors = true)
   {
-    ZSpellMegaBoulder zspellMegaBoulder = this;
-    zspellMegaBoulder.isMoving = true;
-    zspellMegaBoulder.zb = MapGenerator.getOutlineArray(zspellMegaBoulder.radius);
+    ZSpellMegaBoulder spell = this;
+    spell.isMoving = true;
+    spell.zb = MapGenerator.getOutlineArray(spell.radius);
     if (gotoStatic)
       yield return 0.0f;
 label_59:
-    while (!zspellMegaBoulder.isDead)
+    while (!spell.isDead)
     {
-      if (zspellMegaBoulder.curDuration == 30 && zspellMegaBoulder.radius != 28)
-        zspellMegaBoulder.Expand();
-      zspellMegaBoulder.pX = zspellMegaBoulder.position.x;
-      zspellMegaBoulder.pY = zspellMegaBoulder.position.y;
-      FixedInt fixedInt1 = zspellMegaBoulder.position.x + zspellMegaBoulder.velocity.x;
-      FixedInt fixedInt2 = zspellMegaBoulder.position.y + zspellMegaBoulder.velocity.y;
-      zspellMegaBoulder.validX = zspellMegaBoulder.pX;
-      zspellMegaBoulder.validY = zspellMegaBoulder.pY;
-      zspellMegaBoulder.steps = 1;
-      FixedInt x1 = zspellMegaBoulder.velocity.x;
-      FixedInt y1 = zspellMegaBoulder.velocity.y;
-      FixedInt fixedInt3 = zspellMegaBoulder.velocity.x;
-      FixedInt fixedInt4 = zspellMegaBoulder.velocity.y;
-      if (x1 > 1 || x1 < -1 || (y1 > 1 || y1 < -1))
+      if (spell.curDuration == 30 && spell.radius != 28)
+        spell.Expand();
+      spell.pX = spell.position.x;
+      spell.pY = spell.position.y;
+      FixedInt fixedInt1 = spell.position.x + spell.velocity.x;
+      FixedInt fixedInt2 = spell.position.y + spell.velocity.y;
+      spell.validX = spell.pX;
+      spell.validY = spell.pY;
+      spell.steps = 1;
+      FixedInt x1 = spell.velocity.x;
+      FixedInt y1 = spell.velocity.y;
+      FixedInt fixedInt3 = spell.velocity.x;
+      FixedInt fixedInt4 = spell.velocity.y;
+      if (x1 > 1 || x1 < -1 || y1 > 1 || y1 < -1)
       {
         if (FixedInt.Abs(x1) > FixedInt.Abs(y1))
-          zspellMegaBoulder.steps = (int) FixedInt.Abs(x1) + 1;
+          spell.steps = (int) FixedInt.Abs(x1) + 1;
         else
-          zspellMegaBoulder.steps = (int) FixedInt.Abs(y1) + 1;
-        fixedInt3 = zspellMegaBoulder.velocity.x / zspellMegaBoulder.steps;
-        fixedInt4 = zspellMegaBoulder.velocity.y / zspellMegaBoulder.steps;
+          spell.steps = (int) FixedInt.Abs(y1) + 1;
+        fixedInt3 = spell.velocity.x / spell.steps;
+        fixedInt4 = spell.velocity.y / spell.steps;
       }
-      while (zspellMegaBoulder.steps > 0)
+      while (spell.steps > 0)
       {
-        if (zspellMegaBoulder.map.SpellCheckEffectors(zspellMegaBoulder.toCollideCheck, (ZSpell) zspellMegaBoulder, (int) zspellMegaBoulder.validX, (int) zspellMegaBoulder.validY))
+        if (spell.map.SpellCheckEffectors(spell.toCollideCheck, (ZSpell) spell, (int) spell.validX, (int) spell.validY))
         {
-          zspellMegaBoulder.position = new MyLocation(zspellMegaBoulder.validX, zspellMegaBoulder.validY);
+          spell.position = new MyLocation(spell.validX, spell.validY);
           yield return 0.0f;
           goto label_59;
         }
         else
         {
-          --zspellMegaBoulder.steps;
-          int num1 = (int) (((FixedInt) 360 - (Inert.AngleOfVelocity(zspellMegaBoulder.velocity) - 90)) * FixedInt.ThreeSixtyBy1 * zspellMegaBoulder.zb.Count) - zspellMegaBoulder.radius;
+          --spell.steps;
+          int num1 = (int) (((FixedInt) 360 - (Inert.AngleOfVelocity(spell.velocity) - 90)) * FixedInt.ThreeSixtyBy1 * spell.zb.Count) - spell.radius;
           if (num1 < 0)
-            num1 += zspellMegaBoulder.zb.Count;
-          for (int index1 = 0; index1 < zspellMegaBoulder.radius * 2; ++index1)
+            num1 += spell.zb.Count;
+          for (int index1 = 0; index1 < spell.radius * 2; ++index1)
           {
-            int index2 = (index1 + num1) % zspellMegaBoulder.zb.Count;
-            if (!zspellMegaBoulder.map.SpellCheckPosition((int) (fixedInt3 + zspellMegaBoulder.pX) + zspellMegaBoulder.zb[index2].x, (int) (fixedInt4 + zspellMegaBoulder.pY) + zspellMegaBoulder.zb[index2].y, zspellMegaBoulder.toCollideCheck, Inert.mask_spell_movement))
+            int index2 = (index1 + num1) % spell.zb.Count;
+            if (!spell.map.SpellCheckPosition((int) (fixedInt3 + spell.pX) + spell.zb[index2].x, (int) (fixedInt4 + spell.pY) + spell.zb[index2].y, spell.toCollideCheck, Inert.mask_spell_movement))
             {
-              int num2 = (int) (fixedInt3 + zspellMegaBoulder.pX);
-              int num3 = (int) (fixedInt4 + zspellMegaBoulder.pY);
-              if (zspellMegaBoulder.game.isClient)
+              int num2 = (int) (fixedInt3 + spell.pX);
+              int num3 = (int) (fixedInt4 + spell.pY);
+              if (spell.game.isClient)
               {
-                if (zspellMegaBoulder.curDuration >= 30)
-                  AudioManager.Play(zspellMegaBoulder.explosionClip);
+                if (spell.curDuration >= 30)
+                  AudioManager.Play(spell.explosionClip);
                 else
                   AudioManager.Play(AudioManager.instance.spellBounce);
               }
-              int x2 = num2 + zspellMegaBoulder.zb[index2].x;
-              int y2 = num3 + zspellMegaBoulder.zb[index2].y;
-              if (zspellMegaBoulder.curDuration < 30)
+              int x2 = num2 + spell.zb[index2].x;
+              int y2 = num3 + spell.zb[index2].y;
+              if (spell.curDuration < 30)
               {
-                zspellMegaBoulder.position = new MyLocation(zspellMegaBoulder.validX, zspellMegaBoulder.validY);
+                spell.position = new MyLocation(spell.validX, spell.validY);
                 MyLocation zero = MyLocation.zero;
-                int num4 = num2 + zspellMegaBoulder.zb[index2].x;
-                int num5 = num3 + zspellMegaBoulder.zb[index2].y;
+                int num4 = num2 + spell.zb[index2].x;
+                int num5 = num3 + spell.zb[index2].y;
                 for (int index3 = -2; index3 <= 2; ++index3)
                 {
                   for (int index4 = -2; index4 <= 2; ++index4)
                   {
-                    if (zspellMegaBoulder.map.SpellCheckPosition(num4 + index3, num5 + index4, zspellMegaBoulder.toCollideCheck, Inert.mask_movement_NoEffector))
+                    if (spell.map.SpellCheckPosition(num4 + index3, num5 + index4, spell.toCollideCheck, Inert.mask_movement_NoEffector))
                     {
                       zero.x += index3;
                       zero.y += index4;
@@ -98,49 +99,49 @@ label_59:
                   }
                 }
                 zero.Normalize();
-                MyLocation.Reflect(zspellMegaBoulder.velocity, ref zero, out zspellMegaBoulder.velocity);
-                zspellMegaBoulder.velocity = zspellMegaBoulder.velocity * zspellMegaBoulder.elasticity;
+                MyLocation.Reflect(spell.velocity, ref zero, out spell.velocity);
+                spell.velocity = spell.velocity * spell.elasticity;
                 goto label_56;
               }
               else
               {
-                ++zspellMegaBoulder.timesBounced;
-                zspellMegaBoulder.position = new MyLocation(zspellMegaBoulder.validX, zspellMegaBoulder.validY);
-                ZCreature zcreature = zspellMegaBoulder.map.PhysicsCollideCreature((ZCreature) null, x2, y2, 0);
-                zspellMegaBoulder.damage = 25 + Mathf.Clamp(zspellMegaBoulder.curDuration - zspellMegaBoulder.lastHit, 0, 7);
+                ++spell.timesBounced;
+                spell.position = new MyLocation(spell.validX, spell.validY);
+                ZCreature zcreature = spell.map.PhysicsCollideCreature((ZCreature) null, x2, y2);
+                spell.damage = 25 + Mathf.Clamp(spell.curDuration - spell.lastHit, 0, 7);
                 if ((ZComponent) zcreature == (object) null)
                 {
-                  zspellMegaBoulder.velocity.x = -zspellMegaBoulder.velocity.x;
-                  zspellMegaBoulder.velocity.x *= zspellMegaBoulder.elasticity;
-                  zspellMegaBoulder.velocity.y = (FixedInt) (zspellMegaBoulder.zb[index2].y > 5 ? 2 : 7);
+                  spell.velocity.x = -spell.velocity.x;
+                  spell.velocity.x *= spell.elasticity;
+                  spell.velocity.y = (FixedInt) (spell.zb[index2].y > 5 ? 2 : 7);
                 }
                 else
                 {
                   MyLocation zero = MyLocation.zero;
-                  for (int index3 = -2; index3 <= 2; ++index3)
+                  for (int index5 = -2; index5 <= 2; ++index5)
                   {
-                    for (int index4 = -2; index4 <= 2; ++index4)
+                    for (int index6 = -2; index6 <= 2; ++index6)
                     {
-                      if (zspellMegaBoulder.map.SpellCheckPosition(x2 + index3, y2 + index4, zspellMegaBoulder.toCollideCheck, Inert.mask_movement_NoEffector))
+                      if (spell.map.SpellCheckPosition(x2 + index5, y2 + index6, spell.toCollideCheck, Inert.mask_movement_NoEffector))
                       {
-                        zero.x += index3;
-                        zero.y += index4;
+                        zero.x += index5;
+                        zero.y += index6;
                       }
                     }
                   }
                   zero.Normalize();
-                  MyLocation.Reflect(zspellMegaBoulder.velocity, ref zero, out zspellMegaBoulder.velocity);
-                  zspellMegaBoulder.velocity.x *= zspellMegaBoulder.timesBounced % 2 == 1 ? -2 : 2;
-                  zspellMegaBoulder.velocity.x = Mathd.Clamp(zspellMegaBoulder.velocity.x, (FixedInt) -9, (FixedInt) 9);
-                  zspellMegaBoulder.velocity.y = (FixedInt) (zspellMegaBoulder.curDuration - zspellMegaBoulder.lastHit > 2 ? -5 : 5);
+                  MyLocation.Reflect(spell.velocity, ref zero, out spell.velocity);
+                  spell.velocity.x *= spell.timesBounced % 2 == 1 ? -2 : 2;
+                  spell.velocity.x = Mathd.Clamp(spell.velocity.x, (FixedInt) -9, (FixedInt) 9);
+                  spell.velocity.y = (FixedInt) (spell.curDuration - spell.lastHit > 2 ? -5 : 5);
                 }
-                zspellMegaBoulder.lastHit = zspellMegaBoulder.curDuration;
-                zspellMegaBoulder.map.ServerBitBlt((int) zspellMegaBoulder.explosionCutout, (int) zspellMegaBoulder.validX, zspellMegaBoulder.map.CheckPositionOnlyMap(x2, y2) ? y2 : (int) zspellMegaBoulder.validY, true, true);
-                zspellMegaBoulder.OnExplosion();
-                zspellMegaBoulder.ApplyExplosionForce(zspellMegaBoulder.position, 0, true, (ISpellBridge) null, (ZCreature) null);
-                if ((ZComponent) zcreature != (object) null && zspellMegaBoulder.timesBounced < 4 && zspellMegaBoulder.velocity.magnitude < 7)
+                spell.lastHit = spell.curDuration;
+                spell.map.ServerBitBlt((int) spell.explosionCutout, (int) spell.validX, spell.map.CheckPositionOnlyMap(x2, y2) ? y2 : (int) spell.validY);
+                spell.OnExplosion();
+                spell.ApplyExplosionForce(spell.position);
+                if ((ZComponent) zcreature != (object) null && spell.timesBounced < 4 && spell.velocity.magnitude < 7)
                 {
-                  zspellMegaBoulder.Undie();
+                  spell.Undie();
                   goto label_59;
                 }
                 else
@@ -148,42 +149,42 @@ label_59:
               }
             }
           }
-          zspellMegaBoulder.validX = zspellMegaBoulder.pX;
-          zspellMegaBoulder.validY = zspellMegaBoulder.pY;
-          zspellMegaBoulder.pX = zspellMegaBoulder.pX + fixedInt3;
-          zspellMegaBoulder.pY = zspellMegaBoulder.pY + fixedInt4;
+          spell.validX = spell.pX;
+          spell.validY = spell.pY;
+          spell.pX = spell.pX + fixedInt3;
+          spell.pY = spell.pY + fixedInt4;
         }
       }
-      zspellMegaBoulder.position = zspellMegaBoulder.position + zspellMegaBoulder.velocity;
-      if (zspellMegaBoulder.position.y < zspellMegaBoulder.radius)
+      spell.position = spell.position + spell.velocity;
+      if (spell.position.y < spell.radius)
       {
-        zspellMegaBoulder.moving = (IEnumerator<float>) null;
-        zspellMegaBoulder.velocity = MyLocation.zero;
-        zspellMegaBoulder.isMoving = false;
-        zspellMegaBoulder.Splash();
-        zspellMegaBoulder.DestroyDelay();
+        spell.moving = (IEnumerator<float>) null;
+        spell.velocity = MyLocation.zero;
+        spell.isMoving = false;
+        spell.Splash();
+        spell.DestroyDelay();
         break;
       }
-      if (zspellMegaBoulder.addVelocity)
+      if (spell.addVelocity)
       {
-        zspellMegaBoulder.addVelocity = false;
-        zspellMegaBoulder.velocity = zspellMegaBoulder.velocity + zspellMegaBoulder.addedVelocity;
-        zspellMegaBoulder.velocity.x = Mathd.Clamp(zspellMegaBoulder.velocity.x, (FixedInt) -50, (FixedInt) 50);
-        zspellMegaBoulder.velocity.y = Mathd.Clamp(zspellMegaBoulder.velocity.y, (FixedInt) -50, (FixedInt) 50);
-        zspellMegaBoulder.addedVelocity.x = (FixedInt) 0;
-        zspellMegaBoulder.addedVelocity.y = (FixedInt) 0;
+        spell.addVelocity = false;
+        spell.velocity = spell.velocity + spell.addedVelocity;
+        spell.velocity.x = Mathd.Clamp(spell.velocity.x, (FixedInt) -50, (FixedInt) 50);
+        spell.velocity.y = Mathd.Clamp(spell.velocity.y, (FixedInt) -50, (FixedInt) 50);
+        spell.addedVelocity.x = (FixedInt) 0;
+        spell.addedVelocity.y = (FixedInt) 0;
       }
-      else if (zspellMegaBoulder.affectedByGravity && zspellMegaBoulder.velocity.y > -ZMap.MaxSpeed)
-        zspellMegaBoulder.velocity.y += zspellMegaBoulder.map.Gravity;
-      else if (!zspellMegaBoulder.affectedByGravity && zspellMegaBoulder.velocity.y > -10 && zspellMegaBoulder.maxDuration > 150)
-        zspellMegaBoulder.affectedByGravity = true;
-      zspellMegaBoulder.Wind();
+      else if (spell.affectedByGravity && spell.velocity.y > -ZMap.MaxSpeed)
+        spell.velocity.y += spell.map.Gravity;
+      else if (!spell.affectedByGravity && spell.velocity.y > -10 && spell.maxDuration > 150)
+        spell.affectedByGravity = true;
+      spell.Wind();
 label_56:
-      ++zspellMegaBoulder.curDuration;
-      zspellMegaBoulder.Undie();
-      if (zspellMegaBoulder.curDuration >= zspellMegaBoulder.maxDuration || zspellMegaBoulder.timesBounced >= 4)
+      ++spell.curDuration;
+      spell.Undie();
+      if (spell.curDuration >= spell.maxDuration || spell.timesBounced >= 4)
       {
-        zspellMegaBoulder.DestroyDelay();
+        spell.DestroyDelay();
         break;
       }
       yield return 0.0f;

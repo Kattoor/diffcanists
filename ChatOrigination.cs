@@ -1,4 +1,5 @@
 
+#nullable disable
 public enum ChatOrigination
 {
   Lobby,

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+#nullable disable
 namespace WebGLSupport
 {
   public class WebGLInputMobile : MonoBehaviour, IPointerDownHandler, IEventSystemHandler
@@ -13,10 +14,7 @@ namespace WebGLSupport
     private static Dictionary<int, WebGLInputMobile> instances = new Dictionary<int, WebGLInputMobile>();
     private int id = -1;
 
-    private void Awake()
-    {
-      this.enabled = false;
-    }
+    private void Awake() => this.enabled = false;
 
     public void OnPointerDown(PointerEventData eventData)
     {

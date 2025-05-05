@@ -6,23 +6,18 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.Networking;
 
+#nullable disable
 public class TutorialFileRetriever
 {
-  public System.Collections.Generic.List<TutorialFileRetriever.Tuts> list = new System.Collections.Generic.List<TutorialFileRetriever.Tuts>();
   private readonly string _url;
+  public System.Collections.Generic.List<TutorialFileRetriever.Tuts> list = new System.Collections.Generic.List<TutorialFileRetriever.Tuts>();
   private float _lastRetrieve;
 
-  public TutorialFileRetriever(string url)
-  {
-    this._url = url;
-  }
+  public TutorialFileRetriever(string url) => this._url = url;
 
   public static System.Collections.Generic.List<TutorialFileRetriever.Tuts> List
   {
-    get
-    {
-      return ClientResources.Instance.tutorialFileRetriever.list;
-    }
+    get => ClientResources.Instance.tutorialFileRetriever.list;
   }
 
   public static void Get(bool force = false)
@@ -122,10 +117,7 @@ public class TutorialFileRetriever
 
     public string url
     {
-      get
-      {
-        return "pur3extreme.github.io/ArcanistsTutorials/Tutorials/" + this.name + ".arcTutorial2";
-      }
+      get => "pur3extreme.github.io/ArcanistsTutorials/Tutorials/" + this.name + ".arcTutorial2";
     }
 
     public string FileName

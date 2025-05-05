@@ -1,13 +1,14 @@
 
 using UnityEngine;
 
+#nullable disable
 public class SpaceshipLogic : MonoBehaviour
 {
-  private float min = -1000f;
-  public float speed = 0.01f;
   public AnimationCurve curve;
+  private float min = -1000f;
   private float max;
   private float cur;
+  public float speed = 0.01f;
   private Vector3 pos;
   private float seed;
 

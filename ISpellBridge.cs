@@ -1,6 +1,7 @@
 
 using UnityEngine;
 
+#nullable disable
 public interface ISpellBridge
 {
   string GetName { get; }
@@ -26,4 +27,6 @@ public interface ISpellBridge
   ExplosionCutout GetExplosionCutout { get; }
 
   int maxSandDamage { get; }
+
+  int GetDamage { get; }
 }

@@ -1,6 +1,7 @@
 
 using System;
 
+#nullable disable
 namespace LibNoise.Generator
 {
   public class Cylinders : ModuleBase
@@ -20,14 +21,8 @@ namespace LibNoise.Generator
 
     public double Frequency
     {
-      get
-      {
-        return this._frequency;
-      }
-      set
-      {
-        this._frequency = value;
-      }
+      get => this._frequency;
+      set => this._frequency = value;
     }
 
     public override double GetValue(double x, double y, double z)

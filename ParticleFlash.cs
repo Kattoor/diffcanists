@@ -1,6 +1,7 @@
 
 using UnityEngine;
 
+#nullable disable
 public class ParticleFlash : MonoBehaviour
 {
   public SpriteRenderer white;
@@ -15,9 +16,10 @@ public class ParticleFlash : MonoBehaviour
   private void Update()
   {
     this.cur += Time.deltaTime * 2f;
-    Color color = this.white.color;
-    color.a = Mathf.Lerp(0.0f, 0.8f, this.cur);
-    this.white.color = color;
+    this.white.color = this.white.color with
+    {
+      a = Mathf.Lerp(0.0f, 0.8f, this.cur)
+    };
     float num1 = Mathf.Lerp(0.0f, 0.9f, this.cur * 1.5f);
     this.red.localScale = new Vector3(num1, num1, 1f);
     float num2 = Mathf.Lerp(0.0f, 0.8f, this.cur);

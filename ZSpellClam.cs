@@ -1,75 +1,76 @@
 
 using System.Collections.Generic;
 
+#nullable disable
 public class ZSpellClam : ZSpell
 {
   private FixedInt minY = (FixedInt) 100000;
 
   public override IEnumerator<float> SpellMove(bool gotoStatic = false, bool checkEffectors = true)
   {
-    ZSpellClam zspellClam = this;
-    zspellClam.isMoving = true;
-    zspellClam.zb = MapGenerator.getOutlineArray(zspellClam.radius);
+    ZSpellClam spell = this;
+    spell.isMoving = true;
+    spell.zb = MapGenerator.getOutlineArray(spell.radius);
     bool locked = false;
     int bounces = 0;
     if (gotoStatic)
       yield return 0.0f;
-label_46:
-    while (!zspellClam.isDead)
+label_48:
+    while (!spell.isDead)
     {
-      zspellClam.pX = zspellClam.position.x;
-      zspellClam.pY = zspellClam.position.y;
-      FixedInt fixedInt1 = zspellClam.position.x + zspellClam.velocity.x;
-      FixedInt fixedInt2 = zspellClam.position.y + zspellClam.velocity.y;
-      zspellClam.validX = zspellClam.pX;
-      zspellClam.validY = zspellClam.pY;
-      zspellClam.steps = 1;
-      FixedInt x = zspellClam.velocity.x;
-      FixedInt y = zspellClam.velocity.y;
-      FixedInt fixedInt3 = zspellClam.velocity.x;
-      FixedInt fixedInt4 = zspellClam.velocity.y;
-      if (x > 1 || x < -1 || (y > 1 || y < -1))
+      spell.pX = spell.position.x;
+      spell.pY = spell.position.y;
+      FixedInt fixedInt1 = spell.position.x + spell.velocity.x;
+      FixedInt fixedInt2 = spell.position.y + spell.velocity.y;
+      spell.validX = spell.pX;
+      spell.validY = spell.pY;
+      spell.steps = 1;
+      FixedInt x = spell.velocity.x;
+      FixedInt y = spell.velocity.y;
+      FixedInt fixedInt3 = spell.velocity.x;
+      FixedInt fixedInt4 = spell.velocity.y;
+      if (x > 1 || x < -1 || y > 1 || y < -1)
       {
         if (FixedInt.Abs(x) > FixedInt.Abs(y))
-          zspellClam.steps = (int) FixedInt.Abs(x) + 1;
+          spell.steps = (int) FixedInt.Abs(x) + 1;
         else
-          zspellClam.steps = (int) FixedInt.Abs(y) + 1;
-        fixedInt3 = zspellClam.velocity.x / zspellClam.steps;
-        fixedInt4 = zspellClam.velocity.y / zspellClam.steps;
+          spell.steps = (int) FixedInt.Abs(y) + 1;
+        fixedInt3 = spell.velocity.x / spell.steps;
+        fixedInt4 = spell.velocity.y / spell.steps;
       }
-      while (zspellClam.steps > 0)
+      while (spell.steps > 0)
       {
-        if (zspellClam.map.SpellCheckEffectors(zspellClam.toCollideCheck, (ZSpell) zspellClam, (int) zspellClam.validX, (int) zspellClam.validY))
+        if (spell.map.SpellCheckEffectors(spell.toCollideCheck, (ZSpell) spell, (int) spell.validX, (int) spell.validY))
         {
-          zspellClam.position = new MyLocation(zspellClam.validX, zspellClam.validY);
+          spell.position = new MyLocation(spell.validX, spell.validY);
           yield return 0.0f;
-          goto label_46;
+          goto label_48;
         }
         else
         {
-          --zspellClam.steps;
-          int num1 = (int) (((FixedInt) 360 - (Inert.AngleOfVelocity(zspellClam.velocity) - 90)) * FixedInt.ThreeSixtyBy1 * zspellClam.zb.Count) - zspellClam.radius;
+          --spell.steps;
+          int num1 = (int) (((FixedInt) 360 - (Inert.AngleOfVelocity(spell.velocity) - 90)) * FixedInt.ThreeSixtyBy1 * spell.zb.Count) - spell.radius;
           if (num1 < 0)
-            num1 += zspellClam.zb.Count;
-          for (int index1 = 0; index1 < zspellClam.radius * 2; ++index1)
+            num1 += spell.zb.Count;
+          for (int index1 = 0; index1 < spell.radius * 2; ++index1)
           {
-            int index2 = (index1 + num1) % zspellClam.zb.Count;
-            if (!zspellClam.map.SpellCheckPosition((int) (fixedInt3 + zspellClam.pX) + zspellClam.zb[index2].x, (int) (fixedInt4 + zspellClam.pY) + zspellClam.zb[index2].y, zspellClam.toCollideCheck, Inert.mask_spell_movement))
+            int index2 = (index1 + num1) % spell.zb.Count;
+            if (!spell.map.SpellCheckPosition((int) (fixedInt3 + spell.pX) + spell.zb[index2].x, (int) (fixedInt4 + spell.pY) + spell.zb[index2].y, spell.toCollideCheck, Inert.mask_spell_movement))
             {
-              int num2 = (int) (fixedInt3 + zspellClam.pX);
-              int num3 = (int) (fixedInt4 + zspellClam.pY);
-              if (zspellClam.position.y < zspellClam.minY || bounces < 5 && zspellClam.map.SpellCheckPositionEntities(num2 + zspellClam.zb[index2].x, num3 + zspellClam.zb[index2].y, zspellClam.toCollideCheck, Inert.mask_spell_movement))
+              int num2 = (int) (fixedInt3 + spell.pX);
+              int num3 = (int) (fixedInt4 + spell.pY);
+              if (spell.position.y < spell.minY || bounces < 5 && spell.map.SpellCheckPositionEntities(num2 + spell.zb[index2].x, num3 + spell.zb[index2].y, spell.toCollideCheck, Inert.mask_spell_movement))
               {
                 ++bounces;
-                zspellClam.position = new MyLocation(zspellClam.validX, zspellClam.validY);
+                spell.position = new MyLocation(spell.validX, spell.validY);
                 MyLocation zero = MyLocation.zero;
-                int num4 = num2 + zspellClam.zb[index2].x;
-                int num5 = num3 + zspellClam.zb[index2].y;
+                int num4 = num2 + spell.zb[index2].x;
+                int num5 = num3 + spell.zb[index2].y;
                 for (int index3 = -2; index3 <= 2; ++index3)
                 {
                   for (int index4 = -2; index4 <= 2; ++index4)
                   {
-                    if (zspellClam.map.SpellCheckPosition(num4 + index3, num5 + index4, zspellClam.toCollideCheck, Inert.mask_movement_NoEffector))
+                    if (spell.map.SpellCheckPosition(num4 + index3, num5 + index4, spell.toCollideCheck, Inert.mask_movement_NoEffector))
                     {
                       zero.x += index3;
                       zero.y += index4;
@@ -78,70 +79,79 @@ label_46:
                 }
                 if (locked)
                 {
-                  zspellClam.velocity.y = (FixedInt) 6;
-                  zspellClam.velocity.x = (FixedInt) 0;
-                  zspellClam.minY = zspellClam.position.y - 15;
+                  spell.velocity.y = (FixedInt) 6;
+                  spell.velocity.x = (FixedInt) 0;
+                  spell.minY = spell.position.y - 15;
                 }
                 else
                 {
-                  zspellClam.affectedByGravity = true;
-                  zero.Normalize();
-                  MyLocation.Reflect(zspellClam.velocity, ref zero, out zspellClam.velocity);
-                  zspellClam.velocity = zspellClam.velocity * zspellClam.elasticity;
+                  spell.affectedByGravity = true;
                   locked = true;
+                  if (spell.fromArmageddon)
+                  {
+                    spell.velocity.y = (FixedInt) 6;
+                    spell.velocity.x = (FixedInt) 0;
+                    spell.minY = spell.position.y - 15;
+                  }
+                  else
+                  {
+                    zero.Normalize();
+                    MyLocation.Reflect(spell.velocity, ref zero, out spell.velocity);
+                    spell.velocity = spell.velocity * spell.elasticity;
+                  }
                 }
-                zspellClam.map.ServerBitBlt(18, (int) zspellClam.validX, (int) zspellClam.validY, true, true);
-                zspellClam.MoveSurroundings(25);
-                if (zspellClam.game.isClient)
+                spell.map.ServerBitBlt(18, (int) spell.validX, (int) spell.validY);
+                spell.MoveSurroundings(25);
+                if (spell.game.isClient)
                 {
-                  zspellClam.gameObject.GetComponent<AnimateRepeat>().enabled = true;
-                  goto label_43;
+                  spell.gameObject.GetComponent<AnimateRepeat>().enabled = true;
+                  goto label_45;
                 }
                 else
-                  goto label_43;
+                  goto label_45;
               }
             }
           }
-          zspellClam.validX = zspellClam.pX;
-          zspellClam.validY = zspellClam.pY;
-          zspellClam.pX = zspellClam.pX + fixedInt3;
-          zspellClam.pY = zspellClam.pY + fixedInt4;
+          spell.validX = spell.pX;
+          spell.validY = spell.pY;
+          spell.pX = spell.pX + fixedInt3;
+          spell.pY = spell.pY + fixedInt4;
         }
       }
-      zspellClam.position = zspellClam.position + zspellClam.velocity;
-      if (zspellClam.position.y < zspellClam.radius)
+      spell.position = spell.position + spell.velocity;
+      if (spell.position.y < spell.radius)
       {
-        zspellClam.moving = (IEnumerator<float>) null;
-        zspellClam.velocity = MyLocation.zero;
-        zspellClam.isMoving = false;
-        zspellClam.Splash();
-        if (zspellClam.game.AllowExpansion)
+        spell.moving = (IEnumerator<float>) null;
+        spell.velocity = MyLocation.zero;
+        spell.isMoving = false;
+        spell.Splash();
+        if (spell.game.AllowExpansion)
         {
-          zspellClam.OnDeath(true);
+          spell.OnDeath(true);
           break;
         }
-        zspellClam.DestroyDelay();
+        spell.DestroyDelay();
         break;
       }
-      if (zspellClam.addVelocity)
+      if (spell.addVelocity)
       {
-        zspellClam.addVelocity = false;
-        zspellClam.velocity = zspellClam.velocity + zspellClam.addedVelocity;
-        zspellClam.velocity.x = Mathd.Clamp(zspellClam.velocity.x, (FixedInt) -50, (FixedInt) 50);
-        zspellClam.velocity.y = Mathd.Clamp(zspellClam.velocity.y, (FixedInt) -50, (FixedInt) 50);
-        zspellClam.addedVelocity.x = (FixedInt) 0;
-        zspellClam.addedVelocity.y = (FixedInt) 0;
+        spell.addVelocity = false;
+        spell.velocity = spell.velocity + spell.addedVelocity;
+        spell.velocity.x = Mathd.Clamp(spell.velocity.x, (FixedInt) -50, (FixedInt) 50);
+        spell.velocity.y = Mathd.Clamp(spell.velocity.y, (FixedInt) -50, (FixedInt) 50);
+        spell.addedVelocity.x = (FixedInt) 0;
+        spell.addedVelocity.y = (FixedInt) 0;
       }
-      else if (zspellClam.affectedByGravity && zspellClam.velocity.y > -ZMap.MaxSpeed)
-        zspellClam.velocity.y += zspellClam.map.Gravity;
-      else if (!zspellClam.affectedByGravity && zspellClam.velocity.y > -10 && zspellClam.maxDuration > 150)
-        zspellClam.affectedByGravity = true;
-      zspellClam.Wind();
-label_43:
-      ++zspellClam.curDuration;
-      if (zspellClam.curDuration >= zspellClam.maxDuration)
+      else if (spell.affectedByGravity && spell.velocity.y > -ZMap.MaxSpeed)
+        spell.velocity.y += spell.map.Gravity;
+      else if (!spell.affectedByGravity && spell.velocity.y > -10 && spell.maxDuration > 150)
+        spell.affectedByGravity = true;
+      spell.Wind();
+label_45:
+      ++spell.curDuration;
+      if (spell.curDuration >= spell.maxDuration)
       {
-        zspellClam.OnDeath(true);
+        spell.OnDeath(true);
         break;
       }
       yield return 0.0f;

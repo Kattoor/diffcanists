@@ -3,17 +3,18 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+#nullable disable
 public class ArchmageStaff : MonoBehaviour
 {
-  [Header("Rotation")]
-  public float speed = 2f;
-  private Queue<Vector3> oldPos = new Queue<Vector3>();
   public SpriteRenderer spriteRenderer;
   [NonSerialized]
   public Creature target;
+  [Header("Rotation")]
+  public float speed = 2f;
   public int id;
   public bool triStaff;
   public int triIndex;
+  private Queue<Vector3> oldPos = new Queue<Vector3>();
 
   private void Start()
   {

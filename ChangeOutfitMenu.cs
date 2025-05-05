@@ -7,21 +7,21 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
+#nullable disable
 public class ChangeOutfitMenu : MonoBehaviour
 {
-  private string selectedBook = "";
-  private string selectedFilePath = "";
-  private SettingsPlayer settingsPlayer = new SettingsPlayer();
-  private string subDir = "";
   public GameObject buttonOpenFileExplorer;
   public InputFieldPlus input;
   public RectTransform container;
   public GameObject pfabBook;
   public RectTransform[] column;
   public UIOnHover buttonSelect;
+  private string selectedBook = "";
+  private string selectedFilePath = "";
   private GameObject selectedGameObject;
   public UIOnHover buttonDelete;
   public UIOnHover buttonRename;
+  private SettingsPlayer settingsPlayer = new SettingsPlayer();
   public UIPlayerCharacter preview;
   public static ChangeOutfitMenu Instance;
   private float lastClick;
@@ -31,6 +31,7 @@ public class ChangeOutfitMenu : MonoBehaviour
   [Header("Share")]
   public UIOnHover buttonShare;
   private Action<SettingsPlayer> onEnd;
+  private string subDir = "";
 
   public static void Create(
     bool saving,
@@ -47,7 +48,7 @@ public class ChangeOutfitMenu : MonoBehaviour
       {
         ChangeOutfitMenu.Instance.input.onEnd.AddListener(new UnityAction<string>(ChangeOutfitMenu.Instance.OnEndEdit));
         ChangeOutfitMenu.Instance.input.gameObject.SetActive(true);
-        ChangeOutfitMenu.Instance.input.SetAsActive(true);
+        ChangeOutfitMenu.Instance.input.SetAsActive();
       }
       if (sp != null)
         ChangeOutfitMenu.Instance.settingsPlayer.CopyOutfit(sp);
@@ -61,7 +62,7 @@ public class ChangeOutfitMenu : MonoBehaviour
 
   public void ClickShare()
   {
-    Client.AskToShare(Path.GetFileNameWithoutExtension(this.selectedBook), ContentType.Outfit, (object) this.settingsPlayer, false);
+    Client.AskToShare(Path.GetFileNameWithoutExtension(this.selectedBook), ContentType.Outfit, (object) this.settingsPlayer);
     this.Cancel();
   }
 
@@ -70,7 +71,7 @@ public class ChangeOutfitMenu : MonoBehaviour
     if ((UnityEngine.Object) ChangeOutfitMenu.Instance != (UnityEngine.Object) null)
       UnityEngine.Object.Destroy((UnityEngine.Object) ChangeOutfitMenu.Instance.gameObject);
     ChangeOutfitMenu.Instance = this;
-    this.Load("");
+    this.Load();
     this.settingsPlayer.CopyOutfit(Client.settingsPlayer);
     GameObject openFileExplorer = this.buttonOpenFileExplorer;
     if (openFileExplorer == null)
@@ -78,10 +79,7 @@ public class ChangeOutfitMenu : MonoBehaviour
     openFileExplorer.HideIfWebGL();
   }
 
-  private void Start()
-  {
-    ConfigurePlayer.EquipAll(Client.Name, this.preview, this.settingsPlayer);
-  }
+  private void Start() => ConfigurePlayer.EquipAll(Client.Name, this.preview, this.settingsPlayer);
 
   private void OnDestroy()
   {
@@ -133,7 +131,7 @@ public class ChangeOutfitMenu : MonoBehaviour
       gameObject.GetComponent<TextMeshProUGUI>().text = ss;
       gameObject.GetComponent<UIOnHover>().onRightClick.AddListener((UnityAction) (() => this.OnRightClick(dir, gameObject)));
     });
-    myContextMenu.AddInput(a, (string) null, false);
+    myContextMenu.AddInput(a);
   }
 
   public void OnRightClick(string s, GameObject gameObject)
@@ -141,10 +139,9 @@ public class ChangeOutfitMenu : MonoBehaviour
     if (!File.Exists(s))
       return;
     MyContextMenu myContextMenu = MyContextMenu.Show();
-    myContextMenu.AddSeperator("--------------------------");
+    myContextMenu.AddSeperator();
     myContextMenu.AddItem("Rename", (Action) (() => MyContextMenu.Show().AddInput((Action<string>) (ss =>
     {
-      ChangeOutfitMenu.\u003C\u003Ec__DisplayClass27_0 cDisplayClass270 = this;
       if (string.IsNullOrEmpty(ss))
         return;
       string dir = s.Substring(0, s.Length - Path.GetFileName(s).Length) + ss + Path.GetExtension(s);
@@ -153,14 +150,14 @@ public class ChangeOutfitMenu : MonoBehaviour
       gameObject.GetComponent<UIOnHover>().onRightClick.RemoveAllListeners();
       gameObject.name = dir;
       gameObject.GetComponent<TextMeshProUGUI>().text = ss;
-      gameObject.GetComponent<UIOnHover>().onRightClick.AddListener((UnityAction) (() => cDisplayClass270.\u003C\u003E4__this.OnRightClick(dir, cDisplayClass270.gameObject)));
-    }), (string) null, false)), (Color) ColorScheme.GetColor(MyContextMenu.ColorYellow));
+      gameObject.GetComponent<UIOnHover>().onRightClick.AddListener((UnityAction) (() => this.OnRightClick(dir, gameObject)));
+    }))), (Color) ColorScheme.GetColor(MyContextMenu.ColorYellow));
     myContextMenu.AddItem("Delete " + Path.GetFileNameWithoutExtension(s), (Action) (() =>
     {
       Global.DeleteFile(s);
       UnityEngine.Object.Destroy((UnityEngine.Object) gameObject);
     }), (Color) ColorScheme.GetColor(MyContextMenu.ColorRed));
-    myContextMenu.Rebuild(false);
+    myContextMenu.Rebuild();
   }
 
   private void Load(string subFolder = "")
@@ -205,7 +202,7 @@ public class ChangeOutfitMenu : MonoBehaviour
       UIOnHover component1 = gameObject1.GetComponent<UIOnHover>();
       component1.textNormalColor = Color.green;
       gameObject1.GetComponent<TMP_Text>().color = Color.green;
-      component1.onClick.AddListener((UnityAction) (() => this.Load("")));
+      component1.onClick.AddListener((UnityAction) (() => this.Load()));
       gameObject1.SetActive(true);
       GameObject gameObject2 = UnityEngine.Object.Instantiate<GameObject>(this.pfabFolder, (Transform) this.containerFolder);
       RectTransform rect = (RectTransform) gameObject2.transform;
@@ -214,19 +211,19 @@ public class ChangeOutfitMenu : MonoBehaviour
       rect.GetComponent<TMP_Text>().text = "Up One Folder";
       string fullName = Directory.GetParent(Directory.GetParent(path).FullName).FullName;
       RectTransform rectTransform = rect;
-      string str3;
+      string str5;
       if (fullName.Length <= length)
       {
-        str3 = "";
+        str5 = "";
       }
       else
       {
-        string str4 = fullName.Substring(length);
+        string str6 = fullName.Substring(length);
         directorySeparatorChar = Path.DirectorySeparatorChar;
-        string str5 = directorySeparatorChar.ToString();
-        str3 = str4 + str5;
+        string str7 = directorySeparatorChar.ToString();
+        str5 = str6 + str7;
       }
-      rectTransform.name = str3;
+      rectTransform.name = str5;
       UIOnHover component2 = gameObject2.GetComponent<UIOnHover>();
       component2.textNormalColor = Color.green;
       gameObject2.GetComponent<TMP_Text>().color = Color.green;
@@ -242,11 +239,11 @@ public class ChangeOutfitMenu : MonoBehaviour
       rect.localScale = new Vector3(1f, 1f, 1f);
       rect.GetComponent<TMP_Text>().text = directories[index].Substring(path.Length);
       RectTransform rectTransform = rect;
-      string str3 = directories[index].Substring(length);
+      string str8 = directories[index].Substring(length);
       directorySeparatorChar = Path.DirectorySeparatorChar;
-      string str4 = directorySeparatorChar.ToString();
-      string str5 = str3 + str4;
-      rectTransform.name = str5;
+      string str9 = directorySeparatorChar.ToString();
+      string str10 = str8 + str9;
+      rectTransform.name = str10;
       gameObject.GetComponent<UIOnHover>().onClick.AddListener((UnityAction) (() => this.Load(rect.name)));
       gameObject.SetActive(true);
     }
@@ -257,13 +254,13 @@ public class ChangeOutfitMenu : MonoBehaviour
       numArray[index] = this.column[index].anchoredPosition.y;
     int index1 = 0;
     float num2 = 0.0f;
-    foreach (string str3 in list)
+    foreach (string str11 in list)
     {
       GameObject g = UnityEngine.Object.Instantiate<GameObject>(this.pfabBook, (Transform) this.container);
       RectTransform transform = (RectTransform) g.transform;
       transform.localScale = new Vector3(1f, 1f, 1f);
       transform.anchoredPosition = new Vector2(this.column[index1].anchoredPosition.x, numArray[index1]);
-      string s = str3;
+      string s = str11;
       g.name = s;
       g.GetComponent<TextMeshProUGUI>().text = Path.GetFileNameWithoutExtension(g.name);
       g.GetComponent<UIOnHover>().onClick.AddListener((UnityAction) (() =>
@@ -384,10 +381,7 @@ public class ChangeOutfitMenu : MonoBehaviour
     this.Cancel();
   }
 
-  public void OpenFileLocation()
-  {
-    Global.OpenFileLocation("SavedOutfits");
-  }
+  public void OpenFileLocation() => Global.OpenFileLocation("SavedOutfits");
 
   public void OnTouch()
   {

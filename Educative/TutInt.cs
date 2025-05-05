@@ -3,14 +3,15 @@ using Newtonsoft.Json;
 using System;
 using UnityEngine;
 
+#nullable disable
 namespace Educative
 {
   [Serializable]
   public class TutInt
   {
-    public int entity = -2;
     public int _number;
     public From which;
+    public int entity = -2;
     private ZCreature creature;
 
     [JsonIgnore]
@@ -82,7 +83,7 @@ namespace Educative
           case From.Shield:
             if ((ZComponent) this.creature == (object) null)
               break;
-            this.creature.CreateProtectionShield(false);
+            this.creature.CreateProtectionShield();
             this.creature.shield = value;
             this.creature.UpdateHealthTxt();
             break;
@@ -91,14 +92,14 @@ namespace Educative
               break;
             this.creature.MoveToPosition = new MyLocation((FixedInt) value, this.creature.position.y);
             this.creature.Demount();
-            this.creature.Fall(false);
+            this.creature.Fall();
             break;
           case From.Ypos:
             if ((ZComponent) this.creature == (object) null)
               break;
             this.creature.MoveToPosition = new MyLocation(this.creature.position.x, (FixedInt) value);
             this.creature.Demount();
-            this.creature.Fall(false);
+            this.creature.Fall();
             break;
           case From.MinionCount:
             Debug.LogError((object) ("Cannot set " + (object) this.which));
@@ -153,69 +154,30 @@ namespace Educative
       return this.value;
     }
 
-    public int Get()
-    {
-      return this.value;
-    }
+    public int Get() => this.value;
 
-    public void SetEntity(Tutorial t)
-    {
-      this.creature = t.GetCreature(this.entity);
-    }
+    public void SetEntity(Tutorial t) => this.creature = t.GetCreature(this.entity);
 
-    public bool BiggerThen(TutInt other)
-    {
-      return this.value > other.value;
-    }
+    public bool BiggerThen(TutInt other) => this.value > other.value;
 
-    public bool BiggerThenOrEqual(TutInt other)
-    {
-      return this.value >= other.value;
-    }
+    public bool BiggerThenOrEqual(TutInt other) => this.value >= other.value;
 
-    public bool SmallerThen(TutInt other)
-    {
-      return this.value < other.value;
-    }
+    public bool SmallerThen(TutInt other) => this.value < other.value;
 
-    public bool SmallerThenOrEqual(TutInt other)
-    {
-      return this.value <= other.value;
-    }
+    public bool SmallerThenOrEqual(TutInt other) => this.value <= other.value;
 
-    public bool EqualTo(TutInt other)
-    {
-      return this.value == other.value;
-    }
+    public bool EqualTo(TutInt other) => this.value == other.value;
 
-    public bool NotEqual(TutInt other)
-    {
-      return this.value != other.value;
-    }
+    public bool NotEqual(TutInt other) => this.value != other.value;
 
-    public int Add(TutInt other)
-    {
-      return this.value + other.value;
-    }
+    public int Add(TutInt other) => this.value + other.value;
 
-    public int Subract(TutInt other)
-    {
-      return this.value - other.value;
-    }
+    public int Subract(TutInt other) => this.value - other.value;
 
-    public int Multiply(TutInt other)
-    {
-      return this.value * other.value;
-    }
+    public int Multiply(TutInt other) => this.value * other.value;
 
-    public int Divide(TutInt other)
-    {
-      return this.value / other.value;
-    }
+    public int Divide(TutInt other) => this.value / other.value;
 
-    public int Modules(TutInt other)
-    {
-      return this.value % other.value;
-    }
+    public int Modules(TutInt other) => this.value % other.value;
   }
 }

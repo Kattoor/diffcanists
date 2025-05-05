@@ -1,26 +1,16 @@
 
 using UnityEngine;
 
+#nullable disable
 public class Familiar : MonoBehaviour
 {
   internal ZFamiliar serverObj;
   public BookOf bookOf;
+  public bool isAltBook;
 
-  public ZCreature creature
-  {
-    get
-    {
-      return this.serverObj.creature;
-    }
-  }
+  public ZCreature creature => this.serverObj.creature;
 
-  public MyLocation position
-  {
-    get
-    {
-      return this.serverObj.position;
-    }
-  }
+  public MyLocation position => this.serverObj.position;
 
   public void ColorFamiliar()
   {
@@ -48,6 +38,8 @@ public class Familiar : MonoBehaviour
       case BookOf.Storm:
         return new Vector3(0.0f, 45f, 0.0f);
       case BookOf.Frost:
+        return new Vector3(25f, 0.0f, 0.0f);
+      case BookOf.Underdark:
         return new Vector3(25f, 0.0f, 0.0f);
       case BookOf.OverLight:
         return new Vector3(18f, 18f, 0.0f);

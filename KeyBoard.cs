@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
+#nullable disable
 public class KeyBoard : MonoBehaviour
 {
   public GameObject parentObj;
@@ -33,10 +34,7 @@ public class KeyBoard : MonoBehaviour
     }
   }
 
-  internal void Awake()
-  {
-    KeyBoard.Instance = this;
-  }
+  internal void Awake() => KeyBoard.Instance = this;
 
   private void OnDestroy()
   {
@@ -114,25 +112,13 @@ public class KeyBoard : MonoBehaviour
     HUD.instance?.chatInput?.Init(ColorScheme.GetColor(Global.ColorGameText));
   }
 
-  public void OnKey(char c)
-  {
-    this.input.OnScreenKeyboardProcessString(c.ToString());
-  }
+  public void OnKey(char c) => this.input.OnScreenKeyboardProcessString(c.ToString());
 
-  public void OnEnter()
-  {
-    this.input.OnScreenKeyboardProcessString("\n");
-  }
+  public void OnEnter() => this.input.OnScreenKeyboardProcessString("\n");
 
-  public void OnBackspace()
-  {
-    this.input.OnScreenKeyboardProcessString("\b");
-  }
+  public void OnBackspace() => this.input.OnScreenKeyboardProcessString("\b");
 
-  public void OnSpace()
-  {
-    this.input.OnScreenKeyboardProcessString(" ");
-  }
+  public void OnSpace() => this.input.OnScreenKeyboardProcessString(" ");
 
   public void OnEmojiToggle()
   {

@@ -1,12 +1,13 @@
 
 using UnityEngine;
 
+#nullable disable
 public class TiltWindow : MonoBehaviour
 {
   public Vector2 range = new Vector2(5f, 3f);
-  private Vector2 mRot = Vector2.zero;
   private Transform mTrans;
   private Quaternion mStart;
+  private Vector2 mRot = Vector2.zero;
 
   private void Start()
   {

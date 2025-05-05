@@ -1,56 +1,78 @@
 
 using System;
-using System.Collections.Generic;
 
+#nullable disable
 [Serializable]
 public class Restrictions
 {
   public BitBools availableSpells = new BitBools();
+  public BitBools altSpells = new BitBools();
   public int elementals = -1;
   public int alternateEle = -1;
-  public const byte Version = 1;
+  public const byte Version = 2;
+
+  public int GetElementals(bool altBook) => !altBook ? this.elementals : this.alternateEle;
+
+  public BitBools Getspells(bool altBook) => !altBook ? this.availableSpells : this.altSpells;
 
   public Restrictions()
   {
     this.availableSpells.SetAll();
+    this.altSpells.SetAll();
   }
 
   public static Restrictions Combine(Restrictions a, Restrictions b)
   {
     Restrictions restrictions = new Restrictions();
     for (int index = 0; index < 8; ++index)
+    {
       restrictions.availableSpells.array[index] = a.availableSpells.array[index] & b.availableSpells.array[index];
+      restrictions.altSpells.array[index] = a.altSpells.array[index] & b.altSpells.array[index];
+    }
     restrictions.elementals = a.elementals & b.elementals;
     return restrictions;
   }
 
   public bool AnyRestricted()
   {
-    return !this.availableSpells.AllOn() || this.elementals != -1 || this.alternateEle != -1;
+    return !this.availableSpells.AllOn() || this.elementals != -1 || this.alternateEle != -1 || !this.altSpells.AllOn();
   }
 
-  public bool HasRestricted(byte[] spells)
+  public bool HasRestricted(SpellsOnly spells)
   {
     for (int index = 0; index < 16; ++index)
     {
-      if (spells[index] < byte.MaxValue && !this.availableSpells[(int) spells[index]])
+      bool flag = spells.IsAlt((int) spells.spells[index]);
+      if (spells.spells[index] < byte.MaxValue && (!flag && !this.availableSpells[(int) spells.spells[index]] || flag && !this.altSpells[(int) spells.spells[index]]))
         return true;
     }
     return false;
   }
 
-  public bool CleanseSpells(byte[] spells)
+  public bool CleanseSpells(SpellsOnly spells)
   {
     for (int index = 0; index < 16; ++index)
     {
-      if (spells[index] < byte.MaxValue && !this.availableSpells[(int) spells[index]])
-        spells[index] = byte.MaxValue;
+      bool flag = spells.IsAlt((int) spells.spells[index]);
+      if (spells.spells[index] < byte.MaxValue && (!flag && !this.availableSpells[(int) spells.spells[index]] || flag && !this.altSpells[(int) spells.spells[index]]))
+        spells.spells[index] = byte.MaxValue;
     }
     return false;
   }
 
-  public int CleanseElemental(int i)
+  public int CleanseElemental(SpellsOnly spells, int i)
   {
+    if (spells.UsingAltBook((BookOf) i))
+    {
+      if ((this.alternateEle & 1 << i) != 0)
+        return i;
+      for (i = 0; i < 32; ++i)
+      {
+        if ((this.alternateEle & 1 << i) != 0)
+          return i;
+      }
+      return -1;
+    }
     if ((this.elementals & 1 << i) != 0)
       return i;
     for (i = 0; i < 32; ++i)
@@ -61,40 +83,49 @@ public class Restrictions
     return -1;
   }
 
-  public bool CheckRestricted(int i)
+  public bool CheckRestricted(SpellsOnly spells, int i)
   {
-    return i < 0 || i >= 256 || !this.availableSpells[i];
+    if (i < 0 || i >= 256)
+      return true;
+    return !spells.IsAlt(i) ? !this.availableSpells[i] : !this.altSpells[i];
   }
 
-  public bool CheckElemental(int i)
+  public bool CheckElemental(SpellsOnly spells, int i)
   {
-    return (this.elementals & 1 << i) == 0;
+    return ((spells.UsingAltBook((BookOf) i) ? this.alternateEle : this.elementals) & 1 << i) == 0;
   }
 
-  public static bool IsSpellRestricted(int i, Restrictions def = null)
+  public static bool IsSpellRestricted(SpellsOnly spells, int i, Restrictions def = null)
   {
     if (i < 0 || i >= 256)
       return true;
     if (def != null)
-      return def.availableSpells[i];
-    return (!Client.viewSpellLocks.ViewRestricted() && !((UnityEngine.Object) RatedMenu.instance != (UnityEngine.Object) null) || (Server._restrictions == null || Server._restrictions.availableSpells[i])) && ((UnityEngine.Object) UnratedMenu.instance != (UnityEngine.Object) null && Client._gameFacts.settings.restrictions != null) && !Client._gameFacts.settings.restrictions.availableSpells[i];
+      return !spells.IsAlt(i) ? def.availableSpells[i] : def.altSpells[i];
+    if ((UnityEngine.Object) UnratedMenu.instance != (UnityEngine.Object) null && Client._gameFacts.settings.restrictions != null)
+      return !spells.IsAlt(i) ? !Client._gameFacts.settings.restrictions.availableSpells[i] : !Client._gameFacts.settings.restrictions.altSpells[i];
+    if (!Client.viewSpellLocks.ViewRestricted() && !((UnityEngine.Object) RatedMenu.instance != (UnityEngine.Object) null) || Server._restrictions == null)
+      return false;
+    int num = spells.IsAlt(i) ? (Server._restrictions.altSpells[i] ? 1 : 0) : (Server._restrictions.availableSpells[i] ? 1 : 0);
+    return false;
   }
 
-  public static bool IsElementalRestricted(int i, Restrictions def = null)
+  public static bool IsElementalRestricted(SpellsOnly spells, int i, Restrictions def = null)
   {
     if (def != null)
-      return (def.elementals & 1 << i) == 0;
-    return (!Client.viewSpellLocks.ViewRestricted() && !((UnityEngine.Object) RatedMenu.instance != (UnityEngine.Object) null) || (Server._restrictions == null || (Server._restrictions.elementals & 1 << i) == 0)) && ((UnityEngine.Object) UnratedMenu.instance != (UnityEngine.Object) null && Client._gameFacts.settings.restrictions != null) && (Client._gameFacts.settings.restrictions.elementals & 1 << i) == 0;
-  }
-
-  public bool EleAvailable(BookOf b)
-  {
-    return (uint) (this.elementals & 1 << (int) (b & (BookOf) 31)) > 0U;
+      return ((spells.UsingAltBook((BookOf) i) ? def.alternateEle : def.elementals) & 1 << i) == 0;
+    if ((UnityEngine.Object) UnratedMenu.instance != (UnityEngine.Object) null && Client._gameFacts.settings.restrictions != null)
+      return (Client._gameFacts.settings.restrictions.GetElementals(spells.UsingAltBook((BookOf) i)) & 1 << i) == 0;
+    if (!Client.viewSpellLocks.ViewRestricted() && !((UnityEngine.Object) RatedMenu.instance != (UnityEngine.Object) null) || Server._restrictions == null)
+      return false;
+    int num = ((spells.UsingAltBook((BookOf) i) ? Server._restrictions.alternateEle : Server._restrictions.elementals) & 1 << i) == 0 ? 1 : 0;
+    return false;
   }
 
   public void Copy(Restrictions r)
   {
     this.availableSpells.Copy(r.availableSpells);
+    this.altSpells.Copy(r.altSpells);
+    this.alternateEle = r.alternateEle;
     this.elementals = r.elementals;
   }
 
@@ -102,6 +133,8 @@ public class Restrictions
   {
     this.availableSpells.Serialize(w);
     w.Write(this.elementals);
+    this.altSpells.Serialize(w);
+    w.Write(this.alternateEle);
   }
 
   public void DeserializeInstance(myBinaryReader w)
@@ -110,34 +143,46 @@ public class Restrictions
     this.elementals = w.ReadInt32();
   }
 
+  public void DeserializeInstance2(myBinaryReader w)
+  {
+    this.availableSpells.Deserialize(w);
+    this.elementals = w.ReadInt32();
+    this.altSpells.Deserialize(w);
+    this.alternateEle = w.ReadInt32();
+  }
+
   public static Restrictions Deserialize(myBinaryReader w, byte version)
   {
     Restrictions restrictions = new Restrictions();
-    restrictions.DeserializeInstance(w);
+    if (version <= (byte) 1)
+      restrictions.DeserializeInstance(w);
+    else
+      restrictions.DeserializeInstance2(w);
     return restrictions;
   }
 
-  public bool ToggleSpell(int i)
+  public bool ToggleSpell(int i, bool alt)
   {
-    this.availableSpells[i] = !this.availableSpells[i];
-    PopupRestrictions.Instance.SpellEnabled(i, this.availableSpells[i]);
-    return this.availableSpells[i];
+    this.Getspells(alt)[i] = !this.Getspells(alt)[i];
+    PopupRestrictions.Instance.SpellEnabled(i, this.Getspells(alt)[i], alt);
+    return this.Getspells(alt)[i];
   }
 
-  public bool ToggleSpell(int i, bool v)
+  public bool ToggleSpell(int i, bool v, bool alt)
   {
-    this.availableSpells[i] = v;
-    PopupRestrictions.Instance.SpellEnabled(i, this.availableSpells[i]);
-    return this.availableSpells[i];
+    this.Getspells(alt)[i] = v;
+    PopupRestrictions.Instance.SpellEnabled(i, this.Getspells(alt)[i], alt);
+    return this.Getspells(alt)[i];
   }
 
-  public bool ToggleBook(int e)
+  public bool ToggleBook(int e, bool alt)
   {
     int num = e * 12;
     bool v = true;
+    BitBools bitBools = this.Getspells(alt);
     for (int index = 0; index < 12; ++index)
     {
-      if (this.availableSpells[num + index])
+      if (bitBools[num + index])
       {
         v = false;
         break;
@@ -145,17 +190,23 @@ public class Restrictions
     }
     for (int index = 0; index < 12; ++index)
     {
-      this.availableSpells[num + index] = v;
-      PopupRestrictions.Instance.SpellEnabled(num + index, v);
+      bitBools[num + index] = v;
+      PopupRestrictions.Instance.SpellEnabled(num + index, v, alt);
     }
     return v;
   }
 
-  public bool ToggleElemental(int i)
+  public bool ToggleElemental(int i, bool alt)
   {
+    if (alt)
+    {
+      this.alternateEle ^= 1 << i;
+      PopupRestrictions.Instance.ElementalEnabled(i, (this.alternateEle & 1 << i) != 0, alt);
+      return (this.alternateEle & 1 << i) != 0;
+    }
     this.elementals ^= 1 << i;
-    PopupRestrictions.Instance.ElementalEnabled(i, (uint) (this.elementals & 1 << i) > 0U);
-    return (uint) (this.elementals & 1 << i) > 0U;
+    PopupRestrictions.Instance.ElementalEnabled(i, (this.elementals & 1 << i) != 0, alt);
+    return (this.elementals & 1 << i) != 0;
   }
 
   public bool ToggleCastType(int e)
@@ -172,12 +223,31 @@ public class Restrictions
         break;
       }
     }
+    if (v)
+    {
+      for (int index = 0; index < num; ++index)
+      {
+        if (Inert.Instance.altSpells != null && Inert.Instance.altSpells[index].type == castType && this.altSpells[index])
+        {
+          v = false;
+          break;
+        }
+      }
+    }
     for (int index = 0; index < num; ++index)
     {
       if (Inert.Instance.spells[index].type == castType)
       {
         this.availableSpells[index] = v;
-        PopupRestrictions.Instance.SpellEnabled(index, v);
+        PopupRestrictions.Instance.SpellEnabled(index, v, false);
+      }
+    }
+    for (int index = 0; index < num; ++index)
+    {
+      if (Inert.Instance.altSpells != null && Inert.Instance.altSpells[index].type == castType)
+      {
+        this.altSpells[index] = v;
+        PopupRestrictions.Instance.SpellEnabled(index, v, true);
       }
     }
     return v;
@@ -197,35 +267,33 @@ public class Restrictions
         break;
       }
     }
+    if (v)
+    {
+      for (int index = 0; index < num; ++index)
+      {
+        if (Inert.Instance.altSpells != null && Inert.Instance.altSpells[index].spellType == spellType && this.altSpells[index])
+        {
+          v = false;
+          break;
+        }
+      }
+    }
     for (int index = 0; index < num; ++index)
     {
       if (Inert.Instance.spells[index].spellType == spellType)
       {
         this.availableSpells[(int) (byte) index] = v;
-        PopupRestrictions.Instance.SpellEnabled(index, v);
+        PopupRestrictions.Instance.SpellEnabled(index, v, false);
+      }
+    }
+    for (int index = 0; index < num; ++index)
+    {
+      if (Inert.Instance.altSpells != null && Inert.Instance.altSpells[index].spellType == spellType)
+      {
+        this.altSpells[index] = v;
+        PopupRestrictions.Instance.SpellEnabled(index, v, true);
       }
     }
     return v;
-  }
-
-  public int Valid(byte[] spells)
-  {
-    for (int index = 0; index < spells.Length; ++index)
-    {
-      if (!this.availableSpells[(int) spells[index]])
-        return index;
-    }
-    return -1;
-  }
-
-  public List<int> AllInvalid(byte[] spells)
-  {
-    List<int> intList = new List<int>();
-    for (int index = 0; index < spells.Length; ++index)
-    {
-      if (!this.availableSpells[(int) spells[index]])
-        intList.Add(index);
-    }
-    return intList;
   }
 }

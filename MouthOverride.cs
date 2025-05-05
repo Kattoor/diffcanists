@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+#nullable disable
 public class MouthOverride : MonoBehaviour
 {
   public List<Sprite> sprites = new List<Sprite>();

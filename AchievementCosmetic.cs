@@ -1,4 +1,5 @@
 
+#nullable disable
 public class AchievementCosmetic
 {
   public byte body;

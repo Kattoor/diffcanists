@@ -1,6 +1,7 @@
 
 using System.Collections.Generic;
 
+#nullable disable
 public class SteamStore
 {
   public static List<SteamStore.Item> items = new List<SteamStore.Item>()
@@ -46,9 +47,9 @@ public class SteamStore
   public class Item
   {
     public string name = "";
+    public SteamStore.Which which;
     public int amount = 100;
     public int cost = 100;
-    public SteamStore.Which which;
   }
 
   public enum Which

@@ -1,4 +1,5 @@
 
+#nullable disable
 public class WebPing
 {
   internal bool isDone;

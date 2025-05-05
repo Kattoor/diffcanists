@@ -1,4 +1,5 @@
 
+#nullable disable
 public static class Channels
 {
   public const int DefaultReliable = 0;

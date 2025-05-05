@@ -1,6 +1,7 @@
 
 using System;
 
+#nullable disable
 namespace Hazel
 {
   public class NewConnectionEventArgs : EventArgs, IRecyclable
@@ -26,9 +27,6 @@ namespace Hazel
       this.Connection = connection;
     }
 
-    public void Recycle()
-    {
-      NewConnectionEventArgs.objectPool.PutObject(this);
-    }
+    public void Recycle() => NewConnectionEventArgs.objectPool.PutObject(this);
   }
 }

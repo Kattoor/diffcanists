@@ -4,6 +4,7 @@ using SevenZip.Compression.RangeCoder;
 using System;
 using System.IO;
 
+#nullable disable
 namespace SevenZip.Compression.LZMA
 {
   public class Decoder : ICoder, ISetDecoderProperties
@@ -70,9 +71,9 @@ namespace SevenZip.Compression.LZMA
       {
         for (uint index2 = 0; index2 <= this.m_PosStateMask; ++index2)
         {
-          uint num = (index1 << 4) + index2;
-          this.m_IsMatchDecoders[(int) num].Init();
-          this.m_IsRep0LongDecoders[(int) num].Init();
+          uint index3 = (index1 << 4) + index2;
+          this.m_IsMatchDecoders[(int) index3].Init();
+          this.m_IsRep0LongDecoders[(int) index3].Init();
         }
         this.m_IsRepDecoders[(int) index1].Init();
         this.m_IsRepG0Decoders[(int) index1].Init();
@@ -103,25 +104,25 @@ namespace SevenZip.Compression.LZMA
       uint num1 = 0;
       uint num2 = 0;
       uint num3 = 0;
-      ulong num4 = 0;
-      ulong num5 = (ulong) outSize;
-      if (num4 < num5)
+      ulong pos = 0;
+      ulong num4 = (ulong) outSize;
+      if (pos < num4)
       {
         if (this.m_IsMatchDecoders[(int) state.Index << 4].Decode(this.m_RangeDecoder) != 0U)
           throw new DataErrorException();
         state.UpdateChar();
         this.m_OutWindow.PutByte(this.m_LiteralDecoder.DecodeNormal(this.m_RangeDecoder, 0U, (byte) 0));
-        ++num4;
+        ++pos;
       }
-      while (num4 < num5)
+      while (pos < num4)
       {
-        uint posState = (uint) num4 & this.m_PosStateMask;
+        uint posState = (uint) pos & this.m_PosStateMask;
         if (this.m_IsMatchDecoders[((int) state.Index << 4) + (int) posState].Decode(this.m_RangeDecoder) == 0U)
         {
           byte prevByte = this.m_OutWindow.GetByte(0U);
-          this.m_OutWindow.PutByte(state.IsCharState() ? this.m_LiteralDecoder.DecodeNormal(this.m_RangeDecoder, (uint) num4, prevByte) : this.m_LiteralDecoder.DecodeWithMatchByte(this.m_RangeDecoder, (uint) num4, prevByte, this.m_OutWindow.GetByte(distance)));
+          this.m_OutWindow.PutByte(state.IsCharState() ? this.m_LiteralDecoder.DecodeNormal(this.m_RangeDecoder, (uint) pos, prevByte) : this.m_LiteralDecoder.DecodeWithMatchByte(this.m_RangeDecoder, (uint) pos, prevByte, this.m_OutWindow.GetByte(distance)));
           state.UpdateChar();
-          ++num4;
+          ++pos;
         }
         else
         {
@@ -134,32 +135,32 @@ namespace SevenZip.Compression.LZMA
               {
                 state.UpdateShortRep();
                 this.m_OutWindow.PutByte(this.m_OutWindow.GetByte(distance));
-                ++num4;
+                ++pos;
                 continue;
               }
             }
             else
             {
-              uint num6;
+              uint num5;
               if (this.m_IsRepG1Decoders[(int) state.Index].Decode(this.m_RangeDecoder) == 0U)
               {
-                num6 = num1;
+                num5 = num1;
               }
               else
               {
                 if (this.m_IsRepG2Decoders[(int) state.Index].Decode(this.m_RangeDecoder) == 0U)
                 {
-                  num6 = num2;
+                  num5 = num2;
                 }
                 else
                 {
-                  num6 = num3;
+                  num5 = num3;
                   num3 = num2;
                 }
                 num2 = num1;
               }
               num1 = distance;
-              distance = num6;
+              distance = num5;
             }
             len = this.m_RepLenDecoder.Decode(this.m_RangeDecoder, posState) + 2U;
             state.UpdateRep();
@@ -181,14 +182,14 @@ namespace SevenZip.Compression.LZMA
             else
               distance = num6;
           }
-          if ((ulong) distance >= (ulong) this.m_OutWindow.TrainSize + num4 || distance >= this.m_DictionarySizeCheck)
+          if ((ulong) distance >= (ulong) this.m_OutWindow.TrainSize + pos || distance >= this.m_DictionarySizeCheck)
           {
             if (distance != uint.MaxValue)
               throw new DataErrorException();
             break;
           }
           this.m_OutWindow.CopyBlock(distance, len);
-          num4 += (ulong) len;
+          pos += (ulong) len;
         }
       }
       this.m_OutWindow.Flush();
@@ -222,11 +223,11 @@ namespace SevenZip.Compression.LZMA
 
     private class LenDecoder
     {
+      private BitDecoder m_Choice;
+      private BitDecoder m_Choice2;
       private BitTreeDecoder[] m_LowCoder = new BitTreeDecoder[16];
       private BitTreeDecoder[] m_MidCoder = new BitTreeDecoder[16];
       private BitTreeDecoder m_HighCoder = new BitTreeDecoder(8);
-      private BitDecoder m_Choice;
-      private BitDecoder m_Choice2;
       private uint m_NumPosStates;
 
       public void Create(uint numPosStates)
@@ -274,9 +275,9 @@ namespace SevenZip.Compression.LZMA
         this.m_NumPosBits = numPosBits;
         this.m_PosMask = (uint) ((1 << numPosBits) - 1);
         this.m_NumPrevBits = numPrevBits;
-        uint num = (uint) (1 << this.m_NumPrevBits + this.m_NumPosBits);
-        this.m_Coders = new Decoder.LiteralDecoder.Decoder2[(int) num];
-        for (uint index = 0; index < num; ++index)
+        uint length = (uint) (1 << this.m_NumPrevBits + this.m_NumPosBits);
+        this.m_Coders = new Decoder.LiteralDecoder.Decoder2[(int) length];
+        for (uint index = 0; index < length; ++index)
           this.m_Coders[(int) index].Create();
       }
 
@@ -310,10 +311,7 @@ namespace SevenZip.Compression.LZMA
       {
         private BitDecoder[] m_Decoders;
 
-        public void Create()
-        {
-          this.m_Decoders = new BitDecoder[768];
-        }
+        public void Create() => this.m_Decoders = new BitDecoder[768];
 
         public void Init()
         {
@@ -323,33 +321,33 @@ namespace SevenZip.Compression.LZMA
 
         public byte DecodeNormal(SevenZip.Compression.RangeCoder.Decoder rangeDecoder)
         {
-          uint num = 1;
+          uint index = 1;
           do
           {
-            num = num << 1 | this.m_Decoders[(int) num].Decode(rangeDecoder);
+            index = index << 1 | this.m_Decoders[(int) index].Decode(rangeDecoder);
           }
-          while (num < 256U);
-          return (byte) num;
+          while (index < 256U);
+          return (byte) index;
         }
 
         public byte DecodeWithMatchByte(SevenZip.Compression.RangeCoder.Decoder rangeDecoder, byte matchByte)
         {
-          uint num1 = 1;
+          uint index = 1;
           do
           {
-            uint num2 = (uint) ((int) matchByte >> 7 & 1);
+            uint num1 = (uint) ((int) matchByte >> 7 & 1);
             matchByte <<= 1;
-            uint num3 = this.m_Decoders[(1 + (int) num2 << 8) + (int) num1].Decode(rangeDecoder);
-            num1 = num1 << 1 | num3;
-            if ((int) num2 != (int) num3)
+            uint num2 = this.m_Decoders[(1 + (int) num1 << 8) + (int) index].Decode(rangeDecoder);
+            index = index << 1 | num2;
+            if ((int) num1 != (int) num2)
             {
-              while (num1 < 256U)
-                num1 = num1 << 1 | this.m_Decoders[(int) num1].Decode(rangeDecoder);
+              while (index < 256U)
+                index = index << 1 | this.m_Decoders[(int) index].Decode(rangeDecoder);
               break;
             }
           }
-          while (num1 < 256U);
-          return (byte) num1;
+          while (index < 256U);
+          return (byte) index;
         }
       }
     }

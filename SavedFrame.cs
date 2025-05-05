@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+#nullable disable
 public class SavedFrame
 {
   public class ZGame
@@ -19,10 +20,7 @@ public class SavedFrame
       return zgame;
     }
 
-    public static SavedFrame.ZGame Deserialize(myBinaryReader reader)
-    {
-      return new SavedFrame.ZGame();
-    }
+    public static SavedFrame.ZGame Deserialize(myBinaryReader reader) => new SavedFrame.ZGame();
   }
 
   public class ZPerson : SavedFrame.ZComponent
@@ -44,35 +42,19 @@ public class SavedFrame
     public int familiarLevelIllusion;
     public int familiarLevelBlood;
 
-    public static SavedFrame.ZPerson Serialize(
-      myBinaryWriter writer,
-      SavedFrame.ZPerson person)
+    public static SavedFrame.ZPerson Serialize(myBinaryWriter writer, SavedFrame.ZPerson person)
     {
       return new SavedFrame.ZPerson();
     }
 
-    public static SavedFrame.ZPerson Deserialize(myBinaryReader reader)
-    {
-      return new SavedFrame.ZPerson();
-    }
+    public static SavedFrame.ZPerson Deserialize(myBinaryReader reader) => new SavedFrame.ZPerson();
   }
 
   public class ZCreature : SavedFrame.ZEntity
   {
-    public List<SavedFrame.ZSpellSlot> spells = new List<SavedFrame.ZSpellSlot>();
-    public bool canMove = true;
-    public bool usingGlide = true;
-    public Vector2 LongjumpValues = new Vector2(8f, 9f);
-    public Vector2 HighjumpValues = new Vector2(2f, 13f);
-    public float scale = 1f;
-    public FixedInt scaleFixed = (FixedInt) 1;
-    public int team = -1;
-    public bool diesInWater = true;
-    public int turnProtectionShieldCast = -1;
-    public int entangledShield = -1;
-    public int prestigeIndex = -1;
     public SavedFrame.ZCollider collider;
     public SpellEnum spellEnum;
+    public List<SavedFrame.ZSpellSlot> spells = new List<SavedFrame.ZSpellSlot>();
     public int health;
     public int maxHealth;
     public FixedInt speed;
@@ -86,6 +68,10 @@ public class SavedFrame
     public bool canMount;
     public bool phantom;
     public bool gliding;
+    public bool canMove = true;
+    public bool usingGlide = true;
+    public Vector2 LongjumpValues = new Vector2(8f, 9f);
+    public Vector2 HighjumpValues = new Vector2(2f, 13f);
     public EditorVector2 LongJumpData;
     public EditorVector2 HighJumpData;
     public GameObject deathExplosion;
@@ -102,9 +88,12 @@ public class SavedFrame
     public int moneyFrames;
     public int pactID;
     public bool removeFlight;
+    public float scale = 1f;
+    public FixedInt scaleFixed = (FixedInt) 1;
     public bool FullArcane;
     public bool UnaffectedByNaturesWraith;
     public int shield;
+    public int team = -1;
     public int mount;
     public int rider;
     public bool inTower;
@@ -117,24 +106,22 @@ public class SavedFrame
     public bool entangled;
     public bool hasDarkDefenses;
     public bool inWater;
+    public bool diesInWater = true;
     public int bleedCounter;
     public Effector stormShield;
     public Effector auraOfDecay;
     public int flightObj;
     public bool shiningPower;
+    public int turnProtectionShieldCast = -1;
+    public int entangledShield = -1;
     public bool vine_bloom_active;
     public int additionalBleedOutDamage;
+    public int prestigeIndex = -1;
 
     public bool bleeding
     {
-      get
-      {
-        return this.bleedCounter > 0;
-      }
-      set
-      {
-        this.bleedCounter = value ? 3 : 0;
-      }
+      get => this.bleedCounter > 0;
+      set => this.bleedCounter = value ? 3 : 0;
     }
 
     public static SavedFrame.ZCreature Serialize(myBinaryWriter writer, Creature creature)
@@ -167,9 +154,9 @@ public class SavedFrame
 
   public class ZCollider : SavedFrame.ZComponent
   {
-    public int layer = 256;
     public MyLocation position;
     public bool enabled;
+    public int layer = 256;
     public int offsetX;
     public int offsetY;
     public int radius;
@@ -177,9 +164,7 @@ public class SavedFrame
     public MyCollider.Shape shape;
     public StaticPolygons.CachedPolygonEnums cachedPolygon;
 
-    public static SavedFrame.ZCollider Serialize(
-      myBinaryWriter writer,
-      MyCollider collider)
+    public static SavedFrame.ZCollider Serialize(myBinaryWriter writer, MyCollider collider)
     {
       return new SavedFrame.ZCollider();
     }
@@ -203,21 +188,18 @@ public class SavedFrame
       return new SavedFrame.ZSpell();
     }
 
-    public static SavedFrame.ZSpell Deserialize(myBinaryReader reader)
-    {
-      return new SavedFrame.ZSpell();
-    }
+    public static SavedFrame.ZSpell Deserialize(myBinaryReader reader) => new SavedFrame.ZSpell();
   }
 
   public class ZSpellSlot : SavedFrame.ZComponent
   {
     public string spell = "";
-    public int MaxUses = -1;
-    public bool EndsTurn = true;
     public bool syncWithParent;
     public bool isPresent;
     public bool isLevel5;
+    public int MaxUses = -1;
     public int RechargeTime;
+    public bool EndsTurn = true;
     public int TurnsTillFirstUse;
 
     public static SavedFrame.ZSpellSlot Serialize(myBinaryWriter writer, SpellSlot slot)
@@ -243,10 +225,7 @@ public class SavedFrame
       return new SavedFrame.ZTower();
     }
 
-    public static SavedFrame.ZTower Deserialize(myBinaryReader reader)
-    {
-      return new SavedFrame.ZTower();
-    }
+    public static SavedFrame.ZTower Deserialize(myBinaryReader reader) => new SavedFrame.ZTower();
   }
 
   public class ZEntity : SavedFrame.ZComponent

@@ -7,9 +7,24 @@ using System.Text;
 using System.Threading;
 using UnityEngine;
 
+#nullable disable
 [Serializable]
 public class SettingsPlayer
 {
+  public const int NumOutfitParts = 11;
+  public SpellsOnly _spells = new SpellsOnly();
+  public const byte _Version = 5;
+  public byte indexHead;
+  public byte indexBeard;
+  public byte indexBeard2;
+  public byte indexBeard3;
+  public byte indexHat;
+  public byte indexBody;
+  public byte indexLeftHand;
+  public byte indexRightHand;
+  public byte indexLeftFoot;
+  public byte indexRightFoot;
+  public byte indexMouth;
   public static readonly byte[] clanOutfit = new byte[9]
   {
     (byte) 100,
@@ -23,6 +38,12 @@ public class SettingsPlayer
     byte.MaxValue
   };
   public static readonly SettingsPlayer DefaultOutfit = new SettingsPlayer();
+  public Recolor coloring = new Recolor();
+  public byte custom;
+  public string[] customPieces;
+  public Sprite[] textures;
+  public SettingsPlayer.CustomAnim[] animations;
+  public SettingsPlayer.MetaData[] metaData;
   public static byte Achievement_GameOutfit = byte.MaxValue;
   public static ulong id_sno = 628590527973163009;
   public static int sno_body = 65;
@@ -75,61 +96,29 @@ public class SettingsPlayer
     }
   };
   private static Dictionary<string, SettingsPlayer.ByDust> buyables = new Dictionary<string, SettingsPlayer.ByDust>();
-  public SpellsOnly _spells = new SpellsOnly();
-  public Recolor coloring = new Recolor();
-  public const int NumOutfitParts = 11;
-  public const byte _Version = 4;
-  public byte indexHead;
-  public byte indexBeard;
-  public byte indexBeard2;
-  public byte indexBeard3;
-  public byte indexHat;
-  public byte indexBody;
-  public byte indexLeftHand;
-  public byte indexRightHand;
-  public byte indexLeftFoot;
-  public byte indexRightFoot;
-  public byte indexMouth;
-  public byte custom;
-  public string[] customPieces;
-  public Sprite[] textures;
-  public SettingsPlayer.CustomAnim[] animations;
-  public SettingsPlayer.MetaData[] metaData;
 
   public byte fullBook
   {
-    get
-    {
-      return this._spells.fullBook;
-    }
-    set
-    {
-      this._spells.fullBook = value;
-    }
+    get => this._spells.fullBook;
+    set => this._spells.fullBook = value;
   }
 
-  public byte extraInfo
+  public int altBooks
   {
-    get
-    {
-      return this._spells.extraInfo;
-    }
-    set
-    {
-      this._spells.extraInfo = value;
-    }
+    get => this._spells.altBooks;
+    set => this._spells.altBooks = value;
   }
 
   public BookOf Elemental
   {
-    get
-    {
-      return (BookOf) ((int) this.fullBook - 1);
-    }
-    set
-    {
-      this.fullBook = (byte) (value + 1);
-    }
+    get => (BookOf) ((int) this.fullBook - 1);
+    set => this.fullBook = (byte) (value + 1);
+  }
+
+  public BookOf ElementalClamped
+  {
+    get => (BookOf) Mathf.Clamp((int) this.fullBook - 1, 0, (int) RandomExtensions.LastBook());
+    set => this.fullBook = (byte) (value + 1);
   }
 
   public byte GetOutfitIndex(Outfit o)
@@ -205,14 +194,8 @@ public class SettingsPlayer
 
   public byte[] spells
   {
-    get
-    {
-      return this._spells.spells;
-    }
-    set
-    {
-      this._spells.spells = value;
-    }
+    get => this._spells.spells;
+    set => this._spells.spells = value;
   }
 
   internal void Export(string fileName)
@@ -323,8 +306,8 @@ public class SettingsPlayer
         AnimateRepeat component = componentsInChild.GetComponent<AnimateRepeat>();
         if ((UnityEngine.Object) component != (UnityEngine.Object) null)
         {
-          for (int index2 = 0; index2 < component.sprites.Length; ++index2)
-            component.sprites[index2] = Global.AddSprite(Sprite.Create(component.sprites[index2].texture, component.sprites[index2].rect, p, 2f));
+          for (int index3 = 0; index3 < component.sprites.Length; ++index3)
+            component.sprites[index3] = Global.AddSprite(Sprite.Create(component.sprites[index3].texture, component.sprites[index3].rect, p, 2f));
         }
       }
     }
@@ -386,8 +369,8 @@ public class SettingsPlayer
     this.indexMouth = (byte) 0;
     this.indexLeftFoot = (byte) 0;
     this.indexRightFoot = (byte) 0;
-    for (int index = 0; index < 11; ++index)
-      this.ResetCustom((Outfit) index);
+    for (int o = 0; o < 11; ++o)
+      this.ResetCustom((Outfit) o);
   }
 
   public void ResetCustom(Outfit o)
@@ -561,14 +544,14 @@ public class SettingsPlayer
     if (spell.level == 3)
     {
       int num = 0;
-      for (int index1 = 0; index1 < index; ++index1)
+      for (int index2 = 0; index2 < index; ++index2)
       {
-        if ((int) this.spells[index1] < Inert.Instance._spells.Length)
+        if ((int) this.spells[index2] < Inert.Instance._spells.Length)
         {
-          keyValuePair = Inert.Instance.spells.GetItem((int) this.spells[index1]);
+          keyValuePair = Inert.Instance.spells.GetItem((int) this.spells[index2]);
           if (keyValuePair.Value.bookOf == spell.bookOf)
           {
-            keyValuePair = Inert.Instance.spells.GetItem((int) this.spells[index1]);
+            keyValuePair = Inert.Instance.spells.GetItem((int) this.spells[index2]);
             if (keyValuePair.Value.level < 3)
             {
               ++num;
@@ -600,23 +583,23 @@ public class SettingsPlayer
     if (spell.level == 2)
     {
       byte num = (byte) ((uint) spellID - 1U);
-      for (int index1 = 0; index1 < 16; ++index1)
+      for (int index2 = 0; index2 < 16; ++index2)
       {
-        if ((int) this.spells[index1] == (int) num)
+        if ((int) this.spells[index2] == (int) num)
           return true;
       }
     }
     else if (spell.level == 3)
     {
       int num = 0;
-      for (int index1 = 0; index1 < index; ++index1)
+      for (int index3 = 0; index3 < index; ++index3)
       {
-        if ((int) this.spells[index1] < Inert.Instance._spells.Length)
+        if ((int) this.spells[index3] < Inert.Instance._spells.Length)
         {
-          keyValuePair = Inert.Instance.spells.GetItem((int) this.spells[index1]);
+          keyValuePair = Inert.Instance.spells.GetItem((int) this.spells[index3]);
           if (keyValuePair.Value.bookOf == spell.bookOf)
           {
-            keyValuePair = Inert.Instance.spells.GetItem((int) this.spells[index1]);
+            keyValuePair = Inert.Instance.spells.GetItem((int) this.spells[index3]);
             if (keyValuePair.Value.level < 3)
             {
               ++num;
@@ -671,7 +654,7 @@ public class SettingsPlayer
   public void CopySpells(SpellsOnly b)
   {
     this.fullBook = b.fullBook;
-    this.extraInfo = b.extraInfo;
+    this.altBooks = b.altBooks;
     for (int index = 0; index < 16; ++index)
       this.spells[index] = b.spells[index];
   }
@@ -679,7 +662,7 @@ public class SettingsPlayer
   public void FakeCopySpells(SettingsPlayer b)
   {
     this.fullBook = b.fullBook;
-    this.extraInfo = b.extraInfo;
+    this.altBooks = b.altBooks;
     for (int index = 0; index < 16; ++index)
       this.spells[index] = byte.MaxValue;
   }
@@ -688,7 +671,7 @@ public class SettingsPlayer
   {
     if (b.fullBook > (byte) 0 | force)
       this.fullBook = b.fullBook;
-    this.extraInfo = b.extraInfo;
+    this.altBooks = b.altBooks;
     for (int index = 0; index < 16; ++index)
       this.spells[index] = b.spells[index];
   }
@@ -741,7 +724,7 @@ public class SettingsPlayer
 
   public void Serialize(myBinaryWriter w)
   {
-    w.Write((byte) 4);
+    w.Write((byte) 5);
     w.Write(this.indexHead);
     w.Write(this.indexBeard);
     w.Write(this.indexBeard2);
@@ -754,7 +737,7 @@ public class SettingsPlayer
       w.Write(this.spells[index]);
     this.coloring.Serialize(w);
     w.Write(this.fullBook);
-    w.Write(this.extraInfo);
+    w.Write(this.altBooks);
     if (this.customPieces == null || this.customPieces.Length != 11 || !this.CustomContainsSomething())
       this.custom = (byte) 0;
     w.Write(this.custom);
@@ -791,16 +774,16 @@ public class SettingsPlayer
       this.spells[index] = r.ReadByte();
     if (num1 <= (byte) 1)
     {
-      byte num2 = r.ReadByte();
-      byte num3 = r.ReadByte();
-      byte num4 = r.ReadByte();
-      byte num5 = r.ReadByte();
+      byte a1 = r.ReadByte();
+      byte a2 = r.ReadByte();
+      byte a3 = r.ReadByte();
+      byte a4 = r.ReadByte();
       if ((UnityEngine.Object) ClientResources.Instance != (UnityEngine.Object) null)
       {
-        this.coloring.colors[0].red = (Color32) ClientResources.Instance.colorsMain[Mathf.Min((int) num2, ClientResources.Instance.colorsMain.Length - 1)];
-        this.coloring.colors[0].green = (Color32) ClientResources.Instance.colorsSecondary[Mathf.Min((int) num3, ClientResources.Instance.colorsSecondary.Length - 1)];
-        this.coloring.colors[0].blue = (Color32) ClientResources.Instance.colorsHair[Mathf.Min((int) num4, ClientResources.Instance.colorsHair.Length - 1)];
-        this.coloring.colors[0].gray = (Color32) ClientResources.Instance.colorSkin[Mathf.Min((int) num5, ClientResources.Instance.colorSkin.Length - 1)];
+        this.coloring.colors[0].red = (Color32) ClientResources.Instance.colorsMain[Mathf.Min((int) a1, ClientResources.Instance.colorsMain.Length - 1)];
+        this.coloring.colors[0].green = (Color32) ClientResources.Instance.colorsSecondary[Mathf.Min((int) a2, ClientResources.Instance.colorsSecondary.Length - 1)];
+        this.coloring.colors[0].blue = (Color32) ClientResources.Instance.colorsHair[Mathf.Min((int) a3, ClientResources.Instance.colorsHair.Length - 1)];
+        this.coloring.colors[0].gray = (Color32) ClientResources.Instance.colorSkin[Mathf.Min((int) a4, ClientResources.Instance.colorSkin.Length - 1)];
         for (int index = 1; index < this.coloring.colors.Length; ++index)
         {
           this.coloring.colors[index].red = this.coloring.colors[0].red;
@@ -817,7 +800,12 @@ public class SettingsPlayer
     {
       this.coloring.Deserialize(r);
       this.fullBook = r.ReadByte();
-      this.extraInfo = num1 <= (byte) 2 ? (byte) 0 : r.ReadByte();
+      if (num1 > (byte) 4)
+        this.altBooks = r.ReadInt32();
+      else if (num1 > (byte) 2)
+        this.altBooks |= ((int) r.ReadByte() & 1) != 0 ? 1024 : 0;
+      else
+        this.altBooks = 0;
       byte num2 = r.ReadByte();
       if (num2 != (byte) 0)
       {
@@ -847,7 +835,7 @@ public class SettingsPlayer
         w.Write((byte) 44);
         this.Serialize(w);
       }
-      c.SendBytes(memoryStream.ToArray(), SendOption.None);
+      c.SendBytes(memoryStream.ToArray());
     }
   }
 
@@ -878,17 +866,14 @@ public class SettingsPlayer
   {
     if ((int) sp.indexHead == (int) SettingsPlayer.clanOutfit[1])
     {
-      ClanOutfit clanOutfit = ClientResources.Instance.GetClanOutfit(Client.GetAccount(name, false).clan);
-      if (clanOutfit != null && clanOutfit.outfits != null && (clanOutfit.outfits[1] != null && clanOutfit.outfits[1].effect == (byte) 1))
+      ClanOutfit clanOutfit = ClientResources.Instance.GetClanOutfit(Client.GetAccount(name).clan);
+      if (clanOutfit != null && clanOutfit.outfits != null && clanOutfit.outfits[1] != null && clanOutfit.outfits[1].effect == (byte) 1)
         return true;
     }
-    return SettingsPlayer.BeardNoMouth(sp.indexBeard) || SettingsPlayer.BeardNoMouth(sp.indexBeard2) || (SettingsPlayer.BeardNoMouth(sp.indexBeard3) || !Inert.Instance._characterBody[(int) sp.indexBody].hasMouth) || !Inert.Instance._characterHeads[(int) sp.indexHead].hasMouth;
+    return SettingsPlayer.BeardNoMouth(sp.indexBeard) || SettingsPlayer.BeardNoMouth(sp.indexBeard2) || SettingsPlayer.BeardNoMouth(sp.indexBeard3) || !Inert.Instance._characterBody[(int) sp.indexBody].hasMouth || !Inert.Instance._characterHeads[(int) sp.indexHead].hasMouth;
   }
 
-  private static bool BeardNoMouth(byte i)
-  {
-    return !Inert.Instance._characterBeards[(int) i].hasMouth;
-  }
+  private static bool BeardNoMouth(byte i) => !Inert.Instance._characterBeards[(int) i].hasMouth;
 
   public void VerifyOutfit(Cosmetics cosmetics, Account a = null)
   {
@@ -951,6 +936,11 @@ public class SettingsPlayer
     return Inert.Instance.GetOutfit(type)[index].accountType;
   }
 
+  public static Badge CheckBadge(Outfit type, int index)
+  {
+    return Inert.Instance.GetOutfit(type)[index].badge;
+  }
+
   public static bool CheckAlwaysUnlocked(Outfit type, int index)
   {
     return !Inert.Instance.GetOutfit(type)[index].isLocked;
@@ -975,30 +965,33 @@ public class SettingsPlayer
   {
     if (SettingsPlayer.CheckAlwaysUnlocked(type, index) || Client.MyAccount.accountType.has(AccountType.Owner | AccountType.Press_Account))
       return 1;
-    Achievement achievement = SettingsPlayer.CheckAchievements(type, index);
-    if (achievement != Achievement.None && Client.cosmetics.achievements[(int) achievement])
+    Achievement index1 = SettingsPlayer.CheckAchievements(type, index);
+    if (index1 != Achievement.None && Client.cosmetics.achievements[(int) index1])
       return 1;
     Account myAccount = Client.MyAccount;
     AccountType accountType = SettingsPlayer.CheckAccountType(type, index);
     if ((myAccount.accountType & accountType) != AccountType.None)
       return 1;
+    Badge index2 = SettingsPlayer.CheckBadge(type, index);
+    if (index2 != Badge.None && !myAccount.badges[(int) index2])
+      return 1;
     int num1 = SettingsPlayer.CheckPrestige(type, index);
     if (num1 > 0)
       return (int) myAccount.prestige < num1 ? 0 : 1;
     int num2 = SettingsPlayer.CheckExperience(type, index);
-    return num2 > 0 ? ((int) myAccount.experience < num2 ? 0 : 1) : (SettingsPlayer.CheckTournament(type, index) > 0 || Inert.Instance.GetOutfit(type)[index].season != Server.ServerSettings.Season.None || (!string.IsNullOrEmpty(Inert.Instance.GetOutfit(type)[index].reason) || accountType != AccountType.None) || achievement != Achievement.None ? 0 : -1);
+    return num2 > 0 ? ((int) myAccount.experience < num2 ? 0 : 1) : (SettingsPlayer.CheckTournament(type, index) > 0 || Inert.Instance.GetOutfit(type)[index].season != Server.ServerSettings.Season.None || !string.IsNullOrEmpty(Inert.Instance.GetOutfit(type)[index].reason) || accountType != AccountType.None || index1 != Achievement.None ? 0 : -1);
   }
 
   public static bool IsSeasonal(Outfit type, int index)
   {
-    return (uint) Inert.Instance.GetOutfit(type)[index].season > 0U;
+    return Inert.Instance.GetOutfit(type)[index].season != 0;
   }
 
   public static SettingsPlayer.ByDust GetBuyable(string name)
   {
-    SettingsPlayer.ByDust byDust;
-    SettingsPlayer.buyables.TryGetValue(name, out byDust);
-    return byDust;
+    SettingsPlayer.ByDust buyable;
+    SettingsPlayer.buyables.TryGetValue(name, out buyable);
+    return buyable;
   }
 
   public static bool VerifyOutfit(
@@ -1013,14 +1006,14 @@ public class SettingsPlayer
 
   public static void SetupClientData()
   {
-    for (int index1 = 0; index1 < 8; ++index1)
+    for (int o = 0; o < 8; ++o)
     {
-      List<OutfitData> list = Inert.Instance.GetOutfit((Outfit) index1).list;
-      for (int index2 = 0; index2 < list.Count; ++index2)
+      List<OutfitData> list = Inert.Instance.GetOutfit((Outfit) o).list;
+      for (int index = 0; index < list.Count; ++index)
       {
-        list[index2].outfit = Outfit.Body;
-        list[index2].index = index2;
-        int achievement = (int) list[index2].achievement;
+        list[index].outfit = Outfit.Body;
+        list[index].index = index;
+        int achievement = (int) list[index].achievement;
       }
     }
   }
@@ -1032,15 +1025,14 @@ public class SettingsPlayer
 
   public class MetaData
   {
-    private static SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
-    private static Dictionary<string, SettingsPlayer.MetaData> metaQueue = new Dictionary<string, SettingsPlayer.MetaData>();
+    public const byte _version = 1;
     public float fps = 12f;
     public Vector2 pivot = new Vector2(0.5f, 0.5f);
-    public const byte _version = 1;
     internal bool hasEffect;
+    private static SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
+    private static Dictionary<string, SettingsPlayer.MetaData> metaQueue = new Dictionary<string, SettingsPlayer.MetaData>();
 
-    public static (SettingsPlayer.MetaData meta, bool exist) Deserialize(
-      myBinaryReader r)
+    public static (SettingsPlayer.MetaData meta, bool exist) Deserialize(myBinaryReader r)
     {
       int num = (int) r.ReadByte();
       SettingsPlayer.MetaData metaData = new SettingsPlayer.MetaData();

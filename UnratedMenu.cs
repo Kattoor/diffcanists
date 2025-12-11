@@ -390,7 +390,7 @@ public class UnratedMenu : Catalogue
     if (setReadyStates)
       this.SetReadyStatesOff();
     this.isFirst = string.Equals(Client._gameFacts.players[0], Client.Name, StringComparison.OrdinalIgnoreCase);
-    this.UpdateStartButton();
+    this.RefreshGameOptions();
     if (this.viewing != Viewing.Lobby)
       return;
     this.txtRateType.text = "Rating";

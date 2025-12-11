@@ -1391,8 +1391,8 @@ public class ClientResources : MonoBehaviour
       {
         w.Write((byte) 95);
         w.Write(Server._restrictions == null ? 0 : 2);
-        w.Write((byte) 4);
-        w.Write(Server._defaultRatedFacts == null ? 0 : 4);
+        w.Write((byte) 5);
+        w.Write(Server._defaultRatedFacts == null ? 0 : 5);
         if (Server._restrictions != null)
           Server._restrictions.Serialize(w);
         if (Server._defaultRatedFacts != null)

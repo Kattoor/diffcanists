@@ -777,12 +777,12 @@ namespace Educative
 
     public static string getMapRealName(MapEnum id)
     {
-      return GameFacts.MapName(id);
+      return GameFacts.MapName(id, false);
     }
 
     public static string getMapShortName(MapEnum id)
     {
-      return GameFacts.MapShortName(id);
+      return GameFacts.MapShortName(id, false);
     }
 
     public string getArmageddonName(MapEnum id)

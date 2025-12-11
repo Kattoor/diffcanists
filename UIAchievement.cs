@@ -23,7 +23,7 @@ public class UIAchievement : MonoBehaviour
     UIAchievement uiAchievement = Object.Instantiate<UIAchievement>(Controller.Instance.uIAchievement, Controller.Instance.transform);
     uiAchievement.rect.anchoredPosition = new Vector2(168f, 0.0f);
     uiAchievement.Init(achievement);
-    ChatBox.Instance?.NewChatMsg("", "Achievement: " + Achievements.list[(int) achievement].name + " - " + Achievements.list[(int) achievement].description, (Color) ColorScheme.GetColor(Global.ColorNotification), "", ChatOrigination.System, ContentType.STRING, (object) null);
+    ChatBox.Instance?.NewChatMsg("", "Achievement: " + Achievements.list[(int) achievement].name + " - " + Achievements.list[(int) achievement].description, (Color) ColorScheme.GetColor(Global.ColorNotification), "", ChatOrigination.System, ContentType.Achievement, (object) achievement);
   }
 
   public void Init(Achievement e)

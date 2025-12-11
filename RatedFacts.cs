@@ -11,10 +11,11 @@ public class RatedFacts
   public int mapStyle = -1;
   public int extraOptions = 4096;
   public int teams = -1;
+  public int altMap = -1;
   public const int DONT_MIND = -1;
   public int armageddon;
   public int gameType;
-  public const byte Version = 4;
+  public const byte Version = 5;
   public short rating;
   public SpellsOnly spellOverrides;
 
@@ -27,12 +28,12 @@ public class RatedFacts
 
   private bool EqualsRatedFacts(RatedFacts b)
   {
-    return b != null && this.gameType == b.gameType && (this.turnTime == b.turnTime && this.mapStyle == b.mapStyle) && (this.extraOptions == b.extraOptions && this.playerCount == b.playerCount && this.armageddon == b.armageddon) && this.teams == b.teams;
+    return b != null && this.gameType == b.gameType && (this.turnTime == b.turnTime && this.mapStyle == b.mapStyle) && (this.extraOptions == b.extraOptions && this.playerCount == b.playerCount && (this.armageddon == b.armageddon && this.teams == b.teams)) && this.altMap == b.altMap;
   }
 
   public override int GetHashCode()
   {
-    return ((((((17 * 23 + this.playerCount.GetHashCode()) * 23 + this.turnTime.GetHashCode()) * 23 + this.mapStyle.GetHashCode()) * 23 + this.extraOptions.GetHashCode()) * 23 + this.teams.GetHashCode()) * 23 + this.armageddon.GetHashCode()) * 23 + this.gameType.GetHashCode();
+    return (((((((17 * 23 + this.playerCount.GetHashCode()) * 23 + this.turnTime.GetHashCode()) * 23 + this.mapStyle.GetHashCode()) * 23 + this.extraOptions.GetHashCode()) * 23 + this.teams.GetHashCode()) * 23 + this.armageddon.GetHashCode()) * 23 + this.gameType.GetHashCode()) * 23 + this.altMap.GetHashCode();
   }
 
   public void VerifyGameType(bool forced = false)
@@ -51,7 +52,8 @@ public class RatedFacts
         this.teams = forced ? 65536 : -1;
       if (this.gameType == 0)
       {
-        this.armageddon = 0;
+        if (this.armageddon != -1 && this.armageddon != 0 && this.armageddon != 32768)
+          this.armageddon = 0;
         this.extraOptions = 4096;
         this.playerCount = (int) ((TimeEnum) this.teams & GameFacts.GetLowTimes());
         if ((this.teams & 65536) != 0)
@@ -64,7 +66,8 @@ public class RatedFacts
       }
       else if (this.gameType == 1)
       {
-        this.armageddon = 0;
+        if (this.armageddon != -1 && this.armageddon != 0 && this.armageddon != 32768)
+          this.armageddon = 0;
         this.extraOptions = 4096;
         this.playerCount = (this.teams & 16777216) != 0 ? 1375731712 : 67108864;
         if ((this.teams & 65536) != 0)
@@ -103,7 +106,8 @@ public class RatedFacts
       teams = this.teams,
       armageddon = this.armageddon,
       rating = this.rating,
-      customQueue = this.customQueue
+      customQueue = this.customQueue,
+      altMap = this.altMap
     };
   }
 
@@ -190,12 +194,18 @@ public class RatedFacts
           if (num2 == 5)
             obj = (object) mapEnum;
           else if (num2 < 5)
-            stringBuilderPlus.Append("<sprite name=\"").Append(GameFacts.MapName(mapEnum)).Append("\">");
+            stringBuilderPlus.Append("<sprite name=\"").Append(GameFacts.MapName(mapEnum, this.altMap == 1)).Append("\">");
         }
       }
     }
+    if (this.altMap == 1)
+    {
+      stringBuilderPlus.Append("ALT MAP");
+      if (breaks)
+        stringBuilderPlus.Append("\n");
+    }
     if (num2 == 5)
-      stringBuilderPlus.Append("<sprite name=\"").Append(GameFacts.MapName((MapEnum) obj)).Append("\">");
+      stringBuilderPlus.Append("<sprite name=\"").Append(GameFacts.MapName((MapEnum) obj, this.altMap == 1)).Append("\">");
     else if (num2 > 5)
       stringBuilderPlus.Append("+").Append(num2 - 4);
     int num3 = 0;
@@ -417,7 +427,7 @@ public class RatedFacts
   {
     if (a.customQueue == b.customQueue && a.customQueue == a.gameType + 1)
       return true;
-    if (a.customQueue != b.customQueue || a.gameType != b.gameType || a.gameType > 1 && (a.playerCount & b.playerCount) == 0 || ((a.turnTime & b.turnTime) == 0 || (a.mapStyle & b.mapStyle) == 0 || (!a.MatchExtraOption(GameStyle.Random_Spells, b) || !a.MatchExtraOption(GameStyle.Original_Spells_Only, b))) || (!a.MatchExtraOption(GameStyle.Elementals, b) || !a.MatchExtraOption(GameStyle.First_Turn_Teleport, b) || (!a.MatchExtraOption(GameStyle.Bid, b) || !a.MatchExtraOption(GameStyle.Watchtower, b)) || (a.teams & b.teams) == 0))
+    if (a.customQueue != b.customQueue || a.gameType != b.gameType || a.gameType > 1 && (a.playerCount & b.playerCount) == 0 || ((a.turnTime & b.turnTime) == 0 || (a.mapStyle & b.mapStyle) == 0 || (!a.MatchExtraOption(GameStyle.Random_Spells, b) || !a.MatchExtraOption(GameStyle.Original_Spells_Only, b))) || (!a.MatchExtraOption(GameStyle.Elementals, b) || !a.MatchExtraOption(GameStyle.First_Turn_Teleport, b) || (!a.MatchExtraOption(GameStyle.Bid, b) || !a.MatchExtraOption(GameStyle.Watchtower, b)) || ((a.teams & b.teams) == 0 || (a.altMap & b.altMap) == 0)))
       return false;
     if ((a.armageddon & b.armageddon) != 0 || a.armageddon == b.armageddon || (b.armageddon == -1 || a.armageddon == -1))
       return true;
@@ -441,6 +451,7 @@ public class RatedFacts
     this.teams &= a.teams;
     this.armageddon &= a.armageddon;
     this.customQueue &= a.customQueue;
+    this.altMap &= a.altMap;
   }
 
   public void Share(myBinaryWriter w)
@@ -453,6 +464,7 @@ public class RatedFacts
     w.Write(this.armageddon);
     w.Write(this.gameType);
     w.Write(this.customQueue);
+    w.Write(this.altMap);
   }
 
   public void Serialize(myBinaryWriter w, bool includeBook = true)
@@ -468,6 +480,7 @@ public class RatedFacts
     if (this.spellOverrides != null & includeBook)
       this.spellOverrides.Serialize(w);
     w.Write(this.customQueue);
+    w.Write(this.altMap);
   }
 
   public static RatedFacts Deserialize(int version, myBinaryReader r)
@@ -490,9 +503,11 @@ public class RatedFacts
     if (version > 2)
       this.gameType = r.ReadInt32();
     this.spellOverrides = r.ReadByte() != (byte) 1 ? (SpellsOnly) null : (version <= 2 ? SpellsOnly.OLDDeserialize(r) : SpellsOnly.Deserialize(r));
-    if (version <= 3)
+    if (version > 3)
+      this.customQueue = r.ReadInt32();
+    if (version <= 4)
       return;
-    this.customQueue = r.ReadInt32();
+    this.altMap = r.ReadInt32();
   }
 
   public void DeserializeShare(int version, myBinaryReader r)
@@ -505,6 +520,7 @@ public class RatedFacts
     this.armageddon = r.ReadInt32();
     this.gameType = r.ReadInt32();
     this.customQueue = r.ReadInt32();
+    this.altMap = r.ReadInt32();
   }
 
   public void SerializeToFile(string s)
@@ -513,7 +529,7 @@ public class RatedFacts
     {
       using (myBinaryWriter w = new myBinaryWriter((Stream) memoryStream))
       {
-        w.Write((byte) 4);
+        w.Write((byte) 5);
         this.Serialize(w, true);
       }
       File.WriteAllBytes(s, memoryStream.ToArray());

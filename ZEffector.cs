@@ -2601,7 +2601,7 @@ label_5:
               c.ApplyDamage(SpellEnum.Storm_Shield, DamageType.Shock, 5, this.whoSummoned, this.TurnCreated, this.type == EffectorType.Storm_Shield ? (ISpellBridge) Inert.GetSpell("Storm Shield") : (ISpellBridge) Inert.GetSpell("Electrostatic Charge"), false);
             if ((ZComponent) c != (object) null && (!(Mathd.Abs(c.position.x - this.whoSummoned.position.x) < 2) || !(Mathd.Abs(c.velocity.x) < 3) && (!(c.velocity.x < 0) || !(c.position.x < c.map.Width / 2)) && (!(c.velocity.x > 0) || !(c.position.x > c.map.Width / 2))))
               c.ApplyExplosionForce(10, new MyLocation(c.position.x + (c.position.x > this.whoSummoned.position.x ? 5 : -5), c.position.y - 10), (FixedInt) 1572864L, 10, Curve.Generic, false);
-            if ((ZComponent) c != (object) null && c.health <= 0 && this.variable > 0)
+            if (((ZComponent) c == (object) null || c.health <= 0) && this.variable > 0)
             {
               this.variable = 0;
               this.setActive = false;

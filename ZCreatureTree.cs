@@ -583,15 +583,23 @@ public class ZCreatureTree : ZCreature
   {
     if (this.isDead)
       return 0;
-    if (dt == DamageType.Heal || dt == DamageType.Heal20 || dt == DamageType.Heal50)
+    switch (dt)
     {
-      if (!this.baseTree.isStructure)
-      {
-        this.health += damage;
-        if (this.health > this.maxHealth)
-          this.health = this.maxHealth;
-      }
-      return 0;
+      case DamageType.Heal:
+      case DamageType.Heal20:
+      case DamageType.Heal50:
+        if (!this.baseTree.isStructure)
+        {
+          this.health += damage;
+          if (this.health > this.maxHealth)
+            this.health = this.maxHealth;
+        }
+        return 0;
+      case DamageType.Sunder:
+      case DamageType.SunderLight:
+        if ((ZComponent) enemy != (object) null && this.team == enemy.team)
+          return 0;
+        break;
     }
     if (this.baseTree.isButterflyJar)
     {

@@ -308,7 +308,7 @@ public class SettingsPlayer
   {
     if (this.customPieces == null)
       return false;
-    for (int index = 0; index < 11; ++index)
+    for (int index = 0; index < 11 && this.customPieces.Length > index; ++index)
     {
       if (!string.IsNullOrWhiteSpace(this.customPieces[index]))
         return true;
@@ -345,9 +345,9 @@ public class SettingsPlayer
 
   public void MakeSureIntitialized()
   {
-    if (this.customPieces == null)
+    if (this.customPieces == null || this.customPieces.Length != 11)
       this.customPieces = new string[11];
-    if (this.textures != null)
+    if (this.textures != null && this.textures.Length == 11)
       return;
     this.textures = new Sprite[11];
     this.animations = new SettingsPlayer.CustomAnim[11];
@@ -405,7 +405,7 @@ public class SettingsPlayer
   public void ResetCustom(Outfit o)
   {
     int index = (int) o;
-    if (this.customPieces == null)
+    if (this.customPieces == null || this.customPieces.Length <= index)
       return;
     this.customPieces[index] = (string) null;
     if ((UnityEngine.Object) this.textures[index] != (UnityEngine.Object) null)

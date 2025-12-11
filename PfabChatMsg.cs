@@ -117,6 +117,9 @@ public class PfabChatMsg : MonoBehaviour, IPointerClickHandler, IEventSystemHand
       case ContentType.ColorScheme:
         ColorSchemeUI.Create((ColorScheme) this.t.obj);
         break;
+      case ContentType.Achievement:
+        Controller.ShowPopup(Controller.Instance.MenuAchievements).GetComponent<AchievementsMenu>().openedWith = (Achievement) this.t.obj;
+        break;
       default:
         MyContextMenu.Show(this.nameOfPlayer, this.t.msg);
         break;

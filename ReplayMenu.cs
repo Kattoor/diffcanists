@@ -126,7 +126,7 @@ public class ReplayMenu : Catalogue
             }
             this.txt_nameOfGame.text = Path.GetFileNameWithoutExtension(s);
             this.txt_version.text = "Version: " + a;
-            this.txt_map.text = "Map: " + GameFacts.MapName(gf.GetMapMode());
+            this.txt_map.text = "Map: " + GameFacts.MapName(gf.GetMapMode(), false);
             this.txt_server.text = stringBuilder.ToString();
             this.txt_name.text = "Recorded by: " + ReplayMenu.nameWhoRecordedReplay;
             int num1 = reader.ReadInt32();

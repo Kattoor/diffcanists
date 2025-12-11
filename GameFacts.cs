@@ -200,7 +200,7 @@ public class GameFacts
     else
     {
       int timeInSeconds = this.GetTimeInSeconds();
-      if (this.IsNonStandard() || timeInSeconds < 7 || (timeInSeconds > 90 || this.armageddonTurn != (byte) 10) || (this.startHealth != (ushort) 250 || this.restrictions != null && this.restrictions.AnyRestricted()) || (this.GetArmageddon() != ~MapEnum.Dont_Mind || this.settings.customArmageddon != null))
+      if (this.IsNonStandard() || timeInSeconds < 7 || (timeInSeconds > 90 || this.armageddonTurn != (byte) 10) || (this.startHealth != (ushort) 250 || this.restrictions != null && this.restrictions.AnyRestricted()) || (this.GetArmageddon() != ~MapEnum.Dont_Mind && this.GetArmageddon() != this.GetMapMode() && this.GetArmageddon() != MapEnum.Grassy_Hills || this.settings.customArmageddon != null))
         this.gameType = ZGame.GameType.Party;
       else
         this.gameType = this.GetTimeInSeconds() < 30 ? ZGame.GameType.LowStandard : ZGame.GameType.HighStandard;
@@ -225,7 +225,7 @@ public class GameFacts
       stringBuilder1.Append("Sandbox<br>");
     else
       stringBuilder1.Append(RatedFacts.GetGameTypeAsStringLong((int) this.gameType)).Append("<br>");
-    stringBuilder1.Append("Map: ").Append(this.status == (byte) 0 || !linked ? GameFacts.MapName(this.GetMapMode()) : GameFacts.MapName(this.realMap)).Append("<br>");
+    stringBuilder1.Append("Map: ").Append(this.status == (byte) 0 || !linked ? GameFacts.MapName(this.GetMapMode(), g.gameFacts.settings.altGeneration) : GameFacts.MapName(this.realMap, g.gameFacts.settings.altGeneration)).Append("<br>");
     List<SpellEnum> customArmageddon = this.settings.customArmageddon;
     byte num;
     if ((customArmageddon != null ? (__nonvirtual (customArmageddon.Count) > 0 ? 1 : 0) : 0) != 0)
@@ -313,6 +313,8 @@ public class GameFacts
     }
     stringBuilder1.Append("<br>");
     stringBuilder1.Append(this.settings.FilteredDescription());
+    while (stringBuilder1.Length >= 4 && stringBuilder1.ToString().EndsWith("<br>"))
+      stringBuilder1.Length -= 4;
     return stringBuilder1.ToString();
   }
 
@@ -823,7 +825,7 @@ public class GameFacts
     }
   }
 
-  public static string MapShortName(MapEnum e)
+  public static string MapShortName(MapEnum e, bool alt = false)
   {
     switch (e)
     {
@@ -838,7 +840,7 @@ public class GameFacts
       case MapEnum.Wasteland:
         return "Wasteland";
       case MapEnum.Grassy_Hills:
-        return "Grassy";
+        return !alt ? "Grassy" : "Meadows";
       case MapEnum.Giants_Mountains:
         return "Cano";
       case MapEnum.Elven_Isles:
@@ -858,11 +860,11 @@ public class GameFacts
       case MapEnum.Random:
         return "Random";
       case MapEnum.Alien_World:
-        return "Alien";
+        return !alt ? "Alien" : "Planet";
       case MapEnum.Ghostly_Halls:
         return "Halls";
       case MapEnum.Desert:
-        return "Desert";
+        return !alt ? "Desert" : "Brick";
       case MapEnum.Space_Nexus:
         return "Nexus";
       default:
@@ -870,7 +872,7 @@ public class GameFacts
     }
   }
 
-  public static string MapName(MapEnum e)
+  public static string MapName(MapEnum e, bool alt = false)
   {
     switch (e)
     {
@@ -887,7 +889,7 @@ public class GameFacts
       case MapEnum.Wasteland:
         return "Wasteland";
       case MapEnum.Grassy_Hills:
-        return "Grassy Hills";
+        return !alt ? "Grassy Hills" : "Grassy Meadows";
       case MapEnum.Giants_Mountains:
         return "Giants' Mountains";
       case MapEnum.Elven_Isles:
@@ -907,11 +909,11 @@ public class GameFacts
       case MapEnum.Random:
         return "Random";
       case MapEnum.Alien_World:
-        return "Alien World";
+        return !alt ? "Alien World" : "Alien Planet";
       case MapEnum.Ghostly_Halls:
         return "Ghostly Halls";
       case MapEnum.Desert:
-        return "Desert";
+        return !alt ? "Desert" : "Brick";
       case MapEnum.Space_Nexus:
         return "Space Nexus";
       default:

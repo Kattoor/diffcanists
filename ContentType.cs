@@ -13,4 +13,5 @@ public enum ContentType
   RatedSettings,
   RatedContainer,
   ArcMap,
+  Achievement,
 }

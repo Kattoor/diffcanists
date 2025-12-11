@@ -126,7 +126,7 @@ public class pfabLobbyGame : MonoBehaviour, IPointerClickHandler, IEventSystemHa
   {
     if (this.gameFacts == null)
       return;
-    MyToolTip.Show("Map: " + GameFacts.MapName(this.gameFacts.GetMapMode()), -1f, false);
+    MyToolTip.Show("Map: " + GameFacts.MapName(this.gameFacts.GetMapMode(), this.gameFacts.settings.altGeneration), -1f, false);
   }
 
   public void HoverTeam()

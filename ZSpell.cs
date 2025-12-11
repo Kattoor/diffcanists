@@ -7717,7 +7717,7 @@ label_37:
 
   public void OnExplosionBucketOfSand()
   {
-    this.game.ongoing.RunCoroutine(ZSpell.DelaySandBomb(this.game, this.baseSpell, this.toSummon.GetComponent<Spell>(), this.amount, this.parent, this.position), true);
+    this.game.ongoing.RunSpell(ZSpell.DelaySandBomb(this.game, this.baseSpell, this.toSummon.GetComponent<Spell>(), this.amount, this.parent, this.position), true);
   }
 
   public static IEnumerator<float> DelaySandBomb(
@@ -9879,7 +9879,7 @@ label_37:
         c.velocity = myLocation;
         if (theSpell.spellEnum == SpellEnum.Pounce)
         {
-          c.moving = c.game.ongoing.RunCoroutine(c.WolfLeap(50), true);
+          c.moving = c.game.ongoing.RunSpell(c.WolfLeap(50), true);
           c.game.CreatureMoveSurroundings(position4, c.radius, c.collider, false);
           break;
         }
@@ -10161,7 +10161,7 @@ label_37:
         ZComponent.Instantiate<GameObject>(theSpell.explosion, c2.transform.position, Quaternion.identity, c.game.GetMapTransform());
         break;
       case SpellEnum.Burrow:
-        c.game.ongoing.RunCoroutine(ZSpell.FireBurrow(theSpell, c, pos, rot_z, power, target), true);
+        c.game.ongoing.RunSpell(ZSpell.FireBurrow(theSpell, c, pos, rot_z, power, target), true);
         break;
       case SpellEnum.Consume:
         ZCreature zcreature7 = c.map.PhysicsCollideCreature((ZCreature) null, (int) target.x, (int) target.y, Inert.mask_Phantom);

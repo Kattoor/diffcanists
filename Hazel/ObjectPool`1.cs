@@ -8,6 +8,15 @@ namespace Hazel
   {
     private Queue<T> pool = new Queue<T>();
     private Func<T> objectFactory;
+    private static int amount;
+
+    public int Count
+    {
+      get
+      {
+        return this.pool.Count;
+      }
+    }
 
     internal ObjectPool(Func<T> objectFactory)
     {

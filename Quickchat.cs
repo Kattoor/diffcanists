@@ -468,7 +468,7 @@ public static class Quickchat
       if (e == MapEnum.Dont_Mind)
         Quickchat.Maps.Add("Any Map");
       else
-        Quickchat.Maps.Add(GameFacts.MapName(e));
+        Quickchat.Maps.Add(GameFacts.MapName(e, false));
     }
     Quickchat.Maps.Sort();
   }

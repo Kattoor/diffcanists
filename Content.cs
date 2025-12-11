@@ -37,9 +37,11 @@ public static class Content
       case ContentType.ColorScheme:
         return (object) ColorScheme.Deserialize(reader);
       case ContentType.RatedSettings:
-        return (object) RatedFacts.Deserialize(4, reader);
+        return (object) RatedFacts.Deserialize(5, reader);
       case ContentType.RatedContainer:
         return (object) RatedContainer.Deserialize(reader);
+      case ContentType.Achievement:
+        return (object) reader.ReadInt32();
       default:
         return (object) null;
     }
@@ -79,6 +81,9 @@ public static class Content
         break;
       case ContentType.RatedContainer:
         ((RatedContainer) d).Serialize(writer, true);
+        break;
+      case ContentType.Achievement:
+        writer.Write((int) d);
         break;
     }
   }

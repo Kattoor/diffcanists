@@ -9,6 +9,8 @@ public class AchievementsMenu : Catalogue
 {
   public List<GameObject> outfitImages = new List<GameObject>();
   public int _viewing = -1;
+  [NonSerialized]
+  internal Achievement openedWith = ~Achievement.Enchanter;
   public RectTransform container;
   public AchievementButton pfabItem;
   public Image img;
@@ -101,22 +103,24 @@ public class AchievementsMenu : Catalogue
     int num1 = 0;
     int num2 = 0;
     int index = -1;
-    foreach (Achievement achievement in (Achievement[]) Enum.GetValues(typeof (Achievement)))
+    foreach (Achievement e in (Achievement[]) Enum.GetValues(typeof (Achievement)))
     {
-      if (achievement != Achievement.None)
+      if (e != Achievement.None)
       {
         ++index;
         if (Achievements.list[index].available)
         {
-          AchievementButton achievementButton = UnityEngine.Object.Instantiate<AchievementButton>(this.pfabItem, (Transform) this.container);
-          achievementButton.achievement = achievement;
+          AchievementButton a = UnityEngine.Object.Instantiate<AchievementButton>(this.pfabItem, (Transform) this.container);
+          a.achievement = e;
           if (Client.cosmetics.achievements[index])
             ++num2;
-          achievementButton.image.sprite = ClientResources.Instance._achievementIcons[index];
+          a.image.sprite = ClientResources.Instance._achievementIcons[index];
           if (!Client.cosmetics.achievements[index])
-            achievementButton.image.color = (Color) new Color32((byte) 100, (byte) 100, (byte) 100, (byte) 128);
-          achievementButton.gameObject.SetActive(true);
+            a.image.color = (Color) new Color32((byte) 100, (byte) 100, (byte) 100, (byte) 128);
+          a.gameObject.SetActive(true);
           ++num1;
+          if (e == this.openedWith)
+            this.OnClick(a, e);
         }
       }
     }

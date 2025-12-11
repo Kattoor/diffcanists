@@ -89,6 +89,7 @@ public class Server : MonoBehaviour
   public static MyPoll activePoll;
   public static byte[] cachedPollResponses;
   public const string prefPoll = "prefpollID";
+  public static LogSpells logSpells;
   private ConnectionListener listener;
   private WebListener webListenerInsecure;
   public DiscordCommunicator communicator;
@@ -1186,7 +1187,7 @@ public class Server : MonoBehaviour
                       if (gameFacts.GetRatedMode() && c.player.account.prestige == (byte) 0 && (c.player.account.totalWands < 150 && c.player.account.totalRatedGames < 20))
                       {
                         Server.ReturnServerMsg(c, "You need to play more unrated games before you can play rated games.");
-                        return;
+                        break;
                       }
                       if (gameFacts.status == (byte) 0 && gameFacts.connections.Count < (int) gameFacts.customPlayerCount && c.player.location == Location.Lobby && (!gameFacts.connections[0].player.account.ignored.Contains(c.player.account.name) || gameFacts.invitedPlayers.Contains(c.player.account.name)) && (gameFacts.GetInviteMode() == InviteEnum.Open || gameFacts.invitedPlayers.Contains(c.player.account.name) || gameFacts.GetInviteMode() == InviteEnum.Clan && gameFacts.connections.Count > 0 && string.Equals(gameFacts.connections[0].player.account.clan, c.player.account.clan) || (gameFacts.GetInviteMode() == InviteEnum.Friends && (gameFacts.connections.Count == 0 || gameFacts.connections[0].player.account.friends.Contains(c.player.account.name)) || gameFacts.GetInviteMode() == InviteEnum.Similar_Rating && gameFacts.connections.Count > 0 && Mathf.Abs((int) gameFacts.connections[0].player.account.similarRating - (int) c.player.account.similarRating) <= 500)))
                       {
@@ -1298,7 +1299,7 @@ public class Server : MonoBehaviour
                     if (Server._ratedQueue.ContainsKey(c))
                     {
                       Server.ReturnServerMsg(c, "Cannot change spells while finding opponents");
-                      return;
+                      break;
                     }
                     SettingsPlayer b = new SettingsPlayer();
                     b.Deserialize(myBinaryReader);
@@ -1331,31 +1332,33 @@ public class Server : MonoBehaviour
                     if (Server._ratedQueue.ContainsKey(c))
                     {
                       Server.ReturnServerMsg(c, "Cannot change elementals while finding opponents");
-                      return;
+                      break;
                     }
                     c.player.settingsPlayer.fullBook = myBinaryReader.ReadByte();
                     c.SendBytes(args.Bytes, SendOption.None);
                     break;
                   case 75:
-                    if (c.player.account.accountType.IsMuted())
-                      return;
-                    int num2 = myBinaryReader.ReadInt32();
-                    switch (num2)
+                    if (!c.player.account.accountType.IsMuted())
                     {
-                      case 253:
-                      case 254:
-                        c.player.account.displayClanPrefix = num2 == 253 ? (byte) 1 : (byte) 0;
-                        break;
-                      default:
-                        if (num2 > 256 && !c.player.account.badges[num2 - 256])
-                        {
-                          num2 = 0;
+                      int num2 = myBinaryReader.ReadInt32();
+                      switch (num2)
+                      {
+                        case 253:
+                        case 254:
+                          c.player.account.displayClanPrefix = num2 == 253 ? (byte) 1 : (byte) 0;
                           break;
-                        }
-                        break;
+                        default:
+                          if (num2 > 256 && !c.player.account.badges[num2 - 256])
+                          {
+                            num2 = 0;
+                            break;
+                          }
+                          break;
+                      }
+                      c.player.account.displayedIcon = num2;
+                      Server.UpdateAccountInfo(c.player.account, true);
+                      break;
                     }
-                    c.player.account.displayedIcon = num2;
-                    Server.UpdateAccountInfo(c.player.account, true);
                     break;
                   case 77:
                     Server.ValidateShare(c, myBinaryReader, args.Bytes, true, false);
@@ -1416,297 +1419,391 @@ public class Server : MonoBehaviour
                 switch (tag)
                 {
                   case 12:
-                    return;
+                    break;
                   case 14:
                     GameFacts gg1 = (GameFacts) null;
                     if (Server._games.TryGetValue(c.player.gameNumber, out gg1))
                     {
-                      if (gg1.connections.Count == 0 || gg1.connections[0] != c || gg1.GetInviteMode() == InviteEnum.BookClub)
-                        return;
-                      GameFacts.Message message = (GameFacts.Message) myBinaryReader.ReadByte();
-                      int num1 = myBinaryReader.ReadInt32();
-                      if (num1 == -1 && message != GameFacts.Message.Remove_Custom_Armageddon && message != GameFacts.Message.Remove_AutoInclude)
-                        return;
-                      switch (message)
+                      if (gg1.connections.Count != 0)
                       {
-                        case GameFacts.Message.Invite_Mode:
-                          if (!System.Enum.IsDefined(typeof (InviteEnum), (object) num1) || num1 == 32768)
-                            return;
-                          gg1.SetInviteMode((InviteEnum) num1);
-                          break;
-                        case (GameFacts.Message) 2:
-                          return;
-                        case GameFacts.Message.Spectators:
-                          if (!System.Enum.IsDefined(typeof (SpectatorsEnum), (object) num1) || gg1.GetRatedMode())
-                            return;
-                          gg1.SetSpectatorMode(!gg1.GetSpectatorMode());
-                          break;
-                        case (GameFacts.Message) 4:
-                          return;
-                        case GameFacts.Message.Time:
-                          if (!System.Enum.IsDefined(typeof (TimeEnum), (object) num1))
-                            return;
-                          gg1.SetTimeMode((TimeEnum) num1);
-                          gg1.customTime = (ushort) gg1.GetTimeInSeconds();
-                          break;
-                        case GameFacts.Message.Map:
-                          if (!System.Enum.IsDefined(typeof (MapEnum), (object) num1))
-                            return;
-                          if (num1 == 16777216)
+                        if (gg1.connections[0] == c)
+                        {
+                          if (gg1.GetInviteMode() != InviteEnum.BookClub)
                           {
-                            gg1.ActivateAllMaps();
-                            break;
-                          }
-                          gg1.SetMapMode((MapEnum) num1);
-                          break;
-                        case GameFacts.Message.Team:
-                          if (!System.Enum.IsDefined(typeof (TeamEnum), (object) num1) || gg1.GetRatedMode())
-                            return;
-                          if (num1 == 524288)
-                            num1 |= 16777216;
-                          gg1.SetTeamMode((TeamEnum) num1);
-                          break;
-                        case GameFacts.Message.Players:
-                          if (!System.Enum.IsDefined(typeof (PlayerEnum), (object) num1))
-                            return;
-                          gg1.SetPlayerMode((PlayerEnum) num1);
-                          gg1.customPlayerCount = (byte) gg1.GetMaxPlayers();
-                          break;
-                        case GameFacts.Message.PerTeam:
-                          if (!System.Enum.IsDefined(typeof (PlayersPerTeam), (object) num1) || gg1.GetRatedMode())
-                            return;
-                          gg1.SetPlayersPerTeam((PlayersPerTeam) num1);
-                          break;
-                        case (GameFacts.Message) 10:
-                          return;
-                        case GameFacts.Message.GameStyle:
-                          if (!System.Enum.IsDefined(typeof (GameStyle), (object) num1))
-                            return;
-                          gg1.ToggleStyle((GameStyle) num1);
-                          if (gg1.GetRatedMode())
-                          {
-                            gg1.ReSetStyle(GameStyle.Arcane_Monster);
-                            gg1.ReSetStyle(GameStyle.Sandbox);
-                            break;
-                          }
-                          break;
-                        case GameFacts.Message.AddMap:
-                          if (!System.Enum.IsDefined(typeof (MapEnum), (object) num1))
-                            return;
-                          if (num1 == 16777216)
-                          {
-                            gg1.ActivateAllMaps();
-                            break;
-                          }
-                          MapEnum mapMode = gg1.GetMapMode();
-                          gg1.gameModes4 ^= num1;
-                          int num2 = (int) gg1.GetMapMode();
-                          if (num2 == 0)
-                          {
-                            gg1.SetMapMode(mapMode);
-                            num2 = (int) mapMode;
-                          }
-                          if ((mapMode & MapEnum.Random) == ~MapEnum.Dont_Mind)
-                          {
-                            if (!System.Enum.IsDefined(typeof (MapEnum), (object) num2))
+                            GameFacts.Message message = (GameFacts.Message) myBinaryReader.ReadByte();
+                            int num1 = myBinaryReader.ReadInt32();
+                            if (num1 == -1 && message != GameFacts.Message.Remove_Custom_Armageddon)
                             {
-                              gg1.gameModes4 |= 16777216;
-                              break;
+                              if (message != GameFacts.Message.Remove_AutoInclude)
+                                break;
                             }
+                            switch (message - (byte) 1)
+                            {
+                              case (GameFacts.Message) 0:
+                                if (!System.Enum.IsDefined(typeof (InviteEnum), (object) num1) || num1 == 32768)
+                                {
+                                  args.Recycle();
+                                  return;
+                                }
+                                gg1.SetInviteMode((InviteEnum) num1);
+                                break;
+                              case (GameFacts.Message) 2:
+                                if (!System.Enum.IsDefined(typeof (SpectatorsEnum), (object) num1) || gg1.GetRatedMode())
+                                {
+                                  args.Recycle();
+                                  return;
+                                }
+                                gg1.SetSpectatorMode(!gg1.GetSpectatorMode());
+                                break;
+                              case (GameFacts.Message) 4:
+                                if (!System.Enum.IsDefined(typeof (TimeEnum), (object) num1))
+                                {
+                                  args.Recycle();
+                                  return;
+                                }
+                                gg1.SetTimeMode((TimeEnum) num1);
+                                gg1.customTime = (ushort) gg1.GetTimeInSeconds();
+                                break;
+                              case GameFacts.Message.Time:
+                                if (!System.Enum.IsDefined(typeof (MapEnum), (object) num1))
+                                {
+                                  args.Recycle();
+                                  return;
+                                }
+                                if (num1 == 16777216)
+                                {
+                                  gg1.ActivateAllMaps();
+                                  break;
+                                }
+                                gg1.SetMapMode((MapEnum) num1);
+                                break;
+                              case GameFacts.Message.Map:
+                                if (!System.Enum.IsDefined(typeof (TeamEnum), (object) num1) || gg1.GetRatedMode())
+                                {
+                                  args.Recycle();
+                                  return;
+                                }
+                                if (num1 == 524288)
+                                  num1 |= 16777216;
+                                gg1.SetTeamMode((TeamEnum) num1);
+                                break;
+                              case GameFacts.Message.Team:
+                                if (!System.Enum.IsDefined(typeof (PlayerEnum), (object) num1))
+                                {
+                                  args.Recycle();
+                                  return;
+                                }
+                                gg1.SetPlayerMode((PlayerEnum) num1);
+                                gg1.customPlayerCount = (byte) gg1.GetMaxPlayers();
+                                break;
+                              case GameFacts.Message.Players:
+                                if (!System.Enum.IsDefined(typeof (PlayersPerTeam), (object) num1) || gg1.GetRatedMode())
+                                {
+                                  args.Recycle();
+                                  return;
+                                }
+                                gg1.SetPlayersPerTeam((PlayersPerTeam) num1);
+                                break;
+                              case (GameFacts.Message) 10:
+                                if (!System.Enum.IsDefined(typeof (GameStyle), (object) num1))
+                                {
+                                  args.Recycle();
+                                  return;
+                                }
+                                gg1.ToggleStyle((GameStyle) num1);
+                                if (gg1.GetRatedMode())
+                                {
+                                  gg1.ReSetStyle(GameStyle.Arcane_Monster);
+                                  gg1.ReSetStyle(GameStyle.Sandbox);
+                                  break;
+                                }
+                                break;
+                              case GameFacts.Message.GameStyle:
+                                if (!System.Enum.IsDefined(typeof (MapEnum), (object) num1))
+                                {
+                                  args.Recycle();
+                                  return;
+                                }
+                                if (num1 == 16777216)
+                                {
+                                  gg1.ActivateAllMaps();
+                                  break;
+                                }
+                                MapEnum mapMode = gg1.GetMapMode();
+                                gg1.gameModes4 ^= num1;
+                                int num2 = (int) gg1.GetMapMode();
+                                if (num2 == 0)
+                                {
+                                  gg1.SetMapMode(mapMode);
+                                  num2 = (int) mapMode;
+                                }
+                                if ((mapMode & MapEnum.Random) == ~MapEnum.Dont_Mind)
+                                {
+                                  if (!System.Enum.IsDefined(typeof (MapEnum), (object) num2))
+                                  {
+                                    gg1.gameModes4 |= 16777216;
+                                    break;
+                                  }
+                                  break;
+                                }
+                                if (System.Enum.IsDefined(typeof (MapEnum), (object) (num2 ^ 16777216)))
+                                {
+                                  gg1.gameModes4 ^= 16777216;
+                                  break;
+                                }
+                                break;
+                              case GameFacts.Message.AddMap:
+                                if (num1 != 0 && !System.Enum.IsDefined(typeof (MapEnum), (object) num1))
+                                {
+                                  args.Recycle();
+                                  return;
+                                }
+                                if (num1 == 16777216)
+                                {
+                                  gg1.ActivateAlArmageddons();
+                                  break;
+                                }
+                                gg1.SetArmageddon((MapEnum) num1);
+                                gg1.settings.customArmageddon = (List<SpellEnum>) null;
+                                break;
+                              case GameFacts.Message.Armageddon:
+                                if (num1 != 0 && !System.Enum.IsDefined(typeof (MapEnum), (object) num1))
+                                {
+                                  args.Recycle();
+                                  return;
+                                }
+                                if (num1 == 16777216)
+                                {
+                                  gg1.ActivateAlArmageddons();
+                                  break;
+                                }
+                                MapEnum armageddon = gg1.GetArmageddon();
+                                gg1.gameModes3 ^= num1;
+                                if ((armageddon & MapEnum.Random) == ~MapEnum.Dont_Mind)
+                                {
+                                  if (armageddon != ~MapEnum.Dont_Mind && !System.Enum.IsDefined(typeof (MapEnum), (object) (MapEnum) gg1.gameModes3))
+                                    gg1.gameModes3 |= 16777216;
+                                }
+                                else if (System.Enum.IsDefined(typeof (MapEnum), (object) (MapEnum) (gg1.gameModes3 ^ 16777216)))
+                                  gg1.gameModes3 ^= 16777216;
+                                gg1.settings.customArmageddon = (List<SpellEnum>) null;
+                                break;
+                              case GameFacts.Message.AddArmageddon:
+                                if (num1 < 0)
+                                {
+                                  gg1.ReSetStyle(GameStyle.Elementals);
+                                  break;
+                                }
+                                int num3 = Mathf.Clamp(num1, 0, 5);
+                                if ((int) gg1.elementalLevel == num3 && gg1.GetStyle().HasStyle(GameStyle.Elementals))
+                                {
+                                  args.Recycle();
+                                  return;
+                                }
+                                gg1.elementalLevel = (byte) num3;
+                                gg1.SetStyle(GameStyle.Elementals);
+                                break;
+                              case GameFacts.Message.ElementalLevel:
+                                int num4 = Mathf.Clamp(num1, 1, 500);
+                                if ((int) gg1.startHealth == num4)
+                                {
+                                  args.Recycle();
+                                  return;
+                                }
+                                gg1.startHealth = (ushort) num4;
+                                break;
+                              case GameFacts.Message.StartHealth:
+                                int num5 = Mathf.Clamp(num1, 0, 60);
+                                if ((int) gg1.armageddonTurn == num5)
+                                {
+                                  args.Recycle();
+                                  return;
+                                }
+                                gg1.armageddonTurn = (byte) num5;
+                                break;
+                              case (GameFacts.Message) 18:
+                                int num6 = Mathf.Clamp(num1, -3600, 3600);
+                                if ((int) gg1.countdownTime == num6)
+                                {
+                                  args.Recycle();
+                                  return;
+                                }
+                                gg1.countdownTime = (short) num6;
+                                break;
+                              case GameFacts.Message.MaxTime:
+                                int num7 = Mathf.Clamp(num1, 5, 120);
+                                if ((int) gg1.customTime == num7)
+                                {
+                                  args.Recycle();
+                                  return;
+                                }
+                                gg1.customTime = (ushort) num7;
+                                gg1.SetTimeMode(gg1.GetClosestTimeToCustom());
+                                break;
+                              case GameFacts.Message.CustomTime:
+                                int num8 = Mathf.Clamp(num1, 0, 30);
+                                if ((int) gg1.countdownDelay == num8)
+                                {
+                                  args.Recycle();
+                                  return;
+                                }
+                                gg1.countdownDelay = (byte) num8;
+                                break;
+                              case GameFacts.Message.Delay:
+                                int num9 = Mathf.Clamp(num1, 1, 24);
+                                if ((int) gg1.customPlayerCount == num9)
+                                {
+                                  args.Recycle();
+                                  return;
+                                }
+                                gg1.customPlayerCount = (byte) num9;
+                                break;
+                              case GameFacts.Message.CustomPlayerCount:
+                                if (!gg1.GetRatedMode() && c.player.account.accountType.IsModPlusTOParticipate() || gg1.GetTournamentMode())
+                                {
+                                  gg1.SetTournamentMode(!gg1.GetTournamentMode());
+                                  gg1.tournamentWasSetByTO = gg1.GetTournamentMode() && c.player.account.accountType.IsModPlusTO();
+                                  if (gg1.GetTournamentMode() && Server._tournySettings != null)
+                                  {
+                                    gg1.settings.Copy(Server._tournySettings);
+                                    break;
+                                  }
+                                  break;
+                                }
+                                args.Recycle();
+                                return;
+                              case GameFacts.Message.Tournament:
+                                int num10 = Mathf.Clamp((int) CombineBytes.Low(num1), 50, 150);
+                                int num11 = Mathf.Clamp((int) CombineBytes.High(num1), 50, 150);
+                                gg1.settings.mapWidth = (byte) num10;
+                                gg1.settings.mapHeight = (byte) num11;
+                                break;
+                              case GameFacts.Message.Map_Size:
+                                gg1.settings.mapSeed = num1;
+                                gg1.settings.fixedMapSeed = true;
+                                break;
+                              case GameFacts.Message.Map_Seed:
+                                gg1.settings.mapSeed = 0;
+                                gg1.settings.fixedMapSeed = false;
+                                break;
+                              case GameFacts.Message.GameType:
+                                if (!System.Enum.IsDefined(typeof (SpellEnum), (object) num1))
+                                {
+                                  args.Recycle();
+                                  return;
+                                }
+                                Spell spell1 = Inert.GetSpell((SpellEnum) num1);
+                                if ((UnityEngine.Object) spell1 == (UnityEngine.Object) null || spell1.level > 3 && !GameFacts.AllowCustomArmageddon(spell1.spellEnum))
+                                {
+                                  args.Recycle();
+                                  return;
+                                }
+                                if (gg1.settings.customArmageddon == null)
+                                  gg1.settings.customArmageddon = new List<SpellEnum>();
+                                if (gg1.settings.customArmageddon.Count < 5)
+                                {
+                                  gg1.settings.customArmageddon.Add((SpellEnum) num1);
+                                  break;
+                                }
+                                args.Recycle();
+                                return;
+                              case GameFacts.Message.Custom_Armageddon:
+                                if (gg1.settings.customArmageddon == null)
+                                {
+                                  args.Recycle();
+                                  return;
+                                }
+                                if (num1 == -1)
+                                {
+                                  gg1.settings.customArmageddon = (List<SpellEnum>) null;
+                                  break;
+                                }
+                                if (!gg1.settings.customArmageddon.Remove((SpellEnum) num1))
+                                {
+                                  args.Recycle();
+                                  return;
+                                }
+                                if (gg1.settings.customArmageddon.Count == 0)
+                                {
+                                  gg1.settings.customArmageddon = (List<SpellEnum>) null;
+                                  break;
+                                }
+                                break;
+                              case GameFacts.Message.Remove_Custom_Armageddon:
+                                gg1.settings.altGeneration = !gg1.settings.altGeneration;
+                                break;
+                              case GameFacts.Message.Alternate_Generation:
+                                if (!System.Enum.IsDefined(typeof (WaterStyle), (object) num1))
+                                {
+                                  args.Recycle();
+                                  return;
+                                }
+                                gg1.settings.water = (WaterStyle) num1;
+                                break;
+                              case GameFacts.Message.Water:
+                                if (!System.Enum.IsDefined(typeof (SpellEnum), (object) num1))
+                                {
+                                  args.Recycle();
+                                  return;
+                                }
+                                Spell spell2 = Inert.GetSpell((SpellEnum) num1);
+                                if ((UnityEngine.Object) spell2 == (UnityEngine.Object) null || spell2.level > 3)
+                                {
+                                  args.Recycle();
+                                  return;
+                                }
+                                if (gg1.settings.autoInclude == null)
+                                  gg1.settings.autoInclude = new List<SpellEnum>();
+                                SpellEnum s = (SpellEnum) num1;
+                                int index = gg1.settings.autoInclude.FindIndex((Predicate<SpellEnum>) (z => z == s));
+                                if (index >= 0)
+                                {
+                                  gg1.settings.autoInclude.RemoveAt(index);
+                                  break;
+                                }
+                                if (gg1.settings.autoInclude.Count < 250)
+                                {
+                                  gg1.settings.autoInclude.Add(s);
+                                  break;
+                                }
+                                args.Recycle();
+                                return;
+                              case GameFacts.Message.AutoInclude:
+                                if (gg1.settings.autoInclude == null)
+                                {
+                                  args.Recycle();
+                                  return;
+                                }
+                                if (num1 == -1)
+                                {
+                                  gg1.settings.autoInclude = (List<SpellEnum>) null;
+                                  break;
+                                }
+                                if (!gg1.settings.autoInclude.Remove((SpellEnum) num1))
+                                {
+                                  args.Recycle();
+                                  return;
+                                }
+                                if (gg1.settings.autoInclude.Count == 0)
+                                {
+                                  gg1.settings.autoInclude = (List<SpellEnum>) null;
+                                  break;
+                                }
+                                break;
+                              default:
+                                args.Recycle();
+                                return;
+                            }
+                            foreach (Hazel.Connection connection in gg1.connections)
+                              connection.player.ready = false;
+                            gg1.KillStart();
+                            Server.SendGameModeUpdate(gg1);
                             break;
                           }
-                          if (System.Enum.IsDefined(typeof (MapEnum), (object) (num2 ^ 16777216)))
-                          {
-                            gg1.gameModes4 ^= 16777216;
-                            break;
-                          }
                           break;
-                        case GameFacts.Message.Armageddon:
-                          if (num1 != 0 && !System.Enum.IsDefined(typeof (MapEnum), (object) num1))
-                            return;
-                          if (num1 == 16777216)
-                          {
-                            gg1.ActivateAlArmageddons();
-                            break;
-                          }
-                          gg1.SetArmageddon((MapEnum) num1);
-                          gg1.settings.customArmageddon = (List<SpellEnum>) null;
-                          break;
-                        case GameFacts.Message.AddArmageddon:
-                          if (num1 != 0 && !System.Enum.IsDefined(typeof (MapEnum), (object) num1))
-                            return;
-                          if (num1 == 16777216)
-                          {
-                            gg1.ActivateAlArmageddons();
-                            break;
-                          }
-                          MapEnum armageddon = gg1.GetArmageddon();
-                          gg1.gameModes3 ^= num1;
-                          if ((armageddon & MapEnum.Random) == ~MapEnum.Dont_Mind)
-                          {
-                            if (armageddon != ~MapEnum.Dont_Mind && !System.Enum.IsDefined(typeof (MapEnum), (object) (MapEnum) gg1.gameModes3))
-                              gg1.gameModes3 |= 16777216;
-                          }
-                          else if (System.Enum.IsDefined(typeof (MapEnum), (object) (MapEnum) (gg1.gameModes3 ^ 16777216)))
-                            gg1.gameModes3 ^= 16777216;
-                          gg1.settings.customArmageddon = (List<SpellEnum>) null;
-                          break;
-                        case GameFacts.Message.ElementalLevel:
-                          if (num1 < 0)
-                          {
-                            gg1.ReSetStyle(GameStyle.Elementals);
-                            break;
-                          }
-                          int num3 = Mathf.Clamp(num1, 0, 5);
-                          if ((int) gg1.elementalLevel == num3 && gg1.GetStyle().HasStyle(GameStyle.Elementals))
-                            return;
-                          gg1.elementalLevel = (byte) num3;
-                          gg1.SetStyle(GameStyle.Elementals);
-                          break;
-                        case GameFacts.Message.StartHealth:
-                          int num4 = Mathf.Clamp(num1, 1, 500);
-                          if ((int) gg1.startHealth == num4)
-                            return;
-                          gg1.startHealth = (ushort) num4;
-                          break;
-                        case GameFacts.Message.ArmageddonTurn:
-                          int num5 = Mathf.Clamp(num1, 0, 60);
-                          if ((int) gg1.armageddonTurn == num5)
-                            return;
-                          gg1.armageddonTurn = (byte) num5;
-                          break;
-                        case (GameFacts.Message) 18:
-                          return;
-                        case GameFacts.Message.MaxTime:
-                          int num6 = Mathf.Clamp(num1, -3600, 3600);
-                          if ((int) gg1.countdownTime == num6)
-                            return;
-                          gg1.countdownTime = (short) num6;
-                          break;
-                        case GameFacts.Message.CustomTime:
-                          int num7 = Mathf.Clamp(num1, 5, 120);
-                          if ((int) gg1.customTime == num7)
-                            return;
-                          gg1.customTime = (ushort) num7;
-                          gg1.SetTimeMode(gg1.GetClosestTimeToCustom());
-                          break;
-                        case GameFacts.Message.Delay:
-                          int num8 = Mathf.Clamp(num1, 0, 30);
-                          if ((int) gg1.countdownDelay == num8)
-                            return;
-                          gg1.countdownDelay = (byte) num8;
-                          break;
-                        case GameFacts.Message.CustomPlayerCount:
-                          int num9 = Mathf.Clamp(num1, 1, 24);
-                          if ((int) gg1.customPlayerCount == num9)
-                            return;
-                          gg1.customPlayerCount = (byte) num9;
-                          break;
-                        case GameFacts.Message.Tournament:
-                          if ((gg1.GetRatedMode() || !c.player.account.accountType.IsModPlusTOParticipate()) && !gg1.GetTournamentMode())
-                            return;
-                          gg1.SetTournamentMode(!gg1.GetTournamentMode());
-                          gg1.tournamentWasSetByTO = gg1.GetTournamentMode() && c.player.account.accountType.IsModPlusTO();
-                          if (gg1.GetTournamentMode() && Server._tournySettings != null)
-                          {
-                            gg1.settings.Copy(Server._tournySettings);
-                            break;
-                          }
-                          break;
-                        case GameFacts.Message.Map_Size:
-                          int num10 = Mathf.Clamp((int) CombineBytes.Low(num1), 50, 150);
-                          int num11 = Mathf.Clamp((int) CombineBytes.High(num1), 50, 150);
-                          gg1.settings.mapWidth = (byte) num10;
-                          gg1.settings.mapHeight = (byte) num11;
-                          break;
-                        case GameFacts.Message.Map_Seed:
-                          gg1.settings.mapSeed = num1;
-                          gg1.settings.fixedMapSeed = true;
-                          break;
-                        case GameFacts.Message.Disable_Map_Seed:
-                          gg1.settings.mapSeed = 0;
-                          gg1.settings.fixedMapSeed = false;
-                          break;
-                        case GameFacts.Message.GameType:
-                          return;
-                        case GameFacts.Message.Custom_Armageddon:
-                          if (!System.Enum.IsDefined(typeof (SpellEnum), (object) num1))
-                            return;
-                          Spell spell1 = Inert.GetSpell((SpellEnum) num1);
-                          if ((UnityEngine.Object) spell1 == (UnityEngine.Object) null || spell1.level > 3 && !GameFacts.AllowCustomArmageddon(spell1.spellEnum))
-                            return;
-                          if (gg1.settings.customArmageddon == null)
-                            gg1.settings.customArmageddon = new List<SpellEnum>();
-                          if (gg1.settings.customArmageddon.Count >= 5)
-                            return;
-                          gg1.settings.customArmageddon.Add((SpellEnum) num1);
-                          break;
-                        case GameFacts.Message.Remove_Custom_Armageddon:
-                          if (gg1.settings.customArmageddon == null)
-                            return;
-                          if (num1 == -1)
-                          {
-                            gg1.settings.customArmageddon = (List<SpellEnum>) null;
-                            break;
-                          }
-                          if (!gg1.settings.customArmageddon.Remove((SpellEnum) num1))
-                            return;
-                          if (gg1.settings.customArmageddon.Count == 0)
-                          {
-                            gg1.settings.customArmageddon = (List<SpellEnum>) null;
-                            break;
-                          }
-                          break;
-                        case GameFacts.Message.Alternate_Generation:
-                          gg1.settings.altGeneration = !gg1.settings.altGeneration;
-                          break;
-                        case GameFacts.Message.Water:
-                          if (!System.Enum.IsDefined(typeof (WaterStyle), (object) num1))
-                            return;
-                          gg1.settings.water = (WaterStyle) num1;
-                          break;
-                        case GameFacts.Message.AutoInclude:
-                          if (!System.Enum.IsDefined(typeof (SpellEnum), (object) num1))
-                            return;
-                          Spell spell2 = Inert.GetSpell((SpellEnum) num1);
-                          if ((UnityEngine.Object) spell2 == (UnityEngine.Object) null || spell2.level > 3)
-                            return;
-                          if (gg1.settings.autoInclude == null)
-                            gg1.settings.autoInclude = new List<SpellEnum>();
-                          SpellEnum s = (SpellEnum) num1;
-                          int index = gg1.settings.autoInclude.FindIndex((Predicate<SpellEnum>) (z => z == s));
-                          if (index >= 0)
-                          {
-                            gg1.settings.autoInclude.RemoveAt(index);
-                            break;
-                          }
-                          if (gg1.settings.autoInclude.Count >= 250)
-                            return;
-                          gg1.settings.autoInclude.Add(s);
-                          break;
-                        case GameFacts.Message.Remove_AutoInclude:
-                          if (gg1.settings.autoInclude == null)
-                            return;
-                          if (num1 == -1)
-                          {
-                            gg1.settings.autoInclude = (List<SpellEnum>) null;
-                            break;
-                          }
-                          if (!gg1.settings.autoInclude.Remove((SpellEnum) num1))
-                            return;
-                          if (gg1.settings.autoInclude.Count == 0)
-                          {
-                            gg1.settings.autoInclude = (List<SpellEnum>) null;
-                            break;
-                          }
-                          break;
-                        default:
-                          return;
+                        }
+                        break;
                       }
-                      foreach (Hazel.Connection connection in gg1.connections)
-                        connection.player.ready = false;
-                      gg1.KillStart();
-                      Server.SendGameModeUpdate(gg1);
                       break;
                     }
                     break;
@@ -1833,25 +1930,27 @@ public class Server : MonoBehaviour
                     c.SendBytes(args.Bytes, SendOption.None);
                     break;
                   case 75:
-                    if (c.player.account.accountType.IsMuted())
-                      return;
-                    int num12 = myBinaryReader.ReadInt32();
-                    switch (num12)
+                    if (!c.player.account.accountType.IsMuted())
                     {
-                      case 253:
-                      case 254:
-                        c.player.account.displayClanPrefix = num12 == 253 ? (byte) 1 : (byte) 0;
-                        break;
-                      default:
-                        if (num12 > 256 && !c.player.account.badges[num12 - 256])
-                        {
-                          num12 = 0;
+                      int num = myBinaryReader.ReadInt32();
+                      switch (num)
+                      {
+                        case 253:
+                        case 254:
+                          c.player.account.displayClanPrefix = num == 253 ? (byte) 1 : (byte) 0;
                           break;
-                        }
-                        break;
+                        default:
+                          if (num > 256 && !c.player.account.badges[num - 256])
+                          {
+                            num = 0;
+                            break;
+                          }
+                          break;
+                      }
+                      c.player.account.displayedIcon = num;
+                      Server.UpdateAccountInfo(c.player.account, true);
+                      break;
                     }
-                    c.player.account.displayedIcon = num12;
-                    Server.UpdateAccountInfo(c.player.account, true);
                     break;
                   case 77:
                     Server.ValidateShare(c, myBinaryReader, args.Bytes, false, false);
@@ -1863,11 +1962,21 @@ public class Server : MonoBehaviour
                     GameFacts gg2 = (GameFacts) null;
                     if (Server._games.TryGetValue(c.player.gameNumber, out gg2))
                     {
-                      if (gg2.connections.Count == 0 || gg2.connections[0] != c || gg2.GetInviteMode() == InviteEnum.BookClub)
-                        return;
-                      Restrictions restrictions = Restrictions.Deserialize(myBinaryReader, (byte) 2);
-                      gg2.restrictions = restrictions.AnyRestricted() ? restrictions : (Restrictions) null;
-                      Server.SendGameModeUpdate(gg2);
+                      if (gg2.connections.Count != 0)
+                      {
+                        if (gg2.connections[0] == c)
+                        {
+                          if (gg2.GetInviteMode() != InviteEnum.BookClub)
+                          {
+                            Restrictions restrictions = Restrictions.Deserialize(myBinaryReader, (byte) 2);
+                            gg2.restrictions = restrictions.AnyRestricted() ? restrictions : (Restrictions) null;
+                            Server.SendGameModeUpdate(gg2);
+                            break;
+                          }
+                          break;
+                        }
+                        break;
+                      }
                       break;
                     }
                     break;
@@ -1875,38 +1984,48 @@ public class Server : MonoBehaviour
                     GameFacts gg3 = (GameFacts) null;
                     if (Server._games.TryGetValue(c.player.gameNumber, out gg3))
                     {
-                      if (gg3.connections.Count == 0 || gg3.connections[0] != c || gg3.GetInviteMode() == InviteEnum.BookClub)
-                        return;
-                      int num1 = gg3.GetRatedMode() ? 1 : 0;
-                      GameSettings gameSettings = new GameSettings();
-                      gameSettings.Deserialize(myBinaryReader, (byte) 5);
-                      gameSettings.Clamp();
-                      gg3.settings = gameSettings;
-                      if (c.player.account.accountType.IsMuted() && !string.IsNullOrEmpty(gg3.settings.description))
-                        gg3.settings.description = "";
-                      if (!string.IsNullOrEmpty(gg3.settings.description))
-                        MyLog.MainLog("[Game Description] [" + c.name + "] " + gg3.settings.description);
-                      if (num1 != 0)
+                      if (gg3.connections.Count != 0)
                       {
-                        gg3.SetRatedMode(true);
-                        gg3.SetTeamMode(TeamEnum.Yes);
-                        gg3.SetPlayersPerTeam(PlayersPerTeam.Half);
-                        gg3.SetSpectatorMode(true);
-                        gg3.ReSetStyle(GameStyle.Arcane_Monster);
-                        gg3.ReSetStyle(GameStyle.Sandbox);
+                        if (gg3.connections[0] == c)
+                        {
+                          if (gg3.GetInviteMode() != InviteEnum.BookClub)
+                          {
+                            int num = gg3.GetRatedMode() ? 1 : 0;
+                            GameSettings gameSettings = new GameSettings();
+                            gameSettings.Deserialize(myBinaryReader, (byte) 5);
+                            gameSettings.Clamp();
+                            gg3.settings = gameSettings;
+                            if (c.player.account.accountType.IsMuted() && !string.IsNullOrEmpty(gg3.settings.description))
+                              gg3.settings.description = "";
+                            if (!string.IsNullOrEmpty(gg3.settings.description))
+                              MyLog.MainLog("[Game Description] [" + c.name + "] " + gg3.settings.description);
+                            if (num != 0)
+                            {
+                              gg3.SetRatedMode(true);
+                              gg3.SetTeamMode(TeamEnum.Yes);
+                              gg3.SetPlayersPerTeam(PlayersPerTeam.Half);
+                              gg3.SetSpectatorMode(true);
+                              gg3.ReSetStyle(GameStyle.Arcane_Monster);
+                              gg3.ReSetStyle(GameStyle.Sandbox);
+                            }
+                            else
+                              gg3.SetRatedMode(false);
+                            if (gg3.GetRatedMode() || !c.player.account.accountType.IsModPlusTOParticipate())
+                              gg3.SetTournamentMode(false);
+                            else if (gg3.GetTournamentMode())
+                            {
+                              if (!c.player.account.accountType.IsModPlusTOParticipate())
+                                gg3.SetTournamentMode(false);
+                              else
+                                gg3.tournamentWasSetByTO = c.player.account.accountType.IsModPlusTO();
+                            }
+                            Server.SendGameModeUpdate(gg3);
+                            break;
+                          }
+                          break;
+                        }
+                        break;
                       }
-                      else
-                        gg3.SetRatedMode(false);
-                      if (gg3.GetRatedMode() || !c.player.account.accountType.IsModPlusTOParticipate())
-                        gg3.SetTournamentMode(false);
-                      else if (gg3.GetTournamentMode())
-                      {
-                        if (!c.player.account.accountType.IsModPlusTOParticipate())
-                          gg3.SetTournamentMode(false);
-                        else
-                          gg3.tournamentWasSetByTO = c.player.account.accountType.IsModPlusTO();
-                      }
-                      Server.SendGameModeUpdate(gg3);
                       break;
                     }
                     break;
@@ -1914,17 +2033,29 @@ public class Server : MonoBehaviour
                     GameFacts gg4 = (GameFacts) null;
                     if (Server._games.TryGetValue(c.player.gameNumber, out gg4))
                     {
-                      if (gg4.connections.Count == 0 || gg4.connections[0] != c || gg4.GetInviteMode() == InviteEnum.BookClub)
-                        return;
-                      string str = myBinaryReader.ReadString();
-                      if (str.Length > 100)
-                        return;
-                      gg4.settings.description = str;
-                      if (c.player.account.accountType.IsMuted() && !string.IsNullOrEmpty(str))
-                        gg4.settings.description = "";
-                      if (!string.IsNullOrEmpty(str))
-                        MyLog.MainLog("[Game Description] [" + c.name + "] " + str);
-                      Server.SendGameModeUpdate(gg4);
+                      if (gg4.connections.Count != 0)
+                      {
+                        if (gg4.connections[0] == c)
+                        {
+                          if (gg4.GetInviteMode() != InviteEnum.BookClub)
+                          {
+                            string str = myBinaryReader.ReadString();
+                            if (str.Length <= 100)
+                            {
+                              gg4.settings.description = str;
+                              if (c.player.account.accountType.IsMuted() && !string.IsNullOrEmpty(str))
+                                gg4.settings.description = "";
+                              if (!string.IsNullOrEmpty(str))
+                                MyLog.MainLog("[Game Description] [" + c.name + "] " + str);
+                              Server.SendGameModeUpdate(gg4);
+                              break;
+                            }
+                            break;
+                          }
+                          break;
+                        }
+                        break;
+                      }
                       break;
                     }
                     break;

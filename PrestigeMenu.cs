@@ -251,7 +251,7 @@ public class PrestigeMenu : MonoBehaviour
           int button = num;
           UIOnHover uiOnHover = UnityEngine.Object.Instantiate<UIOnHover>(this.pfabMapButton, this.pfabMapButton.transform.parent);
           uiOnHover.onClick.AddListener((UnityAction) (() => this.ClickMap(index, button)));
-          uiOnHover.GetComponent<TMP_Text>().text = GameFacts.MapName(e);
+          uiOnHover.GetComponent<TMP_Text>().text = GameFacts.MapName(e, false);
           uiOnHover.gameObject.SetActive(true);
           this.mapButtons.Add(uiOnHover);
           ++num;
@@ -264,7 +264,7 @@ public class PrestigeMenu : MonoBehaviour
   private void ClickMap(MapEnum x, int button)
   {
     int mapIndex = GameFacts.GetMapIndex(x);
-    this.mapDescription.text = "Map: " + GameFacts.MapName(x) + "\nArmageddon: " + GameFacts.ArmageddonName(x, GameStyle.No_Movement) + "\n\n" + this.mapLore[mapIndex];
+    this.mapDescription.text = "Map: " + GameFacts.MapName(x, false) + "\nArmageddon: " + GameFacts.ArmageddonName(x, GameStyle.No_Movement) + "\n\n" + this.mapLore[mapIndex];
     this.mapImage.sprite = ClientResources.Instance.mapBgBig[mapIndex];
     this.armageddonImage.sprite = Inert.Instance.ArmageddonIcons[mapIndex];
     for (int index = 0; index < this.mapButtons.Count; ++index)

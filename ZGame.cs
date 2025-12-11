@@ -4020,7 +4020,7 @@ label_46:
                           if (this.isClient && (int) selectedZSpell >= creature.spells.Count)
                           {
                             selectedZSpell = (byte) 0;
-                            if (creature.spells.Count == 0 && !creature.inWater)
+                            if (creature.spells.Count == 0)
                               creature.spells.Add(new SpellSlot(Inert.Instance._spells[0]));
                           }
                           if (!creature.inWater && creature.spells.Count <= (int) selectedZSpell)
@@ -4576,7 +4576,7 @@ label_46:
                                         }
                                       }
                                       else
-                                        goto label_158;
+                                        goto label_159;
                                     }
                                     int num11 = myBinaryReader.ReadInt32();
                                     if (controlled[index6].destroyableEffectors.Count == num11)
@@ -4595,7 +4595,7 @@ label_46:
                                           }
                                         }
                                         else
-                                          goto label_158;
+                                          goto label_159;
                                       }
                                       int num12 = myBinaryReader.ReadInt32();
                                       if (controlled[index6].followingColliders.Count == num12)
@@ -4616,26 +4616,26 @@ label_46:
                                             }
                                           }
                                           else
-                                            goto label_158;
+                                            goto label_159;
                                         }
                                         controlled[index6].UpdateHealthTxt();
                                       }
                                       else
-                                        goto label_158;
+                                        goto label_159;
                                     }
                                     else
-                                      goto label_158;
+                                      goto label_159;
                                   }
                                   else
-                                    goto label_158;
+                                    goto label_159;
                                 }
                               }
                               else
-                                goto label_158;
+                                goto label_159;
                             }
                           }
                           else
-                            goto label_158;
+                            goto label_159;
                         }
                         int num13 = myBinaryReader.ReadInt32();
                         if (this.globalEffectors.Count == num13)
@@ -4653,7 +4653,7 @@ label_46:
                               }
                             }
                             else
-                              goto label_158;
+                              goto label_159;
                           }
                           ChatBox.Instance?.NewChatMsg("", "Fast Resync Successful.", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
                           break;
@@ -4666,7 +4666,7 @@ label_46:
                 {
                   Debug.LogError((object) ex);
                 }
-label_158:
+label_159:
                 if (this.isSpectator)
                 {
                   this.resyncing = true;
@@ -5639,7 +5639,7 @@ label_158:
     int num = this.gameFacts.GetTimeInSeconds();
     strArray[4] = num.ToString();
     strArray[5] = "s_";
-    strArray[6] = GameFacts.MapShortName(this.gameFacts.realMap);
+    strArray[6] = GameFacts.MapShortName(this.gameFacts.realMap, this.gameFacts.settings.altGeneration);
     strArray[7] = "_";
     strArray[8] = str1;
     strArray[9] = "_";

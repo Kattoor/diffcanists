@@ -38,6 +38,7 @@ public class RatedTab : MonoBehaviour
   public UIOnHover[] groupTeams;
   public UIOnHover[] groupGameStyles;
   public UIOnHover[] groupCustomQueue;
+  public UIOnHover[] altMap;
   [Header("Alternate settings")]
   public SpellImageList spellOverrides;
   public GameObject panelSpellOverrides;
@@ -263,6 +264,11 @@ public class RatedTab : MonoBehaviour
     Client.AskToChangeGameMode(GameFacts.Message.GameType, x);
   }
 
+  public void AskToChangeAltGen(int x)
+  {
+    Client.AskToChangeGameMode(GameFacts.Message.Alternate_Generation, x);
+  }
+
   [EnumAction(typeof (GameStyle))]
   public void AskToChangeGameStyle(int x)
   {
@@ -323,104 +329,120 @@ public class RatedTab : MonoBehaviour
     if (!this.CanChangeSettings())
       return;
     RatedFacts ratedFacts = this._ratedFacts;
-    switch (whichMode)
+    if ((uint) whichMode <= 27U)
     {
-      case GameFacts.Message.Time:
-        if (!Enum.IsDefined(typeof (TimeEnum), (object) mode))
-          return;
-        if (ratedFacts.turnTime == -1 || mode == -1)
-          ratedFacts.turnTime = mode;
-        else
-          ratedFacts.turnTime ^= mode;
-        if (ratedFacts.turnTime == 0)
-        {
-          ratedFacts.turnTime = -1;
+      switch (whichMode)
+      {
+        case GameFacts.Message.Time:
+          if (!Enum.IsDefined(typeof (TimeEnum), (object) mode))
+            return;
+          if (ratedFacts.turnTime == -1 || mode == -1)
+            ratedFacts.turnTime = mode;
+          else
+            ratedFacts.turnTime ^= mode;
+          if (ratedFacts.turnTime == 0)
+          {
+            ratedFacts.turnTime = -1;
+            break;
+          }
           break;
-        }
-        break;
-      case GameFacts.Message.Map:
-        if (!Enum.IsDefined(typeof (MapEnum), (object) mode))
-          return;
-        if (ratedFacts.mapStyle == -1 || mode == -1)
-          ratedFacts.mapStyle = mode;
-        else
-          ratedFacts.mapStyle ^= mode;
-        if (ratedFacts.mapStyle == 0)
-        {
-          ratedFacts.mapStyle = -1;
+        case GameFacts.Message.Map:
+          if (!Enum.IsDefined(typeof (MapEnum), (object) mode))
+            return;
+          if (ratedFacts.mapStyle == -1 || mode == -1)
+            ratedFacts.mapStyle = mode;
+          else
+            ratedFacts.mapStyle ^= mode;
+          if (ratedFacts.mapStyle == 0)
+          {
+            ratedFacts.mapStyle = -1;
+            break;
+          }
           break;
-        }
-        break;
-      case GameFacts.Message.Team:
-        if (!Enum.IsDefined(typeof (TeamEnum), (object) mode))
-          return;
-        if (ratedFacts.teams == -1 || mode == -1)
-          ratedFacts.teams = mode;
-        else
-          ratedFacts.teams ^= mode;
-        if (ratedFacts.teams == 0)
-        {
-          ratedFacts.teams = -1;
+        case GameFacts.Message.Team:
+          if (!Enum.IsDefined(typeof (TeamEnum), (object) mode))
+            return;
+          if (ratedFacts.teams == -1 || mode == -1)
+            ratedFacts.teams = mode;
+          else
+            ratedFacts.teams ^= mode;
+          if (ratedFacts.teams == 0)
+          {
+            ratedFacts.teams = -1;
+            break;
+          }
           break;
-        }
-        break;
-      case GameFacts.Message.Players:
-        if (!Enum.IsDefined(typeof (PlayerEnum), (object) mode))
-          return;
-        if (ratedFacts.playerCount == -1 || mode == -1)
-          ratedFacts.playerCount = mode;
-        else
-          ratedFacts.playerCount ^= mode;
-        if (ratedFacts.playerCount == 0)
-        {
-          ratedFacts.playerCount = -1;
+        case GameFacts.Message.Players:
+          if (!Enum.IsDefined(typeof (PlayerEnum), (object) mode))
+            return;
+          if (ratedFacts.playerCount == -1 || mode == -1)
+            ratedFacts.playerCount = mode;
+          else
+            ratedFacts.playerCount ^= mode;
+          if (ratedFacts.playerCount == 0)
+          {
+            ratedFacts.playerCount = -1;
+            break;
+          }
           break;
-        }
-        break;
-      case GameFacts.Message.PerTeam:
-        return;
-      case (GameFacts.Message) 10:
-        return;
-      case GameFacts.Message.GameStyle:
-        if (!Enum.IsDefined(typeof (GameStyle), (object) mode) || mode == 128)
+        case GameFacts.Message.PerTeam:
           return;
-        if (ratedFacts.extraOptions == -1 || mode == -1)
-          ratedFacts.extraOptions = mode;
-        else
-          ratedFacts.extraOptions ^= mode;
-        if (ratedFacts.extraOptions == 0)
-        {
-          ratedFacts.extraOptions = -1;
-          break;
-        }
-        break;
-      case GameFacts.Message.AddMap:
-        return;
-      case GameFacts.Message.Armageddon:
-        if (mode != 0 && !Enum.IsDefined(typeof (MapEnum), (object) mode))
+        case (GameFacts.Message) 10:
           return;
-        if (ratedFacts.armageddon == -1 || mode == -1 || mode == 0)
-        {
-          ratedFacts.armageddon = mode;
+        case GameFacts.Message.GameStyle:
+          if (!Enum.IsDefined(typeof (GameStyle), (object) mode) || mode == 128)
+            return;
+          if (ratedFacts.extraOptions == -1 || mode == -1)
+            ratedFacts.extraOptions = mode;
+          else
+            ratedFacts.extraOptions ^= mode;
+          if (ratedFacts.extraOptions == 0)
+          {
+            ratedFacts.extraOptions = -1;
+            break;
+          }
           break;
-        }
-        ratedFacts.armageddon ^= mode;
-        break;
-      case GameFacts.Message.GameType:
-        if (!Enum.IsDefined(typeof (ZGame.GameType), (object) mode))
+        case GameFacts.Message.AddMap:
           return;
-        ratedFacts.gameType = mode;
-        if (ratedFacts.customQueue != 0)
-        {
-          ratedFacts.customQueue = mode + 1;
+        case GameFacts.Message.Armageddon:
+          if (mode != 0 && !Enum.IsDefined(typeof (MapEnum), (object) mode))
+            return;
+          if (ratedFacts.armageddon == -1 || mode == -1 || mode == 0)
+          {
+            ratedFacts.armageddon = mode;
+            break;
+          }
+          ratedFacts.armageddon ^= mode;
           break;
-        }
-        break;
-      case GameFacts.Message.CustomQueue:
-        ratedFacts.customQueue = mode != 0 ? ratedFacts.gameType + 1 : 0;
-        break;
-      default:
-        return;
+        case GameFacts.Message.GameType:
+          if (!Enum.IsDefined(typeof (ZGame.GameType), (object) mode))
+            return;
+          ratedFacts.gameType = mode;
+          if (ratedFacts.customQueue != 0)
+          {
+            ratedFacts.customQueue = mode + 1;
+            break;
+          }
+          break;
+        default:
+          return;
+      }
+    }
+    else
+    {
+      switch (whichMode)
+      {
+        case GameFacts.Message.Alternate_Generation:
+          if (mode != -1 && mode != 1 && mode != 2)
+            return;
+          ratedFacts.altMap = mode;
+          break;
+        case GameFacts.Message.CustomQueue:
+          ratedFacts.customQueue = mode != 0 ? ratedFacts.gameType + 1 : 0;
+          break;
+        default:
+          return;
+      }
     }
     ratedFacts.VerifyGameType(false);
     this.RefreshGameOptions();
@@ -444,6 +466,7 @@ public class RatedTab : MonoBehaviour
     this.ToggleAll(this.groupGameStyles);
     this.ToggleAll(this.groupCustomQueue);
     this.ToggleAll(this.alternateSettings);
+    this.ToggleAll(this.altMap);
     this.panelInfoAltSettings.SetActive(Client._ratedFacts.list.Count > 1);
     if (this._ratedFacts.turnTime == -1)
     {
@@ -469,6 +492,12 @@ public class RatedTab : MonoBehaviour
       if ((turnTime & 262144) != 0)
         this.groupTurnTime[8].AlwaysOn = true;
     }
+    if (this._ratedFacts.altMap == 1)
+      this.altMap[2].AlwaysOn = true;
+    else if (this._ratedFacts.altMap == 2)
+      this.altMap[1].AlwaysOn = true;
+    else
+      this.altMap[0].AlwaysOn = true;
     int mapStyle = this._ratedFacts.mapStyle;
     int armageddon = this._ratedFacts.armageddon;
     if (this._ratedFacts.mapStyle == -1)

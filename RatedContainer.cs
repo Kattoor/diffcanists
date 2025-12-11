@@ -6,7 +6,7 @@ public class RatedContainer
 {
   public List<RatedFacts> list = new List<RatedFacts>();
   public int diff = 400;
-  public const byte Version = 4;
+  public const byte Version = 5;
 
   public void IncreaseDiff()
   {
@@ -27,7 +27,7 @@ public class RatedContainer
     if (num1 == (byte) 1)
     {
       RatedFacts ratedFacts = new RatedFacts();
-      ratedFacts._Deserialize(4, r);
+      ratedFacts._Deserialize(5, r);
       ratedContainer.list.Add(ratedFacts);
       return ratedContainer;
     }
@@ -45,7 +45,7 @@ public class RatedContainer
   {
     if (this.list.Count == 0)
       this.AddDefault();
-    w.Write((byte) 4);
+    w.Write((byte) 5);
     w.Write(this.list.Count);
     foreach (RatedFacts ratedFacts in this.list)
       ratedFacts.Serialize(w, includeBook);

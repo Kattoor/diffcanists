@@ -1495,7 +1495,7 @@ public class HUD : UIBehaviour
       if (game.isClient && !fromReplay)
         HUD.ClientChangeElementalStaff(x, (BookOf) index1, false);
     }
-    if (game.gameFacts.GetStyle().HasStyle(GameStyle.Watchtower) && !game.gameFacts.GetStyle().HasStyle(GameStyle.First_Turn_Teleport))
+    if (game.gameFacts.GetStyle().HasStyle(GameStyle.Watchtower) && !game.gameFacts.GetStyle().HasStyle(GameStyle.First_Turn_Teleport) && game.turn < 0)
       ZSpell.FireTower(Inert.Instance.spells["Watchtower"], zcreature, zcreature.position, (FixedInt) 0, (FixedInt) 0);
     if (x.shownLevel3.Count > 0 || x.BombMaster || (x.FullArcane || x.MinionMaster) || (x.first().gliding || x.first().radius != 18))
       game.SendSpellBookInfo(x);

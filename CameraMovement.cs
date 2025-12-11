@@ -90,8 +90,10 @@ public class CameraMovement : MonoBehaviour
     if ((Object) this._background != (Object) null)
     {
       SpriteRenderer component = this._background.GetComponent<SpriteRenderer>();
-      int mapIndex = GameFacts.GetMapIndex(Client._gameFacts.GetMapMode());
+      MapEnum mapMode = Client._gameFacts.GetMapMode();
+      int mapIndex = GameFacts.GetMapIndex(mapMode);
       component.sprite = Client._tutorial == null || !Client._tutorial.NOBACKGROUND ? (Global.GetPrefBool("prefhdbg", false) ? ClientResources.Instance.mapBgBig[GameFacts.GetMapIndex(Client._gameFacts.GetMapMode())] : ClientResources.Instance.mapBgs[mapIndex]) : ClientResources.Instance.spriteBlack;
+      component.color = !Client._gameFacts.settings.altGeneration || mapMode != MapEnum.Grassy_Hills ? Color.white : new Color(0.39f, 0.39f, 0.8f);
       float height = (float) component.sprite.texture.height;
       float width = (float) component.sprite.texture.width;
       this._background.localScale = new Vector3(Mathf.Max((float) ((double) this.sizeX * 2.0 + 200.0), (float) (Client.map.Width + 1900)) / width, Mathf.Max((float) ((double) this.sizeY * 2.0 + 200.0), (float) (Client.map.Height + 1900)) / height);

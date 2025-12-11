@@ -368,9 +368,11 @@ public class Controller : MonoBehaviour
     this.stack.Add(new Controller.Stack() { current = g });
   }
 
-  public static void ShowPopup(GameObject m)
+  public static GameObject ShowPopup(GameObject m)
   {
-    Controller.Instance.Push(Controller.Instance.CreateAndApply(m, Controller.Instance.transform));
+    GameObject andApply = Controller.Instance.CreateAndApply(m, Controller.Instance.transform);
+    Controller.Instance.Push(andApply);
+    return andApply;
   }
 
   public static void ShowPopup(CreditsMenu.Type t, string txt = null)

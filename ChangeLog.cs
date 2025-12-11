@@ -10,6 +10,12 @@ public static class ChangeLog
   {
     new ChangeLog.PatchNotes()
     {
+      version = "8.3",
+      date = "August 25, 2025",
+      notes = "Additions:\r\n- Can click achievment chat messages\r\n- Alt Grassy map generation (Grassy Meadows) 150% x 75% of Grassy Hills\r\n- Can queue alt map generations & no Armageddon (all ladders)\r\n\r\nBug Fixes:\r\n- Monolith & Pyramid have aura stacking that matches their visual        \r\n- Sunder & Pyramid Strike do not damage friendly structures/trees\r\n- Multi-Control was throwing errors and causing books/outfits to not properly update\r\n- Dark Fortress spawning was crashing under certain circumstances\r\n- Tooltip alignment issues\r\n- Character Creation Right-Hands throwing an error\r\n\r\n\r\n\r\n        "
+    },
+    new ChangeLog.PatchNotes()
+    {
       version = "8.2",
       date = "August 17, 2025",
       notes = "Balance Updates:\r\n- Pyramid (strike) will not damage friendly units/entities\r\n- Erosion will not damage the caster for the first 5 frames of its lifetime\r\n- Arcane Enerigzer gives Arcane Bomb +20 damage potential instead of +15 (Arrow damage is increaded by 5 each instead of an additiona arrow being created)\r\n- Blood Bank reverted and changed to Hemogoblin\r\n- Monolith is similar to previous Blood Bank (but can still be upgraded)\r\n- Monolith and Hemogoblin share a cooldown 'Passive Heal'\r\n- Sand Mite will increase its damage by 5 for each turn it stays alive before infesting a host\r\n\r\nBug Fixes:\r\n- Stolen minions will not count against the victims minion total\r\n- Scannox 5001 will not give items when not actually digging through terrain\r\n- Dark Defenses properly checks if you have an active Blood Pact\r\n- Watchtower in replays\r\n- Gravity Pulse will not damage the casters own tower\r\n- Sand healing the player to full when it hits their monolith\r\n- Sand Mite will not lose its ability to infest after 5 turns\r\n        \r\n        "

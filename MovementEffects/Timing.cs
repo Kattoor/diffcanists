@@ -1124,7 +1124,7 @@ namespace MovementEffects
         return float.NaN;
       }
       if (warnOnIssue)
-        Debug.LogWarning((object) ("WaitUntilDone cannot hold: The coroutine instance that was passed in was not found.\n" + (object) otherCoroutine));
+        Debug.LogWarning((object) ("WaitUntilDone cannot hold: The coroutine instance that was passed in was not found.\n" + otherCoroutine?.ToString()));
       return -1f;
     }
 

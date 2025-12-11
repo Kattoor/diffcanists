@@ -175,7 +175,7 @@ namespace UnityEngine.UI.Extensions
         UIVertex simpleVert = UIVertex.simpleVert;
         simpleVert.color = (Color32) this.color;
         simpleVert.position = (Vector3) vertices[index];
-        simpleVert.uv0 = uvs[index];
+        simpleVert.uv0 = (Vector4) uvs[index];
         uiVertexArray[index] = simpleVert;
       }
       return uiVertexArray;

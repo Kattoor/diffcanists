@@ -456,7 +456,7 @@ public class SlicedFilledImage : MaskableGraphic, ISerializationCallbackReceiver
     SlicedFilledImage.s_UVs[3] = new Vector2(x2, y1);
     int currentVertCount = vh.currentVertCount;
     for (int index = 0; index < 4; ++index)
-      vh.AddVert(SlicedFilledImage.s_Vertices[index], (Color32) this.color, SlicedFilledImage.s_UVs[index]);
+      vh.AddVert(SlicedFilledImage.s_Vertices[index], (Color32) this.color, (Vector4) SlicedFilledImage.s_UVs[index]);
     vh.AddTriangle(currentVertCount, currentVertCount + 1, currentVertCount + 2);
     vh.AddTriangle(currentVertCount + 2, currentVertCount + 3, currentVertCount);
   }

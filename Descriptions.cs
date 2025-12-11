@@ -935,7 +935,7 @@ public static class Descriptions
       ""
     },
     {
-      "Summon Blood Bank",
+      "Summon Hemogoblin",
       ""
     },
     {
@@ -2106,8 +2106,8 @@ public static class Descriptions
       "Targeted:\n{0}\nDisables two of the target's spells for one turn."
     },
     {
-      "Summon Blood Bank",
-      "Arcane Minion: 25-75 health\n{0}\nA small fleshy minion that makes all attacks from the player and their minions heal the bank for 20% of the damage dealt. Any damage the blood bank takes is given to the caster as health if not pacted."
+      "Summon Hemogoblin",
+      "Arcane Minion: 25 health\n{0}\nA small fleshy minion that makes all attacks from the player and their minions heal for 20% of the damage dealt. Any damage the hemogoblin takes is given to the caster as health if not pacted."
     },
     {
       "Summon Gargoyle",
@@ -2147,7 +2147,7 @@ public static class Descriptions
     },
     {
       "Summon Vampire",
-      "Soulbound Minion: minion: 135 health\n{0}\nCan cast Vampire Bat, Blood Siphon, Blood Lust, Blood Bath, Flesh Wound, and Blood Craze. Takes 10 damage a turn if in direct sunlight. Heals 30% of the damage it deals if you have an active Blood Bank."
+      "Soulbound Minion: minion: 135 health\n{0}\nCan cast Vampire Bat, Blood Siphon, Blood Lust, Blood Bath, Flesh Wound, and Blood Craze. Takes 10 damage a turn if in direct sunlight. Heals 30% of the damage it deals if you have an active Hemogoblin."
     },
     {
       "Wraith Drain",
@@ -2519,7 +2519,7 @@ public static class Descriptions
     },
     {
       "Monolith",
-      "Structure: 50 health\n{0}\nSpawns up to 15 health orbs each turn which can be picked up by anyone. Will not spawn more then 20 orbs in the general area, so make sure to pick them up each turn. Can only have one monolith built at a time. If you cast it again it will move the existing one and make it stronger. Cannot be built in terrain."
+      "Structure: 25-75 health\n{0}\nUp to 20% of the Damage you and your minions do is also stored into the Monoliths health pool. When the monolith is damaged it will heal the player. Can only have one monolith built at a time. If you cast it again it will move the existing one, heal it to full health and start spawning healing orbs which can be picked up by anyone. Cannot be built in terrain."
     },
     {
       "Pyramid",
@@ -2559,7 +2559,7 @@ public static class Descriptions
     },
     {
       "Summon Sand Mite",
-      "Arcane Minion: 5 health\n{0}\nWhen it comes into contact with an enemy it will burrow into their skin, removing itself from the battlefield and will deal 5 damage to the target on each of their turns. How irritating."
+      "Arcane Minion: 5 health\n{0}\nWhen it comes into contact with an enemy it will burrow into their skin, removing itself from the battlefield and will deal 5 damage to the target on each of their turns. For each turn it does not infest a host, it's per turn damage is increased by another 5. How irritating."
     },
     {
       "Pyramid Strike",
@@ -2736,98 +2736,122 @@ public static class Descriptions
       return (s, "");
     if (spell.type == CastType.Tower && spell.MaxUses < 0)
       s += "\n\n*Rechargable towers cannot be cast on the same turn another one of your rechargable towers was destroyed*";
-    string str;
+    string str1;
+    int num1;
     if (slot != null)
     {
-      str = slot.MaxUses <= -1 ? "Uses: Infinite" : "Uses: " + (object) slot.MaxUses;
+      str1 = slot.MaxUses <= -1 ? "Uses: Infinite" : "Uses: " + slot.MaxUses.ToString();
       if (slot.RechargeTime > 0)
       {
-        if (str.Length > 0)
-          str += "\n";
-        str = str + "Cooldown: " + (object) (slot.RechargeTime + 1) + " Turns";
+        if (str1.Length > 0)
+          str1 += "\n";
+        str1 = str1 + "Cooldown: " + (slot.RechargeTime + 1).ToString() + " Turns";
       }
       if (slot.TurnsTillFirstUse > 0)
       {
-        if (str.Length > 0)
-          str += "\n";
+        if (str1.Length > 0)
+          str1 += "\n";
         if (slot.spell.spellEnum != SpellEnum.Forest_Seed && Client.game == null || Client.game.MaxTurnTime >= 20)
-          str = str + "Available: Turn " + (object) (slot.TurnsTillFirstUse + 1);
+          str1 = str1 + "Available: Turn " + (slot.TurnsTillFirstUse + 1).ToString();
       }
       if (slot.spell.MaxMinionCount > 0)
       {
-        if (str.Length > 0)
-          str += "\n";
-        str = str + "Limit: " + (object) slot.spell.MaxMinionCount + " at a time";
+        if (str1.Length > 0)
+          str1 += "\n";
+        str1 = str1 + "Limit: " + slot.spell.MaxMinionCount.ToString() + " at a time";
       }
       if (slot.spell.targetType == TargetType.Directional_Controlled)
       {
-        if (str.Length > 0)
-          str += "\n";
-        str += "Directional if > 10s";
+        if (str1.Length > 0)
+          str1 += "\n";
+        str1 += "Directional if > 10s";
       }
       else if (slot.spell.targetType == TargetType.Directional_Controlled_Always)
       {
-        if (str.Length > 0)
-          str += "\n";
-        str += "Directional";
+        if (str1.Length > 0)
+          str1 += "\n";
+        str1 += "Directional";
       }
       if (slot.spell.runTimeStats.sharedCooldown != SharedCooldown.None)
       {
-        if (str.Length > 0)
-          str += "\n";
-        str = str + "Shared CD: " + slot.spell.runTimeStats.sharedCooldown.ToString().Replace('_', ' ');
+        if (str1.Length > 0)
+          str1 += "\n";
+        str1 = str1 + "Shared CD: " + slot.spell.runTimeStats.sharedCooldown.ToString().Replace('_', ' ');
       }
     }
     else
     {
-      str = spell.MaxUses <= -1 ? "Uses: Infinite" : "Uses: " + (object) spell.MaxUses;
+      if (spell.MaxUses > -1)
+      {
+        num1 = spell.MaxUses;
+        str1 = "Uses: " + num1.ToString();
+      }
+      else
+        str1 = "Uses: Infinite";
       if (spell.RechargeTime > 0)
       {
-        if (str.Length > 0)
-          str += "\n";
-        str = str + "Cooldown: " + (object) (spell.RechargeTime + 1) + " Turns";
+        if (str1.Length > 0)
+          str1 += "\n";
+        string str2 = str1;
+        num1 = spell.RechargeTime + 1;
+        string str3 = num1.ToString();
+        str1 = str2 + "Cooldown: " + str3 + " Turns";
       }
       if (spell.TurnsTillFirstUse > 0)
       {
-        if (str.Length > 0)
-          str += "\n";
-        str = str + "Available: Turn " + (object) (float) ((double) (spell.TurnsTillFirstUse + 1) + (spell.halfFirstTurn ? -1.0 : 0.0));
+        if (str1.Length > 0)
+          str1 += "\n";
+        str1 = str1 + "Available: Turn " + ((float) (spell.TurnsTillFirstUse + 1) + (spell.halfFirstTurn ? -1f : 0.0f)).ToString();
         if (spell.spellEnum == SpellEnum.Forest_Seed)
-          str += " (0 if time < 21s)";
+          str1 += " (0 if time < 21s)";
       }
       if (spell.MaxMinionCount > 0)
       {
-        if (str.Length > 0)
-          str += "\n";
-        str = str + "Limit: " + (object) spell.MaxMinionCount + " at a time";
+        if (str1.Length > 0)
+          str1 += "\n";
+        string str2 = str1;
+        num1 = spell.MaxMinionCount;
+        string str3 = num1.ToString();
+        str1 = str2 + "Limit: " + str3 + " at a time";
       }
       if (spell.targetType == TargetType.Directional_Controlled)
       {
-        if (str.Length > 0)
-          str += "\n";
-        str += "Directional if > 10s";
+        if (str1.Length > 0)
+          str1 += "\n";
+        str1 += "Directional if > 10s";
       }
       else if (spell.targetType == TargetType.Directional_Controlled_Always)
       {
-        if (str.Length > 0)
-          str += "\n";
-        str += "Directional";
+        if (str1.Length > 0)
+          str1 += "\n";
+        str1 += "Directional";
       }
       if (spell.runTimeStats.sharedCooldown != SharedCooldown.None)
       {
-        if (str.Length > 0)
-          str += "\n";
-        str = str + "Shared CD: " + spell.runTimeStats.sharedCooldown.ToString().Replace('_', ' ');
+        if (str1.Length > 0)
+          str1 += "\n";
+        str1 = str1 + "Shared CD: " + spell.runTimeStats.sharedCooldown.ToString().Replace('_', ' ');
       }
     }
     if (string.Equals(name, "Enchanted Axes"))
-      return combined ? (string.Format(s, (object) str, (object) (slot == null || !((UnityEngine.Object) Player.Instance != (UnityEngine.Object) null) || slot.bonusDmg <= 0 ? spell.damage : spell.damage + Mathf.Min((Player.Instance.person.localTurn - slot.bonusDmg) * 2, 30 + Player.Instance.person.familiarLevels[13] * 2))), str) : (string.Format(s, (object) "", (object) (slot == null || !((UnityEngine.Object) Player.Instance != (UnityEngine.Object) null) || slot.bonusDmg <= 0 ? spell.damage : spell.damage + Mathf.Min((Player.Instance.person.localTurn - slot.bonusDmg) * 2, 30 + Player.Instance.person.familiarLevels[13] * 2))), str);
+      return combined ? (string.Format(s, (object) str1, (object) (slot == null || !((UnityEngine.Object) Player.Instance != (UnityEngine.Object) null) || slot.bonusDmg <= 0 ? spell.damage : spell.damage + Mathf.Min((Player.Instance.person.localTurn - slot.bonusDmg) * 2, 30 + Player.Instance.person.familiarLevels[13] * 2))), str1) : (string.Format(s, (object) "", (object) (slot == null || !((UnityEngine.Object) Player.Instance != (UnityEngine.Object) null) || slot.bonusDmg <= 0 ? spell.damage : spell.damage + Mathf.Min((Player.Instance.person.localTurn - slot.bonusDmg) * 2, 30 + Player.Instance.person.familiarLevels[13] * 2))), str1);
     if (string.Equals(name, "Verdant Javelin"))
     {
-      int num = slot != null ? spell.damage + slot.bonusDmg : spell.damage;
-      return combined ? (string.Format(s, (object) str, (object) ((num - num / 2).ToString() + "-" + (object) num)), str) : (string.Format(s, (object) "", (object) ((num - num / 2).ToString() + "-" + (object) num)), str);
+      int num2 = slot != null ? spell.damage + slot.bonusDmg : spell.damage;
+      if (combined)
+      {
+        string format = s;
+        string str2 = str1;
+        num1 = num2 - num2 / 2;
+        string str3 = num1.ToString() + "-" + num2.ToString();
+        return (string.Format(format, (object) str2, (object) str3), str1);
+      }
+      string format1 = s;
+      num1 = num2 - num2 / 2;
+      string str4 = num1.ToString() + "-" + num2.ToString();
+      return (string.Format(format1, (object) "", (object) str4), str1);
     }
-    return combined ? (string.Format(s, (object) str), str) : (string.Format(s, (object) ""), str);
+    return combined ? (string.Format(s, (object) str1), str1) : (string.Format(s, (object) ""), str1);
   }
 
   public static string GetBookDescription(BookOf b, bool alt = false)

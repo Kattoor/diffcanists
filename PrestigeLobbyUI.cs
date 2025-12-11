@@ -68,8 +68,8 @@ public class PrestigeLobbyUI : MonoBehaviour
     }
     PrestigeLobbyUI.Rating(this.txtRating);
 label_4:
-    this.txtPrestige.text = "Prestige: " + (object) Client.MyAccount.prestige;
-    this.txtXp.text = "XP: " + (object) (int) Client.MyAccount.bonusExperience + " Level: " + (object) Client.MyAccount.experience;
+    this.txtPrestige.text = "Prestige: " + Client.MyAccount.prestige.ToString();
+    this.txtXp.text = "XP: " + ((int) Client.MyAccount.bonusExperience).ToString() + " Level: " + Client.MyAccount.experience.ToString();
     this.txtWands.text = Client.MyAccount.wands.ToString();
     this.imgPrestige.sprite = ClientResources.Instance._iconsPrestige[Mathf.Clamp((int) Client.MyAccount.prestige, 0, 10)];
   }

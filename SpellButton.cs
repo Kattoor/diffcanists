@@ -93,7 +93,7 @@ public class SpellButton : MonoBehaviour
       this.txtText.gameObject.SetActive(true);
       this.image.color = ClickSpell.GetColor(SpellButton.DarkGray);
       this.bgColor.color = ClickSpell.GetColor(HUD.useNewSpellBgIcons ? SpellButton.DarkerGray : SpellButton.DarkGray);
-      this.txtText.text = string.Concat((object) rechargeTime);
+      this.txtText.text = rechargeTime.ToString() ?? "";
       this.txtText.color = ClickSpell.GetColor(Color.red);
       this.txtText.alignment = TextAlignmentOptions.Midline;
     }
@@ -114,7 +114,7 @@ public class SpellButton : MonoBehaviour
       }
       Color color = ClickSpell.GetColor(c);
       bgColor.color = color;
-      this.txtText.text = string.Concat((object) uses);
+      this.txtText.text = uses.ToString() ?? "";
       this.txtText.color = ClickSpell.GetColor(Color.white);
       this.txtText.alignment = TextAlignmentOptions.BottomRight;
     }

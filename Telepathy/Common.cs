@@ -55,7 +55,7 @@ namespace Telepathy
       }
       catch (Exception ex)
       {
-        Logger.Log("Send: stream.Write exception: " + (object) ex);
+        Logger.Log("Send: stream.Write exception: " + ex?.ToString());
         return false;
       }
     }
@@ -76,7 +76,7 @@ namespace Telepathy
         content = new byte[intBigEndian];
         return stream.ReadExactly(content, intBigEndian);
       }
-      Logger.LogWarning("ReadMessageBlocking: possible allocation attack with a header of: " + (object) intBigEndian + " bytes.");
+      Logger.LogWarning("ReadMessageBlocking: possible allocation attack with a header of: " + intBigEndian.ToString() + " bytes.");
       return false;
     }
 
@@ -97,14 +97,14 @@ namespace Telepathy
           receiveQueue.Enqueue(new Message(connectionId, EventType.Data, content));
           if (receiveQueue.Count > Common.messageQueueSizeWarning && (DateTime.Now - now).TotalSeconds > 10.0)
           {
-            Logger.LogWarning("ReceiveLoop: messageQueue is getting big(" + (object) receiveQueue.Count + "), try calling GetNextMessage more often. You can call it more than once per frame!");
+            Logger.LogWarning("ReceiveLoop: messageQueue is getting big(" + receiveQueue.Count.ToString() + "), try calling GetNextMessage more often. You can call it more than once per frame!");
             now = DateTime.Now;
           }
         }
       }
       catch (Exception ex)
       {
-        Logger.Log("ReceiveLoop: finished receive function for connectionId=" + (object) connectionId + " reason: " + (object) ex);
+        Logger.Log("ReceiveLoop: finished receive function for connectionId=" + connectionId.ToString() + " reason: " + ex?.ToString());
       }
       finally
       {
@@ -140,7 +140,7 @@ namespace Telepathy
       }
       catch (Exception ex)
       {
-        Logger.Log("SendLoop Exception: connectionId=" + (object) connectionId + " reason: " + (object) ex);
+        Logger.Log("SendLoop Exception: connectionId=" + connectionId.ToString() + " reason: " + ex?.ToString());
       }
       finally
       {

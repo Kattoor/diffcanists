@@ -497,7 +497,7 @@ namespace Educative
       this.creature.UpdateHealthTxt();
       if (!((Object) Player.Instance != (Object) null) || this.creature.parent != Player.Instance.person)
         return;
-      HUD.instance.fullBookTextLevel.text = "Level " + (object) this.creature.familiarLevelActivateable;
+      HUD.instance.fullBookTextLevel.text = "Level " + this.creature.familiarLevelActivateable.ToString();
     }
 
     public bool inside(ContainerIndicator a)

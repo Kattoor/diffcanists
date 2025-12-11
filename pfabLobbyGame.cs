@@ -2,7 +2,6 @@
 using Hazel;
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -113,7 +112,7 @@ public class pfabLobbyGame : MonoBehaviour, IPointerClickHandler, IEventSystemHa
   {
     if (this.gameFacts == null)
       return;
-    MyToolTip.Show("Turn time: " + (object) this.gameFacts.customTime + " seconds", -1f, false);
+    MyToolTip.Show("Turn time: " + this.gameFacts.customTime.ToString() + " seconds", -1f, false);
   }
 
   public void HoverLadderType()
@@ -134,7 +133,7 @@ public class pfabLobbyGame : MonoBehaviour, IPointerClickHandler, IEventSystemHa
   {
     if (this.gameFacts == null)
       return;
-    MyToolTip.Show(this.gameFacts.GetTeamMode() ? "Teams of " + (object) this.gameFacts.GetNumberPlayersPerTeam() : "FFA", -1f, false);
+    MyToolTip.Show(this.gameFacts.GetTeamMode() ? "Teams of " + this.gameFacts.GetNumberPlayersPerTeam().ToString() : "FFA", -1f, false);
   }
 
   public void HoverMod()
@@ -202,14 +201,14 @@ public class pfabLobbyGame : MonoBehaviour, IPointerClickHandler, IEventSystemHa
   {
     if (this.gameFacts == null)
       return;
-    MyToolTip.Show("<b>Starting Health</b> - " + (object) this.gameFacts.startHealth, -1f, false);
+    MyToolTip.Show("<b>Starting Health</b> - " + this.gameFacts.startHealth.ToString(), -1f, false);
   }
 
   public void HoverCountdown()
   {
     if (this.gameFacts == null)
       return;
-    MyToolTip.Show("<b>Countdown</b> - " + Global.IntToTime((int) this.gameFacts.countdownTime, 10) + " +" + (object) this.gameFacts.countdownDelay + "s delay" + (this.gameFacts.countdownTime < (short) 0 ? (object) "<br>You lose if time runs out" : (object) "<br>You get 5 second turns if time runs out"), -1f, false);
+    MyToolTip.Show("<b>Countdown</b> - " + Global.IntToTime((int) this.gameFacts.countdownTime, 10) + " +" + this.gameFacts.countdownDelay.ToString() + "s delay" + (this.gameFacts.countdownTime < (short) 0 ? "<br>You lose if time runs out" : "<br>You get 5 second turns if time runs out"), -1f, false);
   }
 
   public void LeaveHover()
@@ -336,7 +335,7 @@ public class pfabLobbyGame : MonoBehaviour, IPointerClickHandler, IEventSystemHa
           pfabLobbyGame.multiTeam.Add(player);
         int count2 = pfabLobbyGame.multiTeam.Count;
       }
-      this.txtPlayers.text = g.status != (byte) 0 ? g.players.Count.ToString() : g.players.Count.ToString() + "/" + (object) customPlayerCount;
+      this.txtPlayers.text = g.status != (byte) 0 ? g.players.Count.ToString() : g.players.Count.ToString() + "/" + customPlayerCount.ToString();
     }
     this.imgGameType.sprite = ClientResources.Instance._gameTypes[g.gameType.Clamp()];
     this.imgSpectators.sprite = ClientResources.Instance._iconsSpectate[g.GetSpectatorMode() ? 1 : 0];
@@ -478,7 +477,7 @@ public class pfabLobbyGame : MonoBehaviour, IPointerClickHandler, IEventSystemHa
         if (Client.MyAccount.accountType.IsModPlus())
         {
           myContextMenu.AddSeperator("--------------------------");
-          myContextMenu.AddItem("ID: " + (object) this.gameFacts.id, (Action) (() => Global.systemCopyBuffer = this.gameFacts.id.ToString()), (Color) ColorScheme.GetColor(MyContextMenu.ColorBlue));
+          myContextMenu.AddItem("ID: " + this.gameFacts.id.ToString(), (Action) (() => Global.systemCopyBuffer = this.gameFacts.id.ToString()), (Color) ColorScheme.GetColor(MyContextMenu.ColorBlue));
         }
         if (this.gameFacts.players.Contains(Client.Name) && (this.gameFacts.status == (byte) 2 || this.gameFacts.status == (byte) 1))
         {
@@ -515,7 +514,7 @@ public class pfabLobbyGame : MonoBehaviour, IPointerClickHandler, IEventSystemHa
     if (this.last_seconds == num2)
       return;
     this.last_seconds = num2;
-    this.txtTime.text = "<mspace=10>" + (object) (num1 / 60) + "</mspace>:<mspace=10>" + (num2 < 10 ? (object) ("0" + num2.ToString()) : (object) num2.ToString()) + "</mspace>";
+    this.txtTime.text = "<mspace=10>" + (num1 / 60).ToString() + "</mspace>:<mspace=10>" + (num2 < 10 ? "0" + num2.ToString() : num2.ToString()) + "</mspace>";
   }
 
   public void Init(object obj, int index)
@@ -536,7 +535,6 @@ public class pfabLobbyGame : MonoBehaviour, IPointerClickHandler, IEventSystemHa
     }
   }
 
-  [SpecialName]
   GameObject IRecycledScrollViewGenericItem.get_gameObject()
   {
     return this.gameObject;

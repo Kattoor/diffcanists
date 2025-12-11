@@ -61,7 +61,7 @@ public class ZEffectorStaticBall : ZEffector
           this.caughtSpells[index].Collider.Enable(this.caughtSpells[index].offset + this.position);
         this.caughtSpells[index].spell.position = this.caughtSpells[index].offset + this.position;
         if ((Object) this.caughtSpells[index].spell.transform == (Object) null)
-          Debug.Log((object) (this.caughtSpells[index].spell.GetName + " " + (object) this.caughtSpells[index].spell.damage + " " + this.caughtSpells[index].spell.isNull.ToString() + " " + this.caughtSpells[index].spell.isDead.ToString() + " " + (object) this.caughtSpells[index].spell.curDuration));
+          Debug.Log((object) (this.caughtSpells[index].spell.GetName + " " + this.caughtSpells[index].spell.damage.ToString() + " " + this.caughtSpells[index].spell.isNull.ToString() + " " + this.caughtSpells[index].spell.isDead.ToString() + " " + this.caughtSpells[index].spell.curDuration.ToString()));
         else if (this.MaxTurnsAlive > 2)
           this.caughtSpells[index].spell.transform.SetParent(this.caughtSpells[index].spell.game.GetMapTransform());
         this.game.ongoing.RunSpell(this.caughtSpells[index].spell.moving, true);

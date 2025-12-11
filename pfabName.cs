@@ -141,7 +141,7 @@ public class pfabName : MonoBehaviour, IPointerClickHandler, IEventSystemHandler
 
   public static void HoverRatingIcon(Account account, string extra = null)
   {
-    MyToolTip.Show(account.name + "\n<sprite name=\"LTS\"> <#FF0050>" + (object) account.Rating + "</color>\n<sprite name=\"HTS\"> <#00FF1D>" + (object) account.Rating1 + "</color>\n<sprite name=\"PMO\"> <#00B2FF>" + (object) account.Rating2 + "</color>\n" + (extra != null ? (object) extra : (object) ""), -1f, false);
+    MyToolTip.Show(account.name + "\n<sprite name=\"LTS\"> <#FF0050>" + account.Rating.ToString() + "</color>\n<sprite name=\"HTS\"> <#00FF1D>" + account.Rating1.ToString() + "</color>\n<sprite name=\"PMO\"> <#00B2FF>" + account.Rating2.ToString() + "</color>\n" + (extra != null ? extra : ""), -1f, false);
   }
 
   public void HideTooltip()

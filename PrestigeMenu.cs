@@ -87,13 +87,77 @@ public class PrestigeMenu : MonoBehaviour
         }
         if (Prestige.ReadyToPrestige(Client.MyAccount) && Prestige.AboveRating(Client.MyAccount, 0))
         {
-          this.txtPrestigeRequirments.text = string.Format(this.txtPrestigeRequirments.text, (object) ("<color=green>Requirements for the</color> " + Account.numberplus((int) Client.MyAccount.prestige + 1) + "<color=green> prestige =</color> " + (object) Prestige.RequiredRating(Client.MyAccount) + "<color=green> rating and</color> " + (object) Prestige.MaxWands(Client.MyAccount) + "<color=green> wands.</color>"));
+          TMP_Text prestigeRequirments = this.txtPrestigeRequirments;
+          string text = this.txtPrestigeRequirments.text;
+          string[] strArray = new string[7]
+          {
+            "<color=green>Requirements for the</color> ",
+            Account.numberplus((int) Client.MyAccount.prestige + 1),
+            "<color=green> prestige =</color> ",
+            null,
+            null,
+            null,
+            null
+          };
+          int num = Prestige.RequiredRating(Client.MyAccount);
+          strArray[3] = num.ToString();
+          strArray[4] = "<color=green> rating and</color> ";
+          num = Prestige.MaxWands(Client.MyAccount);
+          strArray[5] = num.ToString();
+          strArray[6] = "<color=green> wands.</color>";
+          string str1 = string.Concat(strArray);
+          string str2 = string.Format(text, (object) str1);
+          prestigeRequirments.text = str2;
           break;
         }
-        this.txtPrestigeRequirments.text = string.Format(this.txtPrestigeRequirments.text, (object) ("<color=red>Requirements for the</color> " + Account.numberplus((int) Client.MyAccount.prestige + 1) + "<color=red> prestige =</color> " + (object) Prestige.RequiredRating(Client.MyAccount) + "<color=red> rating and</color> " + (object) Prestige.MaxWands(Client.MyAccount) + "<color=red> wands.</color>"));
+        TMP_Text prestigeRequirments1 = this.txtPrestigeRequirments;
+        string text1 = this.txtPrestigeRequirments.text;
+        string[] strArray1 = new string[7]
+        {
+          "<color=red>Requirements for the</color> ",
+          Account.numberplus((int) Client.MyAccount.prestige + 1),
+          "<color=red> prestige =</color> ",
+          null,
+          null,
+          null,
+          null
+        };
+        int num1 = Prestige.RequiredRating(Client.MyAccount);
+        strArray1[3] = num1.ToString();
+        strArray1[4] = "<color=red> rating and</color> ";
+        num1 = Prestige.MaxWands(Client.MyAccount);
+        strArray1[5] = num1.ToString();
+        strArray1[6] = "<color=red> wands.</color>";
+        string str3 = string.Concat(strArray1);
+        string str4 = string.Format(text1, (object) str3);
+        prestigeRequirments1.text = str4;
         break;
       case 1:
-        this.txtExperience.text = string.Format(this.txtExperience.text, (object) ("<color=red>You are level</color> " + (object) Client.MyAccount.experience + " <color=red>and have</color> " + (object) (int) Client.MyAccount.bonusExperience + "/" + (object) Client.MyAccount.RequiredPoints() + " <color=red>experience. With</color> " + (object) Achievements.CalculatePoints(Client.cosmetics) + "/" + (object) Client.MyAccount.RequiredAchievements() + " <color=red>achievement points.</color>"));
+        TMP_Text txtExperience = this.txtExperience;
+        string text2 = this.txtExperience.text;
+        string[] strArray2 = new string[11]
+        {
+          "<color=red>You are level</color> ",
+          Client.MyAccount.experience.ToString(),
+          " <color=red>and have</color> ",
+          ((int) Client.MyAccount.bonusExperience).ToString(),
+          "/",
+          Client.MyAccount.RequiredPoints().ToString(),
+          " <color=red>experience. With</color> ",
+          null,
+          null,
+          null,
+          null
+        };
+        int num2 = Achievements.CalculatePoints(Client.cosmetics);
+        strArray2[7] = num2.ToString();
+        strArray2[8] = "/";
+        num2 = Client.MyAccount.RequiredAchievements();
+        strArray2[9] = num2.ToString();
+        strArray2[10] = " <color=red>achievement points.</color>";
+        string str5 = string.Concat(strArray2);
+        string str6 = string.Format(text2, (object) str5);
+        txtExperience.text = str6;
         break;
       case 2:
         this.txtMinionSwitch.text = string.Format(this.txtMinionSwitch.text, (object) hardInput.GetKeyName("Minions", false), (object) hardInput.GetKeyName("Minions", true));

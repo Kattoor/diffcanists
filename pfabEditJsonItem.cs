@@ -126,7 +126,7 @@ public class pfabEditJsonItem : MonoBehaviour
       {
         float result;
         float.TryParse(s, out result);
-        j.Value = JToken.Parse("\"" + (object) FixedInt.Create(result).RawValue + "\"");
+        j.Value = JToken.Parse("\"" + FixedInt.Create(result).RawValue.ToString() + "\"");
         SpellOverridesUI.Instance.Edited();
       }
       else

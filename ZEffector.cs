@@ -202,7 +202,7 @@ public class ZEffector : ZComponent
   public void Serialize(myBinaryWriter writer, bool fromPartner = false)
   {
     if (this.game == null || this.game.xEffector == null || (ZComponent) this == (object) null)
-      Debug.Log((object) ("YIKES! " + this.baseEffector.name + " " + (object) this.type + " " + (object) this.position + " " + this.dead.ToString() + " ID: " + (object) this.id));
+      Debug.Log((object) ("YIKES! " + this.baseEffector.name + " " + this.type.ToString() + " " + this.position.ToString() + " " + this.dead.ToString() + " ID: " + this.id.ToString()));
     bool flag1 = this.game.xEffector.Contains(this);
     writer.Write(flag1);
     writer.Write(this.id);
@@ -3078,16 +3078,19 @@ label_59:
           break;
         this.active = false;
         ChatBox.Instance?.NewChatMsg("", this.whoSummoned.parent.name + " infested " + (c.isPawn ? c.parent.name + "'s " + c.name : c.parent.name) + " with a sand mite.", (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System, ContentType.STRING, (object) null);
-        ZEffector zeffector = new ZEffector()
+        for (int index = 0; index <= this.turnsAlive; ++index)
         {
-          type = EffectorType.Sand_Mite_Embeded,
-          game = this.game,
-          whoSummoned = c,
-          infector = this.whoSummoned.parent.first(),
-          active = false,
-          MaxTurnsAlive = 10000
-        };
-        c.effectors.Add(zeffector);
+          ZEffector zeffector = new ZEffector()
+          {
+            type = EffectorType.Sand_Mite_Embeded,
+            game = this.game,
+            whoSummoned = c,
+            infector = this.whoSummoned.parent.first(),
+            active = false,
+            MaxTurnsAlive = 10000
+          };
+          c.effectors.Add(zeffector);
+        }
         if (this.game.isClient)
           AudioManager.Play(this.soundClip);
         this.whoSummoned.OnDeath(true);
@@ -3101,7 +3104,7 @@ label_59:
         this.Die(this.whoSummoned.effectors.FindIndex((Predicate<ZEffector>) (x => (ZComponent) x == (object) this)), false, false);
         break;
       default:
-        Debug.LogError((object) ("Wrong ZEffector: " + (object) this.type + " trying to Effect: " + c?.name));
+        Debug.LogError((object) ("Wrong ZEffector: " + this.type.ToString() + " trying to Effect: " + c?.name));
         break;
     }
   }

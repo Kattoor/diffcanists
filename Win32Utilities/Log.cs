@@ -12,7 +12,7 @@ namespace Win32Utilities
     {
       public void error(string v, Exception e)
       {
-        Debug.Log((object) (v + " " + (object) e));
+        Debug.Log((object) (v + " " + e?.ToString()));
       }
 
       internal void debug(string v)

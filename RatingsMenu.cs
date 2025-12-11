@@ -148,7 +148,7 @@ public class RatingsMenu : MonoBehaviour
     newGamesPlayed.Combine(RatingsMenu.selfRank.low[1].games);
     newGamesPlayed.Combine(RatingsMenu.selfRank.high[0].games);
     newGamesPlayed.Combine(RatingsMenu.selfRank.party[0].games);
-    return newGamesPlayed.ToString(Client.MyAccount, RatingsMenu.selfRank.low[0].games.rating.ToString() + "/" + (object) RatingsMenu.selfRank.high[0].games.rating + "/" + (object) RatingsMenu.selfRank.party[0].games.rating + "/" + (object) RatingsMenu.selfRank.low[1].games.rating) + "\nTotal Unrated Games: " + (object) RatingsMenu.selfRank.high[1].TotalRatedGames1;
+    return newGamesPlayed.ToString(Client.MyAccount, RatingsMenu.selfRank.low[0].games.rating.ToString() + "/" + RatingsMenu.selfRank.high[0].games.rating.ToString() + "/" + RatingsMenu.selfRank.party[0].games.rating.ToString() + "/" + RatingsMenu.selfRank.low[1].games.rating.ToString()) + "\nTotal Unrated Games: " + RatingsMenu.selfRank.high[1].TotalRatedGames1.ToString();
   }
 
   public void ClickDefault()
@@ -348,31 +348,16 @@ public class RatingsMenu : MonoBehaviour
     else
     {
       string format = RatingsMenu.Accuracy[this.accuracy];
-      TMP_Text txtWon = g.txtWon;
-      float num = (float) (c.games.ratedGamesWon * 100) / (float) c.games.totalRatedGames;
-      string str1 = num.ToString(format) + "%";
-      txtWon.text = str1;
-      TMP_Text txtLost = g.txtLost;
-      num = (float) ((c.games.totalRatedGames - c.games.ratedGamesWon - c.games.draws) * 100) / (float) c.games.totalRatedGames;
-      string str2 = num.ToString(format) + "%";
-      txtLost.text = str2;
-      TMP_Text txtDraw = g.txtDraw;
-      num = (float) (c.games.draws * 100) / (float) c.games.totalRatedGames;
-      string str3 = num.ToString(format) + "%";
-      txtDraw.text = str3;
+      g.txtWon.text = ((float) (c.games.ratedGamesWon * 100) / (float) c.games.totalRatedGames).ToString(format) + "%";
+      g.txtLost.text = ((float) ((c.games.totalRatedGames - c.games.ratedGamesWon - c.games.draws) * 100) / (float) c.games.totalRatedGames).ToString(format) + "%";
+      g.txtDraw.text = ((float) (c.games.draws * 100) / (float) c.games.totalRatedGames).ToString(format) + "%";
       g.txtDamage.text = c.games.damageDealt.ToString();
       g.txtKills.text = c.games.kills.ToString();
       g.txtWinStreak.text = c.games.longestWinningStreak.ToString();
       g.txtCurWinStreak.text = c.games.currentWinningStreak.ToString();
       g.txtSurvived.text = c.games.gamesSurvived.ToString();
-      TMP_Text txtFirstTurn = g.txtFirstTurn;
-      num = Global.Divide((float) c.games.gamesWentFirst, (float) (c.games.totalRatedGames - c.games.teamGames)) * 100f;
-      string str4 = num.ToString(format) + "%";
-      txtFirstTurn.text = str4;
-      TMP_Text txtFtw = g.txtFTW;
-      num = Global.Divide((float) c.games.gamesWentFirstWon, (float) c.games.gamesWentFirst) * 100f;
-      string str5 = num.ToString(format) + "%";
-      txtFtw.text = str5;
+      g.txtFirstTurn.text = (Global.Divide((float) c.games.gamesWentFirst, (float) (c.games.totalRatedGames - c.games.teamGames)) * 100f).ToString(format) + "%";
+      g.txtFTW.text = (Global.Divide((float) c.games.gamesWentFirstWon, (float) c.games.gamesWentFirst) * 100f).ToString(format) + "%";
       g.txtTeam.text = c.games.teamGames.ToString();
     }
   }

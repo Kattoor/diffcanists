@@ -15,13 +15,13 @@ public static class BidenLog
       BidenLog.count = 0;
       BidenLog.offset = 0;
     }
-    BidenLog.log.LogNoTime(s + " :" + (object) Thread.CurrentThread.ManagedThreadId);
+    BidenLog.log.LogNoTime(s + " :" + Thread.CurrentThread.ManagedThreadId.ToString());
     ++BidenLog.count;
     if (BidenLog.count <= 100000)
       return;
     ++BidenLog.offset;
     BidenLog.count = 0;
     BidenLog.log.Dispose();
-    BidenLog.log = new MyLog("biden" + (object) BidenLog.offset + ".txt");
+    BidenLog.log = new MyLog("biden" + BidenLog.offset.ToString() + ".txt");
   }
 }

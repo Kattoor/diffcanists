@@ -72,7 +72,7 @@ public class DiscordIntergration : MonoBehaviour
 
   private void AuthCallback(Result result, ref OAuth2Token oauth2Token)
   {
-    Debug.Log((object) ("Token - " + (object) result));
+    Debug.Log((object) ("Token - " + result.ToString()));
     this.token = oauth2Token;
   }
 
@@ -80,7 +80,7 @@ public class DiscordIntergration : MonoBehaviour
   {
     if (result == Result.Ok)
       return;
-    Debug.Log((object) ("Activity - " + (object) result));
+    Debug.Log((object) ("Activity - " + result.ToString()));
   }
 
   public long UnixTimeNow()
@@ -116,7 +116,7 @@ public class DiscordIntergration : MonoBehaviour
     if (resetTime || this.viewing != DiscordIntergration.Viewing.GameLobby || this.date == 0L)
       this.date = this.UnixTimeNow();
     this.activity.State = spectator ? "Spectating" : (gf.game == null || !gf.game.isReplay ? (gf.status == (byte) 0 ? (gf.GetRatedMode() ? "Rated Lobby" : "Unrated Lobby") : "In-game") : "Replay");
-    this.activity.Details = gf.players[0] + "'s game - " + (object) gf.GetTimeInSeconds() + "s " + GameFacts.MapShortName(gf.GetMapMode()) + (gf.GetTeamMode() ? (object) " teams" : (object) "") + (gf.GetRatedMode() ? (object) " rated" : (object) "");
+    this.activity.Details = gf.players[0] + "'s game - " + gf.GetTimeInSeconds().ToString() + "s " + GameFacts.MapShortName(gf.GetMapMode()) + (gf.GetTeamMode() ? " teams" : "") + (gf.GetRatedMode() ? " rated" : "");
     this.activity.Timestamps = new ActivityTimestamps()
     {
       Start = this.date

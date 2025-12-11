@@ -1695,10 +1695,14 @@ label_46:
     if (!this.isClient || !((UnityEngine.Object) HUD.instance != (UnityEngine.Object) null))
       return;
     TMP_Text timeTxt = HUD.instance.time_txt;
-    string str1 = ((int) this.serverState.turnTime).ToString();
+    int num = (int) this.serverState.turnTime;
+    string str1 = num.ToString();
     string str2;
     if (this.curBanStage != BanStage.Pick)
-      str2 = "Ban Stage " + (object) (int) (this.curBanStage + 1) + " of " + (object) this.gameFacts.settings.banPhases;
+    {
+      num = (int) (this.curBanStage + 1);
+      str2 = "Ban Stage " + num.ToString() + " of " + this.gameFacts.settings.banPhases.ToString();
+    }
     else
       str2 = "Spell Picking Phase";
     string str3 = str1 + "\n" + str2;
@@ -3286,7 +3290,7 @@ label_46:
                             zcreature.UpdateHealthTxt();
                             if (!((UnityEngine.Object) Player.Instance != (UnityEngine.Object) null) || p != Player.Instance.person)
                               return;
-                            HUD.instance.fullBookTextLevel.text = "Level " + (object) zcreature.familiarLevelActivateable;
+                            HUD.instance.fullBookTextLevel.text = "Level " + zcreature.familiarLevelActivateable.ToString();
                           }
                         }
                       }
@@ -3322,17 +3326,34 @@ label_46:
                         {
                           if (this.isReplay)
                           {
-                            ChatBox.Instance?.NewChatMsg("invalid position on move right #id" + (object) moveID + ": " + (object) validPos1 + " expected: " + (object) cre.position, Color.red);
+                            ChatBox.Instance?.NewChatMsg("invalid position on move right #id" + moveID.ToString() + ": " + validPos1.ToString() + " expected: " + cre.position.ToString(), Color.red);
                             cre.position = validPos1;
                           }
                           else
                           {
-                            this.SendResyncMsg(p, "invalid position on move right #id" + (object) moveID + ": " + (object) validPos1 + " expected: " + (object) cre.position, true, (Action) (() =>
+                            this.SendResyncMsg(p, "invalid position on move right #id" + moveID.ToString() + ": " + validPos1.ToString() + " expected: " + cre.position.ToString(), true, (Action) (() =>
                             {
                               if (this.loggedToDiscord)
                                 return;
                               this.loggedToDiscord = true;
-                              Server.Instance?.communicator?.SendResync(this, "Invalid position on move right #id " + (object) moveID + ": " + (object) validPos1 + " expected: " + (object) cre.position + " inwater: " + cre.inWater.ToString());
+                              Server instance = Server.Instance;
+                              if (instance == null)
+                                return;
+                              DiscordCommunicator communicator = instance.communicator;
+                              if (communicator == null)
+                                return;
+                              string[] strArray = new string[8];
+                              strArray[0] = "Invalid position on move right #id ";
+                              strArray[1] = moveID.ToString();
+                              strArray[2] = ": ";
+                              MyLocation myLocation = validPos1;
+                              strArray[3] = myLocation.ToString();
+                              strArray[4] = " expected: ";
+                              myLocation = cre.position;
+                              strArray[5] = myLocation.ToString();
+                              strArray[6] = " inwater: ";
+                              strArray[7] = cre.inWater.ToString();
+                              communicator.SendResync(this, string.Concat(strArray));
                             }));
                             return;
                           }
@@ -3407,17 +3428,34 @@ label_46:
                         {
                           if (this.isReplay)
                           {
-                            ChatBox.Instance?.NewChatMsg("invalid position on move left #id" + (object) moveID + ": " + (object) validPos2 + " expected: " + (object) cre.position, Color.red);
+                            ChatBox.Instance?.NewChatMsg("invalid position on move left #id" + moveID.ToString() + ": " + validPos2.ToString() + " expected: " + cre.position.ToString(), Color.red);
                             cre.position = validPos2;
                           }
                           else
                           {
-                            this.SendResyncMsg(p, "invalid position on move left #id" + (object) moveID + ": " + (object) validPos2 + " expected: " + (object) cre.position, true, (Action) (() =>
+                            this.SendResyncMsg(p, "invalid position on move left #id" + moveID.ToString() + ": " + validPos2.ToString() + " expected: " + cre.position.ToString(), true, (Action) (() =>
                             {
                               if (this.loggedToDiscord)
                                 return;
                               this.loggedToDiscord = true;
-                              Server.Instance?.communicator?.SendResync(this, "Invalid position on move left #id " + (object) moveID + ": " + (object) validPos2 + " expected: " + (object) cre.position + " inwater: " + cre.inWater.ToString());
+                              Server instance = Server.Instance;
+                              if (instance == null)
+                                return;
+                              DiscordCommunicator communicator = instance.communicator;
+                              if (communicator == null)
+                                return;
+                              string[] strArray = new string[8];
+                              strArray[0] = "Invalid position on move left #id ";
+                              strArray[1] = moveID.ToString();
+                              strArray[2] = ": ";
+                              MyLocation myLocation = validPos2;
+                              strArray[3] = myLocation.ToString();
+                              strArray[4] = " expected: ";
+                              myLocation = cre.position;
+                              strArray[5] = myLocation.ToString();
+                              strArray[6] = " inwater: ";
+                              strArray[7] = cre.inWater.ToString();
+                              communicator.SendResync(this, string.Concat(strArray));
                             }));
                             return;
                           }
@@ -3492,17 +3530,34 @@ label_46:
                         {
                           if (this.isReplay)
                           {
-                            ChatBox.Instance?.NewChatMsg("invalid position on high jump #id" + (object) moveID + ": " + (object) validPos3 + " expected: " + (object) cre.position, Color.red);
+                            ChatBox.Instance?.NewChatMsg("invalid position on high jump #id" + moveID.ToString() + ": " + validPos3.ToString() + " expected: " + cre.position.ToString(), Color.red);
                             cre.position = validPos3;
                           }
                           else
                           {
-                            this.SendResyncMsg(p, "invalid position on high jump #id" + (object) moveID + ": " + (object) validPos3 + " expected: " + (object) cre.position, true, (Action) (() =>
+                            this.SendResyncMsg(p, "invalid position on high jump #id" + moveID.ToString() + ": " + validPos3.ToString() + " expected: " + cre.position.ToString(), true, (Action) (() =>
                             {
                               if (this.loggedToDiscord)
                                 return;
                               this.loggedToDiscord = true;
-                              Server.Instance?.communicator?.SendResync(this, "Invalid position on high jump #id " + (object) moveID + ": " + (object) validPos3 + " expected: " + (object) cre.position + " inwater: " + cre.inWater.ToString());
+                              Server instance = Server.Instance;
+                              if (instance == null)
+                                return;
+                              DiscordCommunicator communicator = instance.communicator;
+                              if (communicator == null)
+                                return;
+                              string[] strArray = new string[8];
+                              strArray[0] = "Invalid position on high jump #id ";
+                              strArray[1] = moveID.ToString();
+                              strArray[2] = ": ";
+                              MyLocation myLocation = validPos3;
+                              strArray[3] = myLocation.ToString();
+                              strArray[4] = " expected: ";
+                              myLocation = cre.position;
+                              strArray[5] = myLocation.ToString();
+                              strArray[6] = " inwater: ";
+                              strArray[7] = cre.inWater.ToString();
+                              communicator.SendResync(this, string.Concat(strArray));
                             }));
                             return;
                           }
@@ -3575,17 +3630,34 @@ label_46:
                         {
                           if (this.isReplay)
                           {
-                            ChatBox.Instance?.NewChatMsg("invalid position on long jump #id" + (object) moveID + ": " + (object) validPos4 + " expected: " + (object) cre.position, Color.red);
+                            ChatBox.Instance?.NewChatMsg("invalid position on long jump #id" + moveID.ToString() + ": " + validPos4.ToString() + " expected: " + cre.position.ToString(), Color.red);
                             cre.position = validPos4;
                           }
                           else
                           {
-                            this.SendResyncMsg(p, "invalid position on long jump #id" + (object) moveID + ": " + (object) validPos4 + " expected: " + (object) cre.position, true, (Action) (() =>
+                            this.SendResyncMsg(p, "invalid position on long jump #id" + moveID.ToString() + ": " + validPos4.ToString() + " expected: " + cre.position.ToString(), true, (Action) (() =>
                             {
                               if (this.loggedToDiscord)
                                 return;
                               this.loggedToDiscord = true;
-                              Server.Instance?.communicator?.SendResync(this, "Invalid position on long jump #id " + (object) moveID + ": " + (object) validPos4 + " expected: " + (object) cre.position + " inwater: " + cre.inWater.ToString());
+                              Server instance = Server.Instance;
+                              if (instance == null)
+                                return;
+                              DiscordCommunicator communicator = instance.communicator;
+                              if (communicator == null)
+                                return;
+                              string[] strArray = new string[8];
+                              strArray[0] = "Invalid position on long jump #id ";
+                              strArray[1] = moveID.ToString();
+                              strArray[2] = ": ";
+                              MyLocation myLocation = validPos4;
+                              strArray[3] = myLocation.ToString();
+                              strArray[4] = " expected: ";
+                              myLocation = cre.position;
+                              strArray[5] = myLocation.ToString();
+                              strArray[6] = " inwater: ";
+                              strArray[7] = cre.inWater.ToString();
+                              communicator.SendResync(this, string.Concat(strArray));
                             }));
                             return;
                           }
@@ -3671,17 +3743,34 @@ label_46:
                           {
                             if (this.isReplay)
                             {
-                              ChatBox.Instance?.NewChatMsg("invalid position on flip flop #id" + (object) moveID + ": " + (object) validPos5 + " expected: " + (object) cre.position, Color.red);
+                              ChatBox.Instance?.NewChatMsg("invalid position on flip flop #id" + moveID.ToString() + ": " + validPos5.ToString() + " expected: " + cre.position.ToString(), Color.red);
                               cre.position = validPos5;
                             }
                             else
                             {
-                              this.SendResyncMsg(p, "invalid position on flip flop #id" + (object) moveID + ": " + (object) validPos5 + " expected: " + (object) cre.position, true, (Action) (() =>
+                              this.SendResyncMsg(p, "invalid position on flip flop #id" + moveID.ToString() + ": " + validPos5.ToString() + " expected: " + cre.position.ToString(), true, (Action) (() =>
                               {
                                 if (this.loggedToDiscord)
                                   return;
                                 this.loggedToDiscord = true;
-                                Server.Instance?.communicator?.SendResync(this, "Invalid position on flip flop #id " + (object) moveID + ": " + (object) validPos5 + " expected: " + (object) cre.position + " inwater: " + cre.inWater.ToString());
+                                Server instance = Server.Instance;
+                                if (instance == null)
+                                  return;
+                                DiscordCommunicator communicator = instance.communicator;
+                                if (communicator == null)
+                                  return;
+                                string[] strArray = new string[8];
+                                strArray[0] = "Invalid position on flip flop #id ";
+                                strArray[1] = moveID.ToString();
+                                strArray[2] = ": ";
+                                MyLocation myLocation = validPos5;
+                                strArray[3] = myLocation.ToString();
+                                strArray[4] = " expected: ";
+                                myLocation = cre.position;
+                                strArray[5] = myLocation.ToString();
+                                strArray[6] = " inwater: ";
+                                strArray[7] = cre.inWater.ToString();
+                                communicator.SendResync(this, string.Concat(strArray));
                               }));
                               return;
                             }
@@ -3738,17 +3827,34 @@ label_46:
                           {
                             if (this.isReplay)
                             {
-                              ChatBox.Instance?.NewChatMsg("invalid position on detower #id" + (object) moveID + ": " + (object) validPos6 + " expected: " + (object) cre.position, Color.red);
+                              ChatBox.Instance?.NewChatMsg("invalid position on detower #id" + moveID.ToString() + ": " + validPos6.ToString() + " expected: " + cre.position.ToString(), Color.red);
                               cre.position = validPos6;
                             }
                             else
                             {
-                              this.SendResyncMsg(p, "invalid position on detower #id" + (object) moveID + ": " + (object) validPos6 + " expected: " + (object) cre.position, true, (Action) (() =>
+                              this.SendResyncMsg(p, "invalid position on detower #id" + moveID.ToString() + ": " + validPos6.ToString() + " expected: " + cre.position.ToString(), true, (Action) (() =>
                               {
                                 if (this.loggedToDiscord)
                                   return;
                                 this.loggedToDiscord = true;
-                                Server.Instance?.communicator?.SendResync(this, "Invalid position on detower #id " + (object) moveID + ": " + (object) validPos6 + " expected: " + (object) cre.position + " inwater: " + cre.inWater.ToString());
+                                Server instance = Server.Instance;
+                                if (instance == null)
+                                  return;
+                                DiscordCommunicator communicator = instance.communicator;
+                                if (communicator == null)
+                                  return;
+                                string[] strArray = new string[8];
+                                strArray[0] = "Invalid position on detower #id ";
+                                strArray[1] = moveID.ToString();
+                                strArray[2] = ": ";
+                                MyLocation myLocation = validPos6;
+                                strArray[3] = myLocation.ToString();
+                                strArray[4] = " expected: ";
+                                myLocation = cre.position;
+                                strArray[5] = myLocation.ToString();
+                                strArray[6] = " inwater: ";
+                                strArray[7] = cre.inWater.ToString();
+                                communicator.SendResync(this, string.Concat(strArray));
                               }));
                               return;
                             }
@@ -3802,17 +3908,34 @@ label_46:
                         {
                           if (this.isReplay)
                           {
-                            ChatBox.Instance?.NewChatMsg("invalid position on controlled jump #id" + (object) moveID + ": " + (object) validPos7 + " expected: " + (object) cre.position, Color.red);
+                            ChatBox.Instance?.NewChatMsg("invalid position on controlled jump #id" + moveID.ToString() + ": " + validPos7.ToString() + " expected: " + cre.position.ToString(), Color.red);
                             cre.position = validPos7;
                           }
                           else
                           {
-                            this.SendResyncMsg(p, "invalid position on controlled jump #id" + (object) moveID + ": " + (object) validPos7 + " expected: " + (object) cre.position, true, (Action) (() =>
+                            this.SendResyncMsg(p, "invalid position on controlled jump #id" + moveID.ToString() + ": " + validPos7.ToString() + " expected: " + cre.position.ToString(), true, (Action) (() =>
                             {
                               if (this.loggedToDiscord)
                                 return;
                               this.loggedToDiscord = true;
-                              Server.Instance?.communicator?.SendResync(this, "Invalid position on controlled jump #id " + (object) moveID + ": " + (object) validPos7 + " expected: " + (object) cre.position + " inwater: " + cre.inWater.ToString());
+                              Server instance = Server.Instance;
+                              if (instance == null)
+                                return;
+                              DiscordCommunicator communicator = instance.communicator;
+                              if (communicator == null)
+                                return;
+                              string[] strArray = new string[8];
+                              strArray[0] = "Invalid position on controlled jump #id ";
+                              strArray[1] = moveID.ToString();
+                              strArray[2] = ": ";
+                              MyLocation myLocation = validPos7;
+                              strArray[3] = myLocation.ToString();
+                              strArray[4] = " expected: ";
+                              myLocation = cre.position;
+                              strArray[5] = myLocation.ToString();
+                              strArray[6] = " inwater: ";
+                              strArray[7] = cre.inWater.ToString();
+                              communicator.SendResync(this, string.Concat(strArray));
                             }));
                             return;
                           }
@@ -3957,7 +4080,7 @@ label_46:
                                 }
                                 if ((spellSlot.LastTurnFired == localTurn && (!creature.flying || !spell.spellEnum.IsFlight()) || (spellSlot.RechargeTime > 0 || spellSlot.LastTurnFired > localTurn) && spellSlot.LastTurnFired + spellSlot.RechargeTime >= localTurn && ((!spellSlot.spell.spellEnum.IsFlight() || !creature.flying) && (spellSlot.TurnsTillFirstUse > localTurn || spellSlot.LastTurnFired > -1))) && !creature.inWater)
                                 {
-                                  this.SendResyncMsg(p, "unable to cast this turn " + (object) spellSlot.spell + " ltf: " + (object) spellSlot.LastTurnFired + " flying: " + creature.flying.ToString() + " recharge: " + (object) spellSlot.RechargeTime + " curTurn: " + (object) localTurn + " ttfs: " + (object) spellSlot.TurnsTillFirstUse, true, (Action) null);
+                                  this.SendResyncMsg(p, "unable to cast this turn " + spellSlot.spell?.ToString() + " ltf: " + spellSlot.LastTurnFired.ToString() + " flying: " + creature.flying.ToString() + " recharge: " + spellSlot.RechargeTime.ToString() + " curTurn: " + localTurn.ToString() + " ttfs: " + spellSlot.TurnsTillFirstUse.ToString(), true, (Action) null);
                                   return;
                                 }
                                 if (!creature.inWater)
@@ -4005,21 +4128,30 @@ label_46:
                                   return;
                                 }
                               }
+                              MyLocation myLocation;
                               if (creature.position.x != validPos8.x || creature.position.y != validPos8.y)
                               {
                                 if (this.isReplay)
                                 {
-                                  ChatBox.Instance?.NewChatMsg("invalid position when casting: " + (object) validPos8 + " expected: " + (object) creature.position, Color.red);
+                                  ChatBox instance = ChatBox.Instance;
+                                  if (instance != null)
+                                  {
+                                    myLocation = validPos8;
+                                    string str1 = myLocation.ToString();
+                                    myLocation = creature.position;
+                                    string str2 = myLocation.ToString();
+                                    instance.NewChatMsg("invalid position when casting: " + str1 + " expected: " + str2, Color.red);
+                                  }
                                   creature.position = validPos8;
                                 }
                                 else
                                 {
-                                  this.SendResyncMsg(p, "invalid position when casting: " + (object) validPos8 + " expected: " + (object) creature.position, true, (Action) (() =>
+                                  this.SendResyncMsg(p, "invalid position when casting: " + validPos8.ToString() + " expected: " + creature.position.ToString(), true, (Action) (() =>
                                   {
                                     if (this.loggedToDiscord)
                                       return;
                                     this.loggedToDiscord = true;
-                                    Server.Instance?.communicator?.SendResync(this, "Invalid position: " + (object) validPos8 + " expected: " + (object) creature.position + " inwater: " + creature.inWater.ToString() + " spell: " + (object) spell.spellEnum + " (" + (object) realSpellSlot + ") Busy: " + (object) this.serverState.busy + " turn time: " + (object) this.serverState.turnTime);
+                                    Server.Instance?.communicator?.SendResync(this, "Invalid position: " + validPos8.ToString() + " expected: " + creature.position.ToString() + " inwater: " + creature.inWater.ToString() + " spell: " + spell.spellEnum.ToString() + " (" + realSpellSlot.ToString() + ") Busy: " + this.serverState.busy.ToString() + " turn time: " + this.serverState.turnTime.ToString());
                                   }));
                                   return;
                                 }
@@ -4187,7 +4319,12 @@ label_46:
                                 if (spell.type == CastType.Placement || spell.type == CastType.Blit)
                                   CameraMovement.followTargets.Enqueue((IFollowTarget) new FollowPosition(target.ToSinglePrecision()));
                                 else if (spell.type == CastType.Tower || spell.type == CastType.Flight)
-                                  CameraMovement.followTargets.Enqueue((IFollowTarget) new FollowPosition(creature.position.ToSinglePrecision()));
+                                {
+                                  Queue<IFollowTarget> followTargets = CameraMovement.followTargets;
+                                  myLocation = creature.position;
+                                  FollowPosition followPosition = new FollowPosition(myLocation.ToSinglePrecision());
+                                  followTargets.Enqueue((IFollowTarget) followPosition);
+                                }
                               }
                               ++this.numExplosionsAndMovement;
                               this.forceRysncPause = true;
@@ -4282,7 +4419,7 @@ label_46:
                     else
                       HUD.instance.uiPlayerCharacters[index].Dead();
                     if (this.players[index].gainedWands > 0 && string.Equals(this.players[index].name, Client.Name))
-                      ChatBox.Instance?.NewChatMsg("You received <color=white>" + (object) this.players[index].gainedWands + "</color> wand" + (this.players[index].gainedWands > 1 ? (object) "s!" : (object) "!"), (Color) ColorScheme.GetColor(Global.ColorSystem));
+                      ChatBox.Instance?.NewChatMsg("You received <color=white>" + this.players[index].gainedWands.ToString() + "</color> wand" + (this.players[index].gainedWands > 1 ? "s!" : "!"), (Color) ColorScheme.GetColor(Global.ColorSystem));
                     HUD.instance.uiPlayerCharacters[index].ShowScrolls(this.players[index].gainedWands);
                   }
                   if (!aWinner)
@@ -4359,9 +4496,9 @@ label_46:
                 this.timeline.RemoveRange(index5, this.timeline.Count - index5);
                 for (int index4 = 0; index4 < num8; ++index4)
                   this.timeline.Add(myBinaryReader.ReadBytes());
-                string str1 = myBinaryReader.ReadString();
-                if (!string.IsNullOrEmpty(str1))
-                  ChatBox.Instance?.NewChatMsg("", "Resync because - " + str1, (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
+                string str3 = myBinaryReader.ReadString();
+                if (!string.IsNullOrEmpty(str3))
+                  ChatBox.Instance?.NewChatMsg("", "Resync because - " + str3, (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
                 bool flag1 = myBinaryReader.ReadBoolean();
                 try
                 {
@@ -4625,7 +4762,7 @@ label_158:
                           if (Server.DebugResyncs)
                           {
                             Player.Instance.person.sendResync = true;
-                            Client.connection.SendBytes(DiscordCommunicator.GameToResync(this, "Client responding to resync - Timeline: " + (object) this.timeline.Count + " Len: " + (object) num14 + " Off: " + (object) index9 + " Count: " + (object) num15, Client.Name, true), SendOption.None);
+                            Client.connection.SendBytes(DiscordCommunicator.GameToResync(this, "Client responding to resync - Timeline: " + this.timeline.Count.ToString() + " Len: " + num14.ToString() + " Off: " + index9.ToString() + " Count: " + num15.ToString(), Client.Name, true), SendOption.None);
                           }
                         }
                       }
@@ -4650,9 +4787,9 @@ label_158:
                 break;
               case 151:
                 string RightClickName1 = myBinaryReader.ReadString();
-                string str2 = myBinaryReader.ReadString();
+                string str4 = myBinaryReader.ReadString();
                 string msg1 = myBinaryReader.ReadString();
-                if (msg1.Length > 600 || str2.Length > 200 || RightClickName1.Length > 200)
+                if (msg1.Length > 600 || str4.Length > 200 || RightClickName1.Length > 200)
                   break;
                 ChatBox.Instance?.NewChatMsg("From " + RightClickName1, msg1, (Color) ColorScheme.GetColor(Global.ColorReceivedPrivate), RightClickName1, ChatOrigination.Private, ContentType.STRING, (object) null);
                 break;
@@ -4664,11 +4801,11 @@ label_158:
                 ChatBox.Instance.NewChatMsg("[Team] " + RightClickName2, msg2, (Color) ColorScheme.GetColor(Global.ColorTeamText), RightClickName2, ChatOrigination.Team, ContentType.STRING, (object) null);
                 break;
               case 153:
-                string str3 = myBinaryReader.ReadString();
+                string str5 = myBinaryReader.ReadString();
                 string msg3 = myBinaryReader.ReadString();
-                if (str3.Length > 200 || msg3.Length > 600)
+                if (str5.Length > 200 || msg3.Length > 600)
                   break;
-                ChatBox.Instance.NewChatMsg(str3, msg3, (Color) ColorScheme.GetColor(Global.ColorGameText), str3, ChatOrigination.Game, ContentType.STRING, (object) null);
+                ChatBox.Instance.NewChatMsg(str5, msg3, (Color) ColorScheme.GetColor(Global.ColorGameText), str5, ChatOrigination.Game, ContentType.STRING, (object) null);
                 break;
               case 154:
                 int index10 = myBinaryReader.ReadInt32();
@@ -4696,8 +4833,8 @@ label_158:
                 break;
               case 185:
                 int index13 = myBinaryReader.ReadInt32();
-                MyLocation myLocation = myBinaryReader.ReadMyLocation();
-                p.controlled[index13].effectors.Find((Predicate<ZEffector>) (z => z.type == EffectorType.Sands_of_Time)).target = myLocation;
+                MyLocation myLocation1 = myBinaryReader.ReadMyLocation();
+                p.controlled[index13].effectors.Find((Predicate<ZEffector>) (z => z.type == EffectorType.Sands_of_Time)).target = myLocation1;
                 break;
               case 186:
                 this.curBanStage = (BanStage) myBinaryReader.ReadInt32();
@@ -5010,8 +5147,8 @@ label_158:
                 Server.ChangeChatSettings(p.connection.player.account, myBinaryReader);
                 break;
               case 64:
-                string str4 = myBinaryReader.ReadString();
-                this.SendResyncMsg(p, "Client - " + str4, true, (Action) null);
+                string str6 = myBinaryReader.ReadString();
+                this.SendResyncMsg(p, "Client - " + str6, true, (Action) null);
                 break;
               case 71:
                 if (this.serverState.busy == ServerState.Busy.Not_started)
@@ -5050,28 +5187,28 @@ label_158:
                 Server.ValidateClanChat(p.connection, myBinaryReader, b);
                 break;
               case 151:
-                string str5 = myBinaryReader.ReadString();
-                if (!string.Equals(str5, p.name))
+                string str7 = myBinaryReader.ReadString();
+                if (!string.Equals(str7, p.name))
                   break;
-                Server.ValidatePrivateChatMessage(str5, p.connection, myBinaryReader, b);
+                Server.ValidatePrivateChatMessage(str7, p.connection, myBinaryReader, b);
                 break;
               case 152:
-                string str6 = myBinaryReader.ReadString();
-                string str7 = myBinaryReader.ReadString();
-                if (str7.Length > 600 || str6.Length > 200 || !(str6 == p.name))
+                string str8 = myBinaryReader.ReadString();
+                string str9 = myBinaryReader.ReadString();
+                if (str9.Length > 600 || str8.Length > 200 || !(str8 == p.name))
                   break;
                 this.SendTeamMessage(b, p.team);
-                MyLog.MainLog("[Team " + this.gameFacts.id.ToString() + "] [" + str6 + "] " + str7);
-                p.GetMultiConnection?.OnChat("[Team " + this.gameFacts.id.ToString() + "] " + str7);
+                MyLog.MainLog("[Team " + this.gameFacts.id.ToString() + "] [" + str8 + "] " + str9);
+                p.GetMultiConnection?.OnChat("[Team " + this.gameFacts.id.ToString() + "] " + str9);
                 break;
               case 153:
                 string a = myBinaryReader.ReadString();
-                string str8 = myBinaryReader.ReadString();
-                if (str8.Length > 600 || a.Length > 200 || !string.Equals(a, p.name))
+                string str10 = myBinaryReader.ReadString();
+                if (str10.Length > 600 || a.Length > 200 || !string.Equals(a, p.name))
                   break;
                 this.SendAllMessage(b);
-                MyLog.MainLog("[Game " + this.gameFacts.id.ToString() + "] [" + a + "] " + str8);
-                p.connection.OnChat("[Game #" + this.gameFacts.id.ToString() + "]" + str8);
+                MyLog.MainLog("[Game " + this.gameFacts.id.ToString() + "] [" + a + "] " + str10);
+                p.connection.OnChat("[Game #" + this.gameFacts.id.ToString() + "]" + str10);
                 break;
               case 154:
                 int num19 = myBinaryReader.ReadInt32();
@@ -5494,7 +5631,23 @@ label_158:
         str2 = this.gameFacts.players[index].Length <= 3 ? str2 + this.gameFacts.players[index] : str2 + this.gameFacts.players[index].Substring(0, 3);
       }
     }
-    this.replayName = this.gameFacts.id.ToString("0000000000") + "_" + DateTime.Now.ToString("MM-dd-tt-hh-mm") + "_" + (object) this.gameFacts.GetTimeInSeconds() + "s_" + GameFacts.MapShortName(this.gameFacts.realMap) + "_" + str1 + "_" + (object) stringSet.Count + "p_" + str2;
+    string[] strArray = new string[13];
+    strArray[0] = this.gameFacts.id.ToString("0000000000");
+    strArray[1] = "_";
+    strArray[2] = DateTime.Now.ToString("MM-dd-tt-hh-mm");
+    strArray[3] = "_";
+    int num = this.gameFacts.GetTimeInSeconds();
+    strArray[4] = num.ToString();
+    strArray[5] = "s_";
+    strArray[6] = GameFacts.MapShortName(this.gameFacts.realMap);
+    strArray[7] = "_";
+    strArray[8] = str1;
+    strArray[9] = "_";
+    num = stringSet.Count;
+    strArray[10] = num.ToString();
+    strArray[11] = "p_";
+    strArray[12] = str2;
+    this.replayName = string.Concat(strArray);
     string path2 = path1 + this.replayName + ".arcreplay";
     try
     {
@@ -5723,7 +5876,7 @@ label_158:
         }
         game.isReplay = false;
         Client.NameOrReplay = game.CurrentPlayer().name;
-        HUD.instance.buttonShowSpells.transform.GetChild(0).GetComponent<TMP_Text>().SetText("Dev Console", true);
+        HUD.instance.buttonShowSpells.transform.GetChild(0).GetComponent<TMP_Text>().SetText("Dev Console");
         HUD.instance.FindPlayer();
         game.serverUpdate = Timing.RunCoroutine(game.FixedUpdate(), Segment.Update);
         HUD.instance.buttonHideChat.gameObject.SetActive(false);
@@ -6572,7 +6725,13 @@ label_158:
     if (!Client.game.isSpectator)
     {
       if ((UnityEngine.Object) Player.Instance == (UnityEngine.Object) null)
-        Debug.LogError((object) ("!!!!! NULL !!!!!!!" + (object) Client.game.players.Count + " " + (object) Client._gameFacts.players.Count));
+      {
+        int count = Client.game.players.Count;
+        string str1 = count.ToString();
+        count = Client._gameFacts.players.Count;
+        string str2 = count.ToString();
+        Debug.LogError((object) ("!!!!! NULL !!!!!!!" + str1 + " " + str2));
+      }
       else if (Player.Instance.person != null && (ZComponent) Player.Instance.person.first() != (object) null && Player.Instance.person.ActivateableFamiliar != BookOf.Nothing)
       {
         BookOf activateableFamiliar = Player.Instance.person.ActivateableFamiliar;

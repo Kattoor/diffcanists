@@ -118,7 +118,7 @@ public class TeamColors
                 if (i < this.team6Colors.Length)
                   this.team6Colors[i] = (Color) c;
                 else
-                  Debug.Log((object) ("Unknown index: " + (object) i + " " + (object) c));
+                  Debug.Log((object) ("Unknown index: " + i.ToString() + " " + c.ToString()));
               }
             }
           }

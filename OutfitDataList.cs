@@ -38,16 +38,16 @@ public class OutfitDataList
 
   public int Random(Account a)
   {
-    int max = 0;
+    int maxExclusive = 0;
     for (int index = 0; index < this.list.Count; ++index)
     {
       if (this.list[index].IsUnlocked(a))
-        ++max;
+        ++maxExclusive;
     }
-    if (max == 0)
+    if (maxExclusive == 0)
       return 0;
     int num1 = 0;
-    int num2 = UnityEngine.Random.Range(0, max);
+    int num2 = UnityEngine.Random.Range(0, maxExclusive);
     for (int index = 0; index < this.list.Count; ++index)
     {
       if (this.list[index].IsUnlocked(a))

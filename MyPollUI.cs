@@ -85,10 +85,7 @@ public class MyPollUI : MonoBehaviour
       Object.Destroy((Object) component.gameObject);
     this.items.Clear();
     this.curIndex = index;
-    if (this.poll.items[index].multipleSelection)
-      this.txtQuestion.text = "<#7b7b7b>[Multiple Selection]</color><br>" + (object) (index + 1) + ") " + this.poll.items[index].question;
-    else
-      this.txtQuestion.text = (index + 1).ToString() + ") " + this.poll.items[index].question;
+    this.txtQuestion.text = !this.poll.items[index].multipleSelection ? (index + 1).ToString() + ") " + this.poll.items[index].question : "<#7b7b7b>[Multiple Selection]</color><br>" + (index + 1).ToString() + ") " + this.poll.items[index].question;
     int index1 = 0;
     foreach (MyPoll.Answer answer in this.poll.items[index].answers)
     {
@@ -99,7 +96,7 @@ public class MyPollUI : MonoBehaviour
       ++index1;
     }
     this.container.sizeDelta = new Vector2(this.container.sizeDelta.x, (float) index1 * this.itemHeight);
-    this.txtHeader.text = this.poll.name + " (" + (object) (index + 1) + "/" + (object) this.poll.items.Count + ")";
+    this.txtHeader.text = this.poll.name + " (" + (index + 1).ToString() + "/" + this.poll.items.Count.ToString() + ")";
     this.txtSubmit.text = index < this.poll.items.Count - 1 ? "Next" : "Submit";
     this.buttonBack.gameObject.SetActive(index > 0);
   }

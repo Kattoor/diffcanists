@@ -177,8 +177,17 @@ public class SpellLobbyChange : MonoBehaviour
       this.UpdateHolidaySprites();
       this.CreateHeaders();
     }
-    this.txtScrollCount.text = Client.MyAccount.wands.ToString();
-    this.txtMaxScrolls.text = "Obtained: " + (object) Client.MyAccount.totalWands + "/" + (object) Prestige.MaxWands(Client.MyAccount);
+    TMP_Text txtScrollCount = this.txtScrollCount;
+    int num = Client.MyAccount.wands;
+    string str1 = num.ToString();
+    txtScrollCount.text = str1;
+    TMP_Text txtMaxScrolls = this.txtMaxScrolls;
+    num = Client.MyAccount.totalWands;
+    string str2 = num.ToString();
+    num = Prestige.MaxWands(Client.MyAccount);
+    string str3 = num.ToString();
+    string str4 = "Obtained: " + str2 + "/" + str3;
+    txtMaxScrolls.text = str4;
     bool prestige = Prestige.ReadyToPrestige(Client.MyAccount);
     this.buttonPrestige.SetActive(prestige || Client.MyAccount.prestige > (byte) 0 && (!prestige || Client.MyAccount.prestige < byte.MaxValue));
     this.txtPrestige.text = prestige ? "Prestige" : "Downgrade";
@@ -186,7 +195,12 @@ public class SpellLobbyChange : MonoBehaviour
     if (prestige && !Prestige.AboveRating(Client.MyAccount, 0))
     {
       this.buttonPrestige.GetComponent<UIOnHover>().Interactable(false);
-      this.txtPrestige.text = Client.MyAccount.HighestRating.ToString() + " / " + (object) Prestige.RequiredRating(Client.MyAccount) + " rating";
+      TMP_Text txtPrestige = this.txtPrestige;
+      string str5 = Client.MyAccount.HighestRating.ToString();
+      num = Prestige.RequiredRating(Client.MyAccount);
+      string str6 = num.ToString();
+      string str7 = str5 + " / " + str6 + " rating";
+      txtPrestige.text = str7;
     }
     this.RefreshList();
     this.buttonViewRestrictions.SetActive(this.toggleRated.AlwaysOn || !this.toggleRated.interactable);
@@ -215,7 +229,7 @@ public class SpellLobbyChange : MonoBehaviour
     }
     if (string.IsNullOrEmpty(str))
       str = "Mixed";
-    Client.AskToShare(str + (object) num2, ContentType.SpellBook, (object) this.settingsPlayer, false);
+    Client.AskToShare(str + num2.ToString(), ContentType.SpellBook, (object) this.settingsPlayer, false);
   }
 
   public void ClickHelp()

@@ -86,7 +86,7 @@ public static class ExplosionSize
       case ExplosionCutout.None:
         return 0;
       default:
-        Debug.LogError((object) ("Explosion Cutout " + (object) e + " is undefined"));
+        Debug.LogError((object) ("Explosion Cutout " + e.ToString() + " is undefined"));
         return 90;
     }
   }

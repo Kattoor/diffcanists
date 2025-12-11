@@ -1,4 +1,5 @@
 
+using mattmc3.dotmore.Collections.Generic;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -238,7 +239,7 @@ public class LobbyMenu : Catalogue
   {
     if (this.viewing != Viewing.Friends)
       return;
-    this.txtRating.text = "Friends " + (object) Client.friends.Count + " / 200";
+    this.txtRating.text = "Friends " + Client.friends.Count.ToString() + " / 200";
     this.txtRateType.text = "";
     int num1 = (int) ((RectTransform) this.pfabFriend.transform).sizeDelta.y + 2;
     int num2 = 2;
@@ -270,7 +271,7 @@ public class LobbyMenu : Catalogue
   {
     if (this.viewing != Viewing.Ignore)
       return;
-    this.txtRating.text = "Ignored " + (object) Client.ignore.Count + " / 100";
+    this.txtRating.text = "Ignored " + Client.ignore.Count.ToString() + " / 100";
     this.txtRateType.text = "";
     int num1 = (int) ((RectTransform) this.pfabFriend.transform).sizeDelta.y + 2;
     int num2 = 2;
@@ -314,7 +315,7 @@ public class LobbyMenu : Catalogue
     }
     else
     {
-      this.txtRating.text = "Clan " + (object) Client.clan.members.Count + " / 100";
+      this.txtRating.text = "Clan " + Client.clan.members.Count.ToString() + " / 100";
       int num1 = (int) ((RectTransform) this.pfabFriend.transform).sizeDelta.y + 2;
       int num2 = 2;
       List<Clan.MemberX> memberXList = new List<Clan.MemberX>();
@@ -351,8 +352,15 @@ public class LobbyMenu : Catalogue
   [ContextMenu("Add")]
   public void AddAccount()
   {
-    for (int count = Client._lobby.Count; count < 13; ++count)
-      Client._lobby.Add("temp" + (object) Client._lobby.Count, "temp" + (object) Client._lobby.Count);
+    for (int count1 = Client._lobby.Count; count1 < 13; ++count1)
+    {
+      OrderedDictionary<string, string> lobby = Client._lobby;
+      int count2 = Client._lobby.Count;
+      string key = "temp" + count2.ToString();
+      count2 = Client._lobby.Count;
+      string str = "temp" + count2.ToString();
+      lobby.Add(key, str);
+    }
     this.RefreshNames(false);
   }
 

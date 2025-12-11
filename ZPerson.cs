@@ -59,6 +59,7 @@ public class ZPerson
   public Torquing torquing;
   public List<GameObject> archMageStaffs;
   public ZCreature bloodBank;
+  public ZCreature monolith;
   public int timesOutfitChanged;
   public FamiliarType familiarBook;
   public SpellsOnly bannedSpells;
@@ -130,13 +131,13 @@ public class ZPerson
       if ((ZComponent) this.stolenMinions[index] == (object) null || this.stolenMinions[index].isDead)
         this.stolenMinions.RemoveAt(index);
     }
-    int count = this.stolenMinions.Count;
+    int num = 0;
     for (int index = this.controlled.Count - 1; index >= 0; --index)
     {
       if ((ZComponent) this.controlled[index] != (object) null && !this.controlled[index].isDead && (this.controlled[index].controllable || this.controlled[index].type == CreatureType.Tiger))
-        ++count;
+        ++num;
     }
-    return count;
+    return num;
   }
 
   public void ReleaseTakenMinion()

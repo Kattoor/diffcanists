@@ -452,7 +452,7 @@ public class ChangeSpellBookMenu : MonoBehaviour
   public void HoverElemental()
   {
     int num = (int) this.settingsPlayer.fullBook - 1;
-    this.headerMouseoverSpell.text = num < 0 || num >= ClientResources.Instance.spellBookIcons.Length ? "No Elemental Selected" : "Elemental of " + (object) (BookOf) num;
+    this.headerMouseoverSpell.text = num < 0 || num >= ClientResources.Instance.spellBookIcons.Length ? "No Elemental Selected" : "Elemental of " + ((BookOf) num).ToString();
     this.textMouseoverSpell.text = "Used with the game mode \"Elementals\": Provides the full book along with your chosen 16 spells. It starts with full familiar - you are free to bring a second familiar.";
     this.textMouseoverSpellExtra.text = "";
     this.MouseoverObj.SetActive(true);

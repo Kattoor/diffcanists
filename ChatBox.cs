@@ -322,7 +322,7 @@ public class ChatBox : UIBehaviour
     ChatBox instance = ChatBox.Instance;
     ChatBox.ChatFilter chatFilter = instance != null ? instance.chatFilter : (ChatBox.ChatFilter) PlayerPrefs.GetInt("filterChat", 0);
     myContextMenu.AddSeperator("<mspace=\"-\">---------------------In-Game Line Count--------------------</mspace>");
-    myContextMenu.AddItem("Visible Lines (" + (object) PlayerPrefs.GetInt("linecount", 5) + ")", (Action) (() => ChatBox.ClickLineCount2()), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
+    myContextMenu.AddItem("Visible Lines (" + PlayerPrefs.GetInt("linecount", 5).ToString() + ")", (Action) (() => ChatBox.ClickLineCount2()), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
     myContextMenu.AddSeperator("<mspace=\"-\">---------------------Chat Filter--------------------</mspace>");
     myContextMenu.AddItem("Block Entirely" + (chatFilter == ChatBox.ChatFilter.Block_Entirely ? "<sprite=\"AccountIconsAll\" index=225>" : ""), (Action) (() => ChatBox._SetFilter(ChatBox.ChatFilter.Block_Entirely, true)), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
     myContextMenu.AddItem("Stars" + (chatFilter == ChatBox.ChatFilter.Stars ? "<sprite=\"AccountIconsAll\" index=225>" : ""), (Action) (() => ChatBox._SetFilter(ChatBox.ChatFilter.Stars, true)), (Color) ColorScheme.GetColor(MyContextMenu.ColorYellow));
@@ -719,7 +719,7 @@ public class ChatBox : UIBehaviour
 
   public static string PrestigeString(int prestige)
   {
-    return "<sprite=\"AccountIconsAll\" index=" + (object) (191 + Mathf.Min(10, prestige)) + "> ";
+    return "<sprite=\"AccountIconsAll\" index=" + (191 + Mathf.Min(10, prestige)).ToString() + "> ";
   }
 
   public static string ExperienceString(int ex)
@@ -762,7 +762,11 @@ public class ChatBox : UIBehaviour
       return "<link=\"Level " + acc.experience.ToString() + "\">" + ChatBox.ExperienceString((int) acc.experience) + "</link>" + str;
     }
     if (acc.displayedIcon > (int) byte.MaxValue)
-      return link ? "<link=\"Badge: " + ClientResources.Instance.badges[acc.DisplayedBadge].name + "\"><sprite=\"Badges\" index=" + (object) acc.DisplayedBadge + "> </link>" + str : "<sprite=\"Badges\" index=" + (object) acc.DisplayedBadge + "> " + str;
+    {
+      if (!link)
+        return "<sprite=\"Badges\" index=" + acc.DisplayedBadge.ToString() + "> " + str;
+      return "<link=\"Badge: " + ClientResources.Instance.badges[acc.DisplayedBadge].name + "\"><sprite=\"Badges\" index=" + acc.DisplayedBadge.ToString() + "> </link>" + str;
+    }
     if (accountType == 0 || acc.displayedIcon == (int) byte.MaxValue)
     {
       if (!includeExtra)

@@ -465,7 +465,7 @@ public class ZMyWorld
 
     public override string ToString()
     {
-      return "pos: (" + (object) this.x + " " + (object) this.y + ")";
+      return "pos: (" + this.x.ToString() + " " + this.y.ToString() + ")";
     }
 
     public bool ContainsPoint(Point p)

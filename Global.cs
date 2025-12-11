@@ -358,7 +358,7 @@ public static class Global
     }
     catch (Exception ex)
     {
-      UnityEngine.Debug.LogError((object) (((UnityEngine.Object) s.texture != (UnityEngine.Object) null ? (object) s.texture.name : (object) s.name).ToString() + " >>> " + (object) ex));
+      UnityEngine.Debug.LogError((object) (((UnityEngine.Object) s.texture != (UnityEngine.Object) null ? s.texture.name : s.name) + " >>> " + ex?.ToString()));
     }
   }
 
@@ -758,7 +758,7 @@ public static class Global
     ts = Mathf.Abs(ts);
     int num1 = ts % 60;
     int num2 = ts / 60;
-    return "<mspace=" + (object) space + ">" + (object) num2 + "</mspace>:<mspace=" + (object) space + ">" + (num1 < 10 ? (object) ("0" + num1.ToString()) : (object) num1.ToString()) + "</mspace>";
+    return "<mspace=" + space.ToString() + ">" + num2.ToString() + "</mspace>:<mspace=" + space.ToString() + ">" + (num1 < 10 ? "0" + num1.ToString() : num1.ToString()) + "</mspace>";
   }
 
   public static T Copy<T>(T source)

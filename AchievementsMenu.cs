@@ -120,7 +120,7 @@ public class AchievementsMenu : Catalogue
         }
       }
     }
-    this.txtAmount.text = num2.ToString() + "/" + (object) num1;
+    this.txtAmount.text = num2.ToString() + "/" + num1.ToString();
   }
 
   public void ClickMainMenu()

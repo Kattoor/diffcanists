@@ -67,7 +67,7 @@ public static class NewtonsoftExtensions
         else
         {
           NewtonsoftExtensions.stack.Add(keyValuePair1);
-          b.Append((object) NewtonsoftExtensions.CompareObjects(keyValuePair1.Value.ToObject<JObject>(), target.GetValue(keyValuePair1.Key).ToObject<JObject>(), false));
+          b.Append(NewtonsoftExtensions.CompareObjects(keyValuePair1.Value.ToObject<JObject>(), target.GetValue(keyValuePair1.Key).ToObject<JObject>(), false));
           NewtonsoftExtensions.stack.RemoveAt(NewtonsoftExtensions.stack.Count - 1);
         }
       }
@@ -81,7 +81,7 @@ public static class NewtonsoftExtensions
         else
         {
           NewtonsoftExtensions.stack.Add(keyValuePair1);
-          b.Append((object) NewtonsoftExtensions.CompareArrays(keyValuePair1.Value.ToObject<JArray>(), target.GetValue(keyValuePair1.Key).ToObject<JArray>(), keyValuePair1.Key));
+          b.Append(NewtonsoftExtensions.CompareArrays(keyValuePair1.Value.ToObject<JArray>(), target.GetValue(keyValuePair1.Key).ToObject<JArray>(), keyValuePair1.Key));
           NewtonsoftExtensions.stack.RemoveAt(NewtonsoftExtensions.stack.Count - 1);
         }
       }
@@ -121,7 +121,7 @@ public static class NewtonsoftExtensions
             stringBuilder.Append(str2);
           }
           else
-            b.Append(keyValuePair1.Key + ": " + (object) keyValuePair1.Value + " <<  " + (s.Length > 20 ? (object) "" : (object) s) + "\n");
+            b.Append(keyValuePair1.Key + ": " + keyValuePair1.Value?.ToString() + " <<  " + (s.Length > 20 ? "" : s) + "\n");
         }
       }
     }
@@ -157,7 +157,7 @@ public static class NewtonsoftExtensions
         string name = t1.Value<JToken>((object) "Name")?.ToString();
         JToken jtoken = !string.IsNullOrWhiteSpace(name) ? target.Children().First<JToken>((Func<JToken, bool>) (z => string.Equals(z.Value<JToken>((object) "Name")?.ToString(), name))) : (index >= target.Count ? (JToken) new JObject() : target[index]);
         if (jtoken != null)
-          b.Append((object) NewtonsoftExtensions.CompareObjects(t1.ToObject<JObject>(), jtoken.ToObject<JObject>(), false));
+          b.Append(NewtonsoftExtensions.CompareObjects(t1.ToObject<JObject>(), jtoken.ToObject<JObject>(), false));
       }
       else
       {
@@ -168,12 +168,12 @@ public static class NewtonsoftExtensions
           if (string.IsNullOrEmpty(arrayName))
           {
             NewtonsoftExtensions.AddHeader(b, NewtonsoftExtensions.currentHeader);
-            b.Append("Index " + (object) index + ": " + (object) t1 + " != " + (object) t2 + "\n");
+            b.Append("Index " + index.ToString() + ": " + t1?.ToString() + " != " + t2?.ToString() + "\n");
           }
           else
           {
             NewtonsoftExtensions.AddHeader(b, NewtonsoftExtensions.currentHeader);
-            b.Append(arrayName + "[" + (object) index + "]: " + (object) t1 + " != " + (object) t2 + "\n");
+            b.Append(arrayName + "[" + index.ToString() + "]: " + t1?.ToString() + " != " + t2?.ToString() + "\n");
           }
         }
       }

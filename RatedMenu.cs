@@ -254,7 +254,7 @@ public class RatedMenu : MonoBehaviour
     if (this.viewing != Viewing.Friends)
       return;
     this.txtRateType.text = "";
-    this.txtRating.text = "Friends " + (object) Client.friends.Count + " / 200";
+    this.txtRating.text = "Friends " + Client.friends.Count.ToString() + " / 200";
     int num1 = (int) ((RectTransform) this.pfabFriend.transform).sizeDelta.y + 2;
     int num2 = 0;
     List<(string, int)> valueTupleList = new List<(string, int)>();
@@ -282,7 +282,7 @@ public class RatedMenu : MonoBehaviour
     if (this.viewing != Viewing.Ignore)
       return;
     this.txtRateType.text = "";
-    this.txtRating.text = "Ignored " + (object) Client.ignore.Count + " / 100";
+    this.txtRating.text = "Ignored " + Client.ignore.Count.ToString() + " / 100";
     int num1 = (int) ((RectTransform) this.pfabFriend.transform).sizeDelta.y + 2;
     int num2 = 0;
     List<string> stringList = new List<string>();
@@ -325,7 +325,7 @@ public class RatedMenu : MonoBehaviour
     }
     else
     {
-      this.txtRating.text = "Clan " + (object) Client.clan.members.Count + " / 100";
+      this.txtRating.text = "Clan " + Client.clan.members.Count.ToString() + " / 100";
       int num1 = (int) ((RectTransform) this.pfabFriend.transform).sizeDelta.y + 2;
       int num2 = 0;
       List<Clan.MemberX> memberXList = new List<Clan.MemberX>();
@@ -806,7 +806,7 @@ public class RatedMenu : MonoBehaviour
         ++num;
         if ((ratedFacts.extraOptions & 16) != 0 && (ratedFacts.spellOverrides != null ? Server.OriginalSpellsOnly(GameStyle.Original_Spells_Only, ratedFacts.spellOverrides) : Server.OriginalSpellsOnly(GameStyle.Original_Spells_Only, Client.settingsPlayer)))
         {
-          ChatBox.Instance.NewChatMsg("You have original spells enabled, but have non-original spells in your settings profile { " + (object) num + " } !!!!", (Color) ColorScheme.GetColor(Global.ColorSystem));
+          ChatBox.Instance.NewChatMsg("You have original spells enabled, but have non-original spells in your settings profile { " + num.ToString() + " } !!!!", (Color) ColorScheme.GetColor(Global.ColorSystem));
           return;
         }
       }

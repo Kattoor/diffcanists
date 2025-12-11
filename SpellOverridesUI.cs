@@ -424,7 +424,7 @@ public class SpellOverridesUI : MonoBehaviour
             {
               identifier = int32
             }));
-            jproperty.Value = JToken.Parse("\"" + (object) (int32 + 1) + "\"");
+            jproperty.Value = JToken.Parse("\"" + (int32 + 1).ToString() + "\"");
             break;
           }
         }

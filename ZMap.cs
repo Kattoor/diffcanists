@@ -246,7 +246,7 @@ public class ZMap
           GameObject gameObject1 = GameObject.FindGameObjectWithTag("map");
           if ((UnityEngine.Object) gameObject1 == (UnityEngine.Object) null)
             gameObject1 = game.GetMapTransform().gameObject;
-          GameObject gameObject2 = new GameObject("map" + (object) index1);
+          GameObject gameObject2 = new GameObject("map" + index1.ToString());
           gameObject2.layer = 12;
           gameObject2.transform.SetParent(gameObject1.transform);
           gameObject2.transform.position = new Vector3((float) (index2 * 128 + 64), (float) (index1 * 128) + 64f, 0.0f);
@@ -373,7 +373,7 @@ public class ZMap
     HashSet<int> intSet = new HashSet<int>();
     foreach (Color32 color32 in g)
       intSet.Add(((int) color32.r << 24) + ((int) color32.g << 16) + ((int) color32.b << 8));
-    Debug.Log((object) ("Pixel Count: " + (object) intSet.Count));
+    Debug.Log((object) ("Pixel Count: " + intSet.Count.ToString()));
   }
 
   public bool IsGround(int x, int y)

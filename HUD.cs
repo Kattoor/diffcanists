@@ -1098,7 +1098,7 @@ public class HUD : UIBehaviour
     if (this.game.isTutorial)
       HUD.instance.buttonShowSpells.SetActive(false);
     if (this.game.isSandbox)
-      HUD.instance.buttonShowSpells.transform.GetChild(0).GetComponent<TMP_Text>().SetText("Dev Console", true);
+      HUD.instance.buttonShowSpells.transform.GetChild(0).GetComponent<TMP_Text>().SetText("Dev Console");
     if (this.game.isReplay)
       this.buttonOverheadEmoji.SetActive(false);
     this._ToggleSpellBgIcons(Global.GetPrefBool("newspellicons", true));
@@ -1495,7 +1495,7 @@ public class HUD : UIBehaviour
       if (game.isClient && !fromReplay)
         HUD.ClientChangeElementalStaff(x, (BookOf) index1, false);
     }
-    if (game.gameFacts.GetStyle().HasStyle(GameStyle.Watchtower) && !game.gameFacts.GetStyle().HasStyle(GameStyle.First_Turn_Teleport) && !fromReplay)
+    if (game.gameFacts.GetStyle().HasStyle(GameStyle.Watchtower) && !game.gameFacts.GetStyle().HasStyle(GameStyle.First_Turn_Teleport))
       ZSpell.FireTower(Inert.Instance.spells["Watchtower"], zcreature, zcreature.position, (FixedInt) 0, (FixedInt) 0);
     if (x.shownLevel3.Count > 0 || x.BombMaster || (x.FullArcane || x.MinionMaster) || (x.first().gliding || x.first().radius != 18))
       game.SendSpellBookInfo(x);
@@ -1577,7 +1577,7 @@ public class HUD : UIBehaviour
       zcreature.DoDamage(20, DamageType.None, (ZCreature) null, false, (ISpellBridge) null);
       if (zcreature.hasDarkDefenses)
         zcreature.DarkDefenses(true);
-      this.fullBookTextLevel.text = "Level " + (object) zcreature.familiarLevelActivateable;
+      this.fullBookTextLevel.text = "Level " + zcreature.familiarLevelActivateable.ToString();
       zcreature.UpdateHealthTxt();
       this.SendUpdateFamiliar();
       if (this.game.MoveQue.Count > 0)
@@ -2226,7 +2226,7 @@ public class HUD : UIBehaviour
       this.txtCountdown.color = this.time_txt.color;
       this.waiting_txt.color = this.time_txt.color;
     }
-    this.time_txt.text = string.Concat((object) Math.Max(0, (!Client.game.isSandbox || Client.game.sandboxTime != 0 ? (int) this.game.PlayersMaxTurnTime : 0) - (int) ((double) this.game.serverState.turnTime + 0.5)));
+    this.time_txt.text = Math.Max(0, (!Client.game.isSandbox || Client.game.sandboxTime != 0 ? (int) this.game.PlayersMaxTurnTime : 0) - (int) ((double) this.game.serverState.turnTime + 0.5)).ToString() ?? "";
     this.panelWaiting.SetActive(this.game.ongoing.isRunningSpell);
     this.txtCountdown.text = Global.IntToTime((int) ((double) this.game.CurrentPlayerNotNull().countdown + 0.5), 30);
   }
@@ -2469,7 +2469,7 @@ public class HUD : UIBehaviour
       return;
     int num2 = Mathf.Clamp(num1, 0, (int) Client.game.gameFacts.startHealth);
     Client.AskToBid((byte) num2);
-    ChatBox.Instance.NewChatMsg("You placed a bid of " + (object) num2 + " lifepoints", (Color) ColorScheme.GetColor(Global.ColorSystem));
+    ChatBox.Instance.NewChatMsg("You placed a bid of " + num2.ToString() + " lifepoints", (Color) ColorScheme.GetColor(Global.ColorSystem));
     this.BidPanel.SetActive(false);
   }
 

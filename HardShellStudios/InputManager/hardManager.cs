@@ -1082,7 +1082,7 @@ namespace HardShellStudios.InputManager
           if (keyMaps1[keyName1].saveKey)
           {
             current = enumerator1.Current;
-            string[] strArray = PlayerPrefs.GetString("settings_bindings_" + current.Value.keyName).Split('^');
+            string[] strArray = PlayerPrefs.GetString("settings_bindings_" + current.Value.keyName).Split('^', StringSplitOptions.None);
             int num = int.Parse(strArray[1]);
             if (this.useController || !this.useController && num <= 10 && num >= 13)
             {
@@ -1112,7 +1112,7 @@ namespace HardShellStudios.InputManager
           if (keyMaps1[keyName1].saveKey)
           {
             current = enumerator2.Current;
-            string[] strArray = PlayerPrefs.GetString("settings_bindings_sec_" + current.Value.keyName).Split('^');
+            string[] strArray = PlayerPrefs.GetString("settings_bindings_sec_" + current.Value.keyName).Split('^', StringSplitOptions.None);
             int num = int.Parse(strArray[1]);
             if (this.useController || !this.useController && num <= 10 && num >= 13)
             {

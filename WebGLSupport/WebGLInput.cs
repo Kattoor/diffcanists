@@ -23,7 +23,7 @@ namespace WebGLSupport
 
     static WebGLInput()
     {
-      WebGLInput.CanvasId = "unityContainer";
+      WebGLInput.CanvasId = "unity-container";
       WebGLInputPlugin.WebGLInputInit();
     }
 

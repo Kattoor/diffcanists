@@ -35,6 +35,6 @@ public class AnimateLava : MonoBehaviour
       this.curOffsetX -= 64f;
     while ((double) this.curOffsetX < -64.0)
       this.curOffsetX += 64f;
-    this.rend.transform.position = new Vector3(-this.curOffsetX + (float) ((Client.game?.map?.Width ?? 0) / 2), this.rend.transform.position.y);
+    this.rend.transform.position = new Vector3(-this.curOffsetX + (float) (Client.game?.map?.Width.GetValueOrDefault() / 2), this.rend.transform.position.y);
   }
 }

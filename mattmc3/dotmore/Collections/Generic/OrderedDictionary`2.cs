@@ -150,14 +150,14 @@ namespace mattmc3.dotmore.Collections.Generic
     public KeyValuePair<TKey, TValue> GetItem(int index)
     {
       if (index < 0 || index >= this._keyedCollection.Count)
-        throw new ArgumentException("The index was outside the bounds of the dictionary: " + (object) index);
+        throw new ArgumentException("The index was outside the bounds of the dictionary: " + index.ToString());
       return this._keyedCollection[index];
     }
 
     public void SetItem(int index, TValue value)
     {
       if (index < 0 || index >= this._keyedCollection.Count)
-        throw new ArgumentException("The index is outside the bounds of the dictionary: " + (object) index);
+        throw new ArgumentException("The index is outside the bounds of the dictionary: " + index.ToString());
       KeyValuePair<TKey, TValue> keyValuePair = new KeyValuePair<TKey, TValue>(this._keyedCollection[index].Key, value);
       this._keyedCollection[index] = keyValuePair;
     }
@@ -175,14 +175,14 @@ namespace mattmc3.dotmore.Collections.Generic
     public void RemoveAt(int index)
     {
       if (index < 0 || index >= this._keyedCollection.Count)
-        throw new ArgumentException("The index was outside the bounds of the dictionary: " + (object) index);
+        throw new ArgumentException("The index was outside the bounds of the dictionary: " + index.ToString());
       this._keyedCollection.RemoveAt(index);
     }
 
     public TValue GetValue(TKey key)
     {
       if (!this._keyedCollection.Contains(key))
-        throw new ArgumentException("The given key is not present in the dictionary: " + (object) key);
+        throw new ArgumentException("The given key is not present in the dictionary: " + key?.ToString());
       return this._keyedCollection[key].Value;
     }
 

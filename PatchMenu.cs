@@ -37,7 +37,7 @@ public class PatchMenu : MonoBehaviour
     if (SpellOverrides.serverObj != null && SpellOverrides.serverObj.global.changelog != null && SpellOverrides.serverObj.global.changelog.Length > 10)
     {
       PlayerPrefs.SetString("", SpellOverrides.serverObj.global.version);
-      optionDataList.Add(new TMP_Dropdown.OptionData("Patch: " + SpellOverrides.serverObj.global.version ?? ""));
+      optionDataList.Add(new TMP_Dropdown.OptionData("Patch: " + SpellOverrides.serverObj.global.version));
     }
     foreach (ChangeLog.PatchNotes patchNotes in ChangeLog.list)
       optionDataList.Add(new TMP_Dropdown.OptionData("(" + patchNotes.version + ") " + patchNotes.date));

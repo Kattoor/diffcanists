@@ -548,6 +548,8 @@ public class ZTower : ZComponent
               this.creature.CreateGravityObj(false);
               this.creature.appliedGravity = this.creature.parent.localTurn + 3;
             }
+            if ((ZComponent) enemy == (object) this.creature)
+              return;
           }
           else if (this.creature.type != CreatureType.Cosmic_Horror && this.creature.familiarLevelCosmos < 5)
           {
@@ -607,13 +609,13 @@ public class ZTower : ZComponent
           {
             ZPerson parent = this.creature.parent;
             if ((parent != null ? (!parent.yourTurn ? 1 : 0) : 0) == 0 && this.game.serverState.busy != ServerState.Busy.No && (this.game.serverState.busy != ServerState.Busy.Moving && this.game.serverState.busy != ServerState.Busy.Moving_NoCountdown) && this.game.serverState.busy != ServerState.Busy.Between_Turns)
-              goto label_140;
+              goto label_142;
           }
           else
-            goto label_140;
+            goto label_142;
         }
         this.creature.OnStunned();
-label_140:
+label_142:
         if (this.Health <= 0)
         {
           if ((ZComponent) enemy != (object) null)

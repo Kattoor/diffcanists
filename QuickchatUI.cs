@@ -129,7 +129,7 @@ public class QuickchatUI : MonoBehaviour
       (string name, List<Quickchat.Command> list, KeyCode key) tuple = Quickchat.AllCommands(i);
       TMP_Text tmpText = UnityEngine.Object.Instantiate<TMP_Text>(this.pfab, (Transform) this.containerCategory);
       UIOnHover component = tmpText.GetComponent<UIOnHover>();
-      tmpText.text = "<mspace=20>" + (object) (num + 1) + "</mspace>) " + tuple.name;
+      tmpText.text = "<mspace=20>" + (num + 1).ToString() + "</mspace>) " + tuple.name;
       int e = num;
       component.onClick.AddListener((UnityAction) (() => this.SelectCategory(e)));
       tmpText.gameObject.SetActive(true);
@@ -203,7 +203,7 @@ public class QuickchatUI : MonoBehaviour
       Quickchat.Command command = list[index];
       TMP_Text tmpText = UnityEngine.Object.Instantiate<TMP_Text>(this.pfabItem, (Transform) this.containerExtend);
       UIOnHover component = tmpText.GetComponent<UIOnHover>();
-      tmpText.text = "<mspace=20>" + (object) command.key + "</mspace>) " + command.name;
+      tmpText.text = "<mspace=20>" + command.key.ToString() + "</mspace>) " + command.name;
       int e = num;
       component.onClick.AddListener((UnityAction) (() => this.SelectItem(e)));
       tmpText.gameObject.SetActive(true);

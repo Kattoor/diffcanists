@@ -226,7 +226,7 @@ public class CosmeticsMenuDev : MonoBehaviour
         sprites2 = ClientResources.Instance._achievementIcons.ToArray();
         break;
       default:
-        Debug.LogError((object) ("Invalid index " + (object) e));
+        Debug.LogError((object) ("Invalid index " + e.ToString()));
         return;
     }
     if (num < 0)

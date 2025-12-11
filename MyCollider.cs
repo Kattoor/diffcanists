@@ -219,7 +219,7 @@ public class MyCollider : MonoBehaviour
 
     public override string ToString()
     {
-      return "(" + (object) this.x1 + ", " + (object) this.x2 + ", " + (object) this.y1 + ", " + (object) this.y2 + ")";
+      return "(" + this.x1.ToString() + ", " + this.x2.ToString() + ", " + this.y1.ToString() + ", " + this.y2.ToString() + ")";
     }
   }
 }

@@ -98,7 +98,7 @@ namespace Junk
     internal void SetPixel(int x, int y, Color32 c)
     {
       if (x < 0 || y < 0 || x + (this.surface.height - y - 1) * this.surface.width >= this.pixels.Length)
-        Debug.Log((object) (x.ToString() + " " + (object) y + " " + (object) this.surface.height + " " + (object) this.surface.width + " " + (object) this.pixels.Length));
+        Debug.Log((object) (x.ToString() + " " + y.ToString() + " " + this.surface.height.ToString() + " " + this.surface.width.ToString() + " " + this.pixels.Length.ToString()));
       this.pixels[x + (this.surface.height - y - 1) * this.surface.width] = c;
     }
 
@@ -555,7 +555,7 @@ namespace Junk
       int height = this.surface.height;
       if (num2 < 0)
       {
-        Debug.LogError((object) ("X cannot be " + (object) num2));
+        Debug.LogError((object) ("X cannot be " + num2.ToString()));
       }
       else
       {

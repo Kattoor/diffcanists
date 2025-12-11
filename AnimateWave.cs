@@ -75,6 +75,6 @@ public class AnimateWave : MonoBehaviour
     while ((double) this.curOffsetX < -64.0)
       this.curOffsetX += 64f;
     for (int index = 0; index < this.rend.Length; ++index)
-      this.rend[index].transform.position = new Vector3(-this.curOffsetX + (float) (index * 32) + (float) ((Client.game?.map?.Width ?? 0) / 2), (float) (index * 8) + this.curOffsetY + this.offsetY, 0.0f);
+      this.rend[index].transform.position = new Vector3(-this.curOffsetX + (float) (index * 32) + (float) (Client.game?.map?.Width.GetValueOrDefault() / 2), (float) (index * 8) + this.curOffsetY + this.offsetY, 0.0f);
   }
 }

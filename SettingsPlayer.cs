@@ -592,7 +592,7 @@ public class SettingsPlayer
       }
     }
     else
-      Debug.LogError((object) ("Unknown Spell Level: " + (object) spell.level));
+      Debug.LogError((object) ("Unknown Spell Level: " + spell.level.ToString()));
     return false;
   }
 
@@ -640,7 +640,7 @@ public class SettingsPlayer
       }
     }
     else
-      Debug.LogError((object) ("Unknown Spell Level: " + (object) spell.level));
+      Debug.LogError((object) ("Unknown Spell Level: " + spell.level.ToString()));
     return false;
   }
 
@@ -976,7 +976,7 @@ public class SettingsPlayer
       case 5:
         return Inert.Instance._characterBeards;
       default:
-        Debug.LogError((object) ("Invalid index " + (object) o));
+        Debug.LogError((object) ("Invalid index " + o.ToString()));
         return Inert.Instance._characterBody;
     }
   }

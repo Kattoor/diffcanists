@@ -72,7 +72,7 @@ namespace Educative
         case Command.Type.Script:
           return (Command) new CScript();
         default:
-          Debug.LogError((object) ("Not implemented: " + (object) t));
+          Debug.LogError((object) ("Not implemented: " + t.ToString()));
           return (Command) null;
       }
     }

@@ -22,7 +22,7 @@ public class Coords
 
   public override string ToString()
   {
-    return "Coords (" + (object) this.x + ", " + (object) this.y + ")";
+    return "Coords (" + this.x.ToString() + ", " + this.y.ToString() + ")";
   }
 
   public Vector3 ToVector()

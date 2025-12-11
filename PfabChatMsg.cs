@@ -104,13 +104,13 @@ public class PfabChatMsg : MonoBehaviour, IPointerClickHandler, IEventSystemHand
           myContextMenu4.AddSeperator("Already joined this game");
         else if (z2.spectator)
         {
-          myContextMenu4.AddItem("Spectate " + z2.from + "'s " + (object) (IMiniGame.GameType) z2.miniGameType + " game", (Action) (() => Client.AcceptSpectateMiniGame(z2.minigameID, true)), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
+          myContextMenu4.AddItem("Spectate " + z2.from + "'s " + ((IMiniGame.GameType) z2.miniGameType).ToString() + " game", (Action) (() => Client.AcceptSpectateMiniGame(z2.minigameID, true)), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
         }
         else
         {
-          myContextMenu4.AddItem("Spectate " + z2.from + "'s " + (object) (IMiniGame.GameType) z2.miniGameType + " game", (Action) (() => Client.AcceptSpectateMiniGame(z2.minigameID, true)), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
+          myContextMenu4.AddItem("Spectate " + z2.from + "'s " + ((IMiniGame.GameType) z2.miniGameType).ToString() + " game", (Action) (() => Client.AcceptSpectateMiniGame(z2.minigameID, true)), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
           myContextMenu4.AddSeperator("--------------------------");
-          myContextMenu4.AddItem("Join " + z2.from + "'s " + (object) (IMiniGame.GameType) z2.miniGameType + " game (Spectate if full)", (Action) (() => Client.AcceptSpectateMiniGame(z2.minigameID, false)), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
+          myContextMenu4.AddItem("Join " + z2.from + "'s " + ((IMiniGame.GameType) z2.miniGameType).ToString() + " game (Spectate if full)", (Action) (() => Client.AcceptSpectateMiniGame(z2.minigameID, false)), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
         }
         myContextMenu4.Rebuild(false);
         break;

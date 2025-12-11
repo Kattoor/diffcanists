@@ -57,7 +57,7 @@ public class ZSpell : ZEntity, ISpellBridge
     SpellEnum.Summon_Mountain_Goat,
     SpellEnum.From_the_Depths,
     SpellEnum.Summon_Gargoyle,
-    SpellEnum.Summon_Blood_Bank,
+    SpellEnum.Summon_Hemogoblin,
     SpellEnum.Dark_Totem,
     SpellEnum.Summon_Vampire,
     SpellEnum.Cogmobile,
@@ -1552,7 +1552,7 @@ label_58:
       case SpellLogic.Javelin:
         return (ZSpell) new ZSpellJavelin();
       default:
-        Debug.LogError((object) ("Unknown spell logic :" + (object) x));
+        Debug.LogError((object) ("Unknown spell logic :" + x?.ToString()));
         return new ZSpell();
     }
   }
@@ -3666,7 +3666,7 @@ label_7:
             goto case 1;
           }
         default:
-          Debug.LogError((object) ("Invalid summon amount: " + (object) c1));
+          Debug.LogError((object) ("Invalid summon amount: " + c1.ToString()));
           goto case 1;
       }
     }
@@ -3882,7 +3882,7 @@ label_7:
       auraOfDecay.active = false;
       sum.effectors.Add(auraOfDecay);
     }
-    else if (sum.spellEnum == SpellEnum.Summon_Blood_Bank)
+    else if (sum.spellEnum == SpellEnum.Summon_Hemogoblin)
       sum.parent.bloodBank = sum;
     else if (sum.spellEnum == SpellEnum.Monkey)
     {
@@ -8133,7 +8133,11 @@ label_37:
       c.health = c.maxHealth;
     }
     if (theSpell.spellEnum == SpellEnum.Monolith)
-      auraOfDecay.variable += auraOfDecay.variable < 10 ? 15 : 10;
+    {
+      if ((ZComponent) zeffector != (object) null)
+        auraOfDecay.variable += auraOfDecay.variable < 10 ? 15 : 10;
+      cre.parent.monolith = c;
+    }
     else if (theSpell.spellEnum == SpellEnum.Pyramid)
       ++auraOfDecay.variable;
     List<ZMyCollider> zmyColliderList = cre.game.world.OverlapColliderAll(auraOfDecay.collider, Inert.mask_entity_movement | Inert.mask_Phantom);
@@ -8551,17 +8555,21 @@ label_37:
   {
     this.OnExplosionGeneric();
     Spell component = this.toSummon.GetComponent<Spell>();
-    int num = this.damage == 15 ? 4 : 3;
+    int num = 3;
     if (!ZComponent.IsNull((ZComponent) this.parent) && this.parent.FullArcane)
     {
       if (!this.parent.game.originalSpellsOnly)
         ZSpell.FireAuraOfDecay(Inert.Instance.arcaneMist, this.parent, this.position, (FixedInt) 0, (FixedInt) 0, this.position, false);
-      num += this.damage == 15 ? 8 : 6;
+      num += 6;
     }
+    ZCreature parent = this.parent;
+    bool flag = parent != null && parent.HasArcaneEnergizer;
     for (int index = 0; index < num; ++index)
     {
       MyLocation power = Inert.Velocity(this.game.RandomFixedInt(0, 360), 7);
       ZSpell zspell = ZSpell.BaseFireTarget(component, this.parent, this.position, Quaternion.identity, power, (FixedInt) 7, this.target, true, false);
+      if (flag)
+        zspell.damage += 5;
       if (this.game.isClient)
         zspell.name = this.name;
     }
@@ -8582,10 +8590,22 @@ label_37:
     zeffector.whoSummoned = this.parent;
     this.parent.effectors.Add(zeffector);
     Spell spell = Inert.GetSpell(SpellEnum.Summon_Queen_Bee);
-    MyLocation target = this.position + new MyLocation(-8, 85);
-    if (target.y >= this.game.map.Height - spell.radius)
-      target.y = (FixedInt) (this.game.map.Height - spell.radius);
-    ZSpell.FireSummon(spell, this.game, this.parent, target, -1, false, (ZPerson) null);
+    MyLocation p = this.position + new MyLocation(-8, 85);
+    if (p.y >= this.game.map.Height - spell.radius)
+      p.y = (FixedInt) (this.game.map.Height - spell.radius);
+    this.game.ongoing.RunSpell(this.IEnumeratorAcorn(spell, this.game, this.parent, p), true);
+  }
+
+  public IEnumerator<float> IEnumeratorAcorn(
+    Spell s,
+    ZGame game,
+    ZCreature parent,
+    MyLocation p)
+  {
+    for (int i = 0; i < 10; ++i)
+      yield return 0.0f;
+    if (!ZComponent.IsNull((ZComponent) parent))
+      ZSpell.FireSummon(s, game, parent, p, -1, false, (ZPerson) null);
   }
 
   public void OnExplosionRocket()
@@ -9625,7 +9645,7 @@ label_37:
           break;
         ChatBox.Instance?.NewChatMsg("", c.parent.name + " cast Curse of Disabling but did not disable anything...", (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System, ContentType.STRING, (object) null);
         break;
-      case SpellEnum.Summon_Blood_Bank:
+      case SpellEnum.Summon_Hemogoblin:
         ZSpell.FireSummon(theSpell, c.game, c, target, -1, false, (ZPerson) null);
         break;
       case SpellEnum.Summon_Gargoyle:
@@ -10563,7 +10583,7 @@ label_37:
       case ExplosionCutout.One_Eighty:
         return ExplosionCutout.Two_Hundred;
       default:
-        Debug.Log((object) ("Unknown Cutout: " + (object) s + " Full Fire"));
+        Debug.Log((object) ("Unknown Cutout: " + s.ToString() + " Full Fire"));
         return s;
     }
   }
@@ -10589,7 +10609,7 @@ label_37:
       case ExplosionCutout.One_Eighty:
         return 95;
       default:
-        Debug.Log((object) ("Unknown Cutout: " + (object) s + " Full Fire"));
+        Debug.Log((object) ("Unknown Cutout: " + s.ToString() + " Full Fire"));
         return 30;
     }
   }

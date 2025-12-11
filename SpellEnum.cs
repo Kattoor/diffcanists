@@ -193,7 +193,7 @@ public enum SpellEnum
   Flesh_Wound = 187, // 0x000000BB
   Blood_Bath = 188, // 0x000000BC
   Curse_of_Disabling = 189, // 0x000000BD
-  Summon_Blood_Bank = 190, // 0x000000BE
+  Summon_Hemogoblin = 190, // 0x000000BE
   Summon_Gargoyle = 191, // 0x000000BF
   Blood_Craze = 192, // 0x000000C0
   Summon_Vampire = 193, // 0x000000C1

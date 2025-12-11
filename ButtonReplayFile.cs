@@ -1,7 +1,6 @@
 
 using System;
 using System.IO;
-using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -84,7 +83,6 @@ public class ButtonReplayFile : MonoBehaviour, IRecycledScrollViewGenericItem
       this.Setup((string) obj);
   }
 
-  [SpecialName]
   GameObject IRecycledScrollViewGenericItem.get_gameObject()
   {
     return this.gameObject;

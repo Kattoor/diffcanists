@@ -58,10 +58,7 @@ public class MyPollResults : MonoBehaviour
   {
     this.container.DestroyChildern();
     this.curIndex = index;
-    if (this.poll.items[index].multipleSelection)
-      this.txtQuestion.text = "<#7b7b7b>[Multiple Selection]</color><br>" + (object) (index + 1) + ") " + this.poll.items[index].question;
-    else
-      this.txtQuestion.text = (index + 1).ToString() + ") " + this.poll.items[index].question;
+    this.txtQuestion.text = !this.poll.items[index].multipleSelection ? (index + 1).ToString() + ") " + this.poll.items[index].question : "<#7b7b7b>[Multiple Selection]</color><br>" + (index + 1).ToString() + ") " + this.poll.items[index].question;
     List<string> stringList = new List<string>();
     List<int> intList = new List<int>();
     float num1 = 0.0f;
@@ -92,7 +89,24 @@ public class MyPollResults : MonoBehaviour
       ++i;
     }
     this.container.sizeDelta = new Vector2(this.container.sizeDelta.x, (float) (i * 26));
-    this.txtHeader.text = this.poll.name + " (" + (object) (index + 1) + "/" + (object) this.poll.items.Count + ")";
+    TMP_Text txtHeader = this.txtHeader;
+    string[] strArray = new string[6]
+    {
+      this.poll.name,
+      " (",
+      null,
+      null,
+      null,
+      null
+    };
+    int num3 = index + 1;
+    strArray[2] = num3.ToString();
+    strArray[3] = "/";
+    num3 = this.poll.items.Count;
+    strArray[4] = num3.ToString();
+    strArray[5] = ")";
+    string str = string.Concat(strArray);
+    txtHeader.text = str;
     this.buttonBack.gameObject.SetActive(index > 0);
     this.buttonSubmit.gameObject.SetActive(index < this.poll.items.Count - 1);
   }

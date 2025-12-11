@@ -3,6 +3,7 @@ using Ninja.WebSockets;
 using System;
 using System.Net.Sockets;
 using System.Net.WebSockets;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -84,36 +85,78 @@ namespace Mirror.Websocket
 
     private async Task ReceiveLoop(WebSocket webSocket, CancellationToken token)
     {
-      byte[] buffer = new byte[2097152];
-      while (true)
+      byte[] buffer;
+      try
       {
-        WebSocketReceiveResult async = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), token);
-        if (async != null && async.MessageType != WebSocketMessageType.Close)
+        buffer = new byte[2097152];
+        TaskAwaiter<WebSocketReceiveResult> awaiter1;
+        TaskAwaiter<byte[]> awaiter2;
+        while (true)
         {
-          byte[] numArray = await this.ReadFrames(async, webSocket, buffer);
-          if (numArray.Length != 0)
+          awaiter1 = webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), token).GetAwaiter();
+          if (awaiter1.IsCompleted)
           {
-            try
+            WebSocketReceiveResult result1 = awaiter1.GetResult();
+            if (result1 != null)
             {
-              System.Action<byte[]> receivedData = this.ReceivedData;
-              if (receivedData != null)
-                receivedData(numArray);
+              if (result1.MessageType != WebSocketMessageType.Close)
+              {
+                awaiter2 = this.ReadFrames(result1, webSocket, buffer).GetAwaiter();
+                if (awaiter2.IsCompleted)
+                {
+                  byte[] result2 = awaiter2.GetResult();
+                  if (result2.Length != 0)
+                  {
+                    try
+                    {
+                      System.Action<byte[]> receivedData = this.ReceivedData;
+                      if (receivedData != null)
+                        receivedData(result2);
+                    }
+                    catch (Exception ex)
+                    {
+                      System.Action<Exception> receivedError = this.ReceivedError;
+                      if (receivedError != null)
+                        receivedError(ex);
+                    }
+                  }
+                  else
+                    goto label_14;
+                }
+                else
+                  goto label_7;
+              }
+              else
+                goto label_14;
             }
-            catch (Exception ex)
-            {
-              System.Action<Exception> receivedError = this.ReceivedError;
-              if (receivedError != null)
-                receivedError(ex);
-            }
+            else
+              goto label_14;
           }
           else
-            goto label_9;
+            break;
         }
-        else
-          break;
+        int num;
+        (^this).\u003C\u003E1__state = num = 0;
+        TaskAwaiter<WebSocketReceiveResult> taskAwaiter1 = awaiter1;
+        (^this).\u003C\u003Et__builder.AwaitUnsafeOnCompleted<TaskAwaiter<WebSocketReceiveResult>, Client.\u003CReceiveLoop\u003Ed__26>(ref awaiter1, this);
+        return;
+label_7:
+        (^this).\u003C\u003E1__state = num = 1;
+        TaskAwaiter<byte[]> taskAwaiter2 = awaiter2;
+        (^this).\u003C\u003Et__builder.AwaitUnsafeOnCompleted<TaskAwaiter<byte[]>, Client.\u003CReceiveLoop\u003Ed__26>(ref awaiter2, this);
+        return;
       }
-      return;
-label_9:;
+      catch (Exception ex)
+      {
+        (^this).\u003C\u003E1__state = -2;
+        buffer = (byte[]) null;
+        (^this).\u003C\u003Et__builder.SetException(ex);
+        return;
+      }
+label_14:
+      (^this).\u003C\u003E1__state = -2;
+      buffer = (byte[]) null;
+      (^this).\u003C\u003Et__builder.SetResult();
     }
 
     private async Task<byte[]> ReadFrames(

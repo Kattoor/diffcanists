@@ -153,7 +153,7 @@ public class AccountInfo
     if ((double) this.bonusExperience < 0.0)
       this.bonusExperience = 0.0f;
     ++this.experience;
-    Server.ReturnServerMsg(c, "You are now level " + (object) this.experienceIndex() + "!");
+    Server.ReturnServerMsg(c, "You are now level " + this.experienceIndex().ToString() + "!");
   }
 
   public short RequiredRating()

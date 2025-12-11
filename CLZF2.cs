@@ -18,7 +18,7 @@ public static class CLZF2
     int count;
     for (count = CLZF2.lzf_compress(inputBytes, ref output); count == 0; count = CLZF2.lzf_compress(inputBytes, ref output))
     {
-      Debug.LogError((object) ("Realocation needed " + (object) length));
+      Debug.LogError((object) ("Realocation needed " + length.ToString()));
       length *= 2;
       output = new byte[length];
     }

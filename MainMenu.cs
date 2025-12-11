@@ -119,7 +119,7 @@ public class MainMenu : Catalogue
     int length = ClientResources.Instance._iconsMapBig.Length;
     ((IEnumerable<MapEnum>) Enum.GetValues(typeof (MapEnum))).ToList<MapEnum>().Sort((Comparison<MapEnum>) ((a, b) => GameFacts.GetMapIndex(a) - GameFacts.GetMapIndex(b)));
     for (int index = 0; index < length; ++index)
-      optionDataList.Add(new TMP_Dropdown.OptionData("", ClientResources.Instance._iconsMapBig[index]));
+      optionDataList.Add(new TMP_Dropdown.OptionData("", ClientResources.Instance._iconsMapBig[index], Color.white));
     this.dropMaps.options = optionDataList;
     this.dropMaps.gameObject.SetActive(true);
     this.dropMaps.SetValueWithoutNotify(PlayerPrefs.GetInt("prefsandboxmaps", 0));

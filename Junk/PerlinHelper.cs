@@ -48,7 +48,7 @@ namespace Junk
 
       public void Clock(string s = "")
       {
-        UnityEngine.Debug.Log((object) (s + " " + (object) this.stopwatch.ElapsedMilliseconds + "ms"));
+        UnityEngine.Debug.Log((object) (s + " " + this.stopwatch.ElapsedMilliseconds.ToString() + "ms"));
         this.stopwatch = Stopwatch.StartNew();
       }
 

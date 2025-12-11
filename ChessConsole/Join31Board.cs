@@ -362,7 +362,7 @@ namespace ChessConsole
             name = str
           });
           if (this.players.Count != num + 1)
-            Debug.LogError((object) ("Player index mismatch: " + (object) this.players.Count + " index: " + (object) num));
+            Debug.LogError((object) ("Player index mismatch: " + this.players.Count.ToString() + " index: " + num.ToString()));
           this.ui?.RefreshPlayers();
           break;
         case 3:
@@ -644,7 +644,7 @@ namespace ChessConsole
     {
       if (c == ChessPiece.Pawn)
         return (Join31Board.CheckersPiece) new Join31Board.Pawn(p, b);
-      throw new Exception("Unknown piece: " + (object) c);
+      throw new Exception("Unknown piece: " + c.ToString());
     }
 
     private void addPiece(Join31Board.Cell cell, Join31Board.CheckersPiece piece)

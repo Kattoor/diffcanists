@@ -80,8 +80,7 @@ public class TutorialFileRetriever
     char[] separator = new char[1]{ '\n' };
     foreach (string str2 in str1.Split(separator, StringSplitOptions.RemoveEmptyEntries))
     {
-      char[] chArray = new char[1]{ ',' };
-      string[] strArray = str2.Split(chArray);
+      string[] strArray = str2.Split(',', StringSplitOptions.None);
       if (strArray.Length >= 2)
         this.list.Add(new TutorialFileRetriever.Tuts()
         {

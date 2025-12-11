@@ -26,8 +26,8 @@ public static class EmojiImport
     HashSet<string> stringSet = new HashSet<string>();
     for (int index1 = 0; index1 < strArray1.Length; ++index1)
     {
-      string[] strArray3 = strArray1[index1].Split(',');
-      string[] strArray4 = strArray2[index1].Split(',');
+      string[] strArray3 = strArray1[index1].Split(',', StringSplitOptions.None);
+      string[] strArray4 = strArray2[index1].Split(',', StringSplitOptions.None);
       for (int index2 = 0; index2 < strArray3.Length; ++index2)
       {
         string a = strArray3[index2].Trim();
@@ -38,7 +38,7 @@ public static class EmojiImport
           stringSet.Add(a);
         }
         else if (!string.Equals(a, "-"))
-          Debug.Log((object) ("Duplicate: " + a + " - " + (object) num));
+          Debug.Log((object) ("Duplicate: " + a + " - " + num.ToString()));
         ++num;
       }
     }

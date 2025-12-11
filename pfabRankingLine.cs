@@ -1,5 +1,4 @@
 
-using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -112,7 +111,6 @@ public class pfabRankingLine : MonoBehaviour, IRecycledScrollViewGenericItem
     return (Object) txt == (Object) this.txtTeam ? 7 : -1;
   }
 
-  [SpecialName]
   GameObject IRecycledScrollViewGenericItem.get_gameObject()
   {
     return this.gameObject;

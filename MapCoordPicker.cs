@@ -108,7 +108,7 @@ public class MapCoordPicker : MonoBehaviour, IPointerDownHandler, IEventSystemHa
   {
     this.down = false;
     Vector2 vector2 = this.Adjust(this.point_clicked);
-    Global.systemCopyBuffer = "point(" + (object) (int) vector2.x + ", " + (object) (int) vector2.y + ")";
+    Global.systemCopyBuffer = "point(" + ((int) vector2.x).ToString() + ", " + ((int) vector2.y).ToString() + ")";
   }
 
   private void Update()
@@ -122,16 +122,84 @@ public class MapCoordPicker : MonoBehaviour, IPointerDownHandler, IEventSystemHa
       this.UpdateVisuals();
       this.ToPoint();
       Vector2 vector2 = this.Adjust(localPoint);
+      int num;
       if (this.radius > 0)
-        this.text.text = "Radius: " + (object) this.radius + " Point (" + (object) (int) vector2.x + ", " + (object) (int) vector2.y + ")";
-      this.text.text = "Point (" + (object) (int) vector2.x + ", " + (object) (int) vector2.y + ")";
+      {
+        TMP_Text text = this.text;
+        string[] strArray = new string[7]
+        {
+          "Radius: ",
+          this.radius.ToString(),
+          " Point (",
+          ((int) vector2.x).ToString(),
+          ", ",
+          null,
+          null
+        };
+        num = (int) vector2.y;
+        strArray[5] = num.ToString();
+        strArray[6] = ")";
+        string str = string.Concat(strArray);
+        text.text = str;
+      }
+      TMP_Text text1 = this.text;
+      string[] strArray1 = new string[5]
+      {
+        "Point (",
+        null,
+        null,
+        null,
+        null
+      };
+      num = (int) vector2.x;
+      strArray1[1] = num.ToString();
+      strArray1[2] = ", ";
+      num = (int) vector2.y;
+      strArray1[3] = num.ToString();
+      strArray1[4] = ")";
+      string str1 = string.Concat(strArray1);
+      text1.text = str1;
     }
     else
     {
       Vector2 vector2 = this.Adjust(localPoint);
+      int num;
       if (this.radius > 0)
-        this.text.text = "Radius: " + (object) this.radius + " Point (" + (object) (int) vector2.x + ", " + (object) (int) vector2.y + ")";
-      this.text.text = "Point (" + (object) (int) vector2.x + ", " + (object) (int) vector2.y + ")";
+      {
+        TMP_Text text = this.text;
+        string[] strArray = new string[7]
+        {
+          "Radius: ",
+          this.radius.ToString(),
+          " Point (",
+          ((int) vector2.x).ToString(),
+          ", ",
+          null,
+          null
+        };
+        num = (int) vector2.y;
+        strArray[5] = num.ToString();
+        strArray[6] = ")";
+        string str = string.Concat(strArray);
+        text.text = str;
+      }
+      TMP_Text text1 = this.text;
+      string[] strArray1 = new string[5]
+      {
+        "Point (",
+        null,
+        null,
+        null,
+        null
+      };
+      num = (int) vector2.x;
+      strArray1[1] = num.ToString();
+      strArray1[2] = ", ";
+      num = (int) vector2.y;
+      strArray1[3] = num.ToString();
+      strArray1[4] = ")";
+      string str1 = string.Concat(strArray1);
+      text1.text = str1;
     }
   }
 

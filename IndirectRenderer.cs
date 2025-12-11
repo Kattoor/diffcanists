@@ -1,6 +1,7 @@
 
 using System;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class IndirectRenderer
 {
@@ -55,7 +56,7 @@ public class IndirectRenderer
     this.TransformBuffer.SetData((Array) IndirectRenderer.TransformData, 0, 0, activeProjectileCount);
     this.args[1] = (uint) activeProjectileCount;
     this.ArgsBuffer.SetData((Array) this.args);
-    Graphics.DrawMeshInstancedIndirect(this.Mesh, 0, this.Material, new UnityEngine.Bounds(Vector3.zero, new Vector3(6000f, 6000f, 6000f)), this.ArgsBuffer);
+    Graphics.DrawMeshInstancedIndirect(this.Mesh, 0, this.Material, new UnityEngine.Bounds(Vector3.zero, new Vector3(6000f, 6000f, 6000f)), this.ArgsBuffer, 0, (MaterialPropertyBlock) null, ShadowCastingMode.On, true, 0, (Camera) null, LightProbeUsage.BlendProbes);
   }
 
   public void ReleaseBuffers(bool releaseArgs)

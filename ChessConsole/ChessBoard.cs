@@ -330,7 +330,7 @@ namespace ChessConsole
             name = str
           });
           if (this.players.Count != num + 1)
-            Debug.LogError((object) ("Player index mismatch: " + (object) this.players.Count + " index: " + (object) num));
+            Debug.LogError((object) ("Player index mismatch: " + this.players.Count.ToString() + " index: " + num.ToString()));
           this.ui?.RefreshPlayers();
           break;
         case 3:
@@ -725,7 +725,7 @@ namespace ChessConsole
         case ChessPiece.King:
           return (Piece) new ChessConsole.Pieces.King(p);
         default:
-          throw new Exception("Unknown piece: " + (object) c);
+          throw new Exception("Unknown piece: " + c.ToString());
       }
     }
 

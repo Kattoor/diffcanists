@@ -250,7 +250,7 @@ public class BoatSpectators : MonoBehaviour
     if (!((Object) HUD.instance != (Object) null))
       return;
     if (this.spectators.Count > 0 && this.gameObject.activeInHierarchy)
-      HUD.instance.txtGameID.text = "Game ID: #" + Client._gameFacts.id.ToString() + "\nSpectators: " + (object) this.spectators.Count;
+      HUD.instance.txtGameID.text = "Game ID: #" + Client._gameFacts.id.ToString() + "\nSpectators: " + this.spectators.Count.ToString();
     else
       HUD.instance.txtGameID.text = "Game ID: #" + Client._gameFacts.id.ToString();
   }
@@ -331,7 +331,7 @@ public class BoatSpectators : MonoBehaviour
       this.Render(closestOpen, character);
     }
     if ((Object) HUD.instance != (Object) null)
-      HUD.instance.txtGameID.text = "Game ID: #" + Client._gameFacts.id.ToString() + "\nSpectators: " + (object) this.spectators.Count;
+      HUD.instance.txtGameID.text = "Game ID: #" + Client._gameFacts.id.ToString() + "\nSpectators: " + this.spectators.Count.ToString();
     if (!flag)
       return;
     component1.gameObject.AddComponent<SpectatorPlayer>().selected = component1;

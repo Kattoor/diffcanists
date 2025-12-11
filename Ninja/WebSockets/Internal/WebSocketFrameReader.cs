@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Net.WebSockets;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,35 +16,94 @@ namespace Ninja.WebSockets.Internal
       ArraySegment<byte> intoBuffer,
       CancellationToken cancellationToken)
     {
-      ArraySegment<byte> smallBuffer = new ArraySegment<byte>(new byte[8]);
-      await BinaryReaderWriter.ReadExactly(2, fromStream, smallBuffer, cancellationToken);
-      byte num1 = smallBuffer.Array[0];
-      byte byte2 = smallBuffer.Array[1];
-      byte num2 = 128;
-      byte num3 = 15;
-      bool isFinBitSet = ((int) num1 & (int) num2) == (int) num2;
-      WebSocketOpCode opCode = (WebSocketOpCode) ((int) num1 & (int) num3);
-      byte num4 = 128;
-      bool isMaskBitSet = ((int) byte2 & (int) num4) == (int) num4;
-      int count = (int) await WebSocketFrameReader.ReadLength(byte2, smallBuffer, fromStream, cancellationToken);
+      ArraySegment<byte> smallBuffer;
+      WebSocketFrame result;
       try
       {
-        if (isMaskBitSet)
+        smallBuffer = new ArraySegment<byte>(new byte[8]);
+        TaskAwaiter awaiter1 = BinaryReaderWriter.ReadExactly(2, fromStream, smallBuffer, cancellationToken).GetAwaiter();
+        TaskAwaiter taskAwaiter1;
+        int num1;
+        if (!awaiter1.IsCompleted)
         {
-          ArraySegment<byte> maskKey = new ArraySegment<byte>(smallBuffer.Array, 0, 4);
-          await BinaryReaderWriter.ReadExactly(maskKey.Count, fromStream, maskKey, cancellationToken);
-          await BinaryReaderWriter.ReadExactly(count, fromStream, intoBuffer, cancellationToken);
-          WebSocketFrameCommon.ToggleMask(maskKey, new ArraySegment<byte>(intoBuffer.Array, intoBuffer.Offset, count));
-          maskKey = new ArraySegment<byte>();
+          (^this).\u003C\u003E1__state = num1 = 0;
+          taskAwaiter1 = awaiter1;
+          (^this).\u003C\u003Et__builder.AwaitUnsafeOnCompleted<TaskAwaiter, WebSocketFrameReader.\u003CReadAsync\u003Ed__0>(ref awaiter1, this);
+          return;
         }
-        else
-          await BinaryReaderWriter.ReadExactly(count, fromStream, intoBuffer, cancellationToken);
+        awaiter1.GetResult();
+        byte num2 = smallBuffer.Array[0];
+        byte byte2 = smallBuffer.Array[1];
+        byte num3 = 128;
+        byte num4 = 15;
+        bool isFinBitSet = ((int) num2 & (int) num3) == (int) num3;
+        WebSocketOpCode opCode = (WebSocketOpCode) ((int) num2 & (int) num4);
+        byte num5 = 128;
+        bool isMaskBitSet = ((int) byte2 & (int) num5) == (int) num5;
+        TaskAwaiter<uint> awaiter2 = WebSocketFrameReader.ReadLength(byte2, smallBuffer, fromStream, cancellationToken).GetAwaiter();
+        if (!awaiter2.IsCompleted)
+        {
+          (^this).\u003C\u003E1__state = num1 = 1;
+          TaskAwaiter<uint> taskAwaiter2 = awaiter2;
+          (^this).\u003C\u003Et__builder.AwaitUnsafeOnCompleted<TaskAwaiter<uint>, WebSocketFrameReader.\u003CReadAsync\u003Ed__0>(ref awaiter2, this);
+          return;
+        }
+        int count = (int) awaiter2.GetResult();
+        try
+        {
+          if (isMaskBitSet)
+          {
+            ArraySegment<byte> maskKey = new ArraySegment<byte>(smallBuffer.Array, 0, 4);
+            TaskAwaiter awaiter3 = BinaryReaderWriter.ReadExactly(maskKey.Count, fromStream, maskKey, cancellationToken).GetAwaiter();
+            if (!awaiter3.IsCompleted)
+            {
+              (^this).\u003C\u003E1__state = num1 = 2;
+              taskAwaiter1 = awaiter3;
+              (^this).\u003C\u003Et__builder.AwaitUnsafeOnCompleted<TaskAwaiter, WebSocketFrameReader.\u003CReadAsync\u003Ed__0>(ref awaiter3, this);
+              return;
+            }
+            awaiter3.GetResult();
+            TaskAwaiter awaiter4 = BinaryReaderWriter.ReadExactly(count, fromStream, intoBuffer, cancellationToken).GetAwaiter();
+            if (!awaiter4.IsCompleted)
+            {
+              (^this).\u003C\u003E1__state = num1 = 3;
+              taskAwaiter1 = awaiter4;
+              (^this).\u003C\u003Et__builder.AwaitUnsafeOnCompleted<TaskAwaiter, WebSocketFrameReader.\u003CReadAsync\u003Ed__0>(ref awaiter4, this);
+              return;
+            }
+            awaiter4.GetResult();
+            WebSocketFrameCommon.ToggleMask(maskKey, new ArraySegment<byte>(intoBuffer.Array, intoBuffer.Offset, count));
+            maskKey = new ArraySegment<byte>();
+          }
+          else
+          {
+            TaskAwaiter awaiter3 = BinaryReaderWriter.ReadExactly(count, fromStream, intoBuffer, cancellationToken).GetAwaiter();
+            if (!awaiter3.IsCompleted)
+            {
+              (^this).\u003C\u003E1__state = num1 = 4;
+              taskAwaiter1 = awaiter3;
+              (^this).\u003C\u003Et__builder.AwaitUnsafeOnCompleted<TaskAwaiter, WebSocketFrameReader.\u003CReadAsync\u003Ed__0>(ref awaiter3, this);
+              return;
+            }
+            awaiter3.GetResult();
+          }
+        }
+        catch (InternalBufferOverflowException ex)
+        {
+          throw new InternalBufferOverflowException(string.Format("Supplied buffer too small to read {0} bytes from {1} frame", (object) 0, (object) Enum.GetName(typeof (WebSocketOpCode), (object) opCode)), (Exception) ex);
+        }
+        result = opCode != WebSocketOpCode.ConnectionClose ? new WebSocketFrame(isFinBitSet, opCode, count) : WebSocketFrameReader.DecodeCloseFrame(isFinBitSet, opCode, count, intoBuffer);
       }
-      catch (InternalBufferOverflowException ex)
+      catch (Exception ex)
       {
-        throw new InternalBufferOverflowException(string.Format("Supplied buffer too small to read {0} bytes from {1} frame", (object) 0, (object) Enum.GetName(typeof (WebSocketOpCode), (object) opCode)), (Exception) ex);
+        (^this).\u003C\u003E1__state = -2;
+        smallBuffer = new ArraySegment<byte>();
+        (^this).\u003C\u003Et__builder.SetException(ex);
+        return;
       }
-      return opCode != WebSocketOpCode.ConnectionClose ? new WebSocketFrame(isFinBitSet, opCode, count) : WebSocketFrameReader.DecodeCloseFrame(isFinBitSet, opCode, count, intoBuffer);
+      (^this).\u003C\u003E1__state = -2;
+      smallBuffer = new ArraySegment<byte>();
+      (^this).\u003C\u003Et__builder.SetResult(result);
     }
 
     private static WebSocketFrame DecodeCloseFrame(
@@ -56,7 +116,7 @@ namespace Ninja.WebSockets.Internal
       string closeStatusDescription;
       if (count >= 2)
       {
-        Array.Reverse((Array) buffer.Array, buffer.Offset, 2);
+        Array.Reverse<byte>((M0[]) buffer.Array, buffer.Offset, 2);
         int uint16 = (int) BitConverter.ToUInt16(buffer.Array, buffer.Offset);
         closeStatus = !Enum.IsDefined(typeof (WebSocketCloseStatus), (object) uint16) ? WebSocketCloseStatus.Empty : (WebSocketCloseStatus) uint16;
         int index = buffer.Offset + 2;

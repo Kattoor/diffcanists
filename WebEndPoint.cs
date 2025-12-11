@@ -1,5 +1,6 @@
 
 using Hazel;
+using System;
 
 public class WebEndPoint : ConnectionEndPoint
 {
@@ -7,7 +8,7 @@ public class WebEndPoint : ConnectionEndPoint
 
   public WebEndPoint(string e)
   {
-    string[] strArray = e.Split(':');
+    string[] strArray = e.Split(':', StringSplitOptions.None);
     if (strArray.Length == 5 && strArray[3].Length > 1)
       this.e = strArray[3].Substring(0, strArray[3].Length - 1) + ":" + strArray[4];
     else

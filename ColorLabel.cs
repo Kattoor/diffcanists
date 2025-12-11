@@ -55,6 +55,6 @@ public class ColorLabel : MonoBehaviour
 
   private string ConvertToDisplayString(float value)
   {
-    return this.precision > 0 ? value.ToString("f " + (object) this.precision) : Mathf.FloorToInt(value).ToString();
+    return this.precision > 0 ? value.ToString("f " + this.precision.ToString()) : Mathf.FloorToInt(value).ToString();
   }
 }

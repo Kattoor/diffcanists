@@ -98,7 +98,11 @@ public class UnratedTab : Catalogue
 
   public void HoverSimiliarRating()
   {
-    MyToolTip.Show(Mathf.Max(1000, (int) Client.GetAccount(this._gameFacts.players[0], false).similarRating).ToString() + "-" + (object) ((int) Client.GetAccount(this._gameFacts.players[0], false).similarRating + 500), -1f, false);
+    int num = Mathf.Max(1000, (int) Client.GetAccount(this._gameFacts.players[0], false).similarRating);
+    string str1 = num.ToString();
+    num = (int) Client.GetAccount(this._gameFacts.players[0], false).similarRating + 500;
+    string str2 = num.ToString();
+    MyToolTip.Show(str1 + "-" + str2, -1f, false);
   }
 
   public void ToggleAll(UIOnHover[] group)
@@ -243,8 +247,8 @@ public class UnratedTab : Catalogue
     this.buttonTournament.gameObject.SetActive(Client.MyAccount.accountType.IsModPlusTOParticipate() && !this._gameFacts.GetRatedMode() || this.buttonTournament.AlwaysOn);
     this.txtArmageddonStart.text = "Turn\n" + this._gameFacts.armageddonTurn.ToString();
     this.txtStartHealth.text = "Health: " + this._gameFacts.startHealth.ToString();
-    this.txtMapSize.text = "Width: " + (object) this._gameFacts.settings.mapWidth + "%";
-    this.txtMapSizeHeight.text = "Height: " + (object) this._gameFacts.settings.mapHeight + "%";
+    this.txtMapSize.text = "Width: " + this._gameFacts.settings.mapWidth.ToString() + "%";
+    this.txtMapSizeHeight.text = "Height: " + this._gameFacts.settings.mapHeight.ToString() + "%";
     this.txtMapSeed.text = "Seed: " + (this._gameFacts.settings.fixedMapSeed ? this._gameFacts.settings.mapSeed.ToString() : "Random");
     TMP_Text txtElementalLevel = this.txtElementalLevel;
     byte num = this._gameFacts.elementalLevel;

@@ -139,7 +139,7 @@ namespace Educative
     [MoonSharpHidden]
     public override string ToString()
     {
-      return " (" + (object) this.x + ", " + (object) this.y + ")";
+      return " (" + this.x.ToString() + ", " + this.y.ToString() + ")";
     }
   }
 }

@@ -662,7 +662,7 @@ public static class Client
             string RightClickName = r.ReadString();
             byte num6 = r.ReadByte();
             Client.clan.members[RightClickName] = (Clan.Roles) num6;
-            ChatBox.Instance?.NewChatMsg("", "Player: <#6633ff>" + RightClickName + "</color> clan role changed to " + (object) Client.clan.members[RightClickName], (Color) ColorScheme.GetColor(Global.ColorClanText), RightClickName, ChatOrigination.Clan, ContentType.STRING, (object) null);
+            ChatBox.Instance?.NewChatMsg("", "Player: <#6633ff>" + RightClickName + "</color> clan role changed to " + Client.clan.members[RightClickName].ToString(), (Color) ColorScheme.GetColor(Global.ColorClanText), RightClickName, ChatOrigination.Clan, ContentType.STRING, (object) null);
             Client.UpdateClanUI();
             return true;
           case 5:
@@ -1575,7 +1575,7 @@ public static class Client
                 }));
                 break;
               }
-              Debug.Log((object) ("Game does not exist: " + (object) key));
+              Debug.Log((object) ("Game does not exist: " + key.ToString()));
               break;
             case 14:
               int id2 = myBinaryReader.ReadInt32();
@@ -1599,7 +1599,7 @@ public static class Client
                 }));
                 break;
               }
-              Debug.Log((object) ("Game does not exist: " + (object) id2));
+              Debug.Log((object) ("Game does not exist: " + id2.ToString()));
               break;
             case 17:
               Client._gameFacts.RecieveReadyState(myBinaryReader);
@@ -1652,7 +1652,7 @@ public static class Client
               gf.ManualDeserialize(myBinaryReader, false, false, (byte) 0);
               if (Client._games.ContainsKey(gf.id))
               {
-                Debug.Log((object) ("Game already exists! " + (object) gf.id));
+                Debug.Log((object) ("Game already exists! " + gf.id.ToString()));
                 Client._games.Remove(gf.id);
               }
               Client._games.Add(gf.id, gf);
@@ -1732,7 +1732,7 @@ public static class Client
                 }));
                 break;
               }
-              Debug.Log((object) ("Game does not exist: " + (object) id3));
+              Debug.Log((object) ("Game does not exist: " + id3.ToString()));
               break;
             case 33:
               string msg1 = myBinaryReader.ReadString();
@@ -2096,7 +2096,13 @@ public static class Client
       }
       HUD.SetupMiniCamera();
       if (!Client.game.isSpectator && (UnityEngine.Object) Player.Instance == (UnityEngine.Object) null)
-        Debug.LogError((object) ("!!!!! NULL !!!!!!!" + (object) Client.game.players.Count + " " + (object) Client._gameFacts.players.Count));
+      {
+        int count = Client.game.players.Count;
+        string str1 = count.ToString();
+        count = Client._gameFacts.players.Count;
+        string str2 = count.ToString();
+        Debug.LogError((object) ("!!!!! NULL !!!!!!!" + str1 + " " + str2));
+      }
       DiscordIntergration.Instance?.UpdateActivity(Client._gameFacts, Client.game.isSpectator, true);
     });
     if (Client.game.isSpectator || Client.game.resyncing)
@@ -2360,17 +2366,17 @@ public static class Client
           ratedFacts.spellOverrides.VerifySpells();
           if (!Prestige.VerifySpells(Client.MyAccount, ratedFacts.spellOverrides.spells, ref ratedFacts.spellOverrides.fullBook))
           {
-            ChatBox.Instance?.NewChatMsg("Your settings profile {" + (object) num + "} contains a locked spell!!!!", (Color) ColorScheme.GetColor(Global.ColorSystem));
+            ChatBox.Instance?.NewChatMsg("Your settings profile {" + num.ToString() + "} contains a locked spell!!!!", (Color) ColorScheme.GetColor(Global.ColorSystem));
             return;
           }
           if (Server._restrictions != null && Server._restrictions.HasRestricted(ratedFacts.spellOverrides))
           {
-            ChatBox.Instance?.NewChatMsg("Your settings profile {" + (object) num + "} contains a restricted spell!!!!", (Color) ColorScheme.GetColor(Global.ColorSystem));
+            ChatBox.Instance?.NewChatMsg("Your settings profile {" + num.ToString() + "} contains a restricted spell!!!!", (Color) ColorScheme.GetColor(Global.ColorSystem));
             return;
           }
           if (Server._restrictions != null && Server._restrictions.CheckElemental(ratedFacts.spellOverrides, (int) ratedFacts.spellOverrides.Elemental))
           {
-            ChatBox.Instance?.NewChatMsg("Your settings profile {" + (object) num + "} is using a restricted elemental!!!!", (Color) ColorScheme.GetColor(Global.ColorSystem));
+            ChatBox.Instance?.NewChatMsg("Your settings profile {" + num.ToString() + "} is using a restricted elemental!!!!", (Color) ColorScheme.GetColor(Global.ColorSystem));
             return;
           }
         }
@@ -2959,7 +2965,7 @@ public static class Client
     }
     else
     {
-      string[] commands = s.Split('.');
+      string[] commands = s.Split('.', StringSplitOptions.None);
       int i = 0;
       int num1 = 0;
       if (commands[0].StartsWith("x"))
@@ -2978,6 +2984,7 @@ public static class Client
 label_206:
       for (; num1 >= 0; --num1)
       {
+        MyLocation myLocation;
         if (string.Equals(commands[0], "power", StringComparison.CurrentCultureIgnoreCase))
         {
           int result;
@@ -2988,7 +2995,7 @@ label_206:
             else if (result < 10)
               result = 10;
             Client._power = (FixedInt) ((float) result / 1000f);
-            ChatBox.Instance?.NewChatMsg("", "power set to: " + (object) result, (Color) ColorScheme.GetColor(Global.ColorTeamText), "", ChatOrigination.System, ContentType.STRING, (object) null);
+            ChatBox.Instance?.NewChatMsg("", "power set to: " + result.ToString(), (Color) ColorScheme.GetColor(Global.ColorTeamText), "", ChatOrigination.System, ContentType.STRING, (object) null);
             if (commands.Length != 2)
               i = 2;
             else
@@ -3007,6 +3014,7 @@ label_206:
         }
         else
         {
+          FixedInt fixedInt;
           if (string.Equals(commands[0], "windspeed"))
           {
             double result;
@@ -3015,16 +3023,31 @@ label_206:
               FixedInt x = Mathd.Clamp((FixedInt) (float) result, (FixedInt) 0, (FixedInt) 100);
               Client.game.map.windSpeed = Mathd.Clamp(x, (FixedInt) 0, (FixedInt) 100) * ZMap.MaxWindSpeed;
               Client.game.map.wind = Global.Velocity(Client.game.map.windDir, Client.game.map.windSpeed);
-              ChatBox.Instance?.NewChatMsg("", "windspeed set to: " + (object) x + "% " + (object) Client.game.map.wind, (Color) ColorScheme.GetColor(Global.ColorTeamText), "", ChatOrigination.System, ContentType.STRING, (object) null);
+              ChatBox instance = ChatBox.Instance;
+              if (instance != null)
+              {
+                fixedInt = x;
+                string str1 = fixedInt.ToString();
+                myLocation = Client.game.map.wind;
+                string str2 = myLocation.ToString();
+                instance.NewChatMsg("", "windspeed set to: " + str1 + "% " + str2, (Color) ColorScheme.GetColor(Global.ColorTeamText), "", ChatOrigination.System, ContentType.STRING, (object) null);
+              }
               WindIndicatorUI.Instance?.Refresh();
             }
             else
-              ChatBox.Instance?.NewChatMsg("", "windspeed requires a number (ex: windspeed.20) ... current: " + (object) Client.game.map.windSpeed, (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
-            Client.game.isWindy = true;
-            WindIndicatorUI instance = WindIndicatorUI.Instance;
-            if (instance != null)
             {
-              instance.gameObject.SetActive(true);
+              ChatBox instance = ChatBox.Instance;
+              if (instance != null)
+              {
+                fixedInt = Client.game.map.windSpeed;
+                instance.NewChatMsg("", "windspeed requires a number (ex: windspeed.20) ... current: " + fixedInt.ToString(), (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
+              }
+            }
+            Client.game.isWindy = true;
+            WindIndicatorUI instance1 = WindIndicatorUI.Instance;
+            if (instance1 != null)
+            {
+              instance1.gameObject.SetActive(true);
               continue;
             }
             continue;
@@ -3036,16 +3059,30 @@ label_206:
             {
               Client.game.map.windDir = (FixedInt) (float) result;
               Client.game.map.wind = Global.Velocity(Client.game.map.windDir, Client.game.map.windSpeed);
-              ChatBox.Instance?.NewChatMsg("", "winddir set to: " + (object) result + " " + (object) Client.game.map.wind, (Color) ColorScheme.GetColor(Global.ColorTeamText), "", ChatOrigination.System, ContentType.STRING, (object) null);
+              ChatBox instance = ChatBox.Instance;
+              if (instance != null)
+              {
+                string str1 = result.ToString();
+                myLocation = Client.game.map.wind;
+                string str2 = myLocation.ToString();
+                instance.NewChatMsg("", "winddir set to: " + str1 + " " + str2, (Color) ColorScheme.GetColor(Global.ColorTeamText), "", ChatOrigination.System, ContentType.STRING, (object) null);
+              }
               WindIndicatorUI.Instance?.Refresh();
             }
             else
-              ChatBox.Instance?.NewChatMsg("", "winddir requires a number (ex: winddir.20) ... current: " + (object) Client.game.map.windDir, (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
-            Client.game.isWindy = true;
-            WindIndicatorUI instance = WindIndicatorUI.Instance;
-            if (instance != null)
             {
-              instance.gameObject.SetActive(true);
+              ChatBox instance = ChatBox.Instance;
+              if (instance != null)
+              {
+                fixedInt = Client.game.map.windDir;
+                instance.NewChatMsg("", "winddir requires a number (ex: winddir.20) ... current: " + fixedInt.ToString(), (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
+              }
+            }
+            Client.game.isWindy = true;
+            WindIndicatorUI instance1 = WindIndicatorUI.Instance;
+            if (instance1 != null)
+            {
+              instance1.gameObject.SetActive(true);
               continue;
             }
             continue;
@@ -3076,11 +3113,12 @@ label_206:
           }
         }
         ZCreature c = (ZCreature) null;
+        int num2;
         if (string.Equals(commands[i], "z", StringComparison.CurrentCultureIgnoreCase))
         {
           if ((UnityEngine.Object) Player.Instance != (UnityEngine.Object) null && Player.Instance.summonedPerson != null)
             c = Player.Instance.summonedPerson.first();
-          ++i;
+          num2 = ++i;
         }
         for (int index = 0; index < game.players.Count && (ZComponent) c == (object) null; ++index)
           c = game.players[index].first();
@@ -3092,7 +3130,7 @@ label_206:
             ZPerson zperson = game.players.Find((Predicate<ZPerson>) (pt => string.Equals(pt.name, n)));
             if (zperson != null && (ZComponent) zperson.first() != (object) null)
               c = zperson.first();
-            ++i;
+            num2 = ++i;
           }
           if (commands[i].StartsWith("p") && commands[i].Length > 1)
           {
@@ -3105,7 +3143,7 @@ label_206:
               if (index < c.game.players.Count && index >= 0 && (ZComponent) c.game.players[index].first() != (object) null)
               {
                 c = c.game.players[index].first();
-                ++i;
+                num2 = ++i;
               }
             }
           }
@@ -3117,17 +3155,17 @@ label_206:
             if (int.TryParse(s1, out local) && index < c.parent.controlled.Count && index > 0)
             {
               c = c.parent.controlled[index];
-              ++i;
+              num2 = ++i;
             }
           }
           if (commands[i].StartsWith("t") && commands[i].Length > 1)
           {
             string s1 = commands[i].Substring(1);
-            int num2 = 0;
-            ref int local = ref num2;
+            int num3 = 0;
+            ref int local = ref num3;
             if (int.TryParse(s1, out local))
             {
-              c.game.PlayersMaxTurnTime += (float) num2;
+              c.game.PlayersMaxTurnTime += (float) num3;
               HUD instance = HUD.instance;
               if (instance != null)
               {
@@ -3138,7 +3176,7 @@ label_206:
             }
           }
         }
-        for (; commands.Length > i; ++i)
+        for (; commands.Length > i; num2 = ++i)
         {
           if (string.Equals(commands[i], "all", StringComparison.CurrentCultureIgnoreCase))
           {
@@ -3163,7 +3201,18 @@ label_206:
                 ChatBox instance = ChatBox.Instance;
                 if (instance != null)
                 {
-                  instance.NewChatMsg("", "Set max quizzes: " + (object) result + "(" + (object) PlayerPrefs.GetInt("quizcorrectcount") + " completed", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
+                  string[] strArray = new string[5]
+                  {
+                    "Set max quizzes: ",
+                    result.ToString(),
+                    "(",
+                    null,
+                    null
+                  };
+                  num2 = PlayerPrefs.GetInt("quizcorrectcount");
+                  strArray[3] = num2.ToString();
+                  strArray[4] = " completed";
+                  instance.NewChatMsg("", string.Concat(strArray), (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
                   goto label_206;
                 }
                 else
@@ -3174,7 +3223,7 @@ label_206:
                 ChatBox instance = ChatBox.Instance;
                 if (instance != null)
                 {
-                  instance.NewChatMsg("", "Max quizzes must be a valid integer." + (object) result, (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
+                  instance.NewChatMsg("", "Max quizzes must be a valid integer." + result.ToString(), (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
                   goto label_206;
                 }
                 else
@@ -3186,7 +3235,11 @@ label_206:
               ChatBox instance = ChatBox.Instance;
               if (instance != null)
               {
-                instance.NewChatMsg("", "Correct Quizzes: " + (object) PlayerPrefs.GetInt("quizcorrectcount") + " out of " + (object) PlayerPrefs.GetInt("quiz_max", 10), (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
+                num2 = PlayerPrefs.GetInt("quizcorrectcount");
+                string str1 = num2.ToString();
+                num2 = PlayerPrefs.GetInt("quiz_max", 10);
+                string str2 = num2.ToString();
+                instance.NewChatMsg("", "Correct Quizzes: " + str1 + " out of " + str2, (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
                 goto label_206;
               }
               else
@@ -3212,7 +3265,10 @@ label_206:
             ChatBox instance = ChatBox.Instance;
             if (instance != null)
             {
-              instance.NewChatMsg("", "Before: " + (object) targetFrameRate + " After: " + (object) Application.targetFrameRate, (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
+              string str1 = targetFrameRate.ToString();
+              num2 = Application.targetFrameRate;
+              string str2 = num2.ToString();
+              instance.NewChatMsg("", "Before: " + str1 + " After: " + str2, (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
               goto label_206;
             }
             else
@@ -3243,7 +3299,7 @@ label_206:
                 int n = HUD.instance.game.players.Count - 2;
                 for (int index = 0; HUD.instance.game.players.FindIndex((Predicate<ZPerson>) (player => string.Equals(player.name, Client.spawnNames[n]))) != -1 && index < Client.spawnNames.Length; ++index)
                 {
-                  n++;
+                  num2 = n++;
                   if (n >= Client.spawnNames.Length)
                     n = 0;
                 }
@@ -3263,16 +3319,16 @@ label_206:
           }
           else if (string.Equals(commands[i], "log", StringComparison.CurrentCultureIgnoreCase))
           {
-            int num2 = (int) (RandomExtensions.LastBook() + 1) * 12;
-            int num3 = 0;
+            int num3 = (int) (RandomExtensions.LastBook() + 1) * 12;
+            int num4 = 0;
             using (IEnumerator<KeyValuePair<string, Spell>> enumerator = Inert.Instance.spells.GetEnumerator())
             {
               while (enumerator.MoveNext())
               {
                 KeyValuePair<string, Spell> current = enumerator.Current;
                 ChatBox.Instance?.NewChatMsg("", "<sprite name=\"" + current.Key + "\"> - " + current.Key, (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System, ContentType.STRING, (object) null);
-                ++num3;
-                if (num3 >= num2)
+                ++num4;
+                if (num4 >= num3)
                   break;
               }
               goto label_206;
@@ -3291,8 +3347,8 @@ label_206:
             {
               int result = 0;
               int yInt = 0;
-              int.TryParse(commands[i + 1].Split(',')[0], out result);
-              int.TryParse(commands[i + 1].Split(',')[0], out result);
+              int.TryParse(commands[i + 1].Split(',', StringSplitOptions.None)[0], out result);
+              int.TryParse(commands[i + 1].Split(',', StringSplitOptions.None)[0], out result);
               if ((ZComponent) c.tower != (object) null)
                 c.tower.SetPosition(new MyLocation(result, yInt));
               else
@@ -3300,7 +3356,8 @@ label_206:
               ChatBox instance = ChatBox.Instance;
               if (instance != null)
               {
-                instance.NewChatMsg("", "Moved to: " + (object) new MyLocation(result, yInt), (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System, ContentType.STRING, (object) null);
+                myLocation = new MyLocation(result, yInt);
+                instance.NewChatMsg("", "Moved to: " + myLocation.ToString(), (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System, ContentType.STRING, (object) null);
                 goto label_206;
               }
               else
@@ -3314,7 +3371,7 @@ label_206:
                 ChatBox instance = ChatBox.Instance;
                 if (instance != null)
                 {
-                  instance.NewChatMsg("", c.name + " health is: " + (object) c.health, (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System, ContentType.STRING, (object) null);
+                  instance.NewChatMsg("", c.name + " health is: " + c.health.ToString(), (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System, ContentType.STRING, (object) null);
                   goto label_206;
                 }
                 else
@@ -3333,7 +3390,7 @@ label_206:
                 ChatBox instance = ChatBox.Instance;
                 if (instance != null)
                 {
-                  instance.NewChatMsg("", c.name + " changed health: " + (object) c.health, (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System, ContentType.STRING, (object) null);
+                  instance.NewChatMsg("", c.name + " changed health: " + c.health.ToString(), (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System, ContentType.STRING, (object) null);
                   goto label_206;
                 }
                 else
@@ -3348,7 +3405,7 @@ label_206:
                 ChatBox instance = ChatBox.Instance;
                 if (instance != null)
                 {
-                  instance.NewChatMsg("", c.name + " max health is: " + (object) c.maxHealth, (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System, ContentType.STRING, (object) null);
+                  instance.NewChatMsg("", c.name + " max health is: " + c.maxHealth.ToString(), (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System, ContentType.STRING, (object) null);
                   goto label_206;
                 }
                 else
@@ -3356,15 +3413,18 @@ label_206:
               }
               else
               {
-                int.TryParse(commands[i] + (object) 1, out result);
-                int num2 = Mathf.Clamp(result, 1, 10000);
-                c.health = num2;
-                c.maxHealth = num2;
+                string str1 = commands[i];
+                num2 = 1;
+                string str2 = num2.ToString();
+                int.TryParse(str1 + str2, out result);
+                int num3 = Mathf.Clamp(result, 1, 10000);
+                c.health = num3;
+                c.maxHealth = num3;
                 c.UpdateHealthTxt();
                 ChatBox instance = ChatBox.Instance;
                 if (instance != null)
                 {
-                  instance.NewChatMsg("", c.name + " changed max health: " + (object) c.maxHealth, (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System, ContentType.STRING, (object) null);
+                  instance.NewChatMsg("", c.name + " changed max health: " + c.maxHealth.ToString(), (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System, ContentType.STRING, (object) null);
                   goto label_206;
                 }
                 else
@@ -3446,12 +3506,12 @@ label_206:
             }
             else if (string.Equals(commands[i], "addAll", StringComparison.CurrentCultureIgnoreCase))
             {
-              int num2 = 0;
+              int num3 = 0;
               foreach (KeyValuePair<string, Spell> spell in Inert.Instance.spells)
               {
-                if (num2 < Inert.Instance.presentIndex)
+                if (num3 < Inert.Instance.presentIndex)
                 {
-                  ++num2;
+                  ++num3;
                   if (spell.Value.level < 4)
                   {
                     if (ClientResources.Instance.icons.ContainsKey(spell.Key))
@@ -3923,8 +3983,8 @@ label_206:
           return "This Session";
         TimeSpan timeSpan = DateTime.FromBinary(this.time) - DateTime.Now;
         if (timeSpan.Hours >= 1)
-          return timeSpan.Hours.ToString() + " Hour" + (timeSpan.Hours > 1 ? (object) "s" : (object) "");
-        return timeSpan.Minutes >= 1 ? ((int) (timeSpan.TotalMinutes + 0.5)).ToString() + " Minute" + ((int) (timeSpan.TotalMinutes + 0.5) > 1 ? (object) "s" : (object) "") : "Briefly";
+          return timeSpan.Hours.ToString() + " Hour" + (timeSpan.Hours > 1 ? "s" : "");
+        return timeSpan.Minutes >= 1 ? ((int) (timeSpan.TotalMinutes + 0.5)).ToString() + " Minute" + ((int) (timeSpan.TotalMinutes + 0.5) > 1 ? "s" : "") : "Briefly";
       }
     }
   }

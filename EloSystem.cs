@@ -12,7 +12,7 @@ public static class EloSystem
     int num5 = (int) b;
     a = (short) ((double) a + (double) num3 * (1.0 - (double) num1));
     b = (short) ((double) b + (double) num3 * -(double) num2);
-    Debug.Log((object) (num4.ToString() + ":" + (object) num5 + " < " + (object) num1 + ":" + (object) num2 + "> " + (object) a + ":" + (object) b));
+    Debug.Log((object) (num4.ToString() + ":" + num5.ToString() + " < " + num1.ToString() + ":" + num2.ToString() + "> " + a.ToString() + ":" + b.ToString()));
   }
 
   public static short Rating(short a, short b, bool aWon, ZGame.GameType g)

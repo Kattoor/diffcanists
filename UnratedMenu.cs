@@ -133,28 +133,17 @@ public class UnratedMenu : Catalogue
   {
     if (UnratedMenu.readyStates == null || UnratedMenu.readyStates.Length != Client._gameFacts.players.Count)
       UnratedMenu.readyStates = new bool[Client._gameFacts.players.Count];
-    string str1 = (string) null;
+    string str = (string) null;
     if (Client._gameFacts.GetRatedMode())
     {
       Client._gameFacts.CalculateGameType();
-      str1 = RatedFacts.GetGameTypeAsString((int) Client._gameFacts.gameType);
+      str = RatedFacts.GetGameTypeAsString((int) Client._gameFacts.gameType);
     }
     int index = Client._gameFacts.players.FindIndex((Predicate<string>) (z => string.Equals(z, Client.Name, StringComparison.CurrentCultureIgnoreCase)));
     if (index >= 0)
     {
       bool readyState = UnratedMenu.readyStates[index];
-      TMP_Text buttonStartGameTxt = this.buttonStartGameTxt;
-      string str2;
-      if (!readyState)
-      {
-        if (!this.buttonStartGame.interactable)
-          str2 = Client._gameFacts.players.Count.ToString() + "/" + (object) (2 * Client._gameFacts.GetNumberPlayersPerTeam()) + " Players";
-        else
-          str2 = "Ready";
-      }
-      else
-        str2 = "Cancel";
-      buttonStartGameTxt.text = str2;
+      this.buttonStartGameTxt.text = readyState ? "Cancel" : (this.buttonStartGame.interactable ? "Ready" : Client._gameFacts.players.Count.ToString() + "/" + (2 * Client._gameFacts.GetNumberPlayersPerTeam()).ToString() + " Players");
       this.startGameImg.color = (Color) (readyState ? new Color32((byte) 147, (byte) 38, (byte) 38, byte.MaxValue) : new Color32((byte) 43, (byte) 147, (byte) 38, byte.MaxValue));
     }
     else
@@ -164,10 +153,10 @@ public class UnratedMenu : Catalogue
       this.unratedTab.groupSpectate[0].Interactable(false);
       this.unratedTab.groupTeams[0].Interactable(false);
     }
-    if (str1 == null)
+    if (str == null)
       return;
-    TMP_Text buttonStartGameTxt1 = this.buttonStartGameTxt;
-    buttonStartGameTxt1.text = buttonStartGameTxt1.text + " (" + str1 + ")";
+    TMP_Text buttonStartGameTxt = this.buttonStartGameTxt;
+    buttonStartGameTxt.text = buttonStartGameTxt.text + " (" + str + ")";
   }
 
   public void SetReadyStatesOff()
@@ -189,7 +178,7 @@ public class UnratedMenu : Catalogue
       f -= Time.deltaTime;
       if ((double) f < 0.0)
         f = 0.0f;
-      this.buttonStartGameTxt.text = "Starting in " + (object) (int) ((double) f + 0.5);
+      this.buttonStartGameTxt.text = "Starting in " + ((int) ((double) f + 0.5)).ToString();
       yield return (object) new WaitForEndOfFrame();
     }
   }
@@ -223,7 +212,11 @@ public class UnratedMenu : Catalogue
 
   public void HoverSimiliarRating()
   {
-    MyToolTip.Show(Mathf.Max(1000, (int) Client.GetAccount(Client._gameFacts.players[0], false).similarRating).ToString() + "-" + (object) ((int) Client.GetAccount(Client._gameFacts.players[0], false).similarRating + 500), -1f, false);
+    int num = Mathf.Max(1000, (int) Client.GetAccount(Client._gameFacts.players[0], false).similarRating);
+    string str1 = num.ToString();
+    num = (int) Client.GetAccount(Client._gameFacts.players[0], false).similarRating + 500;
+    string str2 = num.ToString();
+    MyToolTip.Show(str1 + "-" + str2, -1f, false);
   }
 
   public void OpenInvitePlayers()
@@ -272,7 +265,7 @@ public class UnratedMenu : Catalogue
   {
     if (this.viewing != Viewing.Friends)
       return;
-    this.txtNumPlayers.text = "Friends " + (object) Client.friends.Count + " / 200";
+    this.txtNumPlayers.text = "Friends " + Client.friends.Count.ToString() + " / 200";
     this.txtRateType.text = "";
     int num1 = (int) ((RectTransform) this.pfabFriend.transform).sizeDelta.y + 2;
     int num2 = 2;
@@ -304,7 +297,7 @@ public class UnratedMenu : Catalogue
   {
     if (this.viewing != Viewing.Ignore)
       return;
-    this.txtNumPlayers.text = "Ignored " + (object) Client.ignore.Count + " / 100";
+    this.txtNumPlayers.text = "Ignored " + Client.ignore.Count.ToString() + " / 100";
     this.txtRateType.text = "";
     int num1 = (int) ((RectTransform) this.pfabFriend.transform).sizeDelta.y + 2;
     int num2 = 2;
@@ -348,7 +341,7 @@ public class UnratedMenu : Catalogue
     }
     else
     {
-      this.txtNumPlayers.text = "Clan " + (object) Client.clan.members.Count + " / 100";
+      this.txtNumPlayers.text = "Clan " + Client.clan.members.Count.ToString() + " / 100";
       int num1 = (int) ((RectTransform) this.pfabFriend.transform).sizeDelta.y + 2;
       int num2 = 2;
       List<Clan.MemberX> memberXList = new List<Clan.MemberX>();
@@ -580,7 +573,7 @@ public class UnratedMenu : Catalogue
 
   private void UpdatePlayerCount()
   {
-    this.txtNumPlayers.text = "Players: " + (object) Client._gameFacts.players.Count + "/" + (object) Client._gameFacts.customPlayerCount;
+    this.txtNumPlayers.text = "Players: " + Client._gameFacts.players.Count.ToString() + "/" + Client._gameFacts.customPlayerCount.ToString();
   }
 
   private IEnumerator DelayStart()
@@ -588,7 +581,7 @@ public class UnratedMenu : Catalogue
     this.buttonStartGame.interactable = false;
     for (float i = this.isFirst ? 5.5f : 5f; (double) i > 0.0; i -= Time.deltaTime)
     {
-      this.buttonStartGameTxt.text = "Settings Changed " + (object) (int) ((double) i + 0.490000009536743);
+      this.buttonStartGameTxt.text = "Settings Changed " + ((int) ((double) i + 0.490000009536743)).ToString();
       yield return (object) new WaitForEndOfFrame();
     }
     bool flag = Client._gameFacts.GetTeamMode() && !Client._gameFacts.GetMultiTeamMode();
@@ -795,7 +788,7 @@ public class UnratedMenu : Catalogue
     if (!this.IsFirst)
       return;
     MyContextMenu myContextMenu = MyContextMenu.Show();
-    myContextMenu.AddSeperator("Map " + (width ? "Width: " + (object) Client._gameFacts.settings.mapWidth : "Height: " + (object) Client._gameFacts.settings.mapHeight));
+    myContextMenu.AddSeperator("Map " + (width ? "Width: " + Client._gameFacts.settings.mapWidth.ToString() : "Height: " + Client._gameFacts.settings.mapHeight.ToString()));
     myContextMenu.AddSeperator("Valid range: 50% through 150%");
     if (width)
       myContextMenu.AddInput((Action<string>) (v =>
@@ -821,7 +814,7 @@ public class UnratedMenu : Catalogue
     if (!this.IsFirst)
       return;
     MyContextMenu myContextMenu = MyContextMenu.Show();
-    myContextMenu.AddSeperator("Map Seed: " + (object) Client._gameFacts.settings.mapSeed);
+    myContextMenu.AddSeperator("Map Seed: " + Client._gameFacts.settings.mapSeed.ToString());
     myContextMenu.AddInput((Action<string>) (v =>
     {
       int result = 0;
@@ -908,7 +901,7 @@ public class UnratedMenu : Catalogue
       }
       if (s.Contains(":"))
       {
-        string[] strArray = s.Split(':');
+        string[] strArray = s.Split(':', StringSplitOptions.None);
         float result1 = 0.0f;
         float result2 = 0.0f;
         float.TryParse(strArray[0], out result1);

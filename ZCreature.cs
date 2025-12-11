@@ -155,6 +155,7 @@ public class ZCreature : ZEntity
   internal bool glideIsActive;
   internal bool climbingHooksIsActive;
   internal int bloodBankHeal;
+  internal int monolithHeal;
   internal int tries;
   public ZCreature enemyWhoKilled;
   internal ZPerson killer;
@@ -236,7 +237,7 @@ public class ZCreature : ZEntity
 
   public override string ToString()
   {
-    return "Creature: " + this.baseCreature.name + " Team: " + (object) this.parent.team + " Health: " + (object) this.health + " Pos: " + (object) this.position + " Effectors: " + (object) (this.effectors.Count + this.destroyableEffectors.Count) + " Velocity: " + (object) this.velocity;
+    return "Creature: " + this.baseCreature.name + " Team: " + this.parent.team.ToString() + " Health: " + this.health.ToString() + " Pos: " + this.position.ToString() + " Effectors: " + (this.effectors.Count + this.destroyableEffectors.Count).ToString() + " Velocity: " + this.velocity.ToString();
   }
 
   public Sprite undeadBody
@@ -1353,11 +1354,11 @@ public class ZCreature : ZEntity
       }
       if (this.parent.takenMinions.Count > 0)
         this.parent.ReleaseTakenMinion();
-      if (this.spellEnum == SpellEnum.Summon_Blood_Bank && ((ZComponent) this.parent.bloodBank == (object) null || this.parent.bloodBank.isDead))
+      if (this.spellEnum == SpellEnum.Summon_Hemogoblin && ((ZComponent) this.parent.bloodBank == (object) null || this.parent.bloodBank.isDead))
       {
         for (int index = 1; index < this.parent.controlled.Count; ++index)
         {
-          if ((ZComponent) this.parent.controlled[index] != (object) null && !this.parent.controlled[index].isDead && this.parent.controlled[index].spellEnum == SpellEnum.Summon_Blood_Bank)
+          if ((ZComponent) this.parent.controlled[index] != (object) null && !this.parent.controlled[index].isDead && this.parent.controlled[index].spellEnum == SpellEnum.Summon_Hemogoblin)
           {
             this.parent.bloodBank = this.parent.controlled[index];
             break;
@@ -2078,7 +2079,8 @@ label_16:
       }
     }
     this.HealBloodBank(enemy, damage, dt);
-    if (this.spellEnum == SpellEnum.Summon_Blood_Bank && (ZComponent) this.pact != (object) this.parent.first() && (damage > 0 && (ZComponent) this.parent.first() != (object) null) && (!this.parent.first().isDead && this.parent.first().health > 0))
+    this.HealMonolith(enemy, damage, dt);
+    if (this.spellEnum == SpellEnum.Summon_Hemogoblin && (ZComponent) this.pact != (object) this.parent.first() && (damage > 0 && (ZComponent) this.parent.first() != (object) null) && (!this.parent.first().isDead && this.parent.first().health > 0))
       this.parent.first().DoHeal(Mathf.Min(damage, this.health), DamageType.Heal20, (ZCreature) null, false);
     this.health -= damage;
     if (this.health > this.maxHealth && damage < 0)
@@ -2122,8 +2124,8 @@ label_16:
         enemy.bloodBankHeal -= damage1 * 100 / num;
         if ((ZComponent) enemy.parent.bloodBank != (object) null && enemy.parent.bloodBank.health > 0)
         {
-          enemy.parent.bloodBank.DoHeal(damage1, !ZComponent.IsNull((ZComponent) enemy.parent.bloodBank) ? DamageType.Heal20 : dt, (ZCreature) null, false);
-          enemy.parent.bloodBank.UpdateHealthTxt();
+          enemy.DoHeal(damage1, !ZComponent.IsNull((ZComponent) enemy.parent.bloodBank) ? DamageType.Heal20 : dt, (ZCreature) null, false);
+          enemy.UpdateHealthTxt();
           break;
         }
         if (enemy.health > 0)
@@ -2132,6 +2134,40 @@ label_16:
         break;
       default:
         if (ZComponent.IsNull((ZComponent) enemy.parent.bloodBank) || enemy.parent.bloodBank.isDead)
+          break;
+        goto case DamageType.Heal50;
+    }
+  }
+
+  public void HealMonolith(ZCreature enemy, int damage, DamageType dt)
+  {
+    if (!((ZComponent) enemy != (object) null) || enemy.isDead || !((ZComponent) this != (object) enemy))
+      return;
+    switch (dt)
+    {
+      case DamageType.Heal20:
+        break;
+      case DamageType.Heal50:
+        enemy.monolithHeal += Mathf.Min(damage, this.health);
+        int num = 0;
+        if (!ZComponent.IsNull((ZComponent) enemy.parent.monolith) && !enemy.parent.monolith.isDead)
+          num += 20;
+        int damage1 = Mathf.Min(enemy.monolithHeal, this.health) * num / 100;
+        if (damage1 <= 0)
+          break;
+        enemy.monolithHeal -= damage1 * 100 / num;
+        if ((ZComponent) enemy.parent.monolith != (object) null && enemy.parent.monolith.health > 0)
+        {
+          enemy.parent.monolith.DoHeal(damage1, !ZComponent.IsNull((ZComponent) enemy.parent.monolith) ? DamageType.Heal20 : dt, (ZCreature) null, false);
+          enemy.parent.monolith.UpdateHealthTxt();
+          break;
+        }
+        if (enemy.health > 0)
+          enemy.DoHeal(damage1, !ZComponent.IsNull((ZComponent) enemy.parent.monolith) ? DamageType.Heal20 : dt, (ZCreature) null, false);
+        enemy.UpdateHealthTxt();
+        break;
+      default:
+        if (ZComponent.IsNull((ZComponent) enemy.parent.monolith) || enemy.parent.monolith.isDead)
           break;
         goto case DamageType.Heal50;
     }
@@ -3304,7 +3340,7 @@ label_4:
     if (this.waterShield >= 0 && this.familiarLevelSeas > 0 && (!this.isPawn && this.game.AllowExpansion))
     {
       TMP_Text txtShield = this.txtShield;
-      txtShield.text = txtShield.text + "<sprite name=\"book_seas\"><#00CAFF>" + (object) this.waterShield + "</color>";
+      txtShield.text = txtShield.text + "<sprite name=\"book_seas\"><#00CAFF>" + this.waterShield.ToString() + "</color>";
     }
     if (this.indicatorOfBurningSands)
       this.txtShield.text += "<sprite name=\"Burning Sands\">";
@@ -3654,7 +3690,7 @@ label_4:
           zcreature.velocity.y += zcreature.map.Gravity;
         }
       }
-      if (zcreature.map.ServerBitBltAndReturnIfChanged((int) explosionCutout, (int) zcreature.position.x, (int) zcreature.position.y + (isCharge ? 5 : 3), true) > 200)
+      if (zcreature.map.ServerBitBltAndReturnIfChanged((int) explosionCutout, (int) zcreature.position.x, (int) zcreature.position.y + (isCharge ? 5 : 3), true) > 250)
         zcreature.minerMarket?.IncreaseHolesDug(zcreature);
       zcreature.game.CreatureMoveSurroundings(zcreature.position, zcreature.radius + 10, (ZMyCollider) null, false);
       MinerMarket minerMarket = zcreature.minerMarket;
@@ -4027,7 +4063,7 @@ label_4:
       num += this.zb.Count;
     if (num < 0 || this.zb.Count == 0)
     {
-      Debug.LogError((object) ("Error a: " + (object) num + " zb: " + (object) this.zb.Count + " vel: " + (object) velocity + " aov: " + (object) Inert.AngleOfVelocity(velocity)));
+      Debug.LogError((object) ("Error a: " + num.ToString() + " zb: " + this.zb.Count.ToString() + " vel: " + velocity.ToString() + " aov: " + Inert.AngleOfVelocity(velocity).ToString()));
       if (num < 0)
       {
         if (this.zb.Count == 0)
@@ -4054,7 +4090,7 @@ label_4:
       num += this.zb.Count;
     if (num < 0 || this.zb.Count == 0)
     {
-      Debug.LogError((object) ("Error a: " + (object) num + " zb: " + (object) this.zb.Count + " vel: " + (object) velocity + " aov: " + (object) Inert.AngleOfVelocity(velocity)));
+      Debug.LogError((object) ("Error a: " + num.ToString() + " zb: " + this.zb.Count.ToString() + " vel: " + velocity.ToString() + " aov: " + Inert.AngleOfVelocity(velocity).ToString()));
       if (num < 0)
       {
         if (this.zb.Count == 0)
@@ -4079,7 +4115,7 @@ label_4:
       num += this.zb.Count;
     if (num < 0 || this.zb.Count == 0)
     {
-      Debug.LogError((object) ("Error a: " + (object) num + " zb: " + (object) this.zb.Count + " vel: " + (object) velocity + " aov: " + (object) Inert.AngleOfVelocity(velocity)));
+      Debug.LogError((object) ("Error a: " + num.ToString() + " zb: " + this.zb.Count.ToString() + " vel: " + velocity.ToString() + " aov: " + Inert.AngleOfVelocity(velocity).ToString()));
       if (num < 0)
       {
         if (this.zb.Count == 0)
@@ -4104,7 +4140,7 @@ label_4:
       num += this.zb.Count;
     if (num < 0 || this.zb.Count == 0)
     {
-      Debug.LogError((object) ("Error a: " + (object) num + " zb: " + (object) this.zb.Count + " vel: " + (object) velocity + " aov: " + (object) Inert.AngleOfVelocity(velocity)));
+      Debug.LogError((object) ("Error a: " + num.ToString() + " zb: " + this.zb.Count.ToString() + " vel: " + velocity.ToString() + " aov: " + Inert.AngleOfVelocity(velocity).ToString()));
       if (num < 0)
       {
         if (this.zb.Count == 0)
@@ -4923,12 +4959,26 @@ label_9:
         while (num1 > 0)
         {
           --num1;
-          int num2 = ((FixedInt.Create(360) - (Inert.AngleOfVelocity(zcreature.velocity) - FixedInt.Create(90))) * FixedInt.ThreeSixtyBy1 * zcreature.zb.Count - zcreature.radius).ToInt();
+          FixedInt fixedInt5 = (FixedInt.Create(360) - (Inert.AngleOfVelocity(zcreature.velocity) - FixedInt.Create(90))) * FixedInt.ThreeSixtyBy1 * zcreature.zb.Count - zcreature.radius;
+          int num2 = fixedInt5.ToInt();
           if (num2 < 0)
             num2 += zcreature.zb.Count;
           if (num2 < 0 || zcreature.zb.Count == 0)
           {
-            Debug.LogError((object) ("Error a: " + (object) num2 + " zb: " + (object) zcreature.zb.Count + " vel: " + (object) zcreature.velocity + " aov: " + (object) Inert.AngleOfVelocity(zcreature.velocity)));
+            string[] strArray = new string[8]
+            {
+              "Error a: ",
+              num2.ToString(),
+              " zb: ",
+              zcreature.zb.Count.ToString(),
+              " vel: ",
+              zcreature.velocity.ToString(),
+              " aov: ",
+              null
+            };
+            fixedInt5 = Inert.AngleOfVelocity(zcreature.velocity);
+            strArray[7] = fixedInt5.ToString();
+            Debug.LogError((object) string.Concat(strArray));
             if (num2 < 0)
             {
               if (zcreature.zb.Count == 0)
@@ -5151,7 +5201,7 @@ label_21:
               num3 += zcreature1.zb.Count;
             if (num3 < 0 || zcreature1.zb.Count == 0)
             {
-              Debug.LogError((object) ("Error a: " + (object) num3 + " zb: " + (object) zcreature1.zb.Count + " vel: " + (object) zcreature1.velocity + " aov: " + (object) Inert.AngleOfVelocity(zcreature1.velocity)));
+              Debug.LogError((object) ("Error a: " + num3.ToString() + " zb: " + zcreature1.zb.Count.ToString() + " vel: " + zcreature1.velocity.ToString() + " aov: " + Inert.AngleOfVelocity(zcreature1.velocity).ToString()));
               if (num3 < 0)
               {
                 if (zcreature1.zb.Count == 0)

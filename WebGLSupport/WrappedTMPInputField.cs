@@ -164,22 +164,11 @@ namespace WebGLSupport
 
     public void Rebuild()
     {
-      if (this.input.textComponent.enabled && this.checker.NeedRebuild(false))
-      {
-        UnityEngine.RectTransform component = this.input.textComponent.GetComponent<UnityEngine.RectTransform>();
-        if ((double) this.input.textComponent.GetPreferredValues().x < (double) component.rect.xMax)
-        {
-          Vector2 anchoredPosition = component.anchoredPosition;
-          anchoredPosition.x = 0.0f;
-          component.anchoredPosition = anchoredPosition;
-          this.input.GetComponentInChildren<TMP_SelectionCaret>().GetComponent<UnityEngine.RectTransform>().anchoredPosition = component.anchoredPosition;
-        }
-        this.input.textComponent.enabled = this.rectOverlaps(this.input.textComponent.rectTransform, this.input.textViewport);
-        this.input.textComponent.SetAllDirty();
-        this.input.Rebuild(CanvasUpdate.LatePreRender);
-      }
-      else
-        this.input.textComponent.enabled = true;
+      if (!this.checker.NeedRebuild(false))
+        return;
+      this.input.textComponent.SetVerticesDirty();
+      this.input.textComponent.SetLayoutDirty();
+      this.input.Rebuild(CanvasUpdate.LatePreRender);
     }
 
     private bool rectOverlaps(UnityEngine.RectTransform rectTrans1, UnityEngine.RectTransform rectTrans2)

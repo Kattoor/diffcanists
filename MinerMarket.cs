@@ -96,14 +96,14 @@ public class MinerMarket
       {
         int y = index;
         if (Player.Instance.selected.health <= Inert.Instance.minerMarket[y].cost)
-          myContextMenu.AddItemWithImage("<s>(" + (object) Inert.Instance.minerMarket[y].cost + ")</s> " + Inert.Instance.minerMarket[y].name, Inert.Instance.minerMarket[y].icon, (Action) (() =>
+          myContextMenu.AddItemWithImage("<s>(" + Inert.Instance.minerMarket[y].cost.ToString() + ")</s> " + Inert.Instance.minerMarket[y].name, Inert.Instance.minerMarket[y].icon, (Action) (() =>
           {
             Player.Instance.softLock = true;
             Player.Instance.UnselectSpell();
             ChatBox.Instance?.NewChatMsg("Not enough health to buy: " + Inert.Instance.minerMarket[y].name, (Color) ColorScheme.GetColor(MyContextMenu.ColorRed));
           }), (Color) ColorScheme.GetColor(MyContextMenu.ColorRed), Inert.Instance.minerMarket[y].description);
         else
-          myContextMenu.AddItemWithImage("(" + (object) Inert.Instance.minerMarket[y].cost + ") " + Inert.Instance.minerMarket[y].name, Inert.Instance.minerMarket[y].icon, (Action) (() =>
+          myContextMenu.AddItemWithImage("(" + Inert.Instance.minerMarket[y].cost.ToString() + ") " + Inert.Instance.minerMarket[y].name, Inert.Instance.minerMarket[y].icon, (Action) (() =>
           {
             Player.Instance.softLock = true;
             if ((UnityEngine.Object) Player.Instance.selectedSpell == (UnityEngine.Object) null)

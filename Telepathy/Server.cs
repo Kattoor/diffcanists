@@ -19,7 +19,7 @@ namespace Telepathy
     {
       int num = Interlocked.Increment(ref Server.counter);
       if (num == int.MaxValue)
-        throw new Exception("connection id limit reached: " + (object) num);
+        throw new Exception("connection id limit reached: " + num.ToString());
       return num;
     }
 
@@ -39,7 +39,7 @@ namespace Telepathy
         this.listener.Server.NoDelay = this.NoDelay;
         this.listener.Server.SendTimeout = this.SendTimeout;
         this.listener.Start();
-        Logger.Log("Server: listening port=" + (object) port);
+        Logger.Log("Server: listening port=" + port.ToString());
         while (true)
         {
           TcpClient client = this.listener.AcceptTcpClient();
@@ -57,7 +57,7 @@ namespace Telepathy
             }
             catch (Exception ex)
             {
-              Logger.LogError("Server send thread exception: " + (object) ex);
+              Logger.LogError("Server send thread exception: " + ex?.ToString());
             }
           }));
           sendThread.IsBackground = true;
@@ -72,7 +72,7 @@ namespace Telepathy
             }
             catch (Exception ex)
             {
-              Logger.LogError("Server client thread exception: " + (object) ex);
+              Logger.LogError("Server client thread exception: " + ex?.ToString());
             }
           }))
           {
@@ -82,15 +82,15 @@ namespace Telepathy
       }
       catch (ThreadAbortException ex)
       {
-        Logger.Log("Server thread aborted. That's okay. " + (object) ex);
+        Logger.Log("Server thread aborted. That's okay. " + ex?.ToString());
       }
       catch (SocketException ex)
       {
-        Logger.Log("Server Thread stopped. That's okay. " + (object) ex);
+        Logger.Log("Server Thread stopped. That's okay. " + ex?.ToString());
       }
       catch (Exception ex)
       {
-        Logger.LogError("Server Exception: " + (object) ex);
+        Logger.LogError("Server Exception: " + ex?.ToString());
       }
     }
 
@@ -99,7 +99,7 @@ namespace Telepathy
       if (this.Active)
         return false;
       this.receiveQueue = new ConcurrentQueue<Message>();
-      Logger.Log("Server: Start port=" + (object) port);
+      Logger.Log("Server: Start port=" + port.ToString());
       this.listenerThread = new Thread((ThreadStart) (() => this.Listen(port)));
       this.listenerThread.IsBackground = true;
       this.listenerThread.Priority = ThreadPriority.BelowNormal;
@@ -141,10 +141,10 @@ namespace Telepathy
           clientToken.sendPending.Set();
           return true;
         }
-        Logger.Log("Server.Send: invalid connectionId: " + (object) connectionId);
+        Logger.Log("Server.Send: invalid connectionId: " + connectionId.ToString());
         return false;
       }
-      Logger.LogError("Client.Send: message too big: " + (object) data.Length + ". Limit: " + (object) this.MaxMessageSize);
+      Logger.LogError("Client.Send: message too big: " + data.Length.ToString() + ". Limit: " + this.MaxMessageSize.ToString());
       return false;
     }
 
@@ -160,7 +160,7 @@ namespace Telepathy
       if (!this.clients.TryGetValue(connectionId, out clientToken))
         return false;
       clientToken.client.Close();
-      Logger.Log("Server.Disconnect connectionId:" + (object) connectionId);
+      Logger.Log("Server.Disconnect connectionId:" + connectionId.ToString());
       return true;
     }
 

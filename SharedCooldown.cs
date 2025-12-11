@@ -7,4 +7,5 @@ public enum SharedCooldown
   Hurricanes,
   Monarchs,
   Flying,
+  Passive_Heal,
 }

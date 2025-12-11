@@ -37,7 +37,7 @@ namespace Ninja.WebSockets.Internal
     {
       await BinaryReaderWriter.ReadExactly(2, stream, buffer, cancellationToken);
       if (!isLittleEndian)
-        Array.Reverse((Array) buffer.Array, buffer.Offset, 2);
+        Array.Reverse<byte>((M0[]) buffer.Array, buffer.Offset, 2);
       return BitConverter.ToUInt16(buffer.Array, buffer.Offset);
     }
 
@@ -49,7 +49,7 @@ namespace Ninja.WebSockets.Internal
     {
       await BinaryReaderWriter.ReadExactly(8, stream, buffer, cancellationToken);
       if (!isLittleEndian)
-        Array.Reverse((Array) buffer.Array, buffer.Offset, 8);
+        Array.Reverse<byte>((M0[]) buffer.Array, buffer.Offset, 8);
       return BitConverter.ToUInt64(buffer.Array, buffer.Offset);
     }
 
@@ -61,7 +61,7 @@ namespace Ninja.WebSockets.Internal
     {
       await BinaryReaderWriter.ReadExactly(8, stream, buffer, cancellationToken);
       if (!isLittleEndian)
-        Array.Reverse((Array) buffer.Array, buffer.Offset, 8);
+        Array.Reverse<byte>((M0[]) buffer.Array, buffer.Offset, 8);
       return BitConverter.ToInt64(buffer.Array, buffer.Offset);
     }
 
@@ -69,7 +69,7 @@ namespace Ninja.WebSockets.Internal
     {
       byte[] bytes = BitConverter.GetBytes(value);
       if (BitConverter.IsLittleEndian && !isLittleEndian)
-        Array.Reverse((Array) bytes);
+        Array.Reverse<byte>((M0[]) bytes);
       stream.Write(bytes, 0, bytes.Length);
     }
 
@@ -77,7 +77,7 @@ namespace Ninja.WebSockets.Internal
     {
       byte[] bytes = BitConverter.GetBytes(value);
       if (BitConverter.IsLittleEndian && !isLittleEndian)
-        Array.Reverse((Array) bytes);
+        Array.Reverse<byte>((M0[]) bytes);
       stream.Write(bytes, 0, bytes.Length);
     }
 
@@ -85,7 +85,7 @@ namespace Ninja.WebSockets.Internal
     {
       byte[] bytes = BitConverter.GetBytes(value);
       if (BitConverter.IsLittleEndian && !isLittleEndian)
-        Array.Reverse((Array) bytes);
+        Array.Reverse<byte>((M0[]) bytes);
       stream.Write(bytes, 0, bytes.Length);
     }
 
@@ -93,7 +93,7 @@ namespace Ninja.WebSockets.Internal
     {
       byte[] bytes = BitConverter.GetBytes(value);
       if (BitConverter.IsLittleEndian && !isLittleEndian)
-        Array.Reverse((Array) bytes);
+        Array.Reverse<byte>((M0[]) bytes);
       stream.Write(bytes, 0, bytes.Length);
     }
   }

@@ -14,10 +14,10 @@ public class Quiz
       PlayerPrefs.SetInt("quizcorrectcount", PlayerPrefs.GetInt("quizcorrectcount") + 1);
       int num1 = PlayerPrefs.GetInt("quizcorrectcount");
       int num2 = PlayerPrefs.GetInt("quiz_max", 10);
-      ChatBox.Instance?.NewChatMsg("Correct. You got a score of 100%! " + (num1 >= num2 ? "You've completed all the quizzes!" : (num2 - num1 < 100 ? "Only " + (object) (num2 - num1) + " quizzes left to pass before mastering the seasons." : "")), (Color) ColorScheme.GetColor(Global.ColorWhiteText));
+      ChatBox.Instance?.NewChatMsg("Correct. You got a score of 100%! " + (num1 >= num2 ? "You've completed all the quizzes!" : (num2 - num1 < 100 ? "Only " + (num2 - num1).ToString() + " quizzes left to pass before mastering the seasons." : "")), (Color) ColorScheme.GetColor(Global.ColorWhiteText));
     }
     else
-      ChatBox.Instance?.NewChatMsg("Wrong. Keep at it and you'll eventually be able to tell the difference between " + (object) this.target + " and " + (object) this.guess + ".", (Color) ColorScheme.GetColor(Global.ColorWhiteText));
+      ChatBox.Instance?.NewChatMsg("Wrong. Keep at it and you'll eventually be able to tell the difference between " + this.target.ToString() + " and " + this.guess.ToString() + ".", (Color) ColorScheme.GetColor(Global.ColorWhiteText));
   }
 
   public void No()
@@ -27,7 +27,7 @@ public class Quiz
       PlayerPrefs.SetInt("quizcorrectcount", PlayerPrefs.GetInt("quizcorrectcount") + 1);
       int num1 = PlayerPrefs.GetInt("quizcorrectcount");
       int num2 = PlayerPrefs.GetInt("quiz_max", 10);
-      ChatBox.Instance?.NewChatMsg("Correct. You've Aced the quiz! " + (num1 >= num2 ? "You've completed all the quizzes!" : (num2 - num1 < 100 ? "Only " + (object) (num2 - num1) + " quizzes left to pass before mastering the seasons." : "")), (Color) ColorScheme.GetColor(Global.ColorWhiteText));
+      ChatBox.Instance?.NewChatMsg("Correct. You've Aced the quiz! " + (num1 >= num2 ? "You've completed all the quizzes!" : (num2 - num1 < 100 ? "Only " + (num2 - num1).ToString() + " quizzes left to pass before mastering the seasons." : "")), (Color) ColorScheme.GetColor(Global.ColorWhiteText));
     }
     else
       ChatBox.Instance?.NewChatMsg("Wrong. Should have used the elusive not-so-common sense.", (Color) ColorScheme.GetColor(Global.ColorWhiteText));

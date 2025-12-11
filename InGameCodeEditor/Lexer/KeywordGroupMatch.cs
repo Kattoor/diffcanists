@@ -106,7 +106,7 @@ label_22:
     {
       if (this.keywordCache != null)
         return;
-      this.keywordCache = this.keywords.Split(' ');
+      this.keywordCache = this.keywords.Split(' ', StringSplitOptions.None);
     }
 
     private bool CompareChar(char a, char b)

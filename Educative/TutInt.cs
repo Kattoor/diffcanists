@@ -60,7 +60,7 @@ namespace Educative
             Client._tutorial.namedVariable.TryGetValue(key, out num);
             return num;
         }
-        Debug.LogError((object) ("Not Implemented: " + (object) this.which));
+        Debug.LogError((object) ("Not Implemented: " + this.which.ToString()));
         return this._number;
       }
       set
@@ -101,7 +101,7 @@ namespace Educative
             this.creature.Fall(false);
             break;
           case From.MinionCount:
-            Debug.LogError((object) ("Cannot set " + (object) this.which));
+            Debug.LogError((object) ("Cannot set " + this.which.ToString()));
             break;
           case From.SpellUses:
             if ((ZComponent) this.creature == (object) null || this.creature.spells.Count == 0)

@@ -691,7 +691,7 @@ public class RatedTab : MonoBehaviour
           }
           if ((ratedFacts.customQueue != 0 || (ratedFacts.extraOptions & 16) != 0) && (ratedFacts.spellOverrides != null ? Server.OriginalSpellsOnly(GameStyle.Original_Spells_Only, ratedFacts.spellOverrides) : Server.OriginalSpellsOnly(GameStyle.Original_Spells_Only, Client.settingsPlayer)))
           {
-            ChatBox.Instance.NewChatMsg("You have original spells enabled, but have non-original spells in your settings profile { " + (object) num + " } !!!!", (Color) ColorScheme.GetColor(Global.ColorSystem));
+            ChatBox.Instance.NewChatMsg("You have original spells enabled, but have non-original spells in your settings profile { " + num.ToString() + " } !!!!", (Color) ColorScheme.GetColor(Global.ColorSystem));
             return;
           }
         }

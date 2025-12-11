@@ -196,12 +196,12 @@ public class Server : MonoBehaviour
 
   private static void Server_ReceivedError(int arg1, Exception arg2)
   {
-    Debug.LogError((object) ("Web Error: " + (object) arg1 + " " + arg2.ToString()));
+    Debug.LogError((object) ("Web Error: " + arg1.ToString() + " " + arg2.ToString()));
   }
 
   private static void Server_ReceivedErrorInsecure(int arg1, Exception arg2)
   {
-    Debug.LogError((object) ("Web Error Insecure: " + (object) arg1 + " " + arg2.ToString()));
+    Debug.LogError((object) ("Web Error Insecure: " + arg1.ToString() + " " + arg2.ToString()));
   }
 
   private static void HandleException(string condition, string stackTrace, LogType type)
@@ -859,8 +859,8 @@ public class Server : MonoBehaviour
     string str = reader.ReadString();
     if (str.Length > 600 || !string.Equals(a, c.player.account.name))
       return;
-    MyLog.MainLog("[Minigame Chat " + (object) miniGame.id + "] [" + a + "] " + str);
-    c.OnChat("[Minigame" + (object) miniGame.id + "] " + str);
+    MyLog.MainLog("[Minigame Chat " + miniGame.id.ToString() + "] [" + a + "] " + str);
+    c.OnChat("[Minigame" + miniGame.id.ToString() + "] " + str);
     miniGame.SendAll(bytes);
   }
 
@@ -902,9 +902,9 @@ public class Server : MonoBehaviour
         GameFacts g;
         if (!Server._games.TryGetValue(c.player.gameNumber, out g))
           return;
-        MyLog.MainLog("[Game #" + (object) c.player.gameNumber + "] [" + a + "] " + str);
+        MyLog.MainLog("[Game #" + c.player.gameNumber.ToString() + "] [" + a + "] " + str);
         Server.SendUnratedMessage(g, bytes);
-        c.OnChat("[Game #" + (object) c.player.gameNumber + "] " + str);
+        c.OnChat("[Game #" + c.player.gameNumber.ToString() + "] " + str);
       }
     }
   }
@@ -1000,7 +1000,7 @@ public class Server : MonoBehaviour
               if (!Server._games.TryGetValue(c.player.gameNumber, out g))
                 return;
               Server.SendUnratedMessage(g, args);
-              MyLog.MainLog("[Share " + contentType.ToString() + " Game# " + (object) g.id + "] [" + a + "] " + b);
+              MyLog.MainLog("[Share " + contentType.ToString() + " Game# " + g.id.ToString() + "] [" + a + "] " + b);
             }
             else
             {
@@ -1274,7 +1274,7 @@ public class Server : MonoBehaviour
                           gameID = gf2.id,
                           name = c.player.account.name,
                           cryp = numArray,
-                          isp = c.EndPoint.ToString().Split(':')[0]
+                          isp = c.EndPoint.ToString().Split(':', StringSplitOptions.None)[0]
                         };
                         using (MemoryStream memoryStream2 = new MemoryStream())
                         {
@@ -1382,7 +1382,7 @@ public class Server : MonoBehaviour
               }
               catch (Exception ex)
               {
-                Debug.LogError((object) (ex.ToString() + " MSG: " + (object) Server.errorMsg));
+                Debug.LogError((object) (ex.ToString() + " MSG: " + Server.errorMsg.ToString()));
               }
             }
           }
@@ -2204,24 +2204,24 @@ public class Server : MonoBehaviour
                             ratedFacts.spellOverrides.VerifySpells();
                             if (!Prestige.VerifySpells(connection.player.account, ratedFacts.spellOverrides.spells, ref ratedFacts.spellOverrides.fullBook))
                             {
-                              Server.ReturnServerMsg(connection, "Your settings profile {" + (object) num2 + "} contains a locked spell!!!!");
+                              Server.ReturnServerMsg(connection, "Your settings profile {" + num2.ToString() + "} contains a locked spell!!!!");
                               return;
                             }
                             flag3 = flag2 && Server.OriginalSpellsOnly(GameStyle.Original_Spells_Only, ratedFacts.spellOverrides);
                             if (Server._restrictions != null && Server._restrictions.HasRestricted(ratedFacts.spellOverrides))
                             {
-                              Server.ReturnServerMsg(connection, "Your settings profile {" + (object) num2 + "} contains a restricted spell!!!!");
+                              Server.ReturnServerMsg(connection, "Your settings profile {" + num2.ToString() + "} contains a restricted spell!!!!");
                               return;
                             }
                             if (Server._restrictions != null && Server._restrictions.CheckElemental(ratedFacts.spellOverrides, (int) ratedFacts.spellOverrides.Elemental))
                             {
-                              Server.ReturnServerMsg(connection, "Your settings profile {" + (object) num2 + "} is using a restricted elemental!!!!");
+                              Server.ReturnServerMsg(connection, "Your settings profile {" + num2.ToString() + "} is using a restricted elemental!!!!");
                               return;
                             }
                           }
                           if (flag3)
                           {
-                            Server.ReturnServerMsg(connection, "You have original spells enabled, but have non-original spells in your settings profile {" + (object) num2 + "} !!!!");
+                            Server.ReturnServerMsg(connection, "You have original spells enabled, but have non-original spells in your settings profile {" + num2.ToString() + "} !!!!");
                             return;
                           }
                         }
@@ -2887,7 +2887,7 @@ public class Server : MonoBehaviour
                   case 37:
                     string name = myBinaryReader.ReadString();
                     byte[] cypo = myBinaryReader.ReadBytes();
-                    string endPoint = c.EndPoint.ToString().Split(':')[0];
+                    string endPoint = c.EndPoint.ToString().Split(':', StringSplitOptions.None)[0];
                     UnityThreadHelper.Dispatcher.Dispatch2((Action) (() =>
                     {
                       ValidSpectator validSpectator;

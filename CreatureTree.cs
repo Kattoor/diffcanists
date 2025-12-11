@@ -32,13 +32,28 @@ public class CreatureTree : Creature
       {
         if ((index2 == 0 || pixels32[index1 + index2 * texture.width].a == (byte) 0) && pixels32[index1 + (index2 - 1) * texture.width].a != (byte) 0)
         {
-          str1 = str1 + "new Coords(" + (object) (index1 - num2) + ", " + (object) (index2 - num3) + "), ";
+          string[] strArray = new string[6]
+          {
+            str1,
+            "new Coords(",
+            null,
+            null,
+            null,
+            null
+          };
+          int num4 = index1 - num2;
+          strArray[2] = num4.ToString();
+          strArray[3] = ", ";
+          num4 = index2 - num3;
+          strArray[4] = num4.ToString();
+          strArray[5] = "), ";
+          str1 = string.Concat(strArray);
           ++num1;
         }
       }
     }
     string str2 = str1 + " };";
-    Debug.Log((object) ("Found: " + (object) num1));
+    Debug.Log((object) ("Found: " + num1.ToString()));
     Debug.Log((object) str2);
   }
 }

@@ -177,7 +177,7 @@ label_13:
         }
       }
       if (!flag)
-        return sp._spells.IsAlt(index) ? "Level 3:\nRequires " + (object) (5 - num) + " more <color=white>" + spell.bookOf.ToStringX(true) + "</color> spell" + (num < 4 ? (object) "s" : (object) "") : "Level 3:\nRequires " + (object) (5 - num) + " more <color=white>" + spell.bookOf.ToStringX(false) + "</color> spell" + (num < 4 ? (object) "s" : (object) "");
+        return sp._spells.IsAlt(index) ? "Level 3:\nRequires " + (5 - num).ToString() + " more <color=white>" + spell.bookOf.ToStringX(true) + "</color> spell" + (num < 4 ? "s" : "") : "Level 3:\nRequires " + (5 - num).ToString() + " more <color=white>" + spell.bookOf.ToStringX(false) + "</color> spell" + (num < 4 ? "s" : "");
     }
     return "";
   }
@@ -266,7 +266,7 @@ label_13:
       else if (this.level == 3)
         this.uiOuter.GetImage.color = (Color) new Color32(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue);
       else
-        Debug.LogError((object) ("Unknown Spell Level: " + (object) this.level));
+        Debug.LogError((object) ("Unknown Spell Level: " + this.level.ToString()));
     }
     else
     {
@@ -278,7 +278,7 @@ label_13:
       else if (this.level == 3)
         this.uiOuter.GetImage.color = (Color) new Color32(byte.MaxValue, (byte) 128, byte.MaxValue, byte.MaxValue);
       else
-        Debug.LogError((object) ("Unknown Spell Level: " + (object) this.level));
+        Debug.LogError((object) ("Unknown Spell Level: " + this.level.ToString()));
     }
   }
 
@@ -299,7 +299,7 @@ label_13:
       else if (this.level == 3)
         this.uiOuter.GetImage.color = (Color) new Color32(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue);
       else
-        Debug.LogError((object) ("Unknown Spell Level: " + (object) this.level));
+        Debug.LogError((object) ("Unknown Spell Level: " + this.level.ToString()));
     }
     else
     {
@@ -311,7 +311,7 @@ label_13:
       else if (this.level == 3)
         this.uiOuter.GetImage.color = (Color) new Color32(byte.MaxValue, (byte) 128, byte.MaxValue, byte.MaxValue);
       else
-        Debug.LogError((object) ("Unknown Spell Level: " + (object) this.level));
+        Debug.LogError((object) ("Unknown Spell Level: " + this.level.ToString()));
     }
   }
 }

@@ -338,7 +338,7 @@ namespace Ninja.WebSockets.Internal
       string statusDescription)
     {
       byte[] bytes1 = BitConverter.GetBytes((ushort) closeStatus);
-      Array.Reverse((Array) bytes1);
+      Array.Reverse<byte>((M0[]) bytes1);
       if (statusDescription == null)
         return new ArraySegment<byte>(bytes1);
       byte[] bytes2 = Encoding.UTF8.GetBytes(statusDescription);

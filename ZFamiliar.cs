@@ -19,7 +19,7 @@ public class ZFamiliar : ZComponent
     {
       if ((ZComponent) this.creature == (object) null)
       {
-        Debug.LogError((object) ("Creature is null in Familiar " + (object) this.bookOf));
+        Debug.LogError((object) ("Creature is null in Familiar " + this.bookOf.ToString()));
         return MyLocation.zero;
       }
       return (ZComponent) this.soulJar != (object) null ? this.soulJar.position : new MyLocation(0, 0);

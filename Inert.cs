@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 public class Inert : MonoBehaviour
 {
-  public static string Version = "v8.1";
+  public static string Version = "v8.2";
   public static int _Version = 62;
   public static int mask_Jar = 262144;
   public static int mask_ButterflyJar = 2097152;
@@ -382,7 +382,7 @@ public class Inert : MonoBehaviour
           Spell spell = Inert.GetSpell(creature.runTimeStats.spells[index].serializedSpellEnum);
           creature.runTimeStats.spells[index].spell = spell;
           if ((UnityEngine.Object) spell == (UnityEngine.Object) null)
-            Debug.LogError((object) ("Spell not found: " + (object) creature.runTimeStats.spells[index].serializedSpellEnum));
+            Debug.LogError((object) ("Spell not found: " + creature.runTimeStats.spells[index].serializedSpellEnum.ToString()));
         }
       }
     }

@@ -3,7 +3,7 @@ using System;
 
 public static class BuildConstants
 {
-  public static readonly DateTime buildDate = new DateTime(638864100299532529L);
+  public static readonly DateTime buildDate = new DateTime(638909969442903829L);
   public const string version = "1.0.0.8";
   public const BuildConstants.ReleaseType releaseType = BuildConstants.ReleaseType.NewReleaseType;
   public const BuildConstants.Platform platform = BuildConstants.Platform.PC;
@@ -21,7 +21,6 @@ public static class BuildConstants
     None,
     Linux,
     macOS,
-    Android,
     PC,
   }
 
@@ -30,7 +29,6 @@ public static class BuildConstants
     None,
     Linux_x64,
     macOS,
-    Android,
     Windows_x64,
   }
 

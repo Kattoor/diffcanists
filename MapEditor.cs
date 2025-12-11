@@ -752,7 +752,7 @@ public class MapEditor : MonoBehaviour
       this._grass = (Texture2D) null;
     }), new string[1]{ "png" })), MyContextMenu.ColorGreen);
     myContextMenu1.AddSeperator("--------------------------");
-    myContextMenu1.AddItem("Offset " + (object) this.grass_offset + "px", (Action) (() =>
+    myContextMenu1.AddItem("Offset " + this.grass_offset.ToString() + "px", (Action) (() =>
     {
       MyContextMenu myContextMenu2 = MyContextMenu.Show();
       myContextMenu2.AddInput((Action<string>) (s => this.grass_offset = s.ToInt(6)), this.grass_offset.ToString(), false, true);
@@ -939,7 +939,7 @@ public class MapEditor : MonoBehaviour
     this.game.map = layer;
     layer.SetMapSprite(this.game, pixels, this.mapSizeY, this.mapSizeX);
     this.UpdateLayerOrder(layer, this.layers.Count);
-    layer.name = "Layer " + (object) (this.layers.Count + 1);
+    layer.name = "Layer " + (this.layers.Count + 1).ToString();
     this.layers.Add(layer);
     this.selectedLayer = layer;
     if (this.layers.Count > 1)
@@ -1132,8 +1132,29 @@ public class MapEditor : MonoBehaviour
 
   public void RefreshUI()
   {
-    this.txt_undo.text = this.stack_undo.Count != 0 ? "Undo (" + (object) this.stack_undo.Count + ")" : "Undo";
-    this.txt_redo.text = this.stack_redo.Count != 0 ? "Redo (" + (object) this.stack_redo.Count + ")" : "Redo";
+    int count;
+    if (this.stack_undo.Count == 0)
+    {
+      this.txt_undo.text = "Undo";
+    }
+    else
+    {
+      TMP_Text txtUndo = this.txt_undo;
+      count = this.stack_undo.Count;
+      string str = "Undo (" + count.ToString() + ")";
+      txtUndo.text = str;
+    }
+    if (this.stack_redo.Count == 0)
+    {
+      this.txt_redo.text = "Redo";
+    }
+    else
+    {
+      TMP_Text txtRedo = this.txt_redo;
+      count = this.stack_redo.Count;
+      string str = "Redo (" + count.ToString() + ")";
+      txtRedo.text = str;
+    }
     int selectedLayerIndex = this.selectedLayerIndex;
     this.but_undo.Interactable(this.stack_undo.Count > 0);
     this.but_redo.Interactable(this.stack_redo.Count > 0);

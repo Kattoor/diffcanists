@@ -1,4 +1,5 @@
 
+using System;
 using System.Net.WebSockets;
 
 namespace Hazel.Websocket
@@ -18,7 +19,7 @@ namespace Hazel.Websocket
     public WebConnectionOld(WebSocket ws, string e, int id)
     {
       this.socket = ws;
-      this.EndPoint = e.Split(':')[0];
+      this.EndPoint = e.Split(':', StringSplitOptions.None)[0];
       this.id = id;
       this.Connected = true;
     }

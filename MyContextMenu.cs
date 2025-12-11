@@ -616,7 +616,7 @@ public class MyContextMenu : MonoBehaviour
       }
       this.AddSeperator("--------------------------");
       if (!string.IsNullOrEmpty(acc.clan))
-        this.AddItem("Clan: " + acc.clan + " (" + (object) acc.clanRole + ")", (Action) null, (Color) ColorScheme.GetColor(MyContextMenu.ColorClan));
+        this.AddItem("Clan: " + acc.clan + " (" + acc.clanRole.ToString() + ")", (Action) null, (Color) ColorScheme.GetColor(MyContextMenu.ColorClan));
       else
         this.AddItem("This player is not in a clan", (Action) null, (Color) ColorScheme.GetColor(MyContextMenu.ColorClan));
       this.AddSeperator("--------------------------");
@@ -666,9 +666,9 @@ public class MyContextMenu : MonoBehaviour
           }
         }
         if (acc.prestige > (byte) 0)
-          this.AddItem(ChatBox.PrestigeString((int) acc.prestige) + (object) acc.prestige + Account.number((int) acc.prestige) + " prestige", (Action) (() => {}), (Color) ColorScheme.GetColor(MyContextMenu.ColorBlue));
+          this.AddItem(ChatBox.PrestigeString((int) acc.prestige) + acc.prestige.ToString() + Account.number((int) acc.prestige) + " prestige", (Action) (() => {}), (Color) ColorScheme.GetColor(MyContextMenu.ColorBlue));
         if (acc.experience > (byte) 0)
-          this.AddItem("Level " + (object) acc.experience, (Action) (() => {}), (Color) ColorScheme.GetColor(MyContextMenu.ColorBlue));
+          this.AddItem("Level " + acc.experience.ToString(), (Action) (() => {}), (Color) ColorScheme.GetColor(MyContextMenu.ColorBlue));
         this.AddCopy(chatMsg);
       }
     }

@@ -280,7 +280,7 @@ public abstract class IMiniGame
       this.SendAll((byte) 87, (byte) 2, c.name, -1);
     }
     this.Server_SendCreateGame(c);
-    MyLog.MainLog("[Joined Minigame Chat " + (object) c.miniGame.id + "] [" + c.name + "]");
+    MyLog.MainLog("[Joined Minigame Chat " + c.miniGame.id.ToString() + "] [" + c.name + "]");
   }
 
   public void Leave(Connection c)
@@ -300,7 +300,7 @@ public abstract class IMiniGame
         this.players[index].connection.miniGame = (IMiniGame) null;
         this.players[index].connection = (Connection) null;
         this.players.RemoveAt(index);
-        MyLog.MainLog("[Left Minigame Chat " + (object) c.miniGame.id + "] [" + c.name + "]");
+        MyLog.MainLog("[Left Minigame Chat " + c.miniGame.id.ToString() + "] [" + c.name + "]");
         break;
       }
     }

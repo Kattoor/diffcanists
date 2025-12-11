@@ -105,7 +105,7 @@ public static class Prestige
         break;
       case 9:
         Client.MyAccount.tournamentCoins = r.ReadInt32();
-        CharacterCreation.Instance?.txtCoins.SetText(Client.MyAccount.tournamentCoins.ToString(), true);
+        CharacterCreation.Instance?.txtCoins.SetText(Client.MyAccount.tournamentCoins.ToString());
         break;
       case 10:
         Client.MyAccount.cosmetics.array[r.ReadInt32()][r.ReadInt32()] = true;
@@ -120,14 +120,14 @@ public static class Prestige
         break;
       case 13:
         Client.MyAccount.dust = r.ReadInt32();
-        StoreMenu.Instance?.txtCrystals.SetText(Client.MyAccount.dust.ToString(), true);
+        StoreMenu.Instance?.txtCrystals.SetText(Client.MyAccount.dust.ToString());
         break;
       case 15:
         int count = r.ReadInt32();
         Client.MyAccount.tomatoes = count;
         if ((UnityEngine.Object) StoreMenu.Instance != (UnityEngine.Object) null)
         {
-          StoreMenu.Instance.txtTomatoes.SetText(count.ToString(), true);
+          StoreMenu.Instance.txtTomatoes.SetText(count.ToString());
           StoreMenu.Instance.txtTomatoes.transform.parent.gameObject.SetActive(count > 0);
         }
         if (!((UnityEngine.Object) HUD.instance != (UnityEngine.Object) null))

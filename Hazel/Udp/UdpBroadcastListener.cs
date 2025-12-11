@@ -48,7 +48,7 @@ namespace Hazel.Udp
       {
         Action<string> logger = this.logger;
         if (logger != null)
-          logger("BroadcastListener: " + (object) ex);
+          logger("BroadcastListener: " + ex?.ToString());
         this.Dispose();
       }
     }
@@ -70,7 +70,7 @@ namespace Hazel.Udp
       {
         Action<string> logger = this.logger;
         if (logger != null)
-          logger("BroadcastListener: " + (object) ex);
+          logger("BroadcastListener: " + ex?.ToString());
         this.Dispose();
         return;
       }

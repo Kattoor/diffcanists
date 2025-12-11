@@ -204,8 +204,8 @@ public class CharacterCreation : Catalogue
           {
             if (!Directory.Exists("Clan outfits/" + clanOutfit1.Key))
               Directory.CreateDirectory("Clan outfits/" + clanOutfit1.Key);
-            File.WriteAllBytes("Clan outfits/" + clanOutfit1.Key + "/" + clanOutfit1.Key + "_" + (object) (Outfit) num + ".png", outfit.png);
-            File.WriteAllText("Clan outfits/" + clanOutfit1.Key + "/" + clanOutfit1.Key + "_" + (object) (Outfit) num + ".meta", outfit.pivot.ToString());
+            File.WriteAllBytes("Clan outfits/" + clanOutfit1.Key + "/" + clanOutfit1.Key + "_" + ((Outfit) num).ToString() + ".png", outfit.png);
+            File.WriteAllText("Clan outfits/" + clanOutfit1.Key + "/" + clanOutfit1.Key + "_" + ((Outfit) num).ToString() + ".meta", outfit.pivot.ToString());
           }
           ++num;
         }
@@ -846,9 +846,9 @@ public class CharacterCreation : Catalogue
     if (num <= 0 || Client.MyAccount.cosmetics.array[(int) CharacterCreation.GetViewing(this.viewing)][i])
       return;
     if (Client.MyAccount.tournamentCoins >= num)
-      MyMessageBox.Create("Buy this outfit piece for <sprite name=\"tcoin\"> <#FF0000>" + (object) num + "</color> tournament coins?", (Action) (() => Prestige.Ask((byte) 10, (int) CharacterCreation.GetViewing(this.viewing), i)), "Ok", "Cancel", (Action) null, (Action) null, this.curGroup[i].sprite, (string) null, (Action) null);
+      MyMessageBox.Create("Buy this outfit piece for <sprite name=\"tcoin\"> <#FF0000>" + num.ToString() + "</color> tournament coins?", (Action) (() => Prestige.Ask((byte) 10, (int) CharacterCreation.GetViewing(this.viewing), i)), "Ok", "Cancel", (Action) null, (Action) null, this.curGroup[i].sprite, (string) null, (Action) null);
     else
-      MyToolTip.Show("You need <sprite name=\"tcoin\"> " + (object) (num - Client.MyAccount.tournamentCoins) + " more tournament coins to buy this outfit - Better sign-up for the next one!", -1f, false);
+      MyToolTip.Show("You need <sprite name=\"tcoin\"> " + (num - Client.MyAccount.tournamentCoins).ToString() + " more tournament coins to buy this outfit - Better sign-up for the next one!", -1f, false);
   }
 
   public void SelectIndex(int i)
@@ -1163,7 +1163,7 @@ public class CharacterCreation : Catalogue
       this.outfitButtons[index1].gameObject.SetActive(false);
     this.buttonLeft.Interactable(this.HasLeft());
     this.buttonRight.Interactable(this.HasRight());
-    this.txtPage.text = "Page " + (object) (page + 1) + " of " + (object) ((this.curSorted.Count + 75 - 1) / 75);
+    this.txtPage.text = "Page " + (page + 1).ToString() + " of " + ((this.curSorted.Count + 75 - 1) / 75).ToString();
     this.FindEquipped();
   }
 

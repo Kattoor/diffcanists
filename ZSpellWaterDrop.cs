@@ -26,7 +26,7 @@ public class ZSpellWaterDrop : ZSpell
     }
     if (gotoStatic)
       yield return 0.0f;
-label_69:
+label_71:
     while (!zspellWaterDrop.isDead)
     {
       zspellWaterDrop.pX = zspellWaterDrop.position.x;
@@ -55,7 +55,7 @@ label_69:
         {
           zspellWaterDrop.position = new MyLocation(zspellWaterDrop.validX, zspellWaterDrop.validY);
           yield return 0.0f;
-          goto label_69;
+          goto label_71;
         }
         else
         {
@@ -199,6 +199,8 @@ label_62:
         zspellWaterDrop.DestroyDelay();
         break;
       }
+      if (zspellWaterDrop.curDuration == 5 && zspellWaterDrop.spellEnum == SpellEnum.Erosion)
+        zspellWaterDrop.damageType = DamageType.None;
       yield return 0.0f;
     }
   }

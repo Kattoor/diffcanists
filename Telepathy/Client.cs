@@ -46,12 +46,12 @@ namespace Telepathy
       }
       catch (SocketException ex)
       {
-        Logger.Log("Client Recv: failed to connect to ip=" + ip + " port=" + (object) port + " reason=" + (object) ex);
+        Logger.Log("Client Recv: failed to connect to ip=" + ip + " port=" + port.ToString() + " reason=" + ex?.ToString());
         this.receiveQueue.Enqueue(new Message(0, EventType.Disconnected, (byte[]) null));
       }
       catch (Exception ex)
       {
-        Logger.LogError("Client Recv Exception: " + (object) ex);
+        Logger.LogError("Client Recv Exception: " + ex?.ToString());
       }
       this.sendThread?.Interrupt();
       this._Connecting = false;
@@ -92,7 +92,7 @@ namespace Telepathy
           this.sendPending.Set();
           return true;
         }
-        Logger.LogError("Client.Send: message too big: " + (object) data.Length + ". Limit: " + (object) this.MaxMessageSize);
+        Logger.LogError("Client.Send: message too big: " + data.Length.ToString() + ". Limit: " + this.MaxMessageSize.ToString());
         return false;
       }
       Logger.LogWarning("Client.Send: not connected!");

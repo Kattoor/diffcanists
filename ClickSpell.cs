@@ -384,7 +384,7 @@ public class ClickSpell : MonoBehaviour
     else if (spell1.LastTurnFired > localTurn)
     {
       num4 = Mathf.Max(spell1.LastTurnFired - localTurn);
-      Debug.Log((object) ("HI: " + (object) num4));
+      Debug.Log((object) ("HI: " + num4.ToString()));
     }
     bool maxedSummons = false;
     if (spell2.type == CastType.Placement && spell2.amount > 0 && Player.Instance.selected.parent.GetMinionCount() + spell2.amount > Player.Instance.selected.parent.GetMaxMinions())
@@ -534,7 +534,7 @@ public class ClickSpell : MonoBehaviour
       case 110:
         return "Temporarily Disabled";
       case 111:
-        return "Only one Blood Bank per player allowed";
+        return "Only one Hemogoblin per player allowed";
       case 112:
         return "Cannot cast spells while in stone form";
       case 113:
@@ -650,7 +650,9 @@ label_44:
     switch (s)
     {
       case SpellEnum.Dark_Defences:
-        return !c.pawn ? 0 : 134;
+        if (c.pawn)
+          return 134;
+        return !ZComponent.IsNull((ZComponent) c.pact) && !c.pact.isDead ? 15 : 0;
       case SpellEnum.Vine_Bridge:
         if (c.flying)
           return 3;
@@ -668,8 +670,6 @@ label_44:
         {
           case SpellEnum.Arcane_Energiser:
             return c.HasArcaneEnergizer ? 14 : 0;
-          case SpellEnum.Dark_Defences:
-            return !ZComponent.IsNull((ZComponent) c.pact) && !c.pact.isDead ? 15 : 0;
           case SpellEnum.Frost_Leap:
             return !((ZComponent) c.tower == (object) null) ? 1 : 0;
           case SpellEnum.Blood_Pact:
@@ -788,7 +788,7 @@ label_44:
         this.txtText.gameObject.SetActive(true);
         this.image.color = ClickSpell.bg_image.DarkGray;
         this.bgColor.color = ClickSpell.bg_image.DarkGray;
-        this.txtText.text = string.Concat((object) rechargeTime);
+        this.txtText.text = rechargeTime.ToString() ?? "";
         this.txtText.color = Color.red;
         this.txtText.alignment = TextAlignmentOptions.Midline;
       }
@@ -797,7 +797,7 @@ label_44:
         this.txtText.gameObject.SetActive(true);
         this.image.color = Color.white;
         this.bgColor.color = Color.white;
-        this.txtText.text = string.Concat((object) uses);
+        this.txtText.text = uses.ToString() ?? "";
         this.txtText.color = Color.white;
         this.txtText.alignment = TextAlignmentOptions.BottomRight;
       }

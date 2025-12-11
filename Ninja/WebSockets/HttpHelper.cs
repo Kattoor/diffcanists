@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -32,20 +33,50 @@ namespace Ninja.WebSockets
 
     public static async Task<string> ReadHttpHeaderAsync(Stream stream, CancellationToken token)
     {
-      int length = 16384;
-      byte[] buffer = new byte[length];
-      int offset = 0;
-      while (offset < length)
+      byte[] buffer;
+      string result1;
+      try
       {
-        int num = await stream.ReadAsync(buffer, offset, length - offset, token);
-        offset += num;
-        string str = Encoding.UTF8.GetString(buffer, 0, offset);
-        if (str.Contains("\r\n\r\n"))
-          return str;
-        if (num <= 0)
-          return string.Empty;
+        int length = 16384;
+        buffer = new byte[length];
+        int offset = 0;
+        int result2;
+        do
+        {
+          if (offset >= length)
+            throw new EntityTooLargeException("Http header message too large to fit in buffer (16KB)");
+          TaskAwaiter<int> awaiter = stream.ReadAsync(buffer, offset, length - offset, token).GetAwaiter();
+          if (!awaiter.IsCompleted)
+          {
+            int num;
+            (^this).\u003C\u003E1__state = num = 0;
+            TaskAwaiter<int> taskAwaiter = awaiter;
+            (^this).\u003C\u003Et__builder.AwaitUnsafeOnCompleted<TaskAwaiter<int>, HttpHelper.\u003CReadHttpHeaderAsync\u003Ed__3>(ref awaiter, this);
+            return;
+          }
+          result2 = awaiter.GetResult();
+          offset += result2;
+          string str = Encoding.UTF8.GetString(buffer, 0, offset);
+          if (str.Contains("\r\n\r\n"))
+          {
+            result1 = str;
+            goto label_11;
+          }
+        }
+        while (result2 > 0);
+        result1 = string.Empty;
       }
-      throw new EntityTooLargeException("Http header message too large to fit in buffer (16KB)");
+      catch (Exception ex)
+      {
+        (^this).\u003C\u003E1__state = -2;
+        buffer = (byte[]) null;
+        (^this).\u003C\u003Et__builder.SetException(ex);
+        return;
+      }
+label_11:
+      (^this).\u003C\u003E1__state = -2;
+      buffer = (byte[]) null;
+      (^this).\u003C\u003Et__builder.SetResult(result1);
     }
 
     public static bool IsWebSocketUpgradeRequest(string header)

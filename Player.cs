@@ -110,7 +110,7 @@ public class Player : MonoBehaviour
             int familiarLevel = p.familiarLevels[activateableFamiliar];
             HUD.instance.fullBookImg.sprite = HUD.GetFullBookIcon((BookOf) activateableFamiliar, p);
             HUD.instance.fullBookButton.Interactable(familiarLevel < 5);
-            HUD.instance.fullBookTextLevel.text = familiarLevel == 0 ? "" : "Level " + (object) familiarLevel;
+            HUD.instance.fullBookTextLevel.text = familiarLevel == 0 ? "" : "Level " + familiarLevel.ToString();
             HUD.instance.fullBookObj.SetActive(true);
           }
           else
@@ -133,7 +133,7 @@ public class Player : MonoBehaviour
             int familiarLevel = p.familiarLevels[activateableFamiliar];
             HUD.instance.fullBookImg.sprite = HUD.GetFullBookIcon((BookOf) activateableFamiliar, p);
             HUD.instance.fullBookButton.Interactable(familiarLevel < 5);
-            HUD.instance.fullBookTextLevel.text = familiarLevel == 0 ? "" : "Level " + (object) familiarLevel;
+            HUD.instance.fullBookTextLevel.text = familiarLevel == 0 ? "" : "Level " + familiarLevel.ToString();
             HUD.instance.fullBookObj.SetActive(true);
           }
           else
@@ -661,7 +661,7 @@ label_1:
           this.meter_subs[7].transform.position = this.selected.transform.position;
           break;
         default:
-          Debug.Log((object) ("Wrong spell type: " + (object) type + " in Player.SetSpell."));
+          Debug.Log((object) ("Wrong spell type: " + type.ToString() + " in Player.SetSpell."));
           break;
       }
     }
@@ -1462,13 +1462,17 @@ label_1:
               if (this.hotkeys[i].GetKey(i) && ((ZComponent) this.hotkeys[i].creature != (object) null || this.person.controlled.Count > i))
               {
                 this.UnselectSpell();
-                this.selected = this.hotkeys[i].creature ?? this.person.controlled[i];
-                this.selectedCreaturePlayerOffset = Client.game.players.FindIndex((Predicate<ZPerson>) (z => z == this.selected.parent));
-                this.selectedCreatureIndex = this.selected.parent.controlled.FindIndex((Predicate<ZCreature>) (z => (ZComponent) z == (object) this.selected));
-                CameraMovement.Instance.LerpToTransform(this.selected, false);
-                this.UpdateVisuals();
-                AudioManager.Play(this.selected.clientObj.clipSelect);
-                return;
+                ZCreature zcreature = this.hotkeys[i].creature ?? this.person.controlled[i];
+                if (!((ZComponent) zcreature == (object) null) && zcreature.controllable)
+                {
+                  this.selected = this.hotkeys[i].creature ?? this.person.controlled[i];
+                  this.selectedCreaturePlayerOffset = Client.game.players.FindIndex((Predicate<ZPerson>) (z => z == this.selected.parent));
+                  this.selectedCreatureIndex = this.selected.parent.controlled.FindIndex((Predicate<ZCreature>) (z => (ZComponent) z == (object) this.selected));
+                  CameraMovement.Instance.LerpToTransform(this.selected, false);
+                  this.UpdateVisuals();
+                  AudioManager.Play(this.selected.clientObj.clipSelect);
+                  return;
+                }
               }
             }
             if (hardInput.GetKey("AssignableHotkey"))
@@ -1479,10 +1483,10 @@ label_1:
                 this.hotkeys[numberDown].creature = (ZComponent) this.hotkeys[numberDown].creature != (object) null ? (ZCreature) null : this.selected;
                 if (this.hotkeys[numberDown] != null)
                 {
-                  ChatBox.Instance?.NewChatMsg("Added hotkey " + (object) numberDown + " for: " + this.selected.baseCreature.name, (Color) ColorScheme.GetColor(Global.ColorSystem));
+                  ChatBox.Instance?.NewChatMsg("Added hotkey " + numberDown.ToString() + " for: " + this.selected.baseCreature.name, (Color) ColorScheme.GetColor(Global.ColorSystem));
                   return;
                 }
-                ChatBox.Instance?.NewChatMsg("Removed hotkey " + (object) numberDown, (Color) ColorScheme.GetColor(Global.ColorSystem));
+                ChatBox.Instance?.NewChatMsg("Removed hotkey " + numberDown.ToString(), (Color) ColorScheme.GetColor(Global.ColorSystem));
                 return;
               }
             }
@@ -1707,13 +1711,17 @@ label_1:
         if (this.hotkeys[i].GetKey(i) && ((ZComponent) this.hotkeys[i].creature != (object) null || this.person.controlled.Count > i))
         {
           this.UnselectSpell();
-          this.selected = this.hotkeys[i].creature ?? this.person.controlled[i];
-          this.selectedCreaturePlayerOffset = Client.game.players.FindIndex((Predicate<ZPerson>) (z => z == this.selected.parent));
-          this.selectedCreatureIndex = this.selected.parent.controlled.FindIndex((Predicate<ZCreature>) (z => (ZComponent) z == (object) this.selected));
-          CameraMovement.Instance.LerpToTransform(this.selected, false);
-          this.UpdateVisuals();
-          AudioManager.Play(this.selected.clientObj.clipSelect);
-          return;
+          ZCreature zcreature = this.hotkeys[i].creature ?? this.person.controlled[i];
+          if (!((ZComponent) zcreature == (object) null) && zcreature.controllable)
+          {
+            this.selected = this.hotkeys[i].creature ?? this.person.controlled[i];
+            this.selectedCreaturePlayerOffset = Client.game.players.FindIndex((Predicate<ZPerson>) (z => z == this.selected.parent));
+            this.selectedCreatureIndex = this.selected.parent.controlled.FindIndex((Predicate<ZCreature>) (z => (ZComponent) z == (object) this.selected));
+            CameraMovement.Instance.LerpToTransform(this.selected, false);
+            this.UpdateVisuals();
+            AudioManager.Play(this.selected.clientObj.clipSelect);
+            return;
+          }
         }
       }
     }
@@ -2022,7 +2030,7 @@ label_1:
       }
     }
     if (this.person.game.ongoing.NumberOfSlowUpdateCoroutines > 0 || this.person.game.MoveQue.Count > 0)
-      Debug.Log((object) ("Move que not empty!!!!" + (object) this.person.game.ongoing.NumberOfSlowUpdateCoroutines + " " + (object) this.person.game.MoveQue.Count));
+      Debug.Log((object) ("Move que not empty!!!!" + this.person.game.ongoing.NumberOfSlowUpdateCoroutines.ToString() + " " + this.person.game.MoveQue.Count.ToString()));
     else if (Client.game.players[this.selectedCreaturePlayerOffset].controlled.Count <= this.selectedCreatureIndex)
     {
       this.NextControlled(true, true);
@@ -2060,7 +2068,7 @@ label_1:
   {
     if (this.person.game.ongoing.NumberOfSlowUpdateCoroutines > 0 || this.person.game.MoveQue.Count > 0)
     {
-      Debug.Log((object) ("Move que not empty!!!!" + (object) this.person.game.ongoing.NumberOfSlowUpdateCoroutines + " " + (object) this.person.game.MoveQue.Count));
+      Debug.Log((object) ("Move que not empty!!!!" + this.person.game.ongoing.NumberOfSlowUpdateCoroutines.ToString() + " " + this.person.game.MoveQue.Count.ToString()));
     }
     else
     {

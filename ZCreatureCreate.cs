@@ -126,6 +126,7 @@ public static class ZCreatureCreate
     z._FourSeasonsCastAtEndOfTurn = reader.ReadBoolean();
     z._FourSeasonsLocation = reader.ReadMyLocation();
     z.bloodBankHeal = reader.ReadInt32();
+    z.monolithHeal = reader.ReadInt32();
     z.diesInWater = reader.ReadBoolean();
     parent.game.helper.id_stormShield.Add(new ZGame.ID2(z, reader.ReadInt32()));
     parent.game.helper.id_Aura.Add(new ZGame.ID2(z, reader.ReadInt32()));
@@ -239,6 +240,7 @@ public static class ZCreatureCreate
     writer.Write(c._FourSeasonsCastAtEndOfTurn);
     writer.Write(c._FourSeasonsLocation);
     writer.Write(c.bloodBankHeal);
+    writer.Write(c.monolithHeal);
     writer.Write(c.diesInWater);
     writer.Write(ZGame.GetID(c.stormShield));
     writer.Write(ZGame.GetID(c.auraOfDecay));

@@ -214,89 +214,106 @@ public class GameFacts
 
   public string ToString(ZGame g, bool linked = false)
   {
-    StringBuilder stringBuilder = new StringBuilder();
+    StringBuilder stringBuilder1 = new StringBuilder();
     GameStyle style = this.GetStyle();
     this.CalculateGameType();
     if (this.GetRatedMode())
-      stringBuilder.Append("<#FF0000>Rated Game</color><br>");
+      stringBuilder1.Append("<#FF0000>Rated Game</color><br>");
     if (g != null && g.isTutorial)
-      stringBuilder.Append("Tutorial<br>");
+      stringBuilder1.Append("Tutorial<br>");
     else if (g != null && g.isSandbox)
-      stringBuilder.Append("Sandbox<br>");
+      stringBuilder1.Append("Sandbox<br>");
     else
-      stringBuilder.Append(RatedFacts.GetGameTypeAsStringLong((int) this.gameType)).Append("<br>");
-    stringBuilder.Append("Map: ").Append(this.status == (byte) 0 || !linked ? GameFacts.MapName(this.GetMapMode()) : GameFacts.MapName(this.realMap)).Append("<br>");
+      stringBuilder1.Append(RatedFacts.GetGameTypeAsStringLong((int) this.gameType)).Append("<br>");
+    stringBuilder1.Append("Map: ").Append(this.status == (byte) 0 || !linked ? GameFacts.MapName(this.GetMapMode()) : GameFacts.MapName(this.realMap)).Append("<br>");
     List<SpellEnum> customArmageddon = this.settings.customArmageddon;
+    byte num;
     if ((customArmageddon != null ? (__nonvirtual (customArmageddon.Count) > 0 ? 1 : 0) : 0) != 0)
     {
-      stringBuilder.Append("Armageddon: ");
+      stringBuilder1.Append("Armageddon: ");
       for (int index = 0; index < this.settings.customArmageddon.Count; ++index)
       {
         Spell spell = Inert.GetSpell(this.settings.customArmageddon[index]);
         if ((UnityEngine.Object) spell != (UnityEngine.Object) null && (spell.level < 4 || GameFacts.AllowCustomArmageddon(spell.spellEnum)))
-          stringBuilder.Append("<sprite name=\"").Append(spell.name).Append("\">");
+          stringBuilder1.Append("<sprite name=\"").Append(spell.name).Append("\">");
       }
-      stringBuilder.Append("<br>");
+      stringBuilder1.Append("<br>");
     }
     else
-      stringBuilder.Append("Armageddon: ").Append(g == null ? GameFacts.ArmageddonName(this.GetArmageddon(), style) : GameFacts.ArmageddonName(g.armageddon, style)).Append(g == null || g.armageddon != MapEnum.Grassy_Hills ? " (turn " + (object) this.armageddonTurn + ")<br>" : "<br>");
+    {
+      StringBuilder stringBuilder2 = stringBuilder1.Append("Armageddon: ").Append(g == null ? GameFacts.ArmageddonName(this.GetArmageddon(), style) : GameFacts.ArmageddonName(g.armageddon, style));
+      string str;
+      if (g == null || g.armageddon != MapEnum.Grassy_Hills)
+      {
+        num = this.armageddonTurn;
+        str = " (turn " + num.ToString() + ")<br>";
+      }
+      else
+        str = "<br>";
+      stringBuilder2.Append(str);
+    }
     if (this.settings.autoInclude != null && this.settings.autoInclude.Count > 0)
     {
-      stringBuilder.Append("Auto Included: ");
+      stringBuilder1.Append("Auto Included: ");
       foreach (SpellEnum s in this.settings.autoInclude)
       {
         Spell spell = Inert.GetSpell(s);
         if ((UnityEngine.Object) spell != (UnityEngine.Object) null && spell.level <= 3)
-          stringBuilder.Append("<sprite name=\"" + spell.name + "\">");
+          stringBuilder1.Append("<sprite name=\"" + spell.name + "\">");
       }
-      stringBuilder.Append("<br>");
+      stringBuilder1.Append("<br>");
     }
     if (g == null)
-      stringBuilder.Append("Players: ").Append(this.players.Count).Append("/").Append(this.customPlayerCount.ToString()).Append("<br>");
+    {
+      StringBuilder stringBuilder2 = stringBuilder1.Append("Players: ").Append(this.players.Count).Append("/");
+      num = this.customPlayerCount;
+      string str = num.ToString();
+      stringBuilder2.Append(str).Append("<br>");
+    }
     else
-      stringBuilder.Append("Players: ").Append(this.players.Count).Append("<br>");
-    stringBuilder.Append("Turn Time: ").Append(this.customTime).Append("s<br>");
-    stringBuilder.Append(this.GetTeamMode() ? (this.GetMultiTeamMode() ? "Multi-Teams of " + (object) this.GetNumberPlayersPerTeam() : "Teams of " + (object) this.GetNumberPlayersPerTeam()) : "FFA").Append("<br>");
+      stringBuilder1.Append("Players: ").Append(this.players.Count).Append("<br>");
+    stringBuilder1.Append("Turn Time: ").Append(this.customTime).Append("s<br>");
+    stringBuilder1.Append(this.GetTeamMode() ? (this.GetMultiTeamMode() ? "Multi-Teams of " + this.GetNumberPlayersPerTeam().ToString() : "Teams of " + this.GetNumberPlayersPerTeam().ToString()) : "FFA").Append("<br>");
     if (this.startHealth != (ushort) 250)
-      stringBuilder.Append("Health: ").Append(this.startHealth).Append("<br>");
+      stringBuilder1.Append("Health: ").Append(this.startHealth).Append("<br>");
     if (this.countdownTime != (short) 0)
-      stringBuilder.Append("Countdown: ").Append(Global.IntToTime((int) this.countdownTime, 16)).Append(" +").Append(this.countdownDelay).Append("<br>");
+      stringBuilder1.Append("Countdown: ").Append(Global.IntToTime((int) this.countdownTime, 16)).Append(" +").Append(this.countdownDelay).Append("<br>");
     if (!this.GetSpectatorMode())
-      stringBuilder.Append("No Spectators<br>");
+      stringBuilder1.Append("No Spectators<br>");
     if (style.HasStyle(GameStyle.Shuffle_Players))
-      stringBuilder.Append("Shuffle Players<br>");
+      stringBuilder1.Append("Shuffle Players<br>");
     if (style.HasStyle(GameStyle.Random_Spells))
-      stringBuilder.Append("Random Spells<br>");
+      stringBuilder1.Append("Random Spells<br>");
     if (style.HasStyle(GameStyle.Original_Spells_Only))
-      stringBuilder.Append("Original Spells Only<br>");
+      stringBuilder1.Append("Original Spells Only<br>");
     if (style.HasStyle(GameStyle.No_Movement))
-      stringBuilder.Append("No Movement<br>");
+      stringBuilder1.Append("No Movement<br>");
     if (style.HasStyle(GameStyle.Zero_Shield))
-      stringBuilder.Append("Zero Shield<br>");
+      stringBuilder1.Append("Zero Shield<br>");
     if (style.HasStyle(GameStyle.Sandbox))
-      stringBuilder.Append("Sandbox<br>");
+      stringBuilder1.Append("Sandbox<br>");
     if (style.HasStyle(GameStyle.First_Turn_Teleport))
-      stringBuilder.Append("First Turn Teleport<br>");
+      stringBuilder1.Append("First Turn Teleport<br>");
     if (style.HasStyle(GameStyle.Elementals))
-      stringBuilder.Append("Elementals Level: ").Append(this.settings.elementalLevel).Append("<br>");
+      stringBuilder1.Append("Elementals Level: ").Append(this.settings.elementalLevel).Append("<br>");
     if (this.GetAllowArcanePowers())
-      stringBuilder.Append("Allow Arcane Monster<br>");
+      stringBuilder1.Append("Allow Arcane Monster<br>");
     if (this.restrictions != null)
-      stringBuilder.Append("Restricted spells<br>");
+      stringBuilder1.Append("Restricted spells<br>");
     if (this.settings.mapWidth != (byte) 100)
-      stringBuilder.Append("Width: ").Append(this.settings.mapWidth).Append("%<br>");
+      stringBuilder1.Append("Width: ").Append(this.settings.mapWidth).Append("%<br>");
     if (this.settings.mapHeight != (byte) 100)
-      stringBuilder.Append("Height: ").Append(this.settings.mapHeight).Append("%<br>");
+      stringBuilder1.Append("Height: ").Append(this.settings.mapHeight).Append("%<br>");
     if (g != null && !g.isSandbox || this.settings.fixedMapSeed)
     {
       if (linked)
-        stringBuilder.Append("Seed: <u><link=Copy: " + (object) this.settings.mapSeed + ">").Append(this.settings.mapSeed).Append(this.settings.fixedMapSeed ? "</link></u> (Fixed)<br>" : "</link></u><br>");
+        stringBuilder1.Append("Seed: <u><link=Copy: " + this.settings.mapSeed.ToString() + ">").Append(this.settings.mapSeed).Append(this.settings.fixedMapSeed ? "</link></u> (Fixed)<br>" : "</link></u><br>");
       else
-        stringBuilder.Append("Seed: ").Append(this.settings.mapSeed).Append(this.settings.fixedMapSeed ? " (Fixed)<br>" : "<br>");
+        stringBuilder1.Append("Seed: ").Append(this.settings.mapSeed).Append(this.settings.fixedMapSeed ? " (Fixed)<br>" : "<br>");
     }
-    stringBuilder.Append("<br>");
-    stringBuilder.Append(this.settings.FilteredDescription());
-    return stringBuilder.ToString();
+    stringBuilder1.Append("<br>");
+    stringBuilder1.Append(this.settings.FilteredDescription());
+    return stringBuilder1.ToString();
   }
 
   public void SendReadyState()

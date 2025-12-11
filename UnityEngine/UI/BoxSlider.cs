@@ -1,6 +1,5 @@
 
 using System;
-using System.Runtime.CompilerServices;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
@@ -336,7 +335,6 @@ namespace UnityEngine.UI
       eventData.useDragThreshold = false;
     }
 
-    [SpecialName]
     Transform ICanvasElement.get_transform()
     {
       return this.transform;

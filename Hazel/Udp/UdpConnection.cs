@@ -22,6 +22,103 @@ namespace Hazel.Udp
     private long totalRoundTime;
     private long totalReliableMessages;
 
+    protected UdpConnection()
+    {
+      this.InitializeKeepAliveTimer();
+    }
+
+    protected abstract void WriteBytesToConnection(byte[] bytes);
+
+    public override void SendBytesUnencrypted(byte[] bytes)
+    {
+      if (this.State != ConnectionState.Connected)
+        throw new InvalidOperationException("Could not send data as this Connection is not connected. Did you disconnect?");
+      this.HandleSend(bytes, (byte) 0, (Action) null);
+    }
+
+    public override void SendBytes(byte[] bytes, SendOption sendOption = SendOption.None)
+    {
+      if (this.State != ConnectionState.Connected)
+        throw new InvalidOperationException("Could not send data as this Connection is not connected. Did you disconnect?");
+      this.HandleSend(bytes, (byte) sendOption, (Action) null);
+    }
+
+    public override void SendBytesAndClose(byte[] bytes, SendOption sendOption = SendOption.FragmentedReliable)
+    {
+      throw new NotImplementedException();
+    }
+
+    protected void HandleSend(byte[] data, byte sendOption, Action ackCallback = null)
+    {
+      byte[] bytes;
+      if (sendOption == (byte) 1 || sendOption == (byte) 8)
+      {
+        bytes = new byte[data.Length + 3];
+        this.WriteReliableSendHeader(bytes, ackCallback);
+      }
+      else
+        bytes = new byte[data.Length + 1];
+      bytes[0] = sendOption;
+      Buffer.BlockCopy((Array) data, 0, (Array) bytes, bytes.Length - data.Length, data.Length);
+      this.ResetKeepAliveTimer();
+      this.WriteBytesToConnection(bytes);
+      this.Statistics.LogSend(data.Length, bytes.Length);
+    }
+
+    protected byte[] HandleReceive(byte[] buffer, int bytesReceived)
+    {
+      this.ResetKeepAliveTimer();
+      int srcOffset = 1;
+      switch (buffer[0])
+      {
+        case 1:
+          srcOffset = 3;
+          if (!this.HandleReliableReceive(buffer))
+            return (byte[]) null;
+          break;
+        case 8:
+          this.HandleReliableReceive(buffer);
+          return (byte[]) null;
+        case 9:
+          this.HandleDisconnect((HazelException) null);
+          return (byte[]) null;
+        case 10:
+          this.HandleAcknowledgement(buffer);
+          return (byte[]) null;
+      }
+      byte[] numArray = new byte[bytesReceived - srcOffset];
+      Buffer.BlockCopy((Array) buffer, srcOffset, (Array) numArray, 0, numArray.Length);
+      this.Statistics.LogReceive(numArray.Length, bytesReceived);
+      return numArray;
+    }
+
+    protected void SendHello(byte[] bytes, Action acknowledgeCallback)
+    {
+      byte[] data;
+      if (bytes == null)
+      {
+        data = new byte[1];
+      }
+      else
+      {
+        data = new byte[bytes.Length + 1];
+        Buffer.BlockCopy((Array) bytes, 0, (Array) data, 1, bytes.Length);
+      }
+      this.HandleSend(data, (byte) 8, acknowledgeCallback);
+    }
+
+    protected void SendDisconnect()
+    {
+      this.HandleSend(new byte[0], (byte) 9, (Action) null);
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+      if (disposing)
+        this.DisposeKeepAliveTimer();
+      base.Dispose(disposing);
+    }
+
     public int KeepAliveInterval
     {
       get
@@ -183,103 +280,6 @@ namespace Hazel.Udp
         byte1,
         byte2
       });
-    }
-
-    protected UdpConnection()
-    {
-      this.InitializeKeepAliveTimer();
-    }
-
-    protected abstract void WriteBytesToConnection(byte[] bytes);
-
-    public override void SendBytesUnencrypted(byte[] bytes)
-    {
-      if (this.State != ConnectionState.Connected)
-        throw new InvalidOperationException("Could not send data as this Connection is not connected. Did you disconnect?");
-      this.HandleSend(bytes, (byte) 0, (Action) null);
-    }
-
-    public override void SendBytes(byte[] bytes, SendOption sendOption = SendOption.None)
-    {
-      if (this.State != ConnectionState.Connected)
-        throw new InvalidOperationException("Could not send data as this Connection is not connected. Did you disconnect?");
-      this.HandleSend(bytes, (byte) sendOption, (Action) null);
-    }
-
-    public override void SendBytesAndClose(byte[] bytes, SendOption sendOption = SendOption.FragmentedReliable)
-    {
-      throw new NotImplementedException();
-    }
-
-    protected void HandleSend(byte[] data, byte sendOption, Action ackCallback = null)
-    {
-      byte[] bytes;
-      if (sendOption == (byte) 1 || sendOption == (byte) 8)
-      {
-        bytes = new byte[data.Length + 3];
-        this.WriteReliableSendHeader(bytes, ackCallback);
-      }
-      else
-        bytes = new byte[data.Length + 1];
-      bytes[0] = sendOption;
-      Buffer.BlockCopy((Array) data, 0, (Array) bytes, bytes.Length - data.Length, data.Length);
-      this.ResetKeepAliveTimer();
-      this.WriteBytesToConnection(bytes);
-      this.Statistics.LogSend(data.Length, bytes.Length);
-    }
-
-    protected byte[] HandleReceive(byte[] buffer, int bytesReceived)
-    {
-      this.ResetKeepAliveTimer();
-      int srcOffset = 1;
-      switch (buffer[0])
-      {
-        case 1:
-          srcOffset = 3;
-          if (!this.HandleReliableReceive(buffer))
-            return (byte[]) null;
-          break;
-        case 8:
-          this.HandleReliableReceive(buffer);
-          return (byte[]) null;
-        case 9:
-          this.HandleDisconnect((HazelException) null);
-          return (byte[]) null;
-        case 10:
-          this.HandleAcknowledgement(buffer);
-          return (byte[]) null;
-      }
-      byte[] numArray = new byte[bytesReceived - srcOffset];
-      Buffer.BlockCopy((Array) buffer, srcOffset, (Array) numArray, 0, numArray.Length);
-      this.Statistics.LogReceive(numArray.Length, bytesReceived);
-      return numArray;
-    }
-
-    protected void SendHello(byte[] bytes, Action acknowledgeCallback)
-    {
-      byte[] data;
-      if (bytes == null)
-      {
-        data = new byte[1];
-      }
-      else
-      {
-        data = new byte[bytes.Length + 1];
-        Buffer.BlockCopy((Array) bytes, 0, (Array) data, 1, bytes.Length);
-      }
-      this.HandleSend(data, (byte) 8, acknowledgeCallback);
-    }
-
-    protected void SendDisconnect()
-    {
-      this.HandleSend(new byte[0], (byte) 9, (Action) null);
-    }
-
-    protected override void Dispose(bool disposing)
-    {
-      if (disposing)
-        this.DisposeKeepAliveTimer();
-      base.Dispose(disposing);
     }
 
     private class Packet : IRecyclable, IDisposable

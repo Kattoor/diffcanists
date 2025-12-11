@@ -33,7 +33,7 @@ namespace InGameCodeEditor
       {
         if (this.delimiterSymbolCache == null)
         {
-          string[] strArray = this.delimiterSymbols.Split(' ');
+          string[] strArray = this.delimiterSymbols.Split(' ', StringSplitOptions.None);
           int length = 0;
           for (int index = 0; index < strArray.Length; ++index)
           {

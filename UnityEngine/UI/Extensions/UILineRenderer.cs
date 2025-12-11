@@ -254,7 +254,7 @@ namespace UnityEngine.UI.Extensions
       }
       if (vh.currentVertCount <= 64000)
         return;
-      Debug.LogError((object) ("Max Verticies size is 64000, current mesh vertcies count is [" + (object) vh.currentVertCount + "] - Cannot Draw"));
+      Debug.LogError((object) ("Max Verticies size is 64000, current mesh vertcies count is [" + vh.currentVertCount.ToString() + "] - Cannot Draw"));
       vh.Clear();
     }
 

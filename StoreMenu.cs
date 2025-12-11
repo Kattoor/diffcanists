@@ -29,10 +29,10 @@ public class StoreMenu : MonoBehaviour
   private void Awake()
   {
     StoreMenu.Instance = this;
-    this.txtCrystals.SetText(Client.MyAccount.dust.ToString(), true);
+    this.txtCrystals.SetText(Client.MyAccount.dust.ToString());
     if (Client.MyAccount.tomatoes > 0)
     {
-      this.txtTomatoes.SetText(Client.MyAccount.tomatoes.ToString(), true);
+      this.txtTomatoes.SetText(Client.MyAccount.tomatoes.ToString());
       this.txtTomatoes.transform.parent.gameObject.SetActive(true);
     }
     this.startedFromSteam.gameObject.SetActive(!SteamManager.startedFromSteam);
@@ -175,7 +175,7 @@ public class StoreMenu : MonoBehaviour
   {
     ArcanistsStore.Item item = Store.Instance.Get(which)[itemIndex];
     if (which == ArcanistsStore.Which.SpellSkin)
-      MyMessageBox.Create("Buy <#FF0000>" + item.name + "</color> for <#00FFFF>" + (object) item.cost + "</color> crystals?", (Action) (() => Prestige.Ask((byte) 12, (int) which, itemIndex)), "Ok", "Cancel", (Action) null, (Action) null, item.sprite, "Preview", (Action) (() =>
+      MyMessageBox.Create("Buy <#FF0000>" + item.name + "</color> for <#00FFFF>" + item.cost.ToString() + "</color> crystals?", (Action) (() => Prestige.Ask((byte) 12, (int) which, itemIndex)), "Ok", "Cancel", (Action) null, (Action) null, item.sprite, "Preview", (Action) (() =>
       {
         if ((UnityEngine.Object) MainMenu.Instance == (UnityEngine.Object) null)
         {
@@ -191,7 +191,7 @@ public class StoreMenu : MonoBehaviour
         }
       }));
     else
-      MyMessageBox.Create("Buy <#FF0000>" + item.name + "</color> for <#00FFFF>" + (object) item.cost + "</color> crystals?", (Action) (() => Prestige.Ask((byte) 12, (int) which, itemIndex)), "Ok", "Cancel", (Action) null, (Action) null, item.sprite, (string) null, (Action) null);
+      MyMessageBox.Create("Buy <#FF0000>" + item.name + "</color> for <#00FFFF>" + item.cost.ToString() + "</color> crystals?", (Action) (() => Prestige.Ask((byte) 12, (int) which, itemIndex)), "Ok", "Cancel", (Action) null, (Action) null, item.sprite, (string) null, (Action) null);
   }
 
   public void RightClickItem(int itemIndex, ArcanistsStore.Which which)

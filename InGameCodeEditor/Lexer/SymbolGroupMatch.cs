@@ -131,7 +131,7 @@ label_22:
       if (string.IsNullOrEmpty(this.symbols))
         this.symbolCache = new string[0];
       else
-        this.symbolCache = this.symbols.Split(' ');
+        this.symbolCache = this.symbols.Split(' ', StringSplitOptions.None);
     }
   }
 }

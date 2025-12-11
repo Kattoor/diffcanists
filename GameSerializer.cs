@@ -47,6 +47,7 @@ public static class GameSerializer
     game.SerializeList(writer, x.stolenMinions);
     game.SerializeList(writer, x.takenMinions);
     writer.Write(ZGame.GetID(x.bloodBank));
+    writer.Write(ZGame.GetID(x.monolith));
     writer.Write(x.armaWarnings.Count);
     foreach (ArmaWarning armaWarning in x.armaWarnings)
       armaWarning.Serialize(writer);
@@ -71,6 +72,7 @@ public static class GameSerializer
     game.DeserializeList(reader, x.stolenMinions);
     game.DeserializeList(reader, x.takenMinions);
     x.bloodBank = game.helper.GetCreature(reader.ReadInt32());
+    x.monolith = game.helper.GetCreature(reader.ReadInt32());
     int num1 = reader.ReadInt32();
     for (int index = 0; index < num1; ++index)
       x.armaWarnings.Enqueue(ArmaWarning.Deserialize(reader));

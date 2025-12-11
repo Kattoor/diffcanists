@@ -138,7 +138,7 @@ public static class ZPlayerPrefs
     }
     catch (Exception ex)
     {
-      Debug.LogWarning((object) ("Encrypt Exception: " + (object) ex));
+      Debug.LogWarning((object) ("Encrypt Exception: " + ex?.ToString()));
       return strPlain;
     }
   }
@@ -164,7 +164,7 @@ public static class ZPlayerPrefs
     }
     catch (Exception ex)
     {
-      Debug.LogWarning((object) ("Decrypt Exception: " + (object) ex));
+      Debug.LogWarning((object) ("Decrypt Exception: " + ex?.ToString()));
       return strEncript;
     }
   }

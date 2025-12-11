@@ -8,6 +8,7 @@ using System.Net;
 using System.Net.Security;
 using System.Net.Sockets;
 using System.Net.WebSockets;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -42,28 +43,72 @@ namespace Ninja.WebSockets
       WebSocketClientOptions options,
       CancellationToken token = default (CancellationToken))
     {
-      Guid guid = Guid.NewGuid();
-      string host = uri.Host;
-      int port = uri.Port;
-      TcpClient tcpClient = new TcpClient(AddressFamily.InterNetworkV6);
-      tcpClient.NoDelay = options.NoDelay;
-      tcpClient.Client.DualMode = true;
-      string lower = uri.Scheme.ToLower();
-      bool useSsl = lower == "wss" || lower == "https";
-      IPAddress address;
-      if (IPAddress.TryParse(host, out address))
+      string host;
+      TcpClient tcpClient;
+      WebSocket result;
+      try
       {
-        Events.Log.ClientConnectingToIpAddress(guid, address.ToString(), port);
-        await tcpClient.ConnectAsync(address, port);
+        Guid guid = Guid.NewGuid();
+        host = uri.Host;
+        int port = uri.Port;
+        tcpClient = new TcpClient(AddressFamily.InterNetworkV6);
+        tcpClient.NoDelay = options.NoDelay;
+        tcpClient.Client.DualMode = true;
+        string lower = uri.Scheme.ToLower();
+        bool useSsl = lower == "wss" || lower == "https";
+        TaskAwaiter taskAwaiter1;
+        IPAddress address;
+        int num;
+        if (IPAddress.TryParse(host, out address))
+        {
+          Events.Log.ClientConnectingToIpAddress(guid, address.ToString(), port);
+          TaskAwaiter awaiter = tcpClient.ConnectAsync(address, port).GetAwaiter();
+          if (!awaiter.IsCompleted)
+          {
+            (^this).\u003C\u003E1__state = num = 0;
+            taskAwaiter1 = awaiter;
+            (^this).\u003C\u003Et__builder.AwaitUnsafeOnCompleted<TaskAwaiter, WebSocketClientFactory.\u003CConnectAsync\u003Ed__5>(ref awaiter, this);
+            return;
+          }
+          awaiter.GetResult();
+        }
+        else
+        {
+          Events.Log.ClientConnectingToHost(guid, host, port);
+          TaskAwaiter awaiter = tcpClient.ConnectAsync(host, port).GetAwaiter();
+          if (!awaiter.IsCompleted)
+          {
+            (^this).\u003C\u003E1__state = num = 1;
+            taskAwaiter1 = awaiter;
+            (^this).\u003C\u003Et__builder.AwaitUnsafeOnCompleted<TaskAwaiter, WebSocketClientFactory.\u003CConnectAsync\u003Ed__5>(ref awaiter, this);
+            return;
+          }
+          awaiter.GetResult();
+        }
+        token.ThrowIfCancellationRequested();
+        Stream stream = this.GetStream(guid, tcpClient, useSsl, host);
+        TaskAwaiter<WebSocket> awaiter1 = this.PerformHandshake(guid, uri, stream, options, token).GetAwaiter();
+        if (!awaiter1.IsCompleted)
+        {
+          (^this).\u003C\u003E1__state = num = 2;
+          TaskAwaiter<WebSocket> taskAwaiter2 = awaiter1;
+          (^this).\u003C\u003Et__builder.AwaitUnsafeOnCompleted<TaskAwaiter<WebSocket>, WebSocketClientFactory.\u003CConnectAsync\u003Ed__5>(ref awaiter1, this);
+          return;
+        }
+        result = awaiter1.GetResult();
       }
-      else
+      catch (Exception ex)
       {
-        Events.Log.ClientConnectingToHost(guid, host, port);
-        await tcpClient.ConnectAsync(host, port);
+        (^this).\u003C\u003E1__state = -2;
+        host = (string) null;
+        tcpClient = (TcpClient) null;
+        (^this).\u003C\u003Et__builder.SetException(ex);
+        return;
       }
-      token.ThrowIfCancellationRequested();
-      Stream stream = this.GetStream(guid, tcpClient, useSsl, host);
-      return await this.PerformHandshake(guid, uri, stream, options, token);
+      (^this).\u003C\u003E1__state = -2;
+      host = (string) null;
+      tcpClient = (TcpClient) null;
+      (^this).\u003C\u003Et__builder.SetResult(result);
     }
 
     public async Task<WebSocket> ConnectAsync(

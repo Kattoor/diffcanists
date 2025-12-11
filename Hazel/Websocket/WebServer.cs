@@ -6,6 +6,7 @@ using System.IO;
 using System.Net.Security;
 using System.Net.Sockets;
 using System.Net.WebSockets;
+using System.Runtime.CompilerServices;
 using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
@@ -35,7 +36,7 @@ namespace Hazel.Websocket
     {
       int num = Interlocked.Increment(ref WebServer.counter);
       if (num == int.MaxValue)
-        throw new Exception("connection id limit reached: " + (object) num);
+        throw new Exception("connection id limit reached: " + num.ToString());
       return num;
     }
 
@@ -141,59 +142,101 @@ namespace Hazel.Websocket
       CancellationToken token,
       string ip)
     {
-      int connectionId = WebServer.NextConnectionId();
-      WebConnectionOld con = new WebConnectionOld(webSocket, ip, connectionId);
-      this.clients.Add(connectionId, con);
-      byte[] buffer = new byte[262144];
+      int num = (^this).\u003C\u003E1__state;
+      WebConnectionOld con;
+      byte[] buffer;
       try
       {
-        System.Action<WebConnectionOld> connected = this.Connected;
-        if (connected != null)
-          connected(con);
-        while (true)
+        int connectionId = WebServer.NextConnectionId();
+        con = new WebConnectionOld(webSocket, ip, connectionId);
+        this.clients.Add(connectionId, con);
+        buffer = new byte[262144];
+        try
         {
-          WebSocketReceiveResult async = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), token);
-          if (async.MessageType != WebSocketMessageType.Close)
+          System.Action<WebConnectionOld> connected = this.Connected;
+          if (connected != null)
+            connected(con);
+          TaskAwaiter<WebSocketReceiveResult> awaiter1;
+          TaskAwaiter<byte[]> awaiter2;
+          while (true)
           {
-            byte[] b = await this.ReadFrames(connectionId, async, webSocket, buffer, token);
-            if (b.Length != 0)
+            awaiter1 = webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), token).GetAwaiter();
+            if (awaiter1.IsCompleted)
             {
-              try
+              WebSocketReceiveResult result1 = awaiter1.GetResult();
+              if (result1.MessageType != WebSocketMessageType.Close)
               {
-                ++con.messagesReceived;
-                con.DataReceived(b);
+                awaiter2 = this.ReadFrames(connectionId, result1, webSocket, buffer, token).GetAwaiter();
+                if (awaiter2.IsCompleted)
+                {
+                  byte[] result2 = awaiter2.GetResult();
+                  if (result2.Length != 0)
+                  {
+                    try
+                    {
+                      ++con.messagesReceived;
+                      con.DataReceived(result2);
+                    }
+                    catch (Exception ex)
+                    {
+                      System.Action<int, Exception> receivedError = this.ReceivedError;
+                      if (receivedError != null)
+                        receivedError(connectionId, ex);
+                    }
+                  }
+                  else
+                    goto label_20;
+                }
+                else
+                  goto label_8;
               }
-              catch (Exception ex)
-              {
-                System.Action<int, Exception> receivedError = this.ReceivedError;
-                if (receivedError != null)
-                  receivedError(connectionId, ex);
-              }
+              else
+                goto label_20;
             }
             else
-              goto label_2;
+              break;
           }
-          else
-            break;
+          (^this).\u003C\u003E1__state = num = 0;
+          TaskAwaiter<WebSocketReceiveResult> taskAwaiter1 = awaiter1;
+          (^this).\u003C\u003Et__builder.AwaitUnsafeOnCompleted<TaskAwaiter<WebSocketReceiveResult>, WebServer.\u003CReceiveLoopAsync\u003Ed__26>(ref awaiter1, this);
+          return;
+label_8:
+          (^this).\u003C\u003E1__state = num = 1;
+          TaskAwaiter<byte[]> taskAwaiter2 = awaiter2;
+          (^this).\u003C\u003Et__builder.AwaitUnsafeOnCompleted<TaskAwaiter<byte[]>, WebServer.\u003CReceiveLoopAsync\u003Ed__26>(ref awaiter2, this);
+          return;
         }
-        return;
-label_2:;
+        catch (Exception ex)
+        {
+          System.Action<int, Exception> receivedError = this.ReceivedError;
+          if (receivedError != null)
+            receivedError(connectionId, ex);
+        }
+        finally
+        {
+          if (num < 0)
+          {
+            con.Connected = false;
+            this.clients.Remove(connectionId);
+            System.Action<WebConnectionOld> disconnected = this.Disconnected;
+            if (disconnected != null)
+              disconnected(con);
+          }
+        }
       }
       catch (Exception ex)
       {
-        System.Action<int, Exception> receivedError = this.ReceivedError;
-        if (receivedError == null)
-          return;
-        receivedError(connectionId, ex);
+        (^this).\u003C\u003E1__state = -2;
+        con = (WebConnectionOld) null;
+        buffer = (byte[]) null;
+        (^this).\u003C\u003Et__builder.SetException(ex);
+        return;
       }
-      finally
-      {
-        con.Connected = false;
-        this.clients.Remove(connectionId);
-        System.Action<WebConnectionOld> disconnected = this.Disconnected;
-        if (disconnected != null)
-          disconnected(con);
-      }
+label_20:
+      (^this).\u003C\u003E1__state = -2;
+      con = (WebConnectionOld) null;
+      buffer = (byte[]) null;
+      (^this).\u003C\u003Et__builder.SetResult();
     }
 
     private async Task<byte[]> ReadFrames(

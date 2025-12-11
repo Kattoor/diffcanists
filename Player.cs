@@ -2064,6 +2064,24 @@ label_1:
     }
   }
 
+  internal void SendSpellSwap(byte spell)
+  {
+    using (MemoryStream memoryStream = new MemoryStream())
+    {
+      using (myBinaryWriter myBinaryWriter = new myBinaryWriter((Stream) memoryStream))
+      {
+        myBinaryWriter.Write((byte) 210);
+        myBinaryWriter.Write(this.person.id);
+        myBinaryWriter.Write(Client.game.gameFacts.id);
+        myBinaryWriter.Write(this.person.GetNextMoveID());
+        myBinaryWriter.Write((byte) this.selectedCreatureIndex);
+        myBinaryWriter.Write((byte) this.selectedCreaturePlayerOffset);
+        myBinaryWriter.Write(spell);
+      }
+      Client.SendToGameServer(memoryStream.ToArray());
+    }
+  }
+
   internal void SendFire()
   {
     if (this.person.game.ongoing.NumberOfSlowUpdateCoroutines > 0 || this.person.game.MoveQue.Count > 0)

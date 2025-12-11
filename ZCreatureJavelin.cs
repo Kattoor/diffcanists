@@ -22,7 +22,7 @@ public class ZCreatureJavelin : ZCreature
     ISpellBridge spellRef = null,
     bool isLoop = false)
   {
-    if (dt == DamageType.Heal || this.health == 0 || (this.isDead || ZComponent.IsNull((ZComponent) this)))
+    if (dt == DamageType.Heal || this.health <= 0 || (this.isDead || ZComponent.IsNull((ZComponent) this)))
       return 0;
     this.isDead = true;
     this.isNull = true;

@@ -17,4 +17,5 @@ public enum GameStyle
   Watchtower = 65536, // 0x00010000
   Arcane_Monster = 131072, // 0x00020000
   Wind = 262144, // 0x00040000
+  Dynamic = 524288, // 0x00080000
 }

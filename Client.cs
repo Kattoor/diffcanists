@@ -690,6 +690,19 @@ public static class Client
               ClanMenu.clans.Add(Clan.FromBasic(r));
             ClanMenu.Instance?.Populate();
             return true;
+          case 10:
+            string str3 = r.ReadString();
+            string str4 = r.ReadString();
+            Client.clan?.members.Remove(str3);
+            if (string.Equals(str3, Client.Name))
+            {
+              Client.clan = (Clan) null;
+              ChatBox.Instance?.NewChatMsg("", "You have been kicked from the clan.", (Color) ColorScheme.GetColor(Global.ColorClanText), str3, ChatOrigination.Clan, ContentType.STRING, (object) null);
+            }
+            else
+              ChatBox.Instance?.NewChatMsg("", "Player: <#6633ff>" + str3 + "</color> was " + str4, (Color) ColorScheme.GetColor(Global.ColorClanText), str3, ChatOrigination.Clan, ContentType.STRING, (object) null);
+            Client.UpdateClanUI();
+            return true;
           case 11:
             string key = r.ReadString();
             string index1 = r.ReadString();
@@ -731,9 +744,9 @@ public static class Client
               }
               StringBuilder stringBuilder = new StringBuilder();
               bool flag = true;
-              foreach (string str3 in b1.notation)
+              foreach (string str5 in b1.notation)
               {
-                stringBuilder.Append(flag ? "<color=white>" + str3 + "</color>\n" : str3 + "\n");
+                stringBuilder.Append(flag ? "<color=white>" + str5 + "</color>\n" : str5 + "\n");
                 flag = !flag;
               }
               b1.ui.txtNotation.text = stringBuilder.ToString();
@@ -2892,7 +2905,7 @@ public static class Client
 
   public static void AskOverheadEmoji(int index)
   {
-    if (Client.MyAccount.accountType.IsMuted())
+    if (Client.MyAccount.accountType.IsMuted() && !Client.game.isSandbox && !Client.game.isReplay)
     {
       ChatBox.Instance?.NewChatMsg("Looks like you're muted, try to behave yourself next time.", (Color) ColorScheme.GetColor(Global.ColorSystem));
     }

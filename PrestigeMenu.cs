@@ -31,7 +31,7 @@ public class PrestigeMenu : MonoBehaviour
     "Foliage and overgrowth covers these ancient and consecrated grounds. They say the wood they use from the trees of the Kharazi Jungle is full of magic, but the bark is not what you need to watch out for, for there is a greater threat that lies within.",
     "Organic landscapes of a distant planet, with many places to hide, who knows what lays inside. Be careful of shooting stars on either side!",
     "These ethereal halls were once a bastion of great magical power, now haunted by restless spirits. Eerie whispers and flickering apparitions fill the air as the echoes of past enchantments linger.",
-    "Remnants of a past civilization, once lush and green, now the battle grounds of aspiring Arcanists. Just don't stay to long or the heat my get to you."
+    "Remnants of a past civilization, once lush and green, now the battlegrounds of aspiring Arcanists. Just don't stay too long, or the heat may get to you."
   };
   public RectTransform bgrect;
   public GameObject[] panels;

@@ -198,7 +198,12 @@ namespace Junk
 
     public int Next(int min, int max)
     {
-      return max - min <= 0 ? min : Math.Abs(this.next()) % (max - min) + min;
+      if (max - min <= 0)
+        return min;
+      int num = this.next();
+      if (num == int.MinValue)
+        num = int.MaxValue;
+      return Math.Abs(num) % (max - min) + min;
     }
   }
 }

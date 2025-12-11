@@ -10,6 +10,12 @@ public static class ChangeLog
   {
     new ChangeLog.PatchNotes()
     {
+      version = "8.4",
+      date = "September 15, 2025",
+      notes = "Balance Updates:\r\n- Sand Mite maxes out at 25 damage per turn\r\n- Pyramid (strike) will damage friendly entities other then itself\r\n- Pyramid and Monolith turn into sand and fall (dealing 0 damage) when they die\r\n- Wyrm can walk and jump while standing on sand\r\n- Duplication Armageddon will only fire Whisper Balls (Whisper Arrows thrown like a ball with greatly reduced explosion size) and have 25 health\r\n\r\nAdditions:\r\n- New game mode Dynamic Spellbooks: Allows Empty spell slots to be replaced mid-game (once per turn)\r\n\r\nBug Fixes:\r\n- Fixed a missing outfit error\r\n- Emoji popups closing when unintended\r\n- Can't use overhead emoji's while watching a replay and they work after taking over the replay\r\n- If a player is kicked from a clan, it'll state so instead of just saying the left\r\n- Soul Jar's description modified slightly to be clear on when you will not respawn\r\n- Resync desync involving structures not belonging to the proper parent in certain circumstances\r\n- A non-default aramageddon will not cause rated queues to be PMO, along with watchtower, og spells, and FTT\r\n- Uncontrollable minions cannot mount or be mounted    \r\n- Hemogoblin cannot save a minion that falls to 0 health\r\n- Dragon Hatchling works with resurrection\r\n- Going though portal and mounting a minion at the starting portal will not cause you to stay put\r\n- Going through portal on the same frame as Sands of Time expires will not potentially cause to to go through the portal twice (making you stay put)\r\n- Hovering over the spectate button in a players context menu will properly show the games settings\r\n        \r\n        "
+    },
+    new ChangeLog.PatchNotes()
+    {
       version = "8.3",
       date = "August 25, 2025",
       notes = "Additions:\r\n- Can click achievment chat messages\r\n- Alt Grassy map generation (Grassy Meadows) 150% x 75% of Grassy Hills\r\n- Can queue alt map generations & no Armageddon (all ladders)\r\n\r\nBug Fixes:\r\n- Monolith & Pyramid have aura stacking that matches their visual        \r\n- Sunder & Pyramid Strike do not damage friendly structures/trees\r\n- Multi-Control was throwing errors and causing books/outfits to not properly update\r\n- Dark Fortress spawning was crashing under certain circumstances\r\n- Tooltip alignment issues\r\n- Character Creation Right-Hands throwing an error\r\n\r\n\r\n\r\n        "

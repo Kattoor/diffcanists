@@ -49,7 +49,7 @@ public class SpellLobbyChange : MonoBehaviour
   [Header("Share")]
   public UIOnHover buttonShare;
   internal BookOf openBook;
-  private Action<SettingsPlayer> onEnd;
+  internal Action<SettingsPlayer> onEnd;
   private Action onCancel;
   internal Validation validating;
   public Image imgHoliday;
@@ -59,6 +59,7 @@ public class SpellLobbyChange : MonoBehaviour
   internal Spell viewingSpellMinion;
   [NonSerialized]
   internal Creature viewingMinion;
+  internal bool onEndQuick;
   private float alpha;
 
   public static SpellLobbyChange Instance { get; private set; }
@@ -69,7 +70,8 @@ public class SpellLobbyChange : MonoBehaviour
     bool center = false,
     Validation validate = Validation.Default,
     bool transparent = false,
-    Action onCancel = null)
+    Action onCancel = null,
+    bool onEndQuick = false)
   {
     Client.viewSpellLocks = (ViewSpellLocks) PlayerPrefs.GetInt("prefviewinglocked", 1);
     Client.sharingWith = "";
@@ -98,6 +100,7 @@ public class SpellLobbyChange : MonoBehaviour
       }
       SpellLobbyChange.Instance.Init(sp, onEnd);
       SpellLobbyChange.Instance.onCancel = onCancel;
+      SpellLobbyChange.Instance.onEndQuick = onEndQuick;
       if (center)
         SpellLobbyChange.Instance.Center();
       if ((UnityEngine.Object) LobbyMenu.instance != (UnityEngine.Object) null || (UnityEngine.Object) UnratedMenu.instance != (UnityEngine.Object) null)
@@ -378,9 +381,12 @@ public class SpellLobbyChange : MonoBehaviour
   {
     if (this.onEnd != null)
     {
-      Action<SettingsPlayer> onEnd = this.onEnd;
-      if (onEnd != null)
-        onEnd(this.settingsPlayer);
+      if (!this.onEndQuick)
+      {
+        Action<SettingsPlayer> onEnd = this.onEnd;
+        if (onEnd != null)
+          onEnd(this.settingsPlayer);
+      }
       UnityEngine.Object.Destroy((UnityEngine.Object) this.gameObject);
     }
     else
@@ -402,33 +408,50 @@ public class SpellLobbyChange : MonoBehaviour
 
   public void ClickElemental()
   {
-    ElementalSelection.Create((RectTransform) this.transform, this.settingsPlayer._spells, (Action<BookOf>) (b =>
-    {
-      this.settingsPlayer.fullBook = (byte) (b + 1);
-      this.UpdateElementalIcon();
-      this.UpdateHolidaySprites();
-    }), true);
+    if (this.onEndQuick)
+      MyToolTip.Show("Cannot change elementals", -1f, false);
+    else
+      ElementalSelection.Create((RectTransform) this.transform, this.settingsPlayer._spells, (Action<BookOf>) (b =>
+      {
+        this.settingsPlayer.fullBook = (byte) (b + 1);
+        this.UpdateElementalIcon();
+        this.UpdateHolidaySprites();
+      }), true);
   }
 
   public void CickHoliday()
   {
-    this.settingsPlayer._spells.ToggleAlt(BookOf.Seasons, !this.settingsPlayer._spells.UsingAltBook(BookOf.Seasons));
-    this.UpdateHolidaySprites();
-    if (this.openBook == BookOf.Seasons)
+    if (this.onEndQuick)
     {
-      this.openBook = BookOf.Nothing;
-      this.OpenBook(BookOf.Seasons);
+      MyToolTip.Show("Cannot change alt books", -1f, false);
     }
-    this.RefreshList();
+    else
+    {
+      this.settingsPlayer._spells.ToggleAlt(BookOf.Seasons, !this.settingsPlayer._spells.UsingAltBook(BookOf.Seasons));
+      this.UpdateHolidaySprites();
+      if (this.openBook == BookOf.Seasons)
+      {
+        this.openBook = BookOf.Nothing;
+        this.OpenBook(BookOf.Seasons);
+      }
+      this.RefreshList();
+    }
   }
 
   public void ClickToggleAltBook(int b)
   {
-    this.settingsPlayer._spells.ToggleAlt((BookOf) b, !this.settingsPlayer._spells.UsingAltBook((BookOf) b));
-    this.UpdateHolidaySprites();
-    this.openBook = BookOf.Nothing;
-    this.OpenBook((BookOf) b);
-    this.RefreshList();
+    if (this.onEndQuick)
+    {
+      MyToolTip.Show("Cannot change alt books", -1f, false);
+    }
+    else
+    {
+      this.settingsPlayer._spells.ToggleAlt((BookOf) b, !this.settingsPlayer._spells.UsingAltBook((BookOf) b));
+      this.UpdateHolidaySprites();
+      this.openBook = BookOf.Nothing;
+      this.OpenBook((BookOf) b);
+      this.RefreshList();
+    }
   }
 
   private void UpdateHolidaySprites()
@@ -830,6 +853,22 @@ public class SpellLobbyChange : MonoBehaviour
     return false;
   }
 
+  public bool CanAddSpell(byte spellID)
+  {
+    spellID += (byte) ((uint) this.openBook * 12U);
+    for (int index = 0; index < 16; ++index)
+    {
+      if (this.settingsPlayer.spells[index] == byte.MaxValue)
+        return this.settingsPlayer.CanEquipSpell(index, spellID);
+    }
+    return false;
+  }
+
+  public byte GetSpellID(int index)
+  {
+    return (byte) (index + (int) this.openBook * 12);
+  }
+
   public bool AddSpell(byte spellID)
   {
     spellID += (byte) ((uint) this.openBook * 12U);
@@ -874,10 +913,17 @@ public class SpellLobbyChange : MonoBehaviour
 
   public void ClearSpells()
   {
-    for (int index = 0; index < this.settingsPlayer.spells.Length; ++index)
-      this.settingsPlayer.spells[index] = byte.MaxValue;
-    this.settingsPlayer.spells[0] = (byte) 4;
-    this.RefreshList();
+    if (this.onEndQuick)
+    {
+      MyToolTip.Show("Cannot remove spells", -1f, false);
+    }
+    else
+    {
+      for (int index = 0; index < this.settingsPlayer.spells.Length; ++index)
+        this.settingsPlayer.spells[index] = byte.MaxValue;
+      this.settingsPlayer.spells[0] = (byte) 4;
+      this.RefreshList();
+    }
   }
 
   public void HoverSpellSlot(int i)

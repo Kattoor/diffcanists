@@ -4259,232 +4259,232 @@ label_7:
 
   public static void ApparitionArmageddon(ZCreature c)
   {
-    List<SpellSlot> spellSlotList = new List<SpellSlot>();
-    int num1 = c.parent.localTurn - c.game.armageddonTurn;
-    foreach (SpellSlot spell in c.spells)
+    if (c.spells.Count == 1 && c.spells[0].spell.spellEnum == SpellEnum.Whisper_Arrow)
     {
-      if (c.SpellUseable(spell) && (spell.spell.level == 1 || spell.spell.level == 2 && num1 >= 10 || num1 >= 20) && (!spell.isPresent || !Armageddon.ApparitionExcludedSpells.Contains(spell.spell.spellEnum)))
-        spellSlotList.Add(spell);
+      c.game.ongoing.RunSpell(ZSpell.IEArrows(c, c.spells[0].spell, c.parent.controlled[0].position, true, 1), true);
     }
-    SpellSlot spellSlot = (SpellSlot) null;
-    Spell spell1 = (Spell) null;
-    if (spellSlotList.Count > 0)
+    else
     {
-      spellSlot = spellSlotList[c.game.RandomInt(0, spellSlotList.Count)];
-      spell1 = spellSlot.spell;
-    }
-    if ((UnityEngine.Object) spell1 == (UnityEngine.Object) null)
-      spell1 = Inert.GetSpell(SpellEnum.Color_Spray);
-    ZCreature zcreature;
-    FixedInt power;
-    FixedInt fixedInt1;
-    int x1;
-    int y1;
-    while (true)
-    {
-      zcreature = (ZCreature) null;
-      FixedInt fixedInt2 = (FixedInt) 10000;
-      bool flag = Armageddon.ApparitionFriendlySpells.Contains(spell1.spellEnum);
-      foreach (ZPerson player in c.game.players)
+      SpellSlot spellSlot = (SpellSlot) null;
+      Spell spell = (Spell) null;
+      if (c.spells.Count > 0)
       {
-        if (flag == (player.team == c.parent.team) && !ZComponent.IsNull((ZComponent) player.first()))
-        {
-          FixedInt fixedInt3 = (FixedInt) MyLocation.Distance(c.position, player.first().position);
-          if (fixedInt3 < fixedInt2)
-          {
-            fixedInt2 = fixedInt3;
-            zcreature = player.first();
-          }
-        }
+        spellSlot = c.spells[c.game.RandomInt(0, c.spells.Count)];
+        spell = spellSlot.spell;
       }
-      if ((ZComponent) zcreature == (object) null)
-        zcreature = c.parent.first();
-      if (!((ZComponent) zcreature == (object) null))
+      if ((UnityEngine.Object) spell == (UnityEngine.Object) null)
+        spell = Inert.GetSpell(SpellEnum.Color_Spray);
+      ZCreature zcreature;
+      FixedInt power;
+      FixedInt fixedInt1;
+      int x1;
+      int y1;
+      while (true)
       {
-        MyLocation myLocation = zcreature.GetPositionAI - c.position;
-        myLocation.Normalize();
-        FixedInt d = FixedInt.Abs(c.position.x - (FixedInt) (float) (int) zcreature.position.x);
-        FixedInt v = (FixedInt) spell1.speedMax;
-        if (v <= 0)
-          v = (FixedInt) 1000;
-        power = (FixedInt) (spell1.spellType == SpellType.Bolt ? 0 : 1);
-        FixedInt fixedInt3 = spell1.affectedByGravity ? ZSpell.AngleToGoDistance(v, -(FixedInt) spell1.CustomGravity, d, zcreature.position.y - c.position.y, false) : FixedInt.Atan2(myLocation.y, myLocation.x) * FixedInt.Rad2Deg;
-        FixedInt fixedInt4 = spell1.affectedByGravity ? ZSpell.AngleToGoDistance(v, -(FixedInt) spell1.CustomGravity, d, zcreature.position.y - c.position.y, true) : FixedInt.Atan2(myLocation.y, myLocation.x) * FixedInt.Rad2Deg;
-        fixedInt1 = MyLocation.Distance(zcreature.GetPositionAI, ZSpell.SimulatePath(c.game, c.position, Inert.Velocity(zcreature.position.x < c.position.x ? (FixedInt) 180 - fixedInt3 : fixedInt3, (FixedInt) spell1.speedMax), (FixedInt) spell1.CustomGravity, c, spell1)) < MyLocation.Distance(zcreature.GetPositionAI, ZSpell.SimulatePath(c.game, c.position, Inert.Velocity(zcreature.position.x < c.position.x ? (FixedInt) 180 - fixedInt4 : fixedInt4, (FixedInt) spell1.speedMax), (FixedInt) spell1.CustomGravity, c, spell1)) ? fixedInt3 : fixedInt4;
-        if (FixedInt.InvalidAngle(fixedInt1))
+        zcreature = (ZCreature) null;
+        FixedInt fixedInt2 = (FixedInt) 10000;
+        bool flag = Armageddon.ApparitionFriendlySpells.Contains(spell.spellEnum);
+        foreach (ZPerson player in c.game.players)
         {
-          power = (FixedInt) 1.5f;
-          fixedInt1 = (FixedInt) 47185920L;
-        }
-        if (spell1.affectedByGravity && zcreature.position.x < c.position.x)
-          fixedInt1 = (FixedInt) 180 - fixedInt1;
-        if (fixedInt1 > 90 || fixedInt1 < -90)
-        {
-          if ((double) c.transformscale > 0.0)
-            c.SetScale(-1f);
-        }
-        else if ((double) c.transformscale < 0.0)
-          c.SetScale(1f);
-        if (spell1.spellEnum == SpellEnum.Arcane_Gate || spell1.spellEnum == SpellEnum.Santas_Magic || spell1.spellEnum == SpellEnum.Sands_of_Time)
-        {
-          int max = 300;
-          for (int index = 0; index < 50; ++index)
+          if (flag == (player.team == c.parent.team) && !ZComponent.IsNull((ZComponent) player.first()))
           {
-            int num2 = (int) c.position.x + c.game.RandomInt(-max, max);
-            int num3 = (int) c.position.y + c.game.RandomInt(-max, max);
-            if (ZSpell.ServerCanFire(spell1, num2, num3, 0, 0, c, fixedInt1, power, new MyLocation(num2, num3)))
+            FixedInt fixedInt3 = (FixedInt) MyLocation.Distance(c.position, player.first().position);
+            if (fixedInt3 < fixedInt2)
             {
-              spellSlot?.Fired(c);
-              ZSpell.FireWhich(spell1, c, c.position, fixedInt1, power, new MyLocation(num2, num3), NullMyLocation.Get(), 0, false, (SpellSlot) null, false);
-              return;
+              fixedInt2 = fixedInt3;
+              zcreature = player.first();
             }
           }
-          spell1 = Inert.GetSpell(SpellEnum.Color_Spray);
-          spellSlot = (SpellSlot) null;
         }
-        else if (spell1.spellEnum == SpellEnum.Curse_of_Disabling || spell1.spellEnum == SpellEnum.Curse_of_Loneliness)
+        if ((ZComponent) zcreature == (object) null)
+          zcreature = c.parent.first();
+        if (!((ZComponent) zcreature == (object) null))
         {
-          x1 = (int) c.position.x;
-          y1 = (int) c.position.y;
-          if (!ZSpell.ServerCanFire(spell1, x1, y1, 0, 0, c, fixedInt1, power, new MyLocation(x1, y1)))
+          MyLocation myLocation = zcreature.GetPositionAI - c.position;
+          myLocation.Normalize();
+          FixedInt d = FixedInt.Abs(c.position.x - (FixedInt) (float) (int) zcreature.position.x);
+          FixedInt v = (FixedInt) spell.speedMax;
+          if (v <= 0)
+            v = (FixedInt) 1000;
+          power = (FixedInt) (spell.spellType == SpellType.Bolt ? 0 : 1);
+          FixedInt fixedInt3 = spell.affectedByGravity ? ZSpell.AngleToGoDistance(v, -(FixedInt) spell.CustomGravity, d, zcreature.position.y - c.position.y, false) : FixedInt.Atan2(myLocation.y, myLocation.x) * FixedInt.Rad2Deg;
+          FixedInt fixedInt4 = spell.affectedByGravity ? ZSpell.AngleToGoDistance(v, -(FixedInt) spell.CustomGravity, d, zcreature.position.y - c.position.y, true) : FixedInt.Atan2(myLocation.y, myLocation.x) * FixedInt.Rad2Deg;
+          fixedInt1 = MyLocation.Distance(zcreature.GetPositionAI, ZSpell.SimulatePath(c.game, c.position, Inert.Velocity(zcreature.position.x < c.position.x ? (FixedInt) 180 - fixedInt3 : fixedInt3, (FixedInt) spell.speedMax), (FixedInt) spell.CustomGravity, c, spell)) < MyLocation.Distance(zcreature.GetPositionAI, ZSpell.SimulatePath(c.game, c.position, Inert.Velocity(zcreature.position.x < c.position.x ? (FixedInt) 180 - fixedInt4 : fixedInt4, (FixedInt) spell.speedMax), (FixedInt) spell.CustomGravity, c, spell)) ? fixedInt3 : fixedInt4;
+          if (FixedInt.InvalidAngle(fixedInt1))
           {
-            spell1 = Inert.GetSpell(SpellEnum.Color_Spray);
+            power = (FixedInt) 1.5f;
+            fixedInt1 = (FixedInt) 47185920L;
+          }
+          if (spell.affectedByGravity && zcreature.position.x < c.position.x)
+            fixedInt1 = (FixedInt) 180 - fixedInt1;
+          if (fixedInt1 > 90 || fixedInt1 < -90)
+          {
+            if ((double) c.transformscale > 0.0)
+              c.SetScale(-1f);
+          }
+          else if ((double) c.transformscale < 0.0)
+            c.SetScale(1f);
+          if (spell.spellEnum == SpellEnum.Arcane_Gate || spell.spellEnum == SpellEnum.Santas_Magic || spell.spellEnum == SpellEnum.Sands_of_Time)
+          {
+            int max = 300;
+            for (int index = 0; index < 50; ++index)
+            {
+              int num1 = (int) c.position.x + c.game.RandomInt(-max, max);
+              int num2 = (int) c.position.y + c.game.RandomInt(-max, max);
+              if (ZSpell.ServerCanFire(spell, num1, num2, 0, 0, c, fixedInt1, power, new MyLocation(num1, num2)))
+              {
+                spellSlot?.Fired(c);
+                ZSpell.FireWhich(spell, c, c.position, fixedInt1, power, new MyLocation(num1, num2), NullMyLocation.Get(), 0, false, (SpellSlot) null, false);
+                return;
+              }
+            }
+            spell = Inert.GetSpell(SpellEnum.Color_Spray);
             spellSlot = (SpellSlot) null;
           }
-          else
-            goto label_43;
-        }
-        else if (spell1.maxDistance > 10)
-        {
-          int max = spell1.maxDistance - spell1.radius;
-          if (spell1.spellEnum == SpellEnum.Duplication || spell1.spellEnum == SpellEnum.Passage_Ways)
+          else if (spell.spellEnum == SpellEnum.Curse_of_Disabling || spell.spellEnum == SpellEnum.Curse_of_Loneliness)
           {
-            int x2 = (int) zcreature.GetPositionAI.x;
-            int y2 = (int) zcreature.GetPositionAI.y;
-            for (int index = 0; index < 50; ++index)
+            x1 = (int) c.position.x;
+            y1 = (int) c.position.y;
+            if (!ZSpell.ServerCanFire(spell, x1, y1, 0, 0, c, fixedInt1, power, new MyLocation(x1, y1)))
             {
-              int num2 = (int) c.position.x + c.game.RandomInt(-max, max);
-              int num3 = (int) c.position.y + c.game.RandomInt(-max, max);
-              if (ZSpell.ServerCanFire(spell1, x2, y2, num2, num3, c, fixedInt1, power, new MyLocation(x2, y2)))
+              spell = Inert.GetSpell(SpellEnum.Color_Spray);
+              spellSlot = (SpellSlot) null;
+            }
+            else
+              goto label_39;
+          }
+          else if (spell.maxDistance > 10)
+          {
+            int max = spell.maxDistance - spell.radius;
+            if (spell.spellEnum == SpellEnum.Duplication || spell.spellEnum == SpellEnum.Passage_Ways)
+            {
+              int x2 = (int) zcreature.GetPositionAI.x;
+              int y2 = (int) zcreature.GetPositionAI.y;
+              for (int index = 0; index < 50; ++index)
               {
-                spellSlot?.Fired(c);
-                ZSpell.FireWhich(spell1, c, c.position, fixedInt1, power, new MyLocation(x2, y2), new MyLocation(num2, num3), 0, false, (SpellSlot) null, false);
-                return;
+                int num1 = (int) c.position.x + c.game.RandomInt(-max, max);
+                int num2 = (int) c.position.y + c.game.RandomInt(-max, max);
+                if (ZSpell.ServerCanFire(spell, x2, y2, num1, num2, c, fixedInt1, power, new MyLocation(x2, y2)))
+                {
+                  spellSlot?.Fired(c);
+                  ZSpell.FireWhich(spell, c, c.position, fixedInt1, power, new MyLocation(x2, y2), new MyLocation(num1, num2), 0, false, (SpellSlot) null, false);
+                  return;
+                }
               }
             }
-          }
-          else if (spell1.spellEnum == SpellEnum.Resurrection)
-          {
-            FixedInt rot_z = (FixedInt) c.game.RandomInt(0, c.game.lastMinionToDie.Count);
-            for (int index = 0; index < 50; ++index)
+            else if (spell.spellEnum == SpellEnum.Resurrection)
             {
-              int num2 = (int) c.position.x + c.game.RandomInt(-max, max);
-              int num3 = (int) c.position.y + c.game.RandomInt(-max, max);
-              if (ZSpell.ServerCanFire(spell1, num2, num3, 0, 0, c, rot_z, power, new MyLocation(num2, num3)))
+              FixedInt rot_z = (FixedInt) c.game.RandomInt(0, c.game.lastMinionToDie.Count);
+              for (int index = 0; index < 50; ++index)
               {
-                spellSlot?.Fired(c);
-                ZSpell.FireWhich(spell1, c, c.position, rot_z, power, new MyLocation(num2, num3), NullMyLocation.Get(), 0, false, (SpellSlot) null, false);
-                return;
+                int num1 = (int) c.position.x + c.game.RandomInt(-max, max);
+                int num2 = (int) c.position.y + c.game.RandomInt(-max, max);
+                if (ZSpell.ServerCanFire(spell, num1, num2, 0, 0, c, rot_z, power, new MyLocation(num1, num2)))
+                {
+                  spellSlot?.Fired(c);
+                  ZSpell.FireWhich(spell, c, c.position, rot_z, power, new MyLocation(num1, num2), NullMyLocation.Get(), 0, false, (SpellSlot) null, false);
+                  return;
+                }
               }
             }
-          }
-          else if (spell1.spellEnum == SpellEnum.Summon_Titan)
-          {
-            FixedInt rot_z = (FixedInt) c.game.RandomInt(0, c.parent.minionBookTitans.Count);
-            for (int index = 0; index < 50; ++index)
+            else if (spell.spellEnum == SpellEnum.Summon_Titan)
             {
-              int num2 = (int) c.position.x + c.game.RandomInt(-max, max);
-              int num3 = (int) c.position.y + c.game.RandomInt(-max, max);
-              if (ZSpell.ServerCanFire(spell1, num2, num3, 0, 0, c, rot_z, power, new MyLocation(num2, num3)))
+              FixedInt rot_z = (FixedInt) c.game.RandomInt(0, c.parent.minionBookTitans.Count);
+              for (int index = 0; index < 50; ++index)
               {
-                spellSlot?.Fired(c);
-                ZSpell.FireWhich(spell1, c, c.position, rot_z, power, new MyLocation(num2, num3), NullMyLocation.Get(), 0, false, (SpellSlot) null, false);
-                return;
+                int num1 = (int) c.position.x + c.game.RandomInt(-max, max);
+                int num2 = (int) c.position.y + c.game.RandomInt(-max, max);
+                if (ZSpell.ServerCanFire(spell, num1, num2, 0, 0, c, rot_z, power, new MyLocation(num1, num2)))
+                {
+                  spellSlot?.Fired(c);
+                  ZSpell.FireWhich(spell, c, c.position, rot_z, power, new MyLocation(num1, num2), NullMyLocation.Get(), 0, false, (SpellSlot) null, false);
+                  return;
+                }
               }
             }
-          }
-          else
-          {
-            for (int index = 0; index < 50; ++index)
+            else
             {
-              int num2 = (int) c.position.x + c.game.RandomInt(-max, max);
-              int num3 = (int) c.position.y + c.game.RandomInt(-max, max);
-              if (ZSpell.ServerCanFire(spell1, num2, num3, 0, 0, c, fixedInt1, power, new MyLocation(num2, num3)))
+              for (int index = 0; index < 50; ++index)
               {
-                spellSlot?.Fired(c);
-                ZSpell.FireWhich(spell1, c, c.position, fixedInt1, power, new MyLocation(num2, num3), NullMyLocation.Get(), 0, false, (SpellSlot) null, false);
-                return;
+                int num1 = (int) c.position.x + c.game.RandomInt(-max, max);
+                int num2 = (int) c.position.y + c.game.RandomInt(-max, max);
+                if (ZSpell.ServerCanFire(spell, num1, num2, 0, 0, c, fixedInt1, power, new MyLocation(num1, num2)))
+                {
+                  spellSlot?.Fired(c);
+                  ZSpell.FireWhich(spell, c, c.position, fixedInt1, power, new MyLocation(num1, num2), NullMyLocation.Get(), 0, false, (SpellSlot) null, false);
+                  return;
+                }
               }
             }
-          }
-          spell1 = Inert.GetSpell(SpellEnum.Color_Spray);
-          spellSlot = (SpellSlot) null;
-        }
-        else if (spell1.spellType == SpellType.Blit)
-        {
-          int max = 100;
-          for (int index = 0; index < 50; ++index)
-          {
-            int num2 = (int) zcreature.position.x + (index == 0 ? 0 : c.game.RandomInt(-max, max));
-            int num3 = (int) zcreature.position.y + (index == 0 ? 0 : c.game.RandomInt(-max, max));
-            if (ZSpell.ServerCanFire(spell1, num2, num3, 0, 0, c, fixedInt1, power, new MyLocation(num2, num3)))
-            {
-              spellSlot?.Fired(c);
-              ZSpell.FireWhich(spell1, c, c.position, fixedInt1, power, new MyLocation(num2, num3), NullMyLocation.Get(), 0, false, (SpellSlot) null, false);
-              return;
-            }
-          }
-          spell1 = Inert.GetSpell(SpellEnum.Color_Spray);
-          spellSlot = (SpellSlot) null;
-        }
-        else if (spell1.spellEnum != SpellEnum.Enchanted_Axes)
-        {
-          if (!ZSpell.ServerCanFire(spell1, (int) zcreature.position.x, (int) zcreature.position.y, 0, 0, c, fixedInt1, power, new MyLocation((int) zcreature.position.x, (int) zcreature.position.y)))
-          {
-            int max = 100 + spell1.radius;
-            for (int index = 0; index < 50; ++index)
-            {
-              int num2 = (int) zcreature.position.x + (index == 0 ? 0 : c.game.RandomInt(-max, max));
-              int num3 = (int) zcreature.position.y + (index == 0 ? 0 : c.game.RandomInt(-max, max));
-              if (ZSpell.ServerCanFire(spell1, num2, num3, 0, 0, c, fixedInt1, power, new MyLocation(num2, num3)))
-              {
-                spellSlot?.Fired(c);
-                ZSpell.FireWhich(spell1, c, c.position, fixedInt1, power, new MyLocation(num2, num3), NullMyLocation.Get(), 0, false, (SpellSlot) null, false);
-                return;
-              }
-            }
-            spell1 = Inert.GetSpell(SpellEnum.Color_Spray);
+            spell = Inert.GetSpell(SpellEnum.Color_Spray);
             spellSlot = (SpellSlot) null;
           }
+          else if (spell.spellType == SpellType.Blit)
+          {
+            int max = 100;
+            for (int index = 0; index < 50; ++index)
+            {
+              int num1 = (int) zcreature.position.x + (index == 0 ? 0 : c.game.RandomInt(-max, max));
+              int num2 = (int) zcreature.position.y + (index == 0 ? 0 : c.game.RandomInt(-max, max));
+              if (ZSpell.ServerCanFire(spell, num1, num2, 0, 0, c, fixedInt1, power, new MyLocation(num1, num2)))
+              {
+                spellSlot?.Fired(c);
+                ZSpell.FireWhich(spell, c, c.position, fixedInt1, power, new MyLocation(num1, num2), NullMyLocation.Get(), 0, false, (SpellSlot) null, false);
+                return;
+              }
+            }
+            spell = Inert.GetSpell(SpellEnum.Color_Spray);
+            spellSlot = (SpellSlot) null;
+          }
+          else if (spell.spellEnum != SpellEnum.Enchanted_Axes)
+          {
+            if (!ZSpell.ServerCanFire(spell, (int) zcreature.position.x, (int) zcreature.position.y, 0, 0, c, fixedInt1, power, new MyLocation((int) zcreature.position.x, (int) zcreature.position.y)))
+            {
+              int max = 100 + spell.radius;
+              for (int index = 0; index < 50; ++index)
+              {
+                int num1 = (int) zcreature.position.x + (index == 0 ? 0 : c.game.RandomInt(-max, max));
+                int num2 = (int) zcreature.position.y + (index == 0 ? 0 : c.game.RandomInt(-max, max));
+                if (ZSpell.ServerCanFire(spell, num1, num2, 0, 0, c, fixedInt1, power, new MyLocation(num1, num2)))
+                {
+                  spellSlot?.Fired(c);
+                  ZSpell.FireWhich(spell, c, c.position, fixedInt1, power, new MyLocation(num1, num2), NullMyLocation.Get(), 0, false, (SpellSlot) null, false);
+                  return;
+                }
+              }
+              spell = Inert.GetSpell(SpellEnum.Color_Spray);
+              spellSlot = (SpellSlot) null;
+            }
+            else
+              goto label_99;
+          }
           else
-            goto label_103;
+            goto label_87;
         }
         else
-          goto label_91;
+          break;
       }
-      else
-        break;
-    }
-    return;
-label_43:
-    spellSlot?.Fired(c);
-    ZSpell.FireWhich(spell1, c, c.position, fixedInt1, power, new MyLocation(x1, y1), NullMyLocation.Get(), 0, false, (SpellSlot) null, false);
-    return;
-label_91:
-    spellSlot?.Fired(c);
-    ZSpell.FireWhich(spell1, c, c.position, fixedInt1, power, new MyLocation(fixedInt1, (FixedInt) 0), NullMyLocation.Get(), 0, false, (SpellSlot) null, false);
-    return;
-label_103:
-    spellSlot?.Fired(c);
-    ZSpell.FireWhich(spell1, c, c.position, fixedInt1, power, zcreature.GetPositionAI, NullMyLocation.Get(), 0, false, (SpellSlot) null, false);
-    if (spell1.EndsTurn)
       return;
-    c.game.ongoing.RunSpell(ZSpell.LazyDo((Action) (() =>
-    {
-      if (ZComponent.IsNull((ZComponent) c) || c.isDead)
+label_39:
+      spellSlot?.Fired(c);
+      ZSpell.FireWhich(spell, c, c.position, fixedInt1, power, new MyLocation(x1, y1), NullMyLocation.Get(), 0, false, (SpellSlot) null, false);
+      return;
+label_87:
+      spellSlot?.Fired(c);
+      ZSpell.FireWhich(spell, c, c.position, fixedInt1, power, new MyLocation(fixedInt1, (FixedInt) 0), NullMyLocation.Get(), 0, false, (SpellSlot) null, false);
+      return;
+label_99:
+      spellSlot?.Fired(c);
+      ZSpell.FireWhich(spell, c, c.position, fixedInt1, power, zcreature.GetPositionAI, NullMyLocation.Get(), 0, false, (SpellSlot) null, false);
+      if (spell.EndsTurn)
         return;
-      ZSpell.ApparitionArmageddon(c);
-    }), 30), true);
+      c.game.ongoing.RunSpell(ZSpell.LazyDo((Action) (() =>
+      {
+        if (ZComponent.IsNull((ZComponent) c) || c.isDead)
+          return;
+        ZSpell.ApparitionArmageddon(c);
+      }), 30), true);
+    }
   }
 
   public static IEnumerator<float> LazyDo(Action a, int delay = 30)
@@ -4656,6 +4656,12 @@ label_27:
       if (pos.x < c.GetPositionAI.x)
         power.x = -power.x;
       ZSpell zspell = ZSpell.BaseFire(spell, c, c.GetPositionAI, Quaternion.identity, power, true, false, true);
+      if (spell.spellEnum == SpellEnum.Whisper_Arrow)
+      {
+        zspell.maxTargetFrames = 0;
+        zspell.EXORADIUS = 20;
+        zspell.explosionCutout = ExplosionCutout.Forty;
+      }
       if (c.game.isClient && (UnityEngine.Object) c.clientObj.activeStoreObject != (UnityEngine.Object) null && ((UnityEngine.Object) c.clientObj.activeStoreObject.spellSprite != (UnityEngine.Object) null && (UnityEngine.Object) zspell.gameObject != (UnityEngine.Object) null))
         zspell.gameObject.GetComponent<SpriteRenderer>().sprite = c.clientObj.activeStoreObject.spellSprite;
       yield return 0.0f;
@@ -6397,6 +6403,41 @@ label_27:
     yield return 0.0f;
     yield return 0.0f;
     ZSpell.FireBlit(theSpell, c, target, (SpellSlot) null);
+  }
+
+  public static IEnumerator<float> IEnumeratorStructureToSand(
+    Spell theSpell,
+    ZCreature c,
+    MyLocation pos,
+    ExplosionCutout cutout)
+  {
+    c.turnFriendlyDmg = -2;
+    if (c.game.isClient)
+      SandPool.Create();
+    Texture2D tex = Inert.Instance.cutouts[(int) cutout];
+    Color32[] pixels = c.game.map.GetPixels(tex);
+    int offsetX = (int) pos.x - tex.width / 2;
+    int offsetY = (int) pos.y - tex.height / 2;
+    int delay = 3;
+    if (c.game.isClient && !c.game.resyncing)
+      ZComponent.Instantiate<GameObject>(theSpell.explosion, pos.ToSinglePrecision(), Quaternion.identity).GetComponent<SpriteRenderer>().sprite = Sprite.Create(tex, new Rect(0.0f, 0.0f, (float) tex.width, (float) tex.height), new Vector2(0.5f, 0.5f), 1f);
+    for (int y = 0; y < tex.height; ++y)
+    {
+      for (int index = 0; index < tex.width; ++index)
+      {
+        if (pixels[index + tex.width * y].a != (byte) 0)
+          c.game.ongoing.RunSpell(ZSpellSand.SandMove((ISpellBridge) theSpell, c.game, c, new MyLocation(offsetX + index, offsetY + y), new MyLocation((FixedInt) 0, c.game.RandomFixedInt(-2, 2))), true);
+      }
+      if (delay == 0)
+      {
+        delay = 3;
+        yield return 0.0f;
+      }
+      else
+        --delay;
+      while (c.game.ongoing.NumberOfSlowUpdateCoroutines > 10000)
+        yield return 0.0f;
+    }
   }
 
   public static IEnumerator<float> IEnumeratorSandBlast(

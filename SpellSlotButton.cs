@@ -77,10 +77,17 @@ public class SpellSlotButton : MonoBehaviour
 
   public void ClickRemove()
   {
-    this.Empty();
-    this.Leave();
-    SpellSelection.Instance?.RemoveSpellSlot(this.index, true);
-    SpellLobbyChange.Instance?.RemoveSpellSlot(this.index, true);
+    if ((Object) SpellLobbyChange.Instance != (Object) null && SpellLobbyChange.Instance.onEndQuick)
+    {
+      MyToolTip.Show("Cannot remove spells", -1f, false);
+    }
+    else
+    {
+      this.Empty();
+      this.Leave();
+      SpellSelection.Instance?.RemoveSpellSlot(this.index, true);
+      SpellLobbyChange.Instance?.RemoveSpellSlot(this.index, true);
+    }
   }
 
   public Spell GetSpell()

@@ -46,6 +46,7 @@ public class pfabLobbyGame : MonoBehaviour, IPointerClickHandler, IEventSystemHa
   public Image imgFTT;
   public Image imgBid;
   public Image imgWatchtower;
+  public Image imgDynamic;
   private GameFacts gameFacts;
   private RatedFacts ratedFacts;
 
@@ -78,6 +79,11 @@ public class pfabLobbyGame : MonoBehaviour, IPointerClickHandler, IEventSystemHa
     if (this.gameFacts == null)
       return;
     MyToolTip.Show(this.gameFacts.settings.FilteredDescription(), -1f, false);
+  }
+
+  public void Hover(string s)
+  {
+    MyToolTip.Show(s, -1f, false);
   }
 
   public void HoverInvite()
@@ -365,6 +371,7 @@ public class pfabLobbyGame : MonoBehaviour, IPointerClickHandler, IEventSystemHa
     this.imgZeroShield.gameObject.SetActive(g.GetStyle().HasStyle(GameStyle.Zero_Shield));
     this.imgFTT.gameObject.SetActive(g.GetStyle().HasStyle(GameStyle.First_Turn_Teleport));
     this.imgWatchtower.gameObject.SetActive(g.GetStyle().HasStyle(GameStyle.Watchtower));
+    this.imgDynamic.gameObject.SetActive(g.GetStyle().HasStyle(GameStyle.Dynamic));
     this.imgBid.gameObject.SetActive(false);
     this.imgCountdown.gameObject.SetActive((uint) g.countdownTime > 0U);
     this.imgHealth.gameObject.SetActive(g.startHealth != (ushort) 250);

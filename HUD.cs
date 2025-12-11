@@ -695,7 +695,7 @@ public class HUD : UIBehaviour
           this.ShowStartPanel();
         else if (hardInput.GetKeyDown("ToggleIcons"))
           HUD.instance.ToggleOverheadIcons();
-        else if (hardInput.GetKeyDown("OverheadEmoji"))
+        else if (hardInput.GetKeyDown("OverheadEmoji") && !this.game.isReplay)
           this.ClickOverheadEmoji();
         if ((hardInput.GetKeyDown("mapping") || this.pingOnNextClick > -1 && MyInput.GetMouseButtonDown(0)) && (double) this.lastMapPing < (double) Time.realtimeSinceStartup)
         {
@@ -875,9 +875,9 @@ public class HUD : UIBehaviour
       if ((UnityEngine.Object) SpellLobbyChange.Instance != (UnityEngine.Object) null)
         SpellLobbyChange.Instance.ClickCancel();
       else if ((UnityEngine.Object) Player.Instance != (UnityEngine.Object) null && Player.Instance.person != null && Player.Instance.person.settingsPlayer != null)
-        SpellLobbyChange.Create(Player.Instance.person.settingsPlayer, (Action<SettingsPlayer>) (set => {}), false, Validation.None, true, (Action) null);
+        SpellLobbyChange.Create(Player.Instance.person.settingsPlayer, (Action<SettingsPlayer>) (set => {}), false, Validation.None, true, (Action) null, false);
       else
-        SpellLobbyChange.Create(Client.settingsPlayer, (Action<SettingsPlayer>) (set => Client.AskToChangeSpells(set)), false, Validation.Default, true, (Action) null);
+        SpellLobbyChange.Create(Client.settingsPlayer, (Action<SettingsPlayer>) (set => Client.AskToChangeSpells(set)), false, Validation.Default, true, (Action) null, false);
     }
   }
 
@@ -987,6 +987,14 @@ public class HUD : UIBehaviour
         settingsPlayer.CopySpells(Client._tutorial.settings, true);
         settingsPlayer.CopyOutfit(Client.settingsPlayer);
         this.buttonDummies.SetActive(false);
+      }
+      else
+      {
+        for (int index = 0; index < settingsPlayer.spells.Length; ++index)
+        {
+          if (settingsPlayer.spells[index] == byte.MaxValue)
+            this.game.gameFacts.SetStyle(GameStyle.Dynamic);
+        }
       }
       if (settingsPlayer.fullBook > (byte) 0)
         this.game.gameFacts.ToggleStyle(GameStyle.Elementals);

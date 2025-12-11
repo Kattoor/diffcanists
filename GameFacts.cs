@@ -200,7 +200,7 @@ public class GameFacts
     else
     {
       int timeInSeconds = this.GetTimeInSeconds();
-      if (this.IsNonStandard() || timeInSeconds < 7 || (timeInSeconds > 90 || this.armageddonTurn != (byte) 10) || (this.startHealth != (ushort) 250 || this.restrictions != null && this.restrictions.AnyRestricted()) || (this.GetArmageddon() != ~MapEnum.Dont_Mind && this.GetArmageddon() != this.GetMapMode() && this.GetArmageddon() != MapEnum.Grassy_Hills || this.settings.customArmageddon != null))
+      if (this.IsNonStandard() || timeInSeconds < 7 || (timeInSeconds > 90 || this.startHealth != (ushort) 250) || (this.restrictions != null && this.restrictions.AnyRestricted() || this.settings.customArmageddon != null))
         this.gameType = ZGame.GameType.Party;
       else
         this.gameType = this.GetTimeInSeconds() < 30 ? ZGame.GameType.LowStandard : ZGame.GameType.HighStandard;
@@ -225,7 +225,7 @@ public class GameFacts
       stringBuilder1.Append("Sandbox<br>");
     else
       stringBuilder1.Append(RatedFacts.GetGameTypeAsStringLong((int) this.gameType)).Append("<br>");
-    stringBuilder1.Append("Map: ").Append(this.status == (byte) 0 || !linked ? GameFacts.MapName(this.GetMapMode(), g.gameFacts.settings.altGeneration) : GameFacts.MapName(this.realMap, g.gameFacts.settings.altGeneration)).Append("<br>");
+    stringBuilder1.Append("Map: ").Append(this.status == (byte) 0 || !linked ? GameFacts.MapName(this.GetMapMode(), this.settings.altGeneration) : GameFacts.MapName(this.realMap, this.settings.altGeneration)).Append("<br>");
     List<SpellEnum> customArmageddon = this.settings.customArmageddon;
     byte num;
     if ((customArmageddon != null ? (__nonvirtual (customArmageddon.Count) > 0 ? 1 : 0) : 0) != 0)
@@ -292,6 +292,8 @@ public class GameFacts
       stringBuilder1.Append("Zero Shield<br>");
     if (style.HasStyle(GameStyle.Sandbox))
       stringBuilder1.Append("Sandbox<br>");
+    if (style.HasStyle(GameStyle.Dynamic))
+      stringBuilder1.Append("Dynamic Spellbooks<br>");
     if (style.HasStyle(GameStyle.First_Turn_Teleport))
       stringBuilder1.Append("First Turn Teleport<br>");
     if (style.HasStyle(GameStyle.Elementals))
@@ -415,11 +417,11 @@ public class GameFacts
       else
         this.SetTeamMode(TeamEnum.No);
     }
-    bool flag1 = (uint) (r.extraOptions & 8) > 0U;
-    int num = (uint) (r.extraOptions & 16) > 0U ? 1 : 0;
-    bool flag2 = (uint) (r.extraOptions & 2) > 0U;
-    bool flag3 = (uint) (r.extraOptions & 8192) > 0U;
-    if ((uint) (r.extraOptions & 65536) > 0U)
+    bool flag1 = r.gameType == 2 && (uint) (r.extraOptions & 8) > 0U;
+    int num = r.gameType != 2 ? 0 : ((uint) (r.extraOptions & 16) > 0U ? 1 : 0);
+    bool flag2 = r.gameType == 2 && (uint) (r.extraOptions & 2) > 0U;
+    bool flag3 = r.gameType == 2 && (uint) (r.extraOptions & 8192) > 0U;
+    if ((r.gameType != 2 ? 0 : ((uint) (r.extraOptions & 65536) > 0U ? 1 : 0)) != 0)
     {
       if (r.extraOptions == -1)
       {
@@ -684,12 +686,12 @@ public class GameFacts
 
   public GameStyle GetStyle()
   {
-    return (GameStyle) (this.gameModes2 & 258459);
+    return (GameStyle) (this.gameModes2 & 782747);
   }
 
   public bool IsNonStandard()
   {
-    return (uint) (this.gameModes2 & 254362) > 0U;
+    return (uint) (this.gameModes2 & 147594) > 0U;
   }
 
   public static MapEnum GetRandomMap(ZGame game, int mapStyle, MapEnum def)

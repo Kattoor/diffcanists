@@ -105,7 +105,7 @@ public static class Descriptions
     },
     {
       "Underdark",
-      "Soul Jar\n(drains 20 health per cast)\nCreates a phylactery: an object to contain your soul. If you subsequently die, you'll be resurrected at the Soul Jar's location. The Soul Jar will fail to function if killed by Light damage or if it falls into the water.\nAt level 5: Rain of Chaos is less random."
+      "Soul Jar\n(drains 20 health per cast)\nCreates a phylactery: an object to contain your soul. If you subsequently die, you'll be resurrected at the Soul Jar's location. The Soul Jar will fail to function if you are killed by Light damage, die while in the water or if the jar falls into the water.\nAt level 5: Rain of Chaos is less random."
     },
     {
       "OverLight",
@@ -2063,7 +2063,7 @@ public static class Descriptions
     },
     {
       "Vortex",
-      "Targeted:\n{0}\nDisrupts spells going through it and confuses arrow spells. Facing right will pull the projectiles towards the center. Facing left will push them away."
+      "Targeted:\n{0}\nDisrupts spells going through it and confuses arrow spells. Facing right (will rotate clockwise) will pull the projectiles towards the center. Facing left (will rotate counter-clockwise) will push them away."
     },
     {
       "Whisper Arrow",
@@ -2439,7 +2439,7 @@ public static class Descriptions
     },
     {
       "Black Hole",
-      "Targeted:\n{0}\nStays until moved or the caster is destroyed. Pulls spells and units alike into its center. Units that fall into the center will be sunk unless they are an allied unit and an active wormhole is on the battle field then they will instead be sent through the wormhole. Spells and Towers are destroyed."
+      "Targeted:\n{0}\nStays until moved or the caster is destroyed. Pulls spells and units alike into its center. Units that fall into the center will be sunk unless there is an allied active wormhole of that unit on the battle field then they will instead be sent through the wormhole. Spells and Towers are destroyed."
     },
     {
       "Supernova",
@@ -2535,7 +2535,7 @@ public static class Descriptions
     },
     {
       "Summon Wyrm",
-      "Arcane Minion: 25 health\n{0}\nCannot move, but has the spell Burrow which will not end. Also has the spells Spit and Consume."
+      "Arcane Minion: 25 health\n{0}\nCannot move unless standing on sand. Has the spell Burrow which will not end. Also has the spells Spit and Consume."
     },
     {
       "Sand Trap",

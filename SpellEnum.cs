@@ -353,4 +353,5 @@ public enum SpellEnum
   Call_of_the_Dead = 347, // 0x0000015B
   Deaths_Doorway = 348, // 0x0000015C
   Zombie_Charge = 349, // 0x0000015D
+  Structure_to_Sand = 350, // 0x0000015E
 }

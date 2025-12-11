@@ -46,6 +46,10 @@ public class EmojiSelector : MonoBehaviour
     return andApply;
   }
 
+  public void Empty()
+  {
+  }
+
   public void SetCustomOnEnd(Action<string> e)
   {
     this.onend = e;

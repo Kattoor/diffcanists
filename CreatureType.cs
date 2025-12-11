@@ -41,4 +41,5 @@ public enum CreatureType
   Map_Bottom,
   Zombie,
   Flesh_Golem,
+  Wyrm,
 }

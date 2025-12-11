@@ -467,41 +467,52 @@ public static class Armageddon
 
   private static void GhostlyHalls(ZPerson p)
   {
-    if ((p.localTurn - p.game.armageddonTurn) % 3 != 0 || ZComponent.IsNull((ZComponent) p.first()))
-      return;
-    ZCreature duplicate = ZSpell.CreateDuplicate(p.first(), p.first(), new MyLocation(p.game.RandomInt(50, p.game.map.Width - 50), p.game.RandomInt(50, p.game.map.Height - 50)), true);
-    if (ZComponent.IsNull((ZComponent) duplicate))
-      return;
-    duplicate.spells.Clear();
-    duplicate.spells.Add(new SpellSlot(Inert.GetSpell(SpellEnum.Whisper_Bomb)));
-    duplicate.spells.Add(new SpellSlot(Inert.GetSpell(SpellEnum.Air_Surge)));
-    duplicate.spells.Add(new SpellSlot(Inert.GetSpell(SpellEnum.Whisper_Arrow)));
-    duplicate.spells.Add(new SpellSlot(Inert.GetSpell(SpellEnum.Color_Spray)));
-    duplicate.spells.Add(new SpellSlot(Inert.GetSpell(SpellEnum.Summon_Phantom)));
-    duplicate.spells.Add(new SpellSlot(Inert.GetSpell(SpellEnum.Magical_Barrier)));
-    duplicate.spells.Add(new SpellSlot(Inert.GetSpell(SpellEnum.Vortex)));
-    duplicate.spells.Add(new SpellSlot(Inert.GetSpell(SpellEnum.The_ol_swaparoo)));
-    duplicate.spells.Add(new SpellSlot(Inert.GetSpell(SpellEnum.Blink)));
-    duplicate.spells.Add(new SpellSlot(Inert.GetSpell(SpellEnum.Arcane_Arrow)));
-    duplicate.spells.Add(new SpellSlot(Inert.GetSpell(SpellEnum.Arcane_Bomb)));
-    duplicate.spells.Add(new SpellSlot(Inert.GetSpell(SpellEnum.Arcane_Flash)));
-    duplicate.spells.Add(new SpellSlot(Inert.GetSpell(SpellEnum.Arcane_Sigil)));
-    duplicate.controllable = false;
-    duplicate.parent?.panelPlayer?.SetSummons(duplicate.parent);
-    duplicate.effectors.Add(new ZEffector()
+    if (p.armaWarnings.Count == 0)
     {
-      game = p.game,
-      active = false,
-      type = EffectorType.ApparitionArmageddon,
-      MaxTurnsAlive = -1,
-      whoSummoned = duplicate
-    });
-    ZSpell.FireApparition(duplicate, false, false);
-    p.map.ServerBitBlt(13, (int) duplicate.position.x, (int) duplicate.position.y, true, true);
-    ZSpell.ApplyExplosionForce(SpellEnum.Duplication, duplicate.world, duplicate.position, 0, Curve.None, 10, 75, (FixedInt) 0, DamageType.None, duplicate, duplicate.game.turn, Curve.Generic, (ISpellBridge) null, (ZCreature) null);
-    if (!duplicate.game.isClient)
-      return;
-    AudioManager.Play(Inert.GetSpell(SpellEnum.Duplication).castClip);
+      p.AddArmaWarning(-35, 0);
+    }
+    else
+    {
+      if ((p.localTurn - p.game.armageddonTurn) % 3 != 0 || ZComponent.IsNull((ZComponent) p.first()))
+        return;
+      int num = 0;
+      foreach (ZCreature zcreature in p.controlled)
+      {
+        if ((ZComponent) zcreature != (object) null && zcreature.spellEnum == SpellEnum.None)
+          ++num;
+      }
+      if (num >= 5)
+        return;
+      ArmaWarning armaWarning = p.DequeueArmaWarning();
+      p.AddArmaWarning(-35, 0);
+      ZCreature duplicate = ZSpell.CreateDuplicate(p.first(), p.first(), new MyLocation(armaWarning.x, p.game.RandomInt(50, p.game.map.Height - 50)), true);
+      if (ZComponent.IsNull((ZComponent) duplicate))
+        return;
+      duplicate.canMount = false;
+      if ((ZComponent) duplicate.mount != (object) null)
+        duplicate.Demount(true);
+      duplicate.health = 25;
+      duplicate.maxHealth = 25;
+      duplicate.UpdateHealthTxt();
+      duplicate.spells.Clear();
+      duplicate.spells.Add(new SpellSlot(Inert.GetSpell(SpellEnum.Whisper_Arrow)));
+      duplicate.controllable = false;
+      duplicate.parent?.panelPlayer?.SetSummons(duplicate.parent);
+      duplicate.effectors.Add(new ZEffector()
+      {
+        game = p.game,
+        active = false,
+        type = EffectorType.ApparitionArmageddon,
+        MaxTurnsAlive = -1,
+        whoSummoned = duplicate
+      });
+      ZSpell.FireApparition(duplicate, false, false);
+      p.map.ServerBitBlt(13, (int) duplicate.position.x, (int) duplicate.position.y, true, true);
+      ZSpell.ApplyExplosionForce(SpellEnum.Duplication, duplicate.world, duplicate.position, 0, Curve.None, 10, 75, (FixedInt) 0, DamageType.None, duplicate, duplicate.game.turn, Curve.Generic, (ISpellBridge) null, (ZCreature) null);
+      if (!duplicate.game.isClient)
+        return;
+      AudioManager.Play(Inert.GetSpell(SpellEnum.Duplication).castClip);
+    }
   }
 
   public static IEnumerator<float> IEnumeratorSeaSalt(
@@ -572,7 +583,7 @@ public static class Armageddon
           goto label_19;
       }
     }
-    else if (m == MapEnum.Ghostly_Halls || m != MapEnum.Desert && m != MapEnum.Space_Nexus)
+    else if (m != MapEnum.Ghostly_Halls && m != MapEnum.Desert && m != MapEnum.Space_Nexus)
       goto label_19;
     return true;
 label_19:

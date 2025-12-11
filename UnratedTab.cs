@@ -237,6 +237,8 @@ public class UnratedTab : Catalogue
       this.groupGameStyles[9].AlwaysOn = true;
     if (((GameStyle) style).HasStyle(GameStyle.Watchtower))
       this.groupGameStyles[10].AlwaysOn = true;
+    if (((GameStyle) style).HasStyle(GameStyle.Dynamic))
+      this.groupGameStyles[11].AlwaysOn = true;
     this.groupGameStyles[7].gameObject.SetActive(false);
     this.groupGameStyles[8].gameObject.SetActive(!this._gameFacts.GetRatedMode());
     if (this._gameFacts.GetPlayersPerTeam() == PlayersPerTeam.Half)

@@ -308,40 +308,35 @@ public class ClickSpell : MonoBehaviour
       for (; i < Player.Instance.selected.spells.Count; ++i)
         this.ExtraEffects(i);
     }
+    if (!Player.Instance.selected.isPawn && Client.game.gameFacts.GetStyle().HasStyle(GameStyle.Dynamic))
+    {
+      for (int index = 0; index < Player.Instance.person.settingsPlayer.spells.Length; ++index)
+      {
+        if (Player.Instance.person.settingsPlayer.spells[index] == byte.MaxValue)
+        {
+          if (i >= this.spellButtons.Count)
+            this.AddSlot(i);
+          Vector2 position = this.GetPosition(i, false);
+          this.spellButtons[i].rectTransform.anchoredPosition = new Vector2(position.x, position.y);
+          if ((UnityEngine.Object) this.spellButtons[i].backdrop != (UnityEngine.Object) null)
+            this.spellButtons[i].backdrop.anchoredPosition = new Vector2(position.x, position.y);
+          this.spellButtons[i].error = 0;
+          this.spellButtons[i].SwappableSpell();
+          ++i;
+        }
+      }
+    }
     for (; i < this.spellButtons.Count; ++i)
       this.spellButtons[i].Hide();
   }
 
-  public void ExtraEffectsInWater()
+  private Vector2 GetPosition(int i, bool lvl5)
   {
-    Spell spell = Inert.Instance.waterGate.spell;
-    this.spellButtons[0].SetVisual(spell.name, spell.name, -1, 0, false);
-  }
-
-  public void ExtraEffects(int i)
-  {
-    if ((UnityEngine.Object) Player.Instance == (UnityEngine.Object) null)
-      return;
-    SpellSlot spell1 = Player.Instance.selected.spells[i];
     ZCreature selected = Player.Instance.selected;
-    Spell spell2 = spell1.spell;
-    if ((UnityEngine.Object) spell2 == (UnityEngine.Object) null)
-      return;
-    if (i >= this.spellButtons.Count)
-    {
-      SpellButton spellButton = UnityEngine.Object.Instantiate<SpellButton>(this.sbPrefab, this.sbPrefab.transform.parent);
-      spellButton.index = i;
-      this.spellButtons.Add(spellButton);
-      this.allImages.Add(spellButton.bgColor);
-      this.allImages.Add(spellButton.image);
-      this.allText.Add(spellButton.txtText);
-      RectTransform rectTransform = UnityEngine.Object.Instantiate<RectTransform>(this.backdrop, this.backdrop.parent);
-      spellButton.backdrop = rectTransform;
-    }
     float num1 = this.elementalOffset <= 12 || i >= 32 ? (float) i : (float) (i - (this.elementalOffset - 12));
     float y = (double) num1 % 2.0 == 0.0 ? -45.5f : -29f;
     float num2;
-    if (spell1.isLevel5 && selected.spells.Count > 23)
+    if (lvl5 && (selected.spells.Count > 23 || !selected.isPawn && selected.game.gameFacts.GetStyle().HasStyle(GameStyle.Dynamic)))
     {
       if (this.elementalOffset < 12)
         this.elementalOffset = 12;
@@ -349,7 +344,7 @@ public class ClickSpell : MonoBehaviour
       y = (this.elementalOffset % 2 == 0 ? -45.5f : -29f) + 62f;
       ++this.elementalOffset;
     }
-    else if (selected.spells.Count > 23)
+    else if (selected.spells.Count > 23 || !selected.isPawn && selected.game.gameFacts.GetStyle().HasStyle(GameStyle.Dynamic) && selected.game.isElementals)
     {
       if (i < 12)
       {
@@ -367,24 +362,56 @@ public class ClickSpell : MonoBehaviour
     }
     else
       num2 = (float) (i * 62);
-    float x = num2 + 154f;
-    this.spellButtons[i].rectTransform.anchoredPosition = new Vector2(x, y);
+    return new Vector2(num2 + 154f, y);
+  }
+
+  public void ExtraEffectsInWater()
+  {
+    Spell spell = Inert.Instance.waterGate.spell;
+    this.spellButtons[0].SetVisual(spell.name, spell.name, -1, 0, false);
+  }
+
+  private void AddSlot(int i)
+  {
+    SpellButton spellButton = UnityEngine.Object.Instantiate<SpellButton>(this.sbPrefab, this.sbPrefab.transform.parent);
+    spellButton.index = i;
+    this.spellButtons.Add(spellButton);
+    this.allImages.Add(spellButton.bgColor);
+    this.allImages.Add(spellButton.image);
+    this.allText.Add(spellButton.txtText);
+    RectTransform rectTransform = UnityEngine.Object.Instantiate<RectTransform>(this.backdrop, this.backdrop.parent);
+    spellButton.backdrop = rectTransform;
+  }
+
+  public void ExtraEffects(int i)
+  {
+    if ((UnityEngine.Object) Player.Instance == (UnityEngine.Object) null)
+      return;
+    SpellSlot spell1 = Player.Instance.selected.spells[i];
+    ZCreature selected = Player.Instance.selected;
+    Spell spell2 = spell1.spell;
+    if ((UnityEngine.Object) spell2 == (UnityEngine.Object) null)
+      return;
+    if (i >= this.spellButtons.Count)
+      this.AddSlot(i);
+    Vector2 position = this.GetPosition(i, spell1.isLevel5);
+    this.spellButtons[i].rectTransform.anchoredPosition = new Vector2(position.x, position.y);
     if ((UnityEngine.Object) this.spellButtons[i].backdrop != (UnityEngine.Object) null)
-      this.spellButtons[i].backdrop.anchoredPosition = new Vector2(x, y);
+      this.spellButtons[i].backdrop.anchoredPosition = new Vector2(position.x, position.y);
     this.spellButtons[i].error = 0;
     int uses = -1;
-    int num4 = 0;
+    int num1 = 0;
     if (spell1.MaxUses > 0)
       uses = spell1.MaxUses - spell1.UsedUses;
     int localTurn = Player.Instance.selected.parent.localTurn;
     if (spell1.TurnsTillFirstUse > localTurn)
-      num4 = spell1.TurnsTillFirstUse - localTurn;
+      num1 = spell1.TurnsTillFirstUse - localTurn;
     if (spell1.LastTurnFired == localTurn || (spell1.RechargeTime > 0 || spell1.LastTurnFired > localTurn) && spell1.LastTurnFired + spell1.RechargeTime >= localTurn && (spell1.TurnsTillFirstUse > localTurn || spell1.LastTurnFired > -1))
-      num4 = Mathf.Max(num4, spell1.LastTurnFired >= 0 ? spell1.RechargeTime - (localTurn - (spell1.LastTurnFired + 1)) : -1);
+      num1 = Mathf.Max(num1, spell1.LastTurnFired >= 0 ? spell1.RechargeTime - (localTurn - (spell1.LastTurnFired + 1)) : -1);
     else if (spell1.LastTurnFired > localTurn)
     {
-      num4 = Mathf.Max(spell1.LastTurnFired - localTurn);
-      Debug.Log((object) ("HI: " + num4.ToString()));
+      num1 = Mathf.Max(spell1.LastTurnFired - localTurn);
+      Debug.Log((object) ("HI: " + num1.ToString()));
     }
     bool maxedSummons = false;
     if (spell2.type == CastType.Placement && spell2.amount > 0 && Player.Instance.selected.parent.GetMinionCount() + spell2.amount > Player.Instance.selected.parent.GetMaxMinions())
@@ -407,7 +434,7 @@ public class ClickSpell : MonoBehaviour
       else
       {
         this.spellButtons[i].error = 110;
-        num4 = Mathf.Max(num4, spell1.LastTurnFired >= 0 ? spell1.disabledturn - Player.Instance.person.localTurn + 1 : -1);
+        num1 = Mathf.Max(num1, spell1.LastTurnFired >= 0 ? spell1.disabledturn - Player.Instance.person.localTurn + 1 : -1);
       }
     }
     if (spell2.spellEnum.IsFlight())
@@ -430,10 +457,10 @@ public class ClickSpell : MonoBehaviour
     }
     if (!maxedSummons)
     {
-      int num3 = ClickSpell.Level3(spell2, spell2.spellEnum, Player.Instance.selected, spell1);
-      if (num3 != 0)
-        this.spellButtons[i].error = num3;
-      maxedSummons = (uint) num3 > 0U;
+      int num2 = ClickSpell.Level3(spell2, spell2.spellEnum, Player.Instance.selected, spell1);
+      if (num2 != 0)
+        this.spellButtons[i].error = num2;
+      maxedSummons = (uint) num2 > 0U;
     }
     if (Player.Instance.selected.phantom)
     {
@@ -442,7 +469,7 @@ public class ClickSpell : MonoBehaviour
         this.spellButtons[i].error = 104;
         maxedSummons = true;
         uses = 0;
-        num4 = 0;
+        num1 = 0;
       }
     }
     else if (Player.Instance.selected.race == CreatureRace.Undead && !Player.Instance.selected.pawn)
@@ -452,7 +479,7 @@ public class ClickSpell : MonoBehaviour
         this.spellButtons[i].error = spell2.type == CastType.Tower ? 121 : 103;
         maxedSummons = true;
         uses = 0;
-        num4 = 0;
+        num1 = 0;
       }
     }
     else if (Player.Instance.selected.shiningPower)
@@ -462,7 +489,7 @@ public class ClickSpell : MonoBehaviour
         this.spellButtons[i].error = spell2.type == CastType.Tower ? 140 : 102;
         maxedSummons = true;
         uses = 0;
-        num4 = 0;
+        num1 = 0;
       }
     }
     else if (Player.Instance.selected.race == CreatureRace.Bear && !Player.Instance.selected.pawn && (spell2.bookOf != BookOf.Arcane && spell2.bookOf != BookOf.Druidism && !spell1.isPresent || spell2.type == CastType.Tower))
@@ -470,9 +497,9 @@ public class ClickSpell : MonoBehaviour
       this.spellButtons[i].error = spell2.type == CastType.Tower ? 124 : 122;
       maxedSummons = true;
       uses = 0;
-      num4 = 0;
+      num1 = 0;
     }
-    this.spellButtons[i].SetVisual(Player.Instance.selected.spells[i].spell.name, ClickSpell.GetSpellName(Player.Instance.selected.spells[i].spell, Player.Instance.selected), uses, num4, maxedSummons);
+    this.spellButtons[i].SetVisual(Player.Instance.selected.spells[i].spell.name, ClickSpell.GetSpellName(Player.Instance.selected.spells[i].spell, Player.Instance.selected), uses, num1, maxedSummons);
   }
 
   public static string ErrorString(int code)

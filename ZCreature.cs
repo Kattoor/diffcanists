@@ -2105,7 +2105,7 @@ label_16:
 
   public void HealBloodBank(ZCreature enemy, int damage, DamageType dt)
   {
-    if (!((ZComponent) enemy != (object) null) || enemy.isDead || !((ZComponent) this != (object) enemy))
+    if (!((ZComponent) enemy != (object) null) || enemy.health <= 0 || (enemy.isDead || !((ZComponent) this != (object) enemy)))
       return;
     switch (dt)
     {
@@ -2141,7 +2141,7 @@ label_16:
 
   public void HealMonolith(ZCreature enemy, int damage, DamageType dt)
   {
-    if (!((ZComponent) enemy != (object) null) || enemy.isDead || !((ZComponent) this != (object) enemy))
+    if (!((ZComponent) enemy != (object) null) || enemy.health <= 0 || (enemy.isDead || !((ZComponent) this != (object) enemy)))
       return;
     switch (dt)
     {
@@ -3319,11 +3319,11 @@ label_4:
   {
     if (!this.game.isClient)
       return;
-    int health = this.health;
+    int i = Mathf.Max(0, this.health);
     if ((UnityEngine.Object) this.txtHealth != (UnityEngine.Object) null)
-      this.txtHealth.text = this.maxHealth != 1 ? (health + (!ZComponent.IsNull((ZComponent) this.tower) ? this.tower.Health : 0)).ToString() : "";
+      this.txtHealth.text = this.maxHealth != 1 ? (i + (!ZComponent.IsNull((ZComponent) this.tower) ? this.tower.Health : 0)).ToString() : "";
     if ((UnityEngine.Object) this.panelPlayer != (UnityEngine.Object) null)
-      this.panelPlayer.SetHP(health, !ZComponent.IsNull((ZComponent) this.tower) ? this.tower.Health : 0, (float) this.maxHealth);
+      this.panelPlayer.SetHP(i, !ZComponent.IsNull((ZComponent) this.tower) ? this.tower.Health : 0, (float) this.maxHealth);
     if (!((UnityEngine.Object) this.txtShield != (UnityEngine.Object) null))
       return;
     if (this.shield > 0 || this.bleeding || (this.parent.communeWithNature > 0 || this.fusion > this.parent.localTurn))
@@ -5488,7 +5488,7 @@ label_21:
           }
           else
           {
-            if (zcreature1.parent.yourTurn && !zcreature1.isPawn && (zcreature1.position.y >= zcreature1.game.map.Height + 3000 && !zcreature1.game.isClient))
+            if (zcreature1.parent.yourTurn && !zcreature1.isPawn && (zcreature1.position.y >= zcreature1.game.map.Height + 1400 && !zcreature1.game.isClient))
               Achievements.Set(Achievement.Up__Up_and_Up_some_more, zcreature1.parent.account, zcreature1.game);
             if (zcreature1.addVelocity)
             {

@@ -658,7 +658,12 @@ public class ZCreatureTree : ZCreature
     if (this.health <= 0)
     {
       if ((Object) this.texture != (Object) null)
-        this.map.ServerBitBlt((int) this.cutoutTexture, (int) this.position.x, (int) this.position.y, false, true);
+      {
+        if (this.baseTree.isStructure)
+          this.game.ongoing.RunSpell(ZSpell.IEnumeratorStructureToSand(Inert.GetSpell(SpellEnum.Structure_to_Sand), this.parent.first(), this.position, this.cutoutTexture), true);
+        else
+          this.map.ServerBitBlt((int) this.cutoutTexture, (int) this.position.x, (int) this.position.y, false, true);
+      }
       this.game.forceRysncPause = true;
       this.collider?.Disable(true);
       this.isDead = true;

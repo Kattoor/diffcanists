@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 public class Inert : MonoBehaviour
 {
-  public static string Version = "v8.3";
+  public static string Version = "v8.4";
   public static int _Version = 62;
   public static int mask_Jar = 262144;
   public static int mask_ButterflyJar = 2097152;
@@ -223,6 +223,11 @@ public class Inert : MonoBehaviour
   }
 
   public static Inert Instance { get; set; }
+
+  public static Spell GetSpell(byte i, bool alt)
+  {
+    return !alt ? Inert.Instance._spells[(int) i] : Inert.Instance.altSpells[(int) i];
+  }
 
   public static Spell GetSpell(string s)
   {

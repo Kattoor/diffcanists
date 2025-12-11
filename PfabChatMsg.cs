@@ -71,7 +71,7 @@ public class PfabChatMsg : MonoBehaviour, IPointerClickHandler, IEventSystemHand
         this.DisplayOutfit(myContextMenu1.transform, sp);
         break;
       case ContentType.SpellBook:
-        SpellLobbyChange.Create((SettingsPlayer) this.t.obj, (Action<SettingsPlayer>) (s => Client.AskToChangeSpells(s)), false, Validation.Default, false, (Action) null);
+        SpellLobbyChange.Create((SettingsPlayer) this.t.obj, (Action<SettingsPlayer>) (s => Client.AskToChangeSpells(s)), false, Validation.Default, false, (Action) null, false);
         break;
       case ContentType.ArcTutorial:
         MyContextMenu myContextMenu2 = MyContextMenu.Show();

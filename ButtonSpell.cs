@@ -113,8 +113,29 @@ label_13:
         return;
       if (SpellLobbyChange.Instance.HasSpell((byte) this.index))
       {
-        SpellLobbyChange.Instance.RemoveSpell((byte) this.index);
-        this.SetSprite(this.image.sprite, this.level, false, this.interactable, -1);
+        if (SpellLobbyChange.Instance.onEndQuick)
+        {
+          MyToolTip.Show("You may only Add spells", -1f, false);
+        }
+        else
+        {
+          SpellLobbyChange.Instance.RemoveSpell((byte) this.index);
+          this.SetSprite(this.image.sprite, this.level, false, this.interactable, -1);
+        }
+      }
+      else if (SpellLobbyChange.Instance.onEndQuick)
+      {
+        if (Player.Instance.person.lastSpellSwap >= Player.Instance.person.localTurn)
+          MyToolTip.Show("Can only Add 1 spell per turn", -1f, false);
+        else if (SpellLobbyChange.Instance.CanAddSpell((byte) this.index))
+        {
+          SettingsPlayer settingsPlayer = new SettingsPlayer();
+          settingsPlayer.spells[0] = SpellLobbyChange.Instance.GetSpellID(this.index);
+          SpellLobbyChange.Instance.onEnd(settingsPlayer);
+          Object.Destroy((Object) SpellLobbyChange.Instance.gameObject);
+        }
+        else
+          MyToolTip.Show("Unable to select spell", -1f, false);
       }
       else
       {

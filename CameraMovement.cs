@@ -136,16 +136,17 @@ public class CameraMovement : MonoBehaviour
     }
     else
     {
-      float num1 = Mathf.Clamp01(PlayerPrefs.GetFloat("prefblackBg", 1f));
+      MapEnum mapMode = Client._gameFacts.GetMapMode();
+      float a = Mathf.Clamp01(PlayerPrefs.GetFloat("prefblackBg", 1f));
       Color white = Color.white;
-      white.a = num1;
-      CameraMovement.Instance._background.GetComponent<SpriteRenderer>().color = white;
+      white.a = a;
+      CameraMovement.Instance._background.GetComponent<SpriteRenderer>().color = !Client._gameFacts.settings.altGeneration || mapMode != MapEnum.Grassy_Hills ? white : new Color(0.39f, 0.39f, 0.8f, a);
       float t = Mathf.Clamp01(PlayerPrefs.GetFloat("prefblackFg", 1f));
       white.a = 1f;
-      float num2 = Mathf.Lerp(0.4f, 1f, t);
-      white.r = num2;
-      white.g = num2;
-      white.b = num2;
+      float num = Mathf.Lerp(0.4f, 1f, t);
+      white.r = num;
+      white.g = num;
+      white.b = num;
       if (Client.map == null || Client.map.GetRawSprites() == null)
         return;
       foreach (ZMap.RawSprite rawSprite in Client.map.GetRawSprites())

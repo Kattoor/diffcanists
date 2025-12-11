@@ -283,7 +283,25 @@ public class ZGame
 
   public bool CanMove(ZCreature c)
   {
-    return (this.AllowMinionMovement || !c.isPawn) && this.AllowMovement;
+    bool flag = (this.AllowMinionMovement || !c.isPawn) && this.AllowMovement;
+    if (!flag || c.type != CreatureType.Wyrm)
+      return flag;
+    List<Coords> outlineArray = MapGenerator.getOutlineArray(c.radius);
+    int x = (int) c.position.x;
+    int y = (int) c.position.y;
+    int num = ((FixedInt.Create(360) - -FixedInt.Create(180)) * FixedInt.ThreeSixtyBy1 * outlineArray.Count - c.radius).ToInt();
+    if (num < 0)
+      num += outlineArray.Count;
+    for (int index1 = 0; index1 < c.radius * 2; ++index1)
+    {
+      int index2 = (index1 + num) % outlineArray.Count;
+      for (int index3 = 0; index3 < 5; ++index3)
+      {
+        if (this.map.IsSand(x + outlineArray[index2].x, y + outlineArray[index2].y - index3))
+          return true;
+      }
+    }
+    return false;
   }
 
   public ZGame()
@@ -415,7 +433,7 @@ public class ZGame
 
   public void init_BanStage()
   {
-    SpellLobbyChange.Create(Client.settingsPlayer, (Action<SettingsPlayer>) (set => Client.AskBanStage(set)), false, this.curBanStage == BanStage.Pick ? Validation.Level3Only : Validation.None, true, (Action) (() => this.init_BanStage()));
+    SpellLobbyChange.Create(Client.settingsPlayer, (Action<SettingsPlayer>) (set => Client.AskBanStage(set)), false, this.curBanStage == BanStage.Pick ? Validation.Level3Only : Validation.None, true, (Action) (() => this.init_BanStage()), false);
   }
 
   public void init_Client(ServerState.Busy busy = ServerState.Busy.Not_started)
@@ -1329,6 +1347,11 @@ label_46:
       if (ZComponent.IsNull((ZComponent) this.globalEffectors[index]) || this.globalEffectors[index].dead || ZComponent.IsNull((ZComponent) this.globalEffectors[index].whoSummoned) && p.controlled.Count > 0 && this.globalEffectors[index].KillsHost())
         this.globalEffectors.RemoveAt(index);
       else if (this.globalEffectors[index].type == EffectorType.Portal)
+      {
+        this.globalEffectors[index].active = false;
+        this.globalEffectors[index].partner.active = false;
+      }
+      else if (this.globalEffectors[index].type == EffectorType.Wormhole)
         this.globalEffectors[index].active = false;
     }
     for (int index = this.windShieldEffectors.Count - 1; index >= 0; --index)
@@ -3878,6 +3901,42 @@ label_46:
                       }
                     }));
                     break;
+                  case 210:
+                    if (!this.gameFacts.GetStyle().HasStyle(GameStyle.Dynamic) || p.lastSpellSwap >= p.localTurn)
+                      break;
+                    byte i = myBinaryReader.ReadByte();
+                    for (int index = 0; index < p.settingsPlayer.spells.Length; ++index)
+                    {
+                      if (p.settingsPlayer.spells[index] == byte.MaxValue && (int) i < Inert.Instance.altSpells.Length)
+                      {
+                        Spell spell = Inert.GetSpell(i, p.settingsPlayer._spells.IsAlt((int) i));
+                        if (!((UnityEngine.Object) spell != (UnityEngine.Object) null))
+                          break;
+                        if (spell.level == 2)
+                        {
+                          if (!p.settingsPlayer.HasLevel1((int) i))
+                            break;
+                          p.settingsPlayer.spells[index] = i;
+                          p.first().spells.Add(new SpellSlot(spell));
+                          p.lastSpellSwap = p.yourTurn ? p.localTurn : p.localTurn + 1;
+                          break;
+                        }
+                        if (spell.level == 3)
+                        {
+                          if (!p.settingsPlayer.ValidLevel3((int) i))
+                            break;
+                          p.settingsPlayer.spells[index] = i;
+                          p.first().spells.Add(new SpellSlot(spell));
+                          p.lastSpellSwap = p.yourTurn ? p.localTurn : p.localTurn + 1;
+                          break;
+                        }
+                        p.settingsPlayer.spells[index] = i;
+                        p.first().spells.Add(new SpellSlot(spell));
+                        p.lastSpellSwap = p.yourTurn ? p.localTurn : p.localTurn + 1;
+                        break;
+                      }
+                    }
+                    break;
                   case 211:
                     ZPerson person7 = p;
                     float scaleX6 = myBinaryReader.ReadByte() > (byte) 0 ? 1f : -1f;
@@ -4576,7 +4635,7 @@ label_46:
                                         }
                                       }
                                       else
-                                        goto label_159;
+                                        goto label_174;
                                     }
                                     int num11 = myBinaryReader.ReadInt32();
                                     if (controlled[index6].destroyableEffectors.Count == num11)
@@ -4595,7 +4654,7 @@ label_46:
                                           }
                                         }
                                         else
-                                          goto label_159;
+                                          goto label_174;
                                       }
                                       int num12 = myBinaryReader.ReadInt32();
                                       if (controlled[index6].followingColliders.Count == num12)
@@ -4616,26 +4675,26 @@ label_46:
                                             }
                                           }
                                           else
-                                            goto label_159;
+                                            goto label_174;
                                         }
                                         controlled[index6].UpdateHealthTxt();
                                       }
                                       else
-                                        goto label_159;
+                                        goto label_174;
                                     }
                                     else
-                                      goto label_159;
+                                      goto label_174;
                                   }
                                   else
-                                    goto label_159;
+                                    goto label_174;
                                 }
                               }
                               else
-                                goto label_159;
+                                goto label_174;
                             }
                           }
                           else
-                            goto label_159;
+                            goto label_174;
                         }
                         int num13 = myBinaryReader.ReadInt32();
                         if (this.globalEffectors.Count == num13)
@@ -4653,7 +4712,7 @@ label_46:
                               }
                             }
                             else
-                              goto label_159;
+                              goto label_174;
                           }
                           ChatBox.Instance?.NewChatMsg("", "Fast Resync Successful.", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
                           break;
@@ -4666,7 +4725,7 @@ label_46:
                 {
                   Debug.LogError((object) ex);
                 }
-label_159:
+label_174:
                 if (this.isSpectator)
                 {
                   this.resyncing = true;

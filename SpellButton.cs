@@ -1,4 +1,5 @@
 
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,7 +28,7 @@ public class SpellButton : MonoBehaviour
     this.nameOfSpell = s;
     this.image.sprite = ClientResources.Instance.GetSpellIcon(s);
     this.bg.SetActive(true);
-    if (!((Object) this.backdrop != (Object) null))
+    if (!((UnityEngine.Object) this.backdrop != (UnityEngine.Object) null))
       return;
     this.backdrop.gameObject.SetActive(true);
   }
@@ -55,17 +56,46 @@ public class SpellButton : MonoBehaviour
 
   public void OnClick()
   {
-    ClickSpell.Instance.OnClickIndex(this.index);
+    if (string.IsNullOrEmpty(this.nameOfSpell))
+      SpellLobbyChange.Create(Player.Instance.person.settingsPlayer, (Action<SettingsPlayer>) (s => Player.Instance.SendSpellSwap(s.spells[0])), false, Validation.Default, true, (Action) null, true);
+    else
+      ClickSpell.Instance.OnClickIndex(this.index);
   }
 
   public void OnHover()
   {
-    ClickSpell.Instance.OnPointerEnter(this.index);
+    if (string.IsNullOrEmpty(this.nameOfSpell))
+      MyToolTip.Show("Open Spell Slot", -1f, false);
+    else
+      ClickSpell.Instance.OnPointerEnter(this.index);
   }
 
   public void OnExit()
   {
-    ClickSpell.Instance.OnPointerExit(this.index);
+    if (string.IsNullOrEmpty(this.nameOfSpell))
+      MyToolTip.Close();
+    else
+      ClickSpell.Instance.OnPointerExit(this.index);
+  }
+
+  public void SwappableSpell()
+  {
+    this.nameOfSpell = "";
+    this.txtName.text = "";
+    this.image.sprite = ClientResources.Instance.clear;
+    this.txtText.gameObject.SetActive(true);
+    this.bgColor.color = ClickSpell.GetColor(Player.Instance.person.CanSwapSpells() ? Color.white : (HUD.useNewSpellBgIcons ? SpellButton.DarkerGray : SpellButton.DarkGray));
+    this.txtText.text = Player.Instance.person.CanSwapSpells() ? "" : "1";
+    this.txtText.color = ClickSpell.GetColor(Color.red);
+    this.txtText.alignment = TextAlignmentOptions.Midline;
+    this.bgColor.color = ClickSpell.GetColor(Color.white);
+    this.image.color = ClickSpell.GetColor(Color.white);
+    if (this.zero.activeInHierarchy)
+      this.zero.SetActive(false);
+    this.bg.SetActive(true);
+    if (!((UnityEngine.Object) this.backdrop != (UnityEngine.Object) null))
+      return;
+    this.backdrop.gameObject.SetActive(true);
   }
 
   public void SetVisual(string realName, string s, int uses, int rechargeTime, bool maxedSummons)
@@ -137,7 +167,7 @@ public class SpellButton : MonoBehaviour
       this.txtText.gameObject.SetActive(false);
     }
     this.bg.SetActive(true);
-    if (!((Object) this.backdrop != (Object) null))
+    if (!((UnityEngine.Object) this.backdrop != (UnityEngine.Object) null))
       return;
     this.backdrop.gameObject.SetActive(true);
   }
@@ -146,7 +176,7 @@ public class SpellButton : MonoBehaviour
   {
     this.nameOfSpell = "";
     this.bg.SetActive(false);
-    if (!((Object) this.backdrop != (Object) null))
+    if (!((UnityEngine.Object) this.backdrop != (UnityEngine.Object) null))
       return;
     this.backdrop.gameObject.SetActive(false);
   }

@@ -225,6 +225,7 @@ public class ZEffector : ZComponent
       writer.Write(this.collider.creature.id);
       writer.Write(ZGame.GetID(this.whoSummoned));
       writer.Write(this.collider.creature.team);
+      writer.Write((int) this.collider.creature.spellEnum);
     }
     else if (this.type == EffectorType.Sacrifical_Altar_Aura)
     {
@@ -296,9 +297,9 @@ public class ZEffector : ZComponent
     {
       int num4 = reader.ReadInt32();
       int num5 = reader.ReadInt32();
-      int id = reader.ReadInt32();
+      reader.ReadInt32();
       int num6 = reader.ReadInt32();
-      creature = game.helper.GetCreature(id);
+      SpellEnum spellEnum = (SpellEnum) reader.ReadInt32();
       int num7 = (ZComponent) creature == (object) null ? 1 : 0;
       if ((ZComponent) creature == (object) null)
       {
@@ -309,6 +310,7 @@ public class ZEffector : ZComponent
         creature = zcreature;
       }
       ZCreature creature1 = ZCreatureCreate.CreateCreature(creature.parent, Inert.GetSpell(ZEffector.FromType(type)).toSummon.GetComponent<Creature>(), pos.ToSinglePrecision(), Quaternion.identity, game.GetMapTransform(), true);
+      creature1.spellEnum = spellEnum;
       creature1.game = game;
       creature1.id = num5;
       game.helper.creatureID.Add(creature1.id, creature1);
@@ -318,7 +320,7 @@ public class ZEffector : ZComponent
       ZEffector auraOfDecay = creature1.auraOfDecay;
       auraOfDecay.game = creature1.game;
       auraOfDecay.active = false;
-      auraOfDecay.whoSummoned = creature;
+      auraOfDecay.whoSummoned = creature1;
       auraOfDecay.collider = creature1.collider;
       auraOfDecay.collider.world = auraOfDecay.world;
       auraOfDecay.collider.Initialize(pos, game.world);
@@ -334,9 +336,8 @@ public class ZEffector : ZComponent
     {
       int num4 = reader.ReadInt32();
       int num5 = reader.ReadInt32();
-      int id = reader.ReadInt32();
+      reader.ReadInt32();
       int num6 = reader.ReadInt32();
-      creature = game.helper.GetCreature(id);
       int num7 = (ZComponent) creature == (object) null ? 1 : 0;
       if ((ZComponent) creature == (object) null)
       {
@@ -347,6 +348,7 @@ public class ZEffector : ZComponent
         creature = zcreature;
       }
       ZCreature creature1 = ZCreatureCreate.CreateCreature(creature.parent, Inert.GetSpell(ZEffector.FromType(type)).toSummon.GetComponent<Creature>(), pos.ToSinglePrecision(), Quaternion.identity, game.GetMapTransform(), true);
+      creature1.spellEnum = SpellEnum.Sacrificial_Altar;
       creature1.game = game;
       creature1.id = num5;
       game.helper.creatureID.Add(creature1.id, creature1);
@@ -3078,7 +3080,7 @@ label_59:
           break;
         this.active = false;
         ChatBox.Instance?.NewChatMsg("", this.whoSummoned.parent.name + " infested " + (c.isPawn ? c.parent.name + "'s " + c.name : c.parent.name) + " with a sand mite.", (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System, ContentType.STRING, (object) null);
-        for (int index = 0; index <= this.turnsAlive; ++index)
+        for (int index = 0; index <= this.turnsAlive && index < 5; ++index)
         {
           ZEffector zeffector = new ZEffector()
           {

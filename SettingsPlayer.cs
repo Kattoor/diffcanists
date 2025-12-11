@@ -485,6 +485,33 @@ public class SettingsPlayer
     }
   }
 
+  public bool HasLevel1(int s)
+  {
+    int num = s % 12;
+    if (num >= 10 || num % 2 != 1 || s < 12)
+      return true;
+    for (int index = 0; index < 16; ++index)
+    {
+      if ((int) this.spells[index] == s - 1)
+        return true;
+    }
+    return false;
+  }
+
+  public bool ValidLevel3(int s)
+  {
+    int num1 = s % 12;
+    int num2 = 0;
+    if (num1 >= 10 || num1 < 10 || s < 12)
+      return true;
+    for (int index = 0; index < 16; ++index)
+    {
+      if ((int) this.spells[index] % 12 == num1)
+        ++num2;
+    }
+    return num2 >= 5;
+  }
+
   public void VerifySpells()
   {
     HashSet<byte> byteSet = new HashSet<byte>();

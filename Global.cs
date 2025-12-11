@@ -197,6 +197,7 @@ public static class Global
   public const byte MsgRollBack = 207;
   public const byte MsgFlipFlip = 208;
   public const byte MsgDetower = 209;
+  public const byte MsgSwapSpell = 210;
   public const byte MsgControlledJump = 211;
   public const byte MsgFire = 220;
   public const byte SubSteamInit = 1;

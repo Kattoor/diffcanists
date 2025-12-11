@@ -381,6 +381,11 @@ public class ZMap
     return this.InBounds(x, y) && this.rawspriteColors[(x >> 7) + (y >> 7) * this._numBlocksHorizontal].colors[(x & (int) sbyte.MaxValue) + ((y & (int) sbyte.MaxValue) << 7)].a > (byte) 0;
   }
 
+  public bool IsSand(int x, int y)
+  {
+    return this.InBounds(x, y) && this.rawspriteColors[(x >> 7) + (y >> 7) * this._numBlocksHorizontal].colors[(x & (int) sbyte.MaxValue) + ((y & (int) sbyte.MaxValue) << 7)].a == (byte) 254;
+  }
+
   public bool IsEmpty(int x, int y)
   {
     return !this.InBounds(x, y) || this.rawspriteColors[(x >> 7) + (y >> 7) * this._numBlocksHorizontal].colors[(x & (int) sbyte.MaxValue) + ((y & (int) sbyte.MaxValue) << 7)].a > (byte) 0;
@@ -702,6 +707,17 @@ public class ZMap
       return;
     this.UpdatePixel(x, y, color);
     SandPool.NeedApply = true;
+  }
+
+  public Color32[] GetPixels(Texture2D mask)
+  {
+    Color32[] pixels32;
+    if (!ZMap.cachedPixels.TryGetValue(mask, out pixels32))
+    {
+      pixels32 = mask.GetPixels32();
+      ZMap.cachedPixels.Add(mask, pixels32);
+    }
+    return pixels32;
   }
 
   public void BitBlt(Texture2D mask, int x, int y, bool ignoreAlpha = true, bool apply = true)
@@ -1253,6 +1269,7 @@ public class ZMap
     bool collideWithThorns = true)
   {
     List<ZMyCollider> list = this.world.OverlapPointAll(x, y, mask);
+    MyLocation myLocation = (ZComponent) creature != (object) null ? creature.position : MyLocation.zero;
     if (list.Count > 0)
     {
       for (int index = list.Count - 1; index >= 0; --index)
@@ -1311,7 +1328,7 @@ public class ZMap
             }
             if (!((ZComponent) creature1.mount != (object) null) || !((ZComponent) creature != (object) null))
             {
-              if (creature.team == creature1.team && (creature.mountable || creature1.mountable) && ((creature.canMount || creature1.canMount) && ((ZComponent) creature.tower == (object) null && (ZComponent) creature1.tower == (object) null)))
+              if (creature.team == creature1.team && myLocation == creature.position && (creature.mountable || creature1.mountable) && (creature.controllable && creature1.controllable && (creature.canMount || creature1.canMount)) && ((ZComponent) creature.tower == (object) null && (ZComponent) creature1.tower == (object) null))
               {
                 if (!ZComponent.IsNull((ZComponent) creature.rider) || (ZComponent) creature.mount != (object) null || ((ZComponent) creature1.rider != (object) null || (ZComponent) creature1.mount != (object) null))
                 {
@@ -1399,7 +1416,7 @@ public class ZMap
 
   public bool TryMount(ZCreature creature, ZCreature c, bool justReturn = false)
   {
-    if ((ZComponent) c.mount != (object) null || (ZComponent) creature == (object) null || creature.team != c.team || (!creature.mountable && !c.mountable || !creature.canMount && !c.canMount) || (!((ZComponent) creature.tower == (object) null) || !((ZComponent) c.tower == (object) null) || (!ZComponent.IsNull((ZComponent) creature.rider) || (ZComponent) creature.mount != (object) null) || ((ZComponent) c.rider != (object) null || (ZComponent) c.mount != (object) null)))
+    if ((ZComponent) c.mount != (object) null || (ZComponent) creature == (object) null || creature.team != c.team || (!creature.mountable && !c.mountable || (!creature.controllable || !c.controllable)) || (!creature.canMount && !c.canMount || (!((ZComponent) creature.tower == (object) null) || !((ZComponent) c.tower == (object) null)) || (!ZComponent.IsNull((ZComponent) creature.rider) || (ZComponent) creature.mount != (object) null || ((ZComponent) c.rider != (object) null || (ZComponent) c.mount != (object) null))))
       return false;
     if (creature.mountable)
     {

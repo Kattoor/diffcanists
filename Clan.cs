@@ -72,6 +72,10 @@ public class Clan
   {
   }
 
+  public void SendClanMsg(byte msg, string member, string additional)
+  {
+  }
+
   public void ClanChat(byte[] msg, bool serverMesh = true)
   {
   }

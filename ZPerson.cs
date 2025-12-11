@@ -25,11 +25,11 @@ public class ZPerson
   public SettingsPlayer settingsPlayer = new SettingsPlayer();
   public Account account = new Account();
   public HashSet<SpellSlot> randomSyncedZSpells = new HashSet<SpellSlot>();
-  public BookOf ActivateableFamiliar = BookOf.Nothing;
   public bool drainable = true;
   public int waterMultipler = 1;
   public int bid = -1;
   public Dictionary<SpellEnum, SpellsCast> spellsCast = new Dictionary<SpellEnum, SpellsCast>();
+  internal int lastSpellSwap = -1;
   public ZPerson.Awards awards = new ZPerson.Awards();
   public ZGame game;
   public byte id;
@@ -208,6 +208,8 @@ public class ZPerson
 
   public Color clientColor { get; set; } = Color.gray;
 
+  public BookOf ActivateableFamiliar { get; set; } = BookOf.Nothing;
+
   public bool seasonISHoliday
   {
     get
@@ -240,6 +242,18 @@ public class ZPerson
   public void ResetMoveID()
   {
     this.curMoveID = 0;
+  }
+
+  public bool CanSwapSpells()
+  {
+    if (this.lastSpellSwap < this.localTurn)
+      return true;
+    return this.lastSpellSwap == this.localTurn && !this.yourTurn;
+  }
+
+  public bool HasUsed(SpellEnum s)
+  {
+    return this.spellsCast.ContainsKey(s);
   }
 
   public void UpdateCountdown()

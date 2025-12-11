@@ -593,8 +593,6 @@ public class ZCreatureTree : ZCreature
       }
       return 0;
     }
-    if (this.spellEnum == SpellEnum.Monolith && damage > 0 && ((ZComponent) this.parent.first() != (object) null && !this.parent.first().isDead) && this.parent.first().health > 0)
-      this.parent.first().DoHeal(Mathf.Min(damage, this.health), DamageType.Heal20, (ZCreature) null, false);
     if (this.baseTree.isButterflyJar)
     {
       if (damage <= 0 || (ZComponent) enemy != (object) null && enemy.collider.layer == Inert.mask_ButterflyJar)
@@ -646,6 +644,8 @@ public class ZCreatureTree : ZCreature
         return 0;
       this.curSandDamage += damage;
     }
+    if (this.spellEnum == SpellEnum.Monolith && damage > 0 && (this.health > 0 && (ZComponent) this.parent.first() != (object) null) && (!this.parent.first().isDead && this.parent.first().health > 0))
+      this.parent.first().DoHeal(Mathf.Min(damage, this.health), DamageType.Heal20, (ZCreature) null, false);
     this.health -= damage;
     if (this.health <= 0)
     {

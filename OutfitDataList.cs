@@ -2,19 +2,39 @@
 using System;
 using System.Collections.Generic;
 
-#nullable disable
 [Serializable]
 public class OutfitDataList
 {
   public List<OutfitData> list;
 
-  public void Clear() => this.list.Clear();
+  public void Clear()
+  {
+    this.list.Clear();
+  }
 
-  public int Length => this.list.Count;
+  public int Length
+  {
+    get
+    {
+      return this.list.Count;
+    }
+  }
 
-  public int Count => this.list.Count;
+  public int Count
+  {
+    get
+    {
+      return this.list.Count;
+    }
+  }
 
-  public OutfitData this[int x] => x < this.list.Count ? this.list[x] : this.list[0];
+  public OutfitData this[int x]
+  {
+    get
+    {
+      return x < this.list.Count ? this.list[x] : this.list[0];
+    }
+  }
 
   public int Random(Account a)
   {

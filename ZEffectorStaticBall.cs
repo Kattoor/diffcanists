@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-#nullable disable
 public class ZEffectorStaticBall : ZEffector
 {
   internal List<ZEffectorStaticBall.CaughtSpell> caughtSpells = new List<ZEffectorStaticBall.CaughtSpell>();
+  private bool isactive = true;
   private int frame;
   private float f;
-  private bool isactive = true;
 
   public override void EffectSpell(ZSpell s)
   {
@@ -39,7 +38,7 @@ public class ZEffectorStaticBall : ZEffector
 
   public override void Die(int indexInParent, bool destroyable, bool global)
   {
-    this.collider.Disable();
+    this.collider.Disable(true);
     this.ReleaseSpells();
     this.isNull = true;
     ZComponent.Destroy<GameObject>(this.gameObject);
@@ -65,7 +64,7 @@ public class ZEffectorStaticBall : ZEffector
           Debug.Log((object) (this.caughtSpells[index].spell.GetName + " " + (object) this.caughtSpells[index].spell.damage + " " + this.caughtSpells[index].spell.isNull.ToString() + " " + this.caughtSpells[index].spell.isDead.ToString() + " " + (object) this.caughtSpells[index].spell.curDuration));
         else if (this.MaxTurnsAlive > 2)
           this.caughtSpells[index].spell.transform.SetParent(this.caughtSpells[index].spell.game.GetMapTransform());
-        this.game.ongoing.RunSpell(this.caughtSpells[index].spell.moving);
+        this.game.ongoing.RunSpell(this.caughtSpells[index].spell.moving, true);
       }
     }
     this.caughtSpells.Clear();
@@ -93,8 +92,20 @@ public class ZEffectorStaticBall : ZEffector
     public ZSpell spell;
     public MyLocation offset;
 
-    public Renderer Renderer => this.spell.Renderer;
+    public Renderer Renderer
+    {
+      get
+      {
+        return this.spell.Renderer;
+      }
+    }
 
-    public ZMyCollider Collider => this.spell.collider;
+    public ZMyCollider Collider
+    {
+      get
+      {
+        return this.spell.collider;
+      }
+    }
   }
 }

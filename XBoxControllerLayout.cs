@@ -1,7 +1,6 @@
 
 using UnityEngine;
 
-#nullable disable
 public static class XBoxControllerLayout
 {
   public const string LeftTrigger = "Left Trigger";

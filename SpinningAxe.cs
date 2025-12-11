@@ -1,16 +1,18 @@
 
 using UnityEngine;
 
-#nullable disable
 public class SpinningAxe : MonoBehaviour
 {
-  public Transform parentT;
-  public Transform realAxe;
   public float _speed = 1000f;
-  public bool isBear;
   private Vector3 startPos = Vector3.zero;
   private Vector3 target = Vector3.zero;
   private Vector3 angle = Vector3.zero;
+  public float speedUp = 1f;
+  public float handRadius = 10f;
+  private bool up = true;
+  public Transform parentT;
+  public Transform realAxe;
+  public bool isBear;
   private float lerpT;
   [Header("Bear")]
   public Transform leftArm;
@@ -18,9 +20,6 @@ public class SpinningAxe : MonoBehaviour
   public Transform rightArm;
   private Vector3 leftStart;
   private Vector3 rightStart;
-  public float speedUp = 1f;
-  public float handRadius = 10f;
-  private bool up = true;
 
   public void StartSpinning(Vector3 target)
   {

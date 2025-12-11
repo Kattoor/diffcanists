@@ -1,5 +1,4 @@
 
-#nullable disable
 public enum EffectorType
 {
   None = -1, // 0xFFFFFFFF

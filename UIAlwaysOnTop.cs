@@ -1,7 +1,6 @@
 
 using UnityEngine;
 
-#nullable disable
 public class UIAlwaysOnTop : MonoBehaviour
 {
   private void Update()

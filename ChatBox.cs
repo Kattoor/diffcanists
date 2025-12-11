@@ -11,12 +11,16 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Win32Utilities;
 
-#nullable disable
 public class ChatBox : UIBehaviour
 {
+  public static bool showDate = true;
+  public static bool showIcons = true;
+  public static int showFade = 2;
+  public string privateChatTo = "";
+  private bool _active = true;
+  private OrderedDictionary<string, float> recentNotifications = new OrderedDictionary<string, float>();
   public bool privateChat;
   public bool isFake;
-  public string privateChatTo = "";
   public InputFieldPlus chatInput;
   public RectTransform chatContainer;
   public ScrollRect _chatScrollbar;
@@ -49,15 +53,10 @@ public class ChatBox : UIBehaviour
   public RectTransform filterContainer;
   public RectTransform emptyPanel;
   public RectTransform fpsPanel;
-  public static bool showDate = true;
-  public static bool showIcons = true;
-  public static int showFade = 2;
   private Vector2 defaultPosition;
   private Vector2 currentPosition;
-  private bool _active = true;
   [NonSerialized]
   public TMP_Text textSpellCasted;
-  private OrderedDictionary<string, float> recentNotifications = new OrderedDictionary<string, float>();
   public bool isTransparent;
   private ChatBox.ChatFilter chatFilter;
 
@@ -65,16 +64,25 @@ public class ChatBox : UIBehaviour
 
   public static bool UsingMobileInput
   {
-    get => (UnityEngine.Object) ChatBox.Instance != (UnityEngine.Object) null && KeyBoard.IsActive;
+    get
+    {
+      return (UnityEngine.Object) ChatBox.Instance != (UnityEngine.Object) null && KeyBoard.IsActive;
+    }
   }
 
-  public bool Active => this._active;
+  public bool Active
+  {
+    get
+    {
+      return this._active;
+    }
+  }
 
   public void ToggleTransparency()
   {
     this.isTransparent = !this.isTransparent;
     Global.SetPrefBool("invisChatbox", this.isTransparent);
-    this.SetTransparent();
+    this.SetTransparent(false);
   }
 
   public static void ChangeLineCount(int i, bool save = true, bool force = false)
@@ -129,7 +137,7 @@ public class ChatBox : UIBehaviour
       {
         if (this.recycled.MaxVisible == 8)
           return;
-        ChatBox.ChangeLineCount(8, false);
+        ChatBox.ChangeLineCount(8, false, false);
       }
     }
   }
@@ -159,7 +167,10 @@ public class ChatBox : UIBehaviour
     this.discordButton.SetActive(Client.MyAccount.AccountNotLinked() && Client.MyAccount.accountType.IsMuted() && Client.isConnected);
   }
 
-  public void ToggleEmojiSelector() => this.chatInput.ToggleEmoji();
+  public void ToggleEmojiSelector()
+  {
+    this.chatInput.ToggleEmoji();
+  }
 
   private void Update()
   {
@@ -179,7 +190,10 @@ public class ChatBox : UIBehaviour
     }
   }
 
-  public void ReportAbuse() => Controller.Instance.Report("");
+  public void ReportAbuse()
+  {
+    Controller.Instance.Report("");
+  }
 
   public void ClickMiniGames()
   {
@@ -189,17 +203,17 @@ public class ChatBox : UIBehaviour
       myContextMenu.AddItem("Leave current minigame", (Action) (() => Client.miniGame?.gameObject?.ClickClose()), (Color) ColorScheme.GetColor(Color.red));
       if (Client.miniGame.IsFirst)
       {
-        myContextMenu.AddSeperator();
+        myContextMenu.AddSeperator("--------------------------");
         myContextMenu.AddItem("Invite Lobby to " + Client.miniGame.GetGameType() + " match", (Action) (() => Client.AskToShare(Client.miniGame.GetGameType(), ContentType.MiniGameInvite, (object) new MinigameInvite()
         {
           from = Client.Name,
           minigameID = Client.miniGame.id,
           miniGameType = (int) Client.miniGame.gameType,
           spectator = (Client.miniGame.players.Count > 1)
-        })), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
+        }, false)), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
         if (Client.clan != null)
         {
-          myContextMenu.AddSeperator();
+          myContextMenu.AddSeperator("--------------------------");
           myContextMenu.AddItem("Invite Clan to " + Client.miniGame.GetGameType() + " match", (Action) (() =>
           {
             Client.sharingWith = "[Clan]";
@@ -209,7 +223,7 @@ public class ChatBox : UIBehaviour
               minigameID = Client.miniGame.id,
               miniGameType = (int) Client.miniGame.gameType,
               spectator = (Client.miniGame.players.Count > 1)
-            });
+            }, false);
           }), (Color) ColorScheme.GetColor(MyContextMenu.ColorClan));
         }
       }
@@ -221,24 +235,30 @@ public class ChatBox : UIBehaviour
       myContextMenu.AddItem("New Join31 Lobby", (Action) (() => Client.AskToCreateMiniGame((byte) 3)), Color.green);
       myContextMenu.AddItem("New RPSTBG Lobby", (Action) (() => Client.AskToCreateMiniGame((byte) 4)), Color.green);
     }
-    myContextMenu.Rebuild();
+    myContextMenu.Rebuild(false);
   }
 
-  public void ClickQuickchat() => QuickchatUI.Create();
+  public void ClickQuickchat()
+  {
+    QuickchatUI.Create();
+  }
 
   public void ClickOptions()
   {
     HUD.instance?.TogglePauseMenu(true);
-    Controller.ShowSettingsMenu();
+    Controller.ShowSettingsMenu(false);
   }
 
-  public void ClickStore() => Controller.ShowPopup(Controller.Instance.MenuStore);
+  public void ClickStore()
+  {
+    Controller.ShowPopup(Controller.Instance.MenuStore);
+  }
 
   public void ClickDiscord()
   {
     MyContextMenu myContextMenu = MyContextMenu.Show();
     myContextMenu.AddItem("Verify using your browser", (Action) (() => DiscordController._VerifyBrowser()), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
-    myContextMenu.Rebuild();
+    myContextMenu.Rebuild(false);
   }
 
   public void HoverHelp()
@@ -251,10 +271,13 @@ public class ChatBox : UIBehaviour
       this.txtDiscordQuickLinks.text = stringBuilder.ToString();
     }
     this.txtDiscordQuickLinks.transform.parent.gameObject.SetActive(true);
-    MyToolTip.Show("Chat Prefixes\n\n<" + InputFieldPlus.RGBtoHEX(ColorScheme.GetColor(Global.ColorTeamText)) + ">Team Chat: '/' (If in a team game...ex: /summon swarm)\n</color><" + InputFieldPlus.RGBtoHEX(ColorScheme.GetColor(Global.ColorSentPrivate)) + ">Private Chat: '/name:' (Easier to Right-click their name but...ex: /bob:hi bob)\n</color><" + InputFieldPlus.RGBtoHEX(ColorScheme.GetColor(Global.ColorMiniGameText)) + ">Mini-Game Chat: ';' (If in a mini-game...ex: ;Checkmate!)\n</color><" + InputFieldPlus.RGBtoHEX(ColorScheme.GetColor(Global.ColorClanText)) + ">Clan Chat: '.' (If in a clan...ex: .hello)</color>\n\nEmoji: ':' (ex: :shark:)\nHold alt while picking an Emoji\nfrom the emoji selector to\nAdd it to your favorites");
+    MyToolTip.Show("Chat Prefixes\n\n<" + InputFieldPlus.RGBtoHEX(ColorScheme.GetColor(Global.ColorTeamText)) + ">Team Chat: '/' (If in a team game...ex: /summon swarm)\n</color><" + InputFieldPlus.RGBtoHEX(ColorScheme.GetColor(Global.ColorSentPrivate)) + ">Private Chat: '/name:' (Easier to Right-click their name but...ex: /bob:hi bob)\n</color><" + InputFieldPlus.RGBtoHEX(ColorScheme.GetColor(Global.ColorMiniGameText)) + ">Mini-Game Chat: ';' (If in a mini-game...ex: ;Checkmate!)\n</color><" + InputFieldPlus.RGBtoHEX(ColorScheme.GetColor(Global.ColorClanText)) + ">Clan Chat: '.' (If in a clan...ex: .hello)</color>\n\nEmoji: ':' (ex: :shark:)\nHold alt while picking an Emoji\nfrom the emoji selector to\nAdd it to your favorites", -1f);
   }
 
-  public void ClickLineCount() => ChatBox.ClickLineCount2();
+  public void ClickLineCount()
+  {
+    ChatBox.ClickLineCount2();
+  }
 
   public static void ClickLineCount2()
   {
@@ -262,12 +285,15 @@ public class ChatBox : UIBehaviour
     for (int index = 1; index <= 8; ++index)
     {
       int e = index;
-      myContextMenu.AddItem(index.ToString(), (Action) (() => ChatBox.ChangeLineCount(e)), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
+      myContextMenu.AddItem(index.ToString(), (Action) (() => ChatBox.ChangeLineCount(e, true, false)), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
     }
-    myContextMenu.Rebuild();
+    myContextMenu.Rebuild(false);
   }
 
-  public void ShowToolTip(string s) => MyToolTip.Show(s);
+  public void ShowToolTip(string s)
+  {
+    MyToolTip.Show(s, -1f);
+  }
 
   public void HoverLeave()
   {
@@ -282,10 +308,13 @@ public class ChatBox : UIBehaviour
     myContextMenu.AddItem("On", (Action) (() => Client.AskToChangeChatSetting((byte) x, ChatSetting.On)), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
     myContextMenu.AddItem("Friends", (Action) (() => Client.AskToChangeChatSetting((byte) x, ChatSetting.Friends)), (Color) ColorScheme.GetColor(MyContextMenu.ColorYellow));
     myContextMenu.AddItem("Off", (Action) (() => Client.AskToChangeChatSetting((byte) x, ChatSetting.Off)), (Color) ColorScheme.GetColor(MyContextMenu.ColorRed));
-    myContextMenu.Rebuild();
+    myContextMenu.Rebuild(false);
   }
 
-  public void ShowFilterOptions() => ChatBox._ShowFilterOptions();
+  public void ShowFilterOptions()
+  {
+    ChatBox._ShowFilterOptions();
+  }
 
   public static void _ShowFilterOptions()
   {
@@ -358,14 +387,14 @@ public class ChatBox : UIBehaviour
     myContextMenu.AddSlider((UnityAction<float>) (a =>
     {
       PlayerPrefs.SetFloat("prefchattransparency", a);
-      ChatBox.Instance?.SetTransparent();
+      ChatBox.Instance?.SetTransparent(false);
     }), "Chatbox Transparency", PlayerPrefs.GetFloat("prefchattransparency", 0.75f));
     myContextMenu.AddSlider((UnityAction<float>) (a =>
     {
       PlayerPrefs.SetFloat("prefSpellBarTransparency", a);
       ClickSpell.Instance?.ChangeAlpha(a);
     }), "Spellbar Transparency", PlayerPrefs.GetFloat("prefSpellBarTransparency", 0.35f));
-    myContextMenu.Rebuild();
+    myContextMenu.Rebuild(false);
   }
 
   private static void ToggleFlashChat()
@@ -450,7 +479,7 @@ public class ChatBox : UIBehaviour
   {
     if (this.recentNotifications.ContainsKey(s))
       return;
-    this.NewChatMsg("", s, (Color) ColorScheme.GetColor(Global.ColorSystem), rightClickName, org);
+    this.NewChatMsg("", s, (Color) ColorScheme.GetColor(Global.ColorSystem), rightClickName, org, ContentType.STRING, (object) null);
     this.recentNotifications[s] = Time.realtimeSinceStartup + 10f;
   }
 
@@ -458,7 +487,7 @@ public class ChatBox : UIBehaviour
   {
     if (Client.IsIgnored(s) || !Global.GetPrefBool("prefacceptinvites", true) || this.recentNotifications.ContainsKey(s))
       return;
-    this.NewChatMsg("", s + " wants to join", (Color) ColorScheme.GetColor(Global.ColorNotification), s, ChatOrigination.System);
+    this.NewChatMsg("", s + " wants to join", (Color) ColorScheme.GetColor(Global.ColorNotification), s, ChatOrigination.System, ContentType.STRING, (object) null);
     this.recentNotifications[s] = Time.realtimeSinceStartup + 10f;
     if (!Global.GetPrefBool("prefflashchatinvite", true))
       return;
@@ -490,7 +519,7 @@ public class ChatBox : UIBehaviour
     this.currentPosition = transform.anchoredPosition;
     this._active = true;
     this.isTransparent = Global.GetPrefBool("invisChatbox", true);
-    this.SetTransparent();
+    this.SetTransparent(false);
   }
 
   private void DefaultPosition()
@@ -505,7 +534,10 @@ public class ChatBox : UIBehaviour
     this.SetTransparent(true);
   }
 
-  public void ToggleChat() => this.SetActive(!this._active);
+  public void ToggleChat()
+  {
+    this.SetActive(!this._active);
+  }
 
   public void OnTouch()
   {
@@ -690,7 +722,10 @@ public class ChatBox : UIBehaviour
     return "<sprite=\"AccountIconsAll\" index=" + (object) (191 + Mathf.Min(10, prestige)) + "> ";
   }
 
-  public static string ExperienceString(int ex) => "<sprite=\"AccountIconsAll\" index=264> ";
+  public static string ExperienceString(int ex)
+  {
+    return "<sprite=\"AccountIconsAll\" index=264> ";
+  }
 
   public static string GetAllAccountIcons(Account acc)
   {
@@ -708,44 +743,44 @@ public class ChatBox : UIBehaviour
 
   public static string GetAccountIcons(Account acc, bool includeExtra, bool link = false, bool clanChat = false)
   {
-    string accountIcons = !includeExtra || acc.displayClanPrefix != (byte) 0 || clanChat || Client.clanChat == ChatSetting.Off || string.IsNullOrEmpty(acc.clan) ? "" : "<#FF8E00>[" + acc.clan + "]</color> ";
+    string str = !includeExtra || acc.displayClanPrefix != (byte) 0 || (clanChat || Client.clanChat == ChatSetting.Off) || string.IsNullOrEmpty(acc.clan) ? "" : "<#FF8E00>[" + acc.clan + "]</color> ";
     if (acc.accountType.IsMuted())
     {
       if (!includeExtra)
         return "";
       if (!link)
-        return ChatBox.IconString(acc, acc.accountType.has(AccountType.Perm_Muted) ? AccountType.Perm_Muted : AccountType.Muted) + accountIcons;
-      return "<link=\"" + (acc.discord != 0UL || acc.steamVerified ? "Muted" : "Unverified") + "\">" + ChatBox.IconString(acc, acc.accountType.has(AccountType.Perm_Muted) ? AccountType.Perm_Muted : AccountType.Muted) + "</link>" + accountIcons;
+        return ChatBox.IconString(acc, acc.accountType.has(AccountType.Perm_Muted) ? AccountType.Perm_Muted : AccountType.Muted) + str;
+      return "<link=\"" + (acc.discord != 0UL || acc.steamVerified ? "Muted" : "Unverified") + "\">" + ChatBox.IconString(acc, acc.accountType.has(AccountType.Perm_Muted) ? AccountType.Perm_Muted : AccountType.Muted) + "</link>" + str;
     }
     int accountType = (int) acc.accountType;
     if (acc.displayedIcon == 252)
     {
       if (!includeExtra)
-        return accountIcons;
+        return str;
       if (!link)
-        return ChatBox.ExperienceString((int) acc.experience) + accountIcons;
-      return "<link=\"Level " + acc.experience.ToString() + "\">" + ChatBox.ExperienceString((int) acc.experience) + "</link>" + accountIcons;
+        return ChatBox.ExperienceString((int) acc.experience) + str;
+      return "<link=\"Level " + acc.experience.ToString() + "\">" + ChatBox.ExperienceString((int) acc.experience) + "</link>" + str;
     }
     if (acc.displayedIcon > (int) byte.MaxValue)
-      return link ? "<link=\"Badge: " + ClientResources.Instance.badges[acc.DisplayedBadge].name + "\"><sprite=\"Badges\" index=" + (object) acc.DisplayedBadge + "> </link>" + accountIcons : "<sprite=\"Badges\" index=" + (object) acc.DisplayedBadge + "> " + accountIcons;
+      return link ? "<link=\"Badge: " + ClientResources.Instance.badges[acc.DisplayedBadge].name + "\"><sprite=\"Badges\" index=" + (object) acc.DisplayedBadge + "> </link>" + str : "<sprite=\"Badges\" index=" + (object) acc.DisplayedBadge + "> " + str;
     if (accountType == 0 || acc.displayedIcon == (int) byte.MaxValue)
     {
       if (!includeExtra)
-        return accountIcons;
+        return str;
       if (acc.prestige <= (byte) 0)
-        return "<sprite=\"AccountIconsAll\" index=221> " + accountIcons;
+        return "<sprite=\"AccountIconsAll\" index=221> " + str;
       if (!link)
-        return ChatBox.PrestigeString((int) acc.prestige) + accountIcons;
-      return "<link=\"Prestige " + acc.prestige.ToString() + "\">" + ChatBox.PrestigeString(Mathf.Min(10, (int) acc.prestige)) + "</link>" + accountIcons;
+        return ChatBox.PrestigeString((int) acc.prestige) + str;
+      return "<link=\"Prestige " + acc.prestige.ToString() + "\">" + ChatBox.PrestigeString(Mathf.Min(10, (int) acc.prestige)) + "</link>" + str;
     }
     if (acc.displayedIcon != 0)
     {
-      int a = 1 << acc.displayedIcon;
-      if ((a & accountType) != 0)
+      int num = 1 << acc.displayedIcon;
+      if ((num & accountType) != 0)
       {
         if (!link)
-          return ChatBox.IconString(acc, (AccountType) a) + accountIcons;
-        return "<link=\"" + ((AccountType) a).ToSpacelessString() + "\">" + ChatBox.IconString(acc, (AccountType) a) + "</link>" + accountIcons;
+          return ChatBox.IconString(acc, (AccountType) num) + str;
+        return "<link=\"" + ((AccountType) num).ToSpacelessString() + "\">" + ChatBox.IconString(acc, (AccountType) num) + "</link>" + str;
       }
     }
     for (int index = 0; index < AccountExtension._IconOrder.Length; ++index)
@@ -753,8 +788,8 @@ public class ChatBox : UIBehaviour
       if (((AccountType) accountType & AccountExtension._IconOrder[index]) != AccountType.None)
       {
         if (!link)
-          return ChatBox.IconString(acc, AccountExtension._IconOrder[index]) + accountIcons;
-        return "<link=\"" + AccountExtension._IconOrder[index].ToSpacelessString() + "\">" + ChatBox.IconString(acc, AccountExtension._IconOrder[index]) + "</link>" + accountIcons;
+          return ChatBox.IconString(acc, AccountExtension._IconOrder[index]) + str;
+        return "<link=\"" + AccountExtension._IconOrder[index].ToSpacelessString() + "\">" + ChatBox.IconString(acc, AccountExtension._IconOrder[index]) + "</link>" + str;
       }
     }
     return "Error ";
@@ -784,9 +819,9 @@ public class ChatBox : UIBehaviour
     string icon = "";
     if (!string.IsNullOrEmpty(RightClickName) && (string.Equals(RightClickName, name) || name.Contains(RightClickName)))
     {
-      Account account = Client.GetAccount(RightClickName);
+      Account account = Client.GetAccount(RightClickName, false);
       if (!account.fake)
-        icon = ChatBox.GetAccountIcons(account, false, clanChat: origination == ChatOrigination.Clan);
+        icon = ChatBox.GetAccountIcons(account, false, false, origination == ChatOrigination.Clan);
       if (WordFilter.HasWeb(msg) && origination != ChatOrigination.System && !account.accountType.Heightened())
         return;
       if (!string.Equals(RightClickName, Client.Name, StringComparison.OrdinalIgnoreCase))
@@ -875,8 +910,8 @@ public class ChatBox : UIBehaviour
       return;
     if (Client.game != null && Client.game.isSandbox)
     {
-      this.NewChatMsg("", s, (Color) ColorScheme.GetColor(Global.ColorAnnoucement), "", ChatOrigination.System);
-      Client.DevConsole(s, Client.game);
+      this.NewChatMsg("", s, (Color) ColorScheme.GetColor(Global.ColorAnnoucement), "", ChatOrigination.System, ContentType.STRING, (object) null);
+      Client.DevConsole(s, Client.game, new FixedInt?(), new MyLocation?());
     }
     else if (string.IsNullOrEmpty(s))
     {

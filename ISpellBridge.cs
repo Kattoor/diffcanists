@@ -1,7 +1,6 @@
 
 using UnityEngine;
 
-#nullable disable
 public interface ISpellBridge
 {
   string GetName { get; }

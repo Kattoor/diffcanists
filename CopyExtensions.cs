@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-#nullable disable
 public static class CopyExtensions
 {
   public static void Copy(this Account a, Account b)

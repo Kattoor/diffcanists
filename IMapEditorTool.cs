@@ -1,5 +1,4 @@
 
-#nullable disable
 public interface IMapEditorTool
 {
   void OnMouseDown(bool leftClick);

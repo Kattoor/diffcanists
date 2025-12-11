@@ -1,7 +1,6 @@
 
 using System.Collections.Generic;
 
-#nullable disable
 namespace Educative
 {
   public class TournamentBracket : Tournament
@@ -51,7 +50,10 @@ namespace Educative
         this.playersList[index].seed = index;
     }
 
-    public void AddRound() => this.rounds.Add(new TournamentBracket.Round());
+    public void AddRound()
+    {
+      this.rounds.Add(new TournamentBracket.Round());
+    }
 
     public void GenerateNextRound(
       int r,
@@ -126,15 +128,15 @@ namespace Educative
       }
       else
       {
-        for (int index3 = 0; index3 < p.Count; ++index3)
+        for (int index1 = 0; index1 < p.Count; ++index1)
         {
-          for (int index4 = index3 + 1; index4 < p.Count; ++index4)
+          for (int index2 = index1 + 1; index2 < p.Count; ++index2)
           {
             TournamentBracket.Bracket.Series series = new TournamentBracket.Bracket.Series()
             {
               id = this.nextID++,
-              player1 = p[index3],
-              player2 = p[index4]
+              player1 = p[index1],
+              player2 = p[index2]
             };
             bracket.series.Add(series);
           }
@@ -151,9 +153,9 @@ namespace Educative
     public class Bracket
     {
       public List<TournamentBracket.Bracket.Series> series = new List<TournamentBracket.Bracket.Series>();
-      public TournamentBracket.Bracket.Mode mode;
       public int topAdvances = 1;
       public int bestOf = 1;
+      public TournamentBracket.Bracket.Mode mode;
 
       public class Series
       {

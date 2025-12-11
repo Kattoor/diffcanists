@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 
-#nullable disable
 namespace UnityThreading
 {
   public class Dispatcher : DispatcherBase
@@ -18,7 +17,9 @@ namespace UnityThreading
     {
       get
       {
-        return Dispatcher.currentTask != null ? Dispatcher.currentTask : throw new InvalidOperationException("No task is currently running.");
+        if (Dispatcher.currentTask == null)
+          throw new InvalidOperationException("No task is currently running.");
+        return Dispatcher.currentTask;
       }
     }
 
@@ -26,7 +27,9 @@ namespace UnityThreading
     {
       get
       {
-        return Dispatcher.currentDispatcher != null ? Dispatcher.currentDispatcher : throw new InvalidOperationException("No Dispatcher found for the current thread, please create a new Dispatcher instance before calling this property.");
+        if (Dispatcher.currentDispatcher == null)
+          throw new InvalidOperationException("No Dispatcher found for the current thread, please create a new Dispatcher instance before calling this property.");
+        return Dispatcher.currentDispatcher;
       }
       set
       {
@@ -36,17 +39,31 @@ namespace UnityThreading
       }
     }
 
-    public static Dispatcher CurrentNoThrow => Dispatcher.currentDispatcher;
+    public static Dispatcher CurrentNoThrow
+    {
+      get
+      {
+        return Dispatcher.currentDispatcher;
+      }
+    }
 
     public static Dispatcher Main
     {
       get
       {
-        return Dispatcher.mainDispatcher != null ? Dispatcher.mainDispatcher : throw new InvalidOperationException("No Dispatcher found for the main thread, please create a new Dispatcher instance before calling this property.");
+        if (Dispatcher.mainDispatcher == null)
+          throw new InvalidOperationException("No Dispatcher found for the main thread, please create a new Dispatcher instance before calling this property.");
+        return Dispatcher.mainDispatcher;
       }
     }
 
-    public static Dispatcher MainNoThrow => Dispatcher.mainDispatcher;
+    public static Dispatcher MainNoThrow
+    {
+      get
+      {
+        return Dispatcher.mainDispatcher;
+      }
+    }
 
     public static Func<T> CreateSafeFunction<T>(Func<T> function)
     {
@@ -88,7 +105,9 @@ namespace UnityThreading
     {
       if (!setThreadDefaults)
         return;
-      Dispatcher.currentDispatcher = Dispatcher.currentDispatcher == null ? this : throw new InvalidOperationException("Only one Dispatcher instance allowed per thread.");
+      if (Dispatcher.currentDispatcher != null)
+        throw new InvalidOperationException("Only one Dispatcher instance allowed per thread.");
+      Dispatcher.currentDispatcher = this;
       if (Dispatcher.mainDispatcher != null)
         return;
       Dispatcher.mainDispatcher = this;

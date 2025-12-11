@@ -1,7 +1,6 @@
 
 using System.Collections.Generic;
 
-#nullable disable
 public class Achievements
 {
   public static List<Achievements.Container> list = new List<Achievements.Container>()
@@ -983,22 +982,22 @@ public class Achievements
 
   public static int CalculatePoints(Cosmetics c)
   {
-    int points = 0;
+    int num = 0;
     BitBools achievements = c.achievements;
     for (int index = 0; index < Achievements.list.Count; ++index)
     {
       if (achievements[index])
-        points += (int) Achievements.list[index].points;
+        num += (int) Achievements.list[index].points;
     }
-    return points;
+    return num;
   }
 
   public class Container
   {
+    public bool available = true;
     public string name;
     public string description;
     public ushort points;
     public bool ratedOnly;
-    public bool available = true;
   }
 }

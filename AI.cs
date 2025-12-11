@@ -3,10 +3,12 @@ using MovementEffects;
 using System.Collections.Generic;
 using UnityEngine;
 
-#nullable disable
 public class AI : IAI
 {
-  public override void DoTurn() => Timing.RunCoroutine(this.Loop());
+  public override void DoTurn()
+  {
+    Timing.RunCoroutine(this.Loop());
+  }
 
   public IEnumerator<float> Loop()
   {
@@ -23,7 +25,7 @@ public class AI : IAI
         {
           if (ai.creature.inWater)
           {
-            ZSpell.FireWhich(Inert.GetSpell(SpellEnum.Arcane_Gate), ai.creature, enemy.GetPositionAI + new MyLocation(0, 100), (FixedInt) 0, (FixedInt) 1, enemy.GetPositionAI, NullMyLocation.Get());
+            ZSpell.FireWhich(Inert.GetSpell(SpellEnum.Arcane_Gate), ai.creature, enemy.GetPositionAI + new MyLocation(0, 100), (FixedInt) 0, (FixedInt) 1, enemy.GetPositionAI, NullMyLocation.Get(), 0, false, (SpellSlot) null, false);
             break;
           }
           int num = Random.Range(0, 3);
@@ -59,7 +61,7 @@ public class AI : IAI
             }
             else if ((double) ai.creature.transformscale < 0.0)
               ai.creature.SetScale(1f);
-            ZSpell.FireWhich(spell.spell, ai.creature, ai.creature.position, fixedInt, power, enemy.GetPositionAI, NullMyLocation.Get());
+            ZSpell.FireWhich(spell.spell, ai.creature, ai.creature.position, fixedInt, power, enemy.GetPositionAI, NullMyLocation.Get(), 0, false, (SpellSlot) null, false);
             break;
           }
           ++count;
@@ -103,6 +105,6 @@ public class AI : IAI
   {
     this.creature.velocity = left ? new MyLocation((FixedInt) ((double) this.creature.transformscale < 0.0 ? -11010048L : -6291456L), (FixedInt) 0) : new MyLocation((FixedInt) ((double) this.creature.transformscale > 0.0 ? 9437184L : 4194304L), (FixedInt) 0);
     this.creature.SetScale(left ? -1f : 1f);
-    this.creature.moving = this.creature.game.ongoing.RunCoroutine(this.creature.FlyMove(true));
+    this.creature.moving = this.creature.game.ongoing.RunCoroutine(this.creature.FlyMove(true), true);
   }
 }

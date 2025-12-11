@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-#nullable disable
 namespace mattmc3.dotmore.Collections.Generic
 {
   public class PagedList<T> : List<T>, IPagedList
@@ -15,9 +14,21 @@ namespace mattmc3.dotmore.Collections.Generic
 
     public int PageSize { get; set; }
 
-    public bool HasPreviousPage => this.PageIndex > 0;
+    public bool HasPreviousPage
+    {
+      get
+      {
+        return this.PageIndex > 0;
+      }
+    }
 
-    public bool HasNextPage => this.PageIndex * this.PageSize <= this.TotalCount;
+    public bool HasNextPage
+    {
+      get
+      {
+        return this.PageIndex * this.PageSize <= this.TotalCount;
+      }
+    }
 
     public PagedList(IEnumerable<T> source, int index, int pageSize)
     {

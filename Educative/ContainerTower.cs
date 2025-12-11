@@ -1,7 +1,6 @@
 
 using MoonSharp.Interpreter;
 
-#nullable disable
 namespace Educative
 {
   public class ContainerTower
@@ -19,26 +18,38 @@ namespace Educative
 
     public int health
     {
-      get => this.tower.Health;
+      get
+      {
+        return this.tower.Health;
+      }
       set
       {
         this.tower.Health = value;
         this.tower.creature.UpdateHealthTxt();
         if (this.tower.Health > 0)
           return;
-        this.tower.creature.DestroyTower();
+        this.tower.creature.DestroyTower(false, true);
       }
     }
 
     public int maxHealth
     {
-      get => this.tower.MaxHealth;
-      set => this.tower.MaxHealth = value;
+      get
+      {
+        return this.tower.MaxHealth;
+      }
+      set
+      {
+        this.tower.MaxHealth = value;
+      }
     }
 
     public int x
     {
-      get => this.tower.position.x.ToInt();
+      get
+      {
+        return this.tower.position.x.ToInt();
+      }
       set
       {
         this.tower.position = new MyLocation((FixedInt) value, this.tower.position.y);
@@ -48,7 +59,10 @@ namespace Educative
 
     public int y
     {
-      get => this.tower.position.y.ToInt();
+      get
+      {
+        return this.tower.position.y.ToInt();
+      }
       set
       {
         this.tower.position = new MyLocation(this.tower.position.x, (FixedInt) value);
@@ -81,10 +95,19 @@ namespace Educative
       }
     }
 
-    public TowerType getType() => this.tower.type;
+    public TowerType getType()
+    {
+      return this.tower.type;
+    }
 
-    public void kill() => this.tower.creature.DestroyTower();
+    public void kill()
+    {
+      this.tower.creature.DestroyTower(false, true);
+    }
 
-    public override int GetHashCode() => this._hashCode;
+    public override int GetHashCode()
+    {
+      return this._hashCode;
+    }
   }
 }

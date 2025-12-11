@@ -5,12 +5,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-#nullable disable
 namespace MovementEffects
 {
   public class Timing : MonoBehaviour
   {
-    public float TimeBetweenSlowUpdateCalls = 0.142857149f;
+    public float TimeBetweenSlowUpdateCalls = 0.1428571f;
+    private ushort _expansions = 1;
+    private readonly List<Timing.WaitingProcess> _waitingProcesses = new List<Timing.WaitingProcess>();
+    private readonly Queue<Exception> _exceptions = new Queue<Exception>();
+    private readonly Dictionary<Timing.ProcessIndex, string> _processTags = new Dictionary<Timing.ProcessIndex, string>();
+    private readonly Dictionary<string, HashSet<Timing.ProcessIndex>> _taggedProcesses = new Dictionary<string, HashSet<Timing.ProcessIndex>>();
+    private IEnumerator<float>[] UpdateProcesses = new IEnumerator<float>[256];
+    private IEnumerator<float>[] LateUpdateProcesses = new IEnumerator<float>[8];
+    private IEnumerator<float>[] FixedUpdateProcesses = new IEnumerator<float>[64];
+    private IEnumerator<float>[] SlowUpdateProcesses = new IEnumerator<float>[64];
     public bool AdditionalDebugInfo;
     public int NumberOfUpdateCoroutines;
     public int NumberOfFixedUpdateCoroutines;
@@ -33,7 +41,6 @@ namespace MovementEffects
     private double _lastFixedUpdateTime;
     private double _lastSlowUpdateTime;
     private ushort _framesSinceUpdate;
-    private ushort _expansions = 1;
     private const ushort FramesUntilMaintenance = 64;
     private const int ProcessArrayChunkSize = 64;
     private const int InitialBufferSizeLarge = 256;
@@ -41,21 +48,28 @@ namespace MovementEffects
     private const int InitialBufferSizeSmall = 8;
     public Action<Exception> OnError;
     public static Func<IEnumerator<float>, Segment, string, IEnumerator<float>> ReplacementFunction;
-    private readonly List<Timing.WaitingProcess> _waitingProcesses = new List<Timing.WaitingProcess>();
-    private readonly Queue<Exception> _exceptions = new Queue<Exception>();
-    private readonly Dictionary<Timing.ProcessIndex, string> _processTags = new Dictionary<Timing.ProcessIndex, string>();
-    private readonly Dictionary<string, HashSet<Timing.ProcessIndex>> _taggedProcesses = new Dictionary<string, HashSet<Timing.ProcessIndex>>();
-    private IEnumerator<float>[] UpdateProcesses = new IEnumerator<float>[256];
-    private IEnumerator<float>[] LateUpdateProcesses = new IEnumerator<float>[8];
-    private IEnumerator<float>[] FixedUpdateProcesses = new IEnumerator<float>[64];
-    private IEnumerator<float>[] SlowUpdateProcesses = new IEnumerator<float>[64];
     private static Timing _instance;
 
-    public static float LocalTime => (float) Timing.Instance.localTime;
+    public static float LocalTime
+    {
+      get
+      {
+        return (float) Timing.Instance.localTime;
+      }
+    }
 
-    public static float DeltaTime => Timing.Instance.deltaTime;
+    public static float DeltaTime
+    {
+      get
+      {
+        return Timing.Instance.deltaTime;
+      }
+    }
 
-    public static bool isNotNull() => (UnityEngine.Object) Timing._instance != (UnityEngine.Object) null;
+    public static bool isNotNull()
+    {
+      return (UnityEngine.Object) Timing._instance != (UnityEngine.Object) null;
+    }
 
     public static Timing Instance
     {
@@ -69,11 +83,11 @@ namespace MovementEffects
           {
             GameObject gameObject2 = new GameObject();
             gameObject2.name = "Movement Effects";
-            GameObject target = gameObject2;
-            UnityEngine.Object.DontDestroyOnLoad((UnityEngine.Object) target);
+            GameObject gameObject3 = gameObject2;
+            UnityEngine.Object.DontDestroyOnLoad((UnityEngine.Object) gameObject3);
             if (type != (System.Type) null)
-              target.AddComponent(type);
-            Timing._instance = target.AddComponent<Timing>();
+              gameObject3.AddComponent(type);
+            Timing._instance = gameObject3.AddComponent<Timing>();
           }
           else
           {
@@ -86,7 +100,10 @@ namespace MovementEffects
         }
         return Timing._instance;
       }
-      set => Timing._instance = value;
+      set
+      {
+        Timing._instance = value;
+      }
     }
 
     private void Awake()
@@ -108,37 +125,37 @@ namespace MovementEffects
     {
       if (this._nextServerUpdateProcessSlot <= 0)
         return;
-      Timing.ProcessIndex processIndex = new Timing.ProcessIndex()
+      Timing.ProcessIndex index = new Timing.ProcessIndex()
       {
         seg = Segment.SlowUpdate
       };
       Timing.ProcessIndex coindexTo;
       coindexTo.seg = Segment.SlowUpdate;
       this._runningSlowUpdate = true;
-      this.UpdateTimeValues(processIndex.seg);
-      for (processIndex.i = coindexTo.i = 0; processIndex.i < this._nextServerUpdateProcessSlot; ++processIndex.i)
+      this.UpdateTimeValues(index.seg);
+      for (index.i = coindexTo.i = 0; index.i < this._nextServerUpdateProcessSlot; ++index.i)
       {
-        if (this.SlowUpdateProcesses[processIndex.i] != null)
+        if (this.SlowUpdateProcesses[index.i] != null)
         {
-          if ((double) Time.realtimeSinceStartup >= (double) this.SlowUpdateProcesses[processIndex.i].Current)
+          if ((double) Time.realtimeSinceStartup >= (double) this.SlowUpdateProcesses[index.i].Current)
           {
             try
             {
-              if (!this.SlowUpdateProcesses[processIndex.i].MoveNext())
-                this.SlowUpdateProcesses[processIndex.i] = (IEnumerator<float>) null;
-              else if (this.SlowUpdateProcesses[processIndex.i] != null)
+              if (!this.SlowUpdateProcesses[index.i].MoveNext())
+                this.SlowUpdateProcesses[index.i] = (IEnumerator<float>) null;
+              else if (this.SlowUpdateProcesses[index.i] != null)
               {
-                if (float.IsNaN(this.SlowUpdateProcesses[processIndex.i].Current))
+                if (float.IsNaN(this.SlowUpdateProcesses[index.i].Current))
                 {
                   if (Timing.ReplacementFunction == null)
                   {
-                    this.SlowUpdateProcesses[processIndex.i] = (IEnumerator<float>) null;
+                    this.SlowUpdateProcesses[index.i] = (IEnumerator<float>) null;
                   }
                   else
                   {
-                    this.SlowUpdateProcesses[processIndex.i] = Timing.ReplacementFunction(this.SlowUpdateProcesses[processIndex.i], processIndex.seg, this._processTags.ContainsKey(processIndex) ? this._processTags[processIndex] : (string) null);
+                    this.SlowUpdateProcesses[index.i] = Timing.ReplacementFunction(this.SlowUpdateProcesses[index.i], index.seg, this._processTags.ContainsKey(index) ? this._processTags[index] : (string) null);
                     Timing.ReplacementFunction = (Func<IEnumerator<float>, Segment, string, IEnumerator<float>>) null;
-                    --processIndex.i;
+                    --index.i;
                   }
                 }
               }
@@ -150,24 +167,24 @@ namespace MovementEffects
                 this._exceptions.Enqueue(ex);
               else
                 this.OnError(ex);
-              this.SlowUpdateProcesses[processIndex.i] = (IEnumerator<float>) null;
+              this.SlowUpdateProcesses[index.i] = (IEnumerator<float>) null;
             }
           }
         }
-        if (this.SlowUpdateProcesses[processIndex.i] != null)
+        if (this.SlowUpdateProcesses[index.i] != null)
         {
-          if (processIndex.i != coindexTo.i)
+          if (index.i != coindexTo.i)
           {
-            this.SlowUpdateProcesses[coindexTo.i] = this.SlowUpdateProcesses[processIndex.i];
-            this.MoveTag(processIndex, coindexTo);
+            this.SlowUpdateProcesses[coindexTo.i] = this.SlowUpdateProcesses[index.i];
+            this.MoveTag(index, coindexTo);
           }
           ++coindexTo.i;
         }
       }
-      for (processIndex.i = coindexTo.i; processIndex.i < this._nextServerUpdateProcessSlot; ++processIndex.i)
+      for (index.i = coindexTo.i; index.i < this._nextServerUpdateProcessSlot; ++index.i)
       {
-        this.SlowUpdateProcesses[processIndex.i] = (IEnumerator<float>) null;
-        this.RemoveTag(processIndex);
+        this.SlowUpdateProcesses[index.i] = (IEnumerator<float>) null;
+        this.RemoveTag(index);
       }
       this.NumberOfSlowUpdateCoroutines = this._nextServerUpdateProcessSlot = coindexTo.i;
       this._runningSlowUpdate = false;
@@ -410,7 +427,10 @@ namespace MovementEffects
       Timing._instance.PauseCoroutinesOnInstance();
     }
 
-    public void PauseCoroutinesOnInstance() => this.enabled = false;
+    public void PauseCoroutinesOnInstance()
+    {
+      this.enabled = false;
+    }
 
     public static void ResumeCoroutines()
     {
@@ -419,7 +439,10 @@ namespace MovementEffects
       Timing._instance.ResumeCoroutinesOnInstance();
     }
 
-    public void ResumeCoroutinesOnInstance() => this.enabled = true;
+    public void ResumeCoroutinesOnInstance()
+    {
+      this.enabled = true;
+    }
 
     private void RemoveUnused()
     {
@@ -544,12 +567,16 @@ namespace MovementEffects
       return coroutine != null ? Timing.Instance.RunCoroutineOnInstance(coroutine, Segment.Update, (string) null) : (IEnumerator<float>) null;
     }
 
-    public static IEnumerator<float> RunCoroutine(IEnumerator<float> coroutine, string tag)
+    public static IEnumerator<float> RunCoroutine(
+      IEnumerator<float> coroutine,
+      string tag)
     {
       return coroutine != null ? Timing.Instance.RunCoroutineOnInstance(coroutine, Segment.Update, tag) : (IEnumerator<float>) null;
     }
 
-    public static IEnumerator<float> RunCoroutine(IEnumerator<float> coroutine, Segment timing)
+    public static IEnumerator<float> RunCoroutine(
+      IEnumerator<float> coroutine,
+      Segment timing)
     {
       return coroutine != null ? Timing.Instance.RunCoroutineOnInstance(coroutine, timing) : (IEnumerator<float>) null;
     }
@@ -567,12 +594,16 @@ namespace MovementEffects
       return coroutine != null ? this.RunCoroutineOnInstance(coroutine, Segment.Update, (string) null) : (IEnumerator<float>) null;
     }
 
-    public IEnumerator<float> RunCoroutineOnInstance(IEnumerator<float> coroutine, string tag)
+    public IEnumerator<float> RunCoroutineOnInstance(
+      IEnumerator<float> coroutine,
+      string tag)
     {
       return coroutine != null ? this.RunCoroutineOnInstance(coroutine, Segment.Update, tag) : (IEnumerator<float>) null;
     }
 
-    public IEnumerator<float> RunCoroutineOnInstance(IEnumerator<float> coroutine, Segment timing)
+    public IEnumerator<float> RunCoroutineOnInstance(
+      IEnumerator<float> coroutine,
+      Segment timing)
     {
       return coroutine != null ? this.RunCoroutineOnInstance(coroutine, timing, (string) null) : (IEnumerator<float>) null;
     }
@@ -584,7 +615,7 @@ namespace MovementEffects
     {
       if (coroutine == null)
         return (IEnumerator<float>) null;
-      Timing.ProcessIndex processIndex = new Timing.ProcessIndex()
+      Timing.ProcessIndex index1 = new Timing.ProcessIndex()
       {
         seg = timing
       };
@@ -595,35 +626,35 @@ namespace MovementEffects
           {
             IEnumerator<float>[] updateProcesses = this.UpdateProcesses;
             this.UpdateProcesses = new IEnumerator<float>[this.UpdateProcesses.Length + 64 * (int) this._expansions++];
-            for (int index = 0; index < updateProcesses.Length; ++index)
-              this.UpdateProcesses[index] = updateProcesses[index];
+            for (int index2 = 0; index2 < updateProcesses.Length; ++index2)
+              this.UpdateProcesses[index2] = updateProcesses[index2];
           }
-          processIndex.i = this._nextUpdateProcessSlot++;
-          this.UpdateProcesses[processIndex.i] = coroutine;
+          index1.i = this._nextUpdateProcessSlot++;
+          this.UpdateProcesses[index1.i] = coroutine;
           if (tag != null)
-            this.AddTag(tag, processIndex);
+            this.AddTag(tag, index1);
           if (!this._runningUpdate)
           {
             try
             {
               this._runningUpdate = true;
-              this.SetTimeValues(processIndex.seg);
-              if (!this.UpdateProcesses[processIndex.i].MoveNext())
-                this.UpdateProcesses[processIndex.i] = (IEnumerator<float>) null;
-              else if (this.UpdateProcesses[processIndex.i] != null)
+              this.SetTimeValues(index1.seg);
+              if (!this.UpdateProcesses[index1.i].MoveNext())
+                this.UpdateProcesses[index1.i] = (IEnumerator<float>) null;
+              else if (this.UpdateProcesses[index1.i] != null)
               {
-                if (float.IsNaN(this.UpdateProcesses[processIndex.i].Current))
+                if (float.IsNaN(this.UpdateProcesses[index1.i].Current))
                 {
                   if (Timing.ReplacementFunction == null)
                   {
-                    this.UpdateProcesses[processIndex.i] = (IEnumerator<float>) null;
+                    this.UpdateProcesses[index1.i] = (IEnumerator<float>) null;
                   }
                   else
                   {
-                    this.UpdateProcesses[processIndex.i] = Timing.ReplacementFunction(this.UpdateProcesses[processIndex.i], timing, this._processTags.ContainsKey(processIndex) ? this._processTags[processIndex] : (string) null);
+                    this.UpdateProcesses[index1.i] = Timing.ReplacementFunction(this.UpdateProcesses[index1.i], timing, this._processTags.ContainsKey(index1) ? this._processTags[index1] : (string) null);
                     Timing.ReplacementFunction = (Func<IEnumerator<float>, Segment, string, IEnumerator<float>>) null;
-                    if (this.UpdateProcesses[processIndex.i] != null)
-                      this.UpdateProcesses[processIndex.i].MoveNext();
+                    if (this.UpdateProcesses[index1.i] != null)
+                      this.UpdateProcesses[index1.i].MoveNext();
                   }
                 }
               }
@@ -635,7 +666,7 @@ namespace MovementEffects
                 this._exceptions.Enqueue(ex);
               else
                 this.OnError(ex);
-              this.UpdateProcesses[processIndex.i] = (IEnumerator<float>) null;
+              this.UpdateProcesses[index1.i] = (IEnumerator<float>) null;
             }
             finally
             {
@@ -648,35 +679,35 @@ namespace MovementEffects
           {
             IEnumerator<float>[] fixedUpdateProcesses = this.FixedUpdateProcesses;
             this.FixedUpdateProcesses = new IEnumerator<float>[this.FixedUpdateProcesses.Length + 64 * (int) this._expansions++];
-            for (int index = 0; index < fixedUpdateProcesses.Length; ++index)
-              this.FixedUpdateProcesses[index] = fixedUpdateProcesses[index];
+            for (int index2 = 0; index2 < fixedUpdateProcesses.Length; ++index2)
+              this.FixedUpdateProcesses[index2] = fixedUpdateProcesses[index2];
           }
-          processIndex.i = this._nextFixedUpdateProcessSlot++;
-          this.FixedUpdateProcesses[processIndex.i] = coroutine;
+          index1.i = this._nextFixedUpdateProcessSlot++;
+          this.FixedUpdateProcesses[index1.i] = coroutine;
           if (tag != null)
-            this.AddTag(tag, processIndex);
+            this.AddTag(tag, index1);
           if (!this._runningFixedUpdate)
           {
             try
             {
               this._runningFixedUpdate = true;
-              this.SetTimeValues(processIndex.seg);
-              if (!this.FixedUpdateProcesses[processIndex.i].MoveNext())
-                this.FixedUpdateProcesses[processIndex.i] = (IEnumerator<float>) null;
-              else if (this.FixedUpdateProcesses[processIndex.i] != null)
+              this.SetTimeValues(index1.seg);
+              if (!this.FixedUpdateProcesses[index1.i].MoveNext())
+                this.FixedUpdateProcesses[index1.i] = (IEnumerator<float>) null;
+              else if (this.FixedUpdateProcesses[index1.i] != null)
               {
-                if (float.IsNaN(this.FixedUpdateProcesses[processIndex.i].Current))
+                if (float.IsNaN(this.FixedUpdateProcesses[index1.i].Current))
                 {
                   if (Timing.ReplacementFunction == null)
                   {
-                    this.FixedUpdateProcesses[processIndex.i] = (IEnumerator<float>) null;
+                    this.FixedUpdateProcesses[index1.i] = (IEnumerator<float>) null;
                   }
                   else
                   {
-                    this.FixedUpdateProcesses[processIndex.i] = Timing.ReplacementFunction(this.FixedUpdateProcesses[processIndex.i], timing, this._processTags.ContainsKey(processIndex) ? this._processTags[processIndex] : (string) null);
+                    this.FixedUpdateProcesses[index1.i] = Timing.ReplacementFunction(this.FixedUpdateProcesses[index1.i], timing, this._processTags.ContainsKey(index1) ? this._processTags[index1] : (string) null);
                     Timing.ReplacementFunction = (Func<IEnumerator<float>, Segment, string, IEnumerator<float>>) null;
-                    if (this.FixedUpdateProcesses[processIndex.i] != null)
-                      this.FixedUpdateProcesses[processIndex.i].MoveNext();
+                    if (this.FixedUpdateProcesses[index1.i] != null)
+                      this.FixedUpdateProcesses[index1.i].MoveNext();
                   }
                 }
               }
@@ -688,7 +719,7 @@ namespace MovementEffects
                 this._exceptions.Enqueue(ex);
               else
                 this.OnError(ex);
-              this.FixedUpdateProcesses[processIndex.i] = (IEnumerator<float>) null;
+              this.FixedUpdateProcesses[index1.i] = (IEnumerator<float>) null;
             }
             finally
             {
@@ -701,35 +732,35 @@ namespace MovementEffects
           {
             IEnumerator<float>[] lateUpdateProcesses = this.LateUpdateProcesses;
             this.LateUpdateProcesses = new IEnumerator<float>[this.LateUpdateProcesses.Length + 64 * (int) this._expansions++];
-            for (int index = 0; index < lateUpdateProcesses.Length; ++index)
-              this.LateUpdateProcesses[index] = lateUpdateProcesses[index];
+            for (int index2 = 0; index2 < lateUpdateProcesses.Length; ++index2)
+              this.LateUpdateProcesses[index2] = lateUpdateProcesses[index2];
           }
-          processIndex.i = this._nextLateUpdateProcessSlot++;
-          this.LateUpdateProcesses[processIndex.i] = coroutine;
+          index1.i = this._nextLateUpdateProcessSlot++;
+          this.LateUpdateProcesses[index1.i] = coroutine;
           if (tag != null)
-            this.AddTag(tag, processIndex);
+            this.AddTag(tag, index1);
           if (!this._runningLateUpdate)
           {
             try
             {
               this._runningLateUpdate = true;
-              this.SetTimeValues(processIndex.seg);
-              if (!this.LateUpdateProcesses[processIndex.i].MoveNext())
-                this.LateUpdateProcesses[processIndex.i] = (IEnumerator<float>) null;
-              else if (this.LateUpdateProcesses[processIndex.i] != null)
+              this.SetTimeValues(index1.seg);
+              if (!this.LateUpdateProcesses[index1.i].MoveNext())
+                this.LateUpdateProcesses[index1.i] = (IEnumerator<float>) null;
+              else if (this.LateUpdateProcesses[index1.i] != null)
               {
-                if (float.IsNaN(this.LateUpdateProcesses[processIndex.i].Current))
+                if (float.IsNaN(this.LateUpdateProcesses[index1.i].Current))
                 {
                   if (Timing.ReplacementFunction == null)
                   {
-                    this.LateUpdateProcesses[processIndex.i] = (IEnumerator<float>) null;
+                    this.LateUpdateProcesses[index1.i] = (IEnumerator<float>) null;
                   }
                   else
                   {
-                    this.LateUpdateProcesses[processIndex.i] = Timing.ReplacementFunction(this.LateUpdateProcesses[processIndex.i], timing, this._processTags.ContainsKey(processIndex) ? this._processTags[processIndex] : (string) null);
+                    this.LateUpdateProcesses[index1.i] = Timing.ReplacementFunction(this.LateUpdateProcesses[index1.i], timing, this._processTags.ContainsKey(index1) ? this._processTags[index1] : (string) null);
                     Timing.ReplacementFunction = (Func<IEnumerator<float>, Segment, string, IEnumerator<float>>) null;
-                    if (this.LateUpdateProcesses[processIndex.i] != null)
-                      this.LateUpdateProcesses[processIndex.i].MoveNext();
+                    if (this.LateUpdateProcesses[index1.i] != null)
+                      this.LateUpdateProcesses[index1.i].MoveNext();
                   }
                 }
               }
@@ -741,7 +772,7 @@ namespace MovementEffects
                 this._exceptions.Enqueue(ex);
               else
                 this.OnError(ex);
-              this.LateUpdateProcesses[processIndex.i] = (IEnumerator<float>) null;
+              this.LateUpdateProcesses[index1.i] = (IEnumerator<float>) null;
             }
             finally
             {
@@ -754,35 +785,35 @@ namespace MovementEffects
           {
             IEnumerator<float>[] slowUpdateProcesses = this.SlowUpdateProcesses;
             this.SlowUpdateProcesses = new IEnumerator<float>[this.SlowUpdateProcesses.Length + 64 * (int) this._expansions++];
-            for (int index = 0; index < slowUpdateProcesses.Length; ++index)
-              this.SlowUpdateProcesses[index] = slowUpdateProcesses[index];
+            for (int index2 = 0; index2 < slowUpdateProcesses.Length; ++index2)
+              this.SlowUpdateProcesses[index2] = slowUpdateProcesses[index2];
           }
-          processIndex.i = this._nextServerUpdateProcessSlot++;
-          this.SlowUpdateProcesses[processIndex.i] = coroutine;
+          index1.i = this._nextServerUpdateProcessSlot++;
+          this.SlowUpdateProcesses[index1.i] = coroutine;
           if (tag != null)
-            this.AddTag(tag, processIndex);
+            this.AddTag(tag, index1);
           if (!this._runningSlowUpdate)
           {
             try
             {
               this._runningSlowUpdate = true;
-              this.SetTimeValues(processIndex.seg);
-              if (!this.SlowUpdateProcesses[processIndex.i].MoveNext())
-                this.SlowUpdateProcesses[processIndex.i] = (IEnumerator<float>) null;
-              else if (this.SlowUpdateProcesses[processIndex.i] != null)
+              this.SetTimeValues(index1.seg);
+              if (!this.SlowUpdateProcesses[index1.i].MoveNext())
+                this.SlowUpdateProcesses[index1.i] = (IEnumerator<float>) null;
+              else if (this.SlowUpdateProcesses[index1.i] != null)
               {
-                if (float.IsNaN(this.SlowUpdateProcesses[processIndex.i].Current))
+                if (float.IsNaN(this.SlowUpdateProcesses[index1.i].Current))
                 {
                   if (Timing.ReplacementFunction == null)
                   {
-                    this.SlowUpdateProcesses[processIndex.i] = (IEnumerator<float>) null;
+                    this.SlowUpdateProcesses[index1.i] = (IEnumerator<float>) null;
                   }
                   else
                   {
-                    this.SlowUpdateProcesses[processIndex.i] = Timing.ReplacementFunction(this.SlowUpdateProcesses[processIndex.i], timing, this._processTags.ContainsKey(processIndex) ? this._processTags[processIndex] : (string) null);
+                    this.SlowUpdateProcesses[index1.i] = Timing.ReplacementFunction(this.SlowUpdateProcesses[index1.i], timing, this._processTags.ContainsKey(index1) ? this._processTags[index1] : (string) null);
                     Timing.ReplacementFunction = (Func<IEnumerator<float>, Segment, string, IEnumerator<float>>) null;
-                    if (this.SlowUpdateProcesses[processIndex.i] != null)
-                      this.SlowUpdateProcesses[processIndex.i].MoveNext();
+                    if (this.SlowUpdateProcesses[index1.i] != null)
+                      this.SlowUpdateProcesses[index1.i].MoveNext();
                   }
                 }
               }
@@ -794,7 +825,7 @@ namespace MovementEffects
                 this._exceptions.Enqueue(ex);
               else
                 this.OnError(ex);
-              this.SlowUpdateProcesses[processIndex.i] = (IEnumerator<float>) null;
+              this.SlowUpdateProcesses[index1.i] = (IEnumerator<float>) null;
             }
             finally
             {
@@ -992,7 +1023,7 @@ namespace MovementEffects
       }
       for (int index1 = 0; index1 < this._waitingProcesses.Count; ++index1)
       {
-        if (this._waitingProcesses[index1].Trigger == coroutine && this._waitingProcesses[index1].TriggerTag == tag && !this._waitingProcesses[index1].Killed && !this._waitingProcesses[index1].Killed)
+        if (this._waitingProcesses[index1].Trigger == coroutine && this._waitingProcesses[index1].TriggerTag == tag && (!this._waitingProcesses[index1].Killed && !this._waitingProcesses[index1].Killed))
         {
           this._waitingProcesses[index1].Killed = true;
           ++num;
@@ -1298,7 +1329,7 @@ label_9:;
     {
       if (action == null)
         return;
-      if ((double) delay >= -9.9999997473787516E-05)
+      if ((double) delay >= -9.99999974737875E-05)
         Timing.RunCoroutine(Timing.Instance._CallDelayBack(delay, action));
       else
         action();
@@ -1308,7 +1339,7 @@ label_9:;
     {
       if (action == null)
         return;
-      if ((double) delay >= -9.9999997473787516E-05)
+      if ((double) delay >= -9.99999974737875E-05)
         this.RunCoroutineOnInstance(this._CallDelayBack(delay, action));
       else
         action();
@@ -1532,16 +1563,28 @@ label_9:;
     }
 
     [Obsolete("Unity coroutine function, use RunCoroutine instead.", true)]
-    public Coroutine StartCoroutine(IEnumerator routine) => (Coroutine) null;
+    public new Coroutine StartCoroutine(IEnumerator routine)
+    {
+      return (Coroutine) null;
+    }
 
     [Obsolete("Unity coroutine function, use RunCoroutine instead.", true)]
-    public new Coroutine StartCoroutine(string methodName, object value) => (Coroutine) null;
+    public new Coroutine StartCoroutine(string methodName, object value)
+    {
+      return (Coroutine) null;
+    }
 
     [Obsolete("Unity coroutine function, use RunCoroutine instead.", true)]
-    public new Coroutine StartCoroutine(string methodName) => (Coroutine) null;
+    public new Coroutine StartCoroutine(string methodName)
+    {
+      return (Coroutine) null;
+    }
 
     [Obsolete("Unity coroutine function, use RunCoroutine instead.", true)]
-    public Coroutine StartCoroutine_Auto(IEnumerator routine) => (Coroutine) null;
+    public new Coroutine StartCoroutine_Auto(IEnumerator routine)
+    {
+      return (Coroutine) null;
+    }
 
     [Obsolete("Unity coroutine function, use KillCoroutine instead.", true)]
     public new void StopCoroutine(string methodName)
@@ -1549,7 +1592,7 @@ label_9:;
     }
 
     [Obsolete("Unity coroutine function, use KillCoroutine instead.", true)]
-    public void StopCoroutine(IEnumerator routine)
+    public new void StopCoroutine(IEnumerator routine)
     {
     }
 
@@ -1594,16 +1637,28 @@ label_9:;
     }
 
     [Obsolete("Just.. no.", true)]
-    public new static T FindObjectOfType<T>() where T : UnityEngine.Object => default (T);
+    public new static T FindObjectOfType<T>() where T : UnityEngine.Object
+    {
+      return default (T);
+    }
 
     [Obsolete("Just.. no.", true)]
-    public static UnityEngine.Object FindObjectOfType(System.Type t) => (UnityEngine.Object) null;
+    public new static UnityEngine.Object FindObjectOfType(System.Type t)
+    {
+      return (UnityEngine.Object) null;
+    }
 
     [Obsolete("Just.. no.", true)]
-    public new static T[] FindObjectsOfType<T>() where T : UnityEngine.Object => (T[]) null;
+    public new static T[] FindObjectsOfType<T>() where T : UnityEngine.Object
+    {
+      return (T[]) null;
+    }
 
     [Obsolete("Just.. no.", true)]
-    public static UnityEngine.Object[] FindObjectsOfType(System.Type t) => (UnityEngine.Object[]) null;
+    public new static UnityEngine.Object[] FindObjectsOfType(System.Type t)
+    {
+      return (UnityEngine.Object[]) null;
+    }
 
     [Obsolete("Just.. no.", true)]
     public new static void print(object message)
@@ -1612,10 +1667,10 @@ label_9:;
 
     private class WaitingProcess
     {
+      public readonly List<Timing.WaitingProcess.ProcessData> Tasks = new List<Timing.WaitingProcess.ProcessData>();
       public IEnumerator<float> Trigger;
       public string TriggerTag;
       public bool Killed;
-      public readonly List<Timing.WaitingProcess.ProcessData> Tasks = new List<Timing.WaitingProcess.ProcessData>();
 
       public class ProcessData
       {
@@ -1630,7 +1685,10 @@ label_9:;
       public Segment seg;
       public int i;
 
-      public bool Equals(Timing.ProcessIndex other) => this.seg == other.seg && this.i == other.i;
+      public bool Equals(Timing.ProcessIndex other)
+      {
+        return this.seg == other.seg && this.i == other.i;
+      }
 
       public override bool Equals(object other)
       {
@@ -1647,7 +1705,10 @@ label_9:;
         return a.seg != b.seg || a.i != b.i;
       }
 
-      public override int GetHashCode() => (int) (this.seg - 2) * 715827882 + this.i;
+      public override int GetHashCode()
+      {
+        return (int) (this.seg - 2) * 715827882 + this.i;
+      }
     }
   }
 }

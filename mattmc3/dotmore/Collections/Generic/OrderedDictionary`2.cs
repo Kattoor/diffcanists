@@ -5,34 +5,43 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 
-#nullable disable
 namespace mattmc3.dotmore.Collections.Generic
 {
-  public class OrderedDictionary<TKey, TValue> : 
-    IOrderedDictionary<TKey, TValue>,
-    IDictionary<TKey, TValue>,
-    ICollection<KeyValuePair<TKey, TValue>>,
-    IEnumerable<KeyValuePair<TKey, TValue>>,
-    IEnumerable,
-    IOrderedDictionary,
-    ICollection,
-    IDictionary
+  public class OrderedDictionary<TKey, TValue> : IOrderedDictionary<TKey, TValue>, IDictionary<TKey, TValue>, ICollection<KeyValuePair<TKey, TValue>>, IEnumerable<KeyValuePair<TKey, TValue>>, IEnumerable, IOrderedDictionary, ICollection, IDictionary
   {
     private KeyedCollection2<TKey, KeyValuePair<TKey, TValue>> _keyedCollection;
 
     public TValue this[TKey key]
     {
-      get => this.GetValue(key);
-      set => this.SetValue(key, value);
+      get
+      {
+        return this.GetValue(key);
+      }
+      set
+      {
+        this.SetValue(key, value);
+      }
     }
 
     public TValue this[int index]
     {
-      get => this.GetItem(index).Value;
-      set => this.SetItem(index, value);
+      get
+      {
+        return this.GetItem(index).Value;
+      }
+      set
+      {
+        this.SetItem(index, value);
+      }
     }
 
-    public int Count => this._keyedCollection.Count;
+    public int Count
+    {
+      get
+      {
+        return this._keyedCollection.Count;
+      }
+    }
 
     public ICollection<TKey> Keys
     {
@@ -52,13 +61,19 @@ namespace mattmc3.dotmore.Collections.Generic
 
     public IEqualityComparer<TKey> Comparer { get; private set; }
 
-    public OrderedDictionary() => this.Initialize();
+    public OrderedDictionary()
+    {
+      this.Initialize((IEqualityComparer<TKey>) null);
+    }
 
-    public OrderedDictionary(IEqualityComparer<TKey> comparer) => this.Initialize(comparer);
+    public OrderedDictionary(IEqualityComparer<TKey> comparer)
+    {
+      this.Initialize(comparer);
+    }
 
     public OrderedDictionary(IOrderedDictionary<TKey, TValue> dictionary)
     {
-      this.Initialize();
+      this.Initialize((IEqualityComparer<TKey>) null);
       foreach (KeyValuePair<TKey, TValue> keyValuePair in dictionary)
         this._keyedCollection.Add(keyValuePair);
     }
@@ -74,7 +89,7 @@ namespace mattmc3.dotmore.Collections.Generic
 
     public OrderedDictionary(IEnumerable<KeyValuePair<TKey, TValue>> items)
     {
-      this.Initialize();
+      this.Initialize((IEqualityComparer<TKey>) null);
       foreach (KeyValuePair<TKey, TValue> keyValuePair in items)
         this._keyedCollection.Add(keyValuePair);
     }
@@ -102,7 +117,10 @@ namespace mattmc3.dotmore.Collections.Generic
       this._keyedCollection.Add(new KeyValuePair<TKey, TValue>(key, value));
     }
 
-    public void Clear() => this._keyedCollection.Clear();
+    public void Clear()
+    {
+      this._keyedCollection.Clear();
+    }
 
     public void Insert(int index, TKey key, TValue value)
     {
@@ -114,14 +132,20 @@ namespace mattmc3.dotmore.Collections.Generic
       return this._keyedCollection.Contains(key) ? this._keyedCollection.IndexOf(this._keyedCollection[key]) : -1;
     }
 
-    public bool ContainsValue(TValue value) => this.Values.Contains(value);
+    public bool ContainsValue(TValue value)
+    {
+      return this.Values.Contains(value);
+    }
 
     public bool ContainsValue(TValue value, IEqualityComparer<TValue> comparer)
     {
       return this.Values.Contains<TValue>(value, comparer);
     }
 
-    public bool ContainsKey(TKey key) => this._keyedCollection.Contains(key);
+    public bool ContainsKey(TKey key)
+    {
+      return this._keyedCollection.Contains(key);
+    }
 
     public KeyValuePair<TKey, TValue> GetItem(int index)
     {
@@ -143,7 +167,10 @@ namespace mattmc3.dotmore.Collections.Generic
       return this._keyedCollection.GetEnumerator();
     }
 
-    public bool Remove(TKey key) => this._keyedCollection.Remove(key);
+    public bool Remove(TKey key)
+    {
+      return this._keyedCollection.Remove(key);
+    }
 
     public void RemoveAt(int index)
     {
@@ -180,16 +207,25 @@ namespace mattmc3.dotmore.Collections.Generic
       return false;
     }
 
-    public void SortKeys() => this._keyedCollection.SortByKeys();
+    public void SortKeys()
+    {
+      this._keyedCollection.SortByKeys();
+    }
 
-    public void SortKeys(IComparer<TKey> comparer) => this._keyedCollection.SortByKeys(comparer);
+    public void SortKeys(IComparer<TKey> comparer)
+    {
+      this._keyedCollection.SortByKeys(comparer);
+    }
 
     public void SortKeys(Comparison<TKey> comparison)
     {
       this._keyedCollection.SortByKeys(comparison);
     }
 
-    public void SortValues() => this.SortValues((IComparer<TValue>) System.Collections.Generic.Comparer<TValue>.Default);
+    public void SortValues()
+    {
+      this.SortValues((IComparer<TValue>) System.Collections.Generic.Comparer<TValue>.Default);
+    }
 
     public void SortValues(IComparer<TValue> comparer)
     {
@@ -201,35 +237,67 @@ namespace mattmc3.dotmore.Collections.Generic
       this._keyedCollection.Sort((Comparison<KeyValuePair<TKey, TValue>>) ((x, y) => comparison(x.Value, y.Value)));
     }
 
-    void IDictionary<TKey, TValue>.Add(TKey key, TValue value) => this.Add(key, value);
+    void IDictionary<TKey, TValue>.Add(TKey key, TValue value)
+    {
+      this.Add(key, value);
+    }
 
-    bool IDictionary<TKey, TValue>.ContainsKey(TKey key) => this.ContainsKey(key);
+    bool IDictionary<TKey, TValue>.ContainsKey(TKey key)
+    {
+      return this.ContainsKey(key);
+    }
 
-    ICollection<TKey> IDictionary<TKey, TValue>.Keys => this.Keys;
+    ICollection<TKey> IDictionary<TKey, TValue>.Keys
+    {
+      get
+      {
+        return this.Keys;
+      }
+    }
 
-    bool IDictionary<TKey, TValue>.Remove(TKey key) => this.Remove(key);
+    bool IDictionary<TKey, TValue>.Remove(TKey key)
+    {
+      return this.Remove(key);
+    }
 
     bool IDictionary<TKey, TValue>.TryGetValue(TKey key, out TValue value)
     {
       return this.TryGetValue(key, out value);
     }
 
-    ICollection<TValue> IDictionary<TKey, TValue>.Values => this.Values;
+    ICollection<TValue> IDictionary<TKey, TValue>.Values
+    {
+      get
+      {
+        return this.Values;
+      }
+    }
 
     TValue IDictionary<TKey, TValue>.this[TKey key]
     {
-      get => this[key];
-      set => this[key] = value;
+      get
+      {
+        return this[key];
+      }
+      set
+      {
+        this[key] = value;
+      }
     }
 
-    void ICollection<KeyValuePair<TKey, TValue>>.Add(KeyValuePair<TKey, TValue> item)
+    void ICollection<KeyValuePair<TKey, TValue>>.Add(
+      KeyValuePair<TKey, TValue> item)
     {
       this._keyedCollection.Add(item);
     }
 
-    void ICollection<KeyValuePair<TKey, TValue>>.Clear() => this._keyedCollection.Clear();
+    void ICollection<KeyValuePair<TKey, TValue>>.Clear()
+    {
+      this._keyedCollection.Clear();
+    }
 
-    bool ICollection<KeyValuePair<TKey, TValue>>.Contains(KeyValuePair<TKey, TValue> item)
+    bool ICollection<KeyValuePair<TKey, TValue>>.Contains(
+      KeyValuePair<TKey, TValue> item)
     {
       return this._keyedCollection.Contains(item);
     }
@@ -241,11 +309,24 @@ namespace mattmc3.dotmore.Collections.Generic
       this._keyedCollection.CopyTo(array, arrayIndex);
     }
 
-    int ICollection<KeyValuePair<TKey, TValue>>.Count => this._keyedCollection.Count;
+    int ICollection<KeyValuePair<TKey, TValue>>.Count
+    {
+      get
+      {
+        return this._keyedCollection.Count;
+      }
+    }
 
-    bool ICollection<KeyValuePair<TKey, TValue>>.IsReadOnly => false;
+    bool ICollection<KeyValuePair<TKey, TValue>>.IsReadOnly
+    {
+      get
+      {
+        return false;
+      }
+    }
 
-    bool ICollection<KeyValuePair<TKey, TValue>>.Remove(KeyValuePair<TKey, TValue> item)
+    bool ICollection<KeyValuePair<TKey, TValue>>.Remove(
+      KeyValuePair<TKey, TValue> item)
     {
       return this._keyedCollection.Remove(item);
     }
@@ -255,7 +336,10 @@ namespace mattmc3.dotmore.Collections.Generic
       return this.GetEnumerator();
     }
 
-    IEnumerator IEnumerable.GetEnumerator() => (IEnumerator) this.GetEnumerator();
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+      return (IEnumerator) this.GetEnumerator();
+    }
 
     IDictionaryEnumerator IOrderedDictionary.GetEnumerator()
     {
@@ -267,39 +351,90 @@ namespace mattmc3.dotmore.Collections.Generic
       this.Insert(index, (TKey) key, (TValue) value);
     }
 
-    void IOrderedDictionary.RemoveAt(int index) => this.RemoveAt(index);
+    void IOrderedDictionary.RemoveAt(int index)
+    {
+      this.RemoveAt(index);
+    }
 
     object IOrderedDictionary.this[int index]
     {
-      get => (object) this[index];
-      set => this[index] = (TValue) value;
+      get
+      {
+        return (object) this[index];
+      }
+      set
+      {
+        this[index] = (TValue) value;
+      }
     }
 
-    void IDictionary.Add(object key, object value) => this.Add((TKey) key, (TValue) value);
+    void IDictionary.Add(object key, object value)
+    {
+      this.Add((TKey) key, (TValue) value);
+    }
 
-    void IDictionary.Clear() => this.Clear();
+    void IDictionary.Clear()
+    {
+      this.Clear();
+    }
 
-    bool IDictionary.Contains(object key) => this._keyedCollection.Contains((TKey) key);
+    bool IDictionary.Contains(object key)
+    {
+      return this._keyedCollection.Contains((TKey) key);
+    }
 
     IDictionaryEnumerator IDictionary.GetEnumerator()
     {
       return (IDictionaryEnumerator) new DictionaryEnumerator<TKey, TValue>((IDictionary<TKey, TValue>) this);
     }
 
-    bool IDictionary.IsFixedSize => false;
+    bool IDictionary.IsFixedSize
+    {
+      get
+      {
+        return false;
+      }
+    }
 
-    bool IDictionary.IsReadOnly => false;
+    bool IDictionary.IsReadOnly
+    {
+      get
+      {
+        return false;
+      }
+    }
 
-    ICollection IDictionary.Keys => (ICollection) this.Keys;
+    ICollection IDictionary.Keys
+    {
+      get
+      {
+        return (ICollection) this.Keys;
+      }
+    }
 
-    void IDictionary.Remove(object key) => this.Remove((TKey) key);
+    void IDictionary.Remove(object key)
+    {
+      this.Remove((TKey) key);
+    }
 
-    ICollection IDictionary.Values => (ICollection) this.Values;
+    ICollection IDictionary.Values
+    {
+      get
+      {
+        return (ICollection) this.Values;
+      }
+    }
 
     object IDictionary.this[object key]
     {
-      get => (object) this[(TKey) key];
-      set => this[(TKey) key] = (TValue) value;
+      get
+      {
+        return (object) this[(TKey) key];
+      }
+      set
+      {
+        this[(TKey) key] = (TValue) value;
+      }
     }
 
     void ICollection.CopyTo(Array array, int index)
@@ -307,10 +442,28 @@ namespace mattmc3.dotmore.Collections.Generic
       ((ICollection) this._keyedCollection).CopyTo(array, index);
     }
 
-    int ICollection.Count => this._keyedCollection.Count;
+    int ICollection.Count
+    {
+      get
+      {
+        return this._keyedCollection.Count;
+      }
+    }
 
-    bool ICollection.IsSynchronized => ((ICollection) this._keyedCollection).IsSynchronized;
+    bool ICollection.IsSynchronized
+    {
+      get
+      {
+        return ((ICollection) this._keyedCollection).IsSynchronized;
+      }
+    }
 
-    object ICollection.SyncRoot => ((ICollection) this._keyedCollection).SyncRoot;
+    object ICollection.SyncRoot
+    {
+      get
+      {
+        return ((ICollection) this._keyedCollection).SyncRoot;
+      }
+    }
   }
 }

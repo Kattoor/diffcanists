@@ -3,18 +3,23 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-#nullable disable
 [RequireComponent(typeof (BoxSlider), typeof (RawImage))]
 [ExecuteInEditMode]
 public class SVBoxSlider : MonoBehaviour
 {
+  private float lastH = -1f;
+  private bool listen = true;
   public ColorPicker picker;
   private BoxSlider slider;
   private RawImage image;
-  private float lastH = -1f;
-  private bool listen = true;
 
-  public RectTransform rectTransform => this.transform as RectTransform;
+  public RectTransform rectTransform
+  {
+    get
+    {
+      return this.transform as RectTransform;
+    }
+  }
 
   private void Awake()
   {

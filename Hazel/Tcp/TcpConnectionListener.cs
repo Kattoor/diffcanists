@@ -3,7 +3,6 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 
-#nullable disable
 namespace Hazel.Tcp
 {
   public sealed class TcpConnectionListener : NetworkConnectionListener

@@ -1,11 +1,10 @@
 
 using System;
 
-#nullable disable
 public static class BuildConstants
 {
-  public static readonly DateTime buildDate = new DateTime(638819831693792948L);
-  public const string version = "1.0.0.11";
+  public static readonly DateTime buildDate = new DateTime(638822515338695294L);
+  public const string version = "1.0.0.8";
   public const BuildConstants.ReleaseType releaseType = BuildConstants.ReleaseType.NewReleaseType;
   public const BuildConstants.Platform platform = BuildConstants.Platform.PC;
   public const BuildConstants.Architecture architecture = BuildConstants.Architecture.Windows_x64;

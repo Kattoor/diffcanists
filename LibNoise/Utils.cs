@@ -1,18 +1,10 @@
 
 using System;
 
-#nullable disable
 namespace LibNoise
 {
   internal static class Utils
   {
-    internal const double Sqrt3 = 1.7320508075688772;
-    internal const int OctavesMaximum = 30;
-    private const int GeneratorNoiseX = 1619;
-    private const int GeneratorNoiseY = 31337;
-    private const int GeneratorNoiseZ = 6971;
-    private const int GeneratorSeed = 1013;
-    private const int GeneratorShift = 8;
     internal static readonly double[] Randoms = new double[1024]
     {
       -0.763874,
@@ -923,7 +915,7 @@ namespace LibNoise
       0.322158,
       -0.946284,
       0.0,
-      0.018542199999999998,
+      0.0185422,
       0.716349,
       0.697496,
       0.0,
@@ -952,7 +944,7 @@ namespace LibNoise
       -0.600574,
       0.0,
       0.48947,
-      -0.86681299999999994,
+      -0.866813,
       0.0951509,
       0.0,
       0.251142,
@@ -1040,6 +1032,13 @@ namespace LibNoise
       -0.196654,
       0.0
     };
+    internal const double Sqrt3 = 1.73205080756888;
+    internal const int OctavesMaximum = 30;
+    private const int GeneratorNoiseX = 1619;
+    private const int GeneratorNoiseY = 31337;
+    private const int GeneratorNoiseZ = 6971;
+    private const int GeneratorSeed = 1013;
+    private const int GeneratorShift = 8;
 
     internal static double GradientCoherentNoise3D(
       double x,
@@ -1125,7 +1124,10 @@ namespace LibNoise
       return value <= -1073741824.0 ? 2.0 * Math.IEEERemainder(value, 1073741824.0) + 1073741824.0 : value;
     }
 
-    internal static double MapCubicSCurve(double value) => value * value * (3.0 - 2.0 * value);
+    internal static double MapCubicSCurve(double value)
+    {
+      return value * value * (3.0 - 2.0 * value);
+    }
 
     internal static double MapQuinticSCurve(double value)
     {

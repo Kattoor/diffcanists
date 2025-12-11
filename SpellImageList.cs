@@ -3,7 +3,6 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-#nullable disable
 public class SpellImageList : MonoBehaviour
 {
   public Image[] spellSlot;
@@ -15,8 +14,14 @@ public class SpellImageList : MonoBehaviour
 
   internal SettingsPlayer settingsPlayer
   {
-    get => this._settingsPlayer ?? Client.settingsPlayer;
-    set => this._settingsPlayer = value;
+    get
+    {
+      return this._settingsPlayer ?? Client.settingsPlayer;
+    }
+    set
+    {
+      this._settingsPlayer = value;
+    }
   }
 
   private void Awake()
@@ -27,13 +32,19 @@ public class SpellImageList : MonoBehaviour
     this.prestigeIcon.sprite = ClientResources.Instance._iconsPrestige[Mathf.Clamp((int) Client.MyAccount.prestige, 0, 10)];
   }
 
-  public void ClickQuickChange() => SpellLobbyChange.Create();
+  public void ClickQuickChange()
+  {
+    SpellLobbyChange.Create((SettingsPlayer) null, (Action<SettingsPlayer>) null, false, Validation.Default, false, (Action) null);
+  }
 
-  public void ClickPrestige() => Controller.ShowPrestigeMenu();
+  public void ClickPrestige()
+  {
+    Controller.ShowPrestigeMenu();
+  }
 
   public void UpdateOutfit()
   {
-    Client.settingsPlayer.VerifyOutfit(Client.cosmetics);
+    Client.settingsPlayer.VerifyOutfit(Client.cosmetics, (Account) null);
     ConfigurePlayer.EquipAll(Client.Name, this.uIPlayerCharacter, this.settingsPlayer);
   }
 
@@ -42,7 +53,10 @@ public class SpellImageList : MonoBehaviour
     this.SetSpells(this.settingsPlayer.spells, this.settingsPlayer.fullBook, this.settingsPlayer._spells);
   }
 
-  public void SetSpells(SettingsPlayer s) => this.SetSpells(s.spells, s.fullBook, s._spells);
+  public void SetSpells(SettingsPlayer s)
+  {
+    this.SetSpells(s.spells, s.fullBook, s._spells);
+  }
 
   public void SetSpells(byte[] spells, byte fullBook, SpellsOnly sp)
   {
@@ -52,11 +66,11 @@ public class SpellImageList : MonoBehaviour
       {
         this.spellSlot[index].sprite = !sp.IsAlt((int) spells[index]) ? ClientResources.Instance.icons.GetItem((int) spells[index]).Value : ClientResources.Instance.icons[Inert.Instance.altSpells[(int) spells[index]].name];
         this.spellSlot[index].enabled = true;
-        this.restricted[index].gameObject.SetActive(Restrictions.IsSpellRestricted(sp, (int) spells[index]));
+        this.restricted[index].gameObject.SetActive(Restrictions.IsSpellRestricted(sp, (int) spells[index], (Restrictions) null));
         int spell = (int) spells[index];
         if (Prestige.IsUnlocked(Client.MyAccount, spell) || !Client.viewSpellLocks.ViewLocked() && ((UnityEngine.Object) UnratedMenu.instance == (UnityEngine.Object) null || Client._gameFacts.GetStyle().HasStyle(GameStyle.Sandbox)))
         {
-          if (!Restrictions.IsSpellRestricted(sp, spell))
+          if (!Restrictions.IsSpellRestricted(sp, spell, (Restrictions) null))
           {
             if (Client.viewSpellLocks.ViewRestricted())
             {
@@ -88,12 +102,12 @@ label_6:
     if ((int) fullBook >= ClientResources.Instance.spellBookIcons.Length)
       fullBook = (byte) 0;
     this.elemental.sprite = fullBook <= (byte) 0 || !sp.UsingAltBook((BookOf) ((int) fullBook - 1)) ? ClientResources.Instance.spellBookIcons[(int) fullBook] : ClientResources.Instance.altSpellBookIcons[(int) fullBook];
-    this.elemental.transform.GetChild(0).gameObject.SetActive(fullBook > (byte) 0 && Restrictions.IsElementalRestricted(sp, (int) fullBook - 1));
+    this.elemental.transform.GetChild(0).gameObject.SetActive(fullBook > (byte) 0 && Restrictions.IsElementalRestricted(sp, (int) fullBook - 1, (Restrictions) null));
   }
 
   public void ClickElementalIcon()
   {
-    ElementalSelection.Create((RectTransform) Controller.Instance.transform, this.settingsPlayer._spells, (Action<BookOf>) (b => Client.AskToChangeElemental((byte) (b + 1))));
+    ElementalSelection.Create((RectTransform) Controller.Instance.transform, this.settingsPlayer._spells, (Action<BookOf>) (b => Client.AskToChangeElemental((byte) (b + 1))), true);
   }
 
   public void ClickSavedSpells()
@@ -101,7 +115,7 @@ label_6:
     if (RatedMenu.FindingOpponents)
       ChatBox.Instance?.NewChatMsg("Cannot change spells while finding opponents", (Color) ColorScheme.GetColor(Global.ColorSystem));
     else
-      ChangeSpellBookMenu.Create(false);
+      ChangeSpellBookMenu.Create(false, (SettingsPlayer) null, (Action<SettingsPlayer>) null);
   }
 
   public void ClickSavedOutfits()
@@ -109,9 +123,18 @@ label_6:
     CharacterCreation.Create(Client.settingsPlayer, (Action<SettingsPlayer>) (set => Client.AskToChangeOutfit(set)));
   }
 
-  public void ClickSavedOutfitsSaved() => ChangeOutfitMenu.Create(false);
+  public void ClickSavedOutfitsSaved()
+  {
+    ChangeOutfitMenu.Create(false, true, (SettingsPlayer) null, (Action<SettingsPlayer>) null);
+  }
 
-  public void ToolTip(string s) => MyToolTip.Show(s);
+  public void ToolTip(string s)
+  {
+    MyToolTip.Show(s, -1f);
+  }
 
-  public void HideToolTip() => MyToolTip.Close();
+  public void HideToolTip()
+  {
+    MyToolTip.Close();
+  }
 }

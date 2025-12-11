@@ -1,21 +1,26 @@
 
 using UnityEngine;
 
-#nullable disable
 public class AnimateDragon : IAnimator
 {
-  public SpriteRenderer sp;
   public float timeToFinish = 1f;
+  public float boost = 2f;
+  public SpriteRenderer sp;
   public Sprite[] sprites;
   public Sprite[] attackSprites;
-  public float boost = 2f;
   private float curTime;
   private float timeBetweenFrames;
   private int index;
   private float boosting;
   public Sprite[] choose;
 
-  public SpriteRenderer GetSpriteRenderer => this.sp ?? this.GetComponent<SpriteRenderer>();
+  public SpriteRenderer GetSpriteRenderer
+  {
+    get
+    {
+      return this.sp ?? this.GetComponent<SpriteRenderer>();
+    }
+  }
 
   public override void Play(AnimateState anim, float duration = 0.0f, bool sound = true)
   {
@@ -65,7 +70,7 @@ public class AnimateDragon : IAnimator
     {
       this.curTime += Time.deltaTime * 2f;
       this.boosting += Time.deltaTime * 2f;
-      if ((double) this.boosting >= 0.89999997615814209)
+      if ((double) this.boosting >= 0.899999976158142)
       {
         this.currentState = AnimateState.Stop;
         this.choose = this.sprites;

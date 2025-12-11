@@ -1,5 +1,4 @@
 
-#nullable disable
 namespace Educative
 {
   public class CEnableMovement : Command
@@ -9,6 +8,9 @@ namespace Educative
     public bool bool_takeDamage;
     public bool bool_canSkipTurn;
 
-    public CEnableMovement() => this.type = Command.Type.EnableMovement;
+    public CEnableMovement()
+    {
+      this.type = Command.Type.EnableMovement;
+    }
   }
 }

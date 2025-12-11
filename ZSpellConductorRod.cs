@@ -2,158 +2,157 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-#nullable disable
 public class ZSpellConductorRod : ZSpell
 {
   public override IEnumerator<float> SpellMove(bool gotoStatic = false, bool checkEffectors = true)
   {
-    ZSpellConductorRod spell = this;
-    spell.isMoving = true;
-    spell.zb = MapGenerator.getOutlineArray(spell.radius);
-    if (spell.spellEnum == SpellEnum.Conductor_Rod && (ZComponent) spell.parent != (object) null && spell.parent.familiarLevelStorm > 0)
-      spell.clientObj.GetComponent<SpriteRenderer>().sprite = ClientResources.Instance.paperClip;
+    ZSpellConductorRod zspellConductorRod = this;
+    zspellConductorRod.isMoving = true;
+    zspellConductorRod.zb = MapGenerator.getOutlineArray(zspellConductorRod.radius);
+    if (zspellConductorRod.spellEnum == SpellEnum.Conductor_Rod && (ZComponent) zspellConductorRod.parent != (object) null && zspellConductorRod.parent.familiarLevelStorm > 0)
+      zspellConductorRod.clientObj.GetComponent<SpriteRenderer>().sprite = ClientResources.Instance.paperClip;
     if (gotoStatic)
       yield return 0.0f;
 label_54:
-    while (!spell.isDead)
+    while (!zspellConductorRod.isDead)
     {
-      spell.pX = spell.position.x;
-      spell.pY = spell.position.y;
-      FixedInt fixedInt1 = spell.position.x + spell.velocity.x;
-      FixedInt fixedInt2 = spell.position.y + spell.velocity.y;
-      spell.validX = spell.pX;
-      spell.validY = spell.pY;
-      spell.steps = 1;
-      FixedInt x1 = spell.velocity.x;
-      FixedInt y1 = spell.velocity.y;
-      FixedInt fixedInt3 = spell.velocity.x;
-      FixedInt fixedInt4 = spell.velocity.y;
-      if (x1 > 1 || x1 < -1 || y1 > 1 || y1 < -1)
+      zspellConductorRod.pX = zspellConductorRod.position.x;
+      zspellConductorRod.pY = zspellConductorRod.position.y;
+      FixedInt fixedInt1 = zspellConductorRod.position.x + zspellConductorRod.velocity.x;
+      FixedInt fixedInt2 = zspellConductorRod.position.y + zspellConductorRod.velocity.y;
+      zspellConductorRod.validX = zspellConductorRod.pX;
+      zspellConductorRod.validY = zspellConductorRod.pY;
+      zspellConductorRod.steps = 1;
+      FixedInt x1 = zspellConductorRod.velocity.x;
+      FixedInt y1 = zspellConductorRod.velocity.y;
+      FixedInt fixedInt3 = zspellConductorRod.velocity.x;
+      FixedInt fixedInt4 = zspellConductorRod.velocity.y;
+      if (x1 > 1 || x1 < -1 || (y1 > 1 || y1 < -1))
       {
         if (FixedInt.Abs(x1) > FixedInt.Abs(y1))
-          spell.steps = (int) FixedInt.Abs(x1) + 1;
+          zspellConductorRod.steps = (int) FixedInt.Abs(x1) + 1;
         else
-          spell.steps = (int) FixedInt.Abs(y1) + 1;
-        fixedInt3 = spell.velocity.x / spell.steps;
-        fixedInt4 = spell.velocity.y / spell.steps;
+          zspellConductorRod.steps = (int) FixedInt.Abs(y1) + 1;
+        fixedInt3 = zspellConductorRod.velocity.x / zspellConductorRod.steps;
+        fixedInt4 = zspellConductorRod.velocity.y / zspellConductorRod.steps;
       }
-      while (spell.steps > 0)
+      while (zspellConductorRod.steps > 0)
       {
-        if (spell.map.SpellCheckEffectors(spell.toCollideCheck, (ZSpell) spell, (int) spell.validX, (int) spell.validY))
+        if (zspellConductorRod.map.SpellCheckEffectors(zspellConductorRod.toCollideCheck, (ZSpell) zspellConductorRod, (int) zspellConductorRod.validX, (int) zspellConductorRod.validY))
         {
-          spell.position = new MyLocation(spell.validX, spell.validY);
+          zspellConductorRod.position = new MyLocation(zspellConductorRod.validX, zspellConductorRod.validY);
           yield return 0.0f;
           goto label_54;
         }
         else
         {
-          --spell.steps;
-          int num1 = (int) (((FixedInt) 360 - (Inert.AngleOfVelocity(spell.velocity) - 90)) * FixedInt.ThreeSixtyBy1 * spell.zb.Count) - spell.radius;
+          --zspellConductorRod.steps;
+          int num1 = (int) (((FixedInt) 360 - (Inert.AngleOfVelocity(zspellConductorRod.velocity) - 90)) * FixedInt.ThreeSixtyBy1 * zspellConductorRod.zb.Count) - zspellConductorRod.radius;
           if (num1 < 0)
-            num1 += spell.zb.Count;
-          for (int index1 = 0; index1 < spell.radius * 2; ++index1)
+            num1 += zspellConductorRod.zb.Count;
+          for (int index1 = 0; index1 < zspellConductorRod.radius * 2; ++index1)
           {
-            int index2 = (index1 + num1) % spell.zb.Count;
-            int num2 = (int) (fixedInt3 + spell.pX);
-            int num3 = (int) (fixedInt4 + spell.pY);
-            if (!spell.map.SpellCheckPosition(num2 + spell.zb[index2].x, num3 + spell.zb[index2].y, spell.toCollideCheck, Inert.mask_spell_movement))
+            int index2 = (index1 + num1) % zspellConductorRod.zb.Count;
+            int num2 = (int) (fixedInt3 + zspellConductorRod.pX);
+            int num3 = (int) (fixedInt4 + zspellConductorRod.pY);
+            if (!zspellConductorRod.map.SpellCheckPosition(num2 + zspellConductorRod.zb[index2].x, num3 + zspellConductorRod.zb[index2].y, zspellConductorRod.toCollideCheck, Inert.mask_spell_movement))
             {
-              int x2 = num2 + spell.zb[index2].x;
-              int y2 = num3 + spell.zb[index2].y;
-              ++spell.timesBounced;
-              spell.position = new MyLocation(spell.validX, spell.validY);
-              int num4 = num2 + spell.zb[index2].x;
-              int num5 = num3 + spell.zb[index2].y;
-              AudioManager.Play(spell.explosionClip);
-              spell.hitCreature = spell.map.PhysicsCollideCreature((ZCreature) null, x2, y2);
+              int x2 = num2 + zspellConductorRod.zb[index2].x;
+              int y2 = num3 + zspellConductorRod.zb[index2].y;
+              ++zspellConductorRod.timesBounced;
+              zspellConductorRod.position = new MyLocation(zspellConductorRod.validX, zspellConductorRod.validY);
+              int num4 = num2 + zspellConductorRod.zb[index2].x;
+              int num5 = num3 + zspellConductorRod.zb[index2].y;
+              AudioManager.Play(zspellConductorRod.explosionClip);
+              zspellConductorRod.hitCreature = zspellConductorRod.map.PhysicsCollideCreature((ZCreature) null, x2, y2, 0);
               goto label_29;
             }
           }
-          spell.validX = spell.pX;
-          spell.validY = spell.pY;
-          spell.pX = spell.pX + fixedInt3;
-          spell.pY = spell.pY + fixedInt4;
+          zspellConductorRod.validX = zspellConductorRod.pX;
+          zspellConductorRod.validY = zspellConductorRod.pY;
+          zspellConductorRod.pX = zspellConductorRod.pX + fixedInt3;
+          zspellConductorRod.pY = zspellConductorRod.pY + fixedInt4;
         }
       }
-      spell.position = spell.position + spell.velocity;
-      if (spell.position.y < spell.radius)
+      zspellConductorRod.position = zspellConductorRod.position + zspellConductorRod.velocity;
+      if (zspellConductorRod.position.y < zspellConductorRod.radius)
       {
-        spell.moving = (IEnumerator<float>) null;
-        spell.velocity = MyLocation.zero;
-        spell.isMoving = false;
-        spell.Splash();
-        spell.DestroyDelay();
+        zspellConductorRod.moving = (IEnumerator<float>) null;
+        zspellConductorRod.velocity = MyLocation.zero;
+        zspellConductorRod.isMoving = false;
+        zspellConductorRod.Splash();
+        zspellConductorRod.DestroyDelay();
         break;
       }
-      if (spell.addVelocity)
+      if (zspellConductorRod.addVelocity)
       {
-        spell.addVelocity = false;
-        spell.velocity = spell.velocity + spell.addedVelocity;
-        spell.velocity.x = Mathd.Clamp(spell.velocity.x, (FixedInt) -50, (FixedInt) 50);
-        spell.velocity.y = Mathd.Clamp(spell.velocity.y, (FixedInt) -50, (FixedInt) 50);
-        spell.addedVelocity.x = (FixedInt) 0;
-        spell.addedVelocity.y = (FixedInt) 0;
+        zspellConductorRod.addVelocity = false;
+        zspellConductorRod.velocity = zspellConductorRod.velocity + zspellConductorRod.addedVelocity;
+        zspellConductorRod.velocity.x = Mathd.Clamp(zspellConductorRod.velocity.x, (FixedInt) -50, (FixedInt) 50);
+        zspellConductorRod.velocity.y = Mathd.Clamp(zspellConductorRod.velocity.y, (FixedInt) -50, (FixedInt) 50);
+        zspellConductorRod.addedVelocity.x = (FixedInt) 0;
+        zspellConductorRod.addedVelocity.y = (FixedInt) 0;
       }
-      else if (spell.affectedByGravity && spell.velocity.y > -ZMap.MaxSpeed)
-        spell.velocity.y += spell.map.Gravity;
-      else if (!spell.affectedByGravity && spell.velocity.y > -10 && spell.maxDuration > 150)
-        spell.affectedByGravity = true;
-      spell.Wind();
+      else if (zspellConductorRod.affectedByGravity && zspellConductorRod.velocity.y > -ZMap.MaxSpeed)
+        zspellConductorRod.velocity.y += zspellConductorRod.map.Gravity;
+      else if (!zspellConductorRod.affectedByGravity && zspellConductorRod.velocity.y > -10 && zspellConductorRod.maxDuration > 150)
+        zspellConductorRod.affectedByGravity = true;
+      zspellConductorRod.Wind();
 label_29:
-      if (spell.Rotates && (Object) spell.transform != (Object) null)
-        spell.transform.rotation = Quaternion.Euler(0.0f, 0.0f, Mathf.Atan2(spell.velocity.y.ToFloat(), spell.velocity.x.ToFloat()) * 57.29578f);
-      ++spell.curDuration;
-      spell.Undie();
-      if (spell.timesBounced >= 1)
+      if (zspellConductorRod.Rotates && (Object) zspellConductorRod.transform != (Object) null)
+        zspellConductorRod.transform.rotation = Quaternion.Euler(0.0f, 0.0f, Mathf.Atan2(zspellConductorRod.velocity.y.ToFloat(), zspellConductorRod.velocity.x.ToFloat()) * 57.29578f);
+      ++zspellConductorRod.curDuration;
+      zspellConductorRod.Undie();
+      if (zspellConductorRod.timesBounced >= 1)
       {
-        if (spell.spellEnum == SpellEnum.Conductor_Rod)
+        if (zspellConductorRod.spellEnum == SpellEnum.Conductor_Rod)
         {
-          spell.transform?.GetChild(1).gameObject.SetActive(true);
-          int max = spell.parent.familiar.Has(FamiliarType.Storm) ? (1 + spell.parent.familiarLevelStorm) / 2 + 5 : 5;
+          zspellConductorRod.transform?.GetChild(1).gameObject.SetActive(true);
+          int max = zspellConductorRod.parent.familiar.Has(FamiliarType.Storm) ? (1 + zspellConductorRod.parent.familiarLevelStorm) / 2 + 5 : 5;
           int num = 0;
-          int amount = Mathf.Clamp(((int) FixedInt.Abs(spell.position.x - spell.target.x) + num) / (78 - spell.parent.familiarLevelStorm * 5), 3, max);
-          spell.game.ongoing.RunSpell(ZSpell.IEnumeratorConductorRod(spell.parent, new MyLocation(spell.position.x, (FixedInt) spell.map.Height), -30, 30, amount, true, (int) spell.position.x, (int) spell.position.y, spell.hitCreature));
+          int amount = Mathf.Clamp(((int) FixedInt.Abs(zspellConductorRod.position.x - zspellConductorRod.target.x) + num) / (78 - zspellConductorRod.parent.familiarLevelStorm * 5), 3, max);
+          zspellConductorRod.game.ongoing.RunSpell(ZSpell.IEnumeratorConductorRod(zspellConductorRod.parent, new MyLocation(zspellConductorRod.position.x, (FixedInt) zspellConductorRod.map.Height), -30, 30, amount, true, (int) zspellConductorRod.position.x, (int) zspellConductorRod.position.y, zspellConductorRod.hitCreature), true);
         }
-        else if (spell.spellEnum == SpellEnum.Collision_Course)
-          ZSpell.BaseFire(Inert.GetSpell(SpellEnum.Starfire), spell.parent, new MyLocation(spell.position.x, (FixedInt) (spell.parent.game.map.Height + 1000)), Quaternion.identity, new MyLocation(0, -40));
-        if (spell.spellEnum == SpellEnum.Collision_Course || spell.spellEnum == SpellEnum.Electrostatic_Charge)
+        else if (zspellConductorRod.spellEnum == SpellEnum.Collision_Course)
+          ZSpell.BaseFire(Inert.GetSpell(SpellEnum.Starfire), zspellConductorRod.parent, new MyLocation(zspellConductorRod.position.x, (FixedInt) (zspellConductorRod.parent.game.map.Height + 1000)), Quaternion.identity, new MyLocation(0, -40), true, false, true);
+        if (zspellConductorRod.spellEnum == SpellEnum.Collision_Course || zspellConductorRod.spellEnum == SpellEnum.Electrostatic_Charge)
         {
-          ZEffector effector = spell.effector;
-          effector.game = spell.parent.game;
-          effector.whoSummoned = spell.parent;
+          ZEffector effector = zspellConductorRod.effector;
+          effector.game = zspellConductorRod.parent.game;
+          effector.whoSummoned = zspellConductorRod.parent;
           effector.followParent = false;
-          effector.position = spell.position;
+          effector.position = zspellConductorRod.position;
           effector.active = false;
-          effector.rotation = spell.GetRotation;
-          spell.parent.effectors.Add(effector);
-          spell.game.forceRysncPause = true;
-          if (spell.spellEnum == SpellEnum.Electrostatic_Charge)
+          effector.rotation = zspellConductorRod.GetRotation;
+          zspellConductorRod.parent.effectors.Add(effector);
+          zspellConductorRod.game.forceRysncPause = true;
+          if (zspellConductorRod.spellEnum == SpellEnum.Electrostatic_Charge)
           {
-            if (spell.game.isClient)
-              spell.transform?.GetChild(0).gameObject.SetActive(true);
-            spell.game.staticCharge.Add(effector);
+            if (zspellConductorRod.game.isClient)
+              zspellConductorRod.transform?.GetChild(0).gameObject.SetActive(true);
+            zspellConductorRod.game.staticCharge.Add(effector);
             effector.active = true;
             effector.collider.effector = effector;
             effector.collider.world = effector.world;
-            effector.collider.Move(spell.position);
+            effector.collider.Move(zspellConductorRod.position);
             effector.CheckInitialSpawn_Creatures(effector.collider.radius);
             break;
           }
-          spell.parent = spell.hitCreature;
-          if (!((ZComponent) spell.hitCreature != (object) null))
+          zspellConductorRod.parent = zspellConductorRod.hitCreature;
+          if (!((ZComponent) zspellConductorRod.hitCreature != (object) null))
             break;
-          Transform transform = spell.transform;
+          Transform transform = zspellConductorRod.transform;
           if (transform == null)
             break;
-          transform.SetParent(spell.hitCreature.transform);
+          transform.SetParent(zspellConductorRod.hitCreature.transform);
           break;
         }
-        spell.DestroyConductorRodDelay();
+        zspellConductorRod.DestroyConductorRodDelay();
         break;
       }
-      if (spell.curDuration >= spell.maxDuration)
+      if (zspellConductorRod.curDuration >= zspellConductorRod.maxDuration)
       {
-        spell.DestroyDelay();
+        zspellConductorRod.DestroyDelay();
         break;
       }
       yield return 0.0f;

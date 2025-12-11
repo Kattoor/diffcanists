@@ -3,22 +3,24 @@ using System.Diagnostics;
 using System.IO;
 using UnityEngine;
 
-#nullable disable
 namespace Junk
 {
   public class PerlinHelper
   {
-    public string name;
-    public int count;
-    public Resources resources;
     public int sizeX = 1024;
     public int sizeY = 512;
     public int _octaveCount = 1;
     public float _frecuency = 1f;
     public float _persistence = 0.5f;
     public float threshold = 0.04f;
+    public string name;
+    public int count;
+    public Resources resources;
 
-    public void ExportImg(Texture2D t) => File.WriteAllBytes("SavedPerlinImg.png", t.EncodeToPNG());
+    public void ExportImg(Texture2D t)
+    {
+      File.WriteAllBytes("SavedPerlinImg.png", t.EncodeToPNG());
+    }
 
     public Sprite CreateRawImage(Color32[] pixels)
     {
@@ -39,7 +41,10 @@ namespace Junk
     {
       private Stopwatch stopwatch;
 
-      public void Start() => this.stopwatch = Stopwatch.StartNew();
+      public void Start()
+      {
+        this.stopwatch = Stopwatch.StartNew();
+      }
 
       public void Clock(string s = "")
       {

@@ -1,5 +1,4 @@
 
-#nullable disable
 namespace InGameCodeEditor.Lexer
 {
   public interface ILexer

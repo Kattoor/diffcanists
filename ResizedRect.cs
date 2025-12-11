@@ -2,7 +2,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-#nullable disable
 public class ResizedRect : UIBehaviour
 {
   protected override void OnRectTransformDimensionsChange()

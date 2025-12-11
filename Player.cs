@@ -9,36 +9,38 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-#nullable disable
 public class Player : MonoBehaviour
 {
+  public int selectedSpellIndex = -1;
+  internal bool canSkipTurn = true;
+  public int fakeSpellIndex = -1;
+  private float targetUpdate = 0.01666667f;
+  internal MyLocation target = NullMyLocation.Get();
+  internal MyLocation secTarget = NullMyLocation.Get();
+  private KeyCode[] keyCodes = new KeyCode[0];
+  public List<Player.AssignableHotkey> hotkeys = new List<Player.AssignableHotkey>();
+  public bool summonOnYourTeam = true;
+  [NonSerialized]
+  public FixedInt power = (FixedInt) -1;
+  private Pathfinder path = new Pathfinder();
   private ZCreature _selected;
   public int selectedCreatureIndex;
   public int selectedCreaturePlayerOffset;
-  public int selectedSpellIndex = -1;
   public Spell selectedSpell;
   private ZPerson _person;
-  internal bool canSkipTurn = true;
   public bool skippingTurn;
   public bool jumpIsDetower;
   internal MyLocation spellTarget;
-  public int fakeSpellIndex = -1;
   private GameObject meter;
   internal GameObject[] meter_subs;
   private Image summon_image;
   private Image meterFill;
   private bool targetWasSet;
   private float movementUpdate;
-  private float targetUpdate = 0.0166666675f;
-  internal MyLocation target = NullMyLocation.Get();
-  internal MyLocation secTarget = NullMyLocation.Get();
   public bool LockMeter;
   public bool extendedShot;
-  private KeyCode[] keyCodes = new KeyCode[0];
-  public List<Player.AssignableHotkey> hotkeys = new List<Player.AssignableHotkey>();
   public bool summoniningDummy;
   public Spell summoniningDummySpell;
-  public bool summonOnYourTeam = true;
   public ZPerson summonedPerson;
   private bool hidden;
   [NonSerialized]
@@ -51,20 +53,29 @@ public class Player : MonoBehaviour
   [NonSerialized]
   public FixedInt rot_z;
   [NonSerialized]
-  public FixedInt power = (FixedInt) -1;
-  [NonSerialized]
   public float lastSendTick;
   private KeyCode keyDown;
   private float offset;
   private float _softLock;
   private byte[] gameBytes;
-  private Pathfinder path = new Pathfinder();
   public bool selectingSpell;
   private bool movedThisTurn;
 
-  public IAnimator animator => this.selected.animator;
+  public IAnimator animator
+  {
+    get
+    {
+      return this.selected.animator;
+    }
+  }
 
-  public int myTurn => this.person == null ? 0 : (int) this.person.id;
+  public int myTurn
+  {
+    get
+    {
+      return this.person == null ? 0 : (int) this.person.id;
+    }
+  }
 
   public ZCreature selected
   {
@@ -72,7 +83,10 @@ public class Player : MonoBehaviour
     {
       return ZComponent.IsNull((ZComponent) this._selected) || this._selected.isDead ? (ZCreature) null : this._selected;
     }
-    set => this._selected = value;
+    set
+    {
+      this._selected = value;
+    }
   }
 
   public ZPerson person
@@ -129,7 +143,10 @@ public class Player : MonoBehaviour
       }
       return this._person;
     }
-    set => this._person = value;
+    set
+    {
+      this._person = value;
+    }
   }
 
   public static Player Instance { get; set; }
@@ -142,7 +159,10 @@ public class Player : MonoBehaviour
     }
   }
 
-  public void UpdateVisuals() => ClickSpell.Instance.SetSpells();
+  public void UpdateVisuals()
+  {
+    ClickSpell.Instance.SetSpells();
+  }
 
   public KeyCode GetDown(KeyCode notThis)
   {
@@ -164,25 +184,25 @@ public class Player : MonoBehaviour
 
   public int GetNumberDown()
   {
-    int numberDown = 0;
+    int num = 0;
     KeyCode[] keyCodeArray = new KeyCode[10]
     {
-      hardInput.GetKeyCode("Hotkey1"),
-      hardInput.GetKeyCode("Hotkey2"),
-      hardInput.GetKeyCode("Hotkey3"),
-      hardInput.GetKeyCode("Hotkey4"),
-      hardInput.GetKeyCode("Hotkey5"),
-      hardInput.GetKeyCode("Hotkey6"),
-      hardInput.GetKeyCode("Hotkey7"),
-      hardInput.GetKeyCode("Hotkey8"),
-      hardInput.GetKeyCode("Hotkey9"),
-      hardInput.GetKeyCode("Hotkey0")
+      hardInput.GetKeyCode("Hotkey1", false),
+      hardInput.GetKeyCode("Hotkey2", false),
+      hardInput.GetKeyCode("Hotkey3", false),
+      hardInput.GetKeyCode("Hotkey4", false),
+      hardInput.GetKeyCode("Hotkey5", false),
+      hardInput.GetKeyCode("Hotkey6", false),
+      hardInput.GetKeyCode("Hotkey7", false),
+      hardInput.GetKeyCode("Hotkey8", false),
+      hardInput.GetKeyCode("Hotkey9", false),
+      hardInput.GetKeyCode("Hotkey0", false)
     };
     foreach (KeyCode key in keyCodeArray)
     {
       if (Input.GetKeyDown(key))
-        return numberDown;
-      ++numberDown;
+        return num;
+      ++num;
     }
     return -1;
   }
@@ -202,14 +222,17 @@ public class Player : MonoBehaviour
     return hardInput.GetKey("Long Jump") || hardInput.GetKey("Long Jump 2") || HUD.instance.PressingLongJump;
   }
 
-  public bool PressingDetower() => hardInput.GetKey("detower") || HUD.instance.PressingDetower;
+  public bool PressingDetower()
+  {
+    return hardInput.GetKey("detower") || HUD.instance.PressingDetower;
+  }
 
   public void StartSummoningDummy(Spell s)
   {
     this.UnselectSpell();
     this.summoniningDummy = true;
     this.summoniningDummySpell = s;
-    CursorList.Instance.SetCursor(1);
+    CursorList.Instance.SetCursor(1, CursorMode.Auto);
     this.meter_subs[4].transform.position = this.mouseWorldPos;
     this.meter_subs[4].GetComponent<Image>().color = Color.white;
     this.meter_subs[4].SetActive(true);
@@ -227,12 +250,12 @@ public class Player : MonoBehaviour
   public void NextRecallDevice(bool fromDeath)
   {
     ZCreature selected = this.selected;
-    this.NextControlled(audio: false);
+    this.NextControlled(false, false);
     int num = 0;
-    while (num < 50 && !ZComponent.IsNull((ZComponent) this.selected) && this.selected.type != CreatureType.Recall_Device && this.selected.isPawn)
+    while (num < 50 && !ZComponent.IsNull((ZComponent) this.selected) && (this.selected.type != CreatureType.Recall_Device && this.selected.isPawn))
     {
       ++num;
-      this.NextControlled(audio: false);
+      this.NextControlled(false, false);
     }
     if (!((ZComponent) this.selected != (object) null) || this.selected.type != CreatureType.Recall_Device)
       return;
@@ -244,7 +267,7 @@ public class Player : MonoBehaviour
     ZCreature selected = this.selected;
     this.PreviousControlled(false);
     int num = 0;
-    while (num < 50 && !ZComponent.IsNull((ZComponent) this.selected) && this.selected.type != CreatureType.Recall_Device && this.selected.isPawn)
+    while (num < 50 && !ZComponent.IsNull((ZComponent) this.selected) && (this.selected.type != CreatureType.Recall_Device && this.selected.isPawn))
     {
       ++num;
       this.PreviousControlled(false);
@@ -265,7 +288,7 @@ public class Player : MonoBehaviour
     else
     {
       this.selected = Client.game.players[this.selectedCreaturePlayerOffset].controlled[this.selectedCreatureIndex];
-      CameraMovement.Instance.LerpToTransform(this.selected);
+      CameraMovement.Instance.LerpToTransform(this.selected, false);
       this.UpdateVisuals();
       this.UnselectSpell();
     }
@@ -319,7 +342,7 @@ public class Player : MonoBehaviour
     this.selectedCreaturePlayerOffset = id;
     this.selectedCreatureIndex = index;
     this.selected = c;
-    CameraMovement.Instance.LerpToTransform(this.selected);
+    CameraMovement.Instance.LerpToTransform(this.selected, false);
     this.UpdateVisuals();
     this.UnselectSpell();
     AudioManager.Play(this.selected.clientObj.clipSelect);
@@ -379,7 +402,7 @@ public class Player : MonoBehaviour
     }
     while (this.selectedCreatureIndex > 0 && !Client.game.players[this.selectedCreaturePlayerOffset].IsSelectable(this.selectedCreatureIndex));
     this.selected = Client.game.players[this.selectedCreaturePlayerOffset].controlled[this.selectedCreatureIndex];
-    CameraMovement.Instance.LerpToTransform(this.selected);
+    CameraMovement.Instance.LerpToTransform(this.selected, false);
     this.UpdateVisuals();
     this.UnselectSpell();
     if (!audio)
@@ -393,7 +416,7 @@ public class Player : MonoBehaviour
 label_1:
     if ((ZComponent) this.selected == (object) null)
     {
-      this.NextControlled(audio: audio);
+      this.NextControlled(false, audio);
     }
     else
     {
@@ -460,7 +483,7 @@ label_1:
           this.selectedCreaturePlayerOffset = num2;
           if (this.selectedCreatureIndex <= 0 || Client.game.players[this.selectedCreaturePlayerOffset].IsSelectable(this.selectedCreatureIndex))
           {
-            CameraMovement.Instance.LerpToTransform(this.selected);
+            CameraMovement.Instance.LerpToTransform(this.selected, false);
             this.UpdateVisuals();
             this.UnselectSpell();
             if (!audio)
@@ -526,7 +549,7 @@ label_1:
     this.selectedSpellIndex = i;
     for (int index = 0; index < this.meter_subs.Length; ++index)
       this.meter_subs[index].SetActive(false);
-    CursorList.Instance.SetCursor(0);
+    CursorList.Instance.SetCursor(0, CursorMode.Auto);
     HUD.instance.panelFireControls.SetActive(true);
     HUD.instance.panelAimControls.SetActive(false);
     if (this.selectedSpellIndex > -1)
@@ -558,13 +581,13 @@ label_1:
           HUD.instance.panelAimControls.SetActive(true);
           break;
         case CastType.TargetOnly:
-          CursorList.Instance.SetCursor(1);
+          CursorList.Instance.SetCursor(1, CursorMode.Auto);
           this.meter_subs[6].transform.position = this.mouseWorldPos;
           this.meter_subs[6].SetActive(true);
           if (this.selectedSpell.maxDistance > 10)
           {
             int num = ZSpell.GetSpellMaxDistance(this.selectedSpell, this.selected) * 2;
-            if (this.selectedSpell.spellEnum == SpellEnum.The_ol_swaparoo && this.selected.parent.GetLevel(BookOf.Illusion) == 5)
+            if (this.selectedSpell.spellEnum == SpellEnum.The_ol_swaparoo && this.selected.parent.GetLevel(BookOf.Illusion, false) == 5)
               num = ZSpell.GetSpellMaxDistance(this.selectedSpell, this.selected) * 3;
             this.meter_subs[7].SetActive(true);
             ((RectTransform) this.meter_subs[7].transform).sizeDelta = (Vector2) new Vector3((float) num, (float) num, 1f);
@@ -579,7 +602,7 @@ label_1:
           break;
         case CastType.Target_Power:
         case CastType.Target_Placement:
-          CursorList.Instance.SetCursor(1);
+          CursorList.Instance.SetCursor(1, CursorMode.Auto);
           this.meter_subs[6].transform.position = this.mouseWorldPos;
           this.meter_subs[6].SetActive(true);
           break;
@@ -672,10 +695,10 @@ label_1:
             if (!((UnityEngine.Object) this.selectedSpell != (UnityEngine.Object) null))
               return;
             this.ConFirmResurrect(z);
-          }), Color.green);
+          }), Color.green, "");
         ++num;
       }
-      m.Rebuild();
+      m.Rebuild(false);
     }
     else
     {
@@ -699,10 +722,10 @@ label_1:
             if (!((UnityEngine.Object) this.selectedSpell != (UnityEngine.Object) null))
               return;
             this.ConFirmSummonTitan(z);
-          }), Color.green);
+          }), Color.green, "");
         ++num;
       }
-      m.Rebuild();
+      m.Rebuild(false);
     }
   }
 
@@ -712,14 +735,14 @@ label_1:
     int maxDistance,
     bool affectedByGravity)
   {
-    CursorList.Instance.SetCursor(1);
+    CursorList.Instance.SetCursor(1, CursorMode.Auto);
     if (selectedSpell.spellEnum == SpellEnum.Dive)
       this.mouseWorldPos.y = this.selected.type == CreatureType.Kraken ? 0.0f : (float) this.selected.radius;
     if (selectedSpell.spellEnum == SpellEnum.Summon_Kraken)
       this.mouseWorldPos.y = 0.0f;
     this.meter_subs[4].transform.position = this.mouseWorldPos;
     this.meter_subs[4].SetActive(true);
-    if (selectedSpell.spellEnum == SpellEnum.Arcane_Gate || selectedSpell.spellEnum == SpellEnum.Santas_Magic || selectedSpell.spellEnum == SpellEnum.Sands_of_Time || selectedSpell.spellEnum == SpellEnum.Dive || selectedSpell.spellEnum == SpellEnum.Blink || selectedSpell.spellEnum == SpellEnum.Burrow)
+    if (selectedSpell.spellEnum == SpellEnum.Arcane_Gate || selectedSpell.spellEnum == SpellEnum.Santas_Magic || (selectedSpell.spellEnum == SpellEnum.Sands_of_Time || selectedSpell.spellEnum == SpellEnum.Dive) || (selectedSpell.spellEnum == SpellEnum.Blink || selectedSpell.spellEnum == SpellEnum.Burrow))
       ((RectTransform) this.meter_subs[4].transform).sizeDelta = new Vector2((float) ((!((ZComponent) this.selected.tower != (object) null) || this.selected.tower.type != TowerType.Arcane ? this.selected.radius : 32) * 2), (float) ((!((ZComponent) this.selected.tower != (object) null) || this.selected.tower.type != TowerType.Arcane ? this.selected.radius : 32) * 2));
     else if (selectedSpell.spellEnum == SpellEnum.Arcane_Portal)
     {
@@ -741,7 +764,7 @@ label_1:
     if (maxDistance > 0)
     {
       this.meter_subs[7].SetActive(true);
-      ((RectTransform) this.meter_subs[7].transform).sizeDelta = (Vector2) (selectedSpell.spellEnum == SpellEnum.Duplication || selectedSpell.spellEnum == SpellEnum.Passage_Ways || selectedSpell.spellEnum == SpellEnum.Resurrection || selectedSpell.spellEnum == SpellEnum.Summon_Titan ? new Vector3((float) (maxDistance * 2), (float) (maxDistance * 2), 1f) : new Vector3((float) (ZSpell.GetSpellMaxDistance(selectedSpell, this.selected) * 2), (float) (ZSpell.GetSpellMaxDistance(selectedSpell, this.selected) * 2), 1f));
+      ((RectTransform) this.meter_subs[7].transform).sizeDelta = (Vector2) (selectedSpell.spellEnum == SpellEnum.Duplication || selectedSpell.spellEnum == SpellEnum.Passage_Ways || (selectedSpell.spellEnum == SpellEnum.Resurrection || selectedSpell.spellEnum == SpellEnum.Summon_Titan) ? new Vector3((float) (maxDistance * 2), (float) (maxDistance * 2), 1f) : new Vector3((float) (ZSpell.GetSpellMaxDistance(selectedSpell, this.selected) * 2), (float) (ZSpell.GetSpellMaxDistance(selectedSpell, this.selected) * 2), 1f));
       this.meter_subs[7].transform.position = this.selected.transform.position + new Vector3(0.0f, !affectedByGravity || maxDistance <= 150 ? 0.0f : (float) (maxDistance - 150));
     }
     else if (selectedSpell.spellEnum == SpellEnum.Arcane_Portal)
@@ -756,11 +779,11 @@ label_1:
     {
       if (selectedSpell.spellEnum != SpellEnum.Wormhole)
         return;
-      int num3 = this.selected.radius - 18;
-      this.meter_subs[8].transform.localPosition = !((ZComponent) this.selected.tower != (object) null) || this.selected.tower.type == TowerType.Nature ? (Vector3) this.selected.OverHeadOffset.ToSinglePrecision() + new Vector3(0.0f, (float) (42 + num3)) : (Vector3) this.selected.OverHeadOffset.ToSinglePrecision() + new Vector3(0.0f, (float) (25 + num3));
+      int num1 = this.selected.radius - 18;
+      this.meter_subs[8].transform.localPosition = !((ZComponent) this.selected.tower != (object) null) || this.selected.tower.type == TowerType.Nature ? (Vector3) this.selected.OverHeadOffset.ToSinglePrecision() + new Vector3(0.0f, (float) (42 + num1)) : (Vector3) this.selected.OverHeadOffset.ToSinglePrecision() + new Vector3(0.0f, (float) (25 + num1));
       this.meter_subs[8].SetActive(true);
-      int num4 = radius * 2 + 2;
-      ((RectTransform) this.meter_subs[8].transform).sizeDelta = new Vector2((float) num4, (float) num4);
+      int num2 = radius * 2 + 2;
+      ((RectTransform) this.meter_subs[8].transform).sizeDelta = new Vector2((float) num2, (float) num2);
     }
   }
 
@@ -778,7 +801,7 @@ label_1:
 
   public void ConFirmSummonTitan(int i)
   {
-    if (i >= this.person.minionBookTitans.Count || (UnityEngine.Object) this.selectedSpell == (UnityEngine.Object) null || this.selectedSpell.spellEnum != SpellEnum.Summon_Titan || this.person.minionBookTitans[i].used)
+    if (i >= this.person.minionBookTitans.Count || (UnityEngine.Object) this.selectedSpell == (UnityEngine.Object) null || (this.selectedSpell.spellEnum != SpellEnum.Summon_Titan || this.person.minionBookTitans[i].used))
       return;
     Spell spell = Inert.GetSpell(this.person.minionBookTitans[i].spell);
     Creature component = spell.toSummon.GetComponent<Creature>();
@@ -888,7 +911,10 @@ label_1:
     return (FixedInt) (int) p / (FixedInt) 6291456L * radius;
   }
 
-  public static int LightningExtend(Player.PowerLevel p) => Mathf.Max(2, (int) p);
+  public static int LightningExtend(Player.PowerLevel p)
+  {
+    return Mathf.Max(2, (int) p);
+  }
 
   public static FixedInt PowerExtend(CastType t, Player.PowerLevel p, FixedInt orig)
   {
@@ -965,7 +991,7 @@ label_1:
 
   public void UpdateMouseWorldPos(bool force = false)
   {
-    if (!force && Player.IsPointerOverGameObject() || !force && HUD.UseTouchControls)
+    if (!force && Player.IsPointerOverGameObject(0) || !force && HUD.UseTouchControls)
       return;
     this.mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
     this.mouseWorldPos.z = 0.0f;
@@ -991,16 +1017,22 @@ label_1:
     return !((UnityEngine.Object) gameObject != (UnityEngine.Object) null) || !gameObject.CompareTag("Ignore");
   }
 
-  public Vector3 CurrentMousePos => Camera.main.ScreenToWorldPoint(Input.mousePosition);
+  public Vector3 CurrentMousePos
+  {
+    get
+    {
+      return Camera.main.ScreenToWorldPoint(Input.mousePosition);
+    }
+  }
 
   internal static void InitUncontrolled()
   {
     ZPerson uncontrolledPlayer = Client.game._uncontrolledPlayer;
-    ZCreature character = Inert.CreateCharacter(uncontrolledPlayer, new SettingsPlayer(), new MyLocation(0, -1000), 24, false);
+    ZCreature character = Inert.CreateCharacter(uncontrolledPlayer, new SettingsPlayer(), new MyLocation(0, -1000), 24, false, false);
     character.bg.color = uncontrolledPlayer.clientColor;
     character.transform.GetChild(0).GetChild(1).GetComponent<SpriteRenderer>().color = uncontrolledPlayer.clientColor;
     uncontrolledPlayer.controlled.Insert(0, character);
-    character.Fall();
+    character.Fall(false);
   }
 
   internal bool IsMeterUnLocked()
@@ -1035,7 +1067,7 @@ label_1:
       strArray1[5] = ".spellBook";
       string path = string.Concat(strArray1);
       SettingsPlayer b1 = File.Exists(path) ? SettingsPlayer.Load(path) : Client.settingsPlayer;
-      sp.CopySpells(b1);
+      sp.CopySpells(b1, false);
       string[] strArray2 = new string[6];
       strArray2[0] = SaveFolder.persistentDataPath;
       directorySeparatorChar = Path.DirectorySeparatorChar;
@@ -1054,7 +1086,7 @@ label_1:
     zperson.settingsPlayer = sp;
     zperson.game = Client.game;
     zperson.team = team;
-    ZCreature character = Inert.CreateCharacter(zperson, sp, v, team, onPlayerPanel);
+    ZCreature character = Inert.CreateCharacter(zperson, sp, v, team, onPlayerPanel, false);
     character.team = team;
     character.bg.color = zperson.clientColor;
     character.transform.GetChild(0).GetChild(1).GetComponent<SpriteRenderer>().color = zperson.clientColor;
@@ -1066,7 +1098,7 @@ label_1:
       TcpConnection tcpConnection = new TcpConnection();
       tcpConnection.player.player = zperson;
       Client.game.gameFacts.connections.Add((Connection) tcpConnection);
-      HUD.FindFullBooks(Client.game, zperson, (int) zperson.id);
+      HUD.FindFullBooks(Client.game, zperson, (int) zperson.id, false);
     }
     int result = 0;
     if (int.TryParse(HUD.instance.inputDummyHp.text, out result) && result > 0)
@@ -1076,14 +1108,20 @@ label_1:
       character.UpdateHealthTxt();
     }
     ZSpell.AddPortalToSpawnedPlayer(character);
-    character.Fall();
+    character.Fall(false);
     return zperson;
   }
 
   internal bool softLock
   {
-    get => (double) this._softLock > 0.0;
-    set => this._softLock = value ? 0.5f : 0.0f;
+    get
+    {
+      return (double) this._softLock > 0.0;
+    }
+    set
+    {
+      this._softLock = value ? 0.5f : 0.0f;
+    }
   }
 
   private void Update()
@@ -1092,12 +1130,12 @@ label_1:
     {
       if ((ZComponent) this.selected != (object) null)
         this.meter.transform.position = this.selected.transform.position;
-      if (this.person != null && !ZComponent.IsNull((ZComponent) this.selected) && this.person.yourTurn && this.selectedSpellIndex == -1 && Client.game.ongoing.NumberOfSlowUpdateCoroutines == 0 && Client.game.serverState.busy == ServerState.Busy.No)
+      if (this.person != null && !ZComponent.IsNull((ZComponent) this.selected) && (this.person.yourTurn && this.selectedSpellIndex == -1) && (Client.game.ongoing.NumberOfSlowUpdateCoroutines == 0 && Client.game.serverState.busy == ServerState.Busy.No))
       {
         this.SetSpell(this.fakeSpellIndex);
         this.fakeSpellIndex = -1;
       }
-      else if (this.selectedSpellIndex != -1 || this.person == null || (ZComponent) this.selected == (object) null || this.person.InWater() && this.selected.type != CreatureType.Recall_Device || !this.person.yourTurn || ZComponent.IsNull((ZComponent) this.selected))
+      else if (this.selectedSpellIndex != -1 || this.person == null || (ZComponent) this.selected == (object) null || (this.person.InWater() && this.selected.type != CreatureType.Recall_Device || (!this.person.yourTurn || ZComponent.IsNull((ZComponent) this.selected))))
       {
         this.fakeSpellIndex = -1;
         if (this.selectedSpellIndex == -1)
@@ -1120,7 +1158,7 @@ label_1:
         this._softLock -= Time.deltaTime;
         if (Input.touchCount == 0 && Input.touchSupported)
           this.softLock = false;
-        if (hardInput.GetKey("Move Right") || hardInput.GetKey("Move Left") || this.PressingLongJump() || this.PressingHighJump() || this.PressingDetower() || hardInput.GetKey("Skip Turn") || hardInput.GetKey("Minions") || MyInput.GetMouseButton(0) || MyInput.GetMouseButton(1))
+        if (hardInput.GetKey("Move Right") || hardInput.GetKey("Move Left") || (this.PressingLongJump() || this.PressingHighJump()) || (this.PressingDetower() || hardInput.GetKey("Skip Turn") || (hardInput.GetKey("Minions") || MyInput.GetMouseButton(0))) || MyInput.GetMouseButton(1))
           return;
         for (int index = this.hotkeys.Count - 1; index >= 0; --index)
         {
@@ -1141,14 +1179,14 @@ label_1:
           return;
         if (this.summoniningDummy)
         {
-          this.UpdateMouseWorldPos();
+          this.UpdateMouseWorldPos(false);
           this.meter_subs[4].transform.position = this.mouseWorldPos;
           if (MyInput.GetMouseButtonDown(1))
           {
             this.StopSummoningDummy();
             return;
           }
-          if (Player.IsPointerOverGameObject() || !MyInput.GetMouseButtonUp(0))
+          if (Player.IsPointerOverGameObject(0) || !MyInput.GetMouseButtonUp(0))
             return;
           if (!this.summonOnYourTeam && this.summonedPerson == null)
           {
@@ -1156,7 +1194,7 @@ label_1:
             Player.InitUncontrolled();
           }
           AudioManager.PlayFromSource(this.summoniningDummySpell.castClip, AudioManager.instance.sourceCastSpell);
-          ZCreature zcreature = ZSpell.FireSummon(this.summoniningDummySpell, HUD.instance.game, this.summonOnYourTeam ? Player.Instance.person.first() : this.summonedPerson.first(), (MyLocation) this.mouseWorldPos, 1);
+          ZCreature zcreature = ZSpell.FireSummon(this.summoniningDummySpell, HUD.instance.game, this.summonOnYourTeam ? Player.Instance.person.first() : this.summonedPerson.first(), (MyLocation) this.mouseWorldPos, 1, false, (ZPerson) null);
           if ((ZComponent) zcreature != (object) null)
           {
             int result = 0;
@@ -1179,7 +1217,7 @@ label_1:
       }
       else
       {
-        if (this.person != null && this.person.InWater() && (ZComponent.IsNull((ZComponent) this.selected) || this.selected.type != CreatureType.Recall_Device) && this.person.yourTurn && (UnityEngine.Object) this.selectedSpell == (UnityEngine.Object) null && Client.game.ongoing.NumberOfSlowUpdateCoroutines == 0 && Client.game.serverState.busy == ServerState.Busy.No)
+        if (this.person != null && this.person.InWater() && (ZComponent.IsNull((ZComponent) this.selected) || this.selected.type != CreatureType.Recall_Device) && (this.person.yourTurn && (UnityEngine.Object) this.selectedSpell == (UnityEngine.Object) null && (Client.game.ongoing.NumberOfSlowUpdateCoroutines == 0 && Client.game.serverState.busy == ServerState.Busy.No)))
         {
           this.selectedCreatureIndex = 0;
           this.selectedCreaturePlayerOffset = (int) this.person.id;
@@ -1193,9 +1231,9 @@ label_1:
           return;
         if (!HUD.instance.panelControls.activeInHierarchy)
         {
-          if (this.extendedShot && !hardInput.GetKey("Extended Shot") && !MyInput.GetMouseButton(0) && !MyInput.GetMouseButtonUp(0))
+          if (this.extendedShot && !hardInput.GetKey("Extended Shot") && (!MyInput.GetMouseButton(0) && !MyInput.GetMouseButtonUp(0)))
             this.ToggleExtendedShot(false);
-          else if (!this.extendedShot && hardInput.GetKeyDown("Extended Shot") && !MyInput.GetMouseButton(0) && !MyInput.GetMouseButtonUp(0))
+          else if (!this.extendedShot && hardInput.GetKeyDown("Extended Shot") && (!MyInput.GetMouseButton(0) && !MyInput.GetMouseButtonUp(0)))
             this.ToggleExtendedShot(true);
         }
         if ((int) Client.game.serverState.playersTurn != Client.curGameID || Client.game.ongoing.NumberOfSlowUpdateCoroutines > 0 || Client.game.serverState.busy != ServerState.Busy.No)
@@ -1209,7 +1247,7 @@ label_1:
           }
         }
         if (ZComponent.IsNull((ZComponent) this.selected) && this.person.yourTurn)
-          this.NextControlled();
+          this.NextControlled(false, true);
         if (ZComponent.IsNull((ZComponent) this.selected) || this.selected.isMoving || this.selected.isDead)
         {
           this.Show_Meter(false);
@@ -1220,11 +1258,11 @@ label_1:
           this.Show_Meter(true);
           Vector3 lastMouseWorldPos = this._LastMouseWorldPos;
           if (this.IsMeterUnLocked())
-            this.UpdateMouseWorldPos();
+            this.UpdateMouseWorldPos(false);
           Vector3 zero = Vector3.zero;
           Vector3 position = this.selected.transform.position;
           this.meter.transform.position = position;
-          if ((UnityEngine.Object) this.selectedSpell != (UnityEngine.Object) null && (this.selectedSpell.type == CastType.Placement || this.selectedSpell.type == CastType.Flight || this.selectedSpell.type == CastType.Tower || this.selectedSpell.type == CastType.Blit || this.selectedSpell.type == CastType.TargetOnly || (this.selectedSpell.type == CastType.Target_Power || this.selectedSpell.type == CastType.Target_Placement) && this.target.IsNull()))
+          if ((UnityEngine.Object) this.selectedSpell != (UnityEngine.Object) null && (this.selectedSpell.type == CastType.Placement || this.selectedSpell.type == CastType.Flight || (this.selectedSpell.type == CastType.Tower || this.selectedSpell.type == CastType.Blit) || this.selectedSpell.type == CastType.TargetOnly || (this.selectedSpell.type == CastType.Target_Power || this.selectedSpell.type == CastType.Target_Placement) && this.target.IsNull()))
           {
             if (this.selectedSpell.type == CastType.Flight || this.selectedSpell.type == CastType.Tower)
             {
@@ -1280,7 +1318,7 @@ label_1:
               this.diff = this.mouseWorldPos - position;
               if (HUD.UseTouchControls)
               {
-                if (!Player.IsPointerOverGameObject() && (MyInput.GetMouseButton(0) || Input.touchCount == 1) && !HUD.instance.PressingOnScreenControl)
+                if (!Player.IsPointerOverGameObject(0) && (MyInput.GetMouseButton(0) || Input.touchCount == 1) && !HUD.instance.PressingOnScreenControl)
                   this.rot_z = MyInput.GetMouseButton(0) ? (FixedInt) (Mathf.Atan2(this.diff.y, this.diff.x) * 57.29578f) : this.rot_z;
               }
               else
@@ -1288,7 +1326,7 @@ label_1:
               if (!ZComponent.IsNull((ZComponent) this.selected))
                 this.rot_z = this.selected.ClampAngle(this.rot_z);
               this.offset = 0.0f;
-              if (this.extendedShot && (UnityEngine.Object) this.selectedSpell != (UnityEngine.Object) null && this.selectedSpell.type != CastType.Placement && this.selectedSpell.type != CastType.Target_Placement)
+              if (this.extendedShot && (UnityEngine.Object) this.selectedSpell != (UnityEngine.Object) null && (this.selectedSpell.type != CastType.Placement && this.selectedSpell.type != CastType.Target_Placement))
               {
                 this.rot_z = Player.ClampAngle(this.rot_z);
                 this.ToggleExtendedShot(true);
@@ -1321,7 +1359,7 @@ label_1:
           }
           Vector3 mouseWorldPos = this.mouseWorldPos;
           bool flag1 = true;
-          if ((UnityEngine.Object) this.selectedSpell != (UnityEngine.Object) null && (this.selectedSpell.type == CastType.Power || this.selectedSpell.type == CastType.Naplem || this.selectedSpell.type == CastType.Double_Naplem || this.selectedSpell.type == CastType.Flash || (this.selectedSpell.type == CastType.Target_Power || this.selectedSpell.type == CastType.Target_Placement) && !this.target.IsNull()))
+          if ((UnityEngine.Object) this.selectedSpell != (UnityEngine.Object) null && (this.selectedSpell.type == CastType.Power || this.selectedSpell.type == CastType.Naplem || (this.selectedSpell.type == CastType.Double_Naplem || this.selectedSpell.type == CastType.Flash) || (this.selectedSpell.type == CastType.Target_Power || this.selectedSpell.type == CastType.Target_Placement) && !this.target.IsNull()))
           {
             flag1 = false;
             if (this.rot_z > 90 || this.rot_z < -90)
@@ -1336,7 +1374,7 @@ label_1:
           {
             if (!this.selected.stunned && !this.selected.inWater && !this.selected.InDarkTotem())
             {
-              if ((double) this.movementUpdate > (double) this.targetUpdate || hardInput.GetKeyDown("Move Right") || hardInput.GetKeyDown("Move Left") || HUD.instance.PressingMoveRight || HUD.instance.PressingMoveLeft || this.InTower(TowerType.Cosmos) && (this.PressingLongJump() || this.PressingHighJump()))
+              if ((double) this.movementUpdate > (double) this.targetUpdate || hardInput.GetKeyDown("Move Right") || (hardInput.GetKeyDown("Move Left") || HUD.instance.PressingMoveRight) || HUD.instance.PressingMoveLeft || this.InTower(TowerType.Cosmos) && (this.PressingLongJump() || this.PressingHighJump()))
               {
                 for (; (double) this.movementUpdate >= (double) this.targetUpdate && (ZComponent) this.selected != (object) null && !this.selected.isMoving; this.movementUpdate -= this.targetUpdate)
                 {
@@ -1409,25 +1447,25 @@ label_1:
                     this.movementUpdate = this.targetUpdate;
                 }
               }
-              if (hardInput.GetKey("Move Left") || hardInput.GetKey("Move Right") || HUD.instance.PressingMoveRight || HUD.instance.PressingMoveLeft || this.InTower(TowerType.Cosmos) && (this.PressingLongJump() || this.PressingHighJump()))
+              if (hardInput.GetKey("Move Left") || hardInput.GetKey("Move Right") || (HUD.instance.PressingMoveRight || HUD.instance.PressingMoveLeft) || this.InTower(TowerType.Cosmos) && (this.PressingLongJump() || this.PressingHighJump()))
                 this.movementUpdate += Mathf.Clamp(Client.game.DeltaTime, 0.0f, 0.2f);
             }
             if (hardInput.GetKeyDown("Skip Turn") && this.canSkipTurn)
             {
-              if (Client.game.isSandbox || Client.game.isTutorial || Client.game.players.Count <= 1 || Global.GetPrefBool("prefskipwarning", false))
+              if (Client.game.isSandbox || Client.game.isTutorial || (Client.game.players.Count <= 1 || Global.GetPrefBool("prefskipwarning", false)))
                 this.SkipTurn();
               else
                 HUD.instance.ShowSkipTurnPanel();
             }
-            for (int index = this.hotkeys.Count - 1; index >= 0; --index)
+            for (int i = this.hotkeys.Count - 1; i >= 0; --i)
             {
-              if (this.hotkeys[index].GetKey(index) && ((ZComponent) this.hotkeys[index].creature != (object) null || this.person.controlled.Count > index))
+              if (this.hotkeys[i].GetKey(i) && ((ZComponent) this.hotkeys[i].creature != (object) null || this.person.controlled.Count > i))
               {
                 this.UnselectSpell();
-                this.selected = this.hotkeys[index].creature ?? this.person.controlled[index];
+                this.selected = this.hotkeys[i].creature ?? this.person.controlled[i];
                 this.selectedCreaturePlayerOffset = Client.game.players.FindIndex((Predicate<ZPerson>) (z => z == this.selected.parent));
                 this.selectedCreatureIndex = this.selected.parent.controlled.FindIndex((Predicate<ZCreature>) (z => (ZComponent) z == (object) this.selected));
-                CameraMovement.Instance.LerpToTransform(this.selected);
+                CameraMovement.Instance.LerpToTransform(this.selected, false);
                 this.UpdateVisuals();
                 AudioManager.Play(this.selected.clientObj.clipSelect);
                 return;
@@ -1456,7 +1494,7 @@ label_1:
                   this.hotkeys[index].creature = (ZCreature) null;
               }
             }
-            if ((UnityEngine.Object) this.selectedSpell == (UnityEngine.Object) null && !Player.IsPointerOverGameObject() && !HUD.instance.PressingOnScreenControl)
+            if ((UnityEngine.Object) this.selectedSpell == (UnityEngine.Object) null && !Player.IsPointerOverGameObject(0) && !HUD.instance.PressingOnScreenControl)
             {
               Vector3 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
               if (MyInput.GetMouseButtonDown(0))
@@ -1496,7 +1534,7 @@ label_1:
                         this.selectedCreaturePlayerOffset = index2;
                         this.selectedCreatureIndex = index3;
                         this.selected = c;
-                        CameraMovement.Instance.LerpToTransform(this.selected);
+                        CameraMovement.Instance.LerpToTransform(this.selected, false);
                         this.UpdateVisuals();
                         AudioManager.Play(this.selected.clientObj.clipSelect);
                         return;
@@ -1511,9 +1549,9 @@ label_1:
               if (!this.person.InWater())
               {
                 if (hardInput.GetKeyDownPrimaryOnly("Minions"))
-                  this.NextControlled();
+                  this.NextControlled(false, true);
                 else
-                  this.PreviousControlled();
+                  this.PreviousControlled(true);
               }
               else if (hardInput.GetKeyDownPrimaryOnly("Minions"))
                 this.NextRecallDevice(false);
@@ -1529,7 +1567,7 @@ label_1:
             }
             if ((ZComponent) this.selected != (object) null && !this.selected.stunned && (!this.movedThisTurn || (ZComponent) this.selected.tower == (object) null || this.selected.tower.type != TowerType.Cosmos))
             {
-              if (this.selected.minerMarket != null && this.selected.minerMarket.Has(MinerMarket.Types.Platinum_Climbing_Hooks) && (UnityEngine.Object) this.selectedSpell == (UnityEngine.Object) null && MyInput.GetMouseButton(0) && !Player.IsPointerOverGameObject() && (!HUD.UseTouchControls || !HUD.instance.PressingOnScreenControl))
+              if (this.selected.minerMarket != null && this.selected.minerMarket.Has(MinerMarket.Types.Platinum_Climbing_Hooks) && ((UnityEngine.Object) this.selectedSpell == (UnityEngine.Object) null && MyInput.GetMouseButton(0)) && (!Player.IsPointerOverGameObject(0) && (!HUD.UseTouchControls || !HUD.instance.PressingOnScreenControl)))
                 this.SendMove((byte) 211);
               if ((ZComponent) this.selected.tower != (object) null && this.PressingDetower())
               {
@@ -1558,7 +1596,7 @@ label_1:
                 this.UnselectSpell();
                 this.lastSendTick = Time.realtimeSinceStartup + 0.2f;
               }
-              if (this.PressingHighJump() && !this.selected.isMoving && (double) this.lastSendTick < (double) Time.realtimeSinceStartup && !this.selected.InDarkTotem())
+              if (this.PressingHighJump() && !this.selected.isMoving && ((double) this.lastSendTick < (double) Time.realtimeSinceStartup && !this.selected.InDarkTotem()))
               {
                 if ((ZComponent) this.selected.tower != (object) null)
                 {
@@ -1583,7 +1621,7 @@ label_1:
               this.FlipFlop();
             if (MyInput.GetMouseButtonDown(1) && (UnityEngine.Object) this.selectedSpell != (UnityEngine.Object) null)
               this.UnselectSpell();
-            if (Player.IsPointerOverGameObject())
+            if (Player.IsPointerOverGameObject(0))
               return;
             if (MyInput.GetMouseButtonUp(0) && !HUD.UseTouchControls)
             {
@@ -1628,7 +1666,7 @@ label_1:
               return;
             foreach (KeyCode keyCode in this.keyCodes)
             {
-              if (keyCode != KeyCode.Mouse0 && Input.GetKeyDown(keyCode) && keyCode != KeyCode.LeftAlt && keyCode != KeyCode.Mouse1)
+              if (keyCode != KeyCode.Mouse0 && Input.GetKeyDown(keyCode) && (keyCode != KeyCode.LeftAlt && keyCode != KeyCode.Mouse1))
               {
                 this.keyDown = keyCode;
                 break;
@@ -1653,9 +1691,9 @@ label_1:
       if (!this.person.InWater())
       {
         if (hardInput.GetKeyDownPrimaryOnly("Minions"))
-          this.NextControlled();
+          this.NextControlled(false, true);
         else
-          this.PreviousControlled();
+          this.PreviousControlled(true);
       }
       else if (hardInput.GetKeyDownPrimaryOnly("Minions"))
         this.NextRecallDevice(false);
@@ -1664,22 +1702,22 @@ label_1:
     }
     if (!this.person.InWater())
     {
-      for (int index = this.hotkeys.Count - 1; index >= 0; --index)
+      for (int i = this.hotkeys.Count - 1; i >= 0; --i)
       {
-        if (this.hotkeys[index].GetKey(index) && ((ZComponent) this.hotkeys[index].creature != (object) null || this.person.controlled.Count > index))
+        if (this.hotkeys[i].GetKey(i) && ((ZComponent) this.hotkeys[i].creature != (object) null || this.person.controlled.Count > i))
         {
           this.UnselectSpell();
-          this.selected = this.hotkeys[index].creature ?? this.person.controlled[index];
+          this.selected = this.hotkeys[i].creature ?? this.person.controlled[i];
           this.selectedCreaturePlayerOffset = Client.game.players.FindIndex((Predicate<ZPerson>) (z => z == this.selected.parent));
           this.selectedCreatureIndex = this.selected.parent.controlled.FindIndex((Predicate<ZCreature>) (z => (ZComponent) z == (object) this.selected));
-          CameraMovement.Instance.LerpToTransform(this.selected);
+          CameraMovement.Instance.LerpToTransform(this.selected, false);
           this.UpdateVisuals();
           AudioManager.Play(this.selected.clientObj.clipSelect);
           return;
         }
       }
     }
-    if (this.person.InWater() || !((UnityEngine.Object) this.selectedSpell == (UnityEngine.Object) null) || Player.IsPointerOverGameObject() || HUD.instance.PressingOnScreenControl)
+    if (this.person.InWater() || !((UnityEngine.Object) this.selectedSpell == (UnityEngine.Object) null) || (Player.IsPointerOverGameObject(0) || HUD.instance.PressingOnScreenControl))
       return;
     Vector3 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
     if (!MyInput.GetMouseButtonDown(0))
@@ -1719,7 +1757,7 @@ label_1:
             this.selectedCreaturePlayerOffset = index2;
             this.selectedCreatureIndex = index3;
             this.selected = c;
-            CameraMovement.Instance.LerpToTransform(this.selected);
+            CameraMovement.Instance.LerpToTransform(this.selected, false);
             this.UpdateVisuals();
             AudioManager.Play(this.selected.clientObj.clipSelect);
             break;
@@ -1736,7 +1774,7 @@ label_1:
     Creature creature = this.selectedSpell.spellEnum != SpellEnum.Summon_Titan || !(this.rot_z >= 0) || !(this.rot_z < this.person.minionBookTitans.Count) ? this.selectedSpell.toSummon?.GetComponent<Creature>() : Inert.GetSpell(this.person.minionBookTitans[(int) this.rot_z].spell).toSummon.GetComponent<Creature>();
     if ((UnityEngine.Object) creature == (UnityEngine.Object) null)
       return;
-    if (creature.type == CreatureType.Dragon && this.extendedShot && this.selected.canMount && creature.mountable && this.person.game.map.TryMount(creature, this.selected, this.selected.team))
+    if (creature.type == CreatureType.Dragon && this.extendedShot && (this.selected.canMount && creature.mountable) && this.person.game.map.TryMount(creature, this.selected, this.selected.team))
       this.meter_subs[di].GetComponent<Image>().color = Color.blue;
     if (!creature.mountable || !creature.flying)
       return;
@@ -1942,13 +1980,16 @@ label_1:
     else
     {
       CastType type = this.selectedSpell.type;
-      if (type == CastType.Placement || (type != CastType.Target_Power && type != CastType.Target_Placement || !this.targetWasSet) && type != CastType.Power || !ZSpell.CanFire(this.selectedSpell) || (double) this.meterFill.fillAmount >= 1.0)
+      if (type == CastType.Placement || (type != CastType.Target_Power && type != CastType.Target_Placement || !this.targetWasSet) && type != CastType.Power || (!ZSpell.CanFire(this.selectedSpell) || (double) this.meterFill.fillAmount >= 1.0))
         return;
       this.meterFill.fillAmount += Time.deltaTime * 0.45f;
     }
   }
 
-  private void SendFlipFlop() => this.SendMove((byte) 208);
+  private void SendFlipFlop()
+  {
+    this.SendMove((byte) 208);
+  }
 
   private void LogName(byte b)
   {
@@ -1984,7 +2025,7 @@ label_1:
       Debug.Log((object) ("Move que not empty!!!!" + (object) this.person.game.ongoing.NumberOfSlowUpdateCoroutines + " " + (object) this.person.game.MoveQue.Count));
     else if (Client.game.players[this.selectedCreaturePlayerOffset].controlled.Count <= this.selectedCreatureIndex)
     {
-      this.NextControlled(true);
+      this.NextControlled(true, true);
     }
     else
     {
@@ -2029,7 +2070,7 @@ label_1:
         this.spellTarget.y -= 300;
       Client.game.serverState.busy = ServerState.Busy.Waiting_For_Server_Reply;
       byte selectedSpellIndex = (byte) this.selectedSpellIndex;
-      SpellSlot spellSlot = this.selected.inWater || this.selected.spells.Count == 0 ? this.selected.GetAvailableGate(ref selectedSpellIndex) ?? Inert.Instance.waterGate : this.selected.spells[this.selectedSpellIndex];
+      SpellSlot spellSlot = this.selected.inWater || this.selected.spells.Count == 0 ? this.selected.GetAvailableGate(ref selectedSpellIndex, 0) ?? Inert.Instance.waterGate : this.selected.spells[this.selectedSpellIndex];
       this.selectedSpellIndex = (int) selectedSpellIndex;
       this.selectedSpell = spellSlot.spell;
       using (MemoryStream memoryStream = new MemoryStream())
@@ -2079,8 +2120,8 @@ label_1:
 
   public class AssignableHotkey
   {
-    public ZCreature creature;
     public int slot = -1;
+    public ZCreature creature;
     public KeyCode key;
 
     public bool GetKey(int i)

@@ -4,22 +4,33 @@ using System.Collections;
 using System.Threading;
 using UnityEngine;
 
-#nullable disable
 namespace UnityThreading
 {
   public abstract class ThreadBase : IDisposable
   {
+    protected ManualResetEvent exitEvent = new ManualResetEvent(false);
+    private System.Threading.ThreadPriority priority = System.Threading.ThreadPriority.BelowNormal;
     protected Dispatcher targetDispatcher;
     protected Thread thread;
-    protected ManualResetEvent exitEvent = new ManualResetEvent(false);
     [ThreadStatic]
     private static ThreadBase currentThread;
     private string threadName;
-    private System.Threading.ThreadPriority priority = System.Threading.ThreadPriority.BelowNormal;
 
-    public static int AvailableProcessors => SystemInfo.processorCount;
+    public static int AvailableProcessors
+    {
+      get
+      {
+        return SystemInfo.processorCount;
+      }
+    }
 
-    public static ThreadBase CurrentThread => ThreadBase.currentThread;
+    public static ThreadBase CurrentThread
+    {
+      get
+      {
+        return ThreadBase.currentThread;
+      }
+    }
 
     public ThreadBase(string threadName)
       : this(threadName, true)
@@ -45,9 +56,21 @@ namespace UnityThreading
       this.Start();
     }
 
-    public bool IsAlive => this.thread != null && this.thread.IsAlive;
+    public bool IsAlive
+    {
+      get
+      {
+        return this.thread != null && this.thread.IsAlive;
+      }
+    }
 
-    public bool ShouldStop => this.exitEvent.InterWaitOne(0);
+    public bool ShouldStop
+    {
+      get
+      {
+        return this.exitEvent.InterWaitOne(0);
+      }
+    }
 
     public void Start()
     {
@@ -86,7 +109,10 @@ namespace UnityThreading
       this.thread.Abort();
     }
 
-    public Task<T> Dispatch<T>(Func<T> function) => this.targetDispatcher.Dispatch<T>(function);
+    public Task<T> Dispatch<T>(Func<T> function)
+    {
+      return this.targetDispatcher.Dispatch<T>(function);
+    }
 
     public T DispatchAndWait<T>(Func<T> function)
     {
@@ -102,18 +128,30 @@ namespace UnityThreading
       return task.Result;
     }
 
-    public Task Dispatch(Action action) => this.targetDispatcher.Dispatch(action);
+    public Task Dispatch(Action action)
+    {
+      return this.targetDispatcher.Dispatch(action);
+    }
 
-    public void DispatchAndWait(Action action) => this.Dispatch(action).Wait();
+    public void DispatchAndWait(Action action)
+    {
+      this.Dispatch(action).Wait();
+    }
 
     public void DispatchAndWait(Action action, float timeOutSeconds)
     {
       this.Dispatch(action).WaitForSeconds(timeOutSeconds);
     }
 
-    public Task Dispatch(Task taskBase) => this.targetDispatcher.Dispatch(taskBase);
+    public Task Dispatch(Task taskBase)
+    {
+      return this.targetDispatcher.Dispatch(taskBase);
+    }
 
-    public void DispatchAndWait(Task taskBase) => this.Dispatch(taskBase).Wait();
+    public void DispatchAndWait(Task taskBase)
+    {
+      this.Dispatch(taskBase).Wait();
+    }
 
     public void DispatchAndWait(Task taskBase, float timeOutSeconds)
     {
@@ -154,11 +192,17 @@ namespace UnityThreading
 
     protected abstract IEnumerator Do();
 
-    public virtual void Dispose() => this.AbortWaitForSeconds(1f);
+    public virtual void Dispose()
+    {
+      this.AbortWaitForSeconds(1f);
+    }
 
     public System.Threading.ThreadPriority Priority
     {
-      get => this.priority;
+      get
+      {
+        return this.priority;
+      }
       set
       {
         this.priority = value;

@@ -1,7 +1,6 @@
 
 using UnityEngine;
 
-#nullable disable
 public class AnimateMythEffector : MonoBehaviour
 {
   public ZEffector effector;

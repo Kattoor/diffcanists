@@ -3,25 +3,33 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-#nullable disable
 public class EmojiSuggest : MonoBehaviour
 {
-  public InputFieldPlus targetInput;
-  public TMP_Text pfab;
-  public RectTransform container;
   private List<TMP_Text> items = new List<TMP_Text>();
   private List<UIOnHover> itemButtons = new List<UIOnHover>();
   private int curIndex = -1;
+  public InputFieldPlus targetInput;
+  public TMP_Text pfab;
+  public RectTransform container;
   private int curActive;
 
-  public bool ActiveSelection => this.gameObject.activeInHierarchy && this.curIndex >= 0;
+  public bool ActiveSelection
+  {
+    get
+    {
+      return this.gameObject.activeInHierarchy && this.curIndex >= 0;
+    }
+  }
 
-  private void OnDisable() => this.ClearSelection();
+  private void OnDisable()
+  {
+    this.ClearSelection();
+  }
 
   private void ClearSelection()
   {
     if (this.itemButtons.Count >= this.curIndex && this.curIndex >= 0 && this.curIndex < this.curActive)
-      this.itemButtons[this.curIndex].OnExit();
+      this.itemButtons[this.curIndex].OnExit(false);
     this.curIndex = -1;
   }
 
@@ -58,20 +66,20 @@ public class EmojiSuggest : MonoBehaviour
     if (Input.GetKeyDown(KeyCode.DownArrow))
     {
       if (this.itemButtons.Count >= this.curIndex && this.curIndex >= 0)
-        this.itemButtons[this.curIndex].OnExit();
+        this.itemButtons[this.curIndex].OnExit(false);
       ++this.curIndex;
       if (this.curIndex >= this.curActive)
         this.curIndex = 0;
-      this.itemButtons[this.curIndex].OnEnter();
+      this.itemButtons[this.curIndex].OnEnter(false);
     }
     else if (Input.GetKeyDown(KeyCode.UpArrow))
     {
       if (this.itemButtons.Count >= this.curIndex && this.curIndex >= 0)
-        this.itemButtons[this.curIndex].OnExit();
+        this.itemButtons[this.curIndex].OnExit(false);
       --this.curIndex;
       if (this.curIndex < 0)
         this.curIndex = this.curActive - 1;
-      this.itemButtons[this.curIndex].OnEnter();
+      this.itemButtons[this.curIndex].OnEnter(false);
     }
     else if (Input.GetKeyDown(KeyCode.LeftArrow))
     {
@@ -79,10 +87,10 @@ public class EmojiSuggest : MonoBehaviour
     }
     else
     {
-      if (!Input.GetKeyDown(KeyCode.RightArrow) && !Input.GetKeyDown(KeyCode.Return) || this.curIndex >= this.curActive || this.curIndex < 0)
+      if (!Input.GetKeyDown(KeyCode.RightArrow) && !Input.GetKeyDown(KeyCode.Return) || (this.curIndex >= this.curActive || this.curIndex < 0))
         return;
       if (this.itemButtons.Count >= this.curIndex && this.curIndex >= 0)
-        this.itemButtons[this.curIndex].OnExit();
+        this.itemButtons[this.curIndex].OnExit(false);
       this.itemButtons[this.curIndex].onClick.Invoke();
     }
   }
@@ -93,5 +101,8 @@ public class EmojiSuggest : MonoBehaviour
     this.targetInput.ReplaceEmoji(t.name);
   }
 
-  public void OnHover() => this.ClearSelection();
+  public void OnHover()
+  {
+    this.ClearSelection();
+  }
 }

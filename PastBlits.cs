@@ -1,5 +1,4 @@
 
-#nullable disable
 public class PastBlits
 {
   public int x;

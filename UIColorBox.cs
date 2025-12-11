@@ -3,15 +3,14 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-#nullable disable
 public class UIColorBox : MonoBehaviour
 {
+  public int ColorOverride = -1;
   public GameObject pfabDisabled;
   public RectTransform rect_selected;
   public RectTransform rect_hover;
   public Image[] images;
   public UIOnHover[] uihover;
-  public int ColorOverride = -1;
 
   private void Start()
   {
@@ -57,7 +56,10 @@ public class UIColorBox : MonoBehaviour
     this.rect_hover.gameObject.SetActive(true);
   }
 
-  public void Leave() => this.rect_hover.gameObject.SetActive(false);
+  public void Leave()
+  {
+    this.rect_hover.gameObject.SetActive(false);
+  }
 
   public void ClickPrimary(byte i)
   {

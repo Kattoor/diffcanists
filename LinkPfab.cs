@@ -3,23 +3,22 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-#nullable disable
 public class LinkPfab : MonoBehaviour
 {
+  public static bool isVisible = true;
+  public float slideSpeed = 500f;
+  public float hiddenX = -200f;
+  public float hoverThreshold = 50f;
+  public float hideDelay = 1f;
+  private float curDelay = -1f;
   public UIOnHover buttonRankings;
   public UIOnHover buttonClans;
   public GameObject newPatch;
-  public static bool isVisible = true;
   [Header("Slide")]
   public RectTransform panel;
-  public float slideSpeed = 500f;
-  public float hiddenX = -200f;
   public float visibleX;
-  public float hoverThreshold = 50f;
   private bool isLockedOpen;
   private bool isMoving;
-  public float hideDelay = 1f;
-  private float curDelay = -1f;
 
   private void Awake()
   {
@@ -38,7 +37,7 @@ public class LinkPfab : MonoBehaviour
     MyContextMenu myContextMenu = MyContextMenu.Show();
     myContextMenu.AddSeperator("Opens in an External Browser");
     myContextMenu.AddItem(name, a, (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
-    myContextMenu.Rebuild();
+    myContextMenu.Rebuild(false);
   }
 
   public void ClickDiscordLink()
@@ -56,7 +55,10 @@ public class LinkPfab : MonoBehaviour
     this.ContextMenu("Arcanists wiki", (Action) (() => Global.OpenURL(Server.wikiLink)));
   }
 
-  public void ClickRules() => Controller.ShowPopup(CreditsMenu.Type.Rules);
+  public void ClickRules()
+  {
+    Controller.ShowPopup(CreditsMenu.Type.Rules, (string) null);
+  }
 
   public void ClickPatchNotes()
   {
@@ -64,21 +66,45 @@ public class LinkPfab : MonoBehaviour
     this.newPatch.SetActive(false);
   }
 
-  public void ClickCredits() => Controller.ShowPopup(CreditsMenu.Type.Credits);
+  public void ClickCredits()
+  {
+    Controller.ShowPopup(CreditsMenu.Type.Credits, (string) null);
+  }
 
-  public void ClickClans() => Controller.ShowPopup(Controller.Instance.MenuClanList);
+  public void ClickClans()
+  {
+    Controller.ShowPopup(Controller.Instance.MenuClanList);
+  }
 
-  public void ClickRatingsMenu() => Controller.ShowPopup(Controller.Instance.MenuRatings);
+  public void ClickRatingsMenu()
+  {
+    Controller.ShowPopup(Controller.Instance.MenuRatings);
+  }
 
-  public void ClickAchievements() => Controller.ShowPopup(Controller.Instance.MenuAchievements);
+  public void ClickAchievements()
+  {
+    Controller.ShowPopup(Controller.Instance.MenuAchievements);
+  }
 
-  public void ClickInformation() => Controller.ShowPrestigeMenu();
+  public void ClickInformation()
+  {
+    Controller.ShowPrestigeMenu();
+  }
 
-  public void ClickStore() => Controller.ShowPopup(Controller.Instance.MenuStore);
+  public void ClickStore()
+  {
+    Controller.ShowPopup(Controller.Instance.MenuStore);
+  }
 
-  public void Hover(string s) => MyToolTip.Show(s);
+  public void Hover(string s)
+  {
+    MyToolTip.Show(s, -1f);
+  }
 
-  public void Leave() => MyToolTip.Close();
+  public void Leave()
+  {
+    MyToolTip.Close();
+  }
 
   private void Update()
   {

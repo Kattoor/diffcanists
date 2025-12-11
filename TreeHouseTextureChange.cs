@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-#nullable disable
 public class TreeHouseTextureChange : MonoBehaviour
 {
   internal GameSeason current;
   public List<Sprite> seasonTex;
   public SpriteRenderer rends;
 
-  private void Awake() => this.LateUpdate();
+  private void Awake()
+  {
+    this.LateUpdate();
+  }
 
   public void ChangeSeason(GameSeason season)
   {

@@ -3,25 +3,27 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-#nullable disable
 public class CoroutineInstance
 {
+  private ushort _expansions = 1;
+  private IEnumerator<float>[] SlowUpdateProcesses = new IEnumerator<float>[64];
   public int NumberOfSlowUpdateCoroutines;
   private bool _isRunningSpell;
   public bool forceArmageddon;
   private bool _runningSlowUpdate;
   private int _nextSlowUpdateProcessSlot;
   private int _tempNumber;
-  private ushort _expansions = 1;
   private const int ProcessArrayChunkSize = 64;
   private const int InitialBufferSizeLarge = 256;
   private const int InitialBufferSizeMedium = 64;
   private const int InitialBufferSizeSmall = 8;
-  private IEnumerator<float>[] SlowUpdateProcesses = new IEnumerator<float>[64];
 
   public bool isRunningSpell
   {
-    get => this._isRunningSpell;
+    get
+    {
+      return this._isRunningSpell;
+    }
     set
     {
       if (value != this._isRunningSpell)
@@ -34,7 +36,10 @@ public class CoroutineInstance
     }
   }
 
-  public bool Busy() => this.NumberOfSlowUpdateCoroutines > 0;
+  public bool Busy()
+  {
+    return this.NumberOfSlowUpdateCoroutines > 0;
+  }
 
   public void ServerUpdate()
   {
@@ -67,8 +72,8 @@ public class CoroutineInstance
         ++index1;
       }
     }
-    for (int index3 = index1; index3 < this._nextSlowUpdateProcessSlot; ++index3)
-      this.SlowUpdateProcesses[index3] = (IEnumerator<float>) null;
+    for (int index2 = index1; index2 < this._nextSlowUpdateProcessSlot; ++index2)
+      this.SlowUpdateProcesses[index2] = (IEnumerator<float>) null;
     this.NumberOfSlowUpdateCoroutines = this._nextSlowUpdateProcessSlot = index1;
     if (this.isRunningSpell && this.NumberOfSlowUpdateCoroutines == 0)
       this.isRunningSpell = false;

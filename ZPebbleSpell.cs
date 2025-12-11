@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-#nullable disable
 public class ZPebbleSpell : ZSpell
 {
   public override IEnumerator<float> SpellMove(bool gotoStatic = false, bool checkEffectors = true)
@@ -26,7 +25,7 @@ label_53:
       FixedInt y1 = zpebbleSpell.velocity.y;
       FixedInt fixedInt3 = zpebbleSpell.velocity.x;
       FixedInt fixedInt4 = zpebbleSpell.velocity.y;
-      if (x1 > 1 || x1 < -1 || y1 > 1 || y1 < -1)
+      if (x1 > 1 || x1 < -1 || (y1 > 1 || y1 < -1))
       {
         if (FixedInt.Abs(x1) > FixedInt.Abs(y1))
           zpebbleSpell.steps = (int) FixedInt.Abs(x1) + 1;
@@ -75,10 +74,10 @@ label_53:
                 zero.Normalize();
                 MyLocation.Reflect(zpebbleSpell.velocity, ref zero, out zpebbleSpell.velocity);
                 zpebbleSpell.velocity = zpebbleSpell.velocity * zpebbleSpell.elasticity;
-                zpebbleSpell.map.ServerBitBlt((int) zpebbleSpell.explosionCutout, x2, y2);
+                zpebbleSpell.map.ServerBitBlt((int) zpebbleSpell.explosionCutout, x2, y2, true, true);
                 FixedInt explisiveForce = zpebbleSpell.explisiveForce;
                 zpebbleSpell.explisiveForce = (FixedInt) 2;
-                if (zpebbleSpell.ApplyExplosionForce(zpebbleSpell.position))
+                if (zpebbleSpell.ApplyExplosionForce(zpebbleSpell.position, 0, true, (ISpellBridge) null, (ZCreature) null))
                 {
                   zpebbleSpell.StopAndDie();
                   yield break;
@@ -86,10 +85,10 @@ label_53:
                 else
                 {
                   List<ZMyCollider> zmyColliderList = zpebbleSpell.game.world.OverlapCircleAll((Point) zpebbleSpell.position, 50, (ZMyCollider) null, 256);
-                  for (int index5 = 0; index5 < zmyColliderList.Count; ++index5)
+                  for (int index3 = 0; index3 < zmyColliderList.Count; ++index3)
                   {
-                    if ((ZComponent) zmyColliderList[index5] != (object) null && !ZComponent.IsNull((ZComponent) zmyColliderList[index5].creature) && !zmyColliderList[index5].creature.isDead && zmyColliderList[index5].creature.type == CreatureType.Tree)
-                      zmyColliderList[index5].creature.ApplyDamage(zpebbleSpell.spellEnum, zpebbleSpell.damageType, zpebbleSpell.damage, zpebbleSpell.parent, zpebbleSpell.game.turn, (ISpellBridge) zpebbleSpell);
+                    if ((ZComponent) zmyColliderList[index3] != (object) null && !ZComponent.IsNull((ZComponent) zmyColliderList[index3].creature) && (!zmyColliderList[index3].creature.isDead && zmyColliderList[index3].creature.type == CreatureType.Tree))
+                      zmyColliderList[index3].creature.ApplyDamage(zpebbleSpell.spellEnum, zpebbleSpell.damageType, zpebbleSpell.damage, zpebbleSpell.parent, zpebbleSpell.game.turn, (ISpellBridge) zpebbleSpell, false);
                   }
                   zpebbleSpell.explisiveForce = (FixedInt) (float) (int) explisiveForce;
                   zpebbleSpell.Undie();
@@ -116,7 +115,7 @@ label_53:
             }
             else
             {
-              zpebbleSpell.map.ServerBitBlt((int) zpebbleSpell.explosionCutout, x2, y2);
+              zpebbleSpell.map.ServerBitBlt((int) zpebbleSpell.explosionCutout, x2, y2, true, true);
               zpebbleSpell.StopAndDie();
               yield break;
             }

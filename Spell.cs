@@ -4,7 +4,6 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-#nullable disable
 public class Spell : Entity, ISpellBridge
 {
   public static float[] _tomatoScale = new float[8]
@@ -18,6 +17,7 @@ public class Spell : Entity, ISpellBridge
     1.06f,
     1.06f
   };
+  public bool canHitSelf = true;
   public SpellEnum spellEnum;
   public SpellStats stats;
   [NonSerialized]
@@ -34,10 +34,12 @@ public class Spell : Entity, ISpellBridge
   public Effector effector;
   internal int spellIndex;
   private Renderer _renderer;
-  public bool canHitSelf = true;
   public bool altBook;
 
-  public void ScaleToZero() => this.StartCoroutine(this._ScaleToZero());
+  public void ScaleToZero()
+  {
+    this.StartCoroutine(this._ScaleToZero());
+  }
 
   private IEnumerator _ScaleToZero()
   {
@@ -54,13 +56,37 @@ public class Spell : Entity, ISpellBridge
     }
   }
 
-  public int radius => this.runTimeStats.radius;
+  public int radius
+  {
+    get
+    {
+      return this.runTimeStats.radius;
+    }
+  }
 
-  public int maxDistance => this.runTimeStats.maxDistance;
+  public int maxDistance
+  {
+    get
+    {
+      return this.runTimeStats.maxDistance;
+    }
+  }
 
-  public bool affectedByGravity => this.runTimeStats.affectedByGravity;
+  public bool affectedByGravity
+  {
+    get
+    {
+      return this.runTimeStats.affectedByGravity;
+    }
+  }
 
-  public Renderer Renderer => this._renderer;
+  public Renderer Renderer
+  {
+    get
+    {
+      return this._renderer;
+    }
+  }
 
   public void FindRenderer()
   {
@@ -69,105 +95,405 @@ public class Spell : Entity, ISpellBridge
     this._renderer = this.GetComponent<Renderer>();
   }
 
-  public SpellLogic spellLogic => this.runTimeStats.spellLogic;
+  public SpellLogic spellLogic
+  {
+    get
+    {
+      return this.runTimeStats.spellLogic;
+    }
+  }
 
-  public SpellType spellType => this.runTimeStats.spellType;
+  public SpellType spellType
+  {
+    get
+    {
+      return this.runTimeStats.spellType;
+    }
+  }
 
-  public TargetType targetType => this.runTimeStats.targetType;
+  public TargetType targetType
+  {
+    get
+    {
+      return this.runTimeStats.targetType;
+    }
+  }
 
-  public int level => this.runTimeStats.level;
+  public int level
+  {
+    get
+    {
+      return this.runTimeStats.level;
+    }
+  }
 
-  public EditorFixedInt speedMin => this.runTimeStats.speedMin;
+  public EditorFixedInt speedMin
+  {
+    get
+    {
+      return this.runTimeStats.speedMin;
+    }
+  }
 
-  public EditorFixedInt speedMax => this.runTimeStats.speedMax;
+  public EditorFixedInt speedMax
+  {
+    get
+    {
+      return this.runTimeStats.speedMax;
+    }
+  }
 
-  public EditorFixedInt speedFlying => this.runTimeStats.speedFlying;
+  public EditorFixedInt speedFlying
+  {
+    get
+    {
+      return this.runTimeStats.speedFlying;
+    }
+  }
 
-  public EditorFixedInt speedRotation => this.runTimeStats.speedRotation;
+  public EditorFixedInt speedRotation
+  {
+    get
+    {
+      return this.runTimeStats.speedRotation;
+    }
+  }
 
-  public int maxDuration => this.runTimeStats.maxDuration;
+  public int maxDuration
+  {
+    get
+    {
+      return this.runTimeStats.maxDuration;
+    }
+  }
 
-  public EditorFixedInt elasticity => this.runTimeStats.elasticity;
+  public EditorFixedInt elasticity
+  {
+    get
+    {
+      return this.runTimeStats.elasticity;
+    }
+  }
 
-  public int damage => this.runTimeStats.damage;
+  public int damage
+  {
+    get
+    {
+      return this.runTimeStats.damage;
+    }
+  }
 
-  public DamageType damageType => this.runTimeStats.damageType;
+  public DamageType damageType
+  {
+    get
+    {
+      return this.runTimeStats.damageType;
+    }
+  }
 
-  public int EXORADIUS => this.runTimeStats.EXORADIUS;
+  public int EXORADIUS
+  {
+    get
+    {
+      return this.runTimeStats.EXORADIUS;
+    }
+  }
 
-  public EditorFixedInt explisiveForce => this.runTimeStats.explisiveForce;
+  public EditorFixedInt explisiveForce
+  {
+    get
+    {
+      return this.runTimeStats.explisiveForce;
+    }
+  }
 
-  public ExplosionCutout explosionCutout => this.runTimeStats.explosionCutout;
+  public ExplosionCutout explosionCutout
+  {
+    get
+    {
+      return this.runTimeStats.explosionCutout;
+    }
+  }
 
-  public Curve damageOverDistance => this.runTimeStats.damageOverDistance;
+  public Curve damageOverDistance
+  {
+    get
+    {
+      return this.runTimeStats.damageOverDistance;
+    }
+  }
 
-  public Curve forceOverDistance => this.runTimeStats.forceOverDistance;
+  public Curve forceOverDistance
+  {
+    get
+    {
+      return this.runTimeStats.forceOverDistance;
+    }
+  }
 
-  public bool explodeOnImpact => this.runTimeStats.explodeOnImpact;
+  public bool explodeOnImpact
+  {
+    get
+    {
+      return this.runTimeStats.explodeOnImpact;
+    }
+  }
 
-  public int frameOfPhantom => this.runTimeStats.frameOfPhantom;
+  public int frameOfPhantom
+  {
+    get
+    {
+      return this.runTimeStats.frameOfPhantom;
+    }
+  }
 
-  public bool goToTarget => this.runTimeStats.goToTarget;
+  public bool goToTarget
+  {
+    get
+    {
+      return this.runTimeStats.goToTarget;
+    }
+  }
 
-  public int maxTargetFrames => this.runTimeStats.maxTargetFrames;
+  public int maxTargetFrames
+  {
+    get
+    {
+      return this.runTimeStats.maxTargetFrames;
+    }
+  }
 
-  public bool Rotates => this.runTimeStats.Rotates;
+  public bool Rotates
+  {
+    get
+    {
+      return this.runTimeStats.Rotates;
+    }
+  }
 
-  public bool EndsTurn => this.runTimeStats.EndsTurn;
+  public bool EndsTurn
+  {
+    get
+    {
+      return this.runTimeStats.EndsTurn;
+    }
+  }
 
-  public int MaxUses => this.runTimeStats.MaxUses;
+  public int MaxUses
+  {
+    get
+    {
+      return this.runTimeStats.MaxUses;
+    }
+  }
 
-  public int RechargeTime => this.runTimeStats.RechargeTime;
+  public int RechargeTime
+  {
+    get
+    {
+      return this.runTimeStats.RechargeTime;
+    }
+  }
 
-  public int TurnsTillFirstUse => this.runTimeStats.TurnsTillFirstUse;
+  public int TurnsTillFirstUse
+  {
+    get
+    {
+      return this.runTimeStats.TurnsTillFirstUse;
+    }
+  }
 
-  public bool halfFirstTurn => this.runTimeStats.halfFirstTurn;
+  public bool halfFirstTurn
+  {
+    get
+    {
+      return this.runTimeStats.halfFirstTurn;
+    }
+  }
 
-  public CastType type => this.runTimeStats.type;
+  public CastType type
+  {
+    get
+    {
+      return this.runTimeStats.type;
+    }
+  }
 
-  public BookOf bookOf => this.runTimeStats.bookOf;
+  public BookOf bookOf
+  {
+    get
+    {
+      return this.runTimeStats.bookOf;
+    }
+  }
 
-  public int amount => this.runTimeStats.amount;
+  public int amount
+  {
+    get
+    {
+      return this.runTimeStats.amount;
+    }
+  }
 
-  public int MaxMinionCount => this.runTimeStats.MaxMinionCap;
+  public int MaxMinionCount
+  {
+    get
+    {
+      return this.runTimeStats.MaxMinionCap;
+    }
+  }
 
-  public int Bounces => this.runTimeStats.Bounces;
+  public int Bounces
+  {
+    get
+    {
+      return this.runTimeStats.Bounces;
+    }
+  }
 
-  public EditorFixedInt CustomGravity => this.runTimeStats.CustomGravity;
+  public EditorFixedInt CustomGravity
+  {
+    get
+    {
+      return this.runTimeStats.CustomGravity;
+    }
+  }
 
-  public bool hitPhantom => this.runTimeStats.hitPhantom;
+  public bool hitPhantom
+  {
+    get
+    {
+      return this.runTimeStats.hitPhantom;
+    }
+  }
 
-  public bool destroyTerrainFirstBounce => this.runTimeStats.destroyTerrainFirstBounce;
+  public bool destroyTerrainFirstBounce
+  {
+    get
+    {
+      return this.runTimeStats.destroyTerrainFirstBounce;
+    }
+  }
 
-  public int destroyTerrainBounces => this.runTimeStats.destroyTerrainBounces;
+  public int destroyTerrainBounces
+  {
+    get
+    {
+      return this.runTimeStats.destroyTerrainBounces;
+    }
+  }
 
-  public int maxSandDamage => this.runTimeStats.maxSandDamage;
+  public int maxSandDamage
+  {
+    get
+    {
+      return this.runTimeStats.maxSandDamage;
+    }
+  }
 
-  public static bool IsMinionSpell(SpellEnum e) => ZSpell.MinionSpells.Contains(e);
+  public static bool IsMinionSpell(SpellEnum e)
+  {
+    return ZSpell.MinionSpells.Contains(e);
+  }
 
-  public bool IsMinionSpell() => ZSpell.MinionSpells.Contains(this.spellEnum);
+  public bool IsMinionSpell()
+  {
+    return ZSpell.MinionSpells.Contains(this.spellEnum);
+  }
 
-  public SpellType GetSpellType => this.spellType;
+  public SpellType GetSpellType
+  {
+    get
+    {
+      return this.spellType;
+    }
+  }
 
-  public string GetName => this.name;
+  public string GetName
+  {
+    get
+    {
+      return this.name;
+    }
+  }
 
-  public SpellEnum GetSpellEnum => this.spellEnum;
+  public SpellEnum GetSpellEnum
+  {
+    get
+    {
+      return this.spellEnum;
+    }
+  }
 
-  public BookOf book => this.bookOf;
+  public BookOf book
+  {
+    get
+    {
+      return this.bookOf;
+    }
+  }
 
-  public bool FromArmageddon => false;
+  public bool FromArmageddon
+  {
+    get
+    {
+      return false;
+    }
+  }
 
-  public ZCreature GetParent => (ZCreature) null;
+  public ZCreature GetParent
+  {
+    get
+    {
+      return (ZCreature) null;
+    }
+  }
 
-  public bool GetGoToTarget => this.goToTarget;
+  public bool GetGoToTarget
+  {
+    get
+    {
+      return this.goToTarget;
+    }
+  }
 
-  public GameObject GetToSummon => this.toSummon;
+  public GameObject GetToSummon
+  {
+    get
+    {
+      return this.toSummon;
+    }
+  }
 
-  public Spell GetBaseSpell => this;
+  public Spell GetBaseSpell
+  {
+    get
+    {
+      return this;
+    }
+  }
 
-  public ExplosionCutout GetExplosionCutout => this.explosionCutout;
+  public ExplosionCutout GetExplosionCutout
+  {
+    get
+    {
+      return this.explosionCutout;
+    }
+  }
 
-  public int GetDamage => this.runTimeStats.damage;
+  public int GetDamage
+  {
+    get
+    {
+      return this.runTimeStats.damage;
+    }
+  }
 
-  public DamageType GetDamageType => this.damageType;
+  public DamageType GetDamageType
+  {
+    get
+    {
+      return this.damageType;
+    }
+  }
 }

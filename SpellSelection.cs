@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-#nullable disable
 public class SpellSelection : Catalogue
 {
   public Inert inert;
@@ -40,7 +39,13 @@ public class SpellSelection : Catalogue
 
   public static SpellSelection Instance { get; private set; }
 
-  public SettingsPlayer settingsPlayer => Client.settingsPlayer;
+  public SettingsPlayer settingsPlayer
+  {
+    get
+    {
+      return Client.settingsPlayer;
+    }
+  }
 
   private void Start()
   {
@@ -57,7 +62,10 @@ public class SpellSelection : Catalogue
     DiscordIntergration.Instance?.UpdateActivitySpellSelection();
   }
 
-  public void ClickPrestige() => Controller.ShowPrestigeMenu();
+  public void ClickPrestige()
+  {
+    Controller.ShowPrestigeMenu();
+  }
 
   public void ClickElemental()
   {
@@ -75,11 +83,20 @@ public class SpellSelection : Catalogue
     this.imageElemental.sprite = ClientResources.Instance.spellBookIcons[(int) this.settingsPlayer.fullBook];
   }
 
-  public void ToolTip(string s) => MyToolTip.Show(s);
+  public void ToolTip(string s)
+  {
+    MyToolTip.Show(s, -1f);
+  }
 
-  public void HideToolTip() => MyToolTip.Close();
+  public void HideToolTip()
+  {
+    MyToolTip.Close();
+  }
 
-  public void ClickMainMenu() => Controller.Instance.OpenMenu(Controller.Instance.MenuMain, false);
+  public void ClickMainMenu()
+  {
+    Controller.Instance.OpenMenu(Controller.Instance.MenuMain, false);
+  }
 
   public void ClickCharacterCreation()
   {
@@ -97,7 +114,10 @@ public class SpellSelection : Catalogue
   }
 
   [EnumAction(typeof (BookOf))]
-  public void OpenBook(int i) => this.OpenBook((BookOf) i);
+  public void OpenBook(int i)
+  {
+    this.OpenBook((BookOf) i);
+  }
 
   public void OpenBook(BookOf b)
   {
@@ -106,25 +126,25 @@ public class SpellSelection : Catalogue
       this.bookIcon.sprite = ClientResources.Instance.spellBookIcons[(int) (b + 1)];
       this.openBook = b;
     }
-    int index = (int) b * 12;
-    int num = index + 12;
-    int spellID = 0;
-    while (index < num)
+    int index1 = (int) b * 12;
+    int num = index1 + 12;
+    int index2 = 0;
+    while (index1 < num)
     {
-      Spell spell = Inert.Instance.spells.GetItem(index).Value;
-      bool equipped = this.HasSpell((byte) spellID);
-      this.buttonSpells[spellID].SetSprite(ClientResources.Instance.icons.GetItem(index).Value, spell.level, equipped, equipped || this.settingsPlayer.CanEquipSpell(15, (byte) (spellID + (int) this.openBook * 12)), index);
-      ++index;
-      ++spellID;
+      Spell spell = Inert.Instance.spells.GetItem(index1).Value;
+      bool equipped = this.HasSpell((byte) index2);
+      this.buttonSpells[index2].SetSprite(ClientResources.Instance.icons.GetItem(index1).Value, spell.level, equipped, equipped || this.settingsPlayer.CanEquipSpell(15, (byte) (index2 + (int) this.openBook * 12)), index1);
+      ++index1;
+      ++index2;
     }
   }
 
   [EnumAction(typeof (BookOf))]
   public void HoverBookIcon(int i)
   {
-    this.textMouseoverSpell.text = Descriptions.GetBookHeader((BookOf) i) + "\nFamiliar - " + Descriptions.GetBookDescription((BookOf) i);
+    this.textMouseoverSpell.text = Descriptions.GetBookHeader((BookOf) i, false) + "\nFamiliar - " + Descriptions.GetBookDescription((BookOf) i, false);
     this.textMouseoverSpellExtra.text = "";
-    this.headerMouseoverSpell.text = i == 0 ? "Arcane Book" : "Book of " + ((BookOf) i).ToStringX();
+    this.headerMouseoverSpell.text = i == 0 ? "Arcane Book" : "Book of " + ((BookOf) i).ToStringX(false);
     this.textError.text = "";
   }
 
@@ -133,9 +153,9 @@ public class SpellSelection : Catalogue
     if (this.openBook == BookOf.Nothing)
       return;
     int openBook = (int) this.openBook;
-    this.textMouseoverSpell.text = Descriptions.GetBookHeader((BookOf) openBook) + "\nFamiliar - " + Descriptions.GetBookDescription((BookOf) openBook);
+    this.textMouseoverSpell.text = Descriptions.GetBookHeader((BookOf) openBook, false) + "\nFamiliar - " + Descriptions.GetBookDescription((BookOf) openBook, false);
     this.textMouseoverSpellExtra.text = "";
-    this.headerMouseoverSpell.text = openBook == 0 ? "Arcane Book" : "Book of " + ((BookOf) openBook).ToStringX();
+    this.headerMouseoverSpell.text = openBook == 0 ? "Arcane Book" : "Book of " + ((BookOf) openBook).ToStringX(false);
     this.textError.text = "";
   }
 
@@ -147,12 +167,12 @@ public class SpellSelection : Catalogue
       if (this.settingsPlayer.spells[index] != byte.MaxValue)
         --length;
     }
-    for (int spellID = 0; spellID < 12 && spellID < length; ++spellID)
+    for (int index = 0; index < 12 && index < length; ++index)
     {
-      if (SpellSelection.Instance.HasSpell((byte) spellID))
+      if (SpellSelection.Instance.HasSpell((byte) index))
         ++length;
       else
-        this.buttonSpells[spellID].UpdatedFromSpellSelection_FullBook();
+        this.buttonSpells[index].UpdatedFromSpellSelection_FullBook();
     }
   }
 
@@ -249,7 +269,7 @@ public class SpellSelection : Catalogue
   public void ShowDescription(string s)
   {
     this.headerMouseoverSpell.text = s;
-    (this.textMouseoverSpell.text, this.textMouseoverSpellExtra.text) = Descriptions.GetSpellDescription(s);
+    (this.textMouseoverSpell.text, this.textMouseoverSpellExtra.text) = Descriptions.GetSpellDescription(s, (SpellSlot) null, false);
   }
 
   public void LeaveSpell()
@@ -262,7 +282,10 @@ public class SpellSelection : Catalogue
     this.textError.text = "";
   }
 
-  public void ClickSavedSpells(bool v) => ChangeSpellBookMenu.Create(v, this.settingsPlayer);
+  public void ClickSavedSpells(bool v)
+  {
+    ChangeSpellBookMenu.Create(v, this.settingsPlayer, (Action<SettingsPlayer>) null);
+  }
 
   private string DefaultDescription()
   {

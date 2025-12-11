@@ -3,31 +3,45 @@ using Newtonsoft.Json;
 using System;
 using UnityEngine;
 
-#nullable disable
 [Serializable]
 public class SpellSlot
 {
+  public int MaxUses = -1;
+  public bool EndsTurn = true;
+  [NonSerialized]
+  public int disabledturn = -1;
+  private int _lastturnfired = -1;
   [JsonIgnore]
   public Spell spell;
   public SpellEnum serializedSpellEnum;
   public bool syncWithParent;
   public bool isPresent;
   public bool isLevel5;
-  public int MaxUses = -1;
   public int RechargeTime;
-  public bool EndsTurn = true;
   public int TurnsTillFirstUse;
-  [NonSerialized]
-  public int disabledturn = -1;
   public int bonusDmg;
-  private int _lastturnfired = -1;
   private int _useduses;
 
-  public int LastTurnFired => this._lastturnfired;
+  public int LastTurnFired
+  {
+    get
+    {
+      return this._lastturnfired;
+    }
+  }
 
-  public int UsedUses => this._useduses;
+  public int UsedUses
+  {
+    get
+    {
+      return this._useduses;
+    }
+  }
 
-  public bool MaxUsesReached() => this._useduses >= this.MaxUses && this.MaxUses > 0;
+  public bool MaxUsesReached()
+  {
+    return this._useduses >= this.MaxUses && this.MaxUses > 0;
+  }
 
   public void RefundAUse()
   {
@@ -38,10 +52,16 @@ public class SpellSlot
 
   public int SetUses
   {
-    set => this._useduses = value;
+    set
+    {
+      this._useduses = value;
+    }
   }
 
-  public void AddMaxUse() => ++this.MaxUses;
+  public void AddMaxUse()
+  {
+    ++this.MaxUses;
+  }
 
   public void Fired(ZCreature c)
   {
@@ -76,7 +96,10 @@ public class SpellSlot
     Debug.Log((object) "Serialized!!!!!!!!!!");
   }
 
-  public SpellSlot(Spell p) => this.SetSpell(p);
+  public SpellSlot(Spell p)
+  {
+    this.SetSpell(p);
+  }
 
   public void SetSpell(Spell p)
   {
@@ -88,7 +111,10 @@ public class SpellSlot
     this.TurnsTillFirstUse = p.TurnsTillFirstUse;
   }
 
-  public void DecreaseCooldown() => --this.RechargeTime;
+  public void DecreaseCooldown()
+  {
+    --this.RechargeTime;
+  }
 
   public SpellSlot(SpellSlot s)
   {
@@ -155,10 +181,19 @@ public class SpellSlot
 
   public int SetTurnFired
   {
-    set => this._lastturnfired = value;
+    set
+    {
+      this._lastturnfired = value;
+    }
   }
 
-  public void ResetUses() => this._useduses = 0;
+  public void ResetUses()
+  {
+    this._useduses = 0;
+  }
 
-  public void IncreaseUses() => ++this._useduses;
+  public void IncreaseUses()
+  {
+    ++this._useduses;
+  }
 }

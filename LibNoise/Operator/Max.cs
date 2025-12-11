@@ -1,7 +1,6 @@
 
 using System;
 
-#nullable disable
 namespace LibNoise.Operator
 {
   public class Max : ModuleBase

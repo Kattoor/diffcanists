@@ -4,12 +4,11 @@ using System;
 using System.Text;
 using UnityEngine;
 
-#nullable disable
 [Serializable]
 public class NewGamesPlayed
 {
-  public const byte version = 1;
   public short rating = 1000;
+  public const byte version = 1;
   public int ratedGamesWon;
   public int totalRatedGames;
   [JsonIgnore]
@@ -25,7 +24,13 @@ public class NewGamesPlayed
   public long lastGamePlayed;
 
   [JsonIgnore]
-  public string ratingString => this.rating != (short) -1 ? this.rating.ToString() : "-";
+  public string ratingString
+  {
+    get
+    {
+      return this.rating != (short) -1 ? this.rating.ToString() : "-";
+    }
+  }
 
   public void Serialize(myBinaryWriter w)
   {

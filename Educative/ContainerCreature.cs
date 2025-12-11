@@ -2,7 +2,6 @@
 using MoonSharp.Interpreter;
 using UnityEngine;
 
-#nullable disable
 namespace Educative
 {
   public class ContainerCreature
@@ -19,15 +18,36 @@ namespace Educative
       this._hashCode = (ZComponent) c != (object) null ? c.GetHashCode() : 0;
     }
 
-    public int team => this.creature.team;
+    public int team
+    {
+      get
+      {
+        return this.creature.team;
+      }
+    }
 
-    public string name => this.creature.name;
+    public string name
+    {
+      get
+      {
+        return this.creature.name;
+      }
+    }
 
-    public SpellEnum spellEnum => this.creature.spellEnum;
+    public SpellEnum spellEnum
+    {
+      get
+      {
+        return this.creature.spellEnum;
+      }
+    }
 
     public int health
     {
-      get => this.creature.health;
+      get
+      {
+        return this.creature.health;
+      }
       set
       {
         this.creature.health = value;
@@ -40,18 +60,33 @@ namespace Educative
 
     public int maxHealth
     {
-      get => this.creature.maxHealth;
-      set => this.creature.maxHealth = value;
+      get
+      {
+        return this.creature.maxHealth;
+      }
+      set
+      {
+        this.creature.maxHealth = value;
+      }
     }
 
-    public int healthAndTower => this.creature.GetCurrentHealth();
+    public int healthAndTower
+    {
+      get
+      {
+        return this.creature.GetCurrentHealth();
+      }
+    }
 
     public int shield
     {
-      get => this.creature.shield;
+      get
+      {
+        return this.creature.shield;
+      }
       set
       {
-        this.creature.CreateProtectionShield();
+        this.creature.CreateProtectionShield(false);
         this.creature.shield = value;
         this.creature.UpdateHealthTxt();
       }
@@ -59,23 +94,29 @@ namespace Educative
 
     public int x
     {
-      get => this.creature.position.x.ToInt();
+      get
+      {
+        return this.creature.position.x.ToInt();
+      }
       set
       {
         this.creature.MoveToPosition = new MyLocation((FixedInt) value, this.creature.position.y);
-        this.creature.Demount();
-        this.creature.Fall();
+        this.creature.Demount(false);
+        this.creature.Fall(false);
       }
     }
 
     public int y
     {
-      get => this.creature.position.y.ToInt();
+      get
+      {
+        return this.creature.position.y.ToInt();
+      }
       set
       {
         this.creature.MoveToPosition = new MyLocation(this.creature.position.x, (FixedInt) value);
-        this.creature.Demount();
-        this.creature.Fall();
+        this.creature.Demount(false);
+        this.creature.Fall(false);
       }
     }
 
@@ -92,20 +133,29 @@ namespace Educative
       set
       {
         this.creature.MoveToPosition = new MyLocation((FixedInt) (float) value.x, (FixedInt) (float) value.y);
-        this.creature.Demount();
-        this.creature.Fall();
+        this.creature.Demount(false);
+        this.creature.Fall(false);
       }
     }
 
     public ContainerPlayer parent
     {
-      get => new ContainerPlayer(this.creature.parent);
-      set => this.creature.SwitchTeams(value.person);
+      get
+      {
+        return new ContainerPlayer(this.creature.parent);
+      }
+      set
+      {
+        this.creature.SwitchTeams(value.person, false);
+      }
     }
 
     public int weight
     {
-      get => (int) ((FixedInt) 100 - this.creature.massMulti * 100);
+      get
+      {
+        return (int) ((FixedInt) 100 - this.creature.massMulti * 100);
+      }
       set
       {
         this.creature.massMulti = Mathd.Clamp((FixedInt) ((float) (100 - value) / 100f), (FixedInt) 0, (FixedInt) 1);
@@ -114,17 +164,38 @@ namespace Educative
 
     public int radius
     {
-      get => this.creature.GetRadius();
-      set => this.SetRadius(value);
+      get
+      {
+        return this.creature.GetRadius();
+      }
+      set
+      {
+        this.SetRadius(value);
+      }
     }
 
-    public bool inTower => (ZComponent) this.creature.tower != (object) null;
+    public bool inTower
+    {
+      get
+      {
+        return (ZComponent) this.creature.tower != (object) null;
+      }
+    }
 
-    public bool isMoving => this.creature.isMoving;
+    public bool isMoving
+    {
+      get
+      {
+        return this.creature.isMoving;
+      }
+    }
 
     public bool stunned
     {
-      get => this.creature.stunned;
+      get
+      {
+        return this.creature.stunned;
+      }
       set
       {
         if (this.creature.stunned == value)
@@ -140,7 +211,10 @@ namespace Educative
 
     public bool superStunned
     {
-      get => this.creature.superStunned;
+      get
+      {
+        return this.creature.superStunned;
+      }
       set
       {
         if (this.creature.superStunned == value)
@@ -158,49 +232,118 @@ namespace Educative
 
     public bool waterWalking
     {
-      get => this.creature.waterWalking;
-      set => this.creature.waterWalking = value;
+      get
+      {
+        return this.creature.waterWalking;
+      }
+      set
+      {
+        this.creature.waterWalking = value;
+      }
     }
 
     public bool frostWalking
     {
-      get => this.creature.frostWalking;
-      set => this.creature.frostWalking = value;
+      get
+      {
+        return this.creature.frostWalking;
+      }
+      set
+      {
+        this.creature.frostWalking = value;
+      }
     }
 
-    public bool inWater => this.creature.inWater;
+    public bool inWater
+    {
+      get
+      {
+        return this.creature.inWater;
+      }
+    }
 
     public bool diesInWater
     {
-      get => this.creature.diesInWater;
-      set => this.creature.diesInWater = value;
+      get
+      {
+        return this.creature.diesInWater;
+      }
+      set
+      {
+        this.creature.diesInWater = value;
+      }
     }
 
     public CreatureType type
     {
-      get => this.creature.type;
-      set => this.creature.type = value;
+      get
+      {
+        return this.creature.type;
+      }
+      set
+      {
+        this.creature.type = value;
+      }
     }
 
     public CreatureRace race
     {
-      get => this.creature.race;
-      set => this.creature.race = value;
+      get
+      {
+        return this.creature.race;
+      }
+      set
+      {
+        this.creature.race = value;
+      }
     }
 
-    public bool yourTurn => this.creature.parent.yourTurn;
+    public bool yourTurn
+    {
+      get
+      {
+        return this.creature.parent.yourTurn;
+      }
+    }
 
-    public bool isRider => (ZComponent) this.creature.mount != (object) null;
+    public bool isRider
+    {
+      get
+      {
+        return (ZComponent) this.creature.mount != (object) null;
+      }
+    }
 
-    public bool isMounted => (ZComponent) this.creature.rider != (object) null;
+    public bool isMounted
+    {
+      get
+      {
+        return (ZComponent) this.creature.rider != (object) null;
+      }
+    }
 
-    public bool isDead => (ZComponent) this.creature == (object) null || this.creature.isDead;
+    public bool isDead
+    {
+      get
+      {
+        return (ZComponent) this.creature == (object) null || this.creature.isDead;
+      }
+    }
 
-    public bool isPawn => this.creature.isPawn;
+    public bool isPawn
+    {
+      get
+      {
+        return this.creature.isPawn;
+      }
+    }
 
     public bool isFlying
     {
-      get => this.creature.flying;
+      get
+      {
+        return this.creature.flying;
+      }
       set
       {
         this.creature.flying = value;
@@ -208,13 +351,28 @@ namespace Educative
       }
     }
 
-    public bool isMountable => this.creature.mountable;
+    public bool isMountable
+    {
+      get
+      {
+        return this.creature.mountable;
+      }
+    }
 
-    public bool canMount => this.creature.canMount;
+    public bool canMount
+    {
+      get
+      {
+        return this.creature.canMount;
+      }
+    }
 
     public bool arcaneMonster
     {
-      get => this.creature.FullArcane;
+      get
+      {
+        return this.creature.FullArcane;
+      }
       set
       {
         bool flag = value;
@@ -229,8 +387,14 @@ namespace Educative
 
     public bool takeDamage
     {
-      get => this.creature.invulnerable < 99999;
-      set => this.creature.invulnerable = value ? 0 : 99999;
+      get
+      {
+        return this.creature.invulnerable < 99999;
+      }
+      set
+      {
+        this.creature.invulnerable = value ? 0 : 99999;
+      }
     }
 
     public ContainerCreature getRider()
@@ -269,11 +433,11 @@ namespace Educative
       if (this.isMoving)
         return;
       this.setDirection(dir);
-      this.creature.animator?.Play(AnimateState.Walk, 0.05f);
+      this.creature.animator?.Play(AnimateState.Walk, 0.05f, true);
       if (dir < 0 || dir == 0 && (double) this.creature.transformscale < 0.0)
-        this.creature.MoveLeft();
+        this.creature.MoveLeft(0);
       else
-        this.creature.MoveRight();
+        this.creature.MoveRight(0);
     }
 
     public void setDirection(int dir)
@@ -292,7 +456,10 @@ namespace Educative
       }
     }
 
-    public int getDirection() => (double) this.creature.transformscale <= 0.0 ? -1 : 1;
+    public int getDirection()
+    {
+      return (double) this.creature.transformscale <= 0.0 ? -1 : 1;
+    }
 
     public int getFamiliarLevel(BookOf book)
     {
@@ -300,25 +467,31 @@ namespace Educative
       return index < 0 || index >= this.creature.parent.familiarLevels.Length ? 0 : this.creature.parent.familiarLevels[index];
     }
 
-    public int getActivateableFamiliarLevel() => this.creature.familiarLevelActivateable;
+    public int getActivateableFamiliarLevel()
+    {
+      return this.creature.familiarLevelActivateable;
+    }
 
-    public BookOf getActivateableFamiliarBookID() => this.creature.parent.ActivateableFamiliar;
+    public BookOf getActivateableFamiliarBookID()
+    {
+      return this.creature.parent.ActivateableFamiliar;
+    }
 
     public void increaseFamiliarLevel(BookOf book = BookOf.Nothing, bool dealDmg = true, bool capAt5 = true)
     {
-      int b00k = (int) book;
-      if (b00k == -1)
-        b00k = (int) this.getActivateableFamiliarBookID();
-      if (b00k < 0 || b00k >= this.creature.parent.familiarLevels.Length)
+      int index = (int) book;
+      if (index == -1)
+        index = (int) this.getActivateableFamiliarBookID();
+      if (index < 0 || index >= this.creature.parent.familiarLevels.Length)
         return;
-      if (!capAt5 || this.creature.parent.familiarLevels[b00k] < 5)
-        ++this.creature.parent.familiarLevels[b00k];
+      if (!capAt5 || this.creature.parent.familiarLevels[index] < 5)
+        ++this.creature.parent.familiarLevels[index];
       if (dealDmg)
-        this.creature.DoDamage(20);
+        this.creature.DoDamage(20, DamageType.None, (ZCreature) null, false, (ISpellBridge) null);
       if (this.creature.hasDarkDefenses)
         this.creature.DarkDefenses(true);
-      this.creature.parent.familiarBook |= (FamiliarType) (1 << b00k);
-      this.creature.game.CreateFamiliar((BookOf) b00k, this.creature.parent);
+      this.creature.parent.familiarBook |= (FamiliarType) (1 << index);
+      this.creature.game.CreateFamiliar((BookOf) index, this.creature.parent, true, false);
       if (!this.creature.game.isClient)
         return;
       this.creature.UpdateHealthTxt();
@@ -347,7 +520,10 @@ namespace Educative
       return Mathd.Abs((FixedInt) MyLocation.Distance(this.creature.position, a.ToMyLocation())) < (FixedInt) (float) radius + this.creature.GetRadius();
     }
 
-    public void die(bool playSound = true) => this.creature?.OnDeath(playSound);
+    public void die(bool playSound = true)
+    {
+      this.creature?.OnDeath(playSound);
+    }
 
     private void SetRadius(int i)
     {
@@ -375,7 +551,7 @@ namespace Educative
 
     public ContainerSpell addSpell(object s)
     {
-      Spell spell = ContainerGame.getSpell(s);
+      Spell spell = ContainerGame.getSpell(s, (ZCreature) null);
       if (!((Object) spell != (Object) null))
         return (ContainerSpell) null;
       SpellSlot s1 = new SpellSlot(spell);
@@ -411,14 +587,14 @@ namespace Educative
 
     public Table getSpells(Script script)
     {
-      Table spells = new Table(script);
-      int key = 1;
+      Table table = new Table(script);
+      int num = 1;
       foreach (SpellSlot spell in this.creature.spells)
       {
-        spells[(object) key] = (object) new ContainerSpell(spell);
-        ++key;
+        table[(object) num] = (object) new ContainerSpell(spell);
+        ++num;
       }
-      return spells;
+      return table;
     }
 
     public ContainerSpell getSpell(object spellObj)
@@ -439,15 +615,30 @@ namespace Educative
       return s == null ? (ContainerSpell) null : new ContainerSpell(s);
     }
 
-    public int getSpellCount() => this.creature.spells.Count;
+    public int getSpellCount()
+    {
+      return this.creature.spells.Count;
+    }
 
-    public int castedCount(SpellEnum spellID) => this.creature.parent.GetSpellCast(spellID);
+    public int castedCount(SpellEnum spellID)
+    {
+      return this.creature.parent.GetSpellCast(spellID);
+    }
 
-    public int castedCountThisTurn() => this.creature.parent.spellsCastTHISTurn;
+    public int castedCountThisTurn()
+    {
+      return this.creature.parent.spellsCastTHISTurn;
+    }
 
-    public int castedDamage(SpellEnum spellID) => this.creature.parent.GetSpellDamage(spellID);
+    public int castedDamage(SpellEnum spellID)
+    {
+      return this.creature.parent.GetSpellDamage(spellID);
+    }
 
-    public int getMinionCount() => this.creature.parent.GetMinionCount();
+    public int getMinionCount()
+    {
+      return this.creature.parent.GetMinionCount();
+    }
 
     public void castSpell(
       object spellObj,
@@ -462,7 +653,7 @@ namespace Educative
       if (secTarget == (Point) null)
         secTarget = new Point(-1000.0, -1000.0);
       this.creature.game.serverState.busy = ServerState.Busy.Moving;
-      ZSpell.FireWhich(spell, this.creature, this.creature.position, FixedInt.Create(angle), FixedInt.Create(power), new MyLocation((int) target.x, (int) target.y), new MyLocation((int) secTarget.x, (int) secTarget.y));
+      ZSpell.FireWhich(spell, this.creature, this.creature.position, FixedInt.Create(angle), FixedInt.Create(power), new MyLocation((int) target.x, (int) target.y), new MyLocation((int) secTarget.x, (int) secTarget.y), 0, false, (SpellSlot) null, false);
       if (!((ZComponent) this.creature == (object) Player.Instance?.person?.first()))
         return;
       Player.Instance.UnselectSpell();
@@ -500,7 +691,7 @@ namespace Educative
 
     public void fireAt(object spellObj, ContainerCreature target, double anglevariance = 0.0)
     {
-      this.fireAt(spellObj, target.position, anglevariance);
+      this.fireAt(spellObj, target.position, anglevariance, (Point) null);
     }
 
     public void fireAt(object spellObj, Point target, double anglevariance = 0.0, Point secTarget = null)
@@ -530,44 +721,44 @@ namespace Educative
       this.creature.game.serverState.busy = ServerState.Busy.Moving;
       if (secTarget == (Point) null)
         secTarget = new Point(-1000.0, -1000.0);
-      ZSpell.FireWhich(spell, this.creature, this.creature.position, fixedInt, power, new MyLocation((int) target.x, (int) target.y), new MyLocation((int) secTarget.x, (int) secTarget.y));
+      ZSpell.FireWhich(spell, this.creature, this.creature.position, fixedInt, power, new MyLocation((int) target.x, (int) target.y), new MyLocation((int) secTarget.x, (int) secTarget.y), 0, false, (SpellSlot) null, false);
     }
 
     public Table getEffectors(Script script)
     {
-      Table effectors = new Table(script);
-      int key = 1;
+      Table table = new Table(script);
+      int num = 1;
       foreach (ZEffector effector in this.creature.effectors)
       {
         if (!ZComponent.IsNull((ZComponent) effector))
         {
-          effectors[(object) key] = (object) new ContainerEffector(effector);
-          ++key;
+          table[(object) num] = (object) new ContainerEffector(effector);
+          ++num;
         }
       }
       foreach (ZEffector destroyableEffector in this.creature.destroyableEffectors)
       {
         if (!ZComponent.IsNull((ZComponent) destroyableEffector))
         {
-          effectors[(object) key] = (object) new ContainerEffector(destroyableEffector);
-          ++key;
+          table[(object) num] = (object) new ContainerEffector(destroyableEffector);
+          ++num;
         }
       }
-      return effectors;
+      return table;
     }
 
     public Table getEffectors(Script script, bool destroyable)
     {
-      Table effectors = new Table(script);
-      int key = 1;
+      Table table = new Table(script);
+      int num = 1;
       if (!destroyable)
       {
         foreach (ZEffector effector in this.creature.effectors)
         {
           if (!ZComponent.IsNull((ZComponent) effector))
           {
-            effectors[(object) key] = (object) new ContainerEffector(effector);
-            ++key;
+            table[(object) num] = (object) new ContainerEffector(effector);
+            ++num;
           }
         }
       }
@@ -577,12 +768,12 @@ namespace Educative
         {
           if (!ZComponent.IsNull((ZComponent) destroyableEffector))
           {
-            effectors[(object) key] = (object) new ContainerEffector(destroyableEffector);
-            ++key;
+            table[(object) num] = (object) new ContainerEffector(destroyableEffector);
+            ++num;
           }
         }
       }
-      return effectors;
+      return table;
     }
 
     public override bool Equals(object obj)
@@ -590,7 +781,10 @@ namespace Educative
       return !(typeof (ContainerCreature) != obj?.GetType()) && (ZComponent) this.creature == (object) ((ContainerCreature) obj).creature;
     }
 
-    public override int GetHashCode() => this._hashCode;
+    public override int GetHashCode()
+    {
+      return this._hashCode;
+    }
 
     public static bool operator ==(ContainerCreature v, ContainerCreature x)
     {

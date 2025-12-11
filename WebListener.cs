@@ -12,34 +12,50 @@ using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 
-#nullable disable
 public class WebListener : ConnectionListener
 {
-  private const int MaxMessageSize = 1048576;
-  private TcpListener listener;
   private readonly IWebSocketServerFactory webSocketServerFactory = (IWebSocketServerFactory) new WebSocketServerFactory();
-  private CancellationTokenSource cancellation;
   private Dictionary<int, WebConnection> clients = new Dictionary<int, WebConnection>();
   public bool NoDelay = true;
-  private static int counter;
   public bool _secure = true;
   public WebListener.SslConfiguration _sslConfig = new WebListener.SslConfiguration();
+  private const int MaxMessageSize = 1048576;
+  private TcpListener listener;
+  private CancellationTokenSource cancellation;
+  private static int counter;
 
-  public override void StartNoTry() => throw new NotImplementedException();
+  public override void StartNoTry()
+  {
+    throw new NotImplementedException();
+  }
 
-  public override void Start() => throw new NotImplementedException();
+  public override void Start()
+  {
+    throw new NotImplementedException();
+  }
 
-  public event Action<int, Exception> ReceivedError;
+  public event System.Action<int, Exception> ReceivedError;
 
   public static int NextConnectionId()
   {
     int num = Interlocked.Increment(ref WebListener.counter);
-    return num != int.MaxValue ? num : throw new Exception("connection id limit reached: " + (object) num);
+    if (num == int.MaxValue)
+      throw new Exception("connection id limit reached: " + (object) num);
+    return num;
   }
 
-  public bool Active => this.listener != null;
+  public bool Active
+  {
+    get
+    {
+      return this.listener != null;
+    }
+  }
 
-  public WebConnection GetClient(int connectionId) => this.clients[connectionId];
+  public WebConnection GetClient(int connectionId)
+  {
+    return this.clients[connectionId];
+  }
 
   public async void Listen(int port)
   {
@@ -63,7 +79,7 @@ public class WebListener : ConnectionListener
     }
     catch (Exception ex)
     {
-      Action<int, Exception> receivedError = w.ReceivedError;
+      System.Action<int, Exception> receivedError = w.ReceivedError;
       if (receivedError == null)
         return;
       receivedError(0, ex);
@@ -82,7 +98,7 @@ public class WebListener : ConnectionListener
           KeepAliveInterval = TimeSpan.FromSeconds(30.0),
           SubProtocol = "binary"
         };
-        await this.ReceiveLoopAsync(await this.webSocketServerFactory.AcceptWebSocketAsync(context, options), token, ip);
+        await this.ReceiveLoopAsync(await this.webSocketServerFactory.AcceptWebSocketAsync(context, options, new CancellationToken()), token, ip);
       }
       else
         Debug.Log((object) "Http header contains no web socket upgrade request. Ignoring");
@@ -92,7 +108,7 @@ public class WebListener : ConnectionListener
     }
     catch (Exception ex)
     {
-      Action<int, Exception> receivedError = this.ReceivedError;
+      System.Action<int, Exception> receivedError = this.ReceivedError;
       if (receivedError == null)
         return;
       receivedError(0, ex);
@@ -106,7 +122,7 @@ public class WebListener : ConnectionListener
       }
       catch (Exception ex)
       {
-        Action<int, Exception> receivedError = this.ReceivedError;
+        System.Action<int, Exception> receivedError = this.ReceivedError;
         if (receivedError != null)
           receivedError(0, ex);
       }
@@ -139,7 +155,7 @@ public class WebListener : ConnectionListener
             }
             catch (Exception ex)
             {
-              Action<int, Exception> receivedError = webListener.ReceivedError;
+              System.Action<int, Exception> receivedError = webListener.ReceivedError;
               if (receivedError != null)
                 receivedError(connectionId, ex);
             }
@@ -155,7 +171,7 @@ label_2:;
     }
     catch (Exception ex)
     {
-      Action<int, Exception> receivedError = webListener.ReceivedError;
+      System.Action<int, Exception> receivedError = webListener.ReceivedError;
       if (receivedError == null)
         return;
       receivedError(connectionId, ex);
@@ -164,7 +180,7 @@ label_2:;
     {
       con.SetDisconnected();
       webListener.clients.Remove(connectionId);
-      con.InvokeDisconnected();
+      con.InvokeDisconnected((Exception) null);
       con.Dispose();
     }
   }
@@ -182,7 +198,7 @@ label_2:;
       if (count >= 1048576)
       {
         await webSocket.CloseAsync(WebSocketCloseStatus.MessageTooBig, string.Format("Maximum message size: {0} bytes.", (object) 1048576), CancellationToken.None);
-        Action<int, Exception> receivedError = this.ReceivedError;
+        System.Action<int, Exception> receivedError = this.ReceivedError;
         if (receivedError != null)
           receivedError(connectionId, (Exception) new WebSocketException(WebSocketError.HeaderError));
         return new byte[0];
@@ -190,9 +206,9 @@ label_2:;
       result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer, count, 1048576 - count), CancellationToken.None);
       count += result.Count;
     }
-    byte[] dst = new byte[count];
-    System.Buffer.BlockCopy((Array) buffer, 0, (Array) dst, 0, count);
-    return dst;
+    byte[] numArray = new byte[count];
+    System.Buffer.BlockCopy((Array) buffer, 0, (Array) numArray, 0, count);
+    return numArray;
   }
 
   public void Stop()
@@ -223,7 +239,7 @@ label_2:;
       {
         if (this.clients.ContainsKey(connectionId))
         {
-          Action<int, Exception> receivedError = this.ReceivedError;
+          System.Action<int, Exception> receivedError = this.ReceivedError;
           if (receivedError != null)
             receivedError(connectionId, ex);
         }
@@ -232,7 +248,7 @@ label_2:;
     }
     else
     {
-      Action<int, Exception> receivedError = this.ReceivedError;
+      System.Action<int, Exception> receivedError = this.ReceivedError;
       if (receivedError == null)
         return;
       receivedError(connectionId, (Exception) new SocketException(10057));
@@ -253,7 +269,7 @@ label_2:;
     {
       if (this.clients.ContainsKey(client.id))
       {
-        Action<int, Exception> receivedError = this.ReceivedError;
+        System.Action<int, Exception> receivedError = this.ReceivedError;
         if (receivedError != null)
           receivedError(client.id, ex);
       }
@@ -269,7 +285,7 @@ label_2:;
     webConnection.SetDisconnected();
     this.clients.Remove(connectionId);
     webConnection.webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);
-    webConnection.InvokeDisconnected();
+    webConnection.InvokeDisconnected((Exception) null);
     return true;
   }
 
@@ -280,9 +296,9 @@ label_2:;
 
   public class SslConfiguration
   {
+    public SslProtocols EnabledSslProtocols = SslProtocols.Tls12;
     public X509Certificate2 Certificate;
     public bool ClientCertificateRequired;
-    public SslProtocols EnabledSslProtocols = SslProtocols.Tls12;
     public bool CheckCertificateRevocation;
 
     public void SetKey(WebListener w)

@@ -1,5 +1,4 @@
 
-#nullable disable
 namespace SevenZip.CommandLineParser
 {
   public class CommandForm

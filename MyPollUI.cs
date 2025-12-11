@@ -5,9 +5,13 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-#nullable disable
 public class MyPollUI : MonoBehaviour
 {
+  public List<MyPollUIItem> items = new List<MyPollUIItem>();
+  public float defaultHeight = 420f;
+  public float defContainerHeight = 175f;
+  public float maxBoxSixe = 500f;
+  public float itemHeight = 80f;
   public GameObject minaPanel;
   public RectTransform container;
   public RectTransform scrollBox;
@@ -20,11 +24,6 @@ public class MyPollUI : MonoBehaviour
   public MyPollUIItem pfabItem;
   internal MyPoll poll;
   private int curIndex;
-  public List<MyPollUIItem> items = new List<MyPollUIItem>();
-  public float defaultHeight = 420f;
-  public float defContainerHeight = 175f;
-  public float maxBoxSixe = 500f;
-  public float itemHeight = 80f;
   private bool testing;
 
   public static MyPollUI Instance { get; private set; }
@@ -47,7 +46,10 @@ public class MyPollUI : MonoBehaviour
     MyPollUI.Instance = (MyPollUI) null;
   }
 
-  private void Setup() => this.render(0);
+  private void Setup()
+  {
+    this.render(0);
+  }
 
   private void Update()
   {
@@ -72,7 +74,10 @@ public class MyPollUI : MonoBehaviour
     }
   }
 
-  internal void OnEdit(int i, string s) => this.poll.items[this.curIndex].answers[i].userInput = s;
+  internal void OnEdit(int i, string s)
+  {
+    this.poll.items[this.curIndex].answers[i].userInput = s;
+  }
 
   private void render(int index)
   {
@@ -134,7 +139,13 @@ public class MyPollUI : MonoBehaviour
     this.render(this.curIndex - 1);
   }
 
-  public void ClickMinimize() => this.minaPanel.SetActive(!this.minaPanel.activeSelf);
+  public void ClickMinimize()
+  {
+    this.minaPanel.SetActive(!this.minaPanel.activeSelf);
+  }
 
-  public void ClickClose() => Object.Destroy((Object) this.gameObject);
+  public void ClickClose()
+  {
+    Object.Destroy((Object) this.gameObject);
+  }
 }

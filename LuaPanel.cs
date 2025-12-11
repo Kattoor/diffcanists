@@ -3,7 +3,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-#nullable disable
 public class LuaPanel : MonoBehaviour
 {
   public Image image;

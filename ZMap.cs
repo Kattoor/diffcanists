@@ -6,17 +6,19 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-#nullable disable
 public class ZMap
 {
-  public FixedInt Gravity = (FixedInt) -838860L;
-  public Action doneCallback;
-  public MyLocation wind = new MyLocation(0, 0);
-  public FixedInt windSpeed = (FixedInt) 0;
-  public FixedInt windDir = (FixedInt) -90;
   public static FixedInt MaxWindSpeed = (FixedInt) 52428L;
   public static FixedInt MaxSpeed = FixedInt.Create(100);
   public static FixedInt SnowSpeed = FixedInt.Create(11);
+  public static Dictionary<Texture2D, Color32[]> cachedPixels = new Dictionary<Texture2D, Color32[]>();
+  public static Dictionary<int, BufferedImage> cachedCutouts = new Dictionary<int, BufferedImage>();
+  public FixedInt Gravity = (FixedInt) -838860L;
+  public MyLocation wind = new MyLocation(0, 0);
+  public FixedInt windSpeed = (FixedInt) 0;
+  public FixedInt windDir = (FixedInt) -90;
+  internal List<PastBlits> _pastBits = new List<PastBlits>();
+  public Action doneCallback;
   private int _height;
   private int _width;
   private int _numBlocksHorizontal;
@@ -24,41 +26,56 @@ public class ZMap
   private const int _blockHeight = 128;
   public ZMyWorld world;
   public ZGame game;
-  internal List<PastBlits> _pastBits = new List<PastBlits>();
   private bool purple;
   private Sprite sprite;
   private List<ZMap.RawSprite> rawspriteColors;
   public Color32[] deserializedPixels;
   public byte[] serializedMap;
-  public static Dictionary<Texture2D, Color32[]> cachedPixels = new Dictionary<Texture2D, Color32[]>();
-  public static Dictionary<int, BufferedImage> cachedCutouts = new Dictionary<int, BufferedImage>();
 
-  public int Height => this._height;
+  public int Height
+  {
+    get
+    {
+      return this._height;
+    }
+  }
 
-  public int Width => this._width;
+  public int Width
+  {
+    get
+    {
+      return this._width;
+    }
+  }
 
   public string name
   {
-    get => this.rawspriteColors[0].sr.name;
-    set => this.rawspriteColors[0].sr.name = value;
+    get
+    {
+      return this.rawspriteColors[0].sr.name;
+    }
+    set
+    {
+      this.rawspriteColors[0].sr.name = value;
+    }
   }
 
   public void OnGhosted(int x, int y, int r, ZMyCollider colliderIgnore = null)
   {
-    foreach (ZMyCollider zmyCollider in this.world.OverlapCircleAll(new Point(x, y), r, colliderIgnore, Inert.mask_movement_NoEffector))
+    foreach (ZMyCollider c in this.world.OverlapCircleAll(new Point(x, y), r, colliderIgnore, Inert.mask_movement_NoEffector))
     {
-      if (!ZComponent.IsNull((ZComponent) zmyCollider) && ((ZComponent) zmyCollider.creature != (object) null || (ZComponent) zmyCollider.tower != (object) null))
+      if (!ZComponent.IsNull((ZComponent) c) && ((ZComponent) c.creature != (object) null || (ZComponent) c.tower != (object) null))
       {
-        ZMap.GhostTerrain ghostTerrain = zmyCollider.ghosting;
+        ZMap.GhostTerrain ghostTerrain = c.ghosting;
         if (ghostTerrain == null)
         {
-          zmyCollider.ghosting = new ZMap.GhostTerrain()
+          c.ghosting = new ZMap.GhostTerrain()
           {
             x = x,
             y = y,
             radius2 = r * r
           };
-          UnityEngine.Object.Instantiate<Phasing>(ClientResources.Instance.Phased, (Vector3) zmyCollider.position.ToSinglePrecision(), Quaternion.identity, this.game.GetMapTransform()).Init(zmyCollider, x, y, r * 2);
+          UnityEngine.Object.Instantiate<Phasing>(ClientResources.Instance.Phased, (Vector3) c.position.ToSinglePrecision(), Quaternion.identity, this.game.GetMapTransform()).Init(c, x, y, r * 2);
         }
         else
         {
@@ -76,14 +93,17 @@ public class ZMap
             y = y,
             radius2 = r * r
           };
-          UnityEngine.Object.Instantiate<Phasing>(ClientResources.Instance.Phased, (Vector3) zmyCollider.position.ToSinglePrecision(), Quaternion.identity, this.game.GetMapTransform()).Init(zmyCollider, x, y, r * 2);
+          UnityEngine.Object.Instantiate<Phasing>(ClientResources.Instance.Phased, (Vector3) c.position.ToSinglePrecision(), Quaternion.identity, this.game.GetMapTransform()).Init(c, x, y, r * 2);
         }
-        zmyCollider.ghosted = true;
+        c.ghosted = true;
       }
     }
   }
 
-  public void UpdateWind() => this.wind = Global.Velocity(this.windDir, this.windSpeed);
+  public void UpdateWind()
+  {
+    this.wind = Global.Velocity(this.windDir, this.windSpeed);
+  }
 
   public void RandomizeWind()
   {
@@ -168,9 +188,18 @@ public class ZMap
       rawspriteColor.Purpalize();
   }
 
-  public Sprite GetMapSprite => this.sprite;
+  public Sprite GetMapSprite
+  {
+    get
+    {
+      return this.sprite;
+    }
+  }
 
-  public List<ZMap.RawSprite> GetRawSprites() => this.rawspriteColors;
+  public List<ZMap.RawSprite> GetRawSprites()
+  {
+    return this.rawspriteColors;
+  }
 
   public void SetSprites(ZGame game, Color32[] x)
   {
@@ -258,42 +287,42 @@ public class ZMap
     }
     else if (game.players.Count == 2)
     {
-      int num3 = 256;
-      int num4 = 0;
+      int num1 = 256;
+      int num2 = 0;
       if (game.gameFacts.realMap == MapEnum.Wasteland)
       {
-        num4 = 256;
-        num3 = 512;
+        num2 = 256;
+        num1 = 512;
       }
-      int num5 = game.gameFacts.GetTimeInSeconds() <= 10 ? 256 : 448;
-      int num6 = game.gameFacts.realMap == MapEnum.Jungle ? 300 : 0;
-      for (int index5 = 0; index5 < game.players.Count; ++index5)
+      int num3 = game.gameFacts.GetTimeInSeconds() <= 10 ? 256 : 448;
+      int num4 = game.gameFacts.realMap == MapEnum.Jungle ? 300 : 0;
+      for (int index1 = 0; index1 < game.players.Count; ++index1)
       {
         List<MyLocation> myLocationList = new List<MyLocation>();
-        FixedInt fixedInt = (FixedInt) (this.Height - game.players[index5].controlled[0].radius);
-        MyLocation startPosition1 = game.players[index5].controlled[0].GetStartPosition(new MyLocation((FixedInt) (index5 == 0 ? num3 + num4 : this.Width - num3), fixedInt - num6));
+        FixedInt fixedInt = (FixedInt) (this.Height - game.players[index1].controlled[0].radius);
+        MyLocation startPosition1 = game.players[index1].controlled[0].GetStartPosition(new MyLocation((FixedInt) (index1 == 0 ? num1 + num2 : this.Width - num1), fixedInt - num4));
         myLocationList.Add(startPosition1);
-        for (int index6 = 16; index6 <= num5; index6 += 16)
+        for (int index2 = 16; index2 <= num3; index2 += 16)
         {
-          MyLocation startPosition2 = game.players[index5].controlled[0].GetStartPosition(new MyLocation((FixedInt) (index5 == 0 ? num3 + index6 + num4 : this.Width - num3 - index6), fixedInt - num6));
+          MyLocation startPosition2 = game.players[index1].controlled[0].GetStartPosition(new MyLocation((FixedInt) (index1 == 0 ? num1 + index2 + num2 : this.Width - num1 - index2), fixedInt - num4));
           myLocationList.Add(startPosition2);
         }
         myLocationList.Sort((Comparison<MyLocation>) ((aa, bb) => (int) aa.y - (int) bb.y));
-        game.players[index5].controlled[0].SetPosition(myLocationList[1]);
+        game.players[index1].controlled[0].SetPosition(myLocationList[1]);
       }
     }
     else
     {
-      int num7 = (this.Width - 800 - (game.gameFacts.realMap == MapEnum.Wasteland ? 300 : 0)) / (game.players.Count == 1 ? 1 : game.players.Count - 1);
-      int num8 = game.players.Count == 1 ? this.Width / 2 : 400;
-      int num9 = game.gameFacts.realMap == MapEnum.Jungle ? 300 : 0;
+      int num1 = (this.Width - 800 - (game.gameFacts.realMap == MapEnum.Wasteland ? 300 : 0)) / (game.players.Count == 1 ? 1 : game.players.Count - 1);
+      int num2 = game.players.Count == 1 ? this.Width / 2 : 400;
+      int num3 = game.gameFacts.realMap == MapEnum.Jungle ? 300 : 0;
       if (game.gameFacts.realMap == MapEnum.Wasteland)
-        num8 += 300;
+        num2 += 300;
       for (int index = 0; index < game.players.Count; ++index)
       {
-        FixedInt x2 = (FixedInt) (num7 * index + num8);
+        FixedInt x2 = (FixedInt) (num1 * index + num2);
         FixedInt fixedInt = (FixedInt) (this.Height - game.players[index].controlled[0].radius);
-        game.players[index].controlled[0].position = new MyLocation(x2, fixedInt - num9);
+        game.players[index].controlled[0].position = new MyLocation(x2, fixedInt - num3);
         game.players[index].controlled[0].SetStartPosition();
       }
     }
@@ -359,7 +388,7 @@ public class ZMap
 
   public void UpdatePixel(int x, int y, Color32 c)
   {
-    if (x < 0 || y < 0 || x >= this.Width || y >= this.Height)
+    if (x < 0 || y < 0 || (x >= this.Width || y >= this.Height))
       return;
     this.rawspriteColors[(x >> 7) + (y >> 7) * this._numBlocksHorizontal].SetPixel((x & (int) sbyte.MaxValue) + ((y & (int) sbyte.MaxValue) << 7), c);
   }
@@ -371,7 +400,7 @@ public class ZMap
 
   public Color32 GetPixel(int x, int y)
   {
-    return x < 0 || y < 0 || x >= this.Width || y >= this.Height ? (Color32) Color.white : this.rawspriteColors[(x >> 7) + (y >> 7) * this._numBlocksHorizontal].colors[(x & (int) sbyte.MaxValue) + ((y & (int) sbyte.MaxValue) << 7)];
+    return x < 0 || y < 0 || (x >= this.Width || y >= this.Height) ? (Color32) Color.white : this.rawspriteColors[(x >> 7) + (y >> 7) * this._numBlocksHorizontal].colors[(x & (int) sbyte.MaxValue) + ((y & (int) sbyte.MaxValue) << 7)];
   }
 
   public Color32 GetPixelNoBoundsCheck(int x, int y)
@@ -381,52 +410,52 @@ public class ZMap
 
   private bool PixelNotTransparent(int x, int y)
   {
-    return x >= 0 && y >= 0 && x < this.Width && y < this.Height && this.rawspriteColors[(x >> 7) + (y >> 7) * this._numBlocksHorizontal].colors[(x & (int) sbyte.MaxValue) + ((y & (int) sbyte.MaxValue) << 7)].a > (byte) 0;
+    return x >= 0 && y >= 0 && (x < this.Width && y < this.Height) && this.rawspriteColors[(x >> 7) + (y >> 7) * this._numBlocksHorizontal].colors[(x & (int) sbyte.MaxValue) + ((y & (int) sbyte.MaxValue) << 7)].a > (byte) 0;
   }
 
   public bool PixelNotAlpha(int x, int y, ZCreature creature, int mask, bool collideWithThorns = true)
   {
-    if (x < 0 || y < 0 || x >= this.Width || y >= this.Height)
+    if (x < 0 || y < 0 || (x >= this.Width || y >= this.Height))
       return false;
     return this.rawspriteColors[(x >> 7) + (y >> 7) * this._numBlocksHorizontal].colors[(x & (int) sbyte.MaxValue) + ((y & (int) sbyte.MaxValue) << 7)].a != (byte) 0 || this.PhysicsCollidePoint(creature, x, y, mask, collideWithThorns);
   }
 
   public bool SpellPixelNotAlpha(int x, int y, ZCreature creature, int mask)
   {
-    if (x < 0 || y < 0 || x >= this.Width || y >= this.Height)
+    if (x < 0 || y < 0 || (x >= this.Width || y >= this.Height))
       return false;
     return this.rawspriteColors[(x >> 7) + (y >> 7) * this._numBlocksHorizontal].colors[(x & (int) sbyte.MaxValue) + ((y & (int) sbyte.MaxValue) << 7)].a != (byte) 0 || this.SpellPhysicsCollidePoint(creature, x, y, mask);
   }
 
   public bool LeafPixelNotAlpha(int x, int y, ZCreature creature, int mask)
   {
-    if (x < 0 || y < 0 || x >= this.Width || y >= this.Height)
+    if (x < 0 || y < 0 || (x >= this.Width || y >= this.Height))
       return false;
     return this.rawspriteColors[(x >> 7) + (y >> 7) * this._numBlocksHorizontal].colors[(x & (int) sbyte.MaxValue) + ((y & (int) sbyte.MaxValue) << 7)].a != (byte) 0 || this.LeafPhysicsCollidePoint(creature, x, y, mask);
   }
 
   public bool SpellPixelNotAlphaIgnoreSelf(int x, int y, ZMyCollider ignore, int mask)
   {
-    if (x < 0 || y < 0 || x >= this.Width || y >= this.Height)
+    if (x < 0 || y < 0 || (x >= this.Width || y >= this.Height))
       return false;
     return this.rawspriteColors[(x >> 7) + (y >> 7) * this._numBlocksHorizontal].colors[(x & (int) sbyte.MaxValue) + ((y & (int) sbyte.MaxValue) << 7)].a != (byte) 0 || this.SpellPhysicsCollidePointIgnoreSelf(ignore, x, y, mask);
   }
 
   public bool PixelNotAlphaUndeadOnly(int x, int y, ZCreature creature, ZSpell spell, int mask)
   {
-    if (x < 0 || y < 0 || x >= this.Width || y >= this.Height)
+    if (x < 0 || y < 0 || (x >= this.Width || y >= this.Height))
       return false;
     return this.rawspriteColors[(x >> 7) + (y >> 7) * this._numBlocksHorizontal].colors[(x & (int) sbyte.MaxValue) + ((y & (int) sbyte.MaxValue) << 7)].a != (byte) 0 || this.SpellPhysicsCollidePointUndeadOnly(creature, spell, x, y, mask);
   }
 
   public bool BitBltPixelNotAlpha(int x, int y)
   {
-    return x >= 0 && y >= 0 && x < this.Width && y < this.Height && this.rawspriteColors[(x >> 7) + (y >> 7) * this._numBlocksHorizontal].colors[(x & (int) sbyte.MaxValue) + ((y & (int) sbyte.MaxValue) << 7)].a > (byte) 0;
+    return x >= 0 && y >= 0 && (x < this.Width && y < this.Height) && this.rawspriteColors[(x >> 7) + (y >> 7) * this._numBlocksHorizontal].colors[(x & (int) sbyte.MaxValue) + ((y & (int) sbyte.MaxValue) << 7)].a > (byte) 0;
   }
 
   public Color32 BitBltPixelColor(int x, int y)
   {
-    return x < 0 || y < 0 || x >= this.Width || y >= this.Height ? (Color32) Color.white : this.rawspriteColors[(x >> 7) + (y >> 7) * this._numBlocksHorizontal].colors[(x & (int) sbyte.MaxValue) + ((y & (int) sbyte.MaxValue) << 7)];
+    return x < 0 || y < 0 || (x >= this.Width || y >= this.Height) ? (Color32) Color.white : this.rawspriteColors[(x >> 7) + (y >> 7) * this._numBlocksHorizontal].colors[(x & (int) sbyte.MaxValue) + ((y & (int) sbyte.MaxValue) << 7)];
   }
 
   public void SetPixelColor(int x, int y, Color32 p)
@@ -447,15 +476,15 @@ public class ZMap
 
   public void DrawEllipse(int x, int y, int width, int height, Color32 color)
   {
-    int f1 = width;
-    int f2 = height;
-    for (int x1 = x - Mathf.RoundToInt((float) f1); x1 <= x + Mathf.RoundToInt((float) f1); ++x1)
+    int num1 = width;
+    int num2 = height;
+    for (int x1 = x - Mathf.RoundToInt((float) num1); x1 <= x + Mathf.RoundToInt((float) num1); ++x1)
     {
-      for (int y1 = y - Mathf.RoundToInt((float) f2); y1 <= y + Mathf.RoundToInt((float) f2); ++y1)
+      for (int y1 = y - Mathf.RoundToInt((float) num2); y1 <= y + Mathf.RoundToInt((float) num2); ++y1)
       {
-        double num1 = (double) (x1 - x);
-        float num2 = (float) (y1 - y);
-        if (num1 * num1 / (double) (f1 * f1) + (double) num2 * (double) num2 / (double) (f2 * f2) < 1.0 && this.InBounds(x1, y1))
+        double num3 = (double) (x1 - x);
+        float num4 = (float) (y1 - y);
+        if (num3 * num3 / (double) (num1 * num1) + (double) num4 * (double) num4 / (double) (num2 * num2) < 1.0 && this.InBounds(x1, y1))
           this.UpdatePixel(x1, y1, color);
       }
     }
@@ -469,15 +498,15 @@ public class ZMap
     int outlineRadius,
     Color32 color)
   {
-    int f1 = width / 2;
-    int f2 = height / 2;
-    for (int x1 = x - Mathf.RoundToInt((float) f1); x1 <= x + Mathf.RoundToInt((float) f1); ++x1)
+    int num1 = width / 2;
+    int num2 = height / 2;
+    for (int x1 = x - Mathf.RoundToInt((float) num1); x1 <= x + Mathf.RoundToInt((float) num1); ++x1)
     {
-      for (int y1 = y - Mathf.RoundToInt((float) f2); y1 <= y + Mathf.RoundToInt((float) f2); ++y1)
+      for (int y1 = y - Mathf.RoundToInt((float) num2); y1 <= y + Mathf.RoundToInt((float) num2); ++y1)
       {
-        float num1 = (float) (x1 - x);
-        float num2 = (float) (y1 - y);
-        if ((double) num1 * (double) num1 / (double) (f1 * f1) + (double) num2 * (double) num2 / (double) (f2 * f2) < 1.0 && (double) num1 * (double) num1 / (double) ((f1 - outlineRadius) * (f1 - outlineRadius)) + (double) num2 * (double) num2 / (double) ((f2 - outlineRadius) * (f2 - outlineRadius)) >= 1.0 && this.InBounds(x1, y1))
+        float num3 = (float) (x1 - x);
+        float num4 = (float) (y1 - y);
+        if ((double) num3 * (double) num3 / (double) (num1 * num1) + (double) num4 * (double) num4 / (double) (num2 * num2) < 1.0 && (double) num3 * (double) num3 / (double) ((num1 - outlineRadius) * (num1 - outlineRadius)) + (double) num4 * (double) num4 / (double) ((num2 - outlineRadius) * (num2 - outlineRadius)) >= 1.0 && this.InBounds(x1, y1))
           this.UpdatePixel(x1, y1, color);
       }
     }
@@ -485,33 +514,36 @@ public class ZMap
 
   public bool InBounds(int x, int y, int radius)
   {
-    return x + radius < this.Width && x - radius >= 0 && y - radius >= 0 && y + radius < this.Height;
+    return x + radius < this.Width && x - radius >= 0 && (y - radius >= 0 && y + radius < this.Height);
   }
 
-  public bool InBounds(int x, int y) => x < this.Width && x >= 0 && y >= 0 && y < this.Height;
+  public bool InBounds(int x, int y)
+  {
+    return x < this.Width && x >= 0 && (y >= 0 && y < this.Height);
+  }
 
   public bool CheckPosition(int x, int y, ZCreature creature, int mask)
   {
-    if (x < this.Width && x >= 0 && y >= 0 && y < this.Height)
-      return !this.PixelNotAlpha(x, y, creature, mask);
+    if (x < this.Width && x >= 0 && (y >= 0 && y < this.Height))
+      return !this.PixelNotAlpha(x, y, creature, mask, true);
     if (mask == Inert.mask_entity_movement)
       this.PhysicsCollidePoint(creature, x, y, 2560, false);
-    return !((ZComponent) creature != (object) null) || !creature.flying || creature.entangledOrGravity || x < 0 || x >= this.Width || creature.race == CreatureRace.Effector || (x < this.Width && x >= 0 || !(creature.velocity.y == 0)) && (y >= 0 && y < this.Height || !(creature.velocity.x == 0));
+    return !((ZComponent) creature != (object) null) || !creature.flying || (creature.entangledOrGravity || x < 0) || (x >= this.Width || creature.race == CreatureRace.Effector) || (x < this.Width && x >= 0 || !(creature.velocity.y == 0)) && (y >= 0 && y < this.Height || !(creature.velocity.x == 0));
   }
 
   public bool SpellCheckPosition(int x, int y, ZCreature creature, int mask)
   {
-    return x >= this.Width || x < 0 || y < 0 || y >= this.Height ? !this.SpellPhysicsCollidePoint(creature, x, y, mask) : !this.SpellPixelNotAlpha(x, y, creature, mask);
+    return x >= this.Width || x < 0 || (y < 0 || y >= this.Height) ? !this.SpellPhysicsCollidePoint(creature, x, y, mask) : !this.SpellPixelNotAlpha(x, y, creature, mask);
   }
 
   public bool LeafCheckPosition(int x, int y, ZCreature creature, int mask)
   {
-    return x >= this.Width || x < 0 || y < 0 || y >= this.Height ? !this.LeafPhysicsCollidePoint(creature, x, y, mask) : !this.LeafPixelNotAlpha(x, y, creature, mask);
+    return x >= this.Width || x < 0 || (y < 0 || y >= this.Height) ? !this.LeafPhysicsCollidePoint(creature, x, y, mask) : !this.LeafPixelNotAlpha(x, y, creature, mask);
   }
 
   public bool SpellCheckPositionIgnoreSelf(int x, int y, ZMyCollider ignore, int mask)
   {
-    return x >= this.Width || x < 0 || y < 0 || y >= this.Height ? !this.SpellPhysicsCollidePointIgnoreSelf(ignore, x, y, mask) : !this.SpellPixelNotAlphaIgnoreSelf(x, y, ignore, mask);
+    return x >= this.Width || x < 0 || (y < 0 || y >= this.Height) ? !this.SpellPhysicsCollidePointIgnoreSelf(ignore, x, y, mask) : !this.SpellPixelNotAlphaIgnoreSelf(x, y, ignore, mask);
   }
 
   public bool SpellCheckPositionEntities(int x, int y, ZCreature creature, int mask)
@@ -526,24 +558,24 @@ public class ZMap
     ZSpell spell,
     int mask)
   {
-    return x >= this.Width || x < 0 || y < 0 || y >= this.Height ? !this.SpellPhysicsCollidePointUndeadOnly(creature, spell, x, y, mask) : !this.PixelNotAlphaUndeadOnly(x, y, creature, spell, mask);
+    return x >= this.Width || x < 0 || (y < 0 || y >= this.Height) ? !this.SpellPhysicsCollidePointUndeadOnly(creature, spell, x, y, mask) : !this.PixelNotAlphaUndeadOnly(x, y, creature, spell, mask);
   }
 
   public bool CheckPositionPhantom(int x, int y, ZCreature creature, int mask)
   {
-    if (x < this.Width && x >= 0 && y >= 0 && y < this.Height)
-      return !this.PhysicsCollidePoint(creature, x, y, mask);
-    return !((ZComponent) creature != (object) null) || !creature.flying || creature.entangledOrGravity || x < 0 || x >= this.Width || creature.race == CreatureRace.Effector || (x < this.Width && x >= 0 || !(creature.velocity.y == 0)) && (y >= 0 && y < this.Height || !(creature.velocity.x == 0));
+    if (x < this.Width && x >= 0 && (y >= 0 && y < this.Height))
+      return !this.PhysicsCollidePoint(creature, x, y, mask, true);
+    return !((ZComponent) creature != (object) null) || !creature.flying || (creature.entangledOrGravity || x < 0) || (x >= this.Width || creature.race == CreatureRace.Effector) || (x < this.Width && x >= 0 || !(creature.velocity.y == 0)) && (y >= 0 && y < this.Height || !(creature.velocity.x == 0));
   }
 
   public bool CheckPositionOnlyEntities(int x, int y, ZCreature creature, int mask)
   {
-    return x >= this.Width || x < 0 || y < 0 || y >= this.Height || !this.PhysicsCollidePoint(creature, x, y, mask);
+    return x >= this.Width || x < 0 || (y < 0 || y >= this.Height) || !this.PhysicsCollidePoint(creature, x, y, mask, true);
   }
 
   public bool CheckPositionOnlyMap(int x, int y)
   {
-    return x >= this.Width || x < 0 || y < 0 || y >= this.Height || this.rawspriteColors[(x >> 7) + (y >> 7) * this._numBlocksHorizontal].colors[(x & (int) sbyte.MaxValue) + ((y & (int) sbyte.MaxValue) << 7)].a == (byte) 0;
+    return x >= this.Width || x < 0 || (y < 0 || y >= this.Height) || this.rawspriteColors[(x >> 7) + (y >> 7) * this._numBlocksHorizontal].colors[(x & (int) sbyte.MaxValue) + ((y & (int) sbyte.MaxValue) << 7)].a == (byte) 0;
   }
 
   public bool CheckClampedPixel(int x, int y)
@@ -565,7 +597,7 @@ public class ZMap
         pixels32 = Inert.Instance.cutouts[p.index].GetPixels32();
         ZMap.cachedPixels.Add(Inert.Instance.cutouts[p.index], pixels32);
       }
-      RotateImage.RenderHUE(this, new Surface(pixels32, Inert.Instance.cutouts[p.index].width, Inert.Instance.cutouts[p.index].height), p.x, p.y, 0.0f, false, p.brightness.ToFloat());
+      RotateImage.RenderHUE(this, new Surface(pixels32, Inert.Instance.cutouts[p.index].width, Inert.Instance.cutouts[p.index].height), p.x, p.y, 0.0f, false, p.brightness.ToFloat(), 1f);
     }
     else if (p.rotate)
     {
@@ -575,12 +607,12 @@ public class ZMap
         pixels32 = Inert.Instance.cutouts[p.index].GetPixels32();
         ZMap.cachedPixels.Add(Inert.Instance.cutouts[p.index], pixels32);
       }
-      RotateImage.Render(this, new Surface(pixels32, Inert.Instance.cutouts[p.index].width, Inert.Instance.cutouts[p.index].height), p.x, p.y, p.brightness, 1, p.ignoreAlpha, true, (FixedInt) 1);
+      RotateImage.Render(this, new Surface(pixels32, Inert.Instance.cutouts[p.index].width, Inert.Instance.cutouts[p.index].height), p.x, p.y, p.brightness, 1, p.ignoreAlpha, true, (FixedInt) 1, true);
     }
     else if (p.brightness > 0)
       this.BitBltBrightness(Inert.Instance.cutouts[p.index], p.x, p.y, p.brightness.ToFloat(), p.ignoreAlpha);
     else
-      this.BitBlt(Inert.Instance.cutouts[p.index], p.x, p.y, p.ignoreAlpha);
+      this.BitBlt(Inert.Instance.cutouts[p.index], p.x, p.y, p.ignoreAlpha, true);
   }
 
   public void TutorialBitBlt(Texture2D index, int x, int y, bool ignoreAlpha = true, bool apply = true)
@@ -606,8 +638,8 @@ public class ZMap
   {
     if (!this.game.AllowTerrainDestruction || index == 38)
       return;
-    this._pastBits.Add(new PastBlits(x, y, index, ignoreAlpha, (FixedInt) 0));
-    this.BitBlt(Inert.Instance.cutouts[index], x, y, ignoreAlpha);
+    this._pastBits.Add(new PastBlits(x, y, index, ignoreAlpha, (FixedInt) 0, false));
+    this.BitBlt(Inert.Instance.cutouts[index], x, y, ignoreAlpha, true);
   }
 
   public void ServerBitBltHue(int index, int x, int y, float hue, bool ignoreAlpha = true, bool apply = true)
@@ -621,7 +653,7 @@ public class ZMap
       pixels32 = Inert.Instance.cutouts[index].GetPixels32();
       ZMap.cachedPixels.Add(Inert.Instance.cutouts[index], pixels32);
     }
-    RotateImage.RenderHUE(this, new Surface(pixels32, Inert.Instance.cutouts[index].width, Inert.Instance.cutouts[index].height), x, y, 0.0f, false, hue);
+    RotateImage.RenderHUE(this, new Surface(pixels32, Inert.Instance.cutouts[index].width, Inert.Instance.cutouts[index].height), x, y, 0.0f, false, hue, 1f);
   }
 
   public void ServerBitBltBrightness(
@@ -633,15 +665,15 @@ public class ZMap
   {
     if (!this.game.AllowTerrainDestruction || index == 38)
       return;
-    this._pastBits.Add(new PastBlits(x, y, index, ignoreAlpha, brightness));
-    this.BitBlt(Inert.Instance.cutouts[index], x, y, ignoreAlpha);
+    this._pastBits.Add(new PastBlits(x, y, index, ignoreAlpha, brightness, false));
+    this.BitBlt(Inert.Instance.cutouts[index], x, y, ignoreAlpha, true);
   }
 
   public int ServerBitBltAndReturnIfChanged(int index, int x, int y, bool ignoreAlpha = true)
   {
     if (!this.game.AllowTerrainDestruction || index == 38)
       return 0;
-    this._pastBits.Add(new PastBlits(x, y, index, ignoreAlpha, (FixedInt) -1));
+    this._pastBits.Add(new PastBlits(x, y, index, ignoreAlpha, (FixedInt) -1, false));
     return this.BitBltAndReturnIfChanged(Inert.Instance.cutouts[index], x, y, ignoreAlpha);
   }
 
@@ -717,13 +749,13 @@ public class ZMap
     {
       for (; num2 < height && y < this.Height; ++y)
       {
-        int num6 = num3;
-        for (x = num4; num6 < width && x < this.Width; ++x)
+        int num5 = num3;
+        for (x = num4; num5 < width && x < this.Width; ++x)
         {
-          int index = num2 * width + num6;
+          int index = num2 * width + num5;
           if (pixels32[index].a != (byte) 0)
             this.UpdatePixel(x, y, pixels32[index]);
-          ++num6;
+          ++num5;
         }
         ++num2;
       }
@@ -750,7 +782,7 @@ public class ZMap
         if (this.GetPixelNoBoundsCheck(x, y).a > (byte) 0 && y - 1 >= 0 && this.GetPixelNoBoundsCheck(x, y - 1).a == (byte) 0)
         {
           int num = x % width2;
-          for (int index = 0; index < height2 && y + index < height1 && this.GetPixelNoBoundsCheck(x, y + index).a > (byte) 0; ++index)
+          for (int index = 0; index < height2 && (y + index < height1 && this.GetPixelNoBoundsCheck(x, y + index).a > (byte) 0); ++index)
           {
             if (MapEditor.Instance.isSelected(new Point(x, y)) && !Global.CompareColorsAlpha(pixels32[num + index * width2], this.GetPixel(x, y + index)))
               this.UpdatePixel(x, y + index, pixels32[num + index * width2]);
@@ -780,7 +812,7 @@ public class ZMap
           int num1 = x % width2;
           int num2 = y > height2 ? 0 : height2 - y;
           int num3 = 0;
-          for (int index = height2 - 1; index >= num2 && y - num3 >= 0 && this.GetPixelNoBoundsCheck(x, y - num3).a > (byte) 0; --index)
+          for (int index = height2 - 1; index >= num2 && (y - num3 >= 0 && this.GetPixelNoBoundsCheck(x, y - num3).a > (byte) 0); --index)
           {
             if (MapEditor.Instance.isSelected(new Point(x, y)) && !Global.CompareColorsAlpha(pixels32[num1 + index * width2], this.GetPixel(x, y - num3)))
               valueTupleList.Add((x, y - num3 + MapEditor.Instance.grass_offset, pixels32[num1 + index * width2]));
@@ -807,41 +839,41 @@ public class ZMap
     int num2 = 0;
     int num3 = radius * 2;
     int num4 = radius * 2;
-    int x1 = x;
-    int y1 = y;
+    int num5 = x;
+    int num6 = y;
     x -= num4 / 2;
     y -= num3 / 2;
-    Vector2 a = new Vector2((float) x1, (float) y1);
+    Vector2 a = new Vector2((float) num5, (float) num6);
     Color32[] pixels32;
     if (!ZMap.cachedPixels.TryGetValue(mask, out pixels32))
     {
       pixels32 = mask.GetPixels32();
       ZMap.cachedPixels.Add(mask, pixels32);
     }
-    int num5 = num1;
-    int num6 = x;
-    int num7 = y1 % mask.height;
+    int num7 = num1;
+    int num8 = x;
+    int num9 = num6 % mask.height;
     while (num2 < num3 && y < this.Height)
     {
-      int num8 = x1 % mask.width;
-      int num9 = num5;
-      x = num6;
-      while (num9 < num4 && x < this.Width)
+      int num10 = num5 % mask.width;
+      int num11 = num7;
+      x = num8;
+      while (num11 < num4 && x < this.Width)
       {
-        if (num7 >= 0 && num8 >= 0)
+        if (num9 >= 0 && num10 >= 0)
         {
-          int index = num7 % mask.height * mask.width + num8 % mask.width;
+          int index = num9 % mask.height * mask.width + num10 % mask.width;
           Color32 color32 = ColorHSV.AdjustColor(pixels32[index], hue);
-          if (pixels32[index].a != (byte) 0 && MapEditor.Instance.isSelected(new Point(x, y)) && !Global.CompareColorsAlpha(overrideColor.HasValue ? overrideColor.Value : color32, this.GetPixel(x, y)) && (double) Vector2.Distance(a, new Vector2((float) x, (float) y)) <= (double) radius && (!ignoreExisting || this.GetPixel(x, y).a == (byte) 0))
+          if (pixels32[index].a != (byte) 0 && MapEditor.Instance.isSelected(new Point(x, y)) && (!Global.CompareColorsAlpha(overrideColor.HasValue ? overrideColor.Value : color32, this.GetPixel(x, y)) && (double) Vector2.Distance(a, new Vector2((float) x, (float) y)) <= (double) radius && (!ignoreExisting || this.GetPixel(x, y).a == (byte) 0)))
             this.UpdatePixel(x, y, overrideColor.HasValue ? overrideColor.Value : color32);
         }
-        ++num9;
+        ++num11;
         ++x;
-        ++num8;
+        ++num10;
       }
       ++num2;
       ++y;
-      ++num7;
+      ++num9;
     }
     if (!apply)
       return;
@@ -862,41 +894,41 @@ public class ZMap
     int num2 = 0;
     int num3 = radius * 2;
     int num4 = radius * 2;
-    int x1 = x;
-    int y1 = y;
+    int num5 = x;
+    int num6 = y;
     x -= num4 / 2;
     y -= num3 / 2;
-    Vector2 vector2 = new Vector2((float) x1, (float) y1);
+    Vector2 vector2 = new Vector2((float) num5, (float) num6);
     Color32[] pixels32;
     if (!ZMap.cachedPixels.TryGetValue(mask, out pixels32))
     {
       pixels32 = mask.GetPixels32();
       ZMap.cachedPixels.Add(mask, pixels32);
     }
-    int num5 = num1;
-    int num6 = x;
-    int num7 = y1 % mask.height;
+    int num7 = num1;
+    int num8 = x;
+    int num9 = num6 % mask.height;
     while (num2 < num3 && y < this.Height)
     {
-      int num8 = x1 % mask.width;
-      int num9 = num5;
-      x = num6;
-      while (num9 < num4 && x < this.Width)
+      int num10 = num5 % mask.width;
+      int num11 = num7;
+      x = num8;
+      while (num11 < num4 && x < this.Width)
       {
-        if (num7 >= 0 && num8 >= 0)
+        if (num9 >= 0 && num10 >= 0)
         {
-          int index = num7 % mask.height * mask.width + num8 % mask.width;
+          int index = num9 % mask.height * mask.width + num10 % mask.width;
           Color32 color32 = ColorHSV.AdjustColor(pixels32[index], hue);
-          if (pixels32[index].a != (byte) 0 && MapEditor.Instance.isSelected(new Point(x, y)) && !Global.CompareColorsAlpha(overrideColor.HasValue ? overrideColor.Value : color32, this.GetPixel(x, y)) && (!ignoreExisting || this.GetPixel(x, y).a == (byte) 0))
+          if (pixels32[index].a != (byte) 0 && MapEditor.Instance.isSelected(new Point(x, y)) && (!Global.CompareColorsAlpha(overrideColor.HasValue ? overrideColor.Value : color32, this.GetPixel(x, y)) && (!ignoreExisting || this.GetPixel(x, y).a == (byte) 0)))
             this.UpdatePixel(x, y, overrideColor.HasValue ? overrideColor.Value : color32);
         }
-        ++num9;
+        ++num11;
         ++x;
-        ++num8;
+        ++num10;
       }
       ++num2;
       ++y;
-      ++num7;
+      ++num9;
     }
     if (!apply)
       return;
@@ -915,37 +947,37 @@ public class ZMap
     int num2 = 0;
     int height = mask.height;
     int width = mask.width;
-    int x1 = x;
-    int y1 = y;
+    int num3 = x;
+    int num4 = y;
     x -= width / 2;
     y -= height / 2;
-    Vector2 vector2 = new Vector2((float) x1, (float) y1);
+    Vector2 vector2 = new Vector2((float) num3, (float) num4);
     Color32[] pixels32;
     if (!ZMap.cachedPixels.TryGetValue(mask, out pixels32))
     {
       pixels32 = mask.GetPixels32();
       ZMap.cachedPixels.Add(mask, pixels32);
     }
-    int num3 = num1;
-    int num4 = x;
-    int num5 = y1 % mask.height;
+    int num5 = num1;
+    int num6 = x;
+    int num7 = num4 % mask.height;
     while (num2 < height && y < this.Height)
     {
-      int num6 = x1 % mask.width;
-      int num7 = num3;
-      x = num4;
-      while (num7 < width && x < this.Width)
+      int num8 = num3 % mask.width;
+      int num9 = num5;
+      x = num6;
+      while (num9 < width && x < this.Width)
       {
-        int index = num2 * width + num7;
-        if (pixels32[index].a != (byte) 0 && MapEditor.Instance.isSelected(new Point(x, y)) && !Global.CompareColorsAlpha(overrideColor.HasValue ? overrideColor.Value : pixels32[index], this.GetPixel(x, y)) && (!ignoreExisting || this.GetPixel(x, y).a == (byte) 0))
+        int index = num2 * width + num9;
+        if (pixels32[index].a != (byte) 0 && MapEditor.Instance.isSelected(new Point(x, y)) && (!Global.CompareColorsAlpha(overrideColor.HasValue ? overrideColor.Value : pixels32[index], this.GetPixel(x, y)) && (!ignoreExisting || this.GetPixel(x, y).a == (byte) 0)))
           this.UpdatePixel(x, y, overrideColor.HasValue ? overrideColor.Value : pixels32[index]);
-        ++num7;
+        ++num9;
         ++x;
-        ++num6;
+        ++num8;
       }
       ++num2;
       ++y;
-      ++num5;
+      ++num7;
     }
     if (!apply)
       return;
@@ -999,13 +1031,13 @@ public class ZMap
     {
       for (; num2 < height && y < this.Height; ++y)
       {
-        int num6 = num3;
-        for (x = num4; num6 < width && x < this.Width; ++x)
+        int num5 = num3;
+        for (x = num4; num5 < width && x < this.Width; ++x)
         {
-          int index = num2 * width + num6;
+          int index = num2 * width + num5;
           if (bufferedImage.pixels[index].a != (byte) 0)
             this.UpdatePixel(x, y, bufferedImage.pixels[index]);
-          ++num6;
+          ++num5;
         }
         ++num2;
       }
@@ -1060,13 +1092,13 @@ public class ZMap
     {
       for (; num2 < height && y < this.Height; ++y)
       {
-        int num6 = num3;
-        for (x = num4; num6 < width && x < this.Width; ++x)
+        int num5 = num3;
+        for (x = num4; num5 < width && x < this.Width; ++x)
         {
-          int index = num2 * width + num6;
+          int index = num2 * width + num5;
           if (pixels32[index].a != (byte) 0)
             this.UpdatePixel(x, y, new Color32((byte) ((double) pixels32[index].r * (double) multiplier), (byte) ((double) pixels32[index].g * (double) multiplier), (byte) ((double) pixels32[index].b * (double) multiplier), pixels32[index].a));
-          ++num6;
+          ++num5;
         }
         ++num2;
       }
@@ -1123,16 +1155,16 @@ public class ZMap
     {
       for (; num2 < height && y < this.Height; ++y)
       {
-        int num7 = num4;
-        for (x = num5; num7 < width && x < this.Width; ++x)
+        int num6 = num4;
+        for (x = num5; num6 < width && x < this.Width; ++x)
         {
-          int index = num2 * width + num7;
+          int index = num2 * width + num6;
           if (pixels32[index].a != (byte) 0)
           {
             this.UpdatePixel(x, y, pixels32[index]);
             ++num3;
           }
-          ++num7;
+          ++num6;
         }
         ++num2;
       }
@@ -1178,10 +1210,8 @@ public class ZMap
           Color32 color32 = this.BitBltPixelColor(x, y);
           if (color32.a > (byte) 0 && ((int) color32.r < (int) pixels32[index].r || color32.b > (byte) 0 || color32.g > (byte) 0))
           {
-            Color32 c = pixels32[index] with
-            {
-              a = color32.a
-            };
+            Color32 c = pixels32[index];
+            c.a = color32.a;
             this.UpdatePixel(x, y, c);
           }
         }
@@ -1240,15 +1270,15 @@ public class ZMap
           if ((ZComponent) creature.mount != (object) null && (ZComponent) creature.mount.collider == (object) list[index])
           {
             if (creature.velocity.y > 0)
-              creature.Demount();
+              creature.Demount(false);
             this.world.listPool.ReturnList(list);
             return false;
           }
           if (list[index].gameObjectLayer == 11)
-            list[index].effector?.EffectCreature(creature);
+            list[index].effector?.EffectCreature(creature, false);
           else if (list[index].gameObjectLayer == 9)
           {
-            list[index].effector?.EffectCreature(creature);
+            list[index].effector?.EffectCreature(creature, false);
           }
           else
           {
@@ -1260,15 +1290,15 @@ public class ZMap
             }
             if (list[index].gameObjectLayer == 15)
             {
-              list[index].effector?.EffectCreature(creature);
+              list[index].effector?.EffectCreature(creature, false);
               if (!ZComponent.IsNull((ZComponent) creature.rider))
-                list[index].effector?.EffectCreature(creature.rider);
+                list[index].effector?.EffectCreature(creature.rider, false);
             }
           }
           ZCreature creature1 = list[index].creature;
           if (!ZComponent.IsNull((ZComponent) creature1))
           {
-            if (creature1.spellEnum == SpellEnum.Sacrificial_Altar && (ZComponent) creature != (object) null && creature.isPawn && creature.type != CreatureType.Tree && creature.race != CreatureRace.Effector)
+            if (creature1.spellEnum == SpellEnum.Sacrificial_Altar && (ZComponent) creature != (object) null && (creature.isPawn && creature.type != CreatureType.Tree) && creature.race != CreatureRace.Effector)
             {
               creature1.health += creature.health;
               if (creature1.health > creature1.maxHealth)
@@ -1281,9 +1311,9 @@ public class ZMap
             }
             if (!((ZComponent) creature1.mount != (object) null) || !((ZComponent) creature != (object) null))
             {
-              if (creature.team == creature1.team && (creature.mountable || creature1.mountable) && (creature.canMount || creature1.canMount) && (ZComponent) creature.tower == (object) null && (ZComponent) creature1.tower == (object) null)
+              if (creature.team == creature1.team && (creature.mountable || creature1.mountable) && ((creature.canMount || creature1.canMount) && ((ZComponent) creature.tower == (object) null && (ZComponent) creature1.tower == (object) null)))
               {
-                if (!ZComponent.IsNull((ZComponent) creature.rider) || (ZComponent) creature.mount != (object) null || (ZComponent) creature1.rider != (object) null || (ZComponent) creature1.mount != (object) null)
+                if (!ZComponent.IsNull((ZComponent) creature.rider) || (ZComponent) creature.mount != (object) null || ((ZComponent) creature1.rider != (object) null || (ZComponent) creature1.mount != (object) null))
                 {
                   this.world.listPool.ReturnList(list);
                   return true;
@@ -1301,7 +1331,7 @@ public class ZMap
                   creature.rider = creature1;
                   creature1.RiderMoveToPosition = creature.position + Global.GetMountOffset(creature.transformscale, creature.type);
                   creature1.SetScale(creature.transformscale);
-                  creature1.game.CreatureMoveSurroundings(position, creature1.radius);
+                  creature1.game.CreatureMoveSurroundings(position, creature1.radius, (ZMyCollider) null, false);
                 }
                 else
                 {
@@ -1324,10 +1354,10 @@ public class ZMap
                   creature.OnMount(creature1);
                   creature.RiderMoveToPosition = creature1.position + Global.GetMountOffset(creature1.transformscale, creature1.type);
                   creature.SetScale(creature1.transformscale);
-                  creature.game.CreatureMoveSurroundings(position, creature.radius);
+                  creature.game.CreatureMoveSurroundings(position, creature.radius, (ZMyCollider) null, false);
                 }
               }
-              if ((ZComponent) creature != (object) null && creature1.race != CreatureRace.Effector && creature.race != CreatureRace.Effector && !creature1.collider.ghosted && MyLocation.Distance(creature1.position, creature.position) < (creature1.radius > creature.radius ? creature.radius - 3 : creature1.radius - 3))
+              if ((ZComponent) creature != (object) null && creature1.race != CreatureRace.Effector && (creature.race != CreatureRace.Effector && !creature1.collider.ghosted) && MyLocation.Distance(creature1.position, creature.position) < (creature1.radius > creature.radius ? creature.radius - 3 : creature1.radius - 3))
               {
                 if ((ZComponent) creature1 == (object) creature.mount)
                 {
@@ -1364,12 +1394,12 @@ public class ZMap
 
   public bool TryMount(Creature creature, ZCreature c, int team)
   {
-    return !((ZComponent) c.mount != (object) null) && team == c.team && (creature.mountable || c.mountable) && (creature.canMount || c.canMount) && (ZComponent) c.tower == (object) null && !((ZComponent) c.rider != (object) null) && !((ZComponent) c.mount != (object) null) && creature.mountable && (!c.isPawn || c.radius + 10 < creature.radius);
+    return !((ZComponent) c.mount != (object) null) && team == c.team && (creature.mountable || c.mountable) && ((creature.canMount || c.canMount) && ((ZComponent) c.tower == (object) null && !((ZComponent) c.rider != (object) null))) && (!((ZComponent) c.mount != (object) null) && creature.mountable && (!c.isPawn || c.radius + 10 < creature.radius));
   }
 
   public bool TryMount(ZCreature creature, ZCreature c, bool justReturn = false)
   {
-    if ((ZComponent) c.mount != (object) null || (ZComponent) creature == (object) null || creature.team != c.team || !creature.mountable && !c.mountable || !creature.canMount && !c.canMount || !((ZComponent) creature.tower == (object) null) || !((ZComponent) c.tower == (object) null) || !ZComponent.IsNull((ZComponent) creature.rider) || (ZComponent) creature.mount != (object) null || (ZComponent) c.rider != (object) null || (ZComponent) c.mount != (object) null)
+    if ((ZComponent) c.mount != (object) null || (ZComponent) creature == (object) null || creature.team != c.team || (!creature.mountable && !c.mountable || !creature.canMount && !c.canMount) || (!((ZComponent) creature.tower == (object) null) || !((ZComponent) c.tower == (object) null) || (!ZComponent.IsNull((ZComponent) creature.rider) || (ZComponent) creature.mount != (object) null) || ((ZComponent) c.rider != (object) null || (ZComponent) c.mount != (object) null)))
       return false;
     if (creature.mountable)
     {
@@ -1383,11 +1413,11 @@ public class ZMap
       creature.rider = c;
       c.RiderMoveToPosition = creature.position + Global.GetMountOffset(creature.transformscale, creature.type);
       c.SetScale(creature.transformscale);
-      c.game.CreatureMoveSurroundings(position, c.radius);
+      c.game.CreatureMoveSurroundings(position, c.radius, (ZMyCollider) null, false);
     }
     else
     {
-      if (creature.isPawn && creature.radius + 10 >= c.radius || creature.velocity.y > 0 || creature.position.y + creature.radius >= this.Height - 20 || creature.velocity.y == 0 && !creature.flying)
+      if (creature.isPawn && creature.radius + 10 >= c.radius || (creature.velocity.y > 0 || creature.position.y + creature.radius >= this.Height - 20) || creature.velocity.y == 0 && !creature.flying)
         return false;
       if (justReturn)
         return true;
@@ -1395,7 +1425,7 @@ public class ZMap
       creature.OnMount(c);
       creature.RiderMoveToPosition = c.position + Global.GetMountOffset(c.transformscale, c.type);
       creature.SetScale(c.transformscale);
-      creature.game.CreatureMoveSurroundings(position, creature.radius);
+      creature.game.CreatureMoveSurroundings(position, creature.radius, (ZMyCollider) null, false);
     }
     return false;
   }
@@ -1447,7 +1477,7 @@ public class ZMap
       for (int index = list.Count - 1; index >= 0; --index)
       {
         if (list[index].gameObjectLayer == 9)
-          list[index].effector.EffectCreature(creature);
+          list[index].effector.EffectCreature(creature, false);
         else if (list[index].gameObjectLayer == 11)
           list[index].effector.EffectEntity((ZEntity) creature);
       }
@@ -1578,7 +1608,11 @@ public class ZMap
     return (ZCreature) null;
   }
 
-  public ZCreature PhysicsCollideCreature(ZCreature creature, int x, int y, int maskExtra = 0)
+  public ZCreature PhysicsCollideCreature(
+    ZCreature creature,
+    int x,
+    int y,
+    int maskExtra = 0)
   {
     List<ZMyCollider> list = this.world.OverlapPointAll(x, y, Inert.mask_movement_NoEffector | maskExtra);
     if (list.Count > 0)
@@ -1622,7 +1656,7 @@ public class ZMap
     int num2 = y0 - tex.height / 2;
     int num3 = num1 + tex.width;
     int num4 = num2 + tex.height;
-    if (num1 < 0 || num2 < 0 || num3 > this.Width || num4 > this.Height)
+    if (num1 < 0 || num2 < 0 || (num3 > this.Width || num4 > this.Height))
       return false;
     for (int y = num2; y < num4; ++y)
     {
@@ -1653,7 +1687,7 @@ public class ZMap
     int num4 = num2 + tex.height;
     if (!allowOutOfBounds)
     {
-      if (num1 < 0 || num2 < 0 || num3 > this.Width || num4 > this.Height)
+      if (num1 < 0 || num2 < 0 || (num3 > this.Width || num4 > this.Height))
         return false;
     }
     else if (num2 < 0 || num4 > this.Height)
@@ -1704,7 +1738,7 @@ public class ZMap
     int num6 = num4 + tex.height;
     if (!allowOutOfBounds)
     {
-      if (num3 < 0 || num4 < 0 || num5 > this.Width || num6 > this.Height)
+      if (num3 < 0 || num4 < 0 || (num5 > this.Width || num6 > this.Height))
         return false;
     }
     else if (num4 < 0 || num6 > this.Height)
@@ -1717,7 +1751,7 @@ public class ZMap
         int x = num3;
         while (x < num5)
         {
-          if (pixels32[index].a != (byte) 0 && (num2 < 4 || num2 > 25 || num1 < 5 || num1 > 25) && this.PixelNotAlpha(x, y, ceature, Inert.mask_movement_NoEffector, collideWithThorn))
+          if (pixels32[index].a != (byte) 0 && (num2 < 4 || num2 > 25 || (num1 < 5 || num1 > 25)) && this.PixelNotAlpha(x, y, ceature, Inert.mask_movement_NoEffector, collideWithThorn))
             return false;
           ++index;
           ++x;
@@ -1735,7 +1769,7 @@ public class ZMap
         int x = num3;
         while (x < num5)
         {
-          if (pixels32[index].a != (byte) 0 && (num2 < 4 || num2 > 25 || num1 < 5 || num1 > 25) && this.PhysicsCollidePoint(ceature, x, y, Inert.mask_movement_NoEffector, collideWithThorn))
+          if (pixels32[index].a != (byte) 0 && (num2 < 4 || num2 > 25 || (num1 < 5 || num1 > 25)) && this.PhysicsCollidePoint(ceature, x, y, Inert.mask_movement_NoEffector, collideWithThorn))
             return false;
           ++index;
           ++x;
@@ -1769,7 +1803,7 @@ public class ZMap
       {
         for (; x1 <= num6; ++x1)
         {
-          if (x1 >= 0 && x1 < this.Width && this.PixelNotAlpha(x1, y1, creature, mask))
+          if (x1 >= 0 && x1 < this.Width && this.PixelNotAlpha(x1, y1, creature, mask, true))
             return false;
         }
       }
@@ -1780,7 +1814,7 @@ public class ZMap
       {
         for (; x2 <= num7; ++x2)
         {
-          if (x2 >= 0 && x2 < this.Width && this.PixelNotAlpha(x2, y2, creature, mask))
+          if (x2 >= 0 && x2 < this.Width && this.PixelNotAlpha(x2, y2, creature, mask, true))
             return false;
         }
       }
@@ -1791,7 +1825,7 @@ public class ZMap
       {
         for (; x3 <= num8; ++x3)
         {
-          if (x3 >= 0 && x3 < this.Width && this.PixelNotAlpha(x3, y3, creature, mask))
+          if (x3 >= 0 && x3 < this.Width && this.PixelNotAlpha(x3, y3, creature, mask, true))
             return false;
         }
       }
@@ -1802,7 +1836,7 @@ public class ZMap
       {
         for (; x4 <= num9; ++x4)
         {
-          if (x4 >= 0 && x4 < this.Width && this.PixelNotAlpha(x4, y4, creature, mask))
+          if (x4 >= 0 && x4 < this.Width && this.PixelNotAlpha(x4, y4, creature, mask, true))
             return false;
         }
       }
@@ -1838,7 +1872,7 @@ public class ZMap
         return false;
       for (; x1 <= num6; ++x1)
       {
-        if (x1 < 0 || x1 >= this.Width || this.PixelNotAlpha(x1, y1, creature, mask))
+        if (x1 < 0 || x1 >= this.Width || this.PixelNotAlpha(x1, y1, creature, mask, true))
           return false;
       }
       int x2 = x0 - num2;
@@ -1848,7 +1882,7 @@ public class ZMap
         return false;
       for (; x2 <= num7; ++x2)
       {
-        if (x2 < 0 || x2 >= this.Width || this.PixelNotAlpha(x2, y2, creature, mask))
+        if (x2 < 0 || x2 >= this.Width || this.PixelNotAlpha(x2, y2, creature, mask, true))
           return false;
       }
       int x3 = x0 - num1;
@@ -1858,7 +1892,7 @@ public class ZMap
         return false;
       for (; x3 <= num8; ++x3)
       {
-        if (x3 < 0 || x3 >= this.Width || this.PixelNotAlpha(x3, y3, creature, mask))
+        if (x3 < 0 || x3 >= this.Width || this.PixelNotAlpha(x3, y3, creature, mask, true))
           return false;
       }
       int x4 = x0 - num2;
@@ -1868,7 +1902,7 @@ public class ZMap
         return false;
       for (; x4 <= num9; ++x4)
       {
-        if (x4 < 0 || x4 >= this.Width || this.PixelNotAlpha(x4, y4, creature, mask))
+        if (x4 < 0 || x4 >= this.Width || this.PixelNotAlpha(x4, y4, creature, mask, true))
           return false;
       }
       if (num5 <= 0)
@@ -1903,7 +1937,7 @@ public class ZMap
         return false;
       for (; x1 <= num6; ++x1)
       {
-        if (x1 < 0 || x1 >= this.Width || this.PhysicsCollidePoint(creature, x1, y1, mask))
+        if (x1 < 0 || x1 >= this.Width || this.PhysicsCollidePoint(creature, x1, y1, mask, true))
           return false;
       }
       int x2 = x0 - num2;
@@ -1913,7 +1947,7 @@ public class ZMap
         return false;
       for (; x2 <= num7; ++x2)
       {
-        if (x2 < 0 || x2 >= this.Width || this.PhysicsCollidePoint(creature, x2, y2, mask))
+        if (x2 < 0 || x2 >= this.Width || this.PhysicsCollidePoint(creature, x2, y2, mask, true))
           return false;
       }
       int x3 = x0 - num1;
@@ -1923,7 +1957,7 @@ public class ZMap
         return false;
       for (; x3 <= num8; ++x3)
       {
-        if (x3 < 0 || x3 >= this.Width || this.PhysicsCollidePoint(creature, x3, y3, mask))
+        if (x3 < 0 || x3 >= this.Width || this.PhysicsCollidePoint(creature, x3, y3, mask, true))
           return false;
       }
       int x4 = x0 - num2;
@@ -1933,7 +1967,7 @@ public class ZMap
         return false;
       for (; x4 <= num9; ++x4)
       {
-        if (x4 < 0 || x4 >= this.Width || this.PhysicsCollidePoint(creature, x4, y4, mask))
+        if (x4 < 0 || x4 >= this.Width || this.PhysicsCollidePoint(creature, x4, y4, mask, true))
           return false;
       }
       if (num5 <= 0)
@@ -2097,9 +2131,9 @@ public class ZMap
     {
       int x = x0 + num2;
       int y = y0 + num1;
-      if (x >= this.Width || x < 0 || y < 0 || y >= this.Height)
+      if (x >= this.Width || x < 0 || (y < 0 || y >= this.Height))
         return (Coords) null;
-      if (this.PixelNotAlpha(x, y, creature, mask))
+      if (this.PixelNotAlpha(x, y, creature, mask, true))
         return new Coords(x, y);
       if (num5 <= 0)
       {
@@ -2128,9 +2162,9 @@ public class ZMap
     {
       int x = x0 + num1;
       int y = y0 + num2;
-      if (x >= this.Width || x < 0 || y < 0 || y >= this.Height)
+      if (x >= this.Width || x < 0 || (y < 0 || y >= this.Height))
         return (Coords) null;
-      if (this.PixelNotAlpha(x, y, creature, mask))
+      if (this.PixelNotAlpha(x, y, creature, mask, true))
         return new Coords(x, y);
       if (num5 <= 0)
       {
@@ -2159,9 +2193,9 @@ public class ZMap
     {
       int x = x0 + num1;
       int y = y0 - num2;
-      if (x >= this.Width || x < 0 || y < 0 || y >= this.Height)
+      if (x >= this.Width || x < 0 || (y < 0 || y >= this.Height))
         return (Coords) null;
-      if (this.PixelNotAlpha(x, y, creature, mask))
+      if (this.PixelNotAlpha(x, y, creature, mask, true))
         return new Coords(x, y);
       if (num5 <= 0)
       {
@@ -2190,9 +2224,9 @@ public class ZMap
     {
       int x = x0 + num2;
       int y = y0 - num1;
-      if (x >= this.Width || x < 0 || y < 0 || y >= this.Height)
+      if (x >= this.Width || x < 0 || (y < 0 || y >= this.Height))
         return (Coords) null;
-      if (this.PixelNotAlpha(x, y, creature, mask))
+      if (this.PixelNotAlpha(x, y, creature, mask, true))
         return new Coords(x, y);
       if (num5 <= 0)
       {
@@ -2226,9 +2260,9 @@ public class ZMap
     {
       int x = x0 + num1;
       int y = y0 - num2;
-      if (x >= this.Width || x < 0 || y < 0 || y >= this.Height)
+      if (x >= this.Width || x < 0 || (y < 0 || y >= this.Height))
         return (Coords) null;
-      if (this.PixelNotAlpha(x, y, creature, mask))
+      if (this.PixelNotAlpha(x, y, creature, mask, true))
         return new Coords(x, y);
       if (num5 <= 0)
       {
@@ -2257,9 +2291,9 @@ public class ZMap
     {
       int x = x0 - num2;
       int y = y0 - num1;
-      if (x >= this.Width || x < 0 || y < 0 || y >= this.Height)
+      if (x >= this.Width || x < 0 || (y < 0 || y >= this.Height))
         return (Coords) null;
-      if (this.PixelNotAlpha(x, y, creature, mask))
+      if (this.PixelNotAlpha(x, y, creature, mask, true))
         return new Coords(x, y);
       if (num5 <= 0)
       {
@@ -2277,7 +2311,12 @@ public class ZMap
     return (Coords) null;
   }
 
-  public Coords CheckBottomLeft_FromTop(int x0, int y0, int radius, ZCreature creature, int mask)
+  public Coords CheckBottomLeft_FromTop(
+    int x0,
+    int y0,
+    int radius,
+    ZCreature creature,
+    int mask)
   {
     int num1 = 0;
     int num2 = radius - 1;
@@ -2288,9 +2327,9 @@ public class ZMap
     {
       int x = x0 - num2;
       int y = y0 - num1;
-      if (x >= this.Width || x < 0 || y < 0 || y >= this.Height)
+      if (x >= this.Width || x < 0 || (y < 0 || y >= this.Height))
         return (Coords) null;
-      if (this.PixelNotAlpha(x, y, creature, mask))
+      if (this.PixelNotAlpha(x, y, creature, mask, true))
         return new Coords(x, y);
       if (num5 <= 0)
       {
@@ -2319,9 +2358,9 @@ public class ZMap
     {
       int x = x0 - num1;
       int y = y0 - num2;
-      if (x >= this.Width || x < 0 || y < 0 || y >= this.Height)
+      if (x >= this.Width || x < 0 || (y < 0 || y >= this.Height))
         return (Coords) null;
-      if (this.PixelNotAlpha(x, y, creature, mask))
+      if (this.PixelNotAlpha(x, y, creature, mask, true))
         return new Coords(x, y);
       if (num5 <= 0)
       {
@@ -2350,9 +2389,9 @@ public class ZMap
     {
       int x = x0 - num1;
       int y = y0 + num2;
-      if (x >= this.Width || x < 0 || y < 0 || y >= this.Height)
+      if (x >= this.Width || x < 0 || (y < 0 || y >= this.Height))
         return (Coords) null;
-      if (this.PixelNotAlpha(x, y, creature, mask))
+      if (this.PixelNotAlpha(x, y, creature, mask, true))
         return new Coords(x, y);
       if (num5 <= 0)
       {
@@ -2381,9 +2420,9 @@ public class ZMap
     {
       int x = x0 - num2;
       int y = y0 + num1;
-      if (x >= this.Width || x < 0 || y < 0 || y >= this.Height)
+      if (x >= this.Width || x < 0 || (y < 0 || y >= this.Height))
         return (Coords) null;
-      if (this.PixelNotAlpha(x, y, creature, mask))
+      if (this.PixelNotAlpha(x, y, creature, mask, true))
         return new Coords(x, y);
       if (num5 <= 0)
       {
@@ -2405,7 +2444,7 @@ public class ZMap
   {
     for (; y >= 0; --y)
     {
-      if (x >= 0 && x < this.Width && y >= 0 && y < this.Height)
+      if (x >= 0 && x < this.Width && (y >= 0 && y < this.Height))
       {
         if (!this.CheckClampedPixel(x, y))
           return new Coords(x, y);
@@ -2417,7 +2456,7 @@ public class ZMap
           spell.isDead = true;
           if ((ZComponent) creatureAtPoint.tower == (object) null)
           {
-            creatureAtPoint.ApplyExplosionForce(spell.radius, new MyLocation(x, y), spell.explisiveForce, spell.EXORADIUS, spell.forceOverDistance);
+            creatureAtPoint.ApplyExplosionForce(spell.radius, new MyLocation(x, y), spell.explisiveForce, spell.EXORADIUS, spell.forceOverDistance, false);
             creatureAtPoint.StartMoving(false);
           }
           return new Coords(x, y);
@@ -2455,7 +2494,7 @@ public class ZMap
         int num16 = num8;
         int y1 = end.y;
         int x = num10;
-        if (num16 >= this.Height || num16 < 0 || x < 0 || x >= this.Width)
+        if (num16 >= this.Height || num16 < 0 || (x < 0 || x >= this.Width))
           return (ZCreature) null;
         for (int y2 = num16; y2 > y1 && y2 >= 0; --y2)
         {
@@ -2475,7 +2514,7 @@ public class ZMap
       }
       else
       {
-        if (num7 >= this.Height || num7 < 0 || num15 < 0 || num15 >= this.Width)
+        if (num7 >= this.Height || num7 < 0 || (num15 < 0 || num15 >= this.Width))
           return (ZCreature) null;
         for (int y = num7; y <= num8 && y < this.Height; ++y)
         {
@@ -2496,12 +2535,12 @@ public class ZMap
     }
     else if (num7 == end.x)
     {
-      int num17 = num8;
+      int num16 = num8;
       int x1 = end.x;
       int y = num10;
-      if (num17 >= this.Width || num17 < 0 || y < 0 || y >= this.Height)
+      if (num16 >= this.Width || num16 < 0 || (y < 0 || y >= this.Height))
         return (ZCreature) null;
-      for (int x2 = num17; x2 > x1 && x2 >= 0; --x2)
+      for (int x2 = num16; x2 > x1 && x2 >= 0; --x2)
       {
         ZCreature creatureAtPoint = this.FindCreatureAtPoint(c, x2, y, mask);
         if ((ZComponent) creatureAtPoint != (object) null)
@@ -2519,7 +2558,7 @@ public class ZMap
     }
     else
     {
-      if (num7 >= this.Width || num7 < 0 || num15 < 0 || num15 >= this.Height)
+      if (num7 >= this.Width || num7 < 0 || (num15 < 0 || num15 >= this.Height))
         return (ZCreature) null;
       for (int x = num7; x <= num8 && x < this.Width; ++x)
       {
@@ -2540,7 +2579,12 @@ public class ZMap
     return (ZCreature) null;
   }
 
-  public Coords bresenhamsLineCast(Coords start, Coords end, ZCreature c, ZSpell spell, int mask)
+  public Coords bresenhamsLineCast(
+    Coords start,
+    Coords end,
+    ZCreature c,
+    ZSpell spell,
+    int mask)
   {
     int num1 = Mathf.Abs(end.y - start.y) > Mathf.Abs(end.x - start.x) ? 1 : 0;
     int num2 = num1 != 0 ? start.y : start.x;
@@ -2564,14 +2608,14 @@ public class ZMap
         int num16 = num8;
         int y = end.y;
         int num17 = num10;
-        if (num16 >= this.Height || num16 < 0 || num17 < 0 || num17 >= this.Width)
+        if (num16 >= this.Height || num16 < 0 || (num17 < 0 || num17 >= this.Width))
           return (Coords) null;
         for (int index = num16; index > y && index >= 0; --index)
         {
           if (!this.CheckClampedPixel(num17, index))
           {
             if ((ZComponent) spell != (object) null && spell.spellEnum == SpellEnum.Storm_Dragon_Breath)
-              spell.ApplyExplosionForce(new MyLocation(num17, index));
+              spell.ApplyExplosionForce(new MyLocation(num17, index), 0, true, (ISpellBridge) null, (ZCreature) null);
             return new Coords(num17, index);
           }
           ZCreature creatureAtPoint = this.FindCreatureAtPoint(c, num17, index, mask);
@@ -2582,14 +2626,14 @@ public class ZMap
               spell.position = new MyLocation(num17, index);
               if (spell.spellEnum == SpellEnum.Storm_Dragon_Breath)
               {
-                spell.ApplyExplosionForce(spell.position);
+                spell.ApplyExplosionForce(spell.position, 0, true, (ISpellBridge) null, (ZCreature) null);
               }
               else
               {
                 spell.Damage(creatureAtPoint);
                 if ((ZComponent) creatureAtPoint.tower == (object) null)
                 {
-                  creatureAtPoint.ApplyExplosionForce(spell.radius, new MyLocation(num17, index), spell.explisiveForce, spell.EXORADIUS, spell.forceOverDistance);
+                  creatureAtPoint.ApplyExplosionForce(spell.radius, new MyLocation(num17, index), spell.explisiveForce, spell.EXORADIUS, spell.forceOverDistance, false);
                   creatureAtPoint.StartMoving(false);
                 }
               }
@@ -2609,14 +2653,14 @@ public class ZMap
       }
       else
       {
-        if (num7 >= this.Height || num7 < 0 || num15 < 0 || num15 >= this.Width)
+        if (num7 >= this.Height || num7 < 0 || (num15 < 0 || num15 >= this.Width))
           return (Coords) null;
         for (int index = num7; index <= num8 && index < this.Height; ++index)
         {
           if (!this.CheckClampedPixel(num15, index))
           {
             if ((ZComponent) spell != (object) null && spell.spellEnum == SpellEnum.Storm_Dragon_Breath)
-              spell.ApplyExplosionForce(new MyLocation(num15, index));
+              spell.ApplyExplosionForce(new MyLocation(num15, index), 0, true, (ISpellBridge) null, (ZCreature) null);
             return new Coords(num15, index);
           }
           ZCreature creatureAtPoint = this.FindCreatureAtPoint(c, num15, index, mask);
@@ -2627,14 +2671,14 @@ public class ZMap
               spell.position = new MyLocation(num15, index);
               if (spell.spellEnum == SpellEnum.Storm_Dragon_Breath)
               {
-                spell.ApplyExplosionForce(spell.position);
+                spell.ApplyExplosionForce(spell.position, 0, true, (ISpellBridge) null, (ZCreature) null);
               }
               else
               {
                 spell.Damage(creatureAtPoint);
                 if ((ZComponent) creatureAtPoint.tower == (object) null)
                 {
-                  creatureAtPoint.ApplyExplosionForce(spell.radius, new MyLocation(num15, index), spell.explisiveForce, spell.EXORADIUS, spell.forceOverDistance);
+                  creatureAtPoint.ApplyExplosionForce(spell.radius, new MyLocation(num15, index), spell.explisiveForce, spell.EXORADIUS, spell.forceOverDistance, false);
                   creatureAtPoint.StartMoving(false);
                 }
               }
@@ -2655,46 +2699,46 @@ public class ZMap
     }
     else if (num7 == end.x)
     {
-      int num18 = num8;
+      int num16 = num8;
       int x = end.x;
-      int num19 = num10;
-      if (num18 >= this.Width || num18 < 0 || num19 < 0 || num19 >= this.Height)
+      int num17 = num10;
+      if (num16 >= this.Width || num16 < 0 || (num17 < 0 || num17 >= this.Height))
         return (Coords) null;
-      for (int index = num18; index > x && index >= 0; --index)
+      for (int index = num16; index > x && index >= 0; --index)
       {
-        if (!this.CheckClampedPixel(index, num19))
+        if (!this.CheckClampedPixel(index, num17))
         {
           if ((ZComponent) spell != (object) null && spell.spellEnum == SpellEnum.Storm_Dragon_Breath)
-            spell.ApplyExplosionForce(new MyLocation(index, num19));
-          return new Coords(index, num19);
+            spell.ApplyExplosionForce(new MyLocation(index, num17), 0, true, (ISpellBridge) null, (ZCreature) null);
+          return new Coords(index, num17);
         }
-        ZCreature creatureAtPoint = this.FindCreatureAtPoint(c, index, num19, mask);
+        ZCreature creatureAtPoint = this.FindCreatureAtPoint(c, index, num17, mask);
         if ((ZComponent) creatureAtPoint != (object) null)
         {
           if ((ZComponent) spell != (object) null)
           {
-            spell.position = new MyLocation(index, num19);
+            spell.position = new MyLocation(index, num17);
             if (spell.spellEnum == SpellEnum.Storm_Dragon_Breath)
             {
-              spell.ApplyExplosionForce(spell.position);
+              spell.ApplyExplosionForce(spell.position, 0, true, (ISpellBridge) null, (ZCreature) null);
             }
             else
             {
               spell.Damage(creatureAtPoint);
               if ((ZComponent) creatureAtPoint.tower == (object) null)
               {
-                creatureAtPoint.ApplyExplosionForce(spell.radius, new MyLocation(index, num19), spell.explisiveForce, spell.EXORADIUS, spell.forceOverDistance);
+                creatureAtPoint.ApplyExplosionForce(spell.radius, new MyLocation(index, num17), spell.explisiveForce, spell.EXORADIUS, spell.forceOverDistance, false);
                 creatureAtPoint.StartMoving(false);
               }
             }
           }
-          return new Coords(index, num19);
+          return new Coords(index, num17);
         }
         num14 -= num12;
         if (num14 < 0)
         {
-          num19 -= num13;
-          if (num19 >= 0 && num19 < this.Height)
+          num17 -= num13;
+          if (num17 >= 0 && num17 < this.Height)
             num14 += num11;
           else
             break;
@@ -2703,14 +2747,14 @@ public class ZMap
     }
     else
     {
-      if (num7 >= this.Width || num7 < 0 || num15 < 0 || num15 >= this.Height)
+      if (num7 >= this.Width || num7 < 0 || (num15 < 0 || num15 >= this.Height))
         return (Coords) null;
       for (int index = num7; index <= num8 && index < this.Width; ++index)
       {
         if (!this.CheckClampedPixel(index, num15))
         {
           if ((ZComponent) spell != (object) null && spell.spellEnum == SpellEnum.Storm_Dragon_Breath)
-            spell.ApplyExplosionForce(new MyLocation(index, num15));
+            spell.ApplyExplosionForce(new MyLocation(index, num15), 0, true, (ISpellBridge) null, (ZCreature) null);
           return new Coords(index, num15);
         }
         ZCreature creatureAtPoint = this.FindCreatureAtPoint(c, index, num15, mask);
@@ -2721,14 +2765,14 @@ public class ZMap
             spell.position = new MyLocation(index, num15);
             if (spell.spellEnum == SpellEnum.Storm_Dragon_Breath)
             {
-              spell.ApplyExplosionForce(spell.position);
+              spell.ApplyExplosionForce(spell.position, 0, true, (ISpellBridge) null, (ZCreature) null);
             }
             else
             {
               spell.Damage(creatureAtPoint);
               if ((ZComponent) creatureAtPoint.tower == (object) null)
               {
-                creatureAtPoint.ApplyExplosionForce(spell.radius, new MyLocation(index, num15), spell.explisiveForce, spell.EXORADIUS, spell.forceOverDistance);
+                creatureAtPoint.ApplyExplosionForce(spell.radius, new MyLocation(index, num15), spell.explisiveForce, spell.EXORADIUS, spell.forceOverDistance, false);
                 creatureAtPoint.StartMoving(false);
               }
             }
@@ -2749,7 +2793,12 @@ public class ZMap
     return (Coords) null;
   }
 
-  public Coords bresenhamsCircleCast(Coords start, Coords end, ZCreature c, int mask, int radius)
+  public Coords bresenhamsCircleCast(
+    Coords start,
+    Coords end,
+    ZCreature c,
+    int mask,
+    int radius)
   {
     List<Coords> outlineArray = MapGenerator.getOutlineArray(radius);
     int num1 = ((FixedInt.Create(360) - (Inert.AngleOfVelocity(new MyLocation(end.x, end.y) - new MyLocation(start.x, start.y)) - FixedInt.Create(90))) * FixedInt.ThreeSixtyBy1 * outlineArray.Count - radius).ToInt();
@@ -2799,14 +2848,14 @@ public class ZMap
       }
       else
       {
-        for (int index3 = num8; index3 <= num9 && index3 < this.Height; ++index3)
+        for (int index1 = num8; index1 <= num9 && index1 < this.Height; ++index1)
         {
-          for (int index4 = 0; index4 < radius * 2; ++index4)
+          for (int index2 = 0; index2 < radius * 2; ++index2)
           {
-            if (!this.CheckPositionOnlyMap(num16 + outlineArray[(num1 + index4) % outlineArray.Count].x, index3 + outlineArray[(num1 + index4) % outlineArray.Count].y))
-              return new Coords(num16 + outlineArray[(num1 + index4) % outlineArray.Count].x, index3 + outlineArray[(num1 + index4) % outlineArray.Count].y);
-            if ((ZComponent) this.FindCreatureAtPoint(c, num16 + outlineArray[(num1 + index4) % outlineArray.Count].x, index3 + outlineArray[(num1 + index4) % outlineArray.Count].y, mask) != (object) null)
-              return new Coords(num16 + outlineArray[(num1 + index4) % outlineArray.Count].x, index3 + outlineArray[(num1 + index4) % outlineArray.Count].y);
+            if (!this.CheckPositionOnlyMap(num16 + outlineArray[(num1 + index2) % outlineArray.Count].x, index1 + outlineArray[(num1 + index2) % outlineArray.Count].y))
+              return new Coords(num16 + outlineArray[(num1 + index2) % outlineArray.Count].x, index1 + outlineArray[(num1 + index2) % outlineArray.Count].y);
+            if ((ZComponent) this.FindCreatureAtPoint(c, num16 + outlineArray[(num1 + index2) % outlineArray.Count].x, index1 + outlineArray[(num1 + index2) % outlineArray.Count].y, mask) != (object) null)
+              return new Coords(num16 + outlineArray[(num1 + index2) % outlineArray.Count].x, index1 + outlineArray[(num1 + index2) % outlineArray.Count].y);
           }
           num15 -= num13;
           if (num15 < 0)
@@ -2822,23 +2871,23 @@ public class ZMap
     }
     else if (num8 == end.x)
     {
-      int num19 = num9;
+      int num17 = num9;
       int x = end.x;
-      int num20 = num11;
-      for (int index5 = num19; index5 > x && index5 >= 0; --index5)
+      int num18 = num11;
+      for (int index1 = num17; index1 > x && index1 >= 0; --index1)
       {
-        for (int index6 = 0; index6 < radius * 2; ++index6)
+        for (int index2 = 0; index2 < radius * 2; ++index2)
         {
-          if (!this.CheckPositionOnlyMap(index5 + outlineArray[(num1 + index6) % outlineArray.Count].x, num20 + outlineArray[(num1 + index6) % outlineArray.Count].y))
-            return new Coords(index5 + outlineArray[(num1 + index6) % outlineArray.Count].x, num20 + outlineArray[(num1 + index6) % outlineArray.Count].y);
-          if ((ZComponent) this.FindCreatureAtPoint(c, index5 + outlineArray[(num1 + index6) % outlineArray.Count].x, num20 + outlineArray[(num1 + index6) % outlineArray.Count].y, mask) != (object) null)
-            return new Coords(index5 + outlineArray[(num1 + index6) % outlineArray.Count].x, num20 + outlineArray[(num1 + index6) % outlineArray.Count].y);
+          if (!this.CheckPositionOnlyMap(index1 + outlineArray[(num1 + index2) % outlineArray.Count].x, num18 + outlineArray[(num1 + index2) % outlineArray.Count].y))
+            return new Coords(index1 + outlineArray[(num1 + index2) % outlineArray.Count].x, num18 + outlineArray[(num1 + index2) % outlineArray.Count].y);
+          if ((ZComponent) this.FindCreatureAtPoint(c, index1 + outlineArray[(num1 + index2) % outlineArray.Count].x, num18 + outlineArray[(num1 + index2) % outlineArray.Count].y, mask) != (object) null)
+            return new Coords(index1 + outlineArray[(num1 + index2) % outlineArray.Count].x, num18 + outlineArray[(num1 + index2) % outlineArray.Count].y);
         }
         num15 -= num13;
         if (num15 < 0)
         {
-          num20 -= num14;
-          if (num20 >= 0 && num20 < this.Height)
+          num18 -= num14;
+          if (num18 >= 0 && num18 < this.Height)
             num15 += num12;
           else
             break;
@@ -2847,14 +2896,14 @@ public class ZMap
     }
     else
     {
-      for (int index7 = num8; index7 <= num9 && index7 < this.Width; ++index7)
+      for (int index1 = num8; index1 <= num9 && index1 < this.Width; ++index1)
       {
-        for (int index8 = 0; index8 < radius * 2; ++index8)
+        for (int index2 = 0; index2 < radius * 2; ++index2)
         {
-          if (!this.CheckPositionOnlyMap(index7 + outlineArray[(num1 + index8) % outlineArray.Count].x, num16 + outlineArray[(num1 + index8) % outlineArray.Count].y))
-            return new Coords(index7 + outlineArray[(num1 + index8) % outlineArray.Count].x, num16 + outlineArray[(num1 + index8) % outlineArray.Count].y);
-          if ((ZComponent) this.FindCreatureAtPoint(c, index7 + outlineArray[(num1 + index8) % outlineArray.Count].x, num16 + outlineArray[(num1 + index8) % outlineArray.Count].y, mask) != (object) null)
-            return new Coords(index7 + outlineArray[(num1 + index8) % outlineArray.Count].x, num16 + outlineArray[(num1 + index8) % outlineArray.Count].y);
+          if (!this.CheckPositionOnlyMap(index1 + outlineArray[(num1 + index2) % outlineArray.Count].x, num16 + outlineArray[(num1 + index2) % outlineArray.Count].y))
+            return new Coords(index1 + outlineArray[(num1 + index2) % outlineArray.Count].x, num16 + outlineArray[(num1 + index2) % outlineArray.Count].y);
+          if ((ZComponent) this.FindCreatureAtPoint(c, index1 + outlineArray[(num1 + index2) % outlineArray.Count].x, num16 + outlineArray[(num1 + index2) % outlineArray.Count].y, mask) != (object) null)
+            return new Coords(index1 + outlineArray[(num1 + index2) % outlineArray.Count].x, num16 + outlineArray[(num1 + index2) % outlineArray.Count].y);
         }
         num15 -= num13;
         if (num15 < 0)
@@ -2894,7 +2943,7 @@ public class ZMap
         int num16 = num8;
         int y1 = end.y;
         int x = num10;
-        if (num16 >= this.Height || num16 < 0 || x < 0 || x >= this.Width)
+        if (num16 >= this.Height || num16 < 0 || (x < 0 || x >= this.Width))
           return (Coords) null;
         for (int y2 = num16; y2 > y1 && y2 >= 0; --y2)
         {
@@ -2914,7 +2963,7 @@ public class ZMap
       }
       else
       {
-        if (num7 >= this.Height || num7 < 0 || num15 < 0 || num15 >= this.Width)
+        if (num7 >= this.Height || num7 < 0 || (num15 < 0 || num15 >= this.Width))
           return (Coords) null;
         for (int y = num7; y <= num8 && y < this.Height; ++y)
         {
@@ -2935,12 +2984,12 @@ public class ZMap
     }
     else if (num7 == end.x)
     {
-      int num17 = num8;
+      int num16 = num8;
       int x1 = end.x;
       int y = num10;
-      if (num17 >= this.Width || num17 < 0 || y < 0 || y >= this.Height)
+      if (num16 >= this.Width || num16 < 0 || (y < 0 || y >= this.Height))
         return (Coords) null;
-      for (int x2 = num17; x2 > x1 && x2 >= 0; --x2)
+      for (int x2 = num16; x2 > x1 && x2 >= 0; --x2)
       {
         num14 -= num12;
         if (num14 < 0)
@@ -2958,7 +3007,7 @@ public class ZMap
     }
     else
     {
-      if (num7 >= this.Width || num7 < 0 || num15 < 0 || num15 >= this.Height)
+      if (num7 >= this.Width || num7 < 0 || (num15 < 0 || num15 >= this.Height))
         return (Coords) null;
       for (int x = num7; x <= num8 && x < this.Width; ++x)
       {
@@ -3012,14 +3061,14 @@ public class ZMap
         int num16 = num8;
         int y = end.y;
         int num17 = num10;
-        if (num16 >= this.Height || num16 < 0 || num17 < 0 || num17 >= this.Width)
+        if (num16 >= this.Height || num16 < 0 || (num17 < 0 || num17 >= this.Width))
           return (Coords) null;
         for (int index = num16; index > y && index >= 0; --index)
         {
           if (!this.CheckClampedPixel(num17, index))
           {
             if ((ZComponent) spell != (object) null && spell.spellEnum == SpellEnum.Storm_Dragon_Breath)
-              spell.ApplyExplosionForce(new MyLocation(num17, index));
+              spell.ApplyExplosionForce(new MyLocation(num17, index), 0, true, (ISpellBridge) null, (ZCreature) null);
             return new Coords(num17, index);
           }
           ZCreature creatureAtPoint = this.FindCreatureAtPoint(c, num17, index, mask);
@@ -3030,7 +3079,7 @@ public class ZMap
               spell.position = new MyLocation(num17, index);
               if (spell.spellEnum == SpellEnum.Storm_Dragon_Breath)
               {
-                spell.ApplyExplosionForce(spell.position);
+                spell.ApplyExplosionForce(spell.position, 0, true, (ISpellBridge) null, (ZCreature) null);
               }
               else
               {
@@ -3038,7 +3087,7 @@ public class ZMap
                 spell.isDead = true;
                 if ((ZComponent) creatureAtPoint.tower == (object) null)
                 {
-                  creatureAtPoint.ApplyExplosionForce(spell.radius, new MyLocation(num17, index), spell.explisiveForce, spell.EXORADIUS, spell.forceOverDistance);
+                  creatureAtPoint.ApplyExplosionForce(spell.radius, new MyLocation(num17, index), spell.explisiveForce, spell.EXORADIUS, spell.forceOverDistance, false);
                   creatureAtPoint.StartMoving(false);
                 }
               }
@@ -3058,14 +3107,14 @@ public class ZMap
       }
       else
       {
-        if (num7 >= this.Height || num7 < 0 || num15 < 0 || num15 >= this.Width)
+        if (num7 >= this.Height || num7 < 0 || (num15 < 0 || num15 >= this.Width))
           return (Coords) null;
         for (int index = num7; index <= num8 && index < this.Height; ++index)
         {
           if (!this.CheckClampedPixel(num15, index))
           {
             if ((ZComponent) spell != (object) null && spell.spellEnum == SpellEnum.Storm_Dragon_Breath)
-              spell.ApplyExplosionForce(new MyLocation(num15, index));
+              spell.ApplyExplosionForce(new MyLocation(num15, index), 0, true, (ISpellBridge) null, (ZCreature) null);
             return new Coords(num15, index);
           }
           ZCreature creatureAtPoint = this.FindCreatureAtPoint(c, num15, index, mask);
@@ -3076,7 +3125,7 @@ public class ZMap
               spell.position = new MyLocation(num15, index);
               if (spell.spellEnum == SpellEnum.Storm_Dragon_Breath)
               {
-                spell.ApplyExplosionForce(spell.position);
+                spell.ApplyExplosionForce(spell.position, 0, true, (ISpellBridge) null, (ZCreature) null);
               }
               else
               {
@@ -3084,7 +3133,7 @@ public class ZMap
                 spell.isDead = true;
                 if ((ZComponent) creatureAtPoint.tower == (object) null)
                 {
-                  creatureAtPoint.ApplyExplosionForce(spell.radius, new MyLocation(num15, index), spell.explisiveForce, spell.EXORADIUS, spell.forceOverDistance);
+                  creatureAtPoint.ApplyExplosionForce(spell.radius, new MyLocation(num15, index), spell.explisiveForce, spell.EXORADIUS, spell.forceOverDistance, false);
                   creatureAtPoint.StartMoving(false);
                 }
               }
@@ -3105,28 +3154,28 @@ public class ZMap
     }
     else if (num7 == end.x)
     {
-      int num18 = num8;
+      int num16 = num8;
       int x = end.x;
-      int num19 = num10;
-      if (num18 >= this.Width || num18 < 0 || num19 < 0 || num19 >= this.Height)
+      int num17 = num10;
+      if (num16 >= this.Width || num16 < 0 || (num17 < 0 || num17 >= this.Height))
         return (Coords) null;
-      for (int index = num18; index > x && index >= 0; --index)
+      for (int index = num16; index > x && index >= 0; --index)
       {
-        if (!this.CheckClampedPixel(index, num19))
+        if (!this.CheckClampedPixel(index, num17))
         {
           if ((ZComponent) spell != (object) null && spell.spellEnum == SpellEnum.Storm_Dragon_Breath)
-            spell.ApplyExplosionForce(new MyLocation(index, num19));
-          return new Coords(index, num19);
+            spell.ApplyExplosionForce(new MyLocation(index, num17), 0, true, (ISpellBridge) null, (ZCreature) null);
+          return new Coords(index, num17);
         }
-        ZCreature creatureAtPoint = this.FindCreatureAtPoint(c, index, num19, mask);
+        ZCreature creatureAtPoint = this.FindCreatureAtPoint(c, index, num17, mask);
         if ((ZComponent) creatureAtPoint != (object) null)
         {
           if ((ZComponent) spell != (object) null)
           {
-            spell.position = new MyLocation(index, num19);
+            spell.position = new MyLocation(index, num17);
             if (spell.spellEnum == SpellEnum.Storm_Dragon_Breath)
             {
-              spell.ApplyExplosionForce(spell.position);
+              spell.ApplyExplosionForce(spell.position, 0, true, (ISpellBridge) null, (ZCreature) null);
             }
             else
             {
@@ -3134,18 +3183,18 @@ public class ZMap
               spell.isDead = true;
               if ((ZComponent) creatureAtPoint.tower == (object) null)
               {
-                creatureAtPoint.ApplyExplosionForce(spell.radius, new MyLocation(index, num19), spell.explisiveForce, spell.EXORADIUS, spell.forceOverDistance);
+                creatureAtPoint.ApplyExplosionForce(spell.radius, new MyLocation(index, num17), spell.explisiveForce, spell.EXORADIUS, spell.forceOverDistance, false);
                 creatureAtPoint.StartMoving(false);
               }
             }
           }
-          return new Coords(index, num19);
+          return new Coords(index, num17);
         }
         num14 -= num12;
         if (num14 < 0)
         {
-          num19 -= num13;
-          if (num19 >= 0 && num19 < this.Height)
+          num17 -= num13;
+          if (num17 >= 0 && num17 < this.Height)
             num14 += num11;
           else
             break;
@@ -3154,14 +3203,14 @@ public class ZMap
     }
     else
     {
-      if (num7 >= this.Width || num7 < 0 || num15 < 0 || num15 >= this.Height)
+      if (num7 >= this.Width || num7 < 0 || (num15 < 0 || num15 >= this.Height))
         return (Coords) null;
       for (int index = num7; index <= num8 && index < this.Width; ++index)
       {
         if (!this.CheckClampedPixel(index, num15))
         {
           if ((ZComponent) spell != (object) null && spell.spellEnum == SpellEnum.Storm_Dragon_Breath)
-            spell.ApplyExplosionForce(new MyLocation(index, num15));
+            spell.ApplyExplosionForce(new MyLocation(index, num15), 0, true, (ISpellBridge) null, (ZCreature) null);
           return new Coords(index, num15);
         }
         ZCreature creatureAtPoint = this.FindCreatureAtPoint(c, index, num15, mask);
@@ -3172,7 +3221,7 @@ public class ZMap
             spell.position = new MyLocation(index, num15);
             if (spell.spellEnum == SpellEnum.Storm_Dragon_Breath)
             {
-              spell.ApplyExplosionForce(spell.position);
+              spell.ApplyExplosionForce(spell.position, 0, true, (ISpellBridge) null, (ZCreature) null);
             }
             else
             {
@@ -3180,7 +3229,7 @@ public class ZMap
               spell.isDead = true;
               if ((ZComponent) creatureAtPoint.tower == (object) null)
               {
-                creatureAtPoint.ApplyExplosionForce(spell.radius, new MyLocation(index, num15), spell.explisiveForce, spell.EXORADIUS, spell.forceOverDistance);
+                creatureAtPoint.ApplyExplosionForce(spell.radius, new MyLocation(index, num15), spell.explisiveForce, spell.EXORADIUS, spell.forceOverDistance, false);
                 creatureAtPoint.StartMoving(false);
               }
             }
@@ -3227,7 +3276,7 @@ public class ZMap
         int x = num10;
         for (int y2 = num16; y2 > y1; --y2)
         {
-          if (y2 < this.Height && y2 >= 0 && x >= 0 && x < this.Width && !this.CheckClampedPixel(x, y2))
+          if (y2 < this.Height && y2 >= 0 && (x >= 0 && x < this.Width) && !this.CheckClampedPixel(x, y2))
             return new Coords(x, y2);
           num14 -= num12;
           if (num14 < 0)
@@ -3239,11 +3288,11 @@ public class ZMap
       }
       else
       {
-        if (num7 >= this.Height || num7 < 0 || num15 < 0 || num15 >= this.Width)
+        if (num7 >= this.Height || num7 < 0 || (num15 < 0 || num15 >= this.Width))
           return (Coords) null;
         for (int y = num7; y <= num8; ++y)
         {
-          if (y < this.Height && y >= 0 && num15 >= 0 && num15 < this.Width && !this.CheckClampedPixel(num15, y))
+          if (y < this.Height && y >= 0 && (num15 >= 0 && num15 < this.Width) && !this.CheckClampedPixel(num15, y))
             return new Coords(num15, y);
           num14 -= num12;
           if (num14 < 0)
@@ -3256,12 +3305,12 @@ public class ZMap
     }
     else if (num7 == end.x)
     {
-      int num17 = num8;
+      int num16 = num8;
       int x1 = end.x;
       int y = num10;
-      for (int x2 = num17; x2 > x1; --x2)
+      for (int x2 = num16; x2 > x1; --x2)
       {
-        if (x2 < this.Width && x2 >= 0 && y >= 0 && y < this.Height && !this.CheckClampedPixel(x2, y))
+        if (x2 < this.Width && x2 >= 0 && (y >= 0 && y < this.Height) && !this.CheckClampedPixel(x2, y))
           return new Coords(x2, y);
         num14 -= num12;
         if (num14 < 0)
@@ -3275,7 +3324,7 @@ public class ZMap
     {
       for (int x = num7; x <= num8; ++x)
       {
-        if (x < this.Width && x >= 0 && num15 >= 0 && num15 < this.Height && !this.CheckClampedPixel(x, num15))
+        if (x < this.Width && x >= 0 && (num15 >= 0 && num15 < this.Height) && !this.CheckClampedPixel(x, num15))
           return new Coords(x, num15);
         num14 -= num12;
         if (num14 < 0)
@@ -3298,10 +3347,10 @@ public class ZMap
 
   public class RawSprite
   {
+    public bool requireUpdate = true;
     public Sprite sprite;
     public SpriteRenderer sr;
     public Color32[] colors;
-    public bool requireUpdate = true;
 
     public RawSprite(Sprite s, SpriteRenderer sr, Color32[] c)
     {
@@ -3316,7 +3365,10 @@ public class ZMap
       this.requireUpdate = true;
     }
 
-    public Color32 GetPixel(int i) => this.colors[i];
+    public Color32 GetPixel(int i)
+    {
+      return this.colors[i];
+    }
 
     public void Apply()
     {
@@ -3332,7 +3384,7 @@ public class ZMap
       for (int index = 0; index < this.colors.Length; ++index)
       {
         if (this.colors[index].a == byte.MaxValue)
-          this.colors[index] = RotateImage.Purpalize(this.colors[index]);
+          this.colors[index] = RotateImage.Purpalize(this.colors[index], false);
       }
       this.sprite.texture.SetPixels32(this.colors);
       this.sprite.texture.Apply(true);

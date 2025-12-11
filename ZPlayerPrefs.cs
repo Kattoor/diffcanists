@@ -5,20 +5,28 @@ using System.Security.Cryptography;
 using System.Text;
 using UnityEngine;
 
-#nullable disable
 public static class ZPlayerPrefs
 {
   public static bool useSecure = true;
-  private const int Iterations = 555;
   private static string strPassword = "IamZETOwow!123";
   private static string strSalt = "IvmD123A12";
   private static bool hasSetPassword = false;
+  private const int Iterations = 555;
 
-  public static void DeleteAll() => PlayerPrefs.DeleteAll();
+  public static void DeleteAll()
+  {
+    PlayerPrefs.DeleteAll();
+  }
 
-  public static void DeleteKey(string key) => PlayerPrefs.DeleteKey(key);
+  public static void DeleteKey(string key)
+  {
+    PlayerPrefs.DeleteKey(key);
+  }
 
-  public static float GetFloat(string key) => ZPlayerPrefs.GetFloat(key, 0.0f);
+  public static float GetFloat(string key)
+  {
+    return ZPlayerPrefs.GetFloat(key, 0.0f, true);
+  }
 
   public static float GetFloat(string key, float defaultValue, bool isDecrypt = true)
   {
@@ -26,7 +34,10 @@ public static class ZPlayerPrefs
     return float.TryParse(ZPlayerPrefs.GetString(key), out result) ? result : defaultValue;
   }
 
-  public static int GetInt(string key) => ZPlayerPrefs.GetInt(key, 0);
+  public static int GetInt(string key)
+  {
+    return ZPlayerPrefs.GetInt(key, 0, true);
+  }
 
   public static int GetInt(string key, int defaultValue, bool isDecrypt = true)
   {
@@ -100,7 +111,10 @@ public static class ZPlayerPrefs
     Debug.LogWarning((object) "Set Your Own Password & Salt!!!");
   }
 
-  private static byte[] GetIV() => Encoding.UTF8.GetBytes(ZPlayerPrefs.strSalt);
+  private static byte[] GetIV()
+  {
+    return Encoding.UTF8.GetBytes(ZPlayerPrefs.strSalt);
+  }
 
   private static string Encrypt(string strPlain, string password)
   {

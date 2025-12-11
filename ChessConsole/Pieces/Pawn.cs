@@ -1,13 +1,12 @@
 
 using System.Collections.Generic;
 
-#nullable disable
 namespace ChessConsole.Pieces
 {
   public class Pawn : Piece
   {
-    private Direction forward;
     private ChessBoard.Cell[] hits = new ChessBoard.Cell[2];
+    private Direction forward;
 
     public Pawn(PlayerColor color)
       : base(color)
@@ -49,7 +48,13 @@ namespace ChessConsole.Pieces
       return this.hits[0] != blocked && this.hits[1] != blocked;
     }
 
-    public override ChessPiece Char => ChessPiece.Pawn;
+    public override ChessPiece Char
+    {
+      get
+      {
+        return ChessPiece.Pawn;
+      }
+    }
 
     protected override bool canHit(ChessBoard.Cell cell)
     {

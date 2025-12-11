@@ -1,11 +1,15 @@
 
-#nullable disable
+using System;
+
 public static class Mathd
 {
-  public static FixedInt PI = FixedInt.Create(3.1415M);
+  public static FixedInt PI = FixedInt.Create(new Decimal(31415, 0, 0, false, (byte) 4));
   private const int HalfShift = 10;
 
-  public static bool IsNull(this MyLocation v) => v.x == -1000 && v.y == -1000;
+  public static bool IsNull(this MyLocation v)
+  {
+    return v.x == -1000 && v.y == -1000;
+  }
 
   public static void Sqrt(long RawValue, out FixedInt ret)
   {
@@ -25,9 +29,15 @@ public static class Mathd
     return ret;
   }
 
-  public static FixedInt Max(FixedInt a, FixedInt b) => a > b ? a : b;
+  public static FixedInt Max(FixedInt a, FixedInt b)
+  {
+    return a > b ? a : b;
+  }
 
-  public static FixedInt Min(FixedInt a, FixedInt b) => a < b ? a : b;
+  public static FixedInt Min(FixedInt a, FixedInt b)
+  {
+    return a < b ? a : b;
+  }
 
   public static FixedInt Clamp(FixedInt x, FixedInt a, FixedInt b)
   {
@@ -43,7 +53,10 @@ public static class Mathd
     return x > 1 ? FixedInt.OneF : x;
   }
 
-  public static FixedInt LerpUnclamped(FixedInt v0, FixedInt v1, FixedInt t) => v0 + t * (v1 - v0);
+  public static FixedInt LerpUnclamped(FixedInt v0, FixedInt v1, FixedInt t)
+  {
+    return v0 + t * (v1 - v0);
+  }
 
   public static FixedInt Lerp(FixedInt v0, FixedInt v1, FixedInt t)
   {

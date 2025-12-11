@@ -2,12 +2,17 @@
 using HardShellStudios.InputManager;
 using UnityEngine;
 
-#nullable disable
 public class hardInput : MonoBehaviour
 {
-  public static bool GetKey(string keyName) => hardManager.singleton.GetKey(keyName);
+  public static bool GetKey(string keyName)
+  {
+    return hardManager.singleton.GetKey(keyName);
+  }
 
-  public static bool GetKeyDown(string keyName) => hardManager.singleton.GetKeyDown(keyName);
+  public static bool GetKeyDown(string keyName)
+  {
+    return hardManager.singleton.GetKeyDown(keyName);
+  }
 
   public static bool GetKeyDownSecondaryOnly(string keyName)
   {
@@ -19,7 +24,10 @@ public class hardInput : MonoBehaviour
     return hardManager.singleton.GetKeyDownPrimaryOnly(keyName);
   }
 
-  public static bool GetKeyUp(string keyName) => hardManager.singleton.GetKeyUp(keyName);
+  public static bool GetKeyUp(string keyName)
+  {
+    return hardManager.singleton.GetKeyUp(keyName);
+  }
 
   public static float GetAxis(string keyName, string keyName2, float gravity)
   {
@@ -51,7 +59,10 @@ public class hardInput : MonoBehaviour
     hardManager.singleton.HardStartRebind(keyName, useSecondaryKey, keyCode);
   }
 
-  public static void MouseLock(bool setMouseLock) => hardManager.singleton.MouseLock(setMouseLock);
+  public static void MouseLock(bool setMouseLock)
+  {
+    hardManager.singleton.MouseLock(setMouseLock);
+  }
 
   public static void MouseVisible(bool setMouseVisible)
   {
@@ -78,14 +89,20 @@ public class hardInput : MonoBehaviour
     }
   }
 
-  public static int GetControllerTypeIndex() => hardManager.singleton.controllerType;
+  public static int GetControllerTypeIndex()
+  {
+    return hardManager.singleton.controllerType;
+  }
 
   public static KeyCode GetKeyCode(string keyName, bool useSecondaryKey = false)
   {
     return hardManager.singleton.GetKeyCode(keyName, useSecondaryKey);
   }
 
-  public static void ResetAllBindings() => hardManager.singleton.resetSavedKeys();
+  public static void ResetAllBindings()
+  {
+    hardManager.singleton.resetSavedKeys();
+  }
 
   public static void ResetBinding(string bindingName)
   {

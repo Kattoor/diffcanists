@@ -5,21 +5,20 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-#nullable disable
 [Serializable]
-public class SerializableDictionary<TKey, TValue> : 
-  SerializableDictionary,
-  ISerializationCallbackReceiver,
-  IDictionary<TKey, TValue>,
-  ICollection<KeyValuePair<TKey, TValue>>,
-  IEnumerable<KeyValuePair<TKey, TValue>>,
-  IEnumerable
+public class SerializableDictionary<TKey, TValue> : SerializableDictionary, ISerializationCallbackReceiver, IDictionary<TKey, TValue>, ICollection<KeyValuePair<TKey, TValue>>, IEnumerable<KeyValuePair<TKey, TValue>>, IEnumerable
 {
   [SerializeField]
   private List<SerializableDictionary<TKey, TValue>.SerializableKeyValuePair> list = new List<SerializableDictionary<TKey, TValue>.SerializableKeyValuePair>();
   private Lazy<Dictionary<TKey, uint>> _keyPositions;
 
-  private Dictionary<TKey, uint> KeyPositions => this._keyPositions.Value;
+  private Dictionary<TKey, uint> KeyPositions
+  {
+    get
+    {
+      return this._keyPositions.Value;
+    }
+  }
 
   public SerializableDictionary()
   {
@@ -46,13 +45,16 @@ public class SerializableDictionary<TKey, TValue> :
 
   public TValue this[TKey key]
   {
-    get => this.list[(int) this.KeyPositions[key]].Value;
+    get
+    {
+      return this.list[(int) this.KeyPositions[key]].Value;
+    }
     set
     {
-      uint index;
-      if (this.KeyPositions.TryGetValue(key, out index))
+      uint num;
+      if (this.KeyPositions.TryGetValue(key, out num))
       {
-        this.list[(int) index].SetValue(value);
+        this.list[(int) num].SetValue(value);
       }
       else
       {
@@ -86,43 +88,67 @@ public class SerializableDictionary<TKey, TValue> :
     this.list.Add(new SerializableDictionary<TKey, TValue>.SerializableKeyValuePair(key, value));
   }
 
-  public bool ContainsKey(TKey key) => this.KeyPositions.ContainsKey(key);
+  public bool ContainsKey(TKey key)
+  {
+    return this.KeyPositions.ContainsKey(key);
+  }
 
   public bool Remove(TKey key)
   {
-    uint index1;
-    if (!this.KeyPositions.TryGetValue(key, out index1))
+    uint num;
+    if (!this.KeyPositions.TryGetValue(key, out num))
       return false;
     Dictionary<TKey, uint> keyPositions = this.KeyPositions;
     keyPositions.Remove(key);
     int count = this.list.Count;
-    this.list.RemoveAt((int) index1);
-    for (uint index2 = index1; (long) index2 < (long) count; ++index2)
-      keyPositions[this.list[(int) index2].Key] = index2;
+    this.list.RemoveAt((int) num);
+    for (uint index = num; (long) index < (long) count; ++index)
+      keyPositions[this.list[(int) index].Key] = index;
     return true;
   }
 
   public bool TryGetValue(TKey key, out TValue value)
   {
-    uint index;
-    if (this.KeyPositions.TryGetValue(key, out index))
+    uint num;
+    if (this.KeyPositions.TryGetValue(key, out num))
     {
-      value = this.list[(int) index].Value;
+      value = this.list[(int) num].Value;
       return true;
     }
     value = default (TValue);
     return false;
   }
 
-  public int Count => this.list.Count;
+  public int Count
+  {
+    get
+    {
+      return this.list.Count;
+    }
+  }
 
-  public bool IsReadOnly => false;
+  public bool IsReadOnly
+  {
+    get
+    {
+      return false;
+    }
+  }
 
-  public void Add(KeyValuePair<TKey, TValue> kvp) => this.Add(kvp.Key, kvp.Value);
+  public void Add(KeyValuePair<TKey, TValue> kvp)
+  {
+    this.Add(kvp.Key, kvp.Value);
+  }
 
-  public void Clear() => this.list.Clear();
+  public void Clear()
+  {
+    this.list.Clear();
+  }
 
-  public bool Contains(KeyValuePair<TKey, TValue> kvp) => this.KeyPositions.ContainsKey(kvp.Key);
+  public bool Contains(KeyValuePair<TKey, TValue> kvp)
+  {
+    return this.KeyPositions.ContainsKey(kvp.Key);
+  }
 
   public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
   {
@@ -139,7 +165,10 @@ public class SerializableDictionary<TKey, TValue> :
     }
   }
 
-  public bool Remove(KeyValuePair<TKey, TValue> kvp) => this.Remove(kvp.Key);
+  public bool Remove(KeyValuePair<TKey, TValue> kvp)
+  {
+    return this.Remove(kvp.Key);
+  }
 
   public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
   {
@@ -152,14 +181,26 @@ public class SerializableDictionary<TKey, TValue> :
     }
   }
 
-  IEnumerator IEnumerable.GetEnumerator() => (IEnumerator) this.GetEnumerator();
+  IEnumerator IEnumerable.GetEnumerator()
+  {
+    return (IEnumerator) this.GetEnumerator();
+  }
 
   [Serializable]
-  public struct SerializableKeyValuePair(TKey key, TValue value)
+  public struct SerializableKeyValuePair
   {
-    public TKey Key = key;
-    public TValue Value = value;
+    public TKey Key;
+    public TValue Value;
 
-    public void SetValue(TValue value) => this.Value = value;
+    public SerializableKeyValuePair(TKey key, TValue value)
+    {
+      this.Key = key;
+      this.Value = value;
+    }
+
+    public void SetValue(TValue value)
+    {
+      this.Value = value;
+    }
   }
 }

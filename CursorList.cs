@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-#nullable disable
 public class CursorList : MonoBehaviour
 {
   public List<CursorList.CursorInfo> cursors;
@@ -17,7 +16,7 @@ public class CursorList : MonoBehaviour
   private void Awake()
   {
     CursorList.Instance = this;
-    this.SetCursor(0);
+    this.SetCursor(0, CursorMode.Auto);
   }
 
   private void OnDestroy()

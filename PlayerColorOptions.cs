@@ -1,5 +1,4 @@
 
-#nullable disable
 public enum PlayerColorOptions
 {
   White = 1,

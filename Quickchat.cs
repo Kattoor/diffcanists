@@ -4,10 +4,8 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-#nullable disable
 public static class Quickchat
 {
-  public const int Count = 7;
   private static bool _initialized = false;
   public static List<Quickchat.Command> comGreetings = new List<Quickchat.Command>()
   {
@@ -374,7 +372,6 @@ public static class Quickchat
     }
   };
   private static Dictionary<int, Quickchat.Command> _byID = new Dictionary<int, Quickchat.Command>();
-  internal static Quickchat.Command temp;
   public static List<string> PlayerCounts = new List<string>()
   {
     "Any Player Count",
@@ -427,8 +424,11 @@ public static class Quickchat
   };
   public static List<string> Minion = new List<string>();
   public static List<string> Spell = new List<string>();
+  public const int Count = 7;
+  internal static Quickchat.Command temp;
 
-  public static (string name, List<Quickchat.Command> list, KeyCode key) AllCommands(int i)
+  public static (string name, List<Quickchat.Command> list, KeyCode key) AllCommands(
+    int i)
   {
     switch (i)
     {
@@ -516,7 +516,7 @@ public static class Quickchat
         if (destionation != ChatOrigination.Private)
           return;
         string command = Quickchat.TryGetCommand(id, options);
-        ChatBox.Instance.NewChatMsg("To <sprite name=\"Emoji2_1352\"> " + data.privateDM, command, (Color) ColorScheme.GetColor(Global.ColorSentPrivate), data.privateDM, ChatOrigination.System);
+        ChatBox.Instance.NewChatMsg("To <sprite name=\"Emoji2_1352\"> " + data.privateDM, command, (Color) ColorScheme.GetColor(Global.ColorSentPrivate), data.privateDM, ChatOrigination.System, ContentType.STRING, (object) null);
       }
       else
       {

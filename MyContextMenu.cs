@@ -10,13 +10,8 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-#nullable disable
 public class MyContextMenu : MonoBehaviour
 {
-  public GameObject item;
-  public GameObject itemWithImage;
-  public RectTransform container;
-  private Action onCancel;
   public static Color ColorRed = (Color) new Color32((byte) 194, (byte) 80, (byte) 65, byte.MaxValue);
   public static Color ColorGreen = (Color) new Color32((byte) 85, (byte) 223, (byte) 85, byte.MaxValue);
   public static Color ColorYellow = (Color) new Color32(byte.MaxValue, (byte) 210, (byte) 83, byte.MaxValue);
@@ -26,6 +21,10 @@ public class MyContextMenu : MonoBehaviour
   public static Color ColorPurple = new Color(1f, 0.0f, 0.71373f);
   public static Color ColorClan = (Color) new Color32(byte.MaxValue, (byte) 142, (byte) 0, byte.MaxValue);
   public static Color ColorCream = new Color(0.9647059f, 0.8470589f, 0.6431373f);
+  public GameObject item;
+  public GameObject itemWithImage;
+  public RectTransform container;
+  private Action onCancel;
 
   public static MyContextMenu instance { get; private set; }
 
@@ -118,7 +117,7 @@ public class MyContextMenu : MonoBehaviour
       this.onCancel = (Action) null;
       this.Close();
     }));
-    component.onEnter.AddListener((UnityAction) (() => MyToolTip.Show(tooltip)));
+    component.onEnter.AddListener((UnityAction) (() => MyToolTip.Show(tooltip, -1f)));
     component.onExit.AddListener((UnityAction) (() => MyToolTip.Close()));
     gameObject.SetActive(true);
   }
@@ -149,7 +148,7 @@ public class MyContextMenu : MonoBehaviour
     }
     if (!string.IsNullOrEmpty(tooltip))
     {
-      component.onEnter.AddListener((UnityAction) (() => MyToolTip.Show(tooltip)));
+      component.onEnter.AddListener((UnityAction) (() => MyToolTip.Show(tooltip, -1f)));
       component.onExit.AddListener((UnityAction) (() => MyToolTip.Close()));
     }
     gameObject.SetActive(true);
@@ -185,7 +184,11 @@ public class MyContextMenu : MonoBehaviour
     return toggle;
   }
 
-  public InputFieldPlus AddInput(Action<string> a, string defTxt = null, bool big = false, bool hasButton = true)
+  public InputFieldPlus AddInput(
+    Action<string> a,
+    string defTxt = null,
+    bool big = false,
+    bool hasButton = true)
   {
     InputFieldPlus inputFieldPlus = UnityEngine.Object.Instantiate<InputFieldPlus>(big ? ClientResources.Instance.contextMenuInputFieldLong : ClientResources.Instance.contextMenuInputField, (Transform) this.container);
     inputFieldPlus.IsReportInput = true;
@@ -205,7 +208,7 @@ public class MyContextMenu : MonoBehaviour
     if (!hasButton)
       inputFieldPlus.gameObject.GetComponentInChildren<UIOnHover>()?.gameObject.SetActive(false);
     inputFieldPlus.gameObject.SetActive(true);
-    inputFieldPlus.SetAsActive();
+    inputFieldPlus.SetAsActive(true);
     return inputFieldPlus;
   }
 
@@ -230,14 +233,14 @@ public class MyContextMenu : MonoBehaviour
   {
     MyContextMenu myContextMenu = MyContextMenu.Show();
     myContextMenu.AddItem(s, a, color ?? (Color) ColorScheme.GetColor(MyContextMenu.ColorGray));
-    myContextMenu.Rebuild();
+    myContextMenu.Rebuild(false);
   }
 
   public static void ShowSimple(string s, Color color)
   {
     MyContextMenu myContextMenu = MyContextMenu.Show();
     myContextMenu.AddItem(s, (Action) null, color);
-    myContextMenu.Rebuild();
+    myContextMenu.Rebuild(false);
   }
 
   public static MyContextMenu BuildColorScheme(Transform parent)
@@ -249,7 +252,7 @@ public class MyContextMenu : MonoBehaviour
       component.AddFakeItem(num.ToString() + ". Context Menu", (Color) ColorScheme.GetColor(contextMenuColor));
       ++num;
     }
-    component.Rebuild();
+    component.Rebuild(false);
     MyContextMenu.instance = (MyContextMenu) null;
     component.enabled = false;
     return component;
@@ -263,7 +266,10 @@ public class MyContextMenu : MonoBehaviour
     return MyContextMenu.instance;
   }
 
-  public void SetOnCancel(Action a) => this.onCancel = a;
+  public void SetOnCancel(Action a)
+  {
+    this.onCancel = a;
+  }
 
   public void Rebuild(bool quickReturn = false)
   {
@@ -303,12 +309,12 @@ public class MyContextMenu : MonoBehaviour
       float x = num + 20f;
       for (int index = 2; index < child1.childCount; ++index)
       {
-        ContentSizeFitter component3 = child1.GetChild(index).GetComponent<ContentSizeFitter>();
-        if (!((UnityEngine.Object) component3 == (UnityEngine.Object) null))
+        ContentSizeFitter component2 = child1.GetChild(index).GetComponent<ContentSizeFitter>();
+        if (!((UnityEngine.Object) component2 == (UnityEngine.Object) null))
         {
-          component3.enabled = false;
-          RectTransform child3 = (RectTransform) child1.GetChild(index);
-          child3.sizeDelta = new Vector2(x, child3.sizeDelta.y);
+          component2.enabled = false;
+          RectTransform child2 = (RectTransform) child1.GetChild(index);
+          child2.sizeDelta = new Vector2(x, child2.sizeDelta.y);
         }
       }
       component1.enabled = false;
@@ -323,7 +329,7 @@ public class MyContextMenu : MonoBehaviour
       MyContextMenu myContextMenu = MyContextMenu.Show();
       myContextMenu.AddSeperator("Not Connected");
       myContextMenu.AddCopy(chatMsg);
-      myContextMenu.Rebuild();
+      myContextMenu.Rebuild(false);
     }
     else
     {
@@ -332,7 +338,7 @@ public class MyContextMenu : MonoBehaviour
       MyContextMenu component = Controller.Instance.CreateAndApply(Controller.Instance.MenuContextMenu, Controller.Instance.transform).GetComponent<MyContextMenu>();
       component.Position();
       component.ItemFromName(s, chatMsg);
-      component.Rebuild();
+      component.Rebuild(false);
     }
   }
 
@@ -343,15 +349,15 @@ public class MyContextMenu : MonoBehaviour
     if (Client.clan != null)
     {
       this.AddItem("Leave clan", (Action) (() => MyContextMenu.ShowSimple("Confirm Leave clan?", (Action) (() => Client.AskClanCommand((byte) 3, "")), new Color?((Color) ColorScheme.GetColor(MyContextMenu.ColorRed)))), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
-      this.AddSeperator();
+      this.AddSeperator("--------------------------");
       if ((UnityEngine.Object) Player.Instance != (UnityEngine.Object) null)
         this.AddSeperator("clan icon cannot be changed in-game");
       else
         this.AddItem(acc.displayClanPrefix == (byte) 0 ? "Hide Clan Prefix" : "Show Clan Prefix", (Action) (() => Client.AskToChangeDisplayIcon(acc.displayClanPrefix == (byte) 0 ? 253 : 254)), (Color) ColorScheme.GetColor(MyContextMenu.ColorYellow));
-      this.AddSeperator();
+      this.AddSeperator("--------------------------");
     }
     this.AddSeperator("Change your displayed icon");
-    this.AddSeperator();
+    this.AddSeperator("--------------------------");
     this.AddItem("Display Default", (Action) (() => Client.AskToChangeDisplayIcon(0)), (Color) ColorScheme.GetColor(MyContextMenu.ColorYellow));
     this.AddItem("Display Experience", (Action) (() => Client.AskToChangeDisplayIcon(252)), (Color) ColorScheme.GetColor(MyContextMenu.ColorYellow));
     this.AddItem("Display Prestige", (Action) (() => Client.AskToChangeDisplayIcon((int) byte.MaxValue)), (Color) ColorScheme.GetColor(MyContextMenu.ColorYellow));
@@ -378,13 +384,13 @@ public class MyContextMenu : MonoBehaviour
       UnityEngine.Object.Destroy((UnityEngine.Object) arrayContextmenu.gameObject);
     if (accountType == 0)
     {
-      this.AddItem(Client.Name + " is the best", (Action) (() => { }), (Color) ColorScheme.GetColor(MyContextMenu.ColorPurple));
+      this.AddItem(Client.Name + " is the best", (Action) (() => {}), (Color) ColorScheme.GetColor(MyContextMenu.ColorPurple));
     }
     else
     {
-      if (Client.clan == null || Client.clan.members[Client.Name] < Clan.Roles.Officer || !string.Equals(acc.clan, Client.clan.name) || acc.clanRole > Client.clan.members[Client.Name])
+      if (Client.clan == null || Client.clan.members[Client.Name] < Clan.Roles.Officer || (!string.Equals(acc.clan, Client.clan.name) || acc.clanRole > Client.clan.members[Client.Name]))
         return;
-      this.AddSeperator();
+      this.AddSeperator("--------------------------");
       this.AddItem("Change clan rank...", (Action) (() => MyContextMenu.RankContextMenu(acc)), (Color) ColorScheme.GetColor(MyContextMenu.ColorClan));
     }
   }
@@ -407,7 +413,7 @@ public class MyContextMenu : MonoBehaviour
     }
     if (arrayContextmenu.Count == 0)
       UnityEngine.Object.Destroy((UnityEngine.Object) arrayContextmenu.gameObject);
-    myContextMenu.Rebuild();
+    myContextMenu.Rebuild(false);
   }
 
   private void AddCopy(string chatMsg)
@@ -416,7 +422,7 @@ public class MyContextMenu : MonoBehaviour
       return;
     if (chatMsg.StartsWith("Your spells: (Press F8 to view) "))
       chatMsg = chatMsg.Substring("Your spells: (Press F8 to view) ".Length);
-    this.AddSeperator();
+    this.AddSeperator("--------------------------");
     this.AddItem("Copy Contents to Clipboard", (Action) (() =>
     {
       Global.systemCopyBuffer = chatMsg;
@@ -428,7 +434,7 @@ public class MyContextMenu : MonoBehaviour
   {
     MyContextMenu myContextMenu = MyContextMenu.Show();
     myContextMenu.AddSeperator("Ignore " + s + " for");
-    myContextMenu.AddSeperator();
+    myContextMenu.AddSeperator("--------------------------");
     myContextMenu.AddItem("5 Minutes", (Action) (() =>
     {
       Client.TempIgnored tempIgnored = Client.tempIgnored;
@@ -470,14 +476,14 @@ public class MyContextMenu : MonoBehaviour
       myContextMenu.AddItem("Ignore Indefinitely", (Action) (() => Client.AskToAddFriend(false, true, s)), (Color) ColorScheme.GetColor(MyContextMenu.ColorRed));
     else
       myContextMenu.AddSeperator("Ignore list full - Please use one of the above options");
-    myContextMenu.Rebuild();
+    myContextMenu.Rebuild(false);
   }
 
   public void ItemFromName(string s, string chatMsg = null)
   {
     if (string.IsNullOrEmpty(s))
     {
-      this.AddItem("Do nothing", (Action) (() => { }), (Color) ColorScheme.GetColor(MyContextMenu.ColorGray));
+      this.AddItem("Do nothing", (Action) (() => {}), (Color) ColorScheme.GetColor(MyContextMenu.ColorGray));
       this.AddCopy(chatMsg);
     }
     else if (string.Equals(s, Client.Name, StringComparison.OrdinalIgnoreCase))
@@ -485,7 +491,7 @@ public class MyContextMenu : MonoBehaviour
       this.DisplayIconMenu();
       if (Client.clan != null)
       {
-        this.AddSeperator();
+        this.AddSeperator("--------------------------");
         this.AddItem("My Clan Log...", (Action) (() => Client.AskClanCommand((byte) 12, "")), (Color) ColorScheme.GetColor(MyContextMenu.ColorClan));
       }
       this.AddCopy(chatMsg);
@@ -503,10 +509,10 @@ public class MyContextMenu : MonoBehaviour
     }
     else
     {
-      Account acc = Client.GetAccount(s);
+      Account acc = Client.GetAccount(s, false);
       if (acc.accountType.has(AccountType.Arcane_Monster) && !acc.accountType.isMod())
       {
-        this.AddItem("<color=purple>Arcane Monsters</color> are <color=red>not</color> Moderators", (Action) (() => { }), (Color) ColorScheme.GetColor(MyContextMenu.ColorGray));
+        this.AddItem("<color=purple>Arcane Monsters</color> are <color=red>not</color> Moderators", (Action) (() => {}), (Color) ColorScheme.GetColor(MyContextMenu.ColorGray));
         this.AddSeperator("-----------------------------------");
       }
       if (Client.miniGame != null)
@@ -519,9 +525,9 @@ public class MyContextMenu : MonoBehaviour
             minigameID = Client.miniGame.id,
             miniGameType = (int) Client.miniGame.gameType,
             spectator = (Client.miniGame.players.Count > 1)
-          });
+          }, false);
         }), (Color) ColorScheme.GetColor(MyContextMenu.ColorClan));
-      if (((UnityEngine.Object) LobbyMenu.instance != (UnityEngine.Object) null || (UnityEngine.Object) HUD.instance != (UnityEngine.Object) null && Client.game != null && Client.game.isSpectator) && !Client._lobby.ContainsKey(acc.name) && acc.location.Online())
+      if (((UnityEngine.Object) LobbyMenu.instance != (UnityEngine.Object) null || (UnityEngine.Object) HUD.instance != (UnityEngine.Object) null && Client.game != null && Client.game.isSpectator) && (!Client._lobby.ContainsKey(acc.name) && acc.location.Online()))
       {
         bool flag = false;
         for (int index = Client._games.Count - 1; index >= 0; --index)
@@ -534,9 +540,9 @@ public class MyContextMenu : MonoBehaviour
               if (string.Equals(player, acc.name))
               {
                 GameObject gameObject = this.AddItem("Spectate " + s + " game", (Action) (() => Client.AskToSpectate(x.Key)), (Color) ColorScheme.GetColor(MyContextMenu.ColorCyan));
-                gameObject.GetComponent<UIOnHover>().onEnter.AddListener((UnityAction) (() => MyToolTip.Show(x.Value.ToString((ZGame) null))));
+                gameObject.GetComponent<UIOnHover>().onEnter.AddListener((UnityAction) (() => MyToolTip.Show(x.Value.ToString((ZGame) null, false), -1f)));
                 gameObject.GetComponent<UIOnHover>().onExit.AddListener((UnityAction) (() => MyToolTip.Close()));
-                this.AddSeperator();
+                this.AddSeperator("--------------------------");
                 flag = true;
                 break;
               }
@@ -549,9 +555,9 @@ public class MyContextMenu : MonoBehaviour
               if (string.Equals(player, acc.name))
               {
                 GameObject gameObject = this.AddItem("Join " + s + " game", (Action) (() => Client.AskTojoinGame(x.Key)), (Color) ColorScheme.GetColor(MyContextMenu.ColorCyan));
-                gameObject.GetComponent<UIOnHover>().onEnter.AddListener((UnityAction) (() => MyToolTip.Show(x.Value.ToString((ZGame) null))));
+                gameObject.GetComponent<UIOnHover>().onEnter.AddListener((UnityAction) (() => MyToolTip.Show(x.Value.ToString((ZGame) null, false), -1f)));
                 gameObject.GetComponent<UIOnHover>().onExit.AddListener((UnityAction) (() => MyToolTip.Close()));
-                this.AddSeperator();
+                this.AddSeperator("--------------------------");
                 flag = true;
                 break;
               }
@@ -608,45 +614,45 @@ public class MyContextMenu : MonoBehaviour
           this.AddItem("Change " + s + "'s clan rank...", (Action) (() => MyContextMenu.RankContextMenu(acc)), (Color) ColorScheme.GetColor(MyContextMenu.ColorClan));
         }
       }
-      this.AddSeperator();
+      this.AddSeperator("--------------------------");
       if (!string.IsNullOrEmpty(acc.clan))
         this.AddItem("Clan: " + acc.clan + " (" + (object) acc.clanRole + ")", (Action) null, (Color) ColorScheme.GetColor(MyContextMenu.ColorClan));
       else
         this.AddItem("This player is not in a clan", (Action) null, (Color) ColorScheme.GetColor(MyContextMenu.ColorClan));
-      this.AddSeperator();
+      this.AddSeperator("--------------------------");
       this.AddItem("Share...", (Action) (() => MyContextMenu.ShareContextMenu(s, acc)), MyContextMenu.ColorYellow);
-      this.AddSeperator();
+      this.AddSeperator("--------------------------");
       if (!string.IsNullOrEmpty(acc.oldName))
         this.AddItem("Previous Name: " + acc.oldName, (Action) (() =>
         {
           Global.systemCopyBuffer = acc.oldName;
-          ChatBox.Instance.NewChatMsg("", "Copied " + s + "'s previous name to Clipboard", (Color) ColorScheme.GetColor(Global.ColorSystem), s, ChatOrigination.System);
+          ChatBox.Instance.NewChatMsg("", "Copied " + s + "'s previous name to Clipboard", (Color) ColorScheme.GetColor(Global.ColorSystem), s, ChatOrigination.System, ContentType.STRING, (object) null);
         }), (Color) ColorScheme.GetColor(MyContextMenu.ColorBlue));
       Account myAccount = Client.MyAccount;
       if (acc.discord != 0UL && myAccount.accountType.IsModPlus())
         this.AddItem("Discord ID: " + acc.discord.ToString(), (Action) (() =>
         {
           Global.systemCopyBuffer = acc.discord.ToString();
-          ChatBox.Instance.NewChatMsg("", "Copied " + s + "'s discord ID to Clipboard", (Color) ColorScheme.GetColor(Global.ColorSystem), s, ChatOrigination.System);
+          ChatBox.Instance.NewChatMsg("", "Copied " + s + "'s discord ID to Clipboard", (Color) ColorScheme.GetColor(Global.ColorSystem), s, ChatOrigination.System, ContentType.STRING, (object) null);
         }), (Color) ColorScheme.GetColor(MyContextMenu.ColorBlue));
       if (myAccount.accountType.IsModPlus())
       {
-        this.AddSeperator();
+        this.AddSeperator("--------------------------");
         if (acc.accountType.IsMuted() && !acc.fake)
           this.AddItem("Unmute " + s, (Action) (() => Client.SendChatMsg("?unmute:" + s)), (Color) ColorScheme.GetColor(MyContextMenu.ColorRed));
         else
           this.AddItem("Mute " + s, (Action) (() => Client.SendChatMsg("?mute:" + s)), (Color) ColorScheme.GetColor(MyContextMenu.ColorRed));
       }
-      this.AddSeperator();
+      this.AddSeperator("--------------------------");
       this.AddItem("Report " + s, (Action) (() => Controller.Instance.Report(s)), (Color) ColorScheme.GetColor(MyContextMenu.ColorRed));
-      if ((acc.accountType == AccountType.None || acc.fake) && acc.experience == (byte) 0 && acc.prestige == (byte) 0)
+      if ((acc.accountType == AccountType.None || acc.fake) && (acc.experience == (byte) 0 && acc.prestige == (byte) 0))
       {
         this.AddCopy(chatMsg);
       }
       else
       {
         this.AddSeperator("Account Tags");
-        this.AddSeperator();
+        this.AddSeperator("--------------------------");
         int accountType = (int) acc.accountType;
         for (int index1 = 0; index1 < AccountExtension._IconOrder.Length; ++index1)
         {
@@ -654,15 +660,15 @@ public class MyContextMenu : MonoBehaviour
           {
             int index2 = (int) AccountExtension._IconOrder[index1].GetIndex();
             if (AccountExtension._IconOrder[index1] == AccountType.Muted && acc.discord == 0UL && !acc.steamVerified)
-              this.AddItem(ChatBox.IconString(acc, AccountExtension._IconOrder[index1]) + "Unverified", (Action) (() => { }), (Color) ColorScheme.GetColor(MyContextMenu.ColorBlue));
+              this.AddItem(ChatBox.IconString(acc, AccountExtension._IconOrder[index1]) + "Unverified", (Action) (() => {}), (Color) ColorScheme.GetColor(MyContextMenu.ColorBlue));
             else
-              this.AddItem(ChatBox.IconString(acc, AccountExtension._IconOrder[index1]) + AccountExtension._IconOrder[index1].ToSpacelessString(), (Action) (() => { }), (Color) ColorScheme.GetColor(MyContextMenu.ColorBlue));
+              this.AddItem(ChatBox.IconString(acc, AccountExtension._IconOrder[index1]) + AccountExtension._IconOrder[index1].ToSpacelessString(), (Action) (() => {}), (Color) ColorScheme.GetColor(MyContextMenu.ColorBlue));
           }
         }
         if (acc.prestige > (byte) 0)
-          this.AddItem(ChatBox.PrestigeString((int) acc.prestige) + (object) acc.prestige + Account.number((int) acc.prestige) + " prestige", (Action) (() => { }), (Color) ColorScheme.GetColor(MyContextMenu.ColorBlue));
+          this.AddItem(ChatBox.PrestigeString((int) acc.prestige) + (object) acc.prestige + Account.number((int) acc.prestige) + " prestige", (Action) (() => {}), (Color) ColorScheme.GetColor(MyContextMenu.ColorBlue));
         if (acc.experience > (byte) 0)
-          this.AddItem("Level " + (object) acc.experience, (Action) (() => { }), (Color) ColorScheme.GetColor(MyContextMenu.ColorBlue));
+          this.AddItem("Level " + (object) acc.experience, (Action) (() => {}), (Color) ColorScheme.GetColor(MyContextMenu.ColorBlue));
         this.AddCopy(chatMsg);
       }
     }
@@ -677,31 +683,31 @@ public class MyContextMenu : MonoBehaviour
     MyContextMenu myContextMenu = MyContextMenu.Show();
     myContextMenu.AddItem("Share an outfit with " + s, (Action) (() =>
     {
-      ChangeOutfitMenu.Create(false, onEnd: (Action<SettingsPlayer>) (sp => { }));
+      ChangeOutfitMenu.Create(false, true, (SettingsPlayer) null, (Action<SettingsPlayer>) (sp => {}));
       Client.sharingWith = s;
     }), (Color) ColorScheme.GetColor(MyContextMenu.ColorYellow));
     myContextMenu.AddItem("Share current outfit with " + s, (Action) (() =>
     {
       Client.sharingWith = s;
-      Client.AskToShare("Current", ContentType.Outfit, (UnityEngine.Object) Player.Instance != (UnityEngine.Object) null ? (object) Player.Instance.person.settingsPlayer : (object) Client.settingsPlayer);
+      Client.AskToShare("Current", ContentType.Outfit, (UnityEngine.Object) Player.Instance != (UnityEngine.Object) null ? (object) Player.Instance.person.settingsPlayer : (object) Client.settingsPlayer, false);
       Client.sharingWith = "";
     }), (Color) ColorScheme.GetColor(MyContextMenu.ColorYellow));
     myContextMenu.AddItem("Share a spellbook with " + s, (Action) (() =>
     {
-      ChangeSpellBookMenu.Create(false, onEnd: (Action<SettingsPlayer>) (sp => { }));
+      ChangeSpellBookMenu.Create(false, (SettingsPlayer) null, (Action<SettingsPlayer>) (sp => {}));
       Client.sharingWith = s;
     }), (Color) ColorScheme.GetColor(MyContextMenu.ColorYellow));
     myContextMenu.AddItem("Share current spellbook with " + s, (Action) (() =>
     {
       Client.sharingWith = s;
-      Client.AskToShare("Current", ContentType.SpellBook, (UnityEngine.Object) Player.Instance != (UnityEngine.Object) null ? (object) Player.Instance.person.settingsPlayer : (object) Client.settingsPlayer);
+      Client.AskToShare("Current", ContentType.SpellBook, (UnityEngine.Object) Player.Instance != (UnityEngine.Object) null ? (object) Player.Instance.person.settingsPlayer : (object) Client.settingsPlayer, false);
       Client.sharingWith = "";
     }), (Color) ColorScheme.GetColor(MyContextMenu.ColorYellow));
     if (Client.colorScheme != null)
       myContextMenu.AddItem("Share current color scheme with " + s, (Action) (() =>
       {
         Client.sharingWith = s;
-        Client.AskToShare(Client.colorScheme.name, ContentType.ColorScheme, (object) Client.colorScheme);
+        Client.AskToShare(Client.colorScheme.name, ContentType.ColorScheme, (object) Client.colorScheme, false);
         Client.sharingWith = "";
       }), (Color) ColorScheme.GetColor(MyContextMenu.ColorYellow));
     if (ChooseJsonDialog.HasCustomTutorials())
@@ -709,45 +715,45 @@ public class MyContextMenu : MonoBehaviour
       {
         ChooseJsonDialog.Create(false, ChooseJsonDialog.Viewing.Custom, (Action<string, Tutorial, int>) ((name, sp, _index) =>
         {
-          Client.AskToShare(Path.GetFileNameWithoutExtension(name), ContentType.ArcTutorial, (object) sp);
+          Client.AskToShare(Path.GetFileNameWithoutExtension(name), ContentType.ArcTutorial, (object) sp, false);
           Client.sharingWith = "";
-        }));
+        }), false, (Action<string, string, int>) null);
         Client.sharingWith = s;
       }), (Color) ColorScheme.GetColor(MyContextMenu.ColorYellow));
     if (!string.IsNullOrEmpty(acc.clan) && Client.clan != null && string.Equals(Client.clan.name, acc.clan))
     {
-      myContextMenu.AddSeperator();
+      myContextMenu.AddSeperator("--------------------------");
       myContextMenu.AddItem("Share an outfit with your clan", (Action) (() =>
       {
-        ChangeOutfitMenu.Create(false, onEnd: (Action<SettingsPlayer>) (sp => { }));
+        ChangeOutfitMenu.Create(false, true, (SettingsPlayer) null, (Action<SettingsPlayer>) (sp => {}));
         Client.sharingWith = "[Clan]";
       }), (Color) ColorScheme.GetColor(MyContextMenu.ColorClan));
       myContextMenu.AddItem("Share current outfit with your clan", (Action) (() =>
       {
         Client.sharingWith = "[Clan]";
-        Client.AskToShare("Current", ContentType.Outfit, (UnityEngine.Object) Player.Instance != (UnityEngine.Object) null ? (object) Player.Instance.person.settingsPlayer : (object) Client.settingsPlayer);
+        Client.AskToShare("Current", ContentType.Outfit, (UnityEngine.Object) Player.Instance != (UnityEngine.Object) null ? (object) Player.Instance.person.settingsPlayer : (object) Client.settingsPlayer, false);
         Client.sharingWith = "";
       }), (Color) ColorScheme.GetColor(MyContextMenu.ColorClan));
       myContextMenu.AddItem("Share a spellbook with your clan", (Action) (() =>
       {
-        ChangeSpellBookMenu.Create(false, onEnd: (Action<SettingsPlayer>) (sp => { }));
+        ChangeSpellBookMenu.Create(false, (SettingsPlayer) null, (Action<SettingsPlayer>) (sp => {}));
         Client.sharingWith = "[Clan]";
       }), (Color) ColorScheme.GetColor(MyContextMenu.ColorClan));
       myContextMenu.AddItem("Share current spellbook with your clan", (Action) (() =>
       {
         Client.sharingWith = "[Clan]";
-        Client.AskToShare("Current", ContentType.SpellBook, (UnityEngine.Object) Player.Instance != (UnityEngine.Object) null ? (object) Player.Instance.person.settingsPlayer : (object) Client.settingsPlayer);
+        Client.AskToShare("Current", ContentType.SpellBook, (UnityEngine.Object) Player.Instance != (UnityEngine.Object) null ? (object) Player.Instance.person.settingsPlayer : (object) Client.settingsPlayer, false);
         Client.sharingWith = "";
       }), (Color) ColorScheme.GetColor(MyContextMenu.ColorClan));
       if (Client.colorScheme != null)
         myContextMenu.AddItem("Share current color scheme with " + s, (Action) (() =>
         {
           Client.sharingWith = "[Clan]";
-          Client.AskToShare(Client.colorScheme.name, ContentType.ColorScheme, (object) Client.colorScheme);
+          Client.AskToShare(Client.colorScheme.name, ContentType.ColorScheme, (object) Client.colorScheme, false);
           Client.sharingWith = "";
         }), (Color) ColorScheme.GetColor(MyContextMenu.ColorClan));
     }
-    myContextMenu.Rebuild();
+    myContextMenu.Rebuild(false);
   }
 
   public static void RankContextMenu(Account acc)
@@ -763,9 +769,9 @@ public class MyContextMenu : MonoBehaviour
       else if (list[index] < member)
         myContextMenu.AddItem(list[index].ToString(), (Action) (() => Client.AskClanRank(acc.name, (int) x)), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
       else
-        myContextMenu.AddItem(list[index].ToString(), (Action) (() => { }), (Color) ColorScheme.GetColor(MyContextMenu.ColorRed));
+        myContextMenu.AddItem(list[index].ToString(), (Action) (() => {}), (Color) ColorScheme.GetColor(MyContextMenu.ColorRed));
     }
-    myContextMenu.Rebuild();
+    myContextMenu.Rebuild(false);
   }
 
   public void Close()
@@ -781,5 +787,8 @@ public class MyContextMenu : MonoBehaviour
     UnityEngine.Object.Destroy((UnityEngine.Object) this.gameObject);
   }
 
-  public static void CloseInstance() => MyContextMenu.instance?.Close();
+  public static void CloseInstance()
+  {
+    MyContextMenu.instance?.Close();
+  }
 }

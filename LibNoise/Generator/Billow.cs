@@ -2,7 +2,6 @@
 using System;
 using UnityEngine;
 
-#nullable disable
 namespace LibNoise.Generator
 {
   public class Billow : ModuleBase
@@ -38,38 +37,74 @@ namespace LibNoise.Generator
 
     public double Frequency
     {
-      get => this._frequency;
-      set => this._frequency = value;
+      get
+      {
+        return this._frequency;
+      }
+      set
+      {
+        this._frequency = value;
+      }
     }
 
     public double Lacunarity
     {
-      get => this._lacunarity;
-      set => this._lacunarity = value;
+      get
+      {
+        return this._lacunarity;
+      }
+      set
+      {
+        this._lacunarity = value;
+      }
     }
 
     public LibNoise.QualityMode Quality
     {
-      get => this._quality;
-      set => this._quality = value;
+      get
+      {
+        return this._quality;
+      }
+      set
+      {
+        this._quality = value;
+      }
     }
 
     public int OctaveCount
     {
-      get => this._octaveCount;
-      set => this._octaveCount = Mathf.Clamp(value, 1, 30);
+      get
+      {
+        return this._octaveCount;
+      }
+      set
+      {
+        this._octaveCount = Mathf.Clamp(value, 1, 30);
+      }
     }
 
     public double Persistence
     {
-      get => this._persistence;
-      set => this._persistence = value;
+      get
+      {
+        return this._persistence;
+      }
+      set
+      {
+        this._persistence = value;
+      }
     }
 
     public int Seed
     {
-      get => this._seed;
-      set => this._seed = value;
+      get
+      {
+        return this._seed;
+      }
+      set
+      {
+        this._seed = value;
+      }
     }
 
     public override double GetValue(double x, double y, double z)

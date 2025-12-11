@@ -2,7 +2,6 @@
 using System;
 using UnityEngine;
 
-#nullable disable
 namespace Win32Utilities
 {
   public class Log
@@ -11,11 +10,20 @@ namespace Win32Utilities
 
     public class Inner
     {
-      public void error(string v, Exception e) => Debug.Log((object) (v + " " + (object) e));
+      public void error(string v, Exception e)
+      {
+        Debug.Log((object) (v + " " + (object) e));
+      }
 
-      internal void debug(string v) => Debug.Log((object) v);
+      internal void debug(string v)
+      {
+        Debug.Log((object) v);
+      }
 
-      internal bool isDebug() => false;
+      internal bool isDebug()
+      {
+        return false;
+      }
     }
   }
 }

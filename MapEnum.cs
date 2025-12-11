@@ -1,5 +1,4 @@
 
-#nullable disable
 public enum MapEnum
 {
   Dont_Mind = -1, // 0xFFFFFFFF

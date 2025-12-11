@@ -3,12 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-#nullable disable
 public class NumberAwareStringComparer : IComparer<string>
 {
   private static readonly Regex numberRegex = new Regex("\\d+");
 
-  public int Compare(string x, string y) => NumberAwareStringComparer._Compare(x, y);
+  public int Compare(string x, string y)
+  {
+    return NumberAwareStringComparer._Compare(x, y);
+  }
 
   public static int _Compare(string x, string y)
   {

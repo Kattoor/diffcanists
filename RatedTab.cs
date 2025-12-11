@@ -9,9 +9,17 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-#nullable disable
 public class RatedTab : MonoBehaviour
 {
+  public bool IsFirst = true;
+  public List<string> partyQueue = new List<string>();
+  private string[] period = new string[4]
+  {
+    "Searching",
+    "Searching.",
+    "Searching..",
+    "Searching..."
+  };
   public GameObject[] lowGameObjects;
   public GameObject[] highGameObjects;
   public GameObject[] neitherGameObjects;
@@ -37,8 +45,6 @@ public class RatedTab : MonoBehaviour
   public Toggle toggleBroadcast;
   public GameObject panelDisabled;
   private static bool findingOpponents;
-  public bool IsFirst = true;
-  public List<string> partyQueue = new List<string>();
   [Header("Disco")]
   public RectTransform discoBall;
   public Image discoPfab;
@@ -48,20 +54,19 @@ public class RatedTab : MonoBehaviour
   private bool closeDisco;
   private int periods;
   private float _time;
-  private string[] period = new string[4]
-  {
-    "Searching",
-    "Searching.",
-    "Searching..",
-    "Searching..."
-  };
 
   public static RatedTab instance { get; private set; }
 
   public static bool FindingOpponents
   {
-    get => RatedTab.findingOpponents;
-    set => RatedTab.findingOpponents = value;
+    get
+    {
+      return RatedTab.findingOpponents;
+    }
+    set
+    {
+      RatedTab.findingOpponents = value;
+    }
   }
 
   private RatedFacts _ratedFacts
@@ -108,14 +113,17 @@ public class RatedTab : MonoBehaviour
           }
         }
       };
-      ratedContainer.list[0].VerifyGameType();
+      ratedContainer.list[0].VerifyGameType(false);
       Client._ratedSearches.Add(Client._ratedSearches.Count, ratedContainer);
     }
     LobbyMenu.instance.RefreshGames();
   }
 
   [ContextMenu("Find Matches")]
-  public void SearchQue() => Server.FindRatedMatches();
+  public void SearchQue()
+  {
+    Server.FindRatedMatches();
+  }
 
   [ContextMenu("Remove All")]
   public void removeall()
@@ -140,7 +148,10 @@ public class RatedTab : MonoBehaviour
     this.txtStartGame.text = this.period[this.periods];
   }
 
-  private void Awake() => RatedTab.instance = this;
+  private void Awake()
+  {
+    RatedTab.instance = this;
+  }
 
   private void Start()
   {
@@ -156,7 +167,10 @@ public class RatedTab : MonoBehaviour
     RatedTab.instance = (RatedTab) null;
   }
 
-  public void ClickDiscoClose() => this.closeDisco = true;
+  public void ClickDiscoClose()
+  {
+    this.closeDisco = true;
+  }
 
   private IEnumerator IEDisco()
   {
@@ -210,7 +224,10 @@ public class RatedTab : MonoBehaviour
     AudioManager.PlayMusicMainMenu();
   }
 
-  public void ClickHide() => this.gameObject.SetActive(false);
+  public void ClickHide()
+  {
+    this.gameObject.SetActive(false);
+  }
 
   public void ClickedLobbyQueue(RatedFacts r, bool add)
   {
@@ -265,7 +282,10 @@ public class RatedTab : MonoBehaviour
   }
 
   [EnumAction(typeof (MapEnum))]
-  public void AskToChangeGameModeMap(int x) => Client.AskToChangeGameMode(GameFacts.Message.Map, x);
+  public void AskToChangeGameModeMap(int x)
+  {
+    Client.AskToChangeGameMode(GameFacts.Message.Map, x);
+  }
 
   [EnumAction(typeof (MapEnum))]
   public void AskToChangeArmageddon(int x)
@@ -402,7 +422,7 @@ public class RatedTab : MonoBehaviour
       default:
         return;
     }
-    ratedFacts.VerifyGameType();
+    ratedFacts.VerifyGameType(false);
     this.RefreshGameOptions();
     Inert.SaveSettingsPlayer();
   }
@@ -410,7 +430,7 @@ public class RatedTab : MonoBehaviour
   public void RefreshGameOptions()
   {
     for (int index = 0; index < this.lowGameObjects.Length; ++index)
-      this.lowGameObjects[index].SetActive(this._ratedFacts.gameType != 0);
+      this.lowGameObjects[index].SetActive((uint) this._ratedFacts.gameType > 0U);
     for (int index = 0; index < this.highGameObjects.Length; ++index)
       this.highGameObjects[index].SetActive(this._ratedFacts.gameType != 1);
     for (int index = 0; index < this.neitherGameObjects.Length; ++index)
@@ -506,7 +526,7 @@ public class RatedTab : MonoBehaviour
     this.groupCustomQueue[this._ratedFacts.customQueue == 0 ? 0 : 1].AlwaysOn = true;
     this.optionCustomQueue.SetActive(Server._preGameFacts != null && Server._preGameFacts[this._ratedFacts.gameType] != null);
     this.txtDescription.text = Server._preGameFacts == null || Server._preGameFacts[this._ratedFacts.gameType] == null ? "" : Server._preGameFacts[this._ratedFacts.gameType].settings.description;
-    this.panelDisabled.SetActive(this._ratedFacts.customQueue != 0);
+    this.panelDisabled.SetActive((uint) this._ratedFacts.customQueue > 0U);
     this.groupLadder[Mathf.Clamp(this._ratedFacts.gameType, 0, 2)].AlwaysOn = true;
     if (this._ratedFacts.playerCount == -1)
     {
@@ -545,11 +565,20 @@ public class RatedTab : MonoBehaviour
       this.alternateSettings[index1].gameObject.SetActive(false);
   }
 
-  public void Tooltip(string s) => MyToolTip.Show(s);
+  public void Tooltip(string s)
+  {
+    MyToolTip.Show(s, -1f);
+  }
 
-  public void HideTooltip() => MyToolTip.Close();
+  public void HideTooltip()
+  {
+    MyToolTip.Close();
+  }
 
-  public void ClickLobby() => Client.AskToJoinLobbyFromeQue();
+  public void ClickLobby()
+  {
+    Client.AskToJoinLobbyFromeQue();
+  }
 
   public void ClickInvitePlayers()
   {
@@ -559,7 +588,7 @@ public class RatedTab : MonoBehaviour
   {
     if (Server._preGameFacts == null || Server._preGameFacts[this._ratedFacts.gameType] == null)
     {
-      MyToolTip.Show("No preset settings exist for this ladder");
+      MyToolTip.Show("No preset settings exist for this ladder", -1f);
     }
     else
     {
@@ -583,8 +612,8 @@ public class RatedTab : MonoBehaviour
     if (this._ratedFacts.spellOverrides != null)
       sp.CopySpells(this._ratedFacts.spellOverrides);
     else
-      sp.CopySpells(Client.settingsPlayer);
-    SpellLobbyChange.Create(sp, new Action<SettingsPlayer>(this.OnPickSpellOverrides));
+      sp.CopySpells(Client.settingsPlayer, false);
+    SpellLobbyChange.Create(sp, new Action<SettingsPlayer>(this.OnPickSpellOverrides), false, Validation.Default, false, (Action) null);
   }
 
   public void ClickAddAlternative()
@@ -657,7 +686,7 @@ public class RatedTab : MonoBehaviour
           {
             if (!((UnityEngine.Object) ChatBox.Instance != (UnityEngine.Object) null))
               return;
-            ChatBox.Instance.NewChatMsg("", "You must search for Random Spells and/or Elementals in the Party Mode queue.", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System);
+            ChatBox.Instance.NewChatMsg("", "You must search for Random Spells and/or Elementals in the Party Mode queue.", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
             return;
           }
           if ((ratedFacts.customQueue != 0 || (ratedFacts.extraOptions & 16) != 0) && (ratedFacts.spellOverrides != null ? Server.OriginalSpellsOnly(GameStyle.Original_Spells_Only, ratedFacts.spellOverrides) : Server.OriginalSpellsOnly(GameStyle.Original_Spells_Only, Client.settingsPlayer)))
@@ -686,12 +715,12 @@ public class RatedTab : MonoBehaviour
     {
       Client._ratedFacts = RatedContainer.DeserializeFromFile(s);
       this.RefreshGameOptions();
-    }));
+    }), ContentType.GameSettings, false);
   }
 
   public void SaveSettings()
   {
     RatedContainer x = Global.Copy<RatedContainer>(Client._ratedFacts);
-    MyFilePicker.Create("Save Settings", "RatedSettings", ".ratedSettings", true, (Action<string>) (s => x.SerializeToFile(s)));
+    MyFilePicker.Create("Save Settings", "RatedSettings", ".ratedSettings", true, (Action<string>) (s => x.SerializeToFile(s)), ContentType.GameSettings, false);
   }
 }

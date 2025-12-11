@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-#nullable disable
 public static class NewtonsoftExtensions
 {
   private static string currentHeader;
@@ -21,13 +20,16 @@ public static class NewtonsoftExtensions
 
   public static string GetText(this JToken j)
   {
-    string text = "";
+    string str = "";
     foreach (object obj in (IEnumerable<JToken>) j.Values())
-      text = obj.ToString();
-    return text;
+      str = obj.ToString();
+    return str;
   }
 
-  internal static StringBuilder CompareObjects(JObject source, JObject target, bool topLayer = false)
+  internal static StringBuilder CompareObjects(
+    JObject source,
+    JObject target,
+    bool topLayer = false)
   {
     StringBuilder b = new StringBuilder();
     if (topLayer)
@@ -65,7 +67,7 @@ public static class NewtonsoftExtensions
         else
         {
           NewtonsoftExtensions.stack.Add(keyValuePair1);
-          b.Append((object) NewtonsoftExtensions.CompareObjects(keyValuePair1.Value.ToObject<JObject>(), target.GetValue(keyValuePair1.Key).ToObject<JObject>()));
+          b.Append((object) NewtonsoftExtensions.CompareObjects(keyValuePair1.Value.ToObject<JObject>(), target.GetValue(keyValuePair1.Key).ToObject<JObject>(), false));
           NewtonsoftExtensions.stack.RemoveAt(NewtonsoftExtensions.stack.Count - 1);
         }
       }
@@ -141,7 +143,10 @@ public static class NewtonsoftExtensions
     b.Append("<color=#FF0000>").Append(header).Append("</color>\n");
   }
 
-  private static StringBuilder CompareArrays(JArray source, JArray target, string arrayName = "")
+  private static StringBuilder CompareArrays(
+    JArray source,
+    JArray target,
+    string arrayName = "")
   {
     StringBuilder b = new StringBuilder();
     for (int index = 0; index < source.Count && index < target.Count; ++index)
@@ -152,7 +157,7 @@ public static class NewtonsoftExtensions
         string name = t1.Value<JToken>((object) "Name")?.ToString();
         JToken jtoken = !string.IsNullOrWhiteSpace(name) ? target.Children().First<JToken>((Func<JToken, bool>) (z => string.Equals(z.Value<JToken>((object) "Name")?.ToString(), name))) : (index >= target.Count ? (JToken) new JObject() : target[index]);
         if (jtoken != null)
-          b.Append((object) NewtonsoftExtensions.CompareObjects(t1.ToObject<JObject>(), jtoken.ToObject<JObject>()));
+          b.Append((object) NewtonsoftExtensions.CompareObjects(t1.ToObject<JObject>(), jtoken.ToObject<JObject>(), false));
       }
       else
       {

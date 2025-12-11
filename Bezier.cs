@@ -1,7 +1,6 @@
 
 using UnityEngine;
 
-#nullable disable
 public static class Bezier
 {
   public static Vector3 GetPoint(Vector3 p0, Vector3 p1, Vector3 p2, float t)

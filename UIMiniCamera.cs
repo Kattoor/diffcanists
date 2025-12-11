@@ -2,7 +2,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-#nullable disable
 public class UIMiniCamera : MonoBehaviour, IPointerDownHandler, IEventSystemHandler, IDragHandler
 {
   public Camera miniCam;

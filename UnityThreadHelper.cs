@@ -7,18 +7,20 @@ using System.Threading;
 using UnityEngine;
 using UnityThreading;
 
-#nullable disable
 [ExecuteInEditMode]
 public class UnityThreadHelper : MonoBehaviour
 {
   private static UnityThreadHelper instance = (UnityThreadHelper) null;
   private static object syncRoot = new object();
+  private List<ThreadBase> registeredThreads = new List<ThreadBase>();
   private static Thread mainThread;
   private Dispatcher dispatcher;
   private TaskDistributor taskDistributor;
-  private List<ThreadBase> registeredThreads = new List<ThreadBase>();
 
-  public static bool OnMainThread() => UnityThreadHelper.mainThread == Thread.CurrentThread;
+  public static bool OnMainThread()
+  {
+    return UnityThreadHelper.mainThread == Thread.CurrentThread;
+  }
 
   public static void EnsureHelper()
   {
@@ -30,10 +32,10 @@ public class UnityThreadHelper : MonoBehaviour
       UnityThreadHelper.instance = UnityEngine.Object.FindObjectOfType(typeof (UnityThreadHelper)) as UnityThreadHelper;
       if (UnityThreadHelper.instance != null)
         return;
-      GameObject target = new GameObject("[UnityThreadHelper]");
-      UnityEngine.Object.DontDestroyOnLoad((UnityEngine.Object) target);
-      target.hideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector | HideFlags.NotEditable;
-      UnityThreadHelper.instance = target.AddComponent<UnityThreadHelper>();
+      GameObject gameObject = new GameObject("[UnityThreadHelper]");
+      UnityEngine.Object.DontDestroyOnLoad((UnityEngine.Object) gameObject);
+      gameObject.hideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector | HideFlags.NotEditable;
+      UnityThreadHelper.instance = gameObject.AddComponent<UnityThreadHelper>();
       UnityThreadHelper.instance.EnsureHelperInstance();
     }
   }
@@ -47,16 +49,37 @@ public class UnityThreadHelper : MonoBehaviour
     }
   }
 
-  public static Dispatcher Dispatcher => UnityThreadHelper.Instance.CurrentDispatcher;
+  public static Dispatcher Dispatcher
+  {
+    get
+    {
+      return UnityThreadHelper.Instance.CurrentDispatcher;
+    }
+  }
 
   public static TaskDistributor TaskDistributor
   {
-    get => UnityThreadHelper.Instance.CurrentTaskDistributor;
+    get
+    {
+      return UnityThreadHelper.Instance.CurrentTaskDistributor;
+    }
   }
 
-  public Dispatcher CurrentDispatcher => this.dispatcher;
+  public Dispatcher CurrentDispatcher
+  {
+    get
+    {
+      return this.dispatcher;
+    }
+  }
 
-  public TaskDistributor CurrentTaskDistributor => this.taskDistributor;
+  public TaskDistributor CurrentTaskDistributor
+  {
+    get
+    {
+      return this.taskDistributor;
+    }
+  }
 
   private void EnsureHelperInstance()
   {
@@ -64,10 +87,12 @@ public class UnityThreadHelper : MonoBehaviour
     this.taskDistributor = TaskDistributor.MainNoThrow ?? new TaskDistributor("TaskDistributor");
   }
 
-  public static ActionThread CreateThread(Action<ActionThread> action, bool autoStartThread)
+  public static ActionThread CreateThread(
+    Action<ActionThread> action,
+    bool autoStartThread)
   {
     UnityThreadHelper.Instance.EnsureHelperInstance();
-    ActionThread thread = new ActionThread((Action<ActionThread>) (currentThread =>
+    ActionThread actionThread = new ActionThread((Action<ActionThread>) (currentThread =>
     {
       try
       {
@@ -78,8 +103,8 @@ public class UnityThreadHelper : MonoBehaviour
         Debug.LogError((object) ex);
       }
     }), autoStartThread);
-    UnityThreadHelper.Instance.RegisterThread((ThreadBase) thread);
-    return thread;
+    UnityThreadHelper.Instance.RegisterThread((ThreadBase) actionThread);
+    return actionThread;
   }
 
   public static ActionThread CreateThread(Action<ActionThread> action)
@@ -97,12 +122,14 @@ public class UnityThreadHelper : MonoBehaviour
     return UnityThreadHelper.CreateThread((Action<ActionThread>) (thread => action()), true);
   }
 
-  public static ThreadBase CreateThread(Func<ThreadBase, IEnumerator> action, bool autoStartThread)
+  public static ThreadBase CreateThread(
+    Func<ThreadBase, IEnumerator> action,
+    bool autoStartThread)
   {
     UnityThreadHelper.Instance.EnsureHelperInstance();
-    EnumeratableActionThread thread = new EnumeratableActionThread(action, autoStartThread);
-    UnityThreadHelper.Instance.RegisterThread((ThreadBase) thread);
-    return (ThreadBase) thread;
+    EnumeratableActionThread enumeratableActionThread = new EnumeratableActionThread(action, autoStartThread);
+    UnityThreadHelper.Instance.RegisterThread((ThreadBase) enumeratableActionThread);
+    return (ThreadBase) enumeratableActionThread;
   }
 
   public static ThreadBase CreateThread(Func<ThreadBase, IEnumerator> action)

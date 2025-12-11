@@ -1,5 +1,4 @@
 
-#nullable disable
 namespace Educative
 {
   public class CLockSpell : Command
@@ -8,6 +7,9 @@ namespace Educative
     public SpellEnum spellEnum = SpellEnum.Fire_Ball;
     public bool bool_lock = true;
 
-    public CLockSpell() => this.type = Command.Type.LockSpell;
+    public CLockSpell()
+    {
+      this.type = Command.Type.LockSpell;
+    }
   }
 }

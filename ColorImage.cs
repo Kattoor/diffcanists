@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-#nullable disable
 [RequireComponent(typeof (Image))]
 public class ColorImage : MonoBehaviour
 {
@@ -21,5 +20,8 @@ public class ColorImage : MonoBehaviour
     this.picker.onValueChanged.RemoveListener(new UnityAction<Color>(this.ColorChanged));
   }
 
-  public void ColorChanged(Color newColor) => this.image.color = newColor;
+  public void ColorChanged(Color newColor)
+  {
+    this.image.color = newColor;
+  }
 }

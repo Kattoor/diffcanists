@@ -1,7 +1,6 @@
 
 using UnityEngine;
 
-#nullable disable
 public class FamiliarNature : Familiar
 {
   public float timeToFinish = 1f;

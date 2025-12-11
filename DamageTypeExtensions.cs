@@ -1,5 +1,4 @@
 
-#nullable disable
 public static class DamageTypeExtensions
 {
   public static bool IsSting(this DamageType d)

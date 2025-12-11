@@ -2,7 +2,6 @@
 using System;
 using System.Text;
 
-#nullable disable
 public class FastString
 {
   public StringBuilder stringBuilder = new StringBuilder();
@@ -16,8 +15,14 @@ public class FastString
 
   public int Length
   {
-    get => this.stringBuilder.Length;
-    set => this.stringBuilder.Length = value;
+    get
+    {
+      return this.stringBuilder.Length;
+    }
+    set
+    {
+      this.stringBuilder.Length = value;
+    }
   }
 
   public FastString Append(string c)
@@ -188,11 +193,20 @@ public class FastString
     return a;
   }
 
-  public override string ToString() => this.stringBuilder.ToString();
+  public override string ToString()
+  {
+    return this.stringBuilder.ToString();
+  }
 
   public char this[int x]
   {
-    get => this.stringBuilder[x];
-    set => this.stringBuilder[x] = value;
+    get
+    {
+      return this.stringBuilder[x];
+    }
+    set
+    {
+      this.stringBuilder[x] = value;
+    }
   }
 }

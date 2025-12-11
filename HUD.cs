@@ -14,9 +14,48 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-#nullable disable
 public class HUD : UIBehaviour
 {
+  internal static bool UseTouchControls = false;
+  public static bool useNewSpellBgIcons = true;
+  public static bool useNewPanelPlayer = true;
+  public static string doNotShowResign = "pref_noshowresign";
+  public static string doNotShowLeave = "pref_noshowleave";
+  public bool showDescriptions = true;
+  [Header("Starting Panel")]
+  public List<UIPlayerCharacter> uiPlayerCharacters = new List<UIPlayerCharacter>();
+  public List<HUD.ListOfCharacters> teamsOf12to9 = new List<HUD.ListOfCharacters>();
+  public List<HUD.ListOfCharacters> teamsOf11 = new List<HUD.ListOfCharacters>();
+  public List<HUD.ListOfCharacters> teamsOf10 = new List<HUD.ListOfCharacters>();
+  public List<HUD.ListOfCharacters> teamsOf9 = new List<HUD.ListOfCharacters>();
+  public List<HUD.ListOfCharacters> teamsOf8 = new List<HUD.ListOfCharacters>();
+  public List<HUD.ListOfCharacters> teamsOf7 = new List<HUD.ListOfCharacters>();
+  public List<HUD.ListOfCharacters> teamsOf6 = new List<HUD.ListOfCharacters>();
+  public List<HUD.ListOfCharacters> teamsOf5 = new List<HUD.ListOfCharacters>();
+  public List<HUD.ListOfCharacters> teamsOf4 = new List<HUD.ListOfCharacters>();
+  public List<HUD.ListOfCharacters> teamsOf3 = new List<HUD.ListOfCharacters>();
+  public List<HUD.ListOfCharacters> teamsOf2 = new List<HUD.ListOfCharacters>();
+  private List<(ArmaWarning x, int id, GameObject g)> armaWarnings = new List<(ArmaWarning, int, GameObject)>();
+  private string[] compassRose = new string[9]
+  {
+    "North",
+    "North-West",
+    "West",
+    "South-West",
+    "South",
+    "South-East",
+    "East",
+    "North-East",
+    "North"
+  };
+  private Vector2 _matOffsetStars = new Vector2(0.0f, -0.09f);
+  private int pingOnNextClick = -1;
+  private int pingToSend = -1;
+  public bool FollowSpells = true;
+  public byte lastPlayersTurn = byte.MaxValue;
+  private bool _lockScale = true;
+  private bool hidden = true;
+  private Quiz quiz = new Quiz();
   public Inert inert;
   public ClientResources clientResources;
   public GameObject pfabArmaWarning;
@@ -62,7 +101,6 @@ public class HUD : UIBehaviour
   public GameObject panelSpellDescription;
   public TMP_Text textSpellDescription;
   public TMP_Text textSpellExtraText;
-  public bool showDescriptions = true;
   public UIOnHover showDescriptionsButton;
   [Header("Full Book")]
   public UIOnHover fullBookButton;
@@ -73,19 +111,6 @@ public class HUD : UIBehaviour
   public TMP_Text textSpellCasted;
   public TMP_Text txtGameOptions;
   public RectTransform panelPlayersPanel;
-  [Header("Starting Panel")]
-  public List<UIPlayerCharacter> uiPlayerCharacters = new List<UIPlayerCharacter>();
-  public List<HUD.ListOfCharacters> teamsOf12to9 = new List<HUD.ListOfCharacters>();
-  public List<HUD.ListOfCharacters> teamsOf11 = new List<HUD.ListOfCharacters>();
-  public List<HUD.ListOfCharacters> teamsOf10 = new List<HUD.ListOfCharacters>();
-  public List<HUD.ListOfCharacters> teamsOf9 = new List<HUD.ListOfCharacters>();
-  public List<HUD.ListOfCharacters> teamsOf8 = new List<HUD.ListOfCharacters>();
-  public List<HUD.ListOfCharacters> teamsOf7 = new List<HUD.ListOfCharacters>();
-  public List<HUD.ListOfCharacters> teamsOf6 = new List<HUD.ListOfCharacters>();
-  public List<HUD.ListOfCharacters> teamsOf5 = new List<HUD.ListOfCharacters>();
-  public List<HUD.ListOfCharacters> teamsOf4 = new List<HUD.ListOfCharacters>();
-  public List<HUD.ListOfCharacters> teamsOf3 = new List<HUD.ListOfCharacters>();
-  public List<HUD.ListOfCharacters> teamsOf2 = new List<HUD.ListOfCharacters>();
   public GameObject panelStart;
   public Image panelStartColor;
   public UIOnHover button;
@@ -136,7 +161,6 @@ public class HUD : UIBehaviour
   public GameObject specUI;
   public SpellButton[] specTomatoes;
   public SpellSlot[] specSpells;
-  internal static bool UseTouchControls = false;
   internal bool PressingMoveLeft;
   internal bool PressingMoveRight;
   internal bool PressingFire;
@@ -156,40 +180,15 @@ public class HUD : UIBehaviour
   public UIOnHover uiHoverToggleTeam;
   public UIOnHover uiHoverToggleOverlay;
   public GameObject familiarHowTo;
-  public static bool useNewSpellBgIcons = true;
-  public static bool useNewPanelPlayer = true;
-  private List<(int x, int id, GameObject g)> armaWarnings = new List<(int, int, GameObject)>();
   [NonSerialized]
   public bool hideOverheadIcons;
   private float _lastResyncMsg;
   private int zzturn;
-  private string[] compassRose = new string[9]
-  {
-    "North",
-    "North-West",
-    "West",
-    "South-West",
-    "South",
-    "South-East",
-    "East",
-    "North-East",
-    "North"
-  };
   private Coroutine corCastSpell;
-  private Vector2 _matOffsetStars = new Vector2(0.0f, -0.09f);
   private float lastMapPing;
-  private int pingOnNextClick = -1;
-  private int pingToSend = -1;
-  public static string doNotShowResign = "pref_noshowresign";
-  public static string doNotShowLeave = "pref_noshowleave";
-  public bool FollowSpells = true;
   private bool dummiesLoaded;
   public static bool talking;
-  public byte lastPlayersTurn = byte.MaxValue;
-  private bool _lockScale = true;
-  private bool hidden = true;
   private Coroutine showHideEverything;
-  private Quiz quiz = new Quiz();
   internal bool usedFourSeasons;
   [Header("Tutorial")]
   public RectTransform tutPopup;
@@ -201,13 +200,19 @@ public class HUD : UIBehaviour
 
   public static HUD instance { get; private set; }
 
-  public ZGame game => Client.game;
+  public ZGame game
+  {
+    get
+    {
+      return Client.game;
+    }
+  }
 
   internal bool PressingOnScreenControl
   {
     get
     {
-      return this.PressingMoveLeft || this.PressingMoveRight || this.PressingFire || this.PressingHighJump || this.PressingLongJump || this.PressingDetower;
+      return this.PressingMoveLeft || this.PressingMoveRight || (this.PressingFire || this.PressingHighJump) || this.PressingLongJump || this.PressingDetower;
     }
   }
 
@@ -224,22 +229,22 @@ public class HUD : UIBehaviour
     return p != null && p.settingsPlayer._spells.UsingAltBook(book) ? ClientResources.Instance.altSpellBookIcons[(int) (book + 1)] : ClientResources.Instance.spellBookIcons[(int) (book + 1)];
   }
 
-  public static void AddArmaWarning(ZPerson p, int x)
+  public static void AddArmaWarning(ZPerson p, ArmaWarning x)
   {
     if ((UnityEngine.Object) HUD.instance == (UnityEngine.Object) null)
       return;
-    GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(HUD.instance.pfabArmaWarning, new Vector3((float) x, -35f, 0.0f), Quaternion.identity, HUD.instance.game.GetMapTransform());
+    GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(HUD.instance.pfabArmaWarning, new Vector3((float) x.x, (float) x.y, 0.0f), Quaternion.identity, HUD.instance.game.GetMapTransform());
     gameObject.GetComponent<SpriteRenderer>().color = p.clientColor;
     HUD.instance.armaWarnings.Add((x, (int) p.id, gameObject));
   }
 
-  public static void RemoveArmaWarning(ZPerson p, int x)
+  public static void RemoveArmaWarning(ZPerson p, ArmaWarning x)
   {
     if ((UnityEngine.Object) HUD.instance == (UnityEngine.Object) null)
       return;
     for (int index = 0; index < HUD.instance.armaWarnings.Count; ++index)
     {
-      if (HUD.instance.armaWarnings[index].x == x && HUD.instance.armaWarnings[index].id == (int) p.id)
+      if (HUD.instance.armaWarnings[index].x.Compare(x) && HUD.instance.armaWarnings[index].id == (int) p.id)
       {
         UnityEngine.Object.Destroy((UnityEngine.Object) HUD.instance.armaWarnings[index].g);
         HUD.instance.armaWarnings.RemoveAt(index);
@@ -384,7 +389,7 @@ public class HUD : UIBehaviour
     {
       (byte) 83,
       (byte) 5
-    });
+    }, SendOption.None);
     ChatBox.Instance?.NewChatMsg("Attempting to resync... " + err, (Color) ColorScheme.GetColor(Global.ColorSystem));
   }
 
@@ -493,20 +498,20 @@ public class HUD : UIBehaviour
   public void HoverSeasons()
   {
     if ((UnityEngine.Object) this.seasonIcon.sprite == (UnityEngine.Object) ClientResources.Instance.seasonIcons[0])
-      MyToolTip.Show("The Four Seasons has been cast - the seasons will begin looping on their next turn");
+      MyToolTip.Show("The Four Seasons has been cast - the seasons will begin looping on their next turn", -1f);
     else if ((UnityEngine.Object) this.seasonIcon.sprite == (UnityEngine.Object) ClientResources.Instance.seasonIcons[1])
-      MyToolTip.Show("Summer");
+      MyToolTip.Show("Summer", -1f);
     else if ((UnityEngine.Object) this.seasonIcon.sprite == (UnityEngine.Object) ClientResources.Instance.seasonIcons[2])
-      MyToolTip.Show("Autumn");
+      MyToolTip.Show("Autumn", -1f);
     else if ((UnityEngine.Object) this.seasonIcon.sprite == (UnityEngine.Object) ClientResources.Instance.seasonIcons[3])
     {
-      MyToolTip.Show("Winter");
+      MyToolTip.Show("Winter", -1f);
     }
     else
     {
       if (!((UnityEngine.Object) this.seasonIcon.sprite == (UnityEngine.Object) ClientResources.Instance.seasonIcons[4]))
         return;
-      MyToolTip.Show("Spring");
+      MyToolTip.Show("Spring", -1f);
     }
   }
 
@@ -521,16 +526,16 @@ public class HUD : UIBehaviour
     string str1 = fixedInt > (FixedInt) 0.8f ? "Heavy" : (fixedInt > (FixedInt) 0.6f ? "Strong" : (fixedInt > (FixedInt) 0.4f ? "Moderate" : (fixedInt > (FixedInt) 0.2f ? "Light" : "Calm")));
     string str2 = this.compassRose[index];
     if (fixedInt == 0)
-      MyToolTip.Show("No Wind");
+      MyToolTip.Show("No Wind", -1f);
     else
-      MyToolTip.Show(str1 + " " + str2 + " Wind");
+      MyToolTip.Show(str1 + " " + str2 + " Wind", -1f);
   }
 
   public static void SetupMiniCamera()
   {
     if (Client.map == null)
       return;
-    float num1 = (float) Screen.width / (float) Screen.height / 1.77777779f;
+    float num1 = (float) Screen.width / (float) Screen.height / 1.777778f;
     float num2 = (float) Client.map.Width / 1920f;
     double num3 = (double) Client.map.Height / (Client.map.Width > 2500 ? 960.0 : (Client.map.Height > 2000 ? 1060.0 : 1020.0));
     Camera camera = Controller.miniCameraObj;
@@ -540,16 +545,17 @@ public class HUD : UIBehaviour
       if ((UnityEngine.Object) withTag == (UnityEngine.Object) null)
       {
         Client.Disconnect(false);
-        Controller.Instance.DestroyMap();
+        Controller.Instance.DestroyMap(false, true);
         Controller.Instance.OpenMenu(Controller.Instance.MenuLogin, false);
         return;
       }
       camera = withTag.GetComponent<Camera>();
     }
     camera.transform.position = new Vector3((float) (Client.map.Width / 2), (float) (Client.map.Height / 2), -210f);
-    Rect rect = camera.rect with { width = 0.2f * num2 };
-    rect.height = (float) ((double) rect.width * ((double) Client.map.Height / (double) Client.map.Width) * (double) num1 * 1.7999999523162842);
-    if ((double) rect.width > 0.23999999463558197)
+    Rect rect = camera.rect;
+    rect.width = 0.2f * num2;
+    rect.height = (float) ((double) rect.width * ((double) Client.map.Height / (double) Client.map.Width) * (double) num1 * 1.79999995231628);
+    if ((double) rect.width > 0.239999994635582)
     {
       float num4 = 0.24f / rect.width;
       rect.width = 0.24f;
@@ -562,8 +568,8 @@ public class HUD : UIBehaviour
       return;
     float num5 = (double) num1 > 1.0 ? num1 : 1f;
     float num6 = (double) num1 < 1.0 ? num1 : 1f;
-    HUD.instance.borderLeftMap.anchoredPosition = new Vector2((float) (-((double) rect.width * 1600.0 * (double) num5) - 3.7999999523162842), 0.0f);
-    HUD.instance.borderTopMap.anchoredPosition = new Vector2(0.0f, (float) ((double) rect.height * 900.0 / (double) num6 + 3.7999999523162842));
+    HUD.instance.borderLeftMap.anchoredPosition = new Vector2((float) (-((double) rect.width * 1600.0 * (double) num5) - 3.79999995231628), 0.0f);
+    HUD.instance.borderTopMap.anchoredPosition = new Vector2(0.0f, (float) ((double) rect.height * 900.0 / (double) num6 + 3.79999995231628));
     HUD.instance.borderLeftMap.sizeDelta = new Vector2(4f, HUD.instance.borderTopMap.anchoredPosition.y);
     HUD.instance.borderTopMap.sizeDelta = new Vector2(-HUD.instance.borderLeftMap.anchoredPosition.x, 4f);
   }
@@ -623,9 +629,9 @@ public class HUD : UIBehaviour
       {
         Client.AskDebugTest(s);
         Client.game.AllowInput = true;
-      }));
+      }), (string) null, false, true);
       myContextMenu.SetOnCancel((Action) (() => Client.game.AllowInput = true));
-      myContextMenu.Rebuild();
+      myContextMenu.Rebuild(false);
     }
     this._matOffsetStars.x -= Time.deltaTime * 3f;
     if ((double) this._matOffsetStars.x < -1.0)
@@ -643,7 +649,7 @@ public class HUD : UIBehaviour
         Client.Disconnected((object) null, (DisconnectedEventArgs) null);
     }
     if (this.panelPause.activeInHierarchy && Input.GetKeyDown(KeyCode.F1))
-      Controller.ShowSettingsMenu();
+      Controller.ShowSettingsMenu(false);
     if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Joystick1Button9))
     {
       if (this.chatInput.gameObject.activeInHierarchy)
@@ -653,7 +659,7 @@ public class HUD : UIBehaviour
     }
     if (this.game == null || this.game.AllowInput)
     {
-      if (this.panelStart.activeSelf && !this.button.gameObject.activeSelf && !hardInput.GetKey("BackQuote") && !this.PressingBackQuote)
+      if (this.panelStart.activeSelf && !this.button.gameObject.activeSelf && (!hardInput.GetKey("BackQuote") && !this.PressingBackQuote))
         this.HideStartPanel();
       else if (!this.Chatting())
       {
@@ -704,7 +710,7 @@ public class HUD : UIBehaviour
           this.pingOnNextClick = -1;
         }
       }
-      if ((hardInput.GetKeyDown("Minions") || this.game.isSpectator && hardInput.GetKeyDown("Center Camera")) && ((int) this.game.serverState.playersTurn != Client.curGameID || this.game.isSpectator || this.game.isReplay) && !this.Chatting() && (int) this.game.serverState.playersTurn < this.game.players.Count)
+      if ((hardInput.GetKeyDown("Minions") || this.game.isSpectator && hardInput.GetKeyDown("Center Camera")) && ((int) this.game.serverState.playersTurn != Client.curGameID || this.game.isSpectator || this.game.isReplay) && (!this.Chatting() && (int) this.game.serverState.playersTurn < this.game.players.Count))
         CameraMovement.Instance.LerpToTransform(this.game.players[(int) this.game.serverState.playersTurn].controlled[0], true);
     }
     if (this.game.isReplay && (UnityEngine.Object) ChatBox.Instance != (UnityEngine.Object) null && !ChatBox.Instance.chatInput.enabled || !Input.GetKeyDown(KeyCode.Tab) || this.game.isServer && (!Client.allowtutorialDebugging || !this.game.isTutorial) && !this.game.isSandbox)
@@ -714,7 +720,7 @@ public class HUD : UIBehaviour
 
   public bool Chatting()
   {
-    return this.chatInput.gameObject.activeSelf || InputFieldPlus.Active || (this.game.isSpectator || this.game.isSandbox && (UnityEngine.Object) ChatBox.Instance != (UnityEngine.Object) null) && ChatBox.Instance.chatInput.enabled && (ChatBox.Instance.chatInput.GetCaretPos > 0 || !Global.InputString.Contains("`")) || (UnityEngine.Object) ReportMenu.instance != (UnityEngine.Object) null || (UnityEngine.Object) ChangeSpellBookMenu.Instance != (UnityEngine.Object) null;
+    return this.chatInput.gameObject.activeSelf || InputFieldPlus.Active || (this.game.isSpectator || this.game.isSandbox && (UnityEngine.Object) ChatBox.Instance != (UnityEngine.Object) null) && (ChatBox.Instance.chatInput.enabled && (ChatBox.Instance.chatInput.GetCaretPos > 0 || !Global.InputString.Contains("`"))) || (UnityEngine.Object) ReportMenu.instance != (UnityEngine.Object) null || (UnityEngine.Object) ChangeSpellBookMenu.Instance != (UnityEngine.Object) null;
   }
 
   public void SetupStartPanel()
@@ -762,7 +768,7 @@ public class HUD : UIBehaviour
       if ((double) CameraMovement.Instance.GetZoom() < 550.0)
         CameraMovement.Instance.SetZoom(550f);
     }
-    if (this.game.isReplay && ZGame.replayShowStartPanel || this.game.resyncing || !((UnityEngine.Object) Player.Instance != (UnityEngine.Object) null) || !((UnityEngine.Object) ChatBox.Instance != (UnityEngine.Object) null) || (this.game.gameFacts.GetStyle() & GameStyle.Random_Spells) == ~GameStyle.Dont_Mind)
+    if (this.game.isReplay && ZGame.replayShowStartPanel || (this.game.resyncing || !((UnityEngine.Object) Player.Instance != (UnityEngine.Object) null)) || (!((UnityEngine.Object) ChatBox.Instance != (UnityEngine.Object) null) || (this.game.gameFacts.GetStyle() & GameStyle.Random_Spells) == ~GameStyle.Dont_Mind))
       return;
     if (this.game.isMulti)
     {
@@ -777,7 +783,7 @@ public class HUD : UIBehaviour
           foreach (SpellSlot spell in zperson.first().spells)
             stringBuilder.Append("<sprite name=\"" + spell.spell.name + "\">");
         }
-        ChatBox.Instance.NewChatMsg("", stringBuilder.ToString(), Color.white, "", ChatOrigination.System);
+        ChatBox.Instance.NewChatMsg("", stringBuilder.ToString(), Color.white, "", ChatOrigination.System, ContentType.STRING, (object) null);
       }
     }
     else
@@ -785,7 +791,7 @@ public class HUD : UIBehaviour
       StringBuilder stringBuilder = new StringBuilder("Your spells: (Press F8 to view) ");
       foreach (SpellSlot spell in Player.Instance.person.first().spells)
         stringBuilder.Append("<sprite name=\"" + spell.spell.name + "\">");
-      ChatBox.Instance.NewChatMsg("", stringBuilder.ToString(), Color.white, "", ChatOrigination.System);
+      ChatBox.Instance.NewChatMsg("", stringBuilder.ToString(), Color.white, "", ChatOrigination.System, ContentType.STRING, (object) null);
     }
   }
 
@@ -793,12 +799,15 @@ public class HUD : UIBehaviour
   {
   }
 
-  public void OnDeath() => this.StartCoroutine(this.DelayOnDeath());
+  public void OnDeath()
+  {
+    this.StartCoroutine(this.DelayOnDeath());
+  }
 
   private IEnumerator DelayOnDeath()
   {
     yield return (object) new WaitForSecondsRealtime(5f);
-    while (Client.game != null && (UnityEngine.Object) Player.Instance != (UnityEngine.Object) null && Player.Instance.person != null && Player.Instance.person.yourTurn && Client.game.serverState.busy != ServerState.Busy.Ended)
+    while (Client.game != null && (UnityEngine.Object) Player.Instance != (UnityEngine.Object) null && (Player.Instance.person != null && Player.Instance.person.yourTurn) && Client.game.serverState.busy != ServerState.Busy.Ended)
       yield return (object) new WaitForSecondsRealtime(1f);
     if (Client.game != null && Client.game.serverState.busy != ServerState.Busy.Ended)
     {
@@ -807,7 +816,10 @@ public class HUD : UIBehaviour
     }
   }
 
-  public void AskToJoinBoat() => Spectator.AskToJoinBoat();
+  public void AskToJoinBoat()
+  {
+    Spectator.AskToJoinBoat();
+  }
 
   public void ShowSpellsPopup()
   {
@@ -818,7 +830,7 @@ public class HUD : UIBehaviour
       if ((UnityEngine.Object) ChatBox.Instance == (UnityEngine.Object) null)
       {
         Controller.Instance.ShowChatBox(false);
-        ChatBox.Instance?.NewChatMsg("", "Welcome to the dev console", (Color) ColorScheme.GetColor(Global.ColorTeamText), "", ChatOrigination.System);
+        ChatBox.Instance?.NewChatMsg("", "Welcome to the dev console", (Color) ColorScheme.GetColor(Global.ColorTeamText), "", ChatOrigination.System, ContentType.STRING, (object) null);
         Player.Instance.Hide_All();
         Player.Instance.Show_All();
       }
@@ -835,9 +847,9 @@ public class HUD : UIBehaviour
       if ((UnityEngine.Object) SpellLobbyChange.Instance != (UnityEngine.Object) null)
         SpellLobbyChange.Instance.ClickCancel();
       else if ((UnityEngine.Object) Player.Instance != (UnityEngine.Object) null && Player.Instance.person != null && Player.Instance.person.settingsPlayer != null)
-        SpellLobbyChange.Create(Player.Instance.person.settingsPlayer, (Action<SettingsPlayer>) (set => { }), validate: Validation.None, transparent: true);
+        SpellLobbyChange.Create(Player.Instance.person.settingsPlayer, (Action<SettingsPlayer>) (set => {}), false, Validation.None, true, (Action) null);
       else
-        SpellLobbyChange.Create(Client.settingsPlayer, (Action<SettingsPlayer>) (set => Client.AskToChangeSpells(set)), transparent: true);
+        SpellLobbyChange.Create(Client.settingsPlayer, (Action<SettingsPlayer>) (set => Client.AskToChangeSpells(set)), false, Validation.Default, true, (Action) null);
     }
   }
 
@@ -969,7 +981,7 @@ public class HUD : UIBehaviour
         {
           Texture2D texture2D = new Texture2D(2, 2);
           texture2D.LoadImage(File.ReadAllBytes(path));
-          if (texture2D.width >= 100 && texture2D.height >= 100 && texture2D.width <= 8192 && texture2D.height <= 8192)
+          if (texture2D.width >= 100 && texture2D.height >= 100 && (texture2D.width <= 8192 && texture2D.height <= 8192))
             Client.map.SetMapSprite(this.game, texture2D);
           else
             Client.map.SetMapSprite(this.game, new Color32[Client._tutorial.customWidth * Client._tutorial.customHeight], Client._tutorial.customHeight, Client._tutorial.customWidth);
@@ -988,8 +1000,8 @@ public class HUD : UIBehaviour
       player1.game = this.game;
       player1.settingsPlayer = settingsPlayer;
       player1.account = Client.MyAccount;
-      Client.settingsPlayer.VerifyOutfit(Client.cosmetics);
-      ZCreature character = Inert.CreateCharacter(player1, player1.settingsPlayer, new MyLocation(Client.map.Width / 2 - 50, Client.map.Height - (this.game.gameFacts.realMap == MapEnum.Jungle ? 330 : 30)), 0);
+      Client.settingsPlayer.VerifyOutfit(Client.cosmetics, (Account) null);
+      ZCreature character = Inert.CreateCharacter(player1, player1.settingsPlayer, new MyLocation(Client.map.Width / 2 - 50, Client.map.Height - (this.game.gameFacts.realMap == MapEnum.Jungle ? 330 : 30)), 0, true, false);
       ClickSpell.Instance.SetBGColor(character.bg.color);
       player1.controlled.Add(character);
       if (this.game.isTutorial)
@@ -1011,8 +1023,8 @@ public class HUD : UIBehaviour
       this.InitStartPanel();
       this.game.OnSetup();
       this.game.serverUpdate = Timing.RunCoroutine(this.game.FixedUpdate(), Segment.Update);
-      if (character.ShouldFall())
-        character.Fall();
+      if (character.ShouldFall(true, false))
+        character.Fall(false);
       if (Client.joinedFrom == Client.JoinLocation.Store && (UnityEngine.Object) Player.Instance != (UnityEngine.Object) null)
       {
         Spell spell = Inert.GetSpell(Client.previewItem.spellEnum);
@@ -1058,7 +1070,7 @@ public class HUD : UIBehaviour
     if (this.game.isTutorial)
       HUD.instance.buttonShowSpells.SetActive(false);
     if (this.game.isSandbox)
-      HUD.instance.buttonShowSpells.transform.GetChild(0).GetComponent<TMP_Text>().SetText("Dev Console");
+      HUD.instance.buttonShowSpells.transform.GetChild(0).GetComponent<TMP_Text>().SetText("Dev Console", true);
     if (this.game.isReplay)
       this.buttonOverheadEmoji.SetActive(false);
     this._ToggleSpellBgIcons(Global.GetPrefBool("newspellicons", true));
@@ -1066,18 +1078,18 @@ public class HUD : UIBehaviour
 
   public static string GetCustomArmageddonName(GameFacts f)
   {
-    string customArmageddonName = "";
+    string str = "";
     for (int index = 0; index < f.settings.customArmageddon.Count; ++index)
     {
       Spell spell = Inert.GetSpell(f.settings.customArmageddon[index]);
       if ((UnityEngine.Object) spell != (UnityEngine.Object) null)
       {
-        customArmageddonName += spell.name;
+        str += spell.name;
         if (index < f.settings.customArmageddon.Count - 1)
-          customArmageddonName += "\n";
+          str += "\n";
       }
     }
-    return customArmageddonName;
+    return str;
   }
 
   public void SetArmageddonIcon()
@@ -1091,14 +1103,14 @@ public class HUD : UIBehaviour
       UIOnHover component = this.armIcon.GetComponent<UIOnHover>();
       component.onEnter.RemoveAllListeners();
       component.onExit.RemoveAllListeners();
-      component.onEnter.AddListener((UnityAction) (() => MyToolTip.Show(s)));
+      component.onEnter.AddListener((UnityAction) (() => MyToolTip.Show(s, -1f)));
       component.onExit.AddListener((UnityAction) (() => MyToolTip.Close()));
       this.UpdateArmageddonIcon(this.game.players.Count > 0 ? Mathf.Max(0, this.game.players[0].localTurn) : 0);
     }
     else
     {
       int mapIndex = GameFacts.GetMapIndex(this.game.armageddon);
-      if (mapIndex > 0 && Inert.Instance.ArmageddonIcons.Length > mapIndex && (UnityEngine.Object) Inert.Instance.ArmageddonIcons[mapIndex] != (UnityEngine.Object) null && !string.Equals(Inert.Instance.ArmageddonIcons[mapIndex].name, "Nothing") && !string.Equals(Inert.Instance.ArmageddonIcons[mapIndex].name, "levelstyle_icons_9"))
+      if (mapIndex > 0 && Inert.Instance.ArmageddonIcons.Length > mapIndex && ((UnityEngine.Object) Inert.Instance.ArmageddonIcons[mapIndex] != (UnityEngine.Object) null && !string.Equals(Inert.Instance.ArmageddonIcons[mapIndex].name, "Nothing")) && !string.Equals(Inert.Instance.ArmageddonIcons[mapIndex].name, "levelstyle_icons_9"))
       {
         this.armBg.gameObject.SetActive(true);
         this.armIcon.sprite = Inert.Instance.ArmageddonIcons[mapIndex];
@@ -1107,7 +1119,7 @@ public class HUD : UIBehaviour
         UIOnHover component = this.armIcon.GetComponent<UIOnHover>();
         component.onEnter.RemoveAllListeners();
         component.onExit.RemoveAllListeners();
-        component.onEnter.AddListener((UnityAction) (() => MyToolTip.Show(this.armIcon.sprite.name)));
+        component.onEnter.AddListener((UnityAction) (() => MyToolTip.Show(this.armIcon.sprite.name, -1f)));
         component.onExit.AddListener((UnityAction) (() => MyToolTip.Close()));
         this.UpdateArmageddonIcon(this.game.players.Count > 0 ? Mathf.Max(0, this.game.players[0].localTurn) : 0);
       }
@@ -1121,7 +1133,7 @@ public class HUD : UIBehaviour
     ZGame game = Client.game;
     if ((game != null ? (game.isSandbox ? 1 : 0) : 0) != 0)
     {
-      Client.DevConsole(s, Client.game);
+      Client.DevConsole(s, Client.game, new FixedInt?(), new MyLocation?());
       this.chatInput.gameObject.SetActive(false);
     }
     else
@@ -1178,24 +1190,24 @@ public class HUD : UIBehaviour
 
   public void ConfirmResign()
   {
-    if (this.game != null && this.game.players.Count > 1 && (!this.game.isMulti || this.game.TEAM_COUNT > 1) && !this.game.isSandbox && !this.game.isReplay && !this.game.isSpectator && (UnityEngine.Object) Player.Instance != (UnityEngine.Object) null && !Global.GetPrefBool(HUD.doNotShowResign, false))
-      MyMessageBox.Create("Are you sure you want to <b>RESIGN</b>?", (Action) (() => this.SendResign()), "Yes", "No", doNotShow: (Action) (() => Global.SetPrefBool(HUD.doNotShowResign, true)));
+    if (this.game != null && this.game.players.Count > 1 && (!this.game.isMulti || this.game.TEAM_COUNT > 1) && (!this.game.isSandbox && !this.game.isReplay && (!this.game.isSpectator && (UnityEngine.Object) Player.Instance != (UnityEngine.Object) null)) && !Global.GetPrefBool(HUD.doNotShowResign, false))
+      MyMessageBox.Create("Are you sure you want to <b>RESIGN</b>?", (Action) (() => this.SendResign()), "Yes", "No", (Action) null, (Action) (() => Global.SetPrefBool(HUD.doNotShowResign, true)), (Sprite) null, (string) null, (Action) null);
     else
       this.SendResign();
   }
 
   public void ConfirmLeave()
   {
-    if (this.game != null && this.game.players.Count > 1 && (!this.game.isMulti || this.game.TEAM_COUNT > 1) && !this.game.isSandbox && !this.game.isReplay && !this.game.isSpectator && (UnityEngine.Object) Player.Instance != (UnityEngine.Object) null && !Global.GetPrefBool(HUD.doNotShowLeave, false))
-      MyMessageBox.Create("Are you sure you want to<br><b>LEAVE the GAME?</b>", (Action) (() => this.ClickExit()), "Yes", "No", doNotShow: (Action) (() => Global.SetPrefBool(HUD.doNotShowLeave, true)));
+    if (this.game != null && this.game.players.Count > 1 && (!this.game.isMulti || this.game.TEAM_COUNT > 1) && (!this.game.isSandbox && !this.game.isReplay && (!this.game.isSpectator && (UnityEngine.Object) Player.Instance != (UnityEngine.Object) null)) && !Global.GetPrefBool(HUD.doNotShowLeave, false))
+      MyMessageBox.Create("Are you sure you want to<br><b>LEAVE the GAME?</b>", (Action) (() => this.ClickExit()), "Yes", "No", (Action) null, (Action) (() => Global.SetPrefBool(HUD.doNotShowLeave, true)), (Sprite) null, (string) null, (Action) null);
     else
       this.ClickExit();
   }
 
   public void ConfirmLeaveSave()
   {
-    if (this.game != null && this.game.players.Count > 1 && (!this.game.isMulti || this.game.TEAM_COUNT > 1) && !this.game.isSandbox && !this.game.isReplay && !this.game.isSpectator && (UnityEngine.Object) Player.Instance != (UnityEngine.Object) null && !Global.GetPrefBool(HUD.doNotShowLeave, false))
-      MyMessageBox.Create("Are you sure you want to save and<br><b>LEAVE the GAME?</b>", (Action) (() => this.ClickSaveExit()), "Yes", "No", doNotShow: (Action) (() => Global.SetPrefBool(HUD.doNotShowLeave, true)));
+    if (this.game != null && this.game.players.Count > 1 && (!this.game.isMulti || this.game.TEAM_COUNT > 1) && (!this.game.isSandbox && !this.game.isReplay && (!this.game.isSpectator && (UnityEngine.Object) Player.Instance != (UnityEngine.Object) null)) && !Global.GetPrefBool(HUD.doNotShowLeave, false))
+      MyMessageBox.Create("Are you sure you want to save and<br><b>LEAVE the GAME?</b>", (Action) (() => this.ClickSaveExit()), "Yes", "No", (Action) null, (Action) (() => Global.SetPrefBool(HUD.doNotShowLeave, true)), (Sprite) null, (string) null, (Action) null);
     else
       this.ClickSaveExit();
   }
@@ -1211,7 +1223,7 @@ public class HUD : UIBehaviour
           myBinaryWriter.Write((byte) 195);
           myBinaryWriter.Write(Player.Instance.person.id);
         }
-        Client.connection.SendBytes(memoryStream.ToArray());
+        Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
       }
     }
     this.resignButObj.GetComponent<UIOnHover>().Interactable(false);
@@ -1230,7 +1242,7 @@ public class HUD : UIBehaviour
         myBinaryWriter.Write(Player.Instance.person.id);
         myBinaryWriter.Write(!Player.Instance.person.offeringDraw);
       }
-      Client.connection.SendBytes(memoryStream.ToArray());
+      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -1245,7 +1257,7 @@ public class HUD : UIBehaviour
     ++creature.parent.awards.spellTypesBrought[(int) slot.spell.spellType];
     if (!creature.game.AllowExpansion)
     {
-      if (slot.spell.spellEnum == SpellEnum.Ice_Bomb || slot.spell.spellEnum == SpellEnum.Thorn_Bomb || slot.spell.spellEnum == SpellEnum.Ice_Shield || slot.spell.spellEnum == SpellEnum.Forest_Seed || slot.spell.spellEnum == SpellEnum.Shock_Bomb || slot.spell.spellEnum == SpellEnum.Magma_Bomb || slot.spell.spellEnum == SpellEnum.Summon_Swarm || slot.spell.spellEnum == SpellEnum.Flight)
+      if (slot.spell.spellEnum == SpellEnum.Ice_Bomb || slot.spell.spellEnum == SpellEnum.Thorn_Bomb || (slot.spell.spellEnum == SpellEnum.Ice_Shield || slot.spell.spellEnum == SpellEnum.Forest_Seed) || (slot.spell.spellEnum == SpellEnum.Shock_Bomb || slot.spell.spellEnum == SpellEnum.Magma_Bomb || (slot.spell.spellEnum == SpellEnum.Summon_Swarm || slot.spell.spellEnum == SpellEnum.Flight)))
       {
         slot.TurnsTillFirstUse = 0;
         if (slot.spell.spellEnum != SpellEnum.Ice_Shield)
@@ -1305,10 +1317,10 @@ public class HUD : UIBehaviour
             break;
           }
           componentsInChildren[index1].sprites = new Sprite[8];
-          for (int index3 = 0; index3 < 4; ++index3)
-            componentsInChildren[index1].sprites[index3] = ClientResources.Instance.staffPerElement[(int) (p.ActivateableFamiliar + 1) * 4 + index3];
-          for (int index4 = 0; index4 < 4; ++index4)
-            componentsInChildren[index1].sprites[index4 + 4] = ClientResources.Instance.staffPerElement[(int) (b + 1) * 4 + index4];
+          for (int index2 = 0; index2 < 4; ++index2)
+            componentsInChildren[index1].sprites[index2] = ClientResources.Instance.staffPerElement[(int) (p.ActivateableFamiliar + 1) * 4 + index2];
+          for (int index2 = 0; index2 < 4; ++index2)
+            componentsInChildren[index1].sprites[index2 + 4] = ClientResources.Instance.staffPerElement[(int) (b + 1) * 4 + index2];
           componentsInChildren[index1].UpdateFPS(12f);
           break;
         }
@@ -1357,7 +1369,7 @@ public class HUD : UIBehaviour
           HUD.instance.familiarHowTo.SetActive(true);
       }
     }
-    if (num3 == 12 && bookOf == BookOf.Arcane && (game.isSandbox || game.gameFacts.GetAllowArcanePowers()) && x.account.accountType.has(AccountType.Developer | AccountType.Admin | AccountType.Arcane_Monster | AccountType.Game_Director) && !x.game.isRated && !fromReplay)
+    if (num3 == 12 && bookOf == BookOf.Arcane && (game.isSandbox || game.gameFacts.GetAllowArcanePowers()) && (x.account.accountType.has(AccountType.Developer | AccountType.Admin | AccountType.Arcane_Monster | AccountType.Game_Director) && !x.game.isRated && !fromReplay))
       HUD.TransformArcaneMonster(x, zcreature, game, index);
     if (num1 >= 12 && zcreature.game.AllowExpansion)
     {
@@ -1367,9 +1379,9 @@ public class HUD : UIBehaviour
         if (minionSpell.level == 3)
         {
           int num4 = 0;
-          for (int index2 = 0; index2 < zcreature.spells.Count && index2 < 16; ++index2)
+          for (int index1 = 0; index1 < zcreature.spells.Count && index1 < 16; ++index1)
           {
-            SpellSlot spell = zcreature.spells[index2];
+            SpellSlot spell = zcreature.spells[index1];
             if (spell != null && !((UnityEngine.Object) spell.spell == (UnityEngine.Object) null) && spell.spell.bookOf == minionSpell.bookOf)
               ++num4;
           }
@@ -1407,9 +1419,9 @@ public class HUD : UIBehaviour
     }
     if (game.gameFacts.settings.autoInclude != null)
     {
-      for (int index3 = game.gameFacts.settings.autoInclude.Count - 1; index3 >= 0; --index3)
+      for (int index1 = game.gameFacts.settings.autoInclude.Count - 1; index1 >= 0; --index1)
       {
-        SpellEnum s = game.gameFacts.settings.autoInclude[index3];
+        SpellEnum s = game.gameFacts.settings.autoInclude[index1];
         Spell spell = Inert.GetSpell(s);
         if ((UnityEngine.Object) spell != (UnityEngine.Object) null && spell.level <= 3 && !zcreature.HasSpell(s))
         {
@@ -1420,44 +1432,44 @@ public class HUD : UIBehaviour
     }
     if (game.gameFacts.GetStyle().HasStyle(GameStyle.Elementals))
     {
-      int index4 = (int) zcreature.parent.settingsPlayer.fullBook - 1;
-      int num5 = game.gameFacts.GetStyle().HasStyle(GameStyle.Original_Spells_Only) ? 9 : (int) RandomExtensions.LastBook();
-      if (index4 < 0 || index4 > num5)
-        index4 = 0;
-      int spellIndex1 = index4 * 12;
-      zcreature.parent.familiarBook |= (FamiliarType) (1 << index4);
-      int index5 = 0;
-      int num6 = 0;
-      while (num6 < 12)
+      int index1 = (int) zcreature.parent.settingsPlayer.fullBook - 1;
+      int num4 = game.gameFacts.GetStyle().HasStyle(GameStyle.Original_Spells_Only) ? 9 : (int) RandomExtensions.LastBook();
+      if (index1 < 0 || index1 > num4)
+        index1 = 0;
+      int spellIndex1 = index1 * 12;
+      zcreature.parent.familiarBook |= (FamiliarType) (1 << index1);
+      int index2 = 0;
+      int num5 = 0;
+      while (num5 < 12)
       {
         Spell spell = zcreature.parent.settingsPlayer._spells.IsAlt(spellIndex1) ? Inert.Instance.altSpells[spellIndex1] : Inert.Instance._spells[spellIndex1];
         int spellIndex2 = zcreature.GetSpellIndex(spell.spellEnum);
-        if (index4 != 0 && spellIndex2 >= 0)
+        if (index1 != 0 && spellIndex2 >= 0)
           zcreature.spells.RemoveAt(spellIndex2);
-        zcreature.spells.Insert(index5, new SpellSlot(spell));
-        HUD.OnInitSpell(zcreature, zcreature.spells[index5], fromReplay);
-        ++index5;
+        zcreature.spells.Insert(index2, new SpellSlot(spell));
+        HUD.OnInitSpell(zcreature, zcreature.spells[index2], fromReplay);
+        ++index2;
         if (spell.level == 3 && game.isClient)
           HUD.instance.uiPlayerCharacters[(int) zcreature.parent.id].AddLevel3(spell);
         if (spell.level == 3)
           x.shownLevel3.Add(spell.spellEnum);
-        ++num6;
+        ++num5;
         ++spellIndex1;
       }
-      if (!game.isReplay || zcreature.parent.familiarLevels[index4] == 0)
+      if (!game.isReplay || zcreature.parent.familiarLevels[index1] == 0)
       {
-        for (int index6 = 0; index6 < (game.isSandbox ? 5 : (int) game.gameFacts.elementalLevel); ++index6)
+        for (int index3 = 0; index3 < (game.isSandbox ? 5 : (int) game.gameFacts.elementalLevel); ++index3)
         {
-          ++zcreature.parent.familiarLevels[index4];
-          game.CreateFamiliar((BookOf) index4, zcreature.parent, false, fromReplay);
+          ++zcreature.parent.familiarLevels[index1];
+          game.CreateFamiliar((BookOf) index1, zcreature.parent, false, fromReplay);
         }
       }
       if (game.isClient && !fromReplay)
-        HUD.ClientChangeElementalStaff(x, (BookOf) index4, false);
+        HUD.ClientChangeElementalStaff(x, (BookOf) index1, false);
     }
     if (game.gameFacts.GetStyle().HasStyle(GameStyle.Watchtower) && !game.gameFacts.GetStyle().HasStyle(GameStyle.First_Turn_Teleport) && !fromReplay)
       ZSpell.FireTower(Inert.Instance.spells["Watchtower"], zcreature, zcreature.position, (FixedInt) 0, (FixedInt) 0);
-    if (x.shownLevel3.Count > 0 || x.BombMaster || x.FullArcane || x.MinionMaster || x.first().gliding || x.first().radius != 18)
+    if (x.shownLevel3.Count > 0 || x.BombMaster || (x.FullArcane || x.MinionMaster) || (x.first().gliding || x.first().radius != 18))
       game.SendSpellBookInfo(x);
     if (!((UnityEngine.Object) x.panelPlayer != (UnityEngine.Object) null))
       return;
@@ -1497,7 +1509,7 @@ public class HUD : UIBehaviour
     if (!game.isClient)
       return;
     x.clientColor = ClientResources.Instance.ModColors[0];
-    c.gameObject?.GetComponent<ConfigurePlayer>().ModEquipAll(x.name, x.settingsPlayer, ClientResources.Instance.ModColors);
+    c.gameObject?.GetComponent<ConfigurePlayer>().ModEquipAll(x.name, x.settingsPlayer, ClientResources.Instance.ModColors, true);
     x.panelPlayer.TurnMod(x.settingsPlayer, x.clientColor, c.clientObj);
     HUD.instance.uiPlayerCharacters[index].Copy(x);
     c.bg.color = x.clientColor;
@@ -1509,13 +1521,16 @@ public class HUD : UIBehaviour
     game.map.Purpalize();
   }
 
-  public void ClickChangeOutfits() => ChangeOutfitMenu.Create(false, false);
+  public void ClickChangeOutfits()
+  {
+    ChangeOutfitMenu.Create(false, false, (SettingsPlayer) null, (Action<SettingsPlayer>) null);
+  }
 
   public void ClickUpdateFamiliar()
   {
     this.familiarHowTo?.SetActive(false);
     Global.SetPrefBool("prefhasclickedfamiliar", true);
-    if (!this.game.isServer && Client.connection.State != ConnectionState.Connected || (UnityEngine.Object) Player.Instance == (UnityEngine.Object) null || !Player.Instance.person.yourTurn || this.game.serverState.busy != ServerState.Busy.No || Player.Instance.person.localTurn <= 0 && Client.game.First_Turn_Teleport)
+    if (!this.game.isServer && Client.connection.State != ConnectionState.Connected || ((UnityEngine.Object) Player.Instance == (UnityEngine.Object) null || !Player.Instance.person.yourTurn) || (this.game.serverState.busy != ServerState.Busy.No || Player.Instance.person.localTurn <= 0 && Client.game.First_Turn_Teleport))
       return;
     ZCreature zcreature = Player.Instance.person.controlled[0];
     if (zcreature.familiarLevelActivateable < 5 && zcreature.health > 20)
@@ -1524,23 +1539,23 @@ public class HUD : UIBehaviour
       {
         if (zcreature.health <= 100)
           return;
-        zcreature.DoDamage(100);
+        zcreature.DoDamage(100, DamageType.None, (ZCreature) null, false, (ISpellBridge) null);
         zcreature.UpdateHealthTxt();
         this.SendUpdateFamiliar();
         this.game.RemoveFamiliars();
         return;
       }
       Player.Instance.person.IncreaseLevel();
-      zcreature.DoDamage(20);
+      zcreature.DoDamage(20, DamageType.None, (ZCreature) null, false, (ISpellBridge) null);
       if (zcreature.hasDarkDefenses)
         zcreature.DarkDefenses(true);
       this.fullBookTextLevel.text = "Level " + (object) zcreature.familiarLevelActivateable;
       zcreature.UpdateHealthTxt();
       this.SendUpdateFamiliar();
       if (this.game.MoveQue.Count > 0)
-        this.game.MoveQue.Enqueue((Action) (() => this.game.CreateFamiliar(Player.Instance.person.ActivateableFamiliar, Player.Instance.person)));
+        this.game.MoveQue.Enqueue((Action) (() => this.game.CreateFamiliar(Player.Instance.person.ActivateableFamiliar, Player.Instance.person, true, false)));
       else
-        this.game.CreateFamiliar(Player.Instance.person.ActivateableFamiliar, Player.Instance.person);
+        this.game.CreateFamiliar(Player.Instance.person.ActivateableFamiliar, Player.Instance.person, true, false);
     }
     if (zcreature.familiarLevelActivateable < 5)
       return;
@@ -1598,10 +1613,11 @@ public class HUD : UIBehaviour
   {
     int index = 0;
     if ((UnityEngine.Object) Player.Instance != (UnityEngine.Object) null)
-      this.panelStartColor.color = Player.Instance.person.clientColor with
-      {
-        a = 0.9f
-      };
+    {
+      Color clientColor = Player.Instance.person.clientColor;
+      clientColor.a = 0.9f;
+      this.panelStartColor.color = clientColor;
+    }
     if (this.game.players.Count > 12 && this.game.isTeam)
     {
       switch (this.game.gameFacts.GetNumberPlayersPerTeam())
@@ -1734,7 +1750,7 @@ public class HUD : UIBehaviour
   {
     this.panelStart.SetActive(true);
     this.transform.SetAsLastSibling();
-    if (this.game.serverState.busy != ServerState.Busy.Ended || this.game.isSpectator || this.game.isReplay || !Client.isConnected)
+    if (this.game.serverState.busy != ServerState.Busy.Ended || this.game.isSpectator || (this.game.isReplay || !Client.isConnected))
       return;
     this.rematchObj.SetActive(true);
   }
@@ -1757,9 +1773,15 @@ public class HUD : UIBehaviour
     this.transform.SetAsFirstSibling();
   }
 
-  public void ClickScreenSize() => Controller.ShowScreenSizeMenu();
+  public void ClickScreenSize()
+  {
+    Controller.ShowScreenSizeMenu();
+  }
 
-  public void ClickOptions() => Controller.ShowSettingsMenu();
+  public void ClickOptions()
+  {
+    Controller.ShowSettingsMenu(false);
+  }
 
   public void TogglePauseMenu(bool v)
   {
@@ -1792,7 +1814,10 @@ public class HUD : UIBehaviour
   {
   }
 
-  public void SafeExit() => this.StartCoroutine(this._SafeExit());
+  public void SafeExit()
+  {
+    this.StartCoroutine(this._SafeExit());
+  }
 
   public IEnumerator _SafeExit()
   {
@@ -1807,12 +1832,18 @@ public class HUD : UIBehaviour
     if (this.game == null)
       Controller.Instance.OpenMenu(Controller.Instance.MenuMain, false);
     else
-      this.game.QuitToMainMenu(exitToLobby: Client.JoinLocation.Lobby);
+      this.game.QuitToMainMenu(false, Client.JoinLocation.Lobby, false);
   }
 
-  public void ClickSaveExit() => this.game.QuitToMainMenu(true, Client.JoinLocation.Lobby, true);
+  public void ClickSaveExit()
+  {
+    this.game.QuitToMainMenu(true, Client.JoinLocation.Lobby, true);
+  }
 
-  public void ClickSaveExitNotForced() => this.game.QuitToMainMenu(true, Client.JoinLocation.Lobby);
+  public void ClickSaveExitNotForced()
+  {
+    this.game.QuitToMainMenu(true, Client.JoinLocation.Lobby, false);
+  }
 
   public void ClickOfferRematch()
   {
@@ -1827,7 +1858,7 @@ public class HUD : UIBehaviour
         myBinaryWriter.Write(zperson.id);
         myBinaryWriter.Write(zperson.offeringRematch ? (byte) 0 : (byte) 1);
       }
-      Client.connection.SendBytes(memoryStream.ToArray());
+      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -1857,9 +1888,15 @@ public class HUD : UIBehaviour
     SpectatorPlayer.Instance.SetSpell(index);
   }
 
-  public void HoverExit() => MyToolTip.instance?._Close();
+  public void HoverExit()
+  {
+    MyToolTip.instance?._Close();
+  }
 
-  public void Hover(string msg) => MyToolTip.Show(msg);
+  public void Hover(string msg)
+  {
+    MyToolTip.Show(msg, -1f);
+  }
 
   public void HoverArmageddon()
   {
@@ -1876,12 +1913,12 @@ public class HUD : UIBehaviour
       StringBuilder stringBuilder = new StringBuilder(this.game.isCountdown ? string.Format("{0} / 200 Turns<br>", (object) (num + 1)) : string.Format("{0} / 60 Turns<br>", (object) (num + 1)));
       foreach (ZPerson player in this.game.players)
         stringBuilder.Append("<").Append(InputFieldPlus.RGBtoHEX((Color32) player.clientColor)).Append(">").Append(player.name).Append("</color> - ").Append(Global.IntToTime((int) ((double) player.countdown + 0.5), 12)).Append("<br>");
-      MyToolTip.Show(stringBuilder.ToString());
+      MyToolTip.Show(stringBuilder.ToString(), -1f);
     }
     else if (this.game.isSandbox || this.game.isTutorial)
-      MyToolTip.Show(string.Format("Turn {0}", (object) (num + 1)));
+      MyToolTip.Show(string.Format("Turn {0}", (object) (num + 1)), -1f);
     else
-      MyToolTip.Show(string.Format("{0} / 60 Turns", (object) (num + 1)));
+      MyToolTip.Show(string.Format("{0} / 60 Turns", (object) (num + 1)), -1f);
   }
 
   public void ToggleSummonOnYourTeam()
@@ -1905,7 +1942,10 @@ public class HUD : UIBehaviour
     }
   }
 
-  public void ToggleReplayTimeline(GameObject t) => t.SetActive(!t.activeSelf);
+  public void ToggleReplayTimeline(GameObject t)
+  {
+    t.SetActive(!t.activeSelf);
+  }
 
   public void ToggleDummies(GameObject t)
   {
@@ -1961,7 +2001,7 @@ public class HUD : UIBehaviour
       m.Close();
       MyToolTip.Close();
     }));
-    m.Rebuild();
+    m.Rebuild(false);
   }
 
   public void HideOverheadEmoji()
@@ -1995,7 +2035,10 @@ public class HUD : UIBehaviour
       this.chatInput.gameObject.SetActive(!this.chatInput.gameObject.activeSelf);
   }
 
-  public void ToggleChat() => this.ToggleChat(!ChatBox.Instance.Active);
+  public void ToggleChat()
+  {
+    this.ToggleChat(!ChatBox.Instance.Active);
+  }
 
   public void StopAnimateChatRepaet()
   {
@@ -2016,7 +2059,10 @@ public class HUD : UIBehaviour
     this.OnTouch(this.chatInput);
   }
 
-  public void OnTouch(InputFieldPlus i) => ClientResources.Instance.OnTouch(i);
+  public void OnTouch(InputFieldPlus i)
+  {
+    ClientResources.Instance.OnTouch(i);
+  }
 
   public void disable_talking()
   {
@@ -2066,13 +2112,16 @@ public class HUD : UIBehaviour
     this.panelSkipTurn.SetActive(false);
   }
 
-  public void HideSkipPanel() => this.panelSkipTurn.SetActive(false);
+  public void HideSkipPanel()
+  {
+    this.panelSkipTurn.SetActive(false);
+  }
 
   public void HoverBook()
   {
     if (!((UnityEngine.Object) Player.Instance != (UnityEngine.Object) null) || !((ZComponent) Player.Instance.person.first() != (object) null) || Player.Instance.person.ActivateableFamiliar == BookOf.Nothing)
       return;
-    this.textSpellDescription.text = Descriptions.GetBookDescription(Player.Instance.person.ActivateableFamiliar);
+    this.textSpellDescription.text = Descriptions.GetBookDescription(Player.Instance.person.ActivateableFamiliar, false);
     this.textSpellExtraText.text = "";
     this.ShowPanelDescription();
   }
@@ -2080,7 +2129,7 @@ public class HUD : UIBehaviour
   public void LeaveBook()
   {
     this.panelSpellDescription.SetActive(false);
-    if (this.game == null || !((UnityEngine.Object) this.turTextbox != (UnityEngine.Object) null) || !this.game.isTutorial || string.IsNullOrEmpty(this.turTextbox.text))
+    if (this.game == null || !((UnityEngine.Object) this.turTextbox != (UnityEngine.Object) null) || (!this.game.isTutorial || string.IsNullOrEmpty(this.turTextbox.text)))
       return;
     this.tutPopup.gameObject.SetActive(true);
   }
@@ -2088,19 +2137,22 @@ public class HUD : UIBehaviour
   public void ShowPanelDescription()
   {
     this.panelSpellDescription.SetActive(true);
-    if (this.game == null || !((UnityEngine.Object) this.turTextbox != (UnityEngine.Object) null) || !this.game.isTutorial || string.IsNullOrEmpty(this.turTextbox.text))
+    if (this.game == null || !((UnityEngine.Object) this.turTextbox != (UnityEngine.Object) null) || (!this.game.isTutorial || string.IsNullOrEmpty(this.turTextbox.text)))
       return;
     this.tutPopup.gameObject.SetActive(false);
   }
 
-  public void ToggleLockScale() => this._lockScale = !this._lockScale;
+  public void ToggleLockScale()
+  {
+    this._lockScale = !this._lockScale;
+  }
 
   public void HoverPlayersPanel()
   {
-    MyToolTip.Show("Click to resize - Right-Click for additional options");
+    MyToolTip.Show("Click to resize - Right-Click for additional options", -1f);
     if (this._lockScale)
       return;
-    this.game?.ScalePlayersPanel(true);
+    this.game?.ScalePlayersPanel(true, 0.5f);
   }
 
   public void LeavePlayersPanel()
@@ -2108,14 +2160,17 @@ public class HUD : UIBehaviour
     MyToolTip.Close();
     if (this._lockScale)
       return;
-    this.game?.ScalePlayersPanel(false);
+    this.game?.ScalePlayersPanel(false, 0.5f);
   }
 
-  public void RightClickPlayersPanel() => OptionsMenu.ShowHUDContextMenu();
+  public void RightClickPlayersPanel()
+  {
+    OptionsMenu.ShowHUDContextMenu();
+  }
 
   public static void UpdateTimeSounds()
   {
-    if (Client.game == null || Client.game.isSandbox || !((UnityEngine.Object) Player.Instance != (UnityEngine.Object) null) || !Player.Instance.person.yourTurn)
+    if (Client.game == null || Client.game.isSandbox || (!((UnityEngine.Object) Player.Instance != (UnityEngine.Object) null) || !Player.Instance.person.yourTurn))
       return;
     AudioManager.Timer(Client.game.PlayersMaxTurnTime - Client.game.serverState.turnTime);
   }
@@ -2166,17 +2221,35 @@ public class HUD : UIBehaviour
     this.PressingFire = false;
   }
 
-  public void PressedFlip() => Player.Instance?.FlipFlop();
+  public void PressedFlip()
+  {
+    Player.Instance?.FlipFlop();
+  }
 
-  public void PressedHigh(bool v) => this.PressingHighJump = v;
+  public void PressedHigh(bool v)
+  {
+    this.PressingHighJump = v;
+  }
 
-  public void PressedLong(bool v) => this.PressingLongJump = v;
+  public void PressedLong(bool v)
+  {
+    this.PressingLongJump = v;
+  }
 
-  public void PressedDetower(bool v) => this.PressingDetower = v;
+  public void PressedDetower(bool v)
+  {
+    this.PressingDetower = v;
+  }
 
-  public void PressedLeft(bool v) => this.PressingMoveLeft = v;
+  public void PressedLeft(bool v)
+  {
+    this.PressingMoveLeft = v;
+  }
 
-  public void PressedRight(bool v) => this.PressingMoveRight = v;
+  public void PressedRight(bool v)
+  {
+    this.PressingMoveRight = v;
+  }
 
   public void PressedBackQuote()
   {
@@ -2201,7 +2274,7 @@ public class HUD : UIBehaviour
   {
     Player instance = Player.Instance;
     if ((instance != null ? (!instance.person.InWater() ? 1 : 0) : 1) != 0)
-      Player.Instance?.NextControlled();
+      Player.Instance?.NextControlled(false, true);
     else
       Player.Instance?.NextRecallDevice(false);
   }
@@ -2210,12 +2283,15 @@ public class HUD : UIBehaviour
   {
     Player instance = Player.Instance;
     if ((instance != null ? (!instance.person.InWater() ? 1 : 0) : 1) != 0)
-      Player.Instance?.PreviousControlled();
+      Player.Instance?.PreviousControlled(true);
     else
       Player.Instance?.PreviousRecallDevice();
   }
 
-  public void PressedFireCancel() => Player.Instance?.StopSummoningDummy();
+  public void PressedFireCancel()
+  {
+    Player.Instance?.StopSummoningDummy();
+  }
 
   public void PressedFireUp()
   {
@@ -2230,7 +2306,10 @@ public class HUD : UIBehaviour
     Player.Instance?.MouseDown();
   }
 
-  public void PressedAlt() => Player.Instance.ToggleExtendedShot(!this.buttonAlt.AlwaysOn);
+  public void PressedAlt()
+  {
+    Player.Instance.ToggleExtendedShot(!this.buttonAlt.AlwaysOn);
+  }
 
   public void PressedPing()
   {
@@ -2257,7 +2336,10 @@ public class HUD : UIBehaviour
     this.panelPause.SetActive(false);
   }
 
-  public void ReleaseBackQuoteMobile() => this.PressingBackQuote = false;
+  public void ReleaseBackQuoteMobile()
+  {
+    this.PressingBackQuote = false;
+  }
 
   public void DisableButtons()
   {
@@ -2272,7 +2354,10 @@ public class HUD : UIBehaviour
     Player.Instance.ToggleExtendedShot(false);
   }
 
-  public void AngleChanged(float f) => this.fireAngle = f;
+  public void AngleChanged(float f)
+  {
+    this.fireAngle = f;
+  }
 
   public void PressedCenterCamera()
   {
@@ -2304,7 +2389,13 @@ public class HUD : UIBehaviour
     }
   }
 
-  public static bool Hidden => (UnityEngine.Object) HUD.instance == (UnityEngine.Object) null || HUD.instance.hidden;
+  public static bool Hidden
+  {
+    get
+    {
+      return (UnityEngine.Object) HUD.instance == (UnityEngine.Object) null || HUD.instance.hidden;
+    }
+  }
 
   public void ShowEverything(bool instant)
   {
@@ -2344,13 +2435,13 @@ public class HUD : UIBehaviour
   public void PlaceBid()
   {
     string text = this.inputBid.text;
-    int num = 0;
-    ref int local = ref num;
+    int num1 = 0;
+    ref int local = ref num1;
     if (!int.TryParse(text, out local))
       return;
-    int bid = Mathf.Clamp(num, 0, (int) Client.game.gameFacts.startHealth);
-    Client.AskToBid((byte) bid);
-    ChatBox.Instance.NewChatMsg("You placed a bid of " + (object) bid + " lifepoints", (Color) ColorScheme.GetColor(Global.ColorSystem));
+    int num2 = Mathf.Clamp(num1, 0, (int) Client.game.gameFacts.startHealth);
+    Client.AskToBid((byte) num2);
+    ChatBox.Instance.NewChatMsg("You placed a bid of " + (object) num2 + " lifepoints", (Color) ColorScheme.GetColor(Global.ColorSystem));
     this.BidPanel.SetActive(false);
   }
 
@@ -2409,7 +2500,7 @@ public class HUD : UIBehaviour
   private float getChatY()
   {
     if ((UnityEngine.Object) ChatBox.Instance == (UnityEngine.Object) null || this.game.serverState.busy == ServerState.Busy.Ended)
-      return -352.460022f;
+      return -352.46f;
     RectTransform transform = (RectTransform) ChatBox.Instance.transform;
     return (float) ((double) transform.anchoredPosition.y + (double) transform.sizeDelta.y + 16.0 - 520.0);
   }

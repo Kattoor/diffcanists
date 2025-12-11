@@ -7,41 +7,73 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-#nullable disable
 namespace ChessConsole
 {
   public class Join31Board : IMiniGame
   {
     public string reason = "";
+    public List<ChessMove> previousMoves = new List<ChessMove>();
+    public IMiniGame.GameSettings gameSettings = new IMiniGame.GameSettings();
+    private List<Join31Board.CheckersPiece> pieces = new List<Join31Board.CheckersPiece>();
     public PlayerColor firstPlayer;
     public PlayerColor secondPlayer;
     public PlayerColor whosTurn;
-    public List<ChessMove> previousMoves = new List<ChessMove>();
     public Join31UI ui;
-    public IMiniGame.GameSettings gameSettings = new IMiniGame.GameSettings();
-    private List<Join31Board.CheckersPiece> pieces = new List<Join31Board.CheckersPiece>();
     private bool inCheck;
     private IMiniGame.Player cur;
     private Join31Board.Cell[,] cells;
 
-    public override string GetGameType() => "Join31";
+    public override string GetGameType()
+    {
+      return "Join31";
+    }
 
-    public override IMiniGame.GameType gameType => IMiniGame.GameType.Join31;
+    public override IMiniGame.GameType gameType
+    {
+      get
+      {
+        return IMiniGame.GameType.Join31;
+      }
+    }
 
-    public string firstColor => this.firstPlayer != PlayerColor.White ? "Blue" : "Red";
+    public string firstColor
+    {
+      get
+      {
+        return this.firstPlayer != PlayerColor.White ? "Blue" : "Red";
+      }
+    }
 
-    public string secondColor => this.secondPlayer != PlayerColor.White ? "Blue" : "Red";
+    public string secondColor
+    {
+      get
+      {
+        return this.secondPlayer != PlayerColor.White ? "Blue" : "Red";
+      }
+    }
 
-    public Join31Board.Cell[,] AllCells => this.cells;
+    public Join31Board.Cell[,] AllCells
+    {
+      get
+      {
+        return this.cells;
+      }
+    }
 
-    public Join31Board.Cell FromIndex(int i) => this.cells[i / 7, i % 7];
+    public Join31Board.Cell FromIndex(int i)
+    {
+      return this.cells[i / 7, i % 7];
+    }
 
     public Join31Board.Cell GetCell(int x, int y)
     {
-      return x < 0 || this.cells.GetLength(0) <= x || y < 0 || this.cells.GetLength(1) <= y ? (Join31Board.Cell) null : this.cells[x, y];
+      return x < 0 || this.cells.GetLength(0) <= x || (y < 0 || this.cells.GetLength(1) <= y) ? (Join31Board.Cell) null : this.cells[x, y];
     }
 
-    public Join31Board() => this.Reset();
+    public Join31Board()
+    {
+      this.Reset();
+    }
 
     public Join31Board(bool init)
     {
@@ -81,7 +113,7 @@ namespace ChessConsole
           w.Write((byte) 3);
           this.Serialize(w);
         }
-        c.SendBytes(memoryStream.ToArray());
+        c.SendBytes(memoryStream.ToArray(), SendOption.None);
       }
     }
 
@@ -147,7 +179,7 @@ namespace ChessConsole
       {
         if (!flag1 && !flag2)
           return;
-        if (tag != (byte) 4 && tag != (byte) 5 && tag != (byte) 8 && tag != (byte) 12 && tag != (byte) 13)
+        if (tag != (byte) 4 && tag != (byte) 5 && (tag != (byte) 8 && tag != (byte) 12) && tag != (byte) 13)
         {
           if (flag1)
           {
@@ -170,7 +202,7 @@ namespace ChessConsole
           this.cur = this.GetPlayer(this.whosTurn);
           if ((double) Mathf.Abs(chessMove.time - this.cur.curTime) > 0.5)
             chessMove.time = this.cur.curTime + 0.5f;
-          if ((double) this.cur.startTurnTime - (double) chessMove.time < 0.20000000298023224)
+          if ((double) this.cur.startTurnTime - (double) chessMove.time < 0.200000002980232)
             chessMove.time = this.cur.startTurnTime - 0.2f;
           this.cur.curTime = chessMove.time;
           if ((double) this.cur.curTime <= 0.0)
@@ -180,7 +212,7 @@ namespace ChessConsole
           }
           this.cur.startTurnTime = this.cur.curTime;
           this.previousMoves.Add(chessMove);
-          if (this.CheckIfWon(this.Move(cell, chessMove.promotion, chessMove)))
+          if (this.CheckIfWon(this.Move(cell, chessMove.promotion, chessMove, true)))
           {
             this.SendServerMove(chessMove);
             this.SendGameOver(this.whosTurn == PlayerColor.White ? "Red Wins!" : "Blue Wins!", this.whosTurn == this.firstPlayer ? 1 : 0);
@@ -253,8 +285,8 @@ namespace ChessConsole
     private void Cheat(myBinaryReader r)
     {
       Join31Board.Cell cell = this.FromIndex(r.ReadInt32());
-      int c = r.ReadInt32();
-      if (c == -1)
+      int num = r.ReadInt32();
+      if (num == -1)
       {
         if (cell.Piece != null)
         {
@@ -271,7 +303,7 @@ namespace ChessConsole
           this.pieces.Remove(cell.Piece);
           cell.Piece = (Join31Board.CheckersPiece) null;
         }
-        this.addPiece(cell, Join31Board.FromChar((ChessPiece) c, this.whosTurn, this));
+        this.addPiece(cell, Join31Board.FromChar((ChessPiece) num, this.whosTurn, this));
       }
       this.TurnStart(this.whosTurn);
     }
@@ -337,7 +369,7 @@ namespace ChessConsole
           ChessMove chessMove = ChessMove.Deserialize(r);
           this.GetPlayer(this.whosTurn).curTime = chessMove.time;
           this.previousMoves.Add(chessMove);
-          if (this.CheckIfWon(this.Move(this.FromIndex(chessMove.from), chessMove.promotion, chessMove)))
+          if (this.CheckIfWon(this.Move(this.FromIndex(chessMove.from), chessMove.promotion, chessMove, true)))
             break;
           AudioManager.PlayChess(this.ui.playingAsBlack == (this.whosTurn == PlayerColor.Black) ? this.ui.chessMove : this.ui.chessMoveEnemy);
           this.TurnStart(this.whosTurn == PlayerColor.White ? PlayerColor.Black : PlayerColor.White);
@@ -359,7 +391,7 @@ namespace ChessConsole
           {
             if (!((UnityEngine.Object) ChatBox.Instance != (UnityEngine.Object) null))
               return;
-            ChatBox.Instance.NewChatMsg("[Join31] " + str1, str2, (Color) ColorScheme.GetColor(Global.ColorMiniGameText), str1, ChatOrigination.MiniGame);
+            ChatBox.Instance.NewChatMsg("[Join31] " + str1, str2, (Color) ColorScheme.GetColor(Global.ColorMiniGameText), str1, ChatOrigination.MiniGame, ContentType.STRING, (object) null);
           }));
           break;
         case 8:
@@ -605,7 +637,10 @@ namespace ChessConsole
       return b;
     }
 
-    public static Join31Board.CheckersPiece FromChar(ChessPiece c, PlayerColor p, Join31Board b)
+    public static Join31Board.CheckersPiece FromChar(
+      ChessPiece c,
+      PlayerColor p,
+      Join31Board b)
     {
       if (c == ChessPiece.Pawn)
         return (Join31Board.CheckersPiece) new Join31Board.Pawn(p, b);
@@ -770,7 +805,13 @@ namespace ChessConsole
         this.board = b;
       }
 
-      public override ChessPiece Char => ChessPiece.Pawn;
+      public override ChessPiece Char
+      {
+        get
+        {
+          return ChessPiece.Pawn;
+        }
+      }
     }
 
     public class Cell
@@ -826,13 +867,16 @@ namespace ChessConsole
                   this.image.SetSiblingIndex(index2);
                 break;
               }
-              for (int index3 = index1 + 1; index3 < this.image.parent.childCount && (double) this.image.parent.GetChild(index3).localPosition.z > (double) z2; ++index3)
-                this.image.SetSiblingIndex(index3);
+              for (int index2 = index1 + 1; index2 < this.image.parent.childCount && (double) this.image.parent.GetChild(index2).localPosition.z > (double) z2; ++index2)
+                this.image.SetSiblingIndex(index2);
               break;
             }
           }
         }
-        get => this._parent;
+        get
+        {
+          return this._parent;
+        }
       }
 
       public void Destroy()
@@ -842,11 +886,20 @@ namespace ChessConsole
         UnityEngine.Object.Destroy((UnityEngine.Object) this.image.gameObject);
       }
 
-      public CheckersPiece(PlayerColor color) => this.Color = color;
+      public CheckersPiece(PlayerColor color)
+      {
+        this.Color = color;
+      }
 
-      public void OnPlace(Join31Board.Cell cell) => this.Parent = cell;
+      public void OnPlace(Join31Board.Cell cell)
+      {
+        this.Parent = cell;
+      }
 
-      public void OnMove(Join31Board.Cell cell) => this.Parent = cell;
+      public void OnMove(Join31Board.Cell cell)
+      {
+        this.Parent = cell;
+      }
 
       public abstract ChessPiece Char { get; }
     }

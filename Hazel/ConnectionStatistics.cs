@@ -1,32 +1,67 @@
 
 using System.Threading;
 
-#nullable disable
 namespace Hazel
 {
   public class ConnectionStatistics
   {
     public long CompareMessagesReceived = -1;
+    private long counter = 300;
     private long messagesSent;
     private long dataBytesSent;
     private long totalBytesSent;
-    private long counter = 300;
     public bool checkRate;
     private long messagesReceived;
     private long dataBytesReceived;
     private long totalBytesReceived;
 
-    public long MessagesSent => Interlocked.Read(ref this.messagesSent);
+    public long MessagesSent
+    {
+      get
+      {
+        return Interlocked.Read(ref this.messagesSent);
+      }
+    }
 
-    public long DataBytesSent => Interlocked.Read(ref this.dataBytesSent);
+    public long DataBytesSent
+    {
+      get
+      {
+        return Interlocked.Read(ref this.dataBytesSent);
+      }
+    }
 
-    public long TotalBytesSent => Interlocked.Read(ref this.totalBytesSent);
+    public long TotalBytesSent
+    {
+      get
+      {
+        return Interlocked.Read(ref this.totalBytesSent);
+      }
+    }
 
-    public long MessagesReceived => Interlocked.Read(ref this.messagesReceived);
+    public long MessagesReceived
+    {
+      get
+      {
+        return Interlocked.Read(ref this.messagesReceived);
+      }
+    }
 
-    public long DataBytesReceived => Interlocked.Read(ref this.dataBytesReceived);
+    public long DataBytesReceived
+    {
+      get
+      {
+        return Interlocked.Read(ref this.dataBytesReceived);
+      }
+    }
 
-    public long TotalBytesReceived => Interlocked.Read(ref this.totalBytesReceived);
+    public long TotalBytesReceived
+    {
+      get
+      {
+        return Interlocked.Read(ref this.totalBytesReceived);
+      }
+    }
 
     internal void LogSend(int dataLength, int totalLength)
     {

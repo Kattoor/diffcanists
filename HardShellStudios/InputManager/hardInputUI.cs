@@ -2,7 +2,6 @@
 using TMPro;
 using UnityEngine;
 
-#nullable disable
 namespace HardShellStudios.InputManager
 {
   public class hardInputUI : MonoBehaviour
@@ -14,7 +13,10 @@ namespace HardShellStudios.InputManager
     public bool beingBound;
     public int buttonAction;
 
-    public void EndBind() => this.beingBound = false;
+    public void EndBind()
+    {
+      this.beingBound = false;
+    }
 
     public void remapKey()
     {

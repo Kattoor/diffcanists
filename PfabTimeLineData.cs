@@ -3,12 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-#nullable disable
-public class PfabTimeLineData : 
-  MonoBehaviour,
-  IRecycledScrollViewItem,
-  IPointerClickHandler,
-  IEventSystemHandler
+public class PfabTimeLineData : MonoBehaviour, IRecycledScrollViewItem, IPointerClickHandler, IEventSystemHandler
 {
   public TMP_Text _msg;
   public UIOnHover _ui;

@@ -1,5 +1,4 @@
 
-#nullable disable
 public class ToolBoxSelection : IMapEditorTool
 {
   private static MapEditor.BoxSelection _old;

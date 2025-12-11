@@ -4,9 +4,10 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-#nullable disable
 public class ButtonSpell : MonoBehaviour
 {
+  private bool interactable = true;
+  private int myRealIndex = -1;
   public Image image;
   public UIOnHover uihover;
   public UIOnHoverChild uiOuter;
@@ -14,9 +15,7 @@ public class ButtonSpell : MonoBehaviour
   public Image restricted;
   private int index;
   private bool equipped;
-  private bool interactable = true;
   private int level;
-  private int myRealIndex = -1;
 
   public void SetSprite(Sprite s, int level, bool equipped, bool interactable, int index = -1)
   {
@@ -39,7 +38,7 @@ public class ButtonSpell : MonoBehaviour
       return;
     if (Prestige.IsUnlocked(Client.MyAccount, this.myRealIndex) || !Client.viewSpellLocks.ViewLocked())
     {
-      if (!Restrictions.IsSpellRestricted(SpellLobbyChange.Instance.settingsPlayer._spells, this.myRealIndex))
+      if (!Restrictions.IsSpellRestricted(SpellLobbyChange.Instance.settingsPlayer._spells, this.myRealIndex, (Restrictions) null))
       {
         if (Client.viewSpellLocks.ViewRestricted())
         {
@@ -75,7 +74,7 @@ label_13:
   public void RightClick()
   {
     Spell spell = this.GetSpell();
-    if ((Object) spell == (Object) null || (Object) spell.toSummon == (Object) null || !((Object) spell.toSummon?.GetComponent<Creature>() != (Object) null) || !spell.IsMinionSpell())
+    if ((Object) spell == (Object) null || (Object) spell.toSummon == (Object) null || (!((Object) spell.toSummon?.GetComponent<Creature>() != (Object) null) || !spell.IsMinionSpell()))
       return;
     SpellLobbyChange.Instance?.OpenMinion(spell, spell.toSummon.GetComponent<Creature>());
   }
@@ -99,13 +98,13 @@ label_13:
       if (SpellSelection.Instance.HasSpell((byte) this.index))
       {
         SpellSelection.Instance.RemoveSpell((byte) this.index);
-        this.SetSprite(this.image.sprite, this.level, false, this.interactable);
+        this.SetSprite(this.image.sprite, this.level, false, this.interactable, -1);
       }
       else
       {
         if (!SpellSelection.Instance.AddSpell((byte) this.index))
           return;
-        this.SetSprite(this.image.sprite, this.level, true, this.interactable);
+        this.SetSprite(this.image.sprite, this.level, true, this.interactable, -1);
       }
     }
     else
@@ -115,13 +114,13 @@ label_13:
       if (SpellLobbyChange.Instance.HasSpell((byte) this.index))
       {
         SpellLobbyChange.Instance.RemoveSpell((byte) this.index);
-        this.SetSprite(this.image.sprite, this.level, false, this.interactable);
+        this.SetSprite(this.image.sprite, this.level, false, this.interactable, -1);
       }
       else
       {
         if (!SpellLobbyChange.Instance.AddSpell((byte) this.index))
           return;
-        this.SetSprite(this.image.sprite, this.level, true, this.interactable);
+        this.SetSprite(this.image.sprite, this.level, true, this.interactable, -1);
       }
     }
   }
@@ -129,10 +128,10 @@ label_13:
   public void UpdatedFromSpellSelection_FullBook()
   {
     if ((Object) SpellSelection.Instance != (Object) null && SpellSelection.Instance.AddSpell((byte) this.index))
-      this.SetSprite(this.image.sprite, this.level, true, this.interactable);
+      this.SetSprite(this.image.sprite, this.level, true, this.interactable, -1);
     if (!((Object) SpellLobbyChange.Instance != (Object) null) || !SpellLobbyChange.Instance.AddSpell((byte) this.index))
       return;
-    this.SetSprite(this.image.sprite, this.level, true, this.interactable);
+    this.SetSprite(this.image.sprite, this.level, true, this.interactable, -1);
   }
 
   public static string Hover(SettingsPlayer sp, int index)
@@ -140,31 +139,31 @@ label_13:
     Spell spell = Inert.Instance.spells[index];
     if (spell.level == 2)
     {
-      byte index1 = (byte) (index - 1);
+      byte num = (byte) (index - 1);
       bool flag = false;
-      for (int index2 = 0; index2 < 16; ++index2)
+      for (int index1 = 0; index1 < 16; ++index1)
       {
-        if ((int) sp.spells[index2] == (int) index1)
+        if ((int) sp.spells[index1] == (int) num)
         {
           flag = true;
           break;
         }
       }
       if (!flag)
-        return sp._spells.IsAlt((int) index1) ? "Level 2:\nRequires the level 1 spell: <color=white>" + Inert.Instance.altSpells[(int) index1].name + "</color>" : "Level 2:\nRequires the level 1 spell: <color=white>" + Inert.Instance.spells[(int) index1].name + "</color>";
+        return sp._spells.IsAlt((int) num) ? "Level 2:\nRequires the level 1 spell: <color=white>" + Inert.Instance.altSpells[(int) num].name + "</color>" : "Level 2:\nRequires the level 1 spell: <color=white>" + Inert.Instance.spells[(int) num].name + "</color>";
     }
     else if (spell.level == 3)
     {
       int num = 0;
       bool flag = false;
-      for (int index3 = 0; index3 < sp.spells.Length; ++index3)
+      for (int index1 = 0; index1 < sp.spells.Length; ++index1)
       {
-        if ((int) sp.spells[index3] < Inert.Instance._spells.Length)
+        if ((int) sp.spells[index1] < Inert.Instance._spells.Length)
         {
-          KeyValuePair<string, Spell> keyValuePair = Inert.Instance.spells.GetItem((int) sp.spells[index3]);
+          KeyValuePair<string, Spell> keyValuePair = Inert.Instance.spells.GetItem((int) sp.spells[index1]);
           if (keyValuePair.Value.bookOf == spell.bookOf)
           {
-            keyValuePair = Inert.Instance.spells.GetItem((int) sp.spells[index3]);
+            keyValuePair = Inert.Instance.spells.GetItem((int) sp.spells[index1]);
             if (keyValuePair.Value.level < 3)
             {
               ++num;
@@ -178,7 +177,7 @@ label_13:
         }
       }
       if (!flag)
-        return sp._spells.IsAlt(index) ? "Level 3:\nRequires " + (object) (5 - num) + " more <color=white>" + spell.bookOf.ToStringX(true) + "</color> spell" + (num < 4 ? (object) "s" : (object) "") : "Level 3:\nRequires " + (object) (5 - num) + " more <color=white>" + spell.bookOf.ToStringX() + "</color> spell" + (num < 4 ? (object) "s" : (object) "");
+        return sp._spells.IsAlt(index) ? "Level 3:\nRequires " + (object) (5 - num) + " more <color=white>" + spell.bookOf.ToStringX(true) + "</color> spell" + (num < 4 ? (object) "s" : (object) "") : "Level 3:\nRequires " + (object) (5 - num) + " more <color=white>" + spell.bookOf.ToStringX(false) + "</color> spell" + (num < 4 ? (object) "s" : (object) "");
     }
     return "";
   }

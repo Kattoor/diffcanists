@@ -8,13 +8,12 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-#nullable disable
 namespace WebGLSupport
 {
   public class WebGLInput : MonoBehaviour, IComparable<WebGLInput>
   {
-    private static Dictionary<int, WebGLInput> instances = new Dictionary<int, WebGLInput>();
     internal int id = -1;
+    private static Dictionary<int, WebGLInput> instances = new Dictionary<int, WebGLInput>();
     public IInputField input;
     private bool blurBlock;
     [Tooltip("show input element on canvas. this will make you select text by drag.")]
@@ -28,7 +27,13 @@ namespace WebGLSupport
       WebGLInputPlugin.WebGLInputInit();
     }
 
-    public int Id => this.id;
+    public int Id
+    {
+      get
+      {
+        return this.id;
+      }
+    }
 
     private IInputField Setup()
     {
@@ -62,7 +67,7 @@ namespace WebGLSupport
       bool isPassword = this.input.contentType == ContentType.Password;
       int fontsize = Mathf.Max(14, this.input.fontSize);
       bool isHidden = !this.showHtmlElement && !Application.isMobilePlatform;
-      this.id = WebGLInputPlugin.WebGLInputCreate(WebGLInput.CanvasId, elemetRect.x, elemetRect.y, elemetRect.width, elemetRect.height, fontsize, this.input.text, this.input.placeholder, this.input.lineType != 0, isPassword, isHidden, Application.isMobilePlatform);
+      this.id = WebGLInputPlugin.WebGLInputCreate(WebGLInput.CanvasId, elemetRect.x, elemetRect.y, elemetRect.width, elemetRect.height, fontsize, this.input.text, this.input.placeholder, (uint) this.input.lineType > 0U, isPassword, isHidden, Application.isMobilePlatform);
       WebGLInput.instances[this.id] = this;
       WebGLInputPlugin.WebGLInputEnterSubmit(this.id, this.input.lineType != LineType.MultiLineNewline);
       WebGLInputPlugin.WebGLInputOnFocus(this.id, new Action<int>(WebGLInput.OnFocus));
@@ -77,14 +82,17 @@ namespace WebGLSupport
       WebGLWindow.OnBlurEvent += new Action(this.OnWindowBlur);
     }
 
-    private void OnWindowBlur() => this.blurBlock = true;
+    private void OnWindowBlur()
+    {
+      this.blurBlock = true;
+    }
 
     private Rect GetScreenCoordinates(RectTransform uiElement)
     {
       Vector3[] fourCornersArray = new Vector3[4];
       uiElement.GetWorldCorners(fourCornersArray);
       Canvas componentInParent = uiElement.GetComponentInParent<Canvas>();
-      bool flag = componentInParent.renderMode != 0;
+      bool flag = (uint) componentInParent.renderMode > 0U;
       if ((bool) (UnityEngine.Object) componentInParent & flag)
       {
         Camera camera = componentInParent.worldCamera;
@@ -215,9 +223,15 @@ namespace WebGLSupport
       this.DeactivateInputField();
     }
 
-    private void OnEnable() => WebGLInput.WebGLInputTabFocus.Add(this);
+    private void OnEnable()
+    {
+      WebGLInput.WebGLInputTabFocus.Add(this);
+    }
 
-    private void OnDisable() => WebGLInput.WebGLInputTabFocus.Remove(this);
+    private void OnDisable()
+    {
+      WebGLInput.WebGLInputTabFocus.Remove(this);
+    }
 
     public int CompareTo(WebGLInput other)
     {

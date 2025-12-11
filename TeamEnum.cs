@@ -1,5 +1,4 @@
 
-#nullable disable
 public enum TeamEnum
 {
   Dont_Mind = -1, // 0xFFFFFFFF

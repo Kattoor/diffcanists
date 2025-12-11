@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-#nullable disable
 namespace ChessConsole
 {
   public class Direction

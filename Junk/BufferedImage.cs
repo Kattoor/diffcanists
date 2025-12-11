@@ -3,31 +3,66 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-#nullable disable
 namespace Junk
 {
   public class BufferedImage
   {
+    private bool paintMode = true;
     public Surface surface;
     private BufferedImage paint;
-    private bool paintMode = true;
 
-    public int width => this.surface.width;
+    public int width
+    {
+      get
+      {
+        return this.surface.width;
+      }
+    }
 
-    public int height => this.surface.height;
+    public int height
+    {
+      get
+      {
+        return this.surface.height;
+      }
+    }
 
-    public Color32[] pixels => this.surface.pixels;
+    public Color32[] pixels
+    {
+      get
+      {
+        return this.surface.pixels;
+      }
+    }
 
-    public BufferedImage GetPaint => this.paint;
+    public BufferedImage GetPaint
+    {
+      get
+      {
+        return this.paint;
+      }
+    }
 
-    public int getHeight() => this.surface.height;
+    public int getHeight()
+    {
+      return this.surface.height;
+    }
 
-    public int getWidth() => this.surface.width;
+    public int getWidth()
+    {
+      return this.surface.width;
+    }
 
     public Color32 this[int x]
     {
-      get => this.surface.pixels[x];
-      set => this.surface.pixels[x] = value;
+      get
+      {
+        return this.surface.pixels[x];
+      }
+      set
+      {
+        this.surface.pixels[x] = value;
+      }
     }
 
     public BufferedImage(Color32[] pixels, int w, int h)
@@ -35,7 +70,10 @@ namespace Junk
       this.surface = new Surface(pixels, w, h);
     }
 
-    public BufferedImage(Texture2D tex) => this.surface = new Surface(tex, tex.GetPixels32());
+    public BufferedImage(Texture2D tex)
+    {
+      this.surface = new Surface(tex, tex.GetPixels32());
+    }
 
     public BufferedImage(int v1, int v2)
     {
@@ -44,10 +82,13 @@ namespace Junk
 
     internal Color32 getRGB(int x, int y)
     {
-      return x < 0 || x >= this.surface.width || y < 0 || y >= this.surface.height ? (Color32) Color.clear : this.surface.pixels[x + y * this.surface.width];
+      return x < 0 || x >= this.surface.width || (y < 0 || y >= this.surface.height) ? (Color32) Color.clear : this.surface.pixels[x + y * this.surface.width];
     }
 
-    public void setPaint(BufferedImage b) => this.paint = b;
+    public void setPaint(BufferedImage b)
+    {
+      this.paint = b;
+    }
 
     internal Color32 GetPixel(int x, int y)
     {
@@ -137,11 +178,11 @@ namespace Junk
         for (int index2 = 0; index2 < this.surface.width && this.pixels[num + index2].a == (byte) 0; ++index2)
           this.pixels[num + index2] = (Color32) Color.black;
       }
-      for (int index3 = 0; index3 < this.surface.height; ++index3)
+      for (int index1 = 0; index1 < this.surface.height; ++index1)
       {
-        int num = this.surface.width * index3;
-        for (int index4 = this.surface.width - 1; index4 >= 0 && this.pixels[num + index4].a == (byte) 0; --index4)
-          this.pixels[num + index4] = (Color32) Color.black;
+        int num = this.surface.width * index1;
+        for (int index2 = this.surface.width - 1; index2 >= 0 && this.pixels[num + index2].a == (byte) 0; --index2)
+          this.pixels[num + index2] = (Color32) Color.black;
       }
     }
 
@@ -160,7 +201,7 @@ namespace Junk
         for (int index2 = v2; index2 <= v4; ++index2)
         {
           int index3 = index1 + (this.surface.height - index2 - 1) * this.surface.width;
-          if (index1 >= 0 && index2 < this.surface.height && index3 >= 0 && index3 < this.surface.pixels.Length)
+          if (index1 >= 0 && index2 < this.surface.height && (index3 >= 0 && index3 < this.surface.pixels.Length))
             pixels1[index3] = !this.paintMode ? (Color32) Color.clear : pixels2[index1 % width + (this.surface.height - index2 - 1) % height * width];
         }
       }
@@ -185,7 +226,7 @@ namespace Junk
         while (num3 <= v4)
         {
           int index = num1 + (this.surface.height - num3 - 1) * this.surface.width;
-          if (num1 >= 0 && num3 < this.surface.height && index >= 0 && index < this.surface.pixels.Length)
+          if (num1 >= 0 && num3 < this.surface.height && (index >= 0 && index < this.surface.pixels.Length))
           {
             if (this.paintMode)
             {
@@ -226,7 +267,7 @@ namespace Junk
         while (num3 <= v4)
         {
           int index = num1 + (this.surface.height - num3 - 1) * this.surface.width;
-          if (num1 >= 0 && num3 < this.surface.height && index >= 0 && index < this.surface.pixels.Length)
+          if (num1 >= 0 && num3 < this.surface.height && (index >= 0 && index < this.surface.pixels.Length))
           {
             if (this.paintMode)
             {
@@ -282,34 +323,34 @@ namespace Junk
           if (index2 < num)
             ++point1.x;
         }
-        for (int index3 = 0; index3 < num; ++index3)
+        for (int index2 = 0; index2 < num; ++index2)
         {
           if (this.IsPointInPolygon4(poly, point1))
           {
             this.FloodFill(point1.x, point1.y);
             return;
           }
-          if (index3 < num)
+          if (index2 < num)
             ++point1.y;
         }
-        for (int index4 = 0; index4 < num; ++index4)
+        for (int index2 = 0; index2 < num; ++index2)
         {
           if (this.IsPointInPolygon4(poly, point1))
           {
             this.FloodFill(point1.x, point1.y);
             return;
           }
-          if (index4 < num)
+          if (index2 < num)
             --point1.x;
         }
-        for (int index5 = 0; index5 < num; ++index5)
+        for (int index2 = 0; index2 < num; ++index2)
         {
           if (this.IsPointInPolygon4(poly, point1))
           {
             this.FloodFill(point1.x, point1.y);
             return;
           }
-          if (index5 < num)
+          if (index2 < num)
             --point1.y;
         }
       }
@@ -334,7 +375,7 @@ namespace Junk
         foreach (Coords coords in MapGenerator.bresenhamsLine(p.points[index1], p.points[index1 + 1]))
         {
           int index2 = coords.x + coords.y * this.surface.width;
-          if (coords.x >= 0 && coords.y >= 0 && index2 < this.surface.pixels.Length && index2 >= 0)
+          if (coords.x >= 0 && coords.y >= 0 && (index2 < this.surface.pixels.Length && index2 >= 0))
             this.surface.pixels[index2] = pixels[coords.x % width2 + coords.y % height2 * width2];
         }
         num1 += p.points[index1].x;
@@ -345,7 +386,7 @@ namespace Junk
 
     private void FloodFill(int startX, int startY)
     {
-      if (startX < 0 || startY < 0 || startX >= this.width || startY >= this.height)
+      if (startX < 0 || startY < 0 || (startX >= this.width || startY >= this.height))
         return;
       Queue<Coords> coordsQueue = new Queue<Coords>();
       coordsQueue.Enqueue(new Coords(startX, startY));
@@ -382,11 +423,20 @@ namespace Junk
       }
     }
 
-    internal void setClear() => this.paintMode = false;
+    internal void setClear()
+    {
+      this.paintMode = false;
+    }
 
-    internal void setPaintMode() => this.paintMode = true;
+    internal void setPaintMode()
+    {
+      this.paintMode = true;
+    }
 
-    internal bool GetPaintMode() => this.paintMode;
+    internal bool GetPaintMode()
+    {
+      return this.paintMode;
+    }
 
     internal void drawGrass(BufferedImage gr, int startX, int startY, int srcX, bool behind)
     {
@@ -416,14 +466,14 @@ namespace Junk
       }
       else
       {
-        int num5 = startY;
-        int num6 = num1;
-        while (num5 < num2)
+        int num3 = startY;
+        int num4 = num1;
+        while (num3 < num2)
         {
-          if (gr.surface.pixels[srcX + num6 * width1].a != (byte) 0)
-            this.surface.pixels[startX + num5 * width2] = gr.surface.pixels[srcX + num6 * width1];
-          ++num5;
-          ++num6;
+          if (gr.surface.pixels[srcX + num4 * width1].a != (byte) 0)
+            this.surface.pixels[startX + num3 * width2] = gr.surface.pixels[srcX + num4 * width1];
+          ++num3;
+          ++num4;
         }
       }
     }
@@ -474,14 +524,14 @@ namespace Junk
       {
         while (num2 < num3)
         {
-          int num9 = startY;
-          int num10 = num1;
-          while (num9 < num4)
+          int num7 = startY;
+          int num8 = num1;
+          while (num7 < num4)
           {
-            if (gr.surface.pixels[num6 + num10 * width1].a != (byte) 0)
-              this.surface.pixels[num2 + num9 * width2] = gr.surface.pixels[num6 + num10 * width1];
-            ++num9;
-            ++num10;
+            if (gr.surface.pixels[num6 + num8 * width1].a != (byte) 0)
+              this.surface.pixels[num2 + num7 * width2] = gr.surface.pixels[num6 + num8 * width1];
+            ++num7;
+            ++num8;
           }
           ++num2;
           ++num6;
@@ -533,14 +583,14 @@ namespace Junk
         {
           while (num2 < num3)
           {
-            int num8 = startY;
-            int num9 = num1;
-            while (num8 < num4)
+            int num6 = startY;
+            int num7 = num1;
+            while (num6 < num4)
             {
-              if (gr.surface.pixels[num5 + num9 * width1].a != (byte) 0)
-                this.surface.pixels[num2 + num8 * width2] = gr.surface.pixels[num5 + num9 * width1];
-              ++num8;
-              ++num9;
+              if (gr.surface.pixels[num5 + num7 * width1].a != (byte) 0)
+                this.surface.pixels[num2 + num6 * width2] = gr.surface.pixels[num5 + num7 * width1];
+              ++num6;
+              ++num7;
             }
             ++num2;
             --num5;

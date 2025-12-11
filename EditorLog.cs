@@ -1,7 +1,6 @@
 
 using System.Diagnostics;
 
-#nullable disable
 public static class EditorLog
 {
   [Conditional("UNITY_EDITOR")]

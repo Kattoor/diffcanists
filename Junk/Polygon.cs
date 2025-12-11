@@ -1,7 +1,6 @@
 
 using System.Collections.Generic;
 
-#nullable disable
 namespace Junk
 {
   public class Polygon
@@ -9,9 +8,15 @@ namespace Junk
     public List<Coords> points = new List<Coords>();
     public int Height;
 
-    internal void reset() => this.points.Clear();
+    internal void reset()
+    {
+      this.points.Clear();
+    }
 
-    internal void addPoint(int x, int y) => this.points.Add(new Coords(x, this.Height - y));
+    internal void addPoint(int x, int y)
+    {
+      this.points.Add(new Coords(x, this.Height - y));
+    }
 
     public Rectangle Bounds()
     {

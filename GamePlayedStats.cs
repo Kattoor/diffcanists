@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using System;
 using UnityEngine;
 
-#nullable disable
 [Serializable]
 public class GamePlayedStats
 {

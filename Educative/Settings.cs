@@ -2,7 +2,6 @@
 using MoonSharp.Interpreter;
 using UnityEngine;
 
-#nullable disable
 namespace Educative
 {
   public class Settings
@@ -14,20 +13,20 @@ namespace Educative
     public Settings(SettingsPlayer s)
     {
       this.settings.CopyOutfit(s);
-      this.settings.CopySpells(s);
+      this.settings.CopySpells(s, false);
     }
 
     public Settings(Table outfit, Table colors, Table spells, BookOf elemental)
     {
       this.settings.fullBook = (byte) (elemental + 1);
-      int o = 0;
+      int num = 0;
       if (outfit != null)
       {
         foreach (DynValue dynValue in outfit.Values)
         {
-          this.settings.SetOutfitIndex((Outfit) o, (byte) dynValue.CastToNumber().Value);
-          ++o;
-          if (o > 8)
+          this.settings.SetOutfitIndex((Outfit) num, (byte) dynValue.CastToNumber().Value);
+          ++num;
+          if (num > 8)
             break;
         }
       }

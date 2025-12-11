@@ -1,7 +1,6 @@
 
 using System.IO;
 
-#nullable disable
 namespace SevenZip.Compression.RangeCoder
 {
   internal class Decoder
@@ -20,9 +19,15 @@ namespace SevenZip.Compression.RangeCoder
         this.Code = this.Code << 8 | (uint) (byte) this.Stream.ReadByte();
     }
 
-    public void ReleaseStream() => this.Stream = (Stream) null;
+    public void ReleaseStream()
+    {
+      this.Stream = (Stream) null;
+    }
 
-    public void CloseStream() => this.Stream.Close();
+    public void CloseStream()
+    {
+      this.Stream.Close();
+    }
 
     public void Normalize()
     {
@@ -38,7 +43,10 @@ namespace SevenZip.Compression.RangeCoder
       this.Range <<= 8;
     }
 
-    public uint GetThreshold(uint total) => this.Code / (this.Range /= total);
+    public uint GetThreshold(uint total)
+    {
+      return this.Code / (this.Range /= total);
+    }
 
     public void Decode(uint start, uint size, uint total)
     {

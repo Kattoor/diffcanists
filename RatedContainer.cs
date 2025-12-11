@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 
-#nullable disable
 public class RatedContainer
 {
   public List<RatedFacts> list = new List<RatedFacts>();
-  public const byte Version = 4;
   public int diff = 400;
+  public const byte Version = 4;
 
   public void IncreaseDiff()
   {
@@ -16,25 +15,28 @@ public class RatedContainer
     this.diff += 20;
   }
 
-  public void AddDefault() => this.list.Add(new RatedFacts());
+  public void AddDefault()
+  {
+    this.list.Add(new RatedFacts());
+  }
 
   public static RatedContainer Deserialize(myBinaryReader r)
   {
     RatedContainer ratedContainer = new RatedContainer();
-    byte version = r.ReadByte();
-    if (version == (byte) 1)
+    byte num1 = r.ReadByte();
+    if (num1 == (byte) 1)
     {
       RatedFacts ratedFacts = new RatedFacts();
       ratedFacts._Deserialize(4, r);
       ratedContainer.list.Add(ratedFacts);
       return ratedContainer;
     }
-    int num = r.ReadInt32();
-    if (num > 10)
-      num = 10;
-    for (int index = 0; index < num; ++index)
-      ratedContainer.list.Add(RatedFacts.Deserialize((int) version, r));
-    if (num == 0)
+    int num2 = r.ReadInt32();
+    if (num2 > 10)
+      num2 = 10;
+    for (int index = 0; index < num2; ++index)
+      ratedContainer.list.Add(RatedFacts.Deserialize((int) num1, r));
+    if (num2 == 0)
       ratedContainer.AddDefault();
     return ratedContainer;
   }
@@ -54,7 +56,7 @@ public class RatedContainer
     using (MemoryStream memoryStream = new MemoryStream())
     {
       using (myBinaryWriter w = new myBinaryWriter((Stream) memoryStream))
-        this.Serialize(w);
+        this.Serialize(w, true);
       File.WriteAllBytes(s, memoryStream.ToArray());
     }
   }

@@ -2,7 +2,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-#nullable disable
 public class FadeImage : MonoBehaviour
 {
   public float speed = 0.3f;
@@ -20,12 +19,15 @@ public class FadeImage : MonoBehaviour
     {
       this.cur += Time.deltaTime * this.speed;
       if ((double) this.cur >= 1.0)
+      {
         this.gameObject.SetActive(false);
+      }
       else
-        this.img.color = this.img.color with
-        {
-          a = 1f - this.cur
-        };
+      {
+        Color color = this.img.color;
+        color.a = 1f - this.cur;
+        this.img.color = color;
+      }
     }
   }
 }

@@ -1,7 +1,6 @@
 
 using System.Collections.Generic;
 
-#nullable disable
 namespace Telepathy
 {
   public class SafeQueue<T>
@@ -41,7 +40,7 @@ namespace Telepathy
       {
         result = this.queue.ToArray();
         this.queue.Clear();
-        return result.Length != 0;
+        return (uint) result.Length > 0U;
       }
     }
 

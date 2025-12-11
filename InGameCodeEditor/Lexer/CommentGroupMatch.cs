@@ -3,12 +3,15 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-#nullable disable
 namespace InGameCodeEditor.Lexer
 {
   [Serializable]
   public sealed class CommentGroupMatch : MatchLexer
   {
+    [Tooltip("The color that all comments will be highlighted with")]
+    public Color highlightColor = Color.black;
+    [Tooltip("Should line comments be matched before block comments")]
+    public bool lineCommentHasPresedence = true;
     [NonSerialized]
     private string htmlColor;
     [Tooltip("The special string used to denote the start of a line comment")]
@@ -17,10 +20,6 @@ namespace InGameCodeEditor.Lexer
     public string blockCommentStart;
     [Tooltip("The special string used to denote the end of a block comment")]
     public string blockCommentEnd;
-    [Tooltip("The color that all comments will be highlighted with")]
-    public Color highlightColor = Color.black;
-    [Tooltip("Should line comments be matched before block comments")]
-    public bool lineCommentHasPresedence = true;
 
     public bool HasCommentHighlighting
     {
@@ -60,7 +59,10 @@ namespace InGameCodeEditor.Lexer
       }
     }
 
-    public override void Invalidate() => this.htmlColor = (string) null;
+    public override void Invalidate()
+    {
+      this.htmlColor = (string) null;
+    }
 
     public override bool IsImplicitMatch(ILexer lexer)
     {
@@ -78,7 +80,7 @@ namespace InGameCodeEditor.Lexer
     {
       if (!string.IsNullOrEmpty(this.lineCommentStart))
       {
-        lexer.Rollback();
+        lexer.Rollback(-1);
         bool flag = true;
         for (int index = 0; index < this.lineCommentStart.Length; ++index)
         {
@@ -103,7 +105,7 @@ namespace InGameCodeEditor.Lexer
     {
       if (!string.IsNullOrEmpty(this.blockCommentStart))
       {
-        lexer.Rollback();
+        lexer.Rollback(-1);
         bool flag = true;
         for (int index = 0; index < this.blockCommentStart.Length; ++index)
         {

@@ -1,7 +1,6 @@
 
 using System.Collections;
 
-#nullable disable
 namespace UnityThreading
 {
   public static class EnumeratorExtension

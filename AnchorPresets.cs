@@ -1,7 +1,6 @@
 
 using UnityEngine;
 
-#nullable disable
 public static class AnchorPresets
 {
   private static AnchorPresets.Presets topLeft = new AnchorPresets.Presets(new Vector2(0.0f, 1f));

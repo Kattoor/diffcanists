@@ -1,7 +1,6 @@
 
 using UnityEngine;
 
-#nullable disable
 public class PresentColor : MonoBehaviour
 {
   public SpriteRenderer main;

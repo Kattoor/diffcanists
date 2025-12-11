@@ -4,17 +4,11 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-#nullable disable
-public class Hyperlink : 
-  MonoBehaviour,
-  IPointerClickHandler,
-  IEventSystemHandler,
-  IPointerEnterHandler,
-  IPointerExitHandler
+public class Hyperlink : MonoBehaviour, IPointerClickHandler, IEventSystemHandler, IPointerEnterHandler, IPointerExitHandler
 {
-  public TMP_Text pTextMeshPro;
   private int linkIndex = -1;
   private Color32 oldColors = (Color32) Color.blue;
+  public TMP_Text pTextMeshPro;
   private bool showdTooltip;
 
   public void OnPointerClick(PointerEventData eventData)
@@ -25,7 +19,7 @@ public class Hyperlink :
     if (path.StartsWith("Copy: "))
     {
       Global.systemCopyBuffer = path.Substring("Copy: ".Length);
-      MyToolTip.Show("Copied to Clipboard!");
+      MyToolTip.Show("Copied to Clipboard!", -1f);
     }
     else
     {
@@ -35,7 +29,10 @@ public class Hyperlink :
     }
   }
 
-  private void Start() => this.StartCoroutine(this.delay());
+  private void Start()
+  {
+    this.StartCoroutine(this.delay());
+  }
 
   private IEnumerator delay()
   {
@@ -77,7 +74,7 @@ public class Hyperlink :
     if (intersectingLink != -1 && this.linkIndex != intersectingLink)
     {
       this.SetLinkToColor(intersectingLink, (Color32) Color.white);
-      MyToolTip.Show(this.pTextMeshPro.textInfo.linkInfo[intersectingLink].GetLinkID());
+      MyToolTip.Show(this.pTextMeshPro.textInfo.linkInfo[intersectingLink].GetLinkID(), -1f);
       this.showdTooltip = true;
     }
     else if (intersectingLink == -1 && this.showdTooltip)

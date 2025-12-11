@@ -10,9 +10,12 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
-#nullable disable
 public class SpellOverridesUI : MonoBehaviour
 {
+  private static string prefOpened = "prefspelloverridesopened";
+  internal JObject json = new JObject();
+  private int selectedListIndex = -1;
+  internal string editing = "";
   public RectTransform editContainer;
   public RectTransform listContainer;
   public GameObject pfabListItem;
@@ -26,16 +29,12 @@ public class SpellOverridesUI : MonoBehaviour
   public GameObject buttonAdd;
   public TMP_Text txt_editing;
   internal TMP_Text selectedListText;
-  internal JObject json = new JObject();
   private JArray activeList;
   internal JToken item;
   internal SpellOverrides raw;
-  private int selectedListIndex = -1;
   internal bool edited;
   internal bool changesMade;
-  internal string editing = "";
   internal int viewing;
-  private static string prefOpened = "prefspelloverridesopened";
 
   public static SpellOverridesUI Instance { get; private set; }
 
@@ -51,7 +50,7 @@ public class SpellOverridesUI : MonoBehaviour
     SpellOverridesUI.Instance = this;
     if (Client.game == null)
       return;
-    Client.game.CleanUp();
+    Client.game.CleanUp(false);
     Client.game = (ZGame) null;
   }
 
@@ -177,16 +176,19 @@ public class SpellOverridesUI : MonoBehaviour
       }
       this.Unselect();
       this.PopulateList();
-    }));
+    }), (string) null, false, true);
   }
 
-  public void ClickClose() => UnityEngine.Object.Destroy((UnityEngine.Object) this.gameObject);
+  public void ClickClose()
+  {
+    UnityEngine.Object.Destroy((UnityEngine.Object) this.gameObject);
+  }
 
   public void _OnLoad(string s)
   {
     this.raw = SpellOverrides.FromFile(s);
     this.json = this.raw.ToJson();
-    this.UpdateRaw();
+    this.UpdateRaw(true);
     this.Unselect();
     this.PopulateList();
     this.Editing(s.Substring(SpellOverrides.PATH.Length));
@@ -194,7 +196,7 @@ public class SpellOverridesUI : MonoBehaviour
 
   public void _OnSave(string s)
   {
-    this.UpdateRaw();
+    this.UpdateRaw(true);
     this.raw.SaveToFile(s);
     this.Editing(s.Substring(SpellOverrides.PATH.Length));
   }
@@ -210,28 +212,28 @@ public class SpellOverridesUI : MonoBehaviour
   public void _OnCompare(string s)
   {
     SpellOverrides b = SpellOverrides.FromFile(s);
-    this.UpdateRaw();
+    this.UpdateRaw(true);
     SpellOverrides.Compare(this.raw, b);
   }
 
   public void ClickLoad()
   {
-    MyFilePicker.Create("Spell Overrides", "SpellOverrides", SpellOverrides.EXT, false, new Action<string>(this._OnLoad), ContentType.SpellOverrides);
+    MyFilePicker.Create("Spell Overrides", "SpellOverrides", SpellOverrides.EXT, false, new Action<string>(this._OnLoad), ContentType.SpellOverrides, false);
   }
 
   public void ClickSave()
   {
-    MyFilePicker.Create("Spell Overrides", "SpellOverrides", SpellOverrides.EXT, true, new Action<string>(this._OnSave), ContentType.SpellOverrides);
+    MyFilePicker.Create("Spell Overrides", "SpellOverrides", SpellOverrides.EXT, true, new Action<string>(this._OnSave), ContentType.SpellOverrides, false);
   }
 
   public void ClickUpload()
   {
-    MyFilePicker.Create("Spell Overrides", "SpellOverrides", SpellOverrides.EXT, true, new Action<string>(this._OnUpload), ContentType.SpellOverrides);
+    MyFilePicker.Create("Spell Overrides", "SpellOverrides", SpellOverrides.EXT, true, new Action<string>(this._OnUpload), ContentType.SpellOverrides, false);
   }
 
   public void ClickCompare()
   {
-    MyFilePicker.Create("Compare Spell Overrides", "SpellOverrides", SpellOverrides.EXT, false, new Action<string>(this._OnCompare), ContentType.SpellOverrides);
+    MyFilePicker.Create("Compare Spell Overrides", "SpellOverrides", SpellOverrides.EXT, false, new Action<string>(this._OnCompare), ContentType.SpellOverrides, false);
   }
 
   public void ClickNew()
@@ -245,7 +247,7 @@ public class SpellOverridesUI : MonoBehaviour
 
   public void ClickApply()
   {
-    this.UpdateRaw();
+    this.UpdateRaw(true);
     Inert.Instance.Apply(this.raw);
   }
 
@@ -259,20 +261,25 @@ public class SpellOverridesUI : MonoBehaviour
     this.buttonDelete.SetActive(false);
   }
 
-  private GameObject CreateHeader(ref int i, string name, bool canDelete = false, Action a = null, int offsetX = 200)
+  private GameObject CreateHeader(
+    ref int i,
+    string name,
+    bool canDelete = false,
+    Action a = null,
+    int offsetX = 200)
   {
-    GameObject header = UnityEngine.Object.Instantiate<GameObject>(this.pfabListItem, (Transform) this.editContainer);
-    header.transform.localScale = new Vector3(1f, 1f, 1f);
-    header.gameObject.SetActive(true);
+    GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(this.pfabListItem, (Transform) this.editContainer);
+    gameObject.transform.localScale = new Vector3(1f, 1f, 1f);
+    gameObject.gameObject.SetActive(true);
     int num = name.IndexOf('_');
     if (num > 0)
-      header.GetComponent<TMP_Text>().text = name.Substring(num + 1);
+      gameObject.GetComponent<TMP_Text>().text = name.Substring(num + 1);
     else
-      header.GetComponent<TMP_Text>().text = name;
+      gameObject.GetComponent<TMP_Text>().text = name;
     ++i;
     if (canDelete)
     {
-      Transform child = header.transform.GetChild(0);
+      Transform child = gameObject.transform.GetChild(0);
       child.gameObject.SetActive(true);
       child.GetComponent<UIOnHover>().onClick.AddListener((UnityAction) (() =>
       {
@@ -282,7 +289,7 @@ public class SpellOverridesUI : MonoBehaviour
         action();
       }));
     }
-    return header;
+    return gameObject;
   }
 
   public void DeselectItem()
@@ -349,7 +356,7 @@ public class SpellOverridesUI : MonoBehaviour
     if (this.item == null)
       return;
     foreach (JProperty x in this.item.Values<JProperty>())
-      this.PopulateItem(x, ref i);
+      this.PopulateItem(x, ref i, -1);
     this.editContainer.sizeDelta = new Vector2(this.editContainer.sizeDelta.x, (float) (i * 50 + 16));
   }
 
@@ -358,7 +365,7 @@ public class SpellOverridesUI : MonoBehaviour
     if (x.Value.Type == JTokenType.Object)
     {
       if (!string.Equals(x.Name, "settings"))
-        this.CreateHeader(ref i, x.Name);
+        this.CreateHeader(ref i, x.Name, false, (Action) null, 200);
       foreach (JProperty jproperty in x.Value.Values<JProperty>())
       {
         if (string.Equals(x.Name, "Name"))
@@ -367,43 +374,43 @@ public class SpellOverridesUI : MonoBehaviour
           foreach (object obj in (IEnumerable<JToken>) x.Values())
             name = obj.ToString();
           int i1 = -1;
-          this.CreateHeader(ref i1, name);
+          this.CreateHeader(ref i1, name, false, (Action) null, 200);
         }
         else if (jproperty.Value.Type == JTokenType.Array)
         {
-          this.PopulateItem(jproperty, ref i);
-          int i2 = -1;
-          this.CreateHeader(ref i2, "End Array");
+          this.PopulateItem(jproperty, ref i, -1);
+          int i1 = -1;
+          this.CreateHeader(ref i1, "End Array", false, (Action) null, 200);
         }
         else
-          this.CreateItem(jproperty, ref i);
+          this.CreateItem(jproperty, ref i, -1);
       }
     }
     else if (x.Value.Type == JTokenType.Array)
     {
       bool flag = !string.Equals(x.Name, "spells");
-      this.CreateHeader(ref i, x.Name);
+      this.CreateHeader(ref i, x.Name, false, (Action) null, 200);
       int num = 1;
       foreach (JObject child in x.Value.Children<JObject>())
       {
         int zz = num - 1;
-        int i3 = i;
+        int i1 = i;
         if (flag)
-          this.CreateHeader(ref i3, num.ToString(), true, (Action) (() =>
+          this.CreateHeader(ref i1, num.ToString(), true, (Action) (() =>
           {
             ((JArray) x.Value).RemoveAt(zz);
             this.PopulateEdit();
             this.edited = true;
           }), 20);
         else
-          this.CreateHeader(ref i, num.ToString());
+          this.CreateHeader(ref i, num.ToString(), false, (Action) null, 200);
         foreach (JProperty x1 in child.Values<JProperty>())
           this.PopulateItem(x1, ref i, zz);
         ++num;
       }
       if (!flag)
         return;
-      GameObject header = this.CreateHeader(ref i, "--- Add Item ---");
+      GameObject header = this.CreateHeader(ref i, "--- Add Item ---", false, (Action) null, 200);
       JArray jt = (JArray) x.Value;
       header.GetComponent<UIOnHover>().onClick.AddListener((UnityAction) (() =>
       {
@@ -427,18 +434,18 @@ public class SpellOverridesUI : MonoBehaviour
     }
     else if (string.Equals(x.Name, "Name"))
     {
-      int i4 = -1;
-      this.CreateItem(x, ref i4, arrayIndex);
+      int i1 = -1;
+      this.CreateItem(x, ref i1, arrayIndex);
     }
     else if (string.Equals(x.Name, "type"))
     {
-      int i5 = -3;
-      this.CreateItem(x, ref i5, arrayIndex);
+      int i1 = -3;
+      this.CreateItem(x, ref i1, arrayIndex);
     }
     else if (string.Equals(x.Name, "tabIndex"))
     {
-      int i6 = -2;
-      this.CreateItem(x, ref i6, arrayIndex);
+      int i1 = -2;
+      this.CreateItem(x, ref i1, arrayIndex);
     }
     else
       this.CreateItem(x, ref i, arrayIndex);
@@ -451,43 +458,43 @@ public class SpellOverridesUI : MonoBehaviour
     switch (property.Name)
     {
       case "bookOf":
-        this.CreateDropDown<BookOf>(property, ref i, BookOf.Nothing);
+        this.CreateDropDown<BookOf>(property, ref i, BookOf.Nothing, (Action<int>) null);
         break;
       case "damageOverDistance":
       case "forceOverDistance":
-        this.CreateDropDown<Curve>(property, ref i, Curve.None);
+        this.CreateDropDown<Curve>(property, ref i, Curve.None, (Action<int>) null);
         break;
       case "damageType":
-        this.CreateDropDown<DamageType>(property, ref i, DamageType.None);
+        this.CreateDropDown<DamageType>(property, ref i, DamageType.None, (Action<int>) null);
         break;
       case "explosionCutout":
-        this.CreateDropDown<ExplosionCutout>(property, ref i, ExplosionCutout.None);
+        this.CreateDropDown<ExplosionCutout>(property, ref i, ExplosionCutout.None, (Action<int>) null);
         break;
       case "race":
-        this.CreateDropDown<CreatureRace>(property, ref i, CreatureRace.Unaffiliated);
+        this.CreateDropDown<CreatureRace>(property, ref i, CreatureRace.Unaffiliated, (Action<int>) null);
         break;
       case "serializedSpellEnum":
-        this.CreateDropDown<SpellEnum>(property, ref i, SpellEnum.None);
+        this.CreateDropDown<SpellEnum>(property, ref i, SpellEnum.None, (Action<int>) null);
         break;
       case "spellEnum":
-        this.CreateDropDown<SpellEnum>(property, ref i, SpellEnum.None);
+        this.CreateDropDown<SpellEnum>(property, ref i, SpellEnum.None, (Action<int>) null);
         break;
       case "spellLogic":
-        this.CreateDropDown<SpellLogic>(property, ref i, SpellLogic.Arrow);
+        this.CreateDropDown<SpellLogic>(property, ref i, SpellLogic.Arrow, (Action<int>) null);
         break;
       case "spellType":
-        this.CreateDropDown<SpellType>(property, ref i, SpellType.None);
+        this.CreateDropDown<SpellType>(property, ref i, SpellType.None, (Action<int>) null);
         break;
       case "targetType":
-        this.CreateDropDown<TargetType>(property, ref i, TargetType.None);
+        this.CreateDropDown<TargetType>(property, ref i, TargetType.None, (Action<int>) null);
         break;
       case "type":
         if (this.viewing == 0)
         {
-          this.CreateDropDown<CastType>(property, ref i, CastType.Blit);
+          this.CreateDropDown<CastType>(property, ref i, CastType.Blit, (Action<int>) null);
           break;
         }
-        this.CreateDropDown<CreatureType>(property, ref i, CreatureType.Other);
+        this.CreateDropDown<CreatureType>(property, ref i, CreatureType.Other, (Action<int>) null);
         break;
       default:
         string b = (string) null;
@@ -506,7 +513,7 @@ public class SpellOverridesUI : MonoBehaviour
         pfabEditJsonItem.transform.localScale = new Vector3(1f, 1f, 1f);
         pfabEditJsonItem.gameObject.SetActive(true);
         int num = property.Name.IndexOf('_');
-        pfabEditJsonItem.initSpellOverride(property, arrayIndex, num > -1 ? property.Name.Substring(num + 1) : (string) null);
+        pfabEditJsonItem.initSpellOverride(property, arrayIndex, num > -1 ? property.Name.Substring(num + 1) : (string) null, false);
         ++i;
         break;
     }
@@ -552,7 +559,7 @@ public class SpellOverridesUI : MonoBehaviour
 
   public void ClickDiff()
   {
-    this.UpdateRaw();
+    this.UpdateRaw(true);
     this.raw.CompareDefault();
   }
 
@@ -568,7 +575,7 @@ public class SpellOverridesUI : MonoBehaviour
   {
     if (!Input.GetKeyDown(KeyCode.F12))
       return;
-    this.UpdateRaw();
+    this.UpdateRaw(true);
     Global.systemCopyBuffer = this.json.ToString();
     Debug.Log((object) "Copied to Clipboard");
   }

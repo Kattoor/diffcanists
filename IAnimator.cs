@@ -2,12 +2,11 @@
 using System;
 using UnityEngine;
 
-#nullable disable
 public class IAnimator : MonoBehaviour
 {
-  public AnimateState currentState;
   [NonSerialized]
   public float duration = float.MaxValue;
+  public AnimateState currentState;
 
   public virtual void Play(AnimateState anim, float duration = 0.0f, bool sound = true)
   {

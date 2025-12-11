@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-#nullable disable
 namespace InGameCodeEditor.Lexer
 {
   [Serializable]
@@ -11,6 +10,8 @@ namespace InGameCodeEditor.Lexer
   {
     private static readonly List<string> shortlist = new List<string>();
     private static readonly Stack<string> removeList = new Stack<string>();
+    [Tooltip("The color that all symbols in this group will be highlighted with")]
+    public Color highlightColor = Color.black;
     [NonSerialized]
     private string[] symbolCache;
     [NonSerialized]
@@ -18,10 +19,14 @@ namespace InGameCodeEditor.Lexer
     [TextArea]
     [Tooltip("A number of symbols that will be highlighted. symbol strings of one or more characters recommended (no numbers or letters) separated by a space")]
     public string symbols;
-    [Tooltip("The color that all symbols in this group will be highlighted with")]
-    public Color highlightColor = Color.black;
 
-    public bool HasSymbolHighlighting => this.symbols.Length > 0;
+    public bool HasSymbolHighlighting
+    {
+      get
+      {
+        return this.symbols.Length > 0;
+      }
+    }
 
     public override string HTMLColor
     {
@@ -60,15 +65,18 @@ namespace InGameCodeEditor.Lexer
       }
     }
 
-    public override void Invalidate() => this.htmlColor = (string) null;
+    public override void Invalidate()
+    {
+      this.htmlColor = (string) null;
+    }
 
     public override bool IsImplicitMatch(ILexer lexer)
     {
       this.BuildSymbolCache();
-      if (!char.IsWhiteSpace(lexer.Previous) && !char.IsLetter(lexer.Previous) && !char.IsDigit(lexer.Previous) && !lexer.IsSpecialSymbol(lexer.Previous, SpecialCharacterPosition.End))
+      if (!char.IsWhiteSpace(lexer.Previous) && !char.IsLetter(lexer.Previous) && (!char.IsDigit(lexer.Previous) && !lexer.IsSpecialSymbol(lexer.Previous, SpecialCharacterPosition.End)))
         return false;
       SymbolGroupMatch.shortlist.Clear();
-      int num = 0;
+      int length = 0;
       char ch1 = lexer.ReadNext();
       for (int index = 0; index < this.symbolCache.Length; ++index)
       {
@@ -80,10 +88,10 @@ namespace InGameCodeEditor.Lexer
       while (!lexer.EndOfStream)
       {
         char ch2 = lexer.ReadNext();
-        ++num;
-        if (char.IsWhiteSpace(ch2) || char.IsLetter(ch2) || char.IsDigit(ch2) || lexer.IsSpecialSymbol(ch2))
+        ++length;
+        if (char.IsWhiteSpace(ch2) || char.IsLetter(ch2) || (char.IsDigit(ch2) || lexer.IsSpecialSymbol(ch2, SpecialCharacterPosition.Start)))
         {
-          this.RemoveLongStrings(num);
+          this.RemoveLongStrings(length);
           lexer.Rollback(1);
           goto label_22;
         }
@@ -91,7 +99,7 @@ namespace InGameCodeEditor.Lexer
         {
           foreach (string str in SymbolGroupMatch.shortlist)
           {
-            if (num >= str.Length || (int) str[num] != (int) ch2)
+            if (length >= str.Length || (int) str[length] != (int) ch2)
               SymbolGroupMatch.removeList.Push(str);
           }
           while (SymbolGroupMatch.removeList.Count > 0)
@@ -100,7 +108,7 @@ namespace InGameCodeEditor.Lexer
             goto label_22;
         }
       }
-      this.RemoveLongStrings(num + 1);
+      this.RemoveLongStrings(length + 1);
 label_22:
       return SymbolGroupMatch.shortlist.Count > 0;
     }

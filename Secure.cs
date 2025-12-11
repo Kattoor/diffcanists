@@ -1,7 +1,6 @@
 
 using System;
 
-#nullable disable
 internal class Secure
 {
   public class SlashS

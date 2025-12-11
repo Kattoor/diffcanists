@@ -2,7 +2,6 @@
 using System;
 using System.Collections;
 
-#nullable disable
 namespace SevenZip.CommandLineParser
 {
   public class Parser
@@ -26,64 +25,64 @@ namespace SevenZip.CommandLineParser
       int length1 = srcString.Length;
       if (length1 == 0)
         return false;
-      int num1 = 0;
-      if (!Parser.IsItSwitchChar(srcString[num1]))
+      int index1 = 0;
+      if (!Parser.IsItSwitchChar(srcString[index1]))
         return false;
-      while (num1 < length1)
+      while (index1 < length1)
       {
-        if (Parser.IsItSwitchChar(srcString[num1]))
-          ++num1;
-        int index1 = 0;
-        int num2 = -1;
-        for (int index2 = 0; index2 < this._switches.Length; ++index2)
+        if (Parser.IsItSwitchChar(srcString[index1]))
+          ++index1;
+        int index2 = 0;
+        int num1 = -1;
+        for (int index3 = 0; index3 < this._switches.Length; ++index3)
         {
-          int length2 = switchForms[index2].IDString.Length;
-          if (length2 > num2 && num1 + length2 <= length1 && string.Compare(switchForms[index2].IDString, 0, srcString, num1, length2, true) == 0)
+          int length2 = switchForms[index3].IDString.Length;
+          if (length2 > num1 && index1 + length2 <= length1 && string.Compare(switchForms[index3].IDString, 0, srcString, index1, length2, true) == 0)
           {
-            index1 = index2;
-            num2 = length2;
+            index2 = index3;
+            num1 = length2;
           }
         }
-        if (num2 == -1)
+        if (num1 == -1)
           throw new Exception("maxLen == kNoLen");
-        SwitchResult switchResult = this._switches[index1];
-        SwitchForm switchForm = switchForms[index1];
+        SwitchResult switchResult = this._switches[index2];
+        SwitchForm switchForm = switchForms[index2];
         if (!switchForm.Multi && switchResult.ThereIs)
           throw new Exception("switch must be single");
         switchResult.ThereIs = true;
-        num1 += num2;
-        int num3 = length1 - num1;
+        index1 += num1;
+        int num2 = length1 - index1;
         SwitchType type = switchForm.Type;
         switch (type)
         {
           case SwitchType.PostMinus:
-            if (num3 == 0)
+            if (num2 == 0)
             {
               switchResult.WithMinus = false;
               continue;
             }
-            switchResult.WithMinus = srcString[num1] == '-';
+            switchResult.WithMinus = srcString[index1] == '-';
             if (switchResult.WithMinus)
             {
-              ++num1;
+              ++index1;
               continue;
             }
             continue;
           case SwitchType.LimitedPostString:
           case SwitchType.UnLimitedPostString:
             int minLen = switchForm.MinLen;
-            if (num3 < minLen)
+            if (num2 < minLen)
               throw new Exception("switch is not full");
             if (type == SwitchType.UnLimitedPostString)
             {
-              switchResult.PostStrings.Add((object) srcString.Substring(num1));
+              switchResult.PostStrings.Add((object) srcString.Substring(index1));
               return true;
             }
-            string str = srcString.Substring(num1, minLen);
-            num1 += minLen;
-            for (int index3 = minLen; index3 < switchForm.MaxLen && num1 < length1; ++num1)
+            string str = srcString.Substring(index1, minLen);
+            index1 += minLen;
+            for (int index3 = minLen; index3 < switchForm.MaxLen && index1 < length1; ++index1)
             {
-              char c = srcString[num1];
+              char c = srcString[index1];
               if (!Parser.IsItSwitchChar(c))
               {
                 str += c.ToString();
@@ -95,22 +94,22 @@ namespace SevenZip.CommandLineParser
             switchResult.PostStrings.Add((object) str);
             continue;
           case SwitchType.PostChar:
-            if (num3 < switchForm.MinLen)
+            if (num2 < switchForm.MinLen)
               throw new Exception("switch is not full");
             string postCharSet = switchForm.PostCharSet;
-            if (num3 == 0)
+            if (num2 == 0)
             {
               switchResult.PostCharIndex = -1;
               continue;
             }
-            int num4 = postCharSet.IndexOf(srcString[num1]);
-            if (num4 < 0)
+            int num3 = postCharSet.IndexOf(srcString[index1]);
+            if (num3 < 0)
             {
               switchResult.PostCharIndex = -1;
               continue;
             }
-            switchResult.PostCharIndex = num4;
-            ++num1;
+            switchResult.PostCharIndex = num3;
+            ++index1;
             continue;
           default:
             continue;
@@ -135,28 +134,34 @@ namespace SevenZip.CommandLineParser
       }
     }
 
-    public SwitchResult this[int index] => this._switches[index];
+    public SwitchResult this[int index]
+    {
+      get
+      {
+        return this._switches[index];
+      }
+    }
 
     public static int ParseCommand(
       CommandForm[] commandForms,
       string commandString,
       out string postString)
     {
-      for (int command = 0; command < commandForms.Length; ++command)
+      for (int index = 0; index < commandForms.Length; ++index)
       {
-        string idString = commandForms[command].IDString;
-        if (commandForms[command].PostStringMode)
+        string idString = commandForms[index].IDString;
+        if (commandForms[index].PostStringMode)
         {
           if (commandString.IndexOf(idString) == 0)
           {
             postString = commandString.Substring(idString.Length);
-            return command;
+            return index;
           }
         }
         else if (commandString == idString)
         {
           postString = "";
-          return command;
+          return index;
         }
       }
       postString = "";
@@ -195,6 +200,9 @@ namespace SevenZip.CommandLineParser
       return num1 == commandString.Length;
     }
 
-    private static bool IsItSwitchChar(char c) => c == '-' || c == '/';
+    private static bool IsItSwitchChar(char c)
+    {
+      return c == '-' || c == '/';
+    }
   }
 }

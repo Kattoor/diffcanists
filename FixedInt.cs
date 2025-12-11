@@ -2,18 +2,13 @@
 using System;
 using System.IO;
 
-#nullable disable
-public struct FixedInt(long value)
+public struct FixedInt
 {
   public static FixedInt OneF = FixedInt.Create(1);
   public static FixedInt TwoF = FixedInt.Create(2);
   public static FixedInt ZeroF = FixedInt.Create(0);
   public static FixedInt HalfF = FixedInt.Create(524288L);
   public static FixedInt MaxValue = FixedInt.Create(int.MaxValue);
-  public const int SHIFT_AMOUNT = 20;
-  public const long MAX_VALUE = 8796093022207;
-  public const long OneRaw = 1048576;
-  public long RawValue = value;
   public static FixedInt ThreeSixtyBy1 = (FixedInt) 2911L;
   public static FixedInt Point_Two_Eight = (FixedInt) 293601L;
   public static FixedInt Rad2Deg = (FixedInt) 60078979L;
@@ -21,9 +16,18 @@ public struct FixedInt(long value)
   public static FixedInt Pi = (FixedInt) 3294195L;
   public static FixedInt PiOver2 = (FixedInt) 1647097L;
   public static FixedInt PiTimes2 = (FixedInt) 6588391L;
-  private const int LUT_SIZE = 205887;
   private static readonly FixedInt LutInterval = (FixedInt) 205886 / FixedInt.PiOver2;
+  public const int SHIFT_AMOUNT = 20;
+  public const long MAX_VALUE = 8796093022207;
+  public const long OneRaw = 1048576;
+  public long RawValue;
+  private const int LUT_SIZE = 205887;
   private const int FRACTIONAL_PLACES = 20;
+
+  public FixedInt(long value)
+  {
+    this.RawValue = value;
+  }
 
   public static FixedInt Create(int StartingValue)
   {
@@ -42,23 +46,22 @@ public struct FixedInt(long value)
 
   public static FixedInt Create(float FloatValue)
   {
-    return (FixedInt) 0 with
-    {
-      RawValue = !float.IsNaN(FloatValue) ? (long) ((sfloat) FloatValue * (sfloat) 1048576) : 1L
-    };
+    FixedInt fixedInt = (FixedInt) 0;
+    fixedInt.RawValue = !float.IsNaN(FloatValue) ? (long) ((sfloat) FloatValue * (sfloat) 1048576) : 1L;
+    return fixedInt;
   }
 
   public static FixedInt Create(Decimal DoubleValue)
   {
     FixedInt fixedInt;
-    fixedInt.RawValue = (long) (DoubleValue * 1048576M);
+    fixedInt.RawValue = (long) (DoubleValue * new Decimal(1048576));
     return fixedInt;
   }
 
   public static FixedInt Create(double DoubleValue)
   {
     FixedInt fixedInt;
-    fixedInt.RawValue = (long) ((Decimal) DoubleValue * 1048576M);
+    fixedInt.RawValue = (long) ((Decimal) DoubleValue * new Decimal(1048576));
     return fixedInt;
   }
 
@@ -98,9 +101,15 @@ public struct FixedInt(long value)
     return one;
   }
 
-  public bool BiggerThenOrEqualToZero() => this.RawValue >= 0L;
+  public bool BiggerThenOrEqualToZero()
+  {
+    return this.RawValue >= 0L;
+  }
 
-  public bool SmallerThenOrEqualToOne() => this.RawValue <= 1048576L;
+  public bool SmallerThenOrEqualToOne()
+  {
+    return this.RawValue <= 1048576L;
+  }
 
   public void Divide(long OtherRawValue, out FixedInt ret)
   {
@@ -166,9 +175,15 @@ public struct FixedInt(long value)
     ret.RawValue = this.RawValue + ((long) OtherValue << 20);
   }
 
-  public static FixedInt operator ++(FixedInt a) => a + 1;
+  public static FixedInt operator ++(FixedInt a)
+  {
+    return a + 1;
+  }
 
-  public static FixedInt operator --(FixedInt a) => a - 1;
+  public static FixedInt operator --(FixedInt a)
+  {
+    return a - 1;
+  }
 
   public static FixedInt operator +(FixedInt one, FixedInt other)
   {
@@ -182,11 +197,20 @@ public struct FixedInt(long value)
     return one;
   }
 
-  public static bool operator ==(FixedInt one, int other) => one.RawValue == (long) other << 20;
+  public static bool operator ==(FixedInt one, int other)
+  {
+    return one.RawValue == (long) other << 20;
+  }
 
-  public override bool Equals(object o) => base.Equals(o);
+  public override bool Equals(object o)
+  {
+    return base.Equals(o);
+  }
 
-  public static bool operator !=(FixedInt one, int other) => one.RawValue != (long) other << 20;
+  public static bool operator !=(FixedInt one, int other)
+  {
+    return one.RawValue != (long) other << 20;
+  }
 
   public static FixedInt operator +(FixedInt one, int other)
   {
@@ -194,25 +218,55 @@ public struct FixedInt(long value)
     return one;
   }
 
-  public static bool operator <(FixedInt one, int other) => one.RawValue < (long) other << 20;
+  public static bool operator <(FixedInt one, int other)
+  {
+    return one.RawValue < (long) other << 20;
+  }
 
-  public static bool operator >(FixedInt one, int other) => one.RawValue > (long) other << 20;
+  public static bool operator >(FixedInt one, int other)
+  {
+    return one.RawValue > (long) other << 20;
+  }
 
-  public static bool operator >=(FixedInt one, int other) => one.RawValue >= (long) other << 20;
+  public static bool operator >=(FixedInt one, int other)
+  {
+    return one.RawValue >= (long) other << 20;
+  }
 
-  public static bool operator <=(FixedInt one, int other) => one.RawValue <= (long) other << 20;
+  public static bool operator <=(FixedInt one, int other)
+  {
+    return one.RawValue <= (long) other << 20;
+  }
 
-  public static bool operator >=(FixedInt one, FixedInt other) => one.RawValue >= other.RawValue;
+  public static bool operator >=(FixedInt one, FixedInt other)
+  {
+    return one.RawValue >= other.RawValue;
+  }
 
-  public static bool operator <=(FixedInt one, FixedInt other) => one.RawValue <= other.RawValue;
+  public static bool operator <=(FixedInt one, FixedInt other)
+  {
+    return one.RawValue <= other.RawValue;
+  }
 
-  public static bool operator <(FixedInt one, FixedInt other) => one.RawValue < other.RawValue;
+  public static bool operator <(FixedInt one, FixedInt other)
+  {
+    return one.RawValue < other.RawValue;
+  }
 
-  public static bool operator >(FixedInt one, long other) => one.RawValue > other;
+  public static bool operator >(FixedInt one, long other)
+  {
+    return one.RawValue > other;
+  }
 
-  public static bool operator <(FixedInt one, long other) => one.RawValue < other;
+  public static bool operator <(FixedInt one, long other)
+  {
+    return one.RawValue < other;
+  }
 
-  public static bool operator >(FixedInt one, FixedInt other) => one.RawValue > other.RawValue;
+  public static bool operator >(FixedInt one, FixedInt other)
+  {
+    return one.RawValue > other.RawValue;
+  }
 
   public void Subtract(long OtherRawValue, out FixedInt ret)
   {
@@ -236,27 +290,49 @@ public struct FixedInt(long value)
     return one;
   }
 
-  public bool Equals(long OtherRawValue) => this.RawValue == OtherRawValue;
+  public bool Equals(long OtherRawValue)
+  {
+    return this.RawValue == OtherRawValue;
+  }
 
-  public static bool operator ==(FixedInt one, FixedInt other) => one.Equals(other.RawValue);
+  public static bool operator ==(FixedInt one, FixedInt other)
+  {
+    return one.Equals(other.RawValue);
+  }
 
-  public static bool operator !=(FixedInt one, FixedInt other) => !one.Equals(other.RawValue);
+  public static bool operator !=(FixedInt one, FixedInt other)
+  {
+    return !one.Equals(other.RawValue);
+  }
 
-  public bool MoreEquals(long OtherRawValue) => this.RawValue >= OtherRawValue;
+  public bool MoreEquals(long OtherRawValue)
+  {
+    return this.RawValue >= OtherRawValue;
+  }
 
-  public bool LessEquals(long OtherRawValue) => this.RawValue <= OtherRawValue;
+  public bool LessEquals(long OtherRawValue)
+  {
+    return this.RawValue <= OtherRawValue;
+  }
 
-  public bool More(long OtherRawValue) => this.RawValue > OtherRawValue;
+  public bool More(long OtherRawValue)
+  {
+    return this.RawValue > OtherRawValue;
+  }
 
-  public bool Less(long OtherRawValue) => this.RawValue < OtherRawValue;
+  public bool Less(long OtherRawValue)
+  {
+    return this.RawValue < OtherRawValue;
+  }
 
-  public static bool InvalidAngle(FixedInt x) => x.RawValue == 1L;
+  public static bool InvalidAngle(FixedInt x)
+  {
+    return x.RawValue == 1L;
+  }
 
   public static FixedInt Angle(MyLocation a, MyLocation b)
   {
-    FixedInt x1 = FixedInt.Atan2(a.y, a.x);
-    FixedInt x2 = FixedInt.Atan2(b.y, b.x);
-    return FixedInt.Abs(FixedInt.Abs(x1) - FixedInt.Abs(x2));
+    return FixedInt.Abs(FixedInt.Abs(FixedInt.Atan2(a.y, a.x)) - FixedInt.Abs(FixedInt.Atan2(b.y, b.x)));
   }
 
   public static FixedInt Atan(FixedInt z)
@@ -325,9 +401,15 @@ public struct FixedInt(long value)
     return fixedInt;
   }
 
-  public static FixedInt TempFloat(float f) => FixedInt.Create(f);
+  public static FixedInt TempFloat(float f)
+  {
+    return FixedInt.Create(f);
+  }
 
-  public static float Float(FixedInt f) => f.ToFloat();
+  public static float Float(FixedInt f)
+  {
+    return f.ToFloat();
+  }
 
   public static void GenerateSinLut()
   {
@@ -360,19 +442,40 @@ public struct FixedInt(long value)
     }
   }
 
-  public static explicit operator FixedInt(Decimal v) => FixedInt.Create(v);
+  public static explicit operator FixedInt(Decimal v)
+  {
+    return FixedInt.Create(v);
+  }
 
-  public static explicit operator int(FixedInt v) => v.ToInt();
+  public static explicit operator int(FixedInt v)
+  {
+    return v.ToInt();
+  }
 
-  public static explicit operator sfloat(FixedInt v) => (sfloat) v.ToFloat();
+  public static explicit operator sfloat(FixedInt v)
+  {
+    return (sfloat) v.ToFloat();
+  }
 
-  public static explicit operator FixedInt(sfloat v) => (FixedInt) (float) v;
+  public static explicit operator FixedInt(sfloat v)
+  {
+    return (FixedInt) (float) v;
+  }
 
-  public static implicit operator FixedInt(int v) => FixedInt.Create(v);
+  public static implicit operator FixedInt(int v)
+  {
+    return FixedInt.Create(v);
+  }
 
-  public static implicit operator FixedInt(long v) => FixedInt.Create(v);
+  public static implicit operator FixedInt(long v)
+  {
+    return FixedInt.Create(v);
+  }
 
-  public static implicit operator FixedInt(float v) => FixedInt.Create(v);
+  public static implicit operator FixedInt(float v)
+  {
+    return FixedInt.Create(v);
+  }
 
   public bool AbsoluteValueMoreThan(long OtherRawValue)
   {
@@ -397,7 +500,10 @@ public struct FixedInt(long value)
       this.RawValue = -FixedInt.OneF.RawValue;
   }
 
-  public void Inverse(out FixedInt ret) => ret.RawValue = this.RawValue * -1L;
+  public void Inverse(out FixedInt ret)
+  {
+    ret.RawValue = this.RawValue * -1L;
+  }
 
   public static FixedInt operator -(FixedInt src)
   {
@@ -413,17 +519,35 @@ public struct FixedInt(long value)
     return x;
   }
 
-  public float ToFloat() => (float) this.RawValue / 1048576f;
+  public float ToFloat()
+  {
+    return (float) this.RawValue / 1048576f;
+  }
 
-  public int ToInt() => (int) (this.RawValue >> 20);
+  public int ToInt()
+  {
+    return (int) (this.RawValue >> 20);
+  }
 
-  public double ToDouble() => (double) this.RawValue / 1048576.0;
+  public double ToDouble()
+  {
+    return (double) this.RawValue / 1048576.0;
+  }
 
-  public short ToRoundedShort() => (short) (this.RawValue >> 20);
+  public short ToRoundedShort()
+  {
+    return (short) (this.RawValue >> 20);
+  }
 
-  public override int GetHashCode() => this.RawValue.GetHashCode();
+  public override int GetHashCode()
+  {
+    return this.RawValue.GetHashCode();
+  }
 
-  public override string ToString() => this.ToDouble().ToString();
+  public override string ToString()
+  {
+    return this.ToDouble().ToString();
+  }
 
   public static FixedInt FastMul(FixedInt x, FixedInt y)
   {
@@ -479,9 +603,15 @@ public struct FixedInt(long value)
     return FixedInt.Sin(x + (rawValue > 0L ? -FixedInt.Pi - FixedInt.PiOver2 : FixedInt.PiOver2));
   }
 
-  public static FixedInt Max(FixedInt a, FixedInt b) => !(a > b) ? b : a;
+  public static FixedInt Max(FixedInt a, FixedInt b)
+  {
+    return !(a > b) ? b : a;
+  }
 
-  public static FixedInt Min(FixedInt a, FixedInt b) => !(a < b) ? b : a;
+  public static FixedInt Min(FixedInt a, FixedInt b)
+  {
+    return !(a < b) ? b : a;
+  }
 
   public static FixedInt Clamp(FixedInt x, FixedInt a, FixedInt b)
   {

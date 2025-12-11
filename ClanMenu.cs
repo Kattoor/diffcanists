@@ -4,15 +4,14 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-#nullable disable
 public class ClanMenu : MonoBehaviour
 {
+  public static List<Clan> clans = new List<Clan>();
+  public static float lastGet = 0.0f;
   public RectTransform container;
   public UIClanHeader pfab;
   public TMP_Text headerWhich;
   public GameObject loading;
-  public static List<Clan> clans = new List<Clan>();
-  public static float lastGet = 0.0f;
   public ClanMenu.Sorter sorter;
 
   public static ClanMenu Instance { get; private set; }
@@ -43,7 +42,10 @@ public class ClanMenu : MonoBehaviour
     }
   }
 
-  public void ClickBack() => UnityEngine.Object.Destroy((UnityEngine.Object) this.gameObject);
+  public void ClickBack()
+  {
+    UnityEngine.Object.Destroy((UnityEngine.Object) this.gameObject);
+  }
 
   [EnumAction(typeof (ClanMenu.Sorter))]
   public void ClickSorter(int i)

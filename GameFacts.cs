@@ -7,16 +7,9 @@ using System.IO;
 using System.Text;
 using UnityEngine;
 
-#nullable disable
 public class GameFacts
 {
-  public ZGame game;
-  public bool CreateGameFromGF;
-  public int id;
   public int port = -1;
-  public int seed;
-  public double lastChange;
-  public int serverStartTime;
   public List<Connection> connections = new List<Connection>();
   public List<string> players = new List<string>();
   public List<string> originalOrder = new List<string>();
@@ -25,6 +18,14 @@ public class GameFacts
   public List<SpellsOnly> realSpells = new List<SpellsOnly>();
   public List<Account> accounts = new List<Account>();
   public InviteEnum rematchInvite = InviteEnum.Open;
+  public GameSettings settings = new GameSettings();
+  public MapEnum realMap = MapEnum.Grassy_Hills;
+  public ZGame game;
+  public bool CreateGameFromGF;
+  public int id;
+  public int seed;
+  public double lastChange;
+  public int serverStartTime;
   public bool tournamentWasSetByTO;
   public int customQueue;
   public byte status;
@@ -32,86 +33,162 @@ public class GameFacts
   public const byte status_Starting = 1;
   public const byte status_Inprogress = 2;
   public const byte status_Concluded = 3;
-  public GameSettings settings = new GameSettings();
-  public MapEnum realMap = MapEnum.Grassy_Hills;
   private IEnumerator<float> ieStart;
 
   public ZGame.GameType gameType
   {
-    get => this.settings.gameType;
-    set => this.settings.gameType = value;
+    get
+    {
+      return this.settings.gameType;
+    }
+    set
+    {
+      this.settings.gameType = value;
+    }
   }
 
   public int gameModes
   {
-    get => this.settings.gameModes;
-    set => this.settings.gameModes = value;
+    get
+    {
+      return this.settings.gameModes;
+    }
+    set
+    {
+      this.settings.gameModes = value;
+    }
   }
 
   public int gameModes2
   {
-    get => this.settings.gameModes2;
-    set => this.settings.gameModes2 = value;
+    get
+    {
+      return this.settings.gameModes2;
+    }
+    set
+    {
+      this.settings.gameModes2 = value;
+    }
   }
 
   public int gameModes3
   {
-    get => this.settings.gameModes3;
-    set => this.settings.gameModes3 = value;
+    get
+    {
+      return this.settings.gameModes3;
+    }
+    set
+    {
+      this.settings.gameModes3 = value;
+    }
   }
 
   public int gameModes4
   {
-    get => this.settings.gameModes4;
-    set => this.settings.gameModes4 = value;
+    get
+    {
+      return this.settings.gameModes4;
+    }
+    set
+    {
+      this.settings.gameModes4 = value;
+    }
   }
 
   public byte elementalLevel
   {
-    get => this.settings.elementalLevel;
-    set => this.settings.elementalLevel = value;
+    get
+    {
+      return this.settings.elementalLevel;
+    }
+    set
+    {
+      this.settings.elementalLevel = value;
+    }
   }
 
   public ushort startHealth
   {
-    get => this.settings.startHealth;
-    set => this.settings.startHealth = value;
+    get
+    {
+      return this.settings.startHealth;
+    }
+    set
+    {
+      this.settings.startHealth = value;
+    }
   }
 
   public byte armageddonTurn
   {
-    get => this.settings.armageddonTurn;
-    set => this.settings.armageddonTurn = value;
+    get
+    {
+      return this.settings.armageddonTurn;
+    }
+    set
+    {
+      this.settings.armageddonTurn = value;
+    }
   }
 
   public short countdownTime
   {
-    get => this.settings.countdownTime;
-    set => this.settings.countdownTime = value;
+    get
+    {
+      return this.settings.countdownTime;
+    }
+    set
+    {
+      this.settings.countdownTime = value;
+    }
   }
 
   public byte countdownDelay
   {
-    get => this.settings.countdownDelay;
-    set => this.settings.countdownDelay = value;
+    get
+    {
+      return this.settings.countdownDelay;
+    }
+    set
+    {
+      this.settings.countdownDelay = value;
+    }
   }
 
   public ushort customTime
   {
-    get => this.settings.customTime;
-    set => this.settings.customTime = value;
+    get
+    {
+      return this.settings.customTime;
+    }
+    set
+    {
+      this.settings.customTime = value;
+    }
   }
 
   public byte customPlayerCount
   {
-    get => this.settings.customPlayerCount;
-    set => this.settings.customPlayerCount = value;
+    get
+    {
+      return this.settings.customPlayerCount;
+    }
+    set
+    {
+      this.settings.customPlayerCount = value;
+    }
   }
 
   public Restrictions restrictions
   {
-    get => this.settings.restrictions;
-    set => this.settings.restrictions = value;
+    get
+    {
+      return this.settings.restrictions;
+    }
+    set
+    {
+      this.settings.restrictions = value;
+    }
   }
 
   public void CalculateGameType()
@@ -123,7 +200,7 @@ public class GameFacts
     else
     {
       int timeInSeconds = this.GetTimeInSeconds();
-      if (this.IsNonStandard() || timeInSeconds < 7 || timeInSeconds > 90 || this.armageddonTurn != (byte) 10 || this.startHealth != (ushort) 250 || this.restrictions != null && this.restrictions.AnyRestricted() || this.GetArmageddon() != ~MapEnum.Dont_Mind || this.settings.customArmageddon != null)
+      if (this.IsNonStandard() || timeInSeconds < 7 || (timeInSeconds > 90 || this.armageddonTurn != (byte) 10) || (this.startHealth != (ushort) 250 || this.restrictions != null && this.restrictions.AnyRestricted()) || (this.GetArmageddon() != ~MapEnum.Dont_Mind || this.settings.customArmageddon != null))
         this.gameType = ZGame.GameType.Party;
       else
         this.gameType = this.GetTimeInSeconds() < 30 ? ZGame.GameType.LowStandard : ZGame.GameType.HighStandard;
@@ -245,14 +322,14 @@ public class GameFacts
           if (this.GetRatedMode())
             this.DelayStart();
           else
-            Server.StartGame(this);
+            Server.StartGame(this, false);
         }
         else
           this.KillStart();
       }
       byte[] array = memoryStream.ToArray();
       for (int index = 0; index < this.connections.Count; ++index)
-        this.connections[index].SendBytes(array);
+        this.connections[index].SendBytes(array, SendOption.None);
     }
   }
 
@@ -274,7 +351,10 @@ public class GameFacts
       this.ieStart = Timing.RunCoroutine(this.startRatedLobby());
   }
 
-  public bool CheckRatingDiff() => true;
+  public bool CheckRatingDiff()
+  {
+    return true;
+  }
 
   public void KillStart()
   {
@@ -294,7 +374,7 @@ public class GameFacts
     }
     if (gg.connections.Count >= 4 && gg.connections.Count % gg.GetNumberPlayersPerTeam() == 0)
     {
-      Server.StartGame(gg);
+      Server.StartGame(gg, false);
       gg.ieStart = (IEnumerator<float>) null;
     }
   }
@@ -316,11 +396,11 @@ public class GameFacts
       else
         this.SetTeamMode(TeamEnum.No);
     }
-    bool flag1 = (r.extraOptions & 8) != 0;
-    int num = (r.extraOptions & 16) != 0 ? 1 : 0;
-    bool flag2 = (r.extraOptions & 2) != 0;
-    bool flag3 = (r.extraOptions & 8192) != 0;
-    if ((r.extraOptions & 65536) != 0)
+    bool flag1 = (uint) (r.extraOptions & 8) > 0U;
+    int num = (uint) (r.extraOptions & 16) > 0U ? 1 : 0;
+    bool flag2 = (uint) (r.extraOptions & 2) > 0U;
+    bool flag3 = (uint) (r.extraOptions & 8192) > 0U;
+    if ((uint) (r.extraOptions & 65536) > 0U)
     {
       if (r.extraOptions == -1)
       {
@@ -431,9 +511,15 @@ public class GameFacts
     this.gameModes3 = (int) ((MapEnum) this.gameModes3 | e);
   }
 
-  public void ActivateAllMaps() => this.gameModes4 |= 1342145648;
+  public void ActivateAllMaps()
+  {
+    this.gameModes4 |= 1342145648;
+  }
 
-  public void ActivateAlArmageddons() => this.gameModes3 |= 1342146160;
+  public void ActivateAlArmageddons()
+  {
+    this.gameModes3 |= 1342146160;
+  }
 
   public void SetPlayersPerTeam(PlayersPerTeam e)
   {
@@ -453,17 +539,35 @@ public class GameFacts
     this.gameModes = (int) ((PlayerEnum) this.gameModes | e);
   }
 
-  public bool GetAllowArcanePowers() => (this.gameModes2 & 131072) != 0;
+  public bool GetAllowArcanePowers()
+  {
+    return (uint) (this.gameModes2 & 131072) > 0U;
+  }
 
-  public InviteEnum GetInviteMode() => (InviteEnum) (this.gameModes & 31);
+  public InviteEnum GetInviteMode()
+  {
+    return (InviteEnum) (this.gameModes & 31);
+  }
 
-  public bool GetSpectatorMode() => (this.gameModes & 64) > 0;
+  public bool GetSpectatorMode()
+  {
+    return (this.gameModes & 64) > 0;
+  }
 
-  public bool GetRatedMode() => (this.gameModes & 128) > 0;
+  public bool GetRatedMode()
+  {
+    return (this.gameModes & 128) > 0;
+  }
 
-  public bool GetTournamentMode() => (this.gameModes & 32768) > 0;
+  public bool GetTournamentMode()
+  {
+    return (this.gameModes & 32768) > 0;
+  }
 
-  public TimeEnum GetTimeMode() => (TimeEnum) (this.gameModes & 1343264);
+  public TimeEnum GetTimeMode()
+  {
+    return (TimeEnum) (this.gameModes & 1343264);
+  }
 
   public static TimeEnum GetLowTimes()
   {
@@ -480,13 +584,25 @@ public class GameFacts
     return TimeEnum.Ninety | TimeEnum.Sixty | TimeEnum.Forty_Five | TimeEnum.Thirty | TimeEnum.Twenty | TimeEnum.Fifteen | TimeEnum.Ten | TimeEnum.Seven;
   }
 
-  public MapEnum GetMapMode() => (MapEnum) (this.gameModes4 & 1342146160);
+  public MapEnum GetMapMode()
+  {
+    return (MapEnum) (this.gameModes4 & 1342146160);
+  }
 
-  public MapEnum GetArmageddon() => (MapEnum) (this.gameModes3 & 1342146160);
+  public MapEnum GetArmageddon()
+  {
+    return (MapEnum) (this.gameModes3 & 1342146160);
+  }
 
-  public static int AllMaps() => 16745584;
+  public static int AllMaps()
+  {
+    return 16745584;
+  }
 
-  public PlayersPerTeam GetPlayersPerTeam() => (PlayersPerTeam) (this.gameModes2 & 2117074944);
+  public PlayersPerTeam GetPlayersPerTeam()
+  {
+    return (PlayersPerTeam) (this.gameModes2 & 2117074944);
+  }
 
   public int GetNumberPlayersPerTeam()
   {
@@ -507,44 +623,71 @@ public class GameFacts
       case PlayersPerTeam.Seven:
         return 7;
       default:
-        if (this.game == null || !this.GetMultiTeamMode() || this.game.gameFacts.status == (byte) 0 || this.game.gameFacts.players.Count <= 2)
+        if (this.game == null || !this.GetMultiTeamMode() || (this.game.gameFacts.status == (byte) 0 || this.game.gameFacts.players.Count <= 2))
           return Mathf.Max(2, (1 + Math.Max(this.players.Count, this.connections.Count)) / 2);
-        int numberPlayersPerTeam = 1;
+        int num = 1;
         string player = this.game.gameFacts.players[0];
         for (int index = 1; index < this.game.gameFacts.players.Count && string.Equals(this.game.gameFacts.players[index], this.game.gameFacts.players[0]); ++index)
-          ++numberPlayersPerTeam;
-        return numberPlayersPerTeam;
+          ++num;
+        return num;
     }
   }
 
-  public bool GetTeamMode() => (this.gameModes & 16777216) > 0;
+  public bool GetTeamMode()
+  {
+    return (this.gameModes & 16777216) > 0;
+  }
 
-  public bool GetMultiTeamMode() => (this.gameModes & 524288) > 0;
+  public bool GetMultiTeamMode()
+  {
+    return (this.gameModes & 524288) > 0;
+  }
 
-  public PlayerEnum GetPlayerMode() => (PlayerEnum) (this.gameModes & 2113929216);
+  public PlayerEnum GetPlayerMode()
+  {
+    return (PlayerEnum) (this.gameModes & 2113929216);
+  }
 
-  public void ToggleStyle(GameStyle e) => this.gameModes2 = (int) ((GameStyle) this.gameModes2 ^ e);
+  public void ToggleStyle(GameStyle e)
+  {
+    this.gameModes2 = (int) ((GameStyle) this.gameModes2 ^ e);
+  }
 
-  public void SetStyle(GameStyle e) => this.gameModes2 = (int) ((GameStyle) this.gameModes2 | e);
+  public void SetStyle(GameStyle e)
+  {
+    this.gameModes2 = (int) ((GameStyle) this.gameModes2 | e);
+  }
 
-  public void ReSetStyle(GameStyle e) => this.gameModes2 = (int) ((GameStyle) this.gameModes2 & ~e);
+  public void ReSetStyle(GameStyle e)
+  {
+    this.gameModes2 = (int) ((GameStyle) this.gameModes2 & ~e);
+  }
 
-  public GameStyle GetStyle() => (GameStyle) (this.gameModes2 & 258459);
+  public GameStyle GetStyle()
+  {
+    return (GameStyle) (this.gameModes2 & 258459);
+  }
 
-  public bool IsNonStandard() => (this.gameModes2 & 254362) != 0;
+  public bool IsNonStandard()
+  {
+    return (uint) (this.gameModes2 & 254362) > 0U;
+  }
 
   public static MapEnum GetRandomMap(ZGame game, int mapStyle, MapEnum def)
   {
     List<MapEnum> mapEnumList = new List<MapEnum>();
     foreach (MapEnum mapEnum in (MapEnum[]) Enum.GetValues(typeof (MapEnum)))
     {
-      if ((mapStyle != -1 || mapEnum != MapEnum.Dark_Fortress) && mapEnum != MapEnum.Random && ((MapEnum) mapStyle & mapEnum) != ~MapEnum.Dont_Mind && mapEnum != MapEnum.Dont_Mind)
+      if ((mapStyle != -1 || mapEnum != MapEnum.Dark_Fortress) && (mapEnum != MapEnum.Random && ((MapEnum) mapStyle & mapEnum) != ~MapEnum.Dont_Mind) && mapEnum != MapEnum.Dont_Mind)
         mapEnumList.Add(mapEnum);
     }
     return mapEnumList.Count > 0 ? mapEnumList[game.RandomInt(0, mapEnumList.Count)] : def;
   }
 
-  public int GetTimeInSeconds() => GameFacts._GetTimeInSeconds(this.GetTimeMode());
+  public int GetTimeInSeconds()
+  {
+    return GameFacts._GetTimeInSeconds(this.GetTimeMode());
+  }
 
   public static int _GetTimeInSeconds(TimeEnum t)
   {
@@ -617,7 +760,10 @@ public class GameFacts
     }
   }
 
-  public int GetMaxPlayers() => GameFacts.GetPlayersNeeded(this.GetPlayerMode());
+  public int GetMaxPlayers()
+  {
+    return GameFacts.GetPlayersNeeded(this.GetPlayerMode());
+  }
 
   public static string GameStyleAsString(GameStyle e)
   {

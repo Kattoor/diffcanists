@@ -1,7 +1,6 @@
 
 using UnityEngine;
 
-#nullable disable
 public class SlideOutUI : MonoBehaviour
 {
   private float cur;

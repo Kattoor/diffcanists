@@ -1,14 +1,13 @@
 
 using UnityEngine;
 
-#nullable disable
 public static class OneTimePopups
 {
   public static string prefName = "prefpopupbools";
 
   public static bool IsSet(OneTimePopups.Tip x)
   {
-    return ((OneTimePopups.Tip) PlayerPrefs.GetInt(OneTimePopups.prefName, 0) & x) != 0;
+    return (uint) ((OneTimePopups.Tip) PlayerPrefs.GetInt(OneTimePopups.prefName, 0) & x) > 0U;
   }
 
   public static bool Set(OneTimePopups.Tip x)

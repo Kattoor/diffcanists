@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-#nullable disable
 public static class Descriptions
 {
   private static Dictionary<string, string> bookHeader = new Dictionary<string, string>()
@@ -118,7 +117,7 @@ public static class Descriptions
     },
     {
       "Seas",
-      "Seahorse\n(drains 20 health per cast)\nAllows you and your minions to swim within the confines of the arena as well as reducing any fresh water damage taken (salt water damage is unaffected!).\nSpells Gained: Brine Burst (level 1), Summon Kraken (level 5)."
+      "Seahorse\n(drains 20 health per cast)\nAllows you and your minions to swim within the confines of the arena as well as reducing any fresh water damage taken (salt water damage is unaffected!). Water trolls will no longer damage friendly units.\nSpells Gained: Brine Burst (level 1), Summon Kraken (level 5)."
     },
     {
       "Cogs",
@@ -142,7 +141,7 @@ public static class Descriptions
     },
     {
       "Druidism",
-      "Raven\n(drains 20 health per cast)\nEach Level provides +2 minion health, +2 max damage per enchanted Axe, and +15% base minion/Druidism cast range. Tiger gets the Compete! spell."
+      "Raven\n(drains 20 health per cast)\nEach Level provides +2 minion health, +2 max damage per enchanted Axe, and +15% base minion/Druidism cast range. Tiger gets the Compete! spell and Herd Mentality no longer ends your turn."
     },
     {
       "Cosmos",
@@ -1728,7 +1727,7 @@ public static class Descriptions
     },
     {
       "Hydration",
-      "Ball: 25-50 damage\n{0}\nBasic maths: Water Troll + Hydration = a bigger, friendlier, and tougher Water Troll."
+      "Ball: 25-50 damage\n{0}\nBasic maths: Water Troll + Hydration = a bigger and tougher Water Troll."
     },
     {
       "Deluge",
@@ -2036,7 +2035,7 @@ public static class Descriptions
     },
     {
       "Apparition",
-      "Personal:\n{0}\nBecome a phantom for four turns. Restricts you to the Illusion and Arcane spellbooks."
+      "Personal:\n{0}\nBecome a phantom for five turns. Restricts you to the Illusion and Arcane spellbooks."
     },
     {
       "Color Spray",
@@ -2384,7 +2383,7 @@ public static class Descriptions
     },
     {
       "Herd Mentality",
-      "Minion: 40 health, does not end your turn\n{0}\nSummons another boar to fight alongside."
+      "Minion: 50 health\n{0}\nSummons another boar to fight alongside."
     },
     {
       "Pack Leader",
@@ -2528,7 +2527,7 @@ public static class Descriptions
     },
     {
       "Sandbag",
-      "Personal:\n{0}\nDe-towers you and puts the tower on a reduced cooldown. Increases the health of the next cast of Sand Castle by 75 if used while in a Sand Castle or by 50 if used while not in any tower (Max of 125 health)."
+      "Personal: does not end your turn\n{0}\nDe-towers you and puts the tower on a reduced cooldown. Increases the health of the next cast of Sand Castle by 75 if used while in a Sand Castle or by 50 if used while not in any tower (Max of 125 health)."
     },
     {
       "Sand Castle",
@@ -2588,7 +2587,7 @@ public static class Descriptions
     },
     {
       "Tombstone Curse",
-      "Ball: 25 death damage\n{0}\nUpon contact with terrain it'll create a spectral tombstone which lasts 5 turns. If it hits an enemy it will instead immediately raise a zombie at that location. If the tombstone is destroyed by spell damage or walked over by an enemy it'll raise a zombie and destroy the tombstone."
+      "Ball: 25 death damage\n{0}\nUpon contact with terrain it'll create a spectral tombstone which lasts 5 turns. If an enemy touches the tombstone it'll raise a zombie and destroy the tombstone."
     },
     {
       "Flesh Bomb",
@@ -2596,7 +2595,7 @@ public static class Descriptions
     },
     {
       "Consume Soul",
-      "Targeted: 30 damage\n{0}\nDrain the soul of a target, healing for the damage dealt. For each active buff the target has, the damage is increased by 15."
+      "Targeted: 30 damage\n{0}\nDrain the soul of a target, healing for the damage dealt. For each dispellable effect the target has, the damage is increased by 15."
     },
     {
       "Plague Hive",
@@ -2624,7 +2623,7 @@ public static class Descriptions
     },
     {
       "Sudden Death",
-      "Targeted: x damage\n{0}\nExplodes the targeted minion in a shower of gore, dealing more damage the more health it has. Base explosion will be centered at the targeted location and will do between 1 and 50 damage with additional shrapnel for every 20 health the minion had dealing 10 damage each."
+      "Targeted: x damage\n{0}\nExplodes the targeted minion in a shower of gore, dealing more damage the more health it has."
     },
     {
       "Curse of Haute",
@@ -2644,7 +2643,7 @@ public static class Descriptions
     },
     {
       "Passage Ways",
-      "Targeted: \n{0}\nTeleport a target friendly minion to an area beside you. This does not end your turn."
+      "Targeted: does not end your turn\n{0}\nTeleport a target friendly minion to an area beside you."
     },
     {
       "Death's Doorway",
@@ -2652,11 +2651,14 @@ public static class Descriptions
     },
     {
       "Call of the Dead",
-      "Targeted:\n{0}\nAt the end of your turn all your undead minions will charge at the targeted location dealing 30 damage if they hit an enemy. This does not end your turn."
+      "Targeted: does not end your turn\n{0}\nAt the end of your turn all your undead minions will charge at the targeted location dealing 30 damage if they hit an enemy."
     }
   };
 
-  public static string GetDrownMessage(ZCreature died) => died.parent.name + " drowned.";
+  public static string GetDrownMessage(ZCreature died)
+  {
+    return died.parent.name + " drowned.";
+  }
 
   public static string GetDeathMessage(
     SpellEnum spellEnum,
@@ -2832,25 +2834,25 @@ public static class Descriptions
   {
     if (b == BookOf.Arcane && Client.MyAccount.accountType.has(AccountType.Developer | AccountType.Admin | AccountType.Arcane_Monster | AccountType.Game_Director))
       return "Arcane Neutrality:\n(drains 100 health at casting)\nRemoves familiar effects from the game.\n" + Descriptions.bookDesriptions["Arcane"];
-    int b1 = (int) b;
-    int num;
+    int num1 = (int) b;
+    int num2;
     if (!alt)
     {
       Player instance = Player.Instance;
       if (instance == null)
       {
-        num = 0;
+        num2 = 0;
       }
       else
       {
         bool? nullable = instance.person?.settingsPlayer._spells.UsingAltBook(b);
         bool flag = true;
-        num = nullable.GetValueOrDefault() == flag & nullable.HasValue ? 1 : 0;
+        num2 = nullable.GetValueOrDefault() == flag & nullable.HasValue ? 1 : 0;
       }
     }
     else
-      num = 1;
-    string stringX = ((BookOf) b1).ToStringX(num != 0);
+      num2 = 1;
+    string stringX = ((BookOf) num1).ToStringX(num2 != 0);
     string str;
     return Descriptions.bookDesriptions.TryGetValue(stringX, out str) ? str : "Missing Description";
   }

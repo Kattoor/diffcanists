@@ -6,7 +6,6 @@ using System.Collections;
 using System.IO;
 using UnityEngine.Networking;
 
-#nullable disable
 public static class MyFileBrowser
 {
   public static void GetFile(

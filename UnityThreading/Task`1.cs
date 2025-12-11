@@ -3,7 +3,6 @@ using System;
 using System.Collections;
 using System.Reflection;
 
-#nullable disable
 namespace UnityThreading
 {
   public class Task<T> : Task
@@ -11,9 +10,15 @@ namespace UnityThreading
     private Func<Task, T> function;
     private T result;
 
-    public Task(Func<Task, T> function) => this.function = function;
+    public Task(Func<Task, T> function)
+    {
+      this.function = function;
+    }
 
-    public Task(Func<T> function) => this.function = (Func<Task, T>) (t => function());
+    public Task(Func<T> function)
+    {
+      this.function = (Func<Task, T>) (t => function());
+    }
 
     public Task(Action<Task> action)
     {
@@ -33,12 +38,17 @@ namespace UnityThreading
       });
     }
 
-    public Task(IEnumerator enumerator) => this.function = (Func<Task, T>) (t => (T) enumerator);
+    public Task(IEnumerator enumerator)
+    {
+      this.function = (Func<Task, T>) (t => (T) enumerator);
+    }
 
     public Task(Type type, string methodName, params object[] args)
     {
       MethodInfo methodInfo = type.GetMethod(methodName, BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.InvokeMethod);
-      this.function = !(methodInfo == (MethodInfo) null) ? (Func<Task, T>) (t => (T) methodInfo.Invoke((object) null, args)) : throw new ArgumentException(nameof (methodName), "Fitting method with the given name was not found.");
+      if (methodInfo == (MethodInfo) null)
+        throw new ArgumentException(nameof (methodName), "Fitting method with the given name was not found.");
+      this.function = (Func<Task, T>) (t => (T) methodInfo.Invoke((object) null, args));
     }
 
     public Task(object that, string methodName, params object[] args)

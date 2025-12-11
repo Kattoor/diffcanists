@@ -1,7 +1,6 @@
 
 using System;
 
-#nullable disable
 namespace WebGLSupport
 {
   internal class WebGLInputPlugin
@@ -55,11 +54,20 @@ namespace WebGLSupport
     {
     }
 
-    public static int WebGLInputSelectionStart(int id) => 0;
+    public static int WebGLInputSelectionStart(int id)
+    {
+      return 0;
+    }
 
-    public static int WebGLInputSelectionEnd(int id) => 0;
+    public static int WebGLInputSelectionEnd(int id)
+    {
+      return 0;
+    }
 
-    public static int WebGLInputSelectionDirection(int id) => 0;
+    public static int WebGLInputSelectionDirection(int id)
+    {
+      return 0;
+    }
 
     public static void WebGLInputSetSelectionRange(int id, int start, int end)
     {
@@ -73,7 +81,10 @@ namespace WebGLSupport
     {
     }
 
-    public static bool WebGLInputIsFocus(int id) => false;
+    public static bool WebGLInputIsFocus(int id)
+    {
+      return false;
+    }
 
     public static void WebGLInputDelete(int id)
     {

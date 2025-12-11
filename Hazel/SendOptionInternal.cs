@@ -1,5 +1,4 @@
 
-#nullable disable
 namespace Hazel
 {
   internal enum SendOptionInternal : byte

@@ -2,17 +2,16 @@
 using System;
 using System.Text;
 
-#nullable disable
 namespace InGameCodeEditor
 {
   [Serializable]
   public class AutoIndent
   {
     private static StringBuilder indentBuilder = new StringBuilder();
-    [NonSerialized]
-    private string indentDecreaseString;
     public AutoIndent.IndentMode autoIndentMode = AutoIndent.IndentMode.AutoTab;
     public bool allowAutoIndent = true;
+    [NonSerialized]
+    private string indentDecreaseString;
     public char indentIncreaseCharacter;
     public char indentDecreaseCharacter;
 
@@ -55,31 +54,31 @@ namespace InGameCodeEditor
             AutoIndent.indentBuilder.Append(indentSection[index]);
         }
       }
-      string indentedFormattedString = AutoIndent.indentBuilder.ToString();
+      string str = AutoIndent.indentBuilder.ToString();
       AutoIndent.indentBuilder.Length = 0;
-      caretPosition = indentedFormattedString.Length - 1;
-      for (int index = indentedFormattedString.Length - 1; index >= 0; --index)
+      caretPosition = str.Length - 1;
+      for (int index = str.Length - 1; index >= 0; --index)
       {
-        if (indentedFormattedString[index] != '\n')
+        if (str[index] != '\n')
         {
           caretPosition = index;
           break;
         }
       }
-      return indentedFormattedString;
+      return str;
     }
 
     public int GetAutoIndentLevel(string inputString, int startIndex, int endIndex)
     {
-      int autoIndentLevel = 0;
+      int num = 0;
       for (int index = startIndex; index < endIndex; ++index)
       {
         if (inputString[index] == '\t')
-          ++autoIndentLevel;
+          ++num;
         if (inputString[index] == '\n' || inputString[index] != ' ')
           break;
       }
-      return autoIndentLevel;
+      return num;
     }
 
     private void AppendIndentString(int amount)

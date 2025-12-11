@@ -4,13 +4,12 @@ using System.Collections.Concurrent;
 using System.Net.Sockets;
 using System.Threading;
 
-#nullable disable
 namespace Telepathy
 {
   public abstract class Common
   {
-    protected ConcurrentQueue<Message> receiveQueue = new ConcurrentQueue<Message>();
     public static int messageQueueSizeWarning = 100000;
+    protected ConcurrentQueue<Message> receiveQueue = new ConcurrentQueue<Message>();
     public bool NoDelay = true;
     public int MaxMessageSize = 16384;
     public int SendTimeout = 5000;
@@ -19,9 +18,18 @@ namespace Telepathy
     [ThreadStatic]
     private static byte[] payload;
 
-    public int ReceiveQueueCount => this.receiveQueue.Count;
+    public int ReceiveQueueCount
+    {
+      get
+      {
+        return this.receiveQueue.Count;
+      }
+    }
 
-    public bool GetNextMessage(out Message message) => this.receiveQueue.TryDequeue(out message);
+    public bool GetNextMessage(out Message message)
+    {
+      return this.receiveQueue.TryDequeue(out message);
+    }
 
     protected static bool SendMessagesBlocking(NetworkStream stream, byte[][] messages)
     {

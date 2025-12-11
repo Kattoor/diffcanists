@@ -1,7 +1,6 @@
 
 using System.Collections.Generic;
 
-#nullable disable
 public static class EmojiRaw
 {
   public static List<Emoji> temp = new List<Emoji>()

@@ -1,5 +1,4 @@
 
-#nullable disable
 namespace LibNoise.Operator
 {
   public class Blend : ModuleBase
@@ -19,8 +18,14 @@ namespace LibNoise.Operator
 
     public ModuleBase Controller
     {
-      get => this.Modules[2];
-      set => this.Modules[2] = value;
+      get
+      {
+        return this.Modules[2];
+      }
+      set
+      {
+        this.Modules[2] = value;
+      }
     }
 
     public override double GetValue(double x, double y, double z)

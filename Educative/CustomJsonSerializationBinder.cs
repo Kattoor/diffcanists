@@ -1,7 +1,6 @@
 
 using System.Runtime.Serialization;
 
-#nullable disable
 namespace Educative
 {
   public class CustomJsonSerializationBinder : SerializationBinder

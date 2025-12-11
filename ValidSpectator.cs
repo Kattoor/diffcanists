@@ -1,5 +1,4 @@
 
-#nullable disable
 public class ValidSpectator
 {
   public string name;

@@ -3,16 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-#nullable disable
 public class ImageFader : MonoBehaviour
 {
+  public float fadeDuration = 1f;
+  public float holdDuration = 1f;
+  private bool isUsingFirstRenderer = true;
   public SpriteRenderer spriteRenderer1;
   public SpriteRenderer spriteRenderer2;
   public List<Sprite> sprites;
-  public float fadeDuration = 1f;
-  public float holdDuration = 1f;
   private int currentSpriteIndex;
-  private bool isUsingFirstRenderer = true;
 
   private void Start()
   {

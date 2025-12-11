@@ -1,5 +1,4 @@
 
-#nullable disable
 public class Cosmetics
 {
   public BitBools[] array = new BitBools[8]
@@ -14,21 +13,69 @@ public class Cosmetics
     new BitBools()
   };
 
-  public BitBools body => this.array[0];
+  public BitBools body
+  {
+    get
+    {
+      return this.array[0];
+    }
+  }
 
-  public BitBools head => this.array[1];
+  public BitBools head
+  {
+    get
+    {
+      return this.array[1];
+    }
+  }
 
-  public BitBools leftArm => this.array[2];
+  public BitBools leftArm
+  {
+    get
+    {
+      return this.array[2];
+    }
+  }
 
-  public BitBools rightArm => this.array[3];
+  public BitBools rightArm
+  {
+    get
+    {
+      return this.array[3];
+    }
+  }
 
-  public BitBools hat => this.array[4];
+  public BitBools hat
+  {
+    get
+    {
+      return this.array[4];
+    }
+  }
 
-  public BitBools beard => this.array[5];
+  public BitBools beard
+  {
+    get
+    {
+      return this.array[5];
+    }
+  }
 
-  public BitBools spells => this.array[6];
+  public BitBools spells
+  {
+    get
+    {
+      return this.array[6];
+    }
+  }
 
-  public BitBools achievements => this.array[7];
+  public BitBools achievements
+  {
+    get
+    {
+      return this.array[7];
+    }
+  }
 
   public override bool Equals(object obj)
   {
@@ -43,7 +90,10 @@ public class Cosmetics
     return true;
   }
 
-  public override int GetHashCode() => base.GetHashCode();
+  public override int GetHashCode()
+  {
+    return base.GetHashCode();
+  }
 
   public Cosmetics()
   {

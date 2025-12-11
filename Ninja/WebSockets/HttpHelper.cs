@@ -10,7 +10,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
-#nullable disable
 namespace Ninja.WebSockets
 {
   public class HttpHelper
@@ -28,8 +27,7 @@ namespace Ninja.WebSockets
 
     public static string ComputeSocketAcceptString(string secWebSocketKey)
     {
-      byte[] bytes = Encoding.UTF8.GetBytes(secWebSocketKey + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11");
-      return Convert.ToBase64String(SHA1.Create().ComputeHash(bytes));
+      return Convert.ToBase64String(SHA1.Create().ComputeHash(Encoding.UTF8.GetBytes(secWebSocketKey + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11")));
     }
 
     public static async Task<string> ReadHttpHeaderAsync(Stream stream, CancellationToken token)

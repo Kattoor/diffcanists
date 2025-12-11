@@ -1,7 +1,6 @@
 
 using System.Collections.Generic;
 
-#nullable disable
 public static class DefaultTutorials
 {
   public static List<DefaultTutorials.Data> tutorials = new List<DefaultTutorials.Data>();

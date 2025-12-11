@@ -4,17 +4,16 @@ using Priority_Queue;
 using System.Collections.Generic;
 using UnityEngine;
 
-#nullable disable
 public class AIPathFinding
 {
-  private AIPathFinding.Tile[] tiles;
-  internal int width;
-  internal int height;
   internal int scale = 18;
   private SimplePriorityQueue<AIPathFinding.Tile, float> openSet = new SimplePriorityQueue<AIPathFinding.Tile, float>();
   private HashSet<AIPathFinding.Tile> closedSet = new HashSet<AIPathFinding.Tile>();
   private Dictionary<AIPathFinding.Tile, AIPathFinding.Tile> cameFrom = new Dictionary<AIPathFinding.Tile, AIPathFinding.Tile>();
   private SimplePriorityQueue<AIPathFinding.Tile, float> gScore = new SimplePriorityQueue<AIPathFinding.Tile, float>();
+  private AIPathFinding.Tile[] tiles;
+  internal int width;
+  internal int height;
 
   public AIPathFinding.Tile GetClosestOpen(int x, int y)
   {
@@ -64,12 +63,12 @@ public class AIPathFinding
     while (this.openSet.Count > 0)
     {
       double priority1 = (double) this.openSet.GetPriority(this.openSet.First);
-      AIPathFinding.Tile tile1 = this.openSet.Dequeue();
-      if (tile1 == end)
+      AIPathFinding.Tile tile = this.openSet.Dequeue();
+      if (tile == end)
       {
         if ((double) this.gScore.GetPriority(end) > 1000.0)
         {
-          this.closedSet.Add(tile1);
+          this.closedSet.Add(tile);
           flag = true;
         }
         else
@@ -87,87 +86,87 @@ public class AIPathFinding
       }
       else
       {
-        this.closedSet.Add(tile1);
-        int num1 = tile1.index % this.width;
-        int num2 = tile1.index / this.width;
+        this.closedSet.Add(tile);
+        int num1 = tile.index % this.width;
+        int num2 = tile.index / this.width;
         for (int index = 0; index < 8; ++index)
         {
-          AIPathFinding.Tile tile2 = (AIPathFinding.Tile) null;
+          AIPathFinding.Tile b = (AIPathFinding.Tile) null;
           if (index == 0)
           {
             if (num1 + 1 < this.width)
-              tile2 = this.tiles[tile1.index + 1];
+              b = this.tiles[tile.index + 1];
           }
           else if (index == 1)
           {
             if (num1 - 1 >= 0)
-              tile2 = this.tiles[tile1.index - 1];
+              b = this.tiles[tile.index - 1];
           }
           else if (index == 2)
           {
             if (num2 + 1 < this.height)
-              tile2 = this.tiles[tile1.index + this.width];
+              b = this.tiles[tile.index + this.width];
           }
           else if (index == 3)
           {
             if (num2 - 1 >= 0)
-              tile2 = this.tiles[tile1.index - this.width];
+              b = this.tiles[tile.index - this.width];
           }
           else if (index == 4)
           {
             int num3 = num2 - 1;
             int num4 = num1 + 1;
             if (num3 >= 0 && num4 < this.width)
-              tile2 = this.tiles[tile1.index - this.width + 1];
+              b = this.tiles[tile.index - this.width + 1];
           }
           else if (index == 5)
           {
-            int num5 = num1 + 1;
-            int num6 = num2 + 1;
+            int num3 = num1 + 1;
+            int num4 = num2 + 1;
             int width = this.width;
-            if (num5 < width && num6 < this.height)
-              tile2 = this.tiles[tile1.index + 1 + this.width];
+            if (num3 < width && num4 < this.height)
+              b = this.tiles[tile.index + 1 + this.width];
           }
           else if (index == 6)
           {
-            int num7 = num1 - 1;
-            int num8 = num2 - 1;
-            if (num7 >= 0 && num8 >= 0)
-              tile2 = this.tiles[tile1.index - 1 - this.width];
+            int num3 = num1 - 1;
+            int num4 = num2 - 1;
+            if (num3 >= 0 && num4 >= 0)
+              b = this.tiles[tile.index - 1 - this.width];
           }
           else
           {
-            int num9 = num2 + 1;
-            int num10 = num1 - 1;
+            int num3 = num2 + 1;
+            int num4 = num1 - 1;
             int height = this.height;
-            if (num9 < height && num10 >= 0)
-              tile2 = this.tiles[tile1.index + this.width - 1];
+            if (num3 < height && num4 >= 0)
+              b = this.tiles[tile.index + this.width - 1];
           }
-          if (tile2 != null && !tile2.blocked)
+          if (b != null && !b.blocked)
           {
-            float num11 = (float) AIPathFinding.distance(start, tile2);
-            float priority2 = this.gScore.GetPriority(tile1) + num11;
-            if (this.closedSet.Contains(tile2))
+            float num3 = (float) AIPathFinding.distance(start, b);
+            float priority2 = this.gScore.GetPriority(tile) + num3;
+            if (this.closedSet.Contains(b))
             {
-              if ((double) priority2 < (double) this.gScore.GetPriority(tile2))
+              if ((double) priority2 < (double) this.gScore.GetPriority(b))
               {
-                this.gScore.UpdatePriority(tile2, priority2);
-                if (!this.openSet.Contains(tile2))
-                  this.openSet.Enqueue(tile2, priority2);
-                this.cameFrom[tile2] = tile1;
+                this.gScore.UpdatePriority(b, priority2);
+                if (!this.openSet.Contains(b))
+                  this.openSet.Enqueue(b, priority2);
+                this.cameFrom[b] = tile;
               }
             }
             else
             {
-              if (!this.openSet.Contains(tile2))
-                this.openSet.Enqueue(tile2, priority2);
-              else if ((double) priority2 >= (double) this.gScore.GetPriority(tile2))
+              if (!this.openSet.Contains(b))
+                this.openSet.Enqueue(b, priority2);
+              else if ((double) priority2 >= (double) this.gScore.GetPriority(b))
                 continue;
-              this.cameFrom[tile2] = tile1;
-              if (this.gScore.Contains(tile2))
-                this.gScore.UpdatePriority(tile2, priority2);
+              this.cameFrom[b] = tile;
+              if (this.gScore.Contains(b))
+                this.gScore.UpdatePriority(b, priority2);
               else
-                this.gScore.Enqueue(tile2, priority2);
+                this.gScore.Enqueue(b, priority2);
             }
           }
         }

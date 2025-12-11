@@ -1,13 +1,12 @@
 
-#nullable disable
 namespace LibNoise.Operator
 {
   public class Select : ModuleBase
   {
-    private double _fallOff;
-    private double _raw;
     private double _min = -1.0;
     private double _max = 1.0;
+    private double _fallOff;
+    private double _raw;
 
     public Select()
       : base(3)
@@ -32,13 +31,22 @@ namespace LibNoise.Operator
 
     public ModuleBase Controller
     {
-      get => this.Modules[2];
-      set => this.Modules[2] = value;
+      get
+      {
+        return this.Modules[2];
+      }
+      set
+      {
+        this.Modules[2] = value;
+      }
     }
 
     public double FallOff
     {
-      get => this._fallOff;
+      get
+      {
+        return this._fallOff;
+      }
       set
       {
         double num = this._max - this._min;
@@ -49,7 +57,10 @@ namespace LibNoise.Operator
 
     public double Maximum
     {
-      get => this._max;
+      get
+      {
+        return this._max;
+      }
       set
       {
         this._max = value;
@@ -59,7 +70,10 @@ namespace LibNoise.Operator
 
     public double Minimum
     {
-      get => this._min;
+      get
+      {
+        return this._min;
+      }
       set
       {
         this._min = value;

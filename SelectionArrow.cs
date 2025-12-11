@@ -1,20 +1,22 @@
 
 using UnityEngine;
 
-#nullable disable
 public class SelectionArrow : MonoBehaviour
 {
-  private Transform child;
-  private ZCreature creature;
   private float cur = 0.5f;
-  private float delayActive;
   private bool down = true;
   private Vector3 top = new Vector3(0.0f, 40f, 0.0f);
   private Vector3 bottom = new Vector3(0.0f, -40f, 0.0f);
+  private Transform child;
+  private ZCreature creature;
+  private float delayActive;
 
   internal static SelectionArrow Instance { get; private set; }
 
-  private void Awake() => SelectionArrow.Instance = this;
+  private void Awake()
+  {
+    SelectionArrow.Instance = this;
+  }
 
   private void OnDestroy()
   {

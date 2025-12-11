@@ -2,17 +2,16 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-#nullable disable
 public class TransitionObj : MonoBehaviour
 {
-  public Image rend;
-  public Image rend2;
   public float min = 0.2f;
   public float max = 1f;
-  private float speed = 3.33333325f;
-  private float cur;
+  private float speed = 3.333333f;
   private bool up = true;
   private float c = 0.5f;
+  public Image rend;
+  public Image rend2;
+  private float cur;
 
   private void OnEnable()
   {
@@ -42,7 +41,8 @@ public class TransitionObj : MonoBehaviour
       }
     }
     this.c = this.up ? Mathf.Lerp(this.min, this.max, this.cur) : Mathf.Lerp(0.0f, this.max, this.cur);
-    Color color = this.rend.color with { a = this.c };
+    Color color = this.rend.color;
+    color.a = this.c;
     this.rend.color = color;
     this.rend2.color = color;
   }

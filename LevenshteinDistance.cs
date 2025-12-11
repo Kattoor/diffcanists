@@ -2,7 +2,6 @@
 using Hazel;
 using System;
 
-#nullable disable
 public static class LevenshteinDistance
 {
   public static AccountType ClosestAccountType(string s)

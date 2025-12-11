@@ -6,7 +6,6 @@ using System.IO;
 using TMPro;
 using UnityEngine;
 
-#nullable disable
 public class MyPollResults : MonoBehaviour
 {
   public GameObject panel;
@@ -43,7 +42,10 @@ public class MyPollResults : MonoBehaviour
     MyPollResults.Instance = (MyPollResults) null;
   }
 
-  private void Setup() => this.render(0);
+  private void Setup()
+  {
+    this.render(0);
+  }
 
   private void Update()
   {
@@ -75,21 +77,21 @@ public class MyPollResults : MonoBehaviour
       }
     }
     float num2 = num1 / 100f;
-    int num3;
-    for (num3 = 0; num3 < intList.Count; ++num3)
+    int i;
+    for (i = 0; i < intList.Count; ++i)
     {
       MyPollBar myPollBar = Object.Instantiate<MyPollBar>(this.pfab, (Transform) this.container);
-      myPollBar.rect.anchoredPosition = new Vector2(5f, (float) (-num3 * 26));
-      myPollBar.Setup(num3, stringList[num3], (float) intList[num3] / num2, intList[num3]);
+      myPollBar.rect.anchoredPosition = new Vector2(5f, (float) (-i * 26));
+      myPollBar.Setup(i, stringList[i], (float) intList[i] / num2, intList[i]);
     }
     for (int index2 = 0; index2 < this.poll.items[index].userData.Count; ++index2)
     {
       MyPollBar myPollBar = Object.Instantiate<MyPollBar>(this.pfabUserData, (Transform) this.container);
-      myPollBar.rect.anchoredPosition = new Vector2(5f, (float) (-num3 * 26));
+      myPollBar.rect.anchoredPosition = new Vector2(5f, (float) (-i * 26));
       myPollBar.Setup(this.poll.items[index].userData[index2]);
-      ++num3;
+      ++i;
     }
-    this.container.sizeDelta = new Vector2(this.container.sizeDelta.x, (float) (num3 * 26));
+    this.container.sizeDelta = new Vector2(this.container.sizeDelta.x, (float) (i * 26));
     this.txtHeader.text = this.poll.name + " (" + (object) (index + 1) + "/" + (object) this.poll.items.Count + ")";
     this.buttonBack.gameObject.SetActive(index > 0);
     this.buttonSubmit.gameObject.SetActive(index < this.poll.items.Count - 1);
@@ -122,16 +124,22 @@ public class MyPollResults : MonoBehaviour
     this.render(this.curIndex - 1);
   }
 
-  public void ClickMinimize() => this.panel.SetActive(!this.panel.activeSelf);
+  public void ClickMinimize()
+  {
+    this.panel.SetActive(!this.panel.activeSelf);
+  }
 
-  public void ClickClose() => Object.Destroy((Object) this.gameObject);
+  public void ClickClose()
+  {
+    Object.Destroy((Object) this.gameObject);
+  }
 
   public void HoverOverflow(TMP_Text t)
   {
     t.color = new Color(0.6f, 0.6f, 0.6f);
     if (!t.isTextTruncated)
       return;
-    MyToolTip.Show(t.text);
+    MyToolTip.Show(t.text, -1f);
   }
 
   public void HideToolTip(TMP_Text t)

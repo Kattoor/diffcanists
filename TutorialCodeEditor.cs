@@ -10,18 +10,17 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-#nullable disable
 public class TutorialCodeEditor : MonoBehaviour
 {
+  internal static string prefOpened = "preftutopened";
+  private string editing = "";
   public CodeEditor codeEditor;
   public GameObject panelPoint;
   public TMP_Text txt_editing;
   public TMP_Dropdown mapDropdown;
   public Image imgMap;
   public Image imgMapBg;
-  private string editing = "";
   private bool edited;
-  internal static string prefOpened = "preftutopened";
   internal const string DefaultTutorial = "--NAME = Unnamed\r\n--DESCRIPTION = No Description\r\n--MAP = 0\r\n--SPELLS = {}\r\n--DEBUG = TRUE\r\n\r\n--CODE--\r\n\r\nfunction main()\r\n    while true do\r\n        --Some lua logic goes here\r\n        --Open the API github page for basic documentation and usage\r\n        coroutine.yield(0)\r\n    end\r\nend\r\n";
 
   public static TutorialCodeEditor Instance { get; private set; }
@@ -37,8 +36,14 @@ public class TutorialCodeEditor : MonoBehaviour
 
   private string MapName
   {
-    get => this.Get("--MAP =");
-    set => this.Set("--MAP =", value.ToString());
+    get
+    {
+      return this.Get("--MAP =");
+    }
+    set
+    {
+      this.Set("--MAP =", value.ToString(), true);
+    }
   }
 
   private void Awake()
@@ -46,7 +51,7 @@ public class TutorialCodeEditor : MonoBehaviour
     TutorialCodeEditor.Instance = this;
     if (Client.game == null)
       return;
-    Client.game.CleanUp();
+    Client.game.CleanUp(false);
     Client.game = (ZGame) null;
   }
 
@@ -126,10 +131,10 @@ public class TutorialCodeEditor : MonoBehaviour
       else
       {
         Tutorial tutorial = Tutorial.FromJson(File.ReadAllText(path));
-        tutorial.ToCodeOnly();
+        tutorial.ToCodeOnly(-1);
         string str = path + "2";
         s += "2";
-        this.codeEditor.Text = tutorial.ToCodeOnly();
+        this.codeEditor.Text = tutorial.ToCodeOnly(-1);
       }
     }
     if (string.IsNullOrEmpty(this.codeEditor.Text))
@@ -167,7 +172,7 @@ public class TutorialCodeEditor : MonoBehaviour
         s = s.Substring(Global.GetTutorialPath.Length);
       if (s.EndsWith(".arcTutorial", StringComparison.OrdinalIgnoreCase))
       {
-        string codeOnly = Tutorial.FromJson(text).ToCodeOnly();
+        string codeOnly = Tutorial.FromJson(text).ToCodeOnly(-1);
         s += "2";
         text = codeOnly;
       }
@@ -192,7 +197,7 @@ public class TutorialCodeEditor : MonoBehaviour
 
   public void CreateDefaultTutorial()
   {
-    byte[] bytes = Tutorial.FromCodeOnly(this.codeEditor.Text).ToBytes();
+    byte[] bytes = Tutorial.FromCodeOnly(this.codeEditor.Text, (string) null).ToBytes();
     StringBuilder stringBuilder = new StringBuilder("new Data(){ name = \"" + Path.GetFileNameWithoutExtension(this.editing) + "\" , bytes = new byte[] { ");
     for (int index = 0; index < bytes.Length - 1; ++index)
       stringBuilder.Append(bytes[index].ToString()).Append(",");
@@ -213,9 +218,9 @@ public class TutorialCodeEditor : MonoBehaviour
   {
     ChooseJsonDialog.Create(true, ChooseJsonDialog.Viewing.Custom, (Action<string, Tutorial, int>) ((s, tut, index) =>
     {
-      Global.SaveTutorialCode(s, this.codeEditor.Text);
+      Global.SaveTutorialCode(s, this.codeEditor.Text, true);
       this.Editing(s + ".arcTutorial2");
-    }));
+    }), false, (Action<string, string, int>) null);
   }
 
   public void ClickMapEditor()
@@ -253,14 +258,14 @@ public class TutorialCodeEditor : MonoBehaviour
 
   public void ClickOutfit()
   {
-    ChangeOutfitMenu.Create(false, onEnd: (Action<SettingsPlayer>) (set =>
+    ChangeOutfitMenu.Create(false, true, (SettingsPlayer) null, (Action<SettingsPlayer>) (set =>
     {
       StringBuilder stringBuilder = new StringBuilder("sum.outfit = {");
-      for (int o = 0; o < 9; ++o)
+      for (int index = 0; index < 9; ++index)
       {
-        if (o > 0)
+        if (index > 0)
           stringBuilder.Append(", ");
-        stringBuilder.Append(set.GetOutfitIndex((Outfit) o));
+        stringBuilder.Append(set.GetOutfitIndex((Outfit) index));
       }
       stringBuilder.Append("} \nsum.colors = {");
       for (int i = 0; i < 4; ++i)
@@ -276,7 +281,7 @@ public class TutorialCodeEditor : MonoBehaviour
 
   public void ClickSpells()
   {
-    SpellLobbyChange.Create(onEnd: (Action<SettingsPlayer>) (set =>
+    SpellLobbyChange.Create((SettingsPlayer) null, (Action<SettingsPlayer>) (set =>
     {
       StringBuilder stringBuilder = new StringBuilder("sum.spells = {");
       foreach (byte spell in set.spells)
@@ -296,7 +301,7 @@ public class TutorialCodeEditor : MonoBehaviour
       if (set.Elemental != BookOf.Nothing)
         stringBuilder.Append("\n sum.elemental = BookOf.").Append((object) set.Elemental);
       Global.systemCopyBuffer = stringBuilder.ToString();
-    }), center: true);
+    }), true, Validation.Default, false, (Action) null);
   }
 
   public void ClickPoint()
@@ -332,7 +337,7 @@ public class TutorialCodeEditor : MonoBehaviour
     if (!this.editing.EndsWith("2"))
       this.editing += 2.ToString();
     this.Editing(this.editing);
-    Global.SaveTutorialCode(this.editing, this.codeEditor.Text);
+    Global.SaveTutorialCode(this.editing, this.codeEditor.Text, true);
   }
 
   public void Edited()

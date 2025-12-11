@@ -1,5 +1,4 @@
 
-#nullable disable
 namespace Win32Utilities
 {
   public static class FlashWindow

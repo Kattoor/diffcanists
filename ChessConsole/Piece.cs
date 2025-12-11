@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-#nullable disable
 namespace ChessConsole
 {
   public abstract class Piece
@@ -16,7 +15,10 @@ namespace ChessConsole
 
     public bool SetMoved
     {
-      set => this.Moved = value;
+      set
+      {
+        this.Moved = value;
+      }
     }
 
     public abstract IEnumerable<ChessBoard.Cell> PossibleMoves { get; }
@@ -44,13 +46,16 @@ namespace ChessConsole
                 this.image.SetSiblingIndex(index2);
               break;
             }
-            for (int index3 = index1 + 1; index3 < this.image.parent.childCount && (double) this.image.parent.GetChild(index3).localPosition.z > (double) z2; ++index3)
-              this.image.SetSiblingIndex(index3);
+            for (int index2 = index1 + 1; index2 < this.image.parent.childCount && (double) this.image.parent.GetChild(index2).localPosition.z > (double) z2; ++index2)
+              this.image.SetSiblingIndex(index2);
             break;
           }
         }
       }
-      get => this._parent;
+      get
+      {
+        return this._parent;
+      }
     }
 
     public void Destroy()
@@ -67,7 +72,10 @@ namespace ChessConsole
       this.LegalMoves = new List<ChessBoard.Cell>();
     }
 
-    public void OnPlace(ChessBoard.Cell cell) => this.Parent = cell;
+    public void OnPlace(ChessBoard.Cell cell)
+    {
+      this.Parent = cell;
+    }
 
     public void OnMove(ChessBoard.Cell cell)
     {

@@ -7,9 +7,10 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-#nullable disable
 public abstract class IMiniGame
 {
+  public List<IMiniGame.Player> players = new List<IMiniGame.Player>();
+  public List<Connection> spectators = new List<Connection>();
   public IMiniGameUI gameObject;
   public const byte MsgTime = 1;
   public const byte MsgJoinLobby = 2;
@@ -40,29 +41,51 @@ public abstract class IMiniGame
   public bool isSpectator;
   public GameObject uiObject;
   protected IEnumerator<float> updateLoop;
-  public List<IMiniGame.Player> players = new List<IMiniGame.Player>();
-  public List<Connection> spectators = new List<Connection>();
 
   public abstract string GetGameType();
 
-  public virtual IMiniGame.GameType gameType => IMiniGame.GameType.Chess;
+  public virtual IMiniGame.GameType gameType
+  {
+    get
+    {
+      return IMiniGame.GameType.Chess;
+    }
+  }
 
   public virtual void ServerHandler(Connection c, myBinaryReader r, byte[] bytes)
   {
     throw new NotImplementedException();
   }
 
-  public virtual void ClientHandler(myBinaryReader r) => throw new NotImplementedException();
+  public virtual void ClientHandler(myBinaryReader r)
+  {
+    throw new NotImplementedException();
+  }
 
-  public virtual void Serialize(myBinaryWriter w) => throw new NotImplementedException();
+  public virtual void Serialize(myBinaryWriter w)
+  {
+    throw new NotImplementedException();
+  }
 
-  public virtual void Start(bool newGame) => throw new NotImplementedException();
+  public virtual void Start(bool newGame)
+  {
+    throw new NotImplementedException();
+  }
 
-  public virtual void LogicPlayerLeft(Connection c) => throw new NotImplementedException();
+  public virtual void LogicPlayerLeft(Connection c)
+  {
+    throw new NotImplementedException();
+  }
 
   public abstract void Server_SendCreateGame(Connection c);
 
-  public int MaxPlayers => 2;
+  public int MaxPlayers
+  {
+    get
+    {
+      return 2;
+    }
+  }
 
   public Connection First
   {
@@ -92,7 +115,13 @@ public abstract class IMiniGame
     this.updateLoop = (IEnumerator<float>) null;
   }
 
-  internal bool IsFirst => this.GetPlayerIndex(Client.Name) == 0;
+  internal bool IsFirst
+  {
+    get
+    {
+      return this.GetPlayerIndex(Client.Name) == 0;
+    }
+  }
 
   public int GetPlayerIndex(string n)
   {
@@ -115,7 +144,7 @@ public abstract class IMiniGame
         myBinaryWriter.Write((byte) 8);
         myBinaryWriter.Write(whoFirst);
       }
-      Client.connection.SendBytes(memoryStream.ToArray());
+      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -130,7 +159,7 @@ public abstract class IMiniGame
         w.Write((byte) 3);
         cm.Serialize(w);
       }
-      Client.connection.SendBytes(memoryStream.ToArray());
+      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -157,7 +186,7 @@ public abstract class IMiniGame
         myBinaryWriter.Write((byte) 87);
         myBinaryWriter.Write((byte) 5);
       }
-      Client.connection.SendBytes(memoryStream.ToArray());
+      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -170,7 +199,7 @@ public abstract class IMiniGame
         myBinaryWriter.Write((byte) 87);
         myBinaryWriter.Write((byte) 4);
       }
-      Client.connection.SendBytes(memoryStream.ToArray());
+      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -193,13 +222,13 @@ public abstract class IMiniGame
     foreach (IMiniGame.Player player in this.players)
     {
       if (player != null && player.connection.State == ConnectionState.Connected && player.connection?.miniGame == this)
-        player.connection.SendBytes(b);
+        player.connection.SendBytes(b, SendOption.None);
     }
     for (int index = this.spectators.Count - 1; index >= 0; --index)
     {
       if (this.spectators[index] != null && this.spectators[index].State == ConnectionState.Connected && this.spectators[index]?.miniGame == this)
       {
-        this.spectators[index].SendBytes(b);
+        this.spectators[index].SendBytes(b, SendOption.None);
       }
       else
       {
@@ -226,7 +255,10 @@ public abstract class IMiniGame
     }
   }
 
-  public bool IsFull() => this.players.Count >= this.MaxPlayers;
+  public bool IsFull()
+  {
+    return this.players.Count >= this.MaxPlayers;
+  }
 
   public void OnJoinServer(Connection c, bool forceSpectator)
   {
@@ -264,7 +296,7 @@ public abstract class IMiniGame
           {
             (byte) 87,
             (byte) 9
-          });
+          }, SendOption.None);
         this.players[index].connection.miniGame = (IMiniGame) null;
         this.players[index].connection = (Connection) null;
         this.players.RemoveAt(index);
@@ -281,13 +313,13 @@ public abstract class IMiniGame
     {
       for (int index = 0; index < this.players.Count; ++index)
       {
-        if (this.players[index] != null && this.players[index].connection != null && this.players[index].connection.State == ConnectionState.Connected && this.players[index].connection.miniGame == this)
+        if (this.players[index] != null && this.players[index].connection != null && (this.players[index].connection.State == ConnectionState.Connected && this.players[index].connection.miniGame == this))
         {
           this.players[index].connection.SendBytes(new byte[2]
           {
             (byte) 87,
             (byte) 9
-          });
+          }, SendOption.None);
           this.players[index].connection.miniGame = (IMiniGame) null;
           this.players[index].connection = (Connection) null;
         }
@@ -297,13 +329,13 @@ public abstract class IMiniGame
     {
       for (int index = 0; index < this.spectators.Count; ++index)
       {
-        if (this.spectators[index] != null && this.spectators[index] != null && this.spectators[index].State == ConnectionState.Connected && this.spectators[index].miniGame == this)
+        if (this.spectators[index] != null && this.spectators[index] != null && (this.spectators[index].State == ConnectionState.Connected && this.spectators[index].miniGame == this))
         {
           this.spectators[index].SendBytes(new byte[2]
           {
             (byte) 87,
             (byte) 9
-          });
+          }, SendOption.None);
           this.spectators[index].miniGame = (IMiniGame) null;
         }
       }
@@ -321,10 +353,10 @@ public abstract class IMiniGame
   public class GameSettings
   {
     public float player1Time = 300f;
-    public float player1Delay;
     public float player2Time = 300f;
-    public float player2Delay;
     public PlayerColorOptions playAs = PlayerColorOptions.Random;
+    public float player1Delay;
+    public float player2Delay;
 
     public IMiniGame.GameSettings Copy()
     {
@@ -370,9 +402,9 @@ public abstract class IMiniGame
 
   public class Player
   {
+    public float startTime = 20f;
     public string name;
     public Connection connection;
-    public float startTime = 20f;
     public float curTime;
     public float curDelay;
     public const byte Version = 1;
@@ -382,7 +414,10 @@ public abstract class IMiniGame
     [NonSerialized]
     public float startTurnTime;
 
-    public void SetStartTime() => this.startTime = this.curTime;
+    public void SetStartTime()
+    {
+      this.startTime = this.curTime;
+    }
 
     public void Serialize(myBinaryWriter w)
     {

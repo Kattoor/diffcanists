@@ -3,7 +3,6 @@ using System;
 using System.Xml.Serialization;
 using UnityEngine;
 
-#nullable disable
 namespace LibNoise
 {
   public abstract class ModuleBase : IDisposable
@@ -26,19 +25,35 @@ namespace LibNoise
       {
         if (index < 0 || index >= this._modules.Length)
           throw new ArgumentOutOfRangeException("Index out of valid module range");
-        return this._modules[index] != null ? this._modules[index] : throw new ArgumentNullException("Desired element is null");
+        if (this._modules[index] == null)
+          throw new ArgumentNullException("Desired element is null");
+        return this._modules[index];
       }
       set
       {
         if (index < 0 || index >= this._modules.Length)
           throw new ArgumentOutOfRangeException("Index out of valid module range");
-        this._modules[index] = value != null ? value : throw new ArgumentNullException("Value should not be null");
+        if (value == null)
+          throw new ArgumentNullException("Value should not be null");
+        this._modules[index] = value;
       }
     }
 
-    protected ModuleBase[] Modules => this._modules;
+    protected ModuleBase[] Modules
+    {
+      get
+      {
+        return this._modules;
+      }
+    }
 
-    public int SourceModuleCount => this._modules != null ? this._modules.Length : 0;
+    public int SourceModuleCount
+    {
+      get
+      {
+        return this._modules != null ? this._modules.Length : 0;
+      }
+    }
 
     public abstract double GetValue(double x, double y, double z);
 
@@ -52,7 +67,13 @@ namespace LibNoise
       return this.GetValue((double) coordinate.x, (double) coordinate.y, (double) coordinate.z);
     }
 
-    public bool IsDisposed => this._disposed;
+    public bool IsDisposed
+    {
+      get
+      {
+        return this._disposed;
+      }
+    }
 
     public void Dispose()
     {

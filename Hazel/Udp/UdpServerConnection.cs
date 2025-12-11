@@ -1,7 +1,7 @@
 
 using System;
+using System.Net;
 
-#nullable disable
 namespace Hazel.Udp
 {
   internal sealed class UdpServerConnection : UdpConnection
@@ -10,11 +10,11 @@ namespace Hazel.Udp
 
     public UdpConnectionListener Listener { get; private set; }
 
-    internal UdpServerConnection(UdpConnectionListener listener, System.Net.EndPoint endPoint, IPMode IPMode)
+    internal UdpServerConnection(UdpConnectionListener listener, EndPoint endPoint, IPMode IPMode)
     {
       this.Listener = listener;
       this.RemoteEndPoint = endPoint;
-      this.EndPoint = (ConnectionEndPoint) new NetworkEndPoint(endPoint);
+      this.EndPoint = (ConnectionEndPoint) new NetworkEndPoint(endPoint, IPMode.IPv4);
       this.IPMode = IPMode;
       this.State = ConnectionState.Connected;
     }

@@ -1,6 +1,8 @@
 
-#nullable disable
 public class SpellSoulJar : Creature
 {
-  public override ZCreature Get() => (ZCreature) new ZSpellSoulJar();
+  public override ZCreature Get()
+  {
+    return (ZCreature) new ZSpellSoulJar();
+  }
 }

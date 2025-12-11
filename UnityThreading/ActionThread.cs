@@ -2,7 +2,6 @@
 using System;
 using System.Collections;
 
-#nullable disable
 namespace UnityThreading
 {
   public sealed class ActionThread : ThreadBase

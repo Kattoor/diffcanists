@@ -1,7 +1,6 @@
 
 using System.IO;
 
-#nullable disable
 namespace SevenZip.Compression.LZ
 {
   public class InWindow
@@ -56,7 +55,10 @@ namespace SevenZip.Compression.LZ
       }
     }
 
-    private void Free() => this._bufferBase = (byte[]) null;
+    private void Free()
+    {
+      this._bufferBase = (byte[]) null;
+    }
 
     public void Create(uint keepSizeBefore, uint keepSizeAfter, uint keepSizeReserv)
     {
@@ -72,9 +74,15 @@ namespace SevenZip.Compression.LZ
       this._pointerToLastSafePosition = this._blockSize - keepSizeAfter;
     }
 
-    public void SetStream(Stream stream) => this._stream = stream;
+    public void SetStream(Stream stream)
+    {
+      this._stream = stream;
+    }
 
-    public void ReleaseStream() => this._stream = (Stream) null;
+    public void ReleaseStream()
+    {
+      this._stream = (Stream) null;
+    }
 
     public void Init()
     {
@@ -105,14 +113,17 @@ namespace SevenZip.Compression.LZ
       if (this._streamEndWasReached && (long) this._pos + (long) index + (long) limit > (long) this._streamPos)
         limit = this._streamPos - (uint) ((ulong) this._pos + (ulong) index);
       ++distance;
-      uint num = (uint) ((int) this._bufferOffset + (int) this._pos + index);
-      uint matchLen = 0;
-      while (matchLen < limit && (int) this._bufferBase[(int) num + (int) matchLen] == (int) this._bufferBase[(int) num + (int) matchLen - (int) distance])
-        ++matchLen;
-      return matchLen;
+      uint num1 = (uint) ((int) this._bufferOffset + (int) this._pos + index);
+      uint num2 = 0;
+      while (num2 < limit && (int) this._bufferBase[(int) num1 + (int) num2] == (int) this._bufferBase[(int) num1 + (int) num2 - (int) distance])
+        ++num2;
+      return num2;
     }
 
-    public uint GetNumAvailableBytes() => this._streamPos - this._pos;
+    public uint GetNumAvailableBytes()
+    {
+      return this._streamPos - this._pos;
+    }
 
     public void ReduceOffsets(int subValue)
     {

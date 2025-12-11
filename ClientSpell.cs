@@ -2,7 +2,6 @@
 using System;
 using UnityEngine;
 
-#nullable disable
 public class ClientSpell : MonoBehaviour
 {
   public AudioClip castClip;
@@ -11,7 +10,13 @@ public class ClientSpell : MonoBehaviour
   [NonSerialized]
   private Renderer _renderer;
 
-  public Renderer Renderer => this._renderer;
+  public Renderer Renderer
+  {
+    get
+    {
+      return this._renderer;
+    }
+  }
 
   public void FindRenderer()
   {

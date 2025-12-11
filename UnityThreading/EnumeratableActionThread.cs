@@ -2,7 +2,6 @@
 using System;
 using System.Collections;
 
-#nullable disable
 namespace UnityThreading
 {
   public sealed class EnumeratableActionThread : ThreadBase
@@ -25,6 +24,9 @@ namespace UnityThreading
       this.Start();
     }
 
-    protected override IEnumerator Do() => this.enumeratableAction((ThreadBase) this);
+    protected override IEnumerator Do()
+    {
+      return this.enumeratableAction((ThreadBase) this);
+    }
   }
 }

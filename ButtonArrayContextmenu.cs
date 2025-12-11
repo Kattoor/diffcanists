@@ -5,14 +5,19 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-#nullable disable
 public class ButtonArrayContextmenu : MonoBehaviour
 {
   public UIOnHover pfabButton;
   public UIOnHover pfabImage;
   private int count;
 
-  public int Count => this.count;
+  public int Count
+  {
+    get
+    {
+      return this.count;
+    }
+  }
 
   public void AddItem(string n, Action a, string tooltip = null)
   {
@@ -29,7 +34,7 @@ public class ButtonArrayContextmenu : MonoBehaviour
     uiOnHover.onClick.AddListener((UnityAction) (() => MyContextMenu.CloseInstance()));
     if (!string.IsNullOrEmpty(tooltip))
     {
-      uiOnHover.onEnter.AddListener((UnityAction) (() => MyToolTip.Show(tooltip)));
+      uiOnHover.onEnter.AddListener((UnityAction) (() => MyToolTip.Show(tooltip, -1f)));
       uiOnHover.onExit.AddListener((UnityAction) (() => MyToolTip.Close()));
     }
     uiOnHover.gameObject.SetActive(true);
@@ -43,7 +48,7 @@ public class ButtonArrayContextmenu : MonoBehaviour
     uiOnHover.transform.GetChild(0).GetComponent<Image>().sprite = s;
     if (!string.IsNullOrEmpty(tooltip))
     {
-      uiOnHover.onEnter.AddListener((UnityAction) (() => MyToolTip.Show(tooltip)));
+      uiOnHover.onEnter.AddListener((UnityAction) (() => MyToolTip.Show(tooltip, -1f)));
       uiOnHover.onExit.AddListener((UnityAction) (() => MyToolTip.Close()));
     }
     uiOnHover.onClick.AddListener((UnityAction) (() =>

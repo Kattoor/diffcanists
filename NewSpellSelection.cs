@@ -3,7 +3,6 @@ using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-#nullable disable
 public class NewSpellSelection : MonoBehaviour
 {
   public SpellLobbyChange spellLobby;
@@ -14,11 +13,20 @@ public class NewSpellSelection : MonoBehaviour
     this.spellLobby.Init(Client.settingsPlayer, (Action<SettingsPlayer>) null);
   }
 
-  private void Start() => DiscordIntergration.Instance?.UpdateActivitySpellSelection();
+  private void Start()
+  {
+    DiscordIntergration.Instance?.UpdateActivitySpellSelection();
+  }
 
-  public void ClickLoad() => this.spellLobby.ClicOpen();
+  public void ClickLoad()
+  {
+    this.spellLobby.ClicOpen();
+  }
 
-  public void ClickSave() => this.spellLobby.ClickSave();
+  public void ClickSave()
+  {
+    this.spellLobby.ClickSave();
+  }
 
   private void Equip()
   {

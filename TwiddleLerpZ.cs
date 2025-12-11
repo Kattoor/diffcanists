@@ -1,7 +1,6 @@
 
 using UnityEngine;
 
-#nullable disable
 public class TwiddleLerpZ : MonoBehaviour
 {
   public float minScale = -10f;

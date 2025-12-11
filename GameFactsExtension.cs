@@ -3,7 +3,6 @@ using Hazel;
 using System;
 using UnityEngine;
 
-#nullable disable
 public static class GameFactsExtension
 {
   public static void ManualSerialize(

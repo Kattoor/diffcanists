@@ -1,7 +1,6 @@
 
 using UnityEngine;
 
-#nullable disable
 namespace Junk
 {
   public class Resources
@@ -18,7 +17,10 @@ namespace Junk
     {
     }
 
-    internal static Resources getInstance(MapEnum mapEnum) => (Resources) null;
+    internal static Resources getInstance(MapEnum mapEnum)
+    {
+      return (Resources) null;
+    }
 
     public Resources(SerializedResources.MapGroup p)
     {
@@ -30,9 +32,15 @@ namespace Junk
         this.objects[index] = new Resource(p.resources[index]);
     }
 
-    public BufferedImage getGround() => this.ground;
+    public BufferedImage getGround()
+    {
+      return this.ground;
+    }
 
-    internal int getLength() => this.objects.Length;
+    internal int getLength()
+    {
+      return this.objects.Length;
+    }
 
     internal Rectangle getBounds(int decoIdx)
     {
@@ -40,31 +48,70 @@ namespace Junk
       return new Rectangle(resource.offsetX, resource.offsetY, resource.image.getWidth(), resource.image.getHeight());
     }
 
-    internal bool getCanRotate(int decoIdx) => this.objects[decoIdx].canRotate;
+    internal bool getCanRotate(int decoIdx)
+    {
+      return this.objects[decoIdx].canRotate;
+    }
 
-    internal bool getNeedLevelGround(int decoIdx) => this.objects[decoIdx].needLevelGround;
+    internal bool getNeedLevelGround(int decoIdx)
+    {
+      return this.objects[decoIdx].needLevelGround;
+    }
 
-    internal bool getRequireFlatten(int decoIdx) => this.objects[decoIdx].requireFlatten;
+    internal bool getRequireFlatten(int decoIdx)
+    {
+      return this.objects[decoIdx].requireFlatten;
+    }
 
-    internal int getOffset(int decoIdx) => this.objects[decoIdx].offset;
+    internal int getOffset(int decoIdx)
+    {
+      return this.objects[decoIdx].offset;
+    }
 
-    internal int getOffsetX(int decoIdx) => this.objects[decoIdx].offsetX;
+    internal int getOffsetX(int decoIdx)
+    {
+      return this.objects[decoIdx].offsetX;
+    }
 
-    internal int getOffsetY(int decoIdx) => this.objects[decoIdx].offsetY;
+    internal int getOffsetY(int decoIdx)
+    {
+      return this.objects[decoIdx].offsetY;
+    }
 
-    internal bool getIsForeground(int decoIdx) => this.objects[decoIdx].isForground;
+    internal bool getIsForeground(int decoIdx)
+    {
+      return this.objects[decoIdx].isForground;
+    }
 
-    internal BufferedImage getDecoration(int decoIdx) => this.objects[decoIdx].image;
+    internal BufferedImage getDecoration(int decoIdx)
+    {
+      return this.objects[decoIdx].image;
+    }
 
-    internal BufferedImage getGrass() => this.grass;
+    internal BufferedImage getGrass()
+    {
+      return this.grass;
+    }
 
-    internal BufferedImage getUnerbelly() => this.underBelly;
+    internal BufferedImage getUnerbelly()
+    {
+      return this.underBelly;
+    }
 
-    internal static BufferedImage getHarmlessBridge() => Resources.bridge;
+    internal static BufferedImage getHarmlessBridge()
+    {
+      return Resources.bridge;
+    }
 
-    internal static BufferedImage getDeveloper() => Resources.developer;
+    internal static BufferedImage getDeveloper()
+    {
+      return Resources.developer;
+    }
 
-    internal static BufferedImage getDeveloper2() => Resources.developer2;
+    internal static BufferedImage getDeveloper2()
+    {
+      return Resources.developer2;
+    }
 
     public static void SetBridge(Texture2D t)
     {

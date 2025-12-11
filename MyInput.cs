@@ -2,7 +2,6 @@
 using HardShellStudios.InputManager;
 using UnityEngine;
 
-#nullable disable
 public static class MyInput
 {
   public static float cameraSpeed = 1f;
@@ -47,11 +46,20 @@ public static class MyInput
     }
   }
 
-  public static bool GetMouseButtonDown(int w) => Input.GetMouseButtonDown(w);
+  public static bool GetMouseButtonDown(int w)
+  {
+    return Input.GetMouseButtonDown(w);
+  }
 
-  public static bool GetMouseButtonUp(int w) => Input.GetMouseButtonUp(w);
+  public static bool GetMouseButtonUp(int w)
+  {
+    return Input.GetMouseButtonUp(w);
+  }
 
-  public static bool GetMouseButton(int w) => Input.GetMouseButton(w);
+  public static bool GetMouseButton(int w)
+  {
+    return Input.GetMouseButton(w);
+  }
 
   public static void LoopControllerMouseEvents()
   {

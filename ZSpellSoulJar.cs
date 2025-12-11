@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-#nullable disable
 public class ZSpellSoulJar : ZCreature
 {
   public MyLocation SetPosition
@@ -61,11 +60,20 @@ public class ZSpellSoulJar : ZCreature
   {
   }
 
-  public override void StartMoving(bool fromInput = false) => this.ShouldFall(true, false);
+  public override void StartMoving(bool fromInput = false)
+  {
+    this.ShouldFall(true, false);
+  }
 
-  public override void SetVelocity(int x, int y) => this.ShouldFall(true, false);
+  public override void SetVelocity(int x, int y)
+  {
+    this.ShouldFall(true, false);
+  }
 
-  public override void Fall(bool ignoreFlight = false) => this.ShouldFall(true, false);
+  public override void Fall(bool ignoreFlight = false)
+  {
+    this.ShouldFall(true, false);
+  }
 
   public override void ApplyHeal(DamageType dt, int damage, ZCreature enemy)
   {
@@ -91,12 +99,12 @@ public class ZSpellSoulJar : ZCreature
     }
     else
     {
-      for (int index3 = 0; index3 < this.radius * 2; ++index3)
+      for (int index1 = 0; index1 < this.radius * 2; ++index1)
       {
-        int index4 = (index3 + num1) % this.zb.Count;
+        int index2 = (index1 + num1) % this.zb.Count;
         int x = (int) this.position.x;
-        int num3 = (int) this.position.y - 3;
-        if (!this.map.CheckPositionOnlyMap(x + this.zb[index4].x, num3 + this.zb[index4].y))
+        int num2 = (int) this.position.y - 3;
+        if (!this.map.CheckPositionOnlyMap(x + this.zb[index2].x, num2 + this.zb[index2].y))
           return false;
       }
     }
@@ -135,7 +143,7 @@ public class ZSpellSoulJar : ZCreature
       FixedInt y = this.velocity.y;
       FixedInt fixedInt1 = this.velocity.x;
       FixedInt fixedInt2 = this.velocity.y;
-      if (x3 > 1 || x3 < -1 || y > 1 || y < -1)
+      if (x3 > 1 || x3 < -1 || (y > 1 || y < -1))
       {
         num3 = !(FixedInt.Abs(x3) > FixedInt.Abs(y)) ? (int) FixedInt.Abs(y) + 1 : (int) FixedInt.Abs(x3) + 1;
         fixedInt1 = this.velocity.x / num3;
@@ -189,7 +197,7 @@ public class ZSpellSoulJar : ZCreature
         this.moving = (IEnumerator<float>) null;
         this.velocity = MyLocation.zero;
         this.isMoving = false;
-        this.collider?.Disable();
+        this.collider?.Disable(true);
         this.isDead = true;
         this.isNull = true;
         this.parent?.RemoveFamiliar(BookOf.Underdark);
@@ -200,7 +208,7 @@ public class ZSpellSoulJar : ZCreature
       ++num1;
       if (num1 >= num2)
       {
-        this.collider?.Disable();
+        this.collider?.Disable(true);
         this.isDead = true;
         this.isNull = true;
         this.parent?.RemoveFamiliar(BookOf.Underdark);

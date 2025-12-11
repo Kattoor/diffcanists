@@ -11,9 +11,11 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-#nullable disable
 public class RPSTBGUI : MonoBehaviour, IMiniGameUI
 {
+  public List<Sprite> imageBoards = new List<Sprite>();
+  public List<RPSTBGUI.VisualList> imagePieces = new List<RPSTBGUI.VisualList>();
+  internal bool useAudio = true;
   public RectTransform rectTransform;
   public RectTransform rectMove;
   public GameObject container;
@@ -21,8 +23,6 @@ public class RPSTBGUI : MonoBehaviour, IMiniGameUI
   public Image imgScissors;
   public Image imgRock;
   public Image imgPaper;
-  public List<Sprite> imageBoards = new List<Sprite>();
-  public List<RPSTBGUI.VisualList> imagePieces = new List<RPSTBGUI.VisualList>();
   public RectTransform pfabPiece;
   public RectTransform pfabButton;
   public RectTransform boardContainer;
@@ -59,19 +59,42 @@ public class RPSTBGUI : MonoBehaviour, IMiniGameUI
   internal PlayerState playerState;
   private RPSTBGBoard.Cell holdedNode;
   internal RPSTBGBoard board;
-  internal bool useAudio = true;
   public const string prefColor1 = "prefheckersColor1";
   public const string prefScale = "prefheckersSize";
 
   public static RPSTBGUI Instance { get; private set; }
 
-  public bool largeImages => false;
+  public bool largeImages
+  {
+    get
+    {
+      return false;
+    }
+  }
 
-  public IMiniGame.GameSettings gameSettings => this.board.gameSettings;
+  public IMiniGame.GameSettings gameSettings
+  {
+    get
+    {
+      return this.board.gameSettings;
+    }
+  }
 
-  private bool whitesTurn => this.board.whosTurn == PlayerColor.White;
+  private bool whitesTurn
+  {
+    get
+    {
+      return this.board.whosTurn == PlayerColor.White;
+    }
+  }
 
-  internal bool IsFirst => this.board.GetPlayerIndex(Client.Name) == 0;
+  internal bool IsFirst
+  {
+    get
+    {
+      return this.board.GetPlayerIndex(Client.Name) == 0;
+    }
+  }
 
   internal bool playingAsBlack
   {
@@ -157,7 +180,10 @@ public class RPSTBGUI : MonoBehaviour, IMiniGameUI
     this.board.AskStartGame((byte) 87, whoFirst);
   }
 
-  public void ClickDraw() => this.board.AskDraw();
+  public void ClickDraw()
+  {
+    this.board.AskDraw();
+  }
 
   private void ChangePieceSet()
   {
@@ -188,22 +214,22 @@ public class RPSTBGUI : MonoBehaviour, IMiniGameUI
     {
       this.imgColorBg.color = c;
       Global.SetPrefColor("prefheckersColor1", c);
-    }), (Action<Color>) (c => this.imgColorBg.color = c))), this.imgColorBg.color);
-    myContextMenu.AddSeperator();
-    myContextMenu.AddSeperator();
+    }), (Action<Color>) (c => this.imgColorBg.color = c), (Action) null)), this.imgColorBg.color);
+    myContextMenu.AddSeperator("--------------------------");
+    myContextMenu.AddSeperator("--------------------------");
     if (this.board.status == 1 && !this.board.isSpectator)
     {
       myContextMenu.AddSeperator(">>> Resign <<<");
       myContextMenu.AddItem("Resign", (Action) (() => this.board.AskResign()), (Color) ColorScheme.GetColor(MyContextMenu.ColorRed));
-      myContextMenu.AddSeperator();
-      myContextMenu.AddSeperator();
+      myContextMenu.AddSeperator("--------------------------");
+      myContextMenu.AddSeperator("--------------------------");
     }
     else
     {
       myContextMenu.AddSeperator(">>> Resign <<<");
       myContextMenu.AddSeperator("<s>Resign");
-      myContextMenu.AddSeperator();
-      myContextMenu.AddSeperator();
+      myContextMenu.AddSeperator("--------------------------");
+      myContextMenu.AddSeperator("--------------------------");
     }
     if (this.board.players.Count == 1 && this.board.isSpectator)
     {
@@ -216,16 +242,16 @@ public class RPSTBGUI : MonoBehaviour, IMiniGameUI
       myContextMenu.AddSeperator("<s>Stop spectating and Play!");
     }
     myContextMenu.AddSeperator(">>> Time <<<");
-    myContextMenu.AddItem("Change Time (Both): " + this.ToTime(this.board.gameSettings.player1Time), (Action) (() => this.PickChange(true, true, true)), (Color) ColorScheme.GetColor(MyContextMenu.ColorBlue));
-    myContextMenu.AddItem("Change Player 1's Time: " + this.ToTime(this.board.gameSettings.player1Time), (Action) (() => this.PickChange(true, true, false)), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
-    myContextMenu.AddItem("Change Player 2's Time: " + this.ToTime(this.board.gameSettings.player2Time), (Action) (() => this.PickChange(false, true, false)), (Color) ColorScheme.GetColor(MyContextMenu.ColorRed));
+    myContextMenu.AddItem("Change Time (Both): " + this.ToTime(this.board.gameSettings.player1Time, 10), (Action) (() => this.PickChange(true, true, true)), (Color) ColorScheme.GetColor(MyContextMenu.ColorBlue));
+    myContextMenu.AddItem("Change Player 1's Time: " + this.ToTime(this.board.gameSettings.player1Time, 10), (Action) (() => this.PickChange(true, true, false)), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
+    myContextMenu.AddItem("Change Player 2's Time: " + this.ToTime(this.board.gameSettings.player2Time, 10), (Action) (() => this.PickChange(false, true, false)), (Color) ColorScheme.GetColor(MyContextMenu.ColorRed));
     myContextMenu.AddSeperator(">>> Delay <<<");
     myContextMenu.AddItem("Change Delay (Both): " + this.ToTimeOnlySeconds(this.board.gameSettings.player1Delay), (Action) (() => this.PickChange(true, false, true)), (Color) ColorScheme.GetColor(MyContextMenu.ColorBlue));
     myContextMenu.AddItem("Change Player 1's Delay: " + this.ToTimeOnlySeconds(this.board.gameSettings.player1Delay), (Action) (() => this.PickChange(true, false, false)), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
     myContextMenu.AddItem("Change Player 2's Delay: " + this.ToTimeOnlySeconds(this.board.gameSettings.player2Delay), (Action) (() => this.PickChange(false, false, false)), (Color) ColorScheme.GetColor(MyContextMenu.ColorRed));
     myContextMenu.AddSeperator(">>> Color <<<");
     myContextMenu.AddItem("Player 1 plays as: " + this.board.gameSettings.playAs.ToString(), (Action) (() => this.PickColor()), (Color) ColorScheme.GetColor(MyContextMenu.ColorPurple));
-    myContextMenu.Rebuild();
+    myContextMenu.Rebuild(false);
   }
 
   private void PickColor()
@@ -237,7 +263,7 @@ public class RPSTBGUI : MonoBehaviour, IMiniGameUI
     myContextMenu.AddItem("Blue", (Action) (() => this.PickedColor(PlayerColorOptions.White)), new Color(0.0f, 0.5f, 1f));
     myContextMenu.AddItem("Red", (Action) (() => this.PickedColor(PlayerColorOptions.Black)), new Color(0.9f, 0.0f, 0.0f));
     myContextMenu.AddItem("Random", (Action) (() => this.PickedColor(PlayerColorOptions.Random)), new Color(0.5f, 0.5f, 0.5f));
-    myContextMenu.Rebuild();
+    myContextMenu.Rebuild(false);
   }
 
   private void PickedColor(PlayerColorOptions p)
@@ -254,7 +280,7 @@ public class RPSTBGUI : MonoBehaviour, IMiniGameUI
         w.Write((byte) 12);
         gameSettings.Serialize(w);
       }
-      Client.connection?.SendBytes(memoryStream.ToArray());
+      Client.connection?.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -264,7 +290,7 @@ public class RPSTBGUI : MonoBehaviour, IMiniGameUI
     myContextMenu.AddSeperator((player1 ? "Player 1 " : "Player 2 ") + (time ? "Time " : "Delay ") + "(in minutes - end with s for seconds)");
     myContextMenu.AddInput((Action<string>) (s =>
     {
-      float num = time ? Mathf.Clamp(Global.ParseTime(s, 300f), 5f, 3600f) : Mathf.Clamp(Global.ParseTime(s, 0.0f, false), 0.0f, 30f);
+      float num = time ? Mathf.Clamp(Global.ParseTime(s, 300f, true), 5f, 3600f) : Mathf.Clamp(Global.ParseTime(s, 0.0f, false), 0.0f, 30f);
       IMiniGame.GameSettings gameSettings = this.board.gameSettings.Copy();
       if (player1 | both)
       {
@@ -288,10 +314,10 @@ public class RPSTBGUI : MonoBehaviour, IMiniGameUI
           w.Write((byte) 12);
           gameSettings.Serialize(w);
         }
-        Client.connection?.SendBytes(memoryStream.ToArray());
+        Client.connection?.SendBytes(memoryStream.ToArray(), SendOption.None);
       }
-    }));
-    myContextMenu.Rebuild();
+    }), (string) null, false, true);
+    myContextMenu.Rebuild(false);
   }
 
   public void Cheat(RPSTBGBoard.Cell cell)
@@ -301,9 +327,9 @@ public class RPSTBGUI : MonoBehaviour, IMiniGameUI
     MyContextMenu myContextMenu = MyContextMenu.Show();
     myContextMenu.AddItem("Pawn", (Action) (() => this.SendCheat(cell, ChessPiece.Pawn)), Color.green);
     myContextMenu.AddItem("King", (Action) (() => this.SendCheat(cell, ChessPiece.Bishop)), Color.green);
-    myContextMenu.AddSeperator();
+    myContextMenu.AddSeperator("--------------------------");
     myContextMenu.AddItem("Remove", (Action) (() => this.SendCheat(cell, ~ChessPiece.Pawn)), Color.red);
-    myContextMenu.Rebuild();
+    myContextMenu.Rebuild(false);
   }
 
   private void SendCheat(RPSTBGBoard.Cell cell, ChessPiece s)
@@ -317,7 +343,7 @@ public class RPSTBGUI : MonoBehaviour, IMiniGameUI
         myBinaryWriter.Write((int) cell.index);
         myBinaryWriter.Write((int) s);
       }
-      Client.connection?.SendBytes(memoryStream.ToArray());
+      Client.connection?.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -422,7 +448,10 @@ public class RPSTBGUI : MonoBehaviour, IMiniGameUI
     this.objWinner.SetActive(this.board.status != 1);
   }
 
-  public void RefreshDraw() => this.RefreshTime();
+  public void RefreshDraw()
+  {
+    this.RefreshTime();
+  }
 
   public void RefreshPlayers()
   {
@@ -442,7 +471,7 @@ public class RPSTBGUI : MonoBehaviour, IMiniGameUI
     {
       pfabName pfabName = UnityEngine.Object.Instantiate<pfabName>(this.pfabname, (Transform) this.containerSpectators);
       ((RectTransform) pfabName.transform).anchoredPosition = new Vector2(6f, (float) (-index1 * num - 4));
-      pfabName.Setup(this.board.players[index1].name);
+      pfabName.Setup(this.board.players[index1].name, false);
       pfabName.gameObject.SetActive(true);
     }
     int index2 = 0;
@@ -450,7 +479,7 @@ public class RPSTBGUI : MonoBehaviour, IMiniGameUI
     {
       pfabName pfabName = UnityEngine.Object.Instantiate<pfabName>(this.pfabname, (Transform) this.containerSpectators);
       ((RectTransform) pfabName.transform).anchoredPosition = new Vector2(6f, (float) (-index1 * num - 4));
-      pfabName.Setup(this.board.spectators[index2].name);
+      pfabName.Setup(this.board.spectators[index2].name, false);
       pfabName.gameObject.SetActive(true);
       ++index2;
       ++index1;
@@ -468,16 +497,25 @@ public class RPSTBGUI : MonoBehaviour, IMiniGameUI
     this.arrowPlayer2.gameObject.SetActive(this.board.whosTurn == this.board.secondPlayer);
   }
 
-  public void ClickMinimize() => this.container.SetActive(!this.container.activeSelf);
+  public void ClickMinimize()
+  {
+    this.container.SetActive(!this.container.activeSelf);
+  }
 
   public void ClickSpectators()
   {
     this.containerSpectators.gameObject.SetActive(!this.containerSpectators.gameObject.activeSelf);
   }
 
-  public void ClickMove() => this.StartCoroutine(this.HoldMove());
+  public void ClickMove()
+  {
+    this.StartCoroutine(this.HoldMove());
+  }
 
-  public void ClickResize() => this.StartCoroutine(this.HoldResize());
+  public void ClickResize()
+  {
+    this.StartCoroutine(this.HoldResize());
+  }
 
   private IEnumerator HoldMove()
   {
@@ -576,7 +614,7 @@ public class RPSTBGUI : MonoBehaviour, IMiniGameUI
       this.poolHighlight.DeSpawn();
       this.Despawn();
     }
-    else if ((this.holdedNode == null || this.holdedNode != cell) && this.holdedNode != null && this.holdedNode.Piece.LegalMoves.Contains(cell))
+    else if ((this.holdedNode == null || this.holdedNode != cell) && (this.holdedNode != null && this.holdedNode.Piece.LegalMoves.Contains(cell)))
     {
       this.CompleteMove(cell, PromoteOptions.Queen);
     }
@@ -640,7 +678,7 @@ public class RPSTBGUI : MonoBehaviour, IMiniGameUI
     }
     else
     {
-      this.board.Move(this.holdedNode, cell, PromoteOptions.Queen, new ChessMove());
+      this.board.Move(this.holdedNode, cell, PromoteOptions.Queen, new ChessMove(), true);
       this.board.TurnStart(this.board.whosTurn == PlayerColor.White ? PlayerColor.Black : PlayerColor.White);
     }
   }
@@ -671,7 +709,10 @@ public class RPSTBGUI : MonoBehaviour, IMiniGameUI
     return new Vector2((float) (-(5 - Parent.X) * 64), (float) (-(5 - Parent.Y) * 64));
   }
 
-  public void Reorder() => RPSTBGUI.SortChildren((Transform) this.boardContainer);
+  public void Reorder()
+  {
+    RPSTBGUI.SortChildren((Transform) this.boardContainer);
+  }
 
   public static void SortChildren(Transform o)
   {

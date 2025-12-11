@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-#nullable disable
 public class MapGenerator
 {
   public static Dictionary<int, List<Coords>> cachedRadius = new Dictionary<int, List<Coords>>();
@@ -47,9 +46,9 @@ public class MapGenerator
 
   public static List<Coords> getOutlineArray(int radius)
   {
-    List<Coords> outlineArray = new List<Coords>();
-    if (MapGenerator.cachedRadius.TryGetValue(radius, out outlineArray))
-      return outlineArray;
+    List<Coords> coordsList = new List<Coords>();
+    if (MapGenerator.cachedRadius.TryGetValue(radius, out coordsList))
+      return coordsList;
     int num1 = radius - 1;
     int num2 = 0;
     int num3 = 1;
@@ -92,10 +91,10 @@ public class MapGenerator
 
   public static List<Coords> GetTowerFloatPoints(Texture2D tex, int extraY)
   {
-    List<Coords> towerFloatPoints1 = new List<Coords>();
-    if (MapGenerator.cachedTowerFloatPoints.TryGetValue(tex, out towerFloatPoints1))
-      return towerFloatPoints1;
-    List<Coords> towerFloatPoints2 = new List<Coords>();
+    List<Coords> coordsList1 = new List<Coords>();
+    if (MapGenerator.cachedTowerFloatPoints.TryGetValue(tex, out coordsList1))
+      return coordsList1;
+    List<Coords> coordsList2 = new List<Coords>();
     Color32[] pixels32 = ZMap.GetPixels32(tex);
     int num1 = tex.width / 2;
     int num2 = tex.height / 2 + extraY;
@@ -108,7 +107,7 @@ public class MapGenerator
         {
           if (pixels32[index1 + index2 * tex.width].a != (byte) 0)
           {
-            towerFloatPoints2.Add(new Coords(index1 - num1, index2 - num2));
+            coordsList2.Add(new Coords(index1 - num1, index2 - num2));
             flag = false;
           }
         }
@@ -116,16 +115,16 @@ public class MapGenerator
           flag = true;
       }
     }
-    MapGenerator.cachedTowerFloatPoints.Add(tex, towerFloatPoints2);
-    return towerFloatPoints2;
+    MapGenerator.cachedTowerFloatPoints.Add(tex, coordsList2);
+    return coordsList2;
   }
 
   public static List<Coords> GetTowerFallPoints(Texture2D tex, int extraY)
   {
-    List<Coords> towerFallPoints1 = new List<Coords>();
-    if (MapGenerator.cachedTowerFallPoints.TryGetValue(tex, out towerFallPoints1))
-      return towerFallPoints1;
-    List<Coords> towerFallPoints2 = new List<Coords>();
+    List<Coords> coordsList1 = new List<Coords>();
+    if (MapGenerator.cachedTowerFallPoints.TryGetValue(tex, out coordsList1))
+      return coordsList1;
+    List<Coords> coordsList2 = new List<Coords>();
     Color32[] pixels32 = ZMap.GetPixels32(tex);
     int num1 = tex.width / 2;
     int num2 = tex.height / 2 + extraY;
@@ -138,7 +137,7 @@ public class MapGenerator
         {
           if (pixels32[index1 + index2 * tex.width].a != (byte) 0)
           {
-            towerFallPoints2.Add(new Coords(index1 - num1, index2 - num2));
+            coordsList2.Add(new Coords(index1 - num1, index2 - num2));
             flag = false;
           }
         }
@@ -146,15 +145,15 @@ public class MapGenerator
           flag = true;
       }
     }
-    MapGenerator.cachedTowerFallPoints.Add(tex, towerFallPoints2);
-    return towerFallPoints2;
+    MapGenerator.cachedTowerFallPoints.Add(tex, coordsList2);
+    return coordsList2;
   }
 
   public static List<Coords> GetTowerLeftPoints(Texture2D tex, ZTower tower)
   {
     if (MapGenerator.cachedTowerLeftPoints.ContainsKey(tex))
       return MapGenerator.cachedTowerLeftPoints[tex];
-    List<Coords> towerLeftPoints = new List<Coords>();
+    List<Coords> coordsList = new List<Coords>();
     Color32[] pixels32 = ZMap.GetPixels32(tex);
     int num1 = tex.width / 2 + 1;
     int num2 = tex.height / 2 - (tower.type == TowerType.Cosmos ? 13 : 0);
@@ -164,20 +163,20 @@ public class MapGenerator
       {
         if (pixels32[index2 + index1 * tex.width].a != (byte) 0)
         {
-          towerLeftPoints.Add(new Coords(index2 - num1, index1 - num2));
+          coordsList.Add(new Coords(index2 - num1, index1 - num2));
           break;
         }
       }
     }
-    MapGenerator.cachedTowerLeftPoints[tex] = towerLeftPoints;
-    return towerLeftPoints;
+    MapGenerator.cachedTowerLeftPoints[tex] = coordsList;
+    return coordsList;
   }
 
   public static List<Coords> GetTowerRightPoints(Texture2D tex, ZTower tower)
   {
     if (MapGenerator.cachedTowerRightPoints.ContainsKey(tex))
       return MapGenerator.cachedTowerRightPoints[tex];
-    List<Coords> towerRightPoints = new List<Coords>();
+    List<Coords> coordsList = new List<Coords>();
     Color32[] pixels32 = ZMap.GetPixels32(tex);
     int num1 = tex.width / 2 - 1;
     int num2 = tex.height / 2 - (tower.type == TowerType.Cosmos ? 13 : 0);
@@ -187,13 +186,13 @@ public class MapGenerator
       {
         if (pixels32[index2 + index1 * tex.width].a != (byte) 0)
         {
-          towerRightPoints.Add(new Coords(index2 - num1, index1 - num2));
+          coordsList.Add(new Coords(index2 - num1, index1 - num2));
           break;
         }
       }
     }
-    MapGenerator.cachedTowerRightPoints[tex] = towerRightPoints;
-    return towerRightPoints;
+    MapGenerator.cachedTowerRightPoints[tex] = coordsList;
+    return coordsList;
   }
 
   public static List<Coords> bresenhamsLine(Coords start, Coords end)

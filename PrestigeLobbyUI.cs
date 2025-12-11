@@ -3,7 +3,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-#nullable disable
 public class PrestigeLobbyUI : MonoBehaviour
 {
   public TMP_Text txtName;
@@ -19,7 +18,7 @@ public class PrestigeLobbyUI : MonoBehaviour
   public void Awake()
   {
     PrestigeLobbyUI.Instance = this;
-    this.Refresh();
+    this.Refresh(true);
     this.RefreshOutfit();
     Client.gameType = (ZGame.GameType) Mathf.Clamp(PlayerPrefs.GetInt("gameType", 0), 0, 2);
   }
@@ -80,7 +79,10 @@ label_4:
     txtRating.text = "<sprite name=\"LTS\"> " + Client.MyAccount.gameLowTime.ratingString + "<sprite name=\"HTS\"> " + Client.MyAccount.gameHighTime.ratingString + "<sprite name=\"PMO\"> " + Client.MyAccount.gameFun.ratingString;
   }
 
-  public void RefreshOutfit() => this.panelPlayer?.Init(Client.settingsPlayer, Client.Name);
+  public void RefreshOutfit()
+  {
+    this.panelPlayer?.Init(Client.settingsPlayer, Client.Name);
+  }
 
   private void OnDestroy()
   {
@@ -89,7 +91,13 @@ label_4:
     PrestigeLobbyUI.Instance = (PrestigeLobbyUI) null;
   }
 
-  public void Hover() => pfabName.HoverRatingIcon(Client.MyAccount);
+  public void Hover()
+  {
+    pfabName.HoverRatingIcon(Client.MyAccount, (string) null);
+  }
 
-  public void HideToolTip() => MyToolTip.Close();
+  public void HideToolTip()
+  {
+    MyToolTip.Close();
+  }
 }

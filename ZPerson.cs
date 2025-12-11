@@ -6,14 +6,33 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-#nullable disable
 public class ZPerson
 {
-  public ZGame game;
   public int team = -1;
-  public byte id;
   public int localTurn = -1;
   public int lastTowerCast = -1;
+  public short startingRating = 1000;
+  public int lastArmageddon = -100;
+  public Queue<ArmaWarning> armaWarnings = new Queue<ArmaWarning>();
+  public List<ZCreature> controlled = new List<ZCreature>();
+  public List<ZCreature> stolenMinions = new List<ZCreature>();
+  public List<ZCreature> takenMinions = new List<ZCreature>();
+  public List<ZGame.MinionBookTitan> minionBookTitans = new List<ZGame.MinionBookTitan>();
+  public List<SpellEnum> shownLevel3 = new List<SpellEnum>();
+  public int[] towerHealth = new int[14];
+  public Connection connection = (Connection) new TcpConnection();
+  public string name = "-";
+  public SettingsPlayer settingsPlayer = new SettingsPlayer();
+  public Account account = new Account();
+  public HashSet<SpellSlot> randomSyncedZSpells = new HashSet<SpellSlot>();
+  public BookOf ActivateableFamiliar = BookOf.Nothing;
+  public bool drainable = true;
+  public int waterMultipler = 1;
+  public int bid = -1;
+  public Dictionary<SpellEnum, SpellsCast> spellsCast = new Dictionary<SpellEnum, SpellsCast>();
+  public ZPerson.Awards awards = new ZPerson.Awards();
+  public ZGame game;
+  public byte id;
   public bool yourTurn;
   public bool ready;
   public bool canStart;
@@ -22,7 +41,6 @@ public class ZPerson
   public bool offeringDraw;
   public bool offeringRematch;
   public bool winner;
-  public short startingRating = 1000;
   public short addedRating;
   public int gainedWands;
   public bool wasFirst;
@@ -31,41 +49,23 @@ public class ZPerson
   public bool movedThisTurn;
   public int communeWithNature;
   public float countdown;
-  public int lastArmageddon = -100;
-  public Queue<int> armaWarnings = new Queue<int>();
-  public List<ZCreature> controlled = new List<ZCreature>();
-  public List<ZCreature> stolenMinions = new List<ZCreature>();
-  public List<ZCreature> takenMinions = new List<ZCreature>();
-  public List<ZGame.MinionBookTitan> minionBookTitans = new List<ZGame.MinionBookTitan>();
-  public List<SpellEnum> shownLevel3 = new List<SpellEnum>();
   internal IEnumerator<float> resyncIE;
   internal bool clientResyncing;
   public bool isFake;
-  public int[] towerHealth = new int[14];
   public bool host;
-  public Connection connection = (Connection) new TcpConnection();
-  public string name = "-";
-  public SettingsPlayer settingsPlayer = new SettingsPlayer();
-  public Account account = new Account();
   public PanelPlayer panelPlayer;
   public List<ZFamiliar> familiars;
   public List<SpellSlot> arcaneGateSpellSlot;
-  public HashSet<SpellSlot> randomSyncedZSpells = new HashSet<SpellSlot>();
   public Torquing torquing;
   public List<GameObject> archMageStaffs;
   public ZCreature bloodBank;
   public int timesOutfitChanged;
   public FamiliarType familiarBook;
-  public BookOf ActivateableFamiliar = BookOf.Nothing;
-  public bool drainable = true;
-  public int waterMultipler = 1;
-  public int bid = -1;
   public SpellsOnly bannedSpells;
   public BanStage bidStage;
   public IAI ai;
   public int inactiveTurns;
   public bool hasCastTheFourSeasons;
-  public Dictionary<SpellEnum, SpellsCast> spellsCast = new Dictionary<SpellEnum, SpellsCast>();
   public int curDamageDealtInOneAttack;
   public int MaxDamageDealtInOneAttack;
   public int spellsCastTHISTurn;
@@ -79,24 +79,41 @@ public class ZPerson
   private int curMoveID;
   internal int lastMoveID;
   internal int[] familiarLevels;
-  public ZPerson.Awards awards = new ZPerson.Awards();
 
-  public ZMyWorld world => this.game.world;
-
-  public ZMap map => this.game.map;
-
-  public void AddArmaWarning()
+  public ZMyWorld world
   {
-    int x = this.game.RandomInt(100, Mathf.Min(this.map.Width - 100, Mathf.Max(1, this.localTurn - this.game.armageddonTurn) * 100));
+    get
+    {
+      return this.game.world;
+    }
+  }
+
+  public ZMap map
+  {
+    get
+    {
+      return this.game.map;
+    }
+  }
+
+  public void AddArmaWarning(int y = -35, int left = 0)
+  {
+    int num = this.game.RandomInt(100, Mathf.Min(this.map.Width - 100, Mathf.Max(1, this.localTurn - this.game.armageddonTurn) * 100));
     if (this.game.RandomInt(0, 10) >= 5)
-      x = this.map.Width - x;
+      num = this.map.Width - num;
+    ArmaWarning x = new ArmaWarning()
+    {
+      x = num,
+      y = y,
+      left = left
+    };
     this.armaWarnings.Enqueue(x);
     HUD.AddArmaWarning(this, x);
   }
 
-  public int DequeueArmaWarning()
+  public ArmaWarning DequeueArmaWarning()
   {
-    int x = this.armaWarnings.Dequeue();
+    ArmaWarning x = this.armaWarnings.Dequeue();
     HUD.RemoveArmaWarning(this, x);
     return x;
   }
@@ -152,7 +169,10 @@ public class ZPerson
     return 5 + (this.game.originalSpellsOnly ? 0 : (this.familiarLevels[0] + this.GetLevel(BookOf.Underdark, true) + 1) / 2) - this.stolenMinions.Count;
   }
 
-  public int MaxRitualCount() => this.familiarLevels[13] >= 5 ? 10 : 3 + this.familiarLevels[13];
+  public int MaxRitualCount()
+  {
+    return this.familiarLevels[13] >= 5 ? 10 : 3 + this.familiarLevels[13];
+  }
 
   public Connection GetMultiConnection
   {
@@ -187,15 +207,39 @@ public class ZPerson
 
   public Color clientColor { get; set; } = Color.gray;
 
-  public bool seasonISHoliday => this.settingsPlayer._spells.UsingAltBook(BookOf.Seasons);
+  public bool seasonISHoliday
+  {
+    get
+    {
+      return this.settingsPlayer._spells.UsingAltBook(BookOf.Seasons);
+    }
+  }
 
-  public bool underDarkISNecromancy => this.settingsPlayer._spells.UsingAltBook(BookOf.Underdark);
+  public bool underDarkISNecromancy
+  {
+    get
+    {
+      return this.settingsPlayer._spells.UsingAltBook(BookOf.Underdark);
+    }
+  }
 
-  public BookOf ElementalFamiliar => this.settingsPlayer.ElementalClamped;
+  public BookOf ElementalFamiliar
+  {
+    get
+    {
+      return this.settingsPlayer.ElementalClamped;
+    }
+  }
 
-  public int GetNextMoveID() => ++this.curMoveID;
+  public int GetNextMoveID()
+  {
+    return ++this.curMoveID;
+  }
 
-  public void ResetMoveID() => this.curMoveID = 0;
+  public void ResetMoveID()
+  {
+    this.curMoveID = 0;
+  }
 
   public void UpdateCountdown()
   {
@@ -254,7 +298,7 @@ public class ZPerson
         this.familiars.RemoveAt(index);
       else if (this.familiars[index].bookOf == book)
       {
-        this.familiars[index].soulJar?.collider?.Disable();
+        this.familiars[index].soulJar?.collider?.Disable(true);
         this.familiars[index].soulJar?.SetNull();
         if ((UnityEngine.Object) this.familiars[index].gameObject != (UnityEngine.Object) null)
           UnityEngine.Object.Destroy((UnityEngine.Object) this.familiars[index].gameObject);
@@ -281,11 +325,20 @@ public class ZPerson
     return b < BookOf.Arcane || b >= (BookOf) this.familiarLevels.Length || alt != this.settingsPlayer._spells.UsingAltBook(b) ? 0 : this.familiarLevels[(int) b];
   }
 
-  public bool CanOfferDraw() => this.controlled.Count != 0;
+  public bool CanOfferDraw()
+  {
+    return this.controlled.Count != 0;
+  }
 
-  public ZCreature first() => this.controlled.Count > 0 ? this.controlled[0] : (ZCreature) null;
+  public ZCreature first()
+  {
+    return this.controlled.Count > 0 ? this.controlled[0] : (ZCreature) null;
+  }
 
-  public bool InWater() => this.controlled.Count != 0 && this.controlled[0].inWater;
+  public bool InWater()
+  {
+    return this.controlled.Count != 0 && this.controlled[0].inWater;
+  }
 
   public ZPerson(Connection c)
   {
@@ -293,9 +346,15 @@ public class ZPerson
     this.Init();
   }
 
-  public ZPerson() => this.Init();
+  public ZPerson()
+  {
+    this.Init();
+  }
 
-  private void Init() => this.familiarLevels = new int[(int) (RandomExtensions.LastBook() + 1)];
+  private void Init()
+  {
+    this.familiarLevels = new int[(int) (RandomExtensions.LastBook() + 1)];
+  }
 
   public void IncreaseCastCount(SpellEnum e)
   {
@@ -340,11 +399,14 @@ public class ZPerson
 
   public class Awards
   {
+    private HashSet<SpellEnum> spellsCasted = new HashSet<SpellEnum>();
+    private MyLocation posStarted = MyLocation.zero;
+    public bool OnlyMinionDamage = true;
+    public int[] spellTypesCasted = new int[13];
+    public int[] spellTypesBrought = new int[13];
     private SpellEnum lastZSpellCast;
     private int spellCastStreak;
-    private HashSet<SpellEnum> spellsCasted = new HashSet<SpellEnum>();
     public int numZSpellsCasted;
-    private MyLocation posStarted = MyLocation.zero;
     private int hits;
     public int Most_Damage;
     public int Most_Powerful;
@@ -366,7 +428,6 @@ public class ZPerson
     public int Zombie_Monkey_Killer;
     public bool Sniper;
     public bool Black_out_the_sun;
-    public bool OnlyMinionDamage = true;
     public int minionMountedDamageSaved;
     public int dragonsSummoned;
     public int Subversion;
@@ -376,8 +437,6 @@ public class ZPerson
     public int shiftingSands;
     public (int turn, ZCreature c)? catacomb_teleported;
     public int pharaohMonuments;
-    public int[] spellTypesCasted = new int[13];
-    public int[] spellTypesBrought = new int[13];
     public int Healing;
 
     public void OnMinionDrowned(ZCreature c)
@@ -420,11 +479,20 @@ public class ZPerson
       this.Most_Useless = this.Most_Damage + this.Healing;
     }
 
-    public void Summoned(int c) => this.Most_Minions += c;
+    public void Summoned(int c)
+    {
+      this.Most_Minions += c;
+    }
 
-    public void FellInWater() => ++this.Most_Wet;
+    public void FellInWater()
+    {
+      ++this.Most_Wet;
+    }
 
-    public void TurnStartedAt(MyLocation pos) => this.posStarted = pos;
+    public void TurnStartedAt(MyLocation pos)
+    {
+      this.posStarted = pos;
+    }
 
     public void TurnEndedAt(MyLocation pos)
     {
@@ -456,9 +524,15 @@ public class ZPerson
       }
     }
 
-    public void Moved() => ++this.Most_Fit;
+    public void Moved()
+    {
+      ++this.Most_Fit;
+    }
 
-    public void Bouncy() => ++this.Most_Bouncy;
+    public void Bouncy()
+    {
+      ++this.Most_Bouncy;
+    }
 
     public void Kill(ZCreature me, ZCreature enemy, SpellEnum spellEnum)
     {
@@ -507,7 +581,7 @@ public class ZPerson
           if (me.parent.MaxDamageDealtInOneAttack >= 250 && me.game.isRated && !me.game.isClient)
             Achievements.Set(Achievement.Critical_Hit, me.parent.account, me.game);
         }
-        if (me.parent.curDamageDealtInOneAttack >= 100 && (this.lastZSpellCast == SpellEnum.Swallowing_Pit || this.lastZSpellCast == SpellEnum.Conductor_Rod) && !me.game.isClient && me.game.isRated)
+        if (me.parent.curDamageDealtInOneAttack >= 100 && (this.lastZSpellCast == SpellEnum.Swallowing_Pit || this.lastZSpellCast == SpellEnum.Conductor_Rod) && (!me.game.isClient && me.game.isRated))
         {
           if (me.parent.curDamageDealtInOneAttack >= 200 && this.lastZSpellCast == SpellEnum.Conductor_Rod)
             Achievements.Set(Achievement.Dust_to_Dust, me.parent.account, me.game);

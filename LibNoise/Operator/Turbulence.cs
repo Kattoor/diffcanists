@@ -1,21 +1,20 @@
 
 using LibNoise.Generator;
 
-#nullable disable
 namespace LibNoise.Operator
 {
   public class Turbulence : ModuleBase
   {
+    private double _power = 1.0;
     private const double X0 = 0.189422607421875;
     private const double Y0 = 0.99371337890625;
-    private const double Z0 = 0.4781646728515625;
-    private const double X1 = 0.4046478271484375;
+    private const double Z0 = 0.478164672851563;
+    private const double X1 = 0.404647827148438;
     private const double Y1 = 0.276611328125;
-    private const double Z1 = 0.9230499267578125;
+    private const double Z1 = 0.923049926757813;
     private const double X2 = 0.82122802734375;
-    private const double Y2 = 0.1710968017578125;
-    private const double Z2 = 0.6842803955078125;
-    private double _power = 1.0;
+    private const double Y2 = 0.171096801757813;
+    private const double Z2 = 0.684280395507813;
     private readonly Perlin _xDistort;
     private readonly Perlin _yDistort;
     private readonly Perlin _zDistort;
@@ -54,7 +53,10 @@ namespace LibNoise.Operator
 
     public double Frequency
     {
-      get => this._xDistort.Frequency;
+      get
+      {
+        return this._xDistort.Frequency;
+      }
       set
       {
         this._xDistort.Frequency = value;
@@ -65,13 +67,22 @@ namespace LibNoise.Operator
 
     public double Power
     {
-      get => this._power;
-      set => this._power = value;
+      get
+      {
+        return this._power;
+      }
+      set
+      {
+        this._power = value;
+      }
     }
 
     public int Roughness
     {
-      get => this._xDistort.OctaveCount;
+      get
+      {
+        return this._xDistort.OctaveCount;
+      }
       set
       {
         this._xDistort.OctaveCount = value;
@@ -82,7 +93,10 @@ namespace LibNoise.Operator
 
     public int Seed
     {
-      get => this._xDistort.Seed;
+      get
+      {
+        return this._xDistort.Seed;
+      }
       set
       {
         this._xDistort.Seed = value;
@@ -93,7 +107,7 @@ namespace LibNoise.Operator
 
     public override double GetValue(double x, double y, double z)
     {
-      return this.Modules[0].GetValue(x + this._xDistort.GetValue(x + 0.189422607421875, y + 0.99371337890625, z + 0.4781646728515625) * this._power, y + this._yDistort.GetValue(x + 0.4046478271484375, y + 0.276611328125, z + 0.9230499267578125) * this._power, z + this._zDistort.GetValue(x + 0.82122802734375, y + 0.1710968017578125, z + 0.6842803955078125) * this._power);
+      return this.Modules[0].GetValue(x + this._xDistort.GetValue(x + 0.189422607421875, y + 0.99371337890625, z + 0.478164672851563) * this._power, y + this._yDistort.GetValue(x + 0.404647827148438, y + 0.276611328125, z + 0.923049926757813) * this._power, z + this._zDistort.GetValue(x + 0.82122802734375, y + 0.171096801757813, z + 0.684280395507813) * this._power);
     }
   }
 }

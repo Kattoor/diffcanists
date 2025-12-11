@@ -1,15 +1,18 @@
 
 using Discord;
+using Hazel;
 using System;
 using System.IO;
 using UnityEngine;
 
-#nullable disable
 public class DiscordController : MonoBehaviour
 {
   public const long CLIENT_ID = 633505532753346580;
 
-  public void ClickVerify() => DiscordController.Verify();
+  public void ClickVerify()
+  {
+    DiscordController.Verify();
+  }
 
   public static void Verify()
   {
@@ -35,11 +38,14 @@ public class DiscordController : MonoBehaviour
         myBinaryWriter.Write(oauth2Token.AccessToken);
         myBinaryWriter.Write(Client.identifier);
       }
-      Client.connection.SendBytes(memoryStream.ToArray());
+      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
-  public void VerifyBrowser() => DiscordController._VerifyBrowser();
+  public void VerifyBrowser()
+  {
+    DiscordController._VerifyBrowser();
+  }
 
   public static void _VerifyBrowser()
   {

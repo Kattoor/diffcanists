@@ -1,5 +1,4 @@
 
-#nullable disable
 public enum TimeEnum
 {
   Dont_Mind = -1, // 0xFFFFFFFF

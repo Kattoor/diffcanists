@@ -5,13 +5,12 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 
-#nullable disable
 namespace Hazel.Tcp
 {
   public sealed class TcpConnection : NetworkConnection
   {
-    private Socket socket;
     private object socketLock = new object();
+    private Socket socket;
 
     internal TcpConnection(Socket socket)
     {
@@ -19,7 +18,7 @@ namespace Hazel.Tcp
         throw new ArgumentException("A TcpConnection requires a TCP socket.");
       lock (this.socketLock)
       {
-        this.EndPoint = (ConnectionEndPoint) new NetworkEndPoint(socket.RemoteEndPoint);
+        this.EndPoint = (ConnectionEndPoint) new NetworkEndPoint(socket.RemoteEndPoint, IPMode.IPv4);
         this.RemoteEndPoint = socket.RemoteEndPoint;
         this.socket = socket;
         this.socket.NoDelay = true;
@@ -107,20 +106,20 @@ namespace Hazel.Tcp
         {
           throw new HazelException("An exception occurred while initiating the first receive operation.", ex);
         }
-        byte[] numArray;
+        byte[] bytes1;
         if (bytes == null)
         {
-          numArray = new byte[1];
+          bytes1 = new byte[1];
         }
         else
         {
-          numArray = new byte[bytes.Length + 1];
-          Buffer.BlockCopy((Array) bytes, 0, (Array) numArray, 1, bytes.Length);
+          bytes1 = new byte[bytes.Length + 1];
+          Buffer.BlockCopy((Array) bytes, 0, (Array) bytes1, 1, bytes.Length);
         }
         this.State = ConnectionState.Connected;
         this.stopwatch = new Stopwatch();
         this.stopwatch.Start();
-        this.SendBytesUnencrypted(numArray);
+        this.SendBytesUnencrypted(bytes1);
       }
     }
 
@@ -149,7 +148,10 @@ namespace Hazel.Tcp
       this.Statistics.LogSend(bytes.Length, buffer.Length);
     }
 
-    private void ccc(IAsyncResult a) => UnityEngine.Debug.Log((object) a);
+    private void ccc(IAsyncResult a)
+    {
+      UnityEngine.Debug.Log((object) a);
+    }
 
     public override void SendBytes(byte[] bytes, SendOption sendOption = SendOption.FragmentedReliable)
     {
@@ -257,9 +259,9 @@ namespace Hazel.Tcp
       {
         this.StartWaitingForHeader((Action<byte[]>) (bytes =>
         {
-          byte[] dst = new byte[bytes.Length - 1];
-          Buffer.BlockCopy((Array) bytes, 1, (Array) dst, 0, bytes.Length - 1);
-          callback(dst);
+          byte[] numArray = new byte[bytes.Length - 1];
+          Buffer.BlockCopy((Array) bytes, 1, (Array) numArray, 0, bytes.Length - 1);
+          callback(numArray);
         }));
       }
       catch (Exception ex)
@@ -343,13 +345,13 @@ namespace Hazel.Tcp
 
     private static byte[] AppendLengthHeader(byte[] bytes)
     {
-      byte[] dst = new byte[bytes.Length + 4];
-      dst[0] = (byte) (bytes.Length >>> 24 & (int) byte.MaxValue);
-      dst[1] = (byte) (bytes.Length >>> 16 & (int) byte.MaxValue);
-      dst[2] = (byte) (bytes.Length >>> 8 & (int) byte.MaxValue);
-      dst[3] = (byte) bytes.Length;
-      Buffer.BlockCopy((Array) bytes, 0, (Array) dst, 4, bytes.Length);
-      return dst;
+      byte[] numArray = new byte[bytes.Length + 4];
+      numArray[0] = (byte) ((uint) bytes.Length >> 24 & (uint) byte.MaxValue);
+      numArray[1] = (byte) ((uint) bytes.Length >> 16 & (uint) byte.MaxValue);
+      numArray[2] = (byte) ((uint) bytes.Length >> 8 & (uint) byte.MaxValue);
+      numArray[3] = (byte) bytes.Length;
+      Buffer.BlockCopy((Array) bytes, 0, (Array) numArray, 4, bytes.Length);
+      return numArray;
     }
 
     private static int GetLengthFromBytes(byte[] bytes)

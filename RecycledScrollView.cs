@@ -5,25 +5,30 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-#nullable disable
 public class RecycledScrollView : MonoBehaviour
 {
+  public int MaxVisible = 8;
+  private bool notmaxed = true;
+  private List<PfabChatMsg> pfabs = new List<PfabChatMsg>();
+  private List<PfabChatMsg.contain> list = new List<PfabChatMsg.contain>();
+  private int lastRender = -1;
   public GameObject pfabChat;
   public RectTransform chatContainer;
   public RectTransform chatContainerScroller;
   public ScrollRect _chatScrollbar;
   public Scrollbar _bar;
-  public int MaxVisible = 8;
   public const int MaxSize = 200;
   internal int _id;
-  private bool notmaxed = true;
-  private List<PfabChatMsg> pfabs = new List<PfabChatMsg>();
-  private List<PfabChatMsg.contain> list = new List<PfabChatMsg.contain>();
   private int firstVisible;
   private int nextindex;
-  private int lastRender = -1;
 
-  public List<PfabChatMsg.contain> GetList => this.list;
+  public List<PfabChatMsg.contain> GetList
+  {
+    get
+    {
+      return this.list;
+    }
+  }
 
   public void ChangeLineCount(int i)
   {
@@ -61,14 +66,14 @@ public class RecycledScrollView : MonoBehaviour
 
   private int GetLastVisible(int firstVisible)
   {
-    int lastVisible = firstVisible;
+    int num = firstVisible;
     for (int index = 0; index < this.MaxCount; ++index)
     {
-      ++lastVisible;
-      if (lastVisible >= this.list.Count)
-        lastVisible = 0;
+      ++num;
+      if (num >= this.list.Count)
+        num = 0;
     }
-    return lastVisible;
+    return num;
   }
 
   private bool downPassesFirst(int firstVisible)
@@ -85,9 +90,15 @@ public class RecycledScrollView : MonoBehaviour
     return false;
   }
 
-  private bool upPassesLastIndex(int firstVisible) => firstVisible == this.lastIndex();
+  private bool upPassesLastIndex(int firstVisible)
+  {
+    return firstVisible == this.lastIndex();
+  }
 
-  private void Awake() => this._bar.onValueChanged.AddListener(new UnityAction<float>(this.Scroll));
+  private void Awake()
+  {
+    this._bar.onValueChanged.AddListener(new UnityAction<float>(this.Scroll));
+  }
 
   public int GetIndex(int i)
   {
@@ -141,7 +152,10 @@ public class RecycledScrollView : MonoBehaviour
     this.Render();
   }
 
-  private int lastIndex() => this.nextindex == 0 ? this.list.Count - 1 : this.nextindex - 1;
+  private int lastIndex()
+  {
+    return this.nextindex == 0 ? this.list.Count - 1 : this.nextindex - 1;
+  }
 
   private int firstIndex()
   {
@@ -170,7 +184,13 @@ public class RecycledScrollView : MonoBehaviour
     }
   }
 
-  public int MaxCount => Mathf.Min(this.pfabs.Count, this.MaxVisible);
+  public int MaxCount
+  {
+    get
+    {
+      return Mathf.Min(this.pfabs.Count, this.MaxVisible);
+    }
+  }
 
   private void Render()
   {

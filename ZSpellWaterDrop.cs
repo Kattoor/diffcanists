@@ -2,91 +2,90 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-#nullable disable
 public class ZSpellWaterDrop : ZSpell
 {
   public override IEnumerator<float> SpellMove(bool gotoStatic = false, bool checkEffectors = true)
   {
-    ZSpellWaterDrop spell = this;
-    spell.isMoving = true;
-    spell.zb = MapGenerator.getOutlineArray(spell.radius);
+    ZSpellWaterDrop zspellWaterDrop = this;
+    zspellWaterDrop.isMoving = true;
+    zspellWaterDrop.zb = MapGenerator.getOutlineArray(zspellWaterDrop.radius);
     if (!gotoStatic)
-      spell.curDestroyTerrainBounces = spell.destroyTerrainBounces;
-    if (spell.spellEnum == SpellEnum.Starfire_Shard && (ZComponent) spell.parent != (object) null && spell.parent.familiarLevelCosmos > 0 && !gotoStatic)
+      zspellWaterDrop.curDestroyTerrainBounces = zspellWaterDrop.destroyTerrainBounces;
+    if (zspellWaterDrop.spellEnum == SpellEnum.Starfire_Shard && (ZComponent) zspellWaterDrop.parent != (object) null && (zspellWaterDrop.parent.familiarLevelCosmos > 0 && !gotoStatic))
     {
-      if (spell.parent.familiarLevelCosmos == 1)
-        spell.explosionCutout = ExplosionCutout.Forty_Five;
-      else if (spell.parent.familiarLevelCosmos == 2)
-        spell.explosionCutout = ExplosionCutout.Fifty;
-      else if (spell.parent.familiarLevelCosmos == 3)
-        spell.explosionCutout = ExplosionCutout.Sixty;
-      else if (spell.parent.familiarLevelCosmos == 4)
-        spell.explosionCutout = ExplosionCutout.Sixty;
+      if (zspellWaterDrop.parent.familiarLevelCosmos == 1)
+        zspellWaterDrop.explosionCutout = ExplosionCutout.Forty_Five;
+      else if (zspellWaterDrop.parent.familiarLevelCosmos == 2)
+        zspellWaterDrop.explosionCutout = ExplosionCutout.Fifty;
+      else if (zspellWaterDrop.parent.familiarLevelCosmos == 3)
+        zspellWaterDrop.explosionCutout = ExplosionCutout.Sixty;
+      else if (zspellWaterDrop.parent.familiarLevelCosmos == 4)
+        zspellWaterDrop.explosionCutout = ExplosionCutout.Sixty;
       else
-        spell.explosionCutout = ExplosionCutout.Seventy_Five;
+        zspellWaterDrop.explosionCutout = ExplosionCutout.Seventy_Five;
     }
     if (gotoStatic)
       yield return 0.0f;
 label_69:
-    while (!spell.isDead)
+    while (!zspellWaterDrop.isDead)
     {
-      spell.pX = spell.position.x;
-      spell.pY = spell.position.y;
-      FixedInt fixedInt1 = spell.position.x + spell.velocity.x;
-      FixedInt fixedInt2 = spell.position.y + spell.velocity.y;
-      spell.validX = spell.pX;
-      spell.validY = spell.pY;
-      spell.steps = 1;
-      FixedInt x1 = spell.velocity.x;
-      FixedInt y1 = spell.velocity.y;
-      FixedInt fixedInt3 = spell.velocity.x;
-      FixedInt fixedInt4 = spell.velocity.y;
-      if (x1 > 1 || x1 < -1 || y1 > 1 || y1 < -1)
+      zspellWaterDrop.pX = zspellWaterDrop.position.x;
+      zspellWaterDrop.pY = zspellWaterDrop.position.y;
+      FixedInt fixedInt1 = zspellWaterDrop.position.x + zspellWaterDrop.velocity.x;
+      FixedInt fixedInt2 = zspellWaterDrop.position.y + zspellWaterDrop.velocity.y;
+      zspellWaterDrop.validX = zspellWaterDrop.pX;
+      zspellWaterDrop.validY = zspellWaterDrop.pY;
+      zspellWaterDrop.steps = 1;
+      FixedInt x1 = zspellWaterDrop.velocity.x;
+      FixedInt y1 = zspellWaterDrop.velocity.y;
+      FixedInt fixedInt3 = zspellWaterDrop.velocity.x;
+      FixedInt fixedInt4 = zspellWaterDrop.velocity.y;
+      if (x1 > 1 || x1 < -1 || (y1 > 1 || y1 < -1))
       {
         if (FixedInt.Abs(x1) > FixedInt.Abs(y1))
-          spell.steps = (int) FixedInt.Abs(x1) + 1;
+          zspellWaterDrop.steps = (int) FixedInt.Abs(x1) + 1;
         else
-          spell.steps = (int) FixedInt.Abs(y1) + 1;
-        fixedInt3 = spell.velocity.x / spell.steps;
-        fixedInt4 = spell.velocity.y / spell.steps;
+          zspellWaterDrop.steps = (int) FixedInt.Abs(y1) + 1;
+        fixedInt3 = zspellWaterDrop.velocity.x / zspellWaterDrop.steps;
+        fixedInt4 = zspellWaterDrop.velocity.y / zspellWaterDrop.steps;
       }
-      while (spell.steps > 0)
+      while (zspellWaterDrop.steps > 0)
       {
-        if (spell.map.SpellCheckEffectors(spell.toCollideCheck, (ZSpell) spell, (int) spell.validX, (int) spell.validY))
+        if (zspellWaterDrop.map.SpellCheckEffectors(zspellWaterDrop.toCollideCheck, (ZSpell) zspellWaterDrop, (int) zspellWaterDrop.validX, (int) zspellWaterDrop.validY))
         {
-          spell.position = new MyLocation(spell.validX, spell.validY);
+          zspellWaterDrop.position = new MyLocation(zspellWaterDrop.validX, zspellWaterDrop.validY);
           yield return 0.0f;
           goto label_69;
         }
         else
         {
-          --spell.steps;
-          int num1 = (int) (((FixedInt) 360 - (Inert.AngleOfVelocity(spell.velocity) - 90)) * FixedInt.ThreeSixtyBy1 * spell.zb.Count) - spell.radius;
+          --zspellWaterDrop.steps;
+          int num1 = (int) (((FixedInt) 360 - (Inert.AngleOfVelocity(zspellWaterDrop.velocity) - 90)) * FixedInt.ThreeSixtyBy1 * zspellWaterDrop.zb.Count) - zspellWaterDrop.radius;
           if (num1 < 0)
-            num1 += spell.zb.Count;
-          for (int index1 = 0; index1 < spell.radius * 2; ++index1)
+            num1 += zspellWaterDrop.zb.Count;
+          for (int index1 = 0; index1 < zspellWaterDrop.radius * 2; ++index1)
           {
-            int index2 = (index1 + num1) % spell.zb.Count;
-            int num2 = (int) (fixedInt3 + spell.pX);
-            int num3 = (int) (fixedInt4 + spell.pY);
-            if ((spell.curDuration < 3 ? (!spell.map.CheckPositionOnlyMap(num2 + spell.zb[index2].x, num3 + spell.zb[index2].y) ? 1 : 0) : (!spell.map.SpellCheckPosition(num2 + spell.zb[index2].x, num3 + spell.zb[index2].y, spell.toCollideCheck, Inert.mask_spell_movement) ? 1 : 0)) != 0)
+            int index2 = (index1 + num1) % zspellWaterDrop.zb.Count;
+            int num2 = (int) (fixedInt3 + zspellWaterDrop.pX);
+            int num3 = (int) (fixedInt4 + zspellWaterDrop.pY);
+            if ((zspellWaterDrop.curDuration < 3 ? (!zspellWaterDrop.map.CheckPositionOnlyMap(num2 + zspellWaterDrop.zb[index2].x, num3 + zspellWaterDrop.zb[index2].y) ? 1 : 0) : (!zspellWaterDrop.map.SpellCheckPosition(num2 + zspellWaterDrop.zb[index2].x, num3 + zspellWaterDrop.zb[index2].y, zspellWaterDrop.toCollideCheck, Inert.mask_spell_movement) ? 1 : 0)) != 0)
             {
-              int x2 = num2 + spell.zb[index2].x;
-              int y2 = num3 + spell.zb[index2].y;
-              if (spell.spellEnum == SpellEnum.Firecrackers || !spell.map.CheckPositionOnlyMap(x2, y2))
+              int x2 = num2 + zspellWaterDrop.zb[index2].x;
+              int y2 = num3 + zspellWaterDrop.zb[index2].y;
+              if (zspellWaterDrop.spellEnum == SpellEnum.Firecrackers || !zspellWaterDrop.map.CheckPositionOnlyMap(x2, y2))
               {
-                if (spell.timesBounced < spell.Bounces)
+                if (zspellWaterDrop.timesBounced < zspellWaterDrop.Bounces)
                 {
-                  ++spell.timesBounced;
-                  spell.position = new MyLocation(spell.validX, spell.validY);
+                  ++zspellWaterDrop.timesBounced;
+                  zspellWaterDrop.position = new MyLocation(zspellWaterDrop.validX, zspellWaterDrop.validY);
                   MyLocation zero = MyLocation.zero;
-                  int num4 = num2 + spell.zb[index2].x;
-                  int num5 = num3 + spell.zb[index2].y;
+                  int num4 = num2 + zspellWaterDrop.zb[index2].x;
+                  int num5 = num3 + zspellWaterDrop.zb[index2].y;
                   for (int index3 = -2; index3 <= 2; ++index3)
                   {
                     for (int index4 = -2; index4 <= 2; ++index4)
                     {
-                      if (spell.map.SpellCheckPosition(num4 + index3, num5 + index4, spell.toCollideCheck, Inert.mask_movement_NoEffector))
+                      if (zspellWaterDrop.map.SpellCheckPosition(num4 + index3, num5 + index4, zspellWaterDrop.toCollideCheck, Inert.mask_movement_NoEffector))
                       {
                         zero.x += index3;
                         zero.y += index4;
@@ -94,34 +93,34 @@ label_69:
                     }
                   }
                   bool flag = false;
-                  if (spell.destroyTerrainFirstBounce && spell.curDestroyTerrainBounces > 0)
+                  if (zspellWaterDrop.destroyTerrainFirstBounce && zspellWaterDrop.curDestroyTerrainBounces > 0)
                   {
-                    --spell.curDestroyTerrainBounces;
-                    spell.map.ServerBitBlt((int) spell.explosionCutout, x2, y2);
-                    spell.MoveSurroundings(spell.EXORADIUS + 5);
-                    if (MyLocation.Distance(MyLocation.zero, spell.velocity) > 40)
+                    --zspellWaterDrop.curDestroyTerrainBounces;
+                    zspellWaterDrop.map.ServerBitBlt((int) zspellWaterDrop.explosionCutout, x2, y2, true, true);
+                    zspellWaterDrop.MoveSurroundings(zspellWaterDrop.EXORADIUS + 5);
+                    if (MyLocation.Distance(MyLocation.zero, zspellWaterDrop.velocity) > 40)
                       flag = true;
                   }
                   if (!flag)
                   {
                     zero.Normalize();
                     MyLocation ret;
-                    MyLocation.Reflect(spell.velocity, ref zero, out ret);
-                    spell.velocity = ret;
-                    spell.velocity = spell.velocity * spell.elasticity;
+                    MyLocation.Reflect(zspellWaterDrop.velocity, ref zero, out ret);
+                    zspellWaterDrop.velocity = ret;
+                    zspellWaterDrop.velocity = zspellWaterDrop.velocity * zspellWaterDrop.elasticity;
                   }
-                  if (spell.game.isClient && !spell.game.resyncing && (Object) spell.toSummon != (Object) null)
-                    ZComponent.Instantiate<GameObject>(spell.toSummon, new Vector3((float) x2, (float) y2), Quaternion.identity, spell.game.GetMapTransform());
-                  if (spell.ApplyExplosionForce(spell.position, Inert.mask_Phantom))
+                  if (zspellWaterDrop.game.isClient && !zspellWaterDrop.game.resyncing && (Object) zspellWaterDrop.toSummon != (Object) null)
+                    ZComponent.Instantiate<GameObject>(zspellWaterDrop.toSummon, new Vector3((float) x2, (float) y2), Quaternion.identity, zspellWaterDrop.game.GetMapTransform());
+                  if (zspellWaterDrop.ApplyExplosionForce(zspellWaterDrop.position, Inert.mask_Phantom, true, (ISpellBridge) null, (ZCreature) null))
                   {
-                    spell.StopAndDie();
-                    spell.OnExplosionGeneric();
+                    zspellWaterDrop.StopAndDie();
+                    zspellWaterDrop.OnExplosionGeneric();
                     yield break;
                   }
                   else
                   {
-                    spell.Undie();
-                    if (spell.damageType == DamageType.Water && spell.game.isClient)
+                    zspellWaterDrop.Undie();
+                    if (zspellWaterDrop.damageType == DamageType.Water && zspellWaterDrop.game.isClient)
                     {
                       AudioManager.Play(AudioManager.instance.waterBounce);
                       goto label_62;
@@ -132,73 +131,73 @@ label_69:
                 }
                 else
                 {
-                  spell.velocity.y = (FixedInt) 0;
-                  spell.velocity.x = (FixedInt) 0;
-                  spell.position = new MyLocation(spell.validX, spell.validY);
-                  spell.moving = (IEnumerator<float>) null;
-                  spell.isMoving = false;
-                  spell.OnDeath(true);
-                  spell.OnExplosionGeneric();
+                  zspellWaterDrop.velocity.y = (FixedInt) 0;
+                  zspellWaterDrop.velocity.x = (FixedInt) 0;
+                  zspellWaterDrop.position = new MyLocation(zspellWaterDrop.validX, zspellWaterDrop.validY);
+                  zspellWaterDrop.moving = (IEnumerator<float>) null;
+                  zspellWaterDrop.isMoving = false;
+                  zspellWaterDrop.OnDeath(true);
+                  zspellWaterDrop.OnExplosionGeneric();
                   yield break;
                 }
               }
               else
               {
-                spell.velocity.y = (FixedInt) 0;
-                spell.velocity.x = (FixedInt) 0;
-                spell.position = new MyLocation(spell.validX, spell.validY);
-                spell.moving = (IEnumerator<float>) null;
-                spell.isMoving = false;
-                spell.map.ServerBitBlt((int) spell.explosionCutout, x2, y2);
-                spell.OnDeath(true);
-                spell.OnExplosionGeneric();
+                zspellWaterDrop.velocity.y = (FixedInt) 0;
+                zspellWaterDrop.velocity.x = (FixedInt) 0;
+                zspellWaterDrop.position = new MyLocation(zspellWaterDrop.validX, zspellWaterDrop.validY);
+                zspellWaterDrop.moving = (IEnumerator<float>) null;
+                zspellWaterDrop.isMoving = false;
+                zspellWaterDrop.map.ServerBitBlt((int) zspellWaterDrop.explosionCutout, x2, y2, true, true);
+                zspellWaterDrop.OnDeath(true);
+                zspellWaterDrop.OnExplosionGeneric();
                 yield break;
               }
             }
           }
-          spell.validX = spell.pX;
-          spell.validY = spell.pY;
-          spell.pX = spell.pX + fixedInt3;
-          spell.pY = spell.pY + fixedInt4;
+          zspellWaterDrop.validX = zspellWaterDrop.pX;
+          zspellWaterDrop.validY = zspellWaterDrop.pY;
+          zspellWaterDrop.pX = zspellWaterDrop.pX + fixedInt3;
+          zspellWaterDrop.pY = zspellWaterDrop.pY + fixedInt4;
         }
       }
-      spell.position = spell.position + spell.velocity;
-      if (spell.position.y < spell.radius)
+      zspellWaterDrop.position = zspellWaterDrop.position + zspellWaterDrop.velocity;
+      if (zspellWaterDrop.position.y < zspellWaterDrop.radius)
       {
-        spell.moving = (IEnumerator<float>) null;
-        spell.velocity = MyLocation.zero;
-        spell.isMoving = false;
-        spell.Splash();
-        spell.DestroyDelay();
+        zspellWaterDrop.moving = (IEnumerator<float>) null;
+        zspellWaterDrop.velocity = MyLocation.zero;
+        zspellWaterDrop.isMoving = false;
+        zspellWaterDrop.Splash();
+        zspellWaterDrop.DestroyDelay();
         break;
       }
-      if (spell.addVelocity)
+      if (zspellWaterDrop.addVelocity)
       {
-        spell.addVelocity = false;
-        spell.velocity = spell.velocity + spell.addedVelocity;
-        spell.velocity.x = Mathd.Clamp(spell.velocity.x, (FixedInt) -50, (FixedInt) 50);
-        spell.velocity.y = Mathd.Clamp(spell.velocity.y, (FixedInt) -50, (FixedInt) 50);
-        spell.addedVelocity.x = (FixedInt) 0;
-        spell.addedVelocity.y = (FixedInt) 0;
+        zspellWaterDrop.addVelocity = false;
+        zspellWaterDrop.velocity = zspellWaterDrop.velocity + zspellWaterDrop.addedVelocity;
+        zspellWaterDrop.velocity.x = Mathd.Clamp(zspellWaterDrop.velocity.x, (FixedInt) -50, (FixedInt) 50);
+        zspellWaterDrop.velocity.y = Mathd.Clamp(zspellWaterDrop.velocity.y, (FixedInt) -50, (FixedInt) 50);
+        zspellWaterDrop.addedVelocity.x = (FixedInt) 0;
+        zspellWaterDrop.addedVelocity.y = (FixedInt) 0;
       }
-      else if (spell.affectedByGravity && spell.velocity.y > -ZMap.MaxSpeed)
-        spell.velocity.y += spell.map.Gravity;
-      else if (!spell.affectedByGravity && spell.velocity.y > -10 && spell.maxDuration > 150)
-        spell.affectedByGravity = true;
-      spell.Wind();
+      else if (zspellWaterDrop.affectedByGravity && zspellWaterDrop.velocity.y > -ZMap.MaxSpeed)
+        zspellWaterDrop.velocity.y += zspellWaterDrop.map.Gravity;
+      else if (!zspellWaterDrop.affectedByGravity && zspellWaterDrop.velocity.y > -10 && zspellWaterDrop.maxDuration > 150)
+        zspellWaterDrop.affectedByGravity = true;
+      zspellWaterDrop.Wind();
 label_62:
-      if (spell.Rotates && (Object) spell.transform != (Object) null)
-        spell.transform.rotation = Quaternion.Euler(0.0f, 0.0f, Mathf.Atan2(spell.velocity.y.ToFloat(), spell.velocity.x.ToFloat()) * 57.29578f);
-      ++spell.curDuration;
-      if (spell.curDuration >= spell.maxDuration)
+      if (zspellWaterDrop.Rotates && (Object) zspellWaterDrop.transform != (Object) null)
+        zspellWaterDrop.transform.rotation = Quaternion.Euler(0.0f, 0.0f, Mathf.Atan2(zspellWaterDrop.velocity.y.ToFloat(), zspellWaterDrop.velocity.x.ToFloat()) * 57.29578f);
+      ++zspellWaterDrop.curDuration;
+      if (zspellWaterDrop.curDuration >= zspellWaterDrop.maxDuration)
       {
-        if (spell.spellEnum == SpellEnum.Firecrackers)
+        if (zspellWaterDrop.spellEnum == SpellEnum.Firecrackers)
         {
-          spell.OnDeath(true);
-          spell.OnExplosionGeneric();
+          zspellWaterDrop.OnDeath(true);
+          zspellWaterDrop.OnExplosionGeneric();
           break;
         }
-        spell.DestroyDelay();
+        zspellWaterDrop.DestroyDelay();
         break;
       }
       yield return 0.0f;

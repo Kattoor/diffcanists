@@ -6,24 +6,23 @@ using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
 
-#nullable disable
 namespace Hazel.Websocket
 {
   public class Client
   {
+    public bool NoDelay = true;
     private const int MaxMessageSize = 2097152;
     private WebSocket webSocket;
     private CancellationTokenSource cancellation;
-    public bool NoDelay = true;
     private Uri uri;
 
     public event System.Action Connected;
 
-    public event Action<byte[]> ReceivedData;
+    public event System.Action<byte[]> ReceivedData;
 
     public event System.Action Disconnected;
 
-    public event Action<Exception> ReceivedError;
+    public event System.Action<Exception> ReceivedError;
 
     public bool Connecting { get; set; }
 
@@ -87,7 +86,7 @@ namespace Hazel.Websocket
         return;
       UnityThreadHelper.Dispatcher.Dispatch2((System.Action) (() =>
       {
-        Action<Exception> receivedError = this.ReceivedError;
+        System.Action<Exception> receivedError = this.ReceivedError;
         if (receivedError == null)
           return;
         receivedError(ex);
@@ -111,7 +110,7 @@ namespace Hazel.Websocket
             {
               UnityThreadHelper.Dispatcher.Dispatch2((System.Action) (() =>
               {
-                Action<byte[]> receivedData = client.ReceivedData;
+                System.Action<byte[]> receivedData = client.ReceivedData;
                 if (receivedData == null)
                   return;
                 receivedData(data);
@@ -149,9 +148,9 @@ label_8:;
         result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer, count, 2097152 - count), CancellationToken.None);
         count += result.Count;
       }
-      byte[] dst = new byte[count];
-      System.Buffer.BlockCopy((Array) buffer, 0, (Array) dst, 0, count);
-      return dst;
+      byte[] numArray = new byte[count];
+      System.Buffer.BlockCopy((Array) buffer, 0, (Array) numArray, 0, count);
+      return numArray;
     }
 
     public void Disconnect()

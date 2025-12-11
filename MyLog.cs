@@ -4,15 +4,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 
-#nullable disable
 public class MyLog
 {
   private ReaderWriterLockSlim _readWriteLock = new ReaderWriterLockSlim();
+  private string openFile = "";
   private FileStream stream;
   private StreamWriter writer;
   private StreamReader reader;
   private static MyLog _inst;
-  private string openFile = "";
 
   private static MyLog instance
   {
@@ -24,11 +23,20 @@ public class MyLog
     }
   }
 
-  private MyLog() => this.OpenSteam("MyLog.txt");
+  private MyLog()
+  {
+    this.OpenSteam("MyLog.txt");
+  }
 
-  public MyLog(string s) => this.OpenSteam(s);
+  public MyLog(string s)
+  {
+    this.OpenSteam(s);
+  }
 
-  ~MyLog() => this.Dispose();
+  ~MyLog()
+  {
+    this.Dispose();
+  }
 
   private void OpenSteam(string file)
   {
@@ -76,24 +84,27 @@ public class MyLog
     }
   }
 
-  public static string GetAllText() => MyLog.instance._GetAllText();
+  public static string GetAllText()
+  {
+    return MyLog.instance._GetAllText();
+  }
 
   internal string _GetAllText()
   {
     this._readWriteLock.EnterWriteLock();
-    string allText = "";
+    string str = "";
     try
     {
       long position = this.writer.BaseStream.Position;
       this.reader.BaseStream.Position = 0L;
-      allText = this.reader.ReadToEnd();
+      str = this.reader.ReadToEnd();
       this.writer.BaseStream.Position = position;
     }
     finally
     {
       this._readWriteLock.ExitWriteLock();
     }
-    return allText;
+    return str;
   }
 
   public static void MainLog(string s)
@@ -102,7 +113,10 @@ public class MyLog
     Server.Instance?.communicator?.SendMsg(s);
   }
 
-  public static void MainClear() => MyLog.instance.Clear();
+  public static void MainClear()
+  {
+    MyLog.instance.Clear();
+  }
 
   public void Clear()
   {

@@ -1,5 +1,4 @@
 
-#nullable disable
 namespace UnityThreading
 {
   public class SwitchTo
@@ -9,7 +8,10 @@ namespace UnityThreading
 
     public SwitchTo.TargetType Target { get; private set; }
 
-    private SwitchTo(SwitchTo.TargetType target) => this.Target = target;
+    private SwitchTo(SwitchTo.TargetType target)
+    {
+      this.Target = target;
+    }
 
     public enum TargetType
     {

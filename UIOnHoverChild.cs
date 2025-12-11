@@ -4,53 +4,64 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-#nullable disable
 public class UIOnHoverChild : MonoBehaviour
 {
-  protected Image targetRenderer;
-  protected Text text;
-  protected TMP_Text tmpText;
-  protected Outline outline;
   public float FadeDuration = 0.1f;
-  public bool getImageComponetOverride;
-  public bool useColorTint;
   public Color NormalColor = Color.white;
   public Color HighlightedColor = Color.white;
   public Color PressedColor = Color.white;
   public Color DisabledColor = new Color(0.576f, 0.576f, 0.576f, 1f);
-  public bool useTMPTextColor;
-  public bool useTextColor;
   public Color textNormalColor = Color.white;
   public Color textHighlightedColor = Color.white;
   public Color textPressedColor = Color.white;
   public Color textDisabledColor = new Color(0.376f, 0.376f, 0.376f, 1f);
+  public float NormalSize = 1f;
+  public float HighlightedSize = 1.2f;
+  public float PressedSize = 1.2f;
+  public float DisabledSize = 1f;
+  public float TextNormalSize = 1f;
+  public float TextHighlightedSize = 1.2f;
+  public float TextPressedSize = 1.2f;
+  public float TextDisabledSize = 1f;
+  public bool HighlightedActive = true;
+  public bool PressedActive = true;
+  protected Image targetRenderer;
+  protected Text text;
+  protected TMP_Text tmpText;
+  protected Outline outline;
+  public bool getImageComponetOverride;
+  public bool useColorTint;
+  public bool useTMPTextColor;
+  public bool useTextColor;
   public bool useSpriteSwap;
   public Sprite NormalSprite;
   public Sprite HighlightedSprite;
   public Sprite PressedSprite;
   public Sprite DisabledSprite;
   public bool useResize;
-  public float NormalSize = 1f;
-  public float HighlightedSize = 1.2f;
-  public float PressedSize = 1.2f;
-  public float DisabledSize = 1f;
   public bool useTextResize;
-  public float TextNormalSize = 1f;
-  public float TextHighlightedSize = 1.2f;
-  public float TextPressedSize = 1.2f;
-  public float TextDisabledSize = 1f;
   public bool useActivate;
   public Behaviour[] activeBehaviours;
   public GameObject[] activeGameObjects;
   public bool NormalActive;
-  public bool HighlightedActive = true;
-  public bool PressedActive = true;
   public bool DisabledActive;
   private bool initialized;
 
-  public Image GetImage => this.targetRenderer ?? this.GetComponent<Image>();
+  public Image GetImage
+  {
+    get
+    {
+      return this.targetRenderer ?? this.GetComponent<Image>();
+    }
+  }
 
-  public TMP_Text GetText => this.tmpText;
+  public TMP_Text GetText
+  {
+    get
+    {
+      return this.tmpText;
+    }
+  }
 
   public void ToggleInteractable(bool v, bool hovering, bool alwaysOn)
   {
@@ -103,7 +114,7 @@ public class UIOnHoverChild : MonoBehaviour
       return;
     this.StopAllCoroutines();
     if (this.useColorTint)
-      this.StartCoroutine(this.FadeColor(this.PressedColor));
+      this.StartCoroutine(this.FadeColor(this.PressedColor, true));
     if (this.useSpriteSwap)
       this.SwapSprite(this.PressedSprite);
     if (this.useTextColor)
@@ -139,7 +150,7 @@ public class UIOnHoverChild : MonoBehaviour
     {
       this.StopAllCoroutines();
       if (this.useColorTint)
-        this.StartCoroutine(this.FadeColor(this.HighlightedColor));
+        this.StartCoroutine(this.FadeColor(this.HighlightedColor, true));
       if (this.useSpriteSwap)
         this.SwapSprite(this.HighlightedSprite);
       if (this.useTextColor)
@@ -171,7 +182,7 @@ public class UIOnHoverChild : MonoBehaviour
     {
       this.StopAllCoroutines();
       if (this.useColorTint)
-        this.StartCoroutine(this.FadeColor(this.NormalColor));
+        this.StartCoroutine(this.FadeColor(this.NormalColor, true));
       if (this.useSpriteSwap)
         this.SwapSprite(this.NormalSprite);
       if (this.useTextColor)
@@ -188,7 +199,10 @@ public class UIOnHoverChild : MonoBehaviour
     }
   }
 
-  private void Awake() => this.Init();
+  private void Awake()
+  {
+    this.Init();
+  }
 
   private void Activator(bool v)
   {
@@ -427,7 +441,13 @@ public class UIOnHoverChild : MonoBehaviour
     this.tmpText.color = c;
   }
 
-  private void Size(float f) => this.transform.localScale = new Vector3(f, f, f);
+  private void Size(float f)
+  {
+    this.transform.localScale = new Vector3(f, f, f);
+  }
 
-  private void TextSize(float f) => this.text.fontSize = (int) f;
+  private void TextSize(float f)
+  {
+    this.text.fontSize = (int) f;
+  }
 }

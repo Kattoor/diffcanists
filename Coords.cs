@@ -1,7 +1,6 @@
 
 using UnityEngine;
 
-#nullable disable
 public class Coords
 {
   public int x;
@@ -13,15 +12,33 @@ public class Coords
     this.y = y;
   }
 
-  public override string ToString() => "Coords (" + (object) this.x + ", " + (object) this.y + ")";
+  public override string ToString()
+  {
+    return "Coords (" + (object) this.x + ", " + (object) this.y + ")";
+  }
 
-  public Vector3 ToVector() => new Vector3((float) this.x, (float) this.y);
+  public Vector3 ToVector()
+  {
+    return new Vector3((float) this.x, (float) this.y);
+  }
 
-  public MyLocation ToMyLocation() => new MyLocation(this.x, this.y);
+  public MyLocation ToMyLocation()
+  {
+    return new MyLocation(this.x, this.y);
+  }
 
-  public float distance => Mathf.Sqrt((float) (this.x * this.x + this.y * this.y));
+  public float distance
+  {
+    get
+    {
+      return Mathf.Sqrt((float) (this.x * this.x + this.y * this.y));
+    }
+  }
 
-  public int Distance(Coords b) => Mathf.Abs(b.x - this.x) + Mathf.Abs(b.y - this.y);
+  public int Distance(Coords b)
+  {
+    return Mathf.Abs(b.x - this.x) + Mathf.Abs(b.y - this.y);
+  }
 
   public float DistanceSq(Coords b)
   {

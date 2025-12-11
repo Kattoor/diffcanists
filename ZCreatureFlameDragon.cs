@@ -1,7 +1,6 @@
 
 using UnityEngine;
 
-#nullable disable
 public class ZCreatureFlameDragon : ZCreature
 {
   public DamageType ImmuneTo = DamageType.Napalm;

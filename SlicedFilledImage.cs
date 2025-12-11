@@ -6,41 +6,39 @@ using UnityEngine.Sprites;
 using UnityEngine.U2D;
 using UnityEngine.UI;
 
-#nullable disable
 [RequireComponent(typeof (CanvasRenderer))]
 [AddComponentMenu("UI/Sliced Filled Image", 11)]
-public class SlicedFilledImage : 
-  MaskableGraphic,
-  ISerializationCallbackReceiver,
-  ILayoutElement,
-  ICanvasRaycastFilter
+public class SlicedFilledImage : MaskableGraphic, ISerializationCallbackReceiver, ILayoutElement, ICanvasRaycastFilter
 {
   private static readonly Vector3[] s_Vertices = new Vector3[4];
   private static readonly Vector2[] s_UVs = new Vector2[4];
   private static readonly Vector2[] s_SlicedVertices = new Vector2[4];
   private static readonly Vector2[] s_SlicedUVs = new Vector2[4];
-  [SerializeField]
-  private Sprite m_Sprite;
-  [SerializeField]
-  private SlicedFilledImage.FillDirection m_FillDirection;
+  private static List<SlicedFilledImage> m_TrackedTexturelessImages = new List<SlicedFilledImage>();
   [Range(0.0f, 1f)]
   [SerializeField]
   private float m_FillAmount = 1f;
   [SerializeField]
   private bool m_FillCenter = true;
   [SerializeField]
-  private bool m_PreserveBorder;
-  [SerializeField]
   private float m_PixelsPerUnitMultiplier = 1f;
+  [SerializeField]
+  private Sprite m_Sprite;
+  [SerializeField]
+  private SlicedFilledImage.FillDirection m_FillDirection;
+  [SerializeField]
+  private bool m_PreserveBorder;
   [NonSerialized]
   private Sprite m_OverrideSprite;
   private bool m_Tracked;
-  private static List<SlicedFilledImage> m_TrackedTexturelessImages = new List<SlicedFilledImage>();
   private static bool s_Initialized;
 
   public Sprite sprite
   {
-    get => this.m_Sprite;
+    get
+    {
+      return this.m_Sprite;
+    }
     set
     {
       if (!SlicedFilledImage.SetPropertyUtility.SetClass<Sprite>(ref this.m_Sprite, value))
@@ -52,7 +50,10 @@ public class SlicedFilledImage :
 
   public SlicedFilledImage.FillDirection fillDirection
   {
-    get => this.m_FillDirection;
+    get
+    {
+      return this.m_FillDirection;
+    }
     set
     {
       if (!SlicedFilledImage.SetPropertyUtility.SetStruct<SlicedFilledImage.FillDirection>(ref this.m_FillDirection, value))
@@ -63,7 +64,10 @@ public class SlicedFilledImage :
 
   public float fillAmount
   {
-    get => this.m_FillAmount;
+    get
+    {
+      return this.m_FillAmount;
+    }
     set
     {
       if (!SlicedFilledImage.SetPropertyUtility.SetStruct<float>(ref this.m_FillAmount, Mathf.Clamp01(value)))
@@ -74,7 +78,10 @@ public class SlicedFilledImage :
 
   public bool fillCenter
   {
-    get => this.m_FillCenter;
+    get
+    {
+      return this.m_FillCenter;
+    }
     set
     {
       if (!SlicedFilledImage.SetPropertyUtility.SetStruct<bool>(ref this.m_FillCenter, value))
@@ -85,7 +92,10 @@ public class SlicedFilledImage :
 
   public bool preserveBorder
   {
-    get => this.m_PreserveBorder;
+    get
+    {
+      return this.m_PreserveBorder;
+    }
     set
     {
       if (!SlicedFilledImage.SetPropertyUtility.SetStruct<bool>(ref this.m_PreserveBorder, value))
@@ -96,8 +106,14 @@ public class SlicedFilledImage :
 
   public float pixelsPerUnitMultiplier
   {
-    get => this.m_PixelsPerUnitMultiplier;
-    set => this.m_PixelsPerUnitMultiplier = Mathf.Max(0.01f, value);
+    get
+    {
+      return this.m_PixelsPerUnitMultiplier;
+    }
+    set
+    {
+      this.m_PixelsPerUnitMultiplier = Mathf.Max(0.01f, value);
+    }
   }
 
   public float pixelsPerUnit
@@ -116,7 +132,10 @@ public class SlicedFilledImage :
 
   public Sprite overrideSprite
   {
-    get => this.activeSprite;
+    get
+    {
+      return this.activeSprite;
+    }
     set
     {
       if (!SlicedFilledImage.SetPropertyUtility.SetClass<Sprite>(ref this.m_OverrideSprite, value))
@@ -160,12 +179,18 @@ public class SlicedFilledImage :
         return this.m_Material;
       return (bool) (UnityEngine.Object) this.activeSprite && (UnityEngine.Object) this.activeSprite.associatedAlphaSplitTexture != (UnityEngine.Object) null ? Image.defaultETC1GraphicMaterial : this.defaultMaterial;
     }
-    set => base.material = value;
+    set
+    {
+      base.material = value;
+    }
   }
 
   public float alphaHitTestMinimumThreshold { get; set; }
 
-  protected SlicedFilledImage() => this.useLegacyMeshGeneration = false;
+  protected SlicedFilledImage()
+  {
+    this.useLegacyMeshGeneration = false;
+  }
 
   protected override void OnEnable()
   {
@@ -295,19 +320,19 @@ public class SlicedFilledImage :
       SlicedFilledImage.s_SlicedUVs[1] = new Vector2(innerUv.x, innerUv.y);
       SlicedFilledImage.s_SlicedUVs[2] = new Vector2(innerUv.z, innerUv.w);
       SlicedFilledImage.s_SlicedUVs[3] = new Vector2(outerUv.z, outerUv.w);
-      float num3;
-      float num4;
+      float num1;
+      float num2;
       if (this.m_FillDirection == SlicedFilledImage.FillDirection.Left || this.m_FillDirection == SlicedFilledImage.FillDirection.Right)
       {
-        num3 = pixelAdjustedRect.x + vector4.x;
-        float num5 = pixelAdjustedRect.width - vector4.x - vector4.z;
-        num4 = (double) num5 > 0.0 ? 1f / num5 : 1f;
+        num1 = pixelAdjustedRect.x + vector4.x;
+        float num3 = pixelAdjustedRect.width - vector4.x - vector4.z;
+        num2 = (double) num3 > 0.0 ? 1f / num3 : 1f;
       }
       else
       {
-        num3 = pixelAdjustedRect.y + vector4.y;
-        float num6 = pixelAdjustedRect.height - vector4.y - vector4.w;
-        num4 = (double) num6 > 0.0 ? 1f / num6 : 1f;
+        num1 = pixelAdjustedRect.y + vector4.y;
+        float num3 = pixelAdjustedRect.height - vector4.y - vector4.w;
+        num2 = (double) num3 > 0.0 ? 1f / num3 : 1f;
       }
       for (int index1 = 0; index1 < 3; ++index1)
       {
@@ -317,35 +342,35 @@ public class SlicedFilledImage :
           if (this.m_FillCenter || index1 != 1 || index3 != 1)
           {
             int index4 = index3 + 1;
-            float num7;
-            float num8;
+            float num3;
+            float num4;
             switch (this.m_FillDirection)
             {
               case SlicedFilledImage.FillDirection.Right:
-                num7 = (SlicedFilledImage.s_SlicedVertices[index1].x - num3) * num4;
-                num8 = (SlicedFilledImage.s_SlicedVertices[index2].x - num3) * num4;
+                num3 = (SlicedFilledImage.s_SlicedVertices[index1].x - num1) * num2;
+                num4 = (SlicedFilledImage.s_SlicedVertices[index2].x - num1) * num2;
                 break;
               case SlicedFilledImage.FillDirection.Left:
-                num7 = (float) (1.0 - ((double) SlicedFilledImage.s_SlicedVertices[index2].x - (double) num3) * (double) num4);
-                num8 = (float) (1.0 - ((double) SlicedFilledImage.s_SlicedVertices[index1].x - (double) num3) * (double) num4);
+                num3 = (float) (1.0 - ((double) SlicedFilledImage.s_SlicedVertices[index2].x - (double) num1) * (double) num2);
+                num4 = (float) (1.0 - ((double) SlicedFilledImage.s_SlicedVertices[index1].x - (double) num1) * (double) num2);
                 break;
               case SlicedFilledImage.FillDirection.Up:
-                num7 = (SlicedFilledImage.s_SlicedVertices[index3].y - num3) * num4;
-                num8 = (SlicedFilledImage.s_SlicedVertices[index4].y - num3) * num4;
+                num3 = (SlicedFilledImage.s_SlicedVertices[index3].y - num1) * num2;
+                num4 = (SlicedFilledImage.s_SlicedVertices[index4].y - num1) * num2;
                 break;
               case SlicedFilledImage.FillDirection.Down:
-                num7 = (float) (1.0 - ((double) SlicedFilledImage.s_SlicedVertices[index4].y - (double) num3) * (double) num4);
-                num8 = (float) (1.0 - ((double) SlicedFilledImage.s_SlicedVertices[index3].y - (double) num3) * (double) num4);
+                num3 = (float) (1.0 - ((double) SlicedFilledImage.s_SlicedVertices[index4].y - (double) num1) * (double) num2);
+                num4 = (float) (1.0 - ((double) SlicedFilledImage.s_SlicedVertices[index3].y - (double) num1) * (double) num2);
                 break;
               default:
-                num7 = num8 = 0.0f;
+                num3 = num4 = 0.0f;
                 break;
             }
-            if ((double) num7 < (double) this.m_FillAmount)
+            if ((double) num3 < (double) this.m_FillAmount)
             {
               Vector4 vertices = new Vector4(SlicedFilledImage.s_SlicedVertices[index1].x, SlicedFilledImage.s_SlicedVertices[index3].y, SlicedFilledImage.s_SlicedVertices[index2].x, SlicedFilledImage.s_SlicedVertices[index4].y);
               Vector4 uvs = new Vector4(SlicedFilledImage.s_SlicedUVs[index1].x, SlicedFilledImage.s_SlicedUVs[index3].y, SlicedFilledImage.s_SlicedUVs[index2].x, SlicedFilledImage.s_SlicedUVs[index4].y);
-              float fillAmount = (float) (((double) this.m_FillAmount - (double) num7) / ((double) num8 - (double) num7));
+              float fillAmount = (float) (((double) this.m_FillAmount - (double) num3) / ((double) num4 - (double) num3));
               this.GenerateFilledSprite(vh, vertices, uvs, fillAmount);
             }
           }
@@ -375,9 +400,9 @@ public class SlicedFilledImage :
       if ((double) size[index] < (double) num4 && (double) num4 != 0.0)
       {
         size = adjustedRect.size;
-        float num5 = size[index] / num4;
-        border[index] *= num5;
-        border[index + 2] *= num5;
+        float num1 = size[index] / num4;
+        border[index] *= num1;
+        border[index + 2] *= num1;
       }
     }
     return border;
@@ -436,15 +461,45 @@ public class SlicedFilledImage :
     vh.AddTriangle(currentVertCount + 2, currentVertCount + 3, currentVertCount);
   }
 
-  int ILayoutElement.layoutPriority => 0;
+  int ILayoutElement.layoutPriority
+  {
+    get
+    {
+      return 0;
+    }
+  }
 
-  float ILayoutElement.minWidth => 0.0f;
+  float ILayoutElement.minWidth
+  {
+    get
+    {
+      return 0.0f;
+    }
+  }
 
-  float ILayoutElement.minHeight => 0.0f;
+  float ILayoutElement.minHeight
+  {
+    get
+    {
+      return 0.0f;
+    }
+  }
 
-  float ILayoutElement.flexibleWidth => -1f;
+  float ILayoutElement.flexibleWidth
+  {
+    get
+    {
+      return -1f;
+    }
+  }
 
-  float ILayoutElement.flexibleHeight => -1f;
+  float ILayoutElement.flexibleHeight
+  {
+    get
+    {
+      return -1f;
+    }
+  }
 
   float ILayoutElement.preferredWidth
   {
@@ -470,7 +525,9 @@ public class SlicedFilledImage :
   {
   }
 
-  bool ICanvasRaycastFilter.IsRaycastLocationValid(Vector2 screenPoint, Camera eventCamera)
+  bool ICanvasRaycastFilter.IsRaycastLocationValid(
+    Vector2 screenPoint,
+    Camera eventCamera)
   {
     if ((double) this.alphaHitTestMinimumThreshold <= 0.0)
       return true;
@@ -509,19 +566,19 @@ public class SlicedFilledImage :
         }
         else
         {
-          double a1 = (double) adjustedBorders[index1];
+          double num1 = (double) adjustedBorders[index1];
           size = pixelAdjustedRect.size;
-          double b1 = (double) size[index1] - (double) adjustedBorders[index1 + 2];
-          double num6 = (double) localPoint[index1];
-          float num7 = Mathf.InverseLerp((float) a1, (float) b1, (float) num6);
+          double num2 = (double) size[index1] - (double) adjustedBorders[index1 + 2];
+          double num3 = (double) localPoint[index1];
+          float num4 = Mathf.InverseLerp((float) num1, (float) num2, (float) num3);
           ref Vector2 local = ref localPoint;
-          int index4 = index1;
-          double a2 = (double) border[index1];
+          int index2 = index1;
+          double num5 = (double) border[index1];
           size = rect.size;
-          double b2 = (double) size[index1] - (double) border[index1 + 2];
-          double t = (double) num7;
-          double num8 = (double) Mathf.Lerp((float) a2, (float) b2, (float) t);
-          local[index4] = (float) num8;
+          double num6 = (double) size[index1] - (double) border[index1 + 2];
+          double num7 = (double) num4;
+          double num8 = (double) Mathf.Lerp((float) num5, (float) num6, (float) num7);
+          local[index2] = (float) num8;
         }
       }
     }
@@ -554,7 +611,7 @@ public class SlicedFilledImage :
     }
     catch (UnityException ex)
     {
-      Debug.LogError((object) ("Using alphaHitTestMinimumThreshold greater than 0 on Image whose sprite texture cannot be read. " + ((Exception) ex).Message + " Also make sure to disable sprite packing for this sprite."), (UnityEngine.Object) this);
+      Debug.LogError((object) ("Using alphaHitTestMinimumThreshold greater than 0 on Image whose sprite texture cannot be read. " + ex.Message + " Also make sure to disable sprite packing for this sprite."), (UnityEngine.Object) this);
       return true;
     }
   }

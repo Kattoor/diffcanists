@@ -6,25 +6,23 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI.Extensions;
 
-#nullable disable
-public class MapCoordPicker : 
-  MonoBehaviour,
-  IPointerDownHandler,
-  IEventSystemHandler,
-  IPointerUpHandler
+public class MapCoordPicker : MonoBehaviour, IPointerDownHandler, IEventSystemHandler, IPointerUpHandler
 {
+  public Vector2 point_clicked = Vector2.zero;
   public TMP_Text text;
   public RectTransform container;
   public RectTransform center;
   public UILineRenderer edge;
   public bool down;
-  public Vector2 point_clicked = Vector2.zero;
   public int radius;
   public JProperty itemPoint;
 
   public static MapCoordPicker Instance { get; private set; }
 
-  private void Awake() => MapCoordPicker.Instance = this;
+  private void Awake()
+  {
+    MapCoordPicker.Instance = this;
+  }
 
   private void OnDestroy()
   {
@@ -41,19 +39,17 @@ public class MapCoordPicker :
 
   public void FromX(int x)
   {
-    this.point_clicked = this.UnAdjust(this.Adjust(this.point_clicked) with
-    {
-      x = (float) x
-    });
+    Vector2 a = this.Adjust(this.point_clicked);
+    a.x = (float) x;
+    this.point_clicked = this.UnAdjust(a);
     this.UpdateVisuals();
   }
 
   public void FromY(int y)
   {
-    this.point_clicked = this.UnAdjust(this.Adjust(this.point_clicked) with
-    {
-      y = (float) y
-    });
+    Vector2 a = this.Adjust(this.point_clicked);
+    a.y = (float) y;
+    this.point_clicked = this.UnAdjust(a);
     this.UpdateVisuals();
   }
 
@@ -151,5 +147,8 @@ public class MapCoordPicker :
     return a;
   }
 
-  private void OnDisable() => this.down = false;
+  private void OnDisable()
+  {
+    this.down = false;
+  }
 }

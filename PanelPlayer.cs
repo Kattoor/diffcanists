@@ -4,7 +4,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-#nullable disable
 public class PanelPlayer : MonoBehaviour
 {
   public bool newLayout;
@@ -121,7 +120,10 @@ public class PanelPlayer : MonoBehaviour
     }
   }
 
-  public void OnDestroy() => this.Dispose();
+  public void OnDestroy()
+  {
+    this.Dispose();
+  }
 
   private void FindCenterPivet(Image a, Sprite s)
   {
@@ -142,38 +144,38 @@ public class PanelPlayer : MonoBehaviour
         }
       }
     }
-    for (int index3 = s.texture.height - 1; index3 > 0; --index3)
+    for (int index1 = s.texture.height - 1; index1 > 0; --index1)
     {
-      for (int index4 = 0; index4 < s.texture.width; ++index4)
+      for (int index2 = 0; index2 < s.texture.width; ++index2)
       {
-        if (pixels32[index4 + index3 * s.texture.width].a > (byte) 0)
+        if (pixels32[index2 + index1 * s.texture.width].a > (byte) 0)
         {
-          num1 = index3;
-          index3 = 0;
+          num1 = index1;
+          index1 = 0;
           break;
         }
       }
     }
-    for (int index5 = 0; index5 < s.texture.width; ++index5)
+    for (int index1 = 0; index1 < s.texture.width; ++index1)
     {
-      for (int index6 = 0; index6 < s.texture.height; ++index6)
+      for (int index2 = 0; index2 < s.texture.height; ++index2)
       {
-        if (pixels32[index5 + index6 * s.texture.width].a > (byte) 0)
+        if (pixels32[index1 + index2 * s.texture.width].a > (byte) 0)
         {
-          x = index5;
-          index5 = s.texture.width;
+          x = index1;
+          index1 = s.texture.width;
           break;
         }
       }
     }
-    for (int index7 = s.texture.width - 1; index7 > 0; --index7)
+    for (int index1 = s.texture.width - 1; index1 > 0; --index1)
     {
-      for (int index8 = 0; index8 < s.texture.height; ++index8)
+      for (int index2 = 0; index2 < s.texture.height; ++index2)
       {
-        if (pixels32[index7 + index8 * s.texture.width].a > (byte) 0)
+        if (pixels32[index1 + index2 * s.texture.width].a > (byte) 0)
         {
-          num2 = index7;
-          index7 = 0;
+          num2 = index1;
+          index1 = 0;
           break;
         }
       }
@@ -187,7 +189,10 @@ public class PanelPlayer : MonoBehaviour
     a.rectTransform.pivot = new Vector2(0.5f, 0.5f);
   }
 
-  public void UpdateColors() => this.Colorize(this.bgStar.color);
+  public void UpdateColors()
+  {
+    this.Colorize(this.bgStar.color);
+  }
 
   private void Colorize(Color c)
   {

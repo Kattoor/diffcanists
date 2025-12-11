@@ -7,14 +7,19 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
 
-#nullable disable
 public static class RandomExtensions
 {
   private static Dictionary<SpellEnum, int> spellToIndex;
 
-  public static BookOf LastBook() => BookOf.Sands;
+  public static BookOf LastBook()
+  {
+    return BookOf.Sands;
+  }
 
-  public static int Clamp(this ZGame.GameType gameType) => Mathf.Clamp((int) gameType, 0, 2);
+  public static int Clamp(this ZGame.GameType gameType)
+  {
+    return Mathf.Clamp((int) gameType, 0, 2);
+  }
 
   public static T Random<T>(this List<T> t, System.Random r = null)
   {
@@ -94,7 +99,10 @@ public static class RandomExtensions
     };
   }
 
-  public static bool Online(this Location loc) => loc > Location.Disconnecting;
+  public static bool Online(this Location loc)
+  {
+    return loc > Location.Disconnecting;
+  }
 
   public static void HideIfWebGL(this GameObject g)
   {
@@ -130,7 +138,10 @@ public static class RandomExtensions
     return e == SpellEnum.Flight || e == SpellEnum.Whistling_Winds || e == SpellEnum.Vampire_Bat;
   }
 
-  public static bool Has(this FamiliarType f, FamiliarType t) => (f & t) != 0;
+  public static bool Has(this FamiliarType f, FamiliarType t)
+  {
+    return (uint) (f & t) > 0U;
+  }
 
   public static int Index(this SpellEnum s)
   {
@@ -157,11 +168,20 @@ public static class RandomExtensions
     t.position = (Vector3) p.ToSinglePrecision();
   }
 
-  public static void DestroyThis(this Component a) => UnityEngine.Object.Destroy((UnityEngine.Object) a);
+  public static void DestroyThis(this Component a)
+  {
+    UnityEngine.Object.Destroy((UnityEngine.Object) a);
+  }
 
-  public static int Squared(this int x) => x * x;
+  public static int Squared(this int x)
+  {
+    return x * x;
+  }
 
-  public static FixedInt Squared(this FixedInt x) => x * x;
+  public static FixedInt Squared(this FixedInt x)
+  {
+    return x * x;
+  }
 
   public static void DestroyChildern(this RectTransform a)
   {
@@ -182,7 +202,10 @@ public static class RandomExtensions
     return stringBuilder.ToString();
   }
 
-  public static bool HasStyle(this GameStyle s, GameStyle t) => (s & t) != 0;
+  public static bool HasStyle(this GameStyle s, GameStyle t)
+  {
+    return (uint) (s & t) > 0U;
+  }
 
   public static void SetNativeSize2(this Image i)
   {
@@ -242,7 +265,10 @@ public static class RandomExtensions
     return new Color32((byte) r.Next((int) byte.MaxValue), (byte) r.Next((int) byte.MaxValue), (byte) r.Next((int) byte.MaxValue), byte.MaxValue);
   }
 
-  public static bool Is(this OperatingSystem os, OperatingSystem e) => (os & e) != 0;
+  public static bool Is(this OperatingSystem os, OperatingSystem e)
+  {
+    return (uint) (os & e) > 0U;
+  }
 
   public static bool IsNot(this OperatingSystem os, OperatingSystem e)
   {
@@ -251,10 +277,10 @@ public static class RandomExtensions
 
   public static string GetFirstFlags(this AccountType value)
   {
-    foreach (AccountType flag in Enum.GetValues(typeof (AccountType)))
+    foreach (AccountType accountType in Enum.GetValues(typeof (AccountType)))
     {
-      if (value.HasFlag((Enum) flag) && flag != AccountType.None)
-        return flag.ToString();
+      if (value.HasFlag((Enum) accountType) && accountType != AccountType.None)
+        return accountType.ToString();
     }
     return "";
   }
@@ -262,10 +288,10 @@ public static class RandomExtensions
   public static string GetActiveFlags(this AccountType value)
   {
     StringBuilder stringBuilder = new StringBuilder();
-    foreach (AccountType flag in Enum.GetValues(typeof (AccountType)))
+    foreach (AccountType accountType in Enum.GetValues(typeof (AccountType)))
     {
-      if (value.HasFlag((Enum) flag) && flag != AccountType.None)
-        stringBuilder.Append(flag.ToString()).Append(", ");
+      if (value.HasFlag((Enum) accountType) && accountType != AccountType.None)
+        stringBuilder.Append(accountType.ToString()).Append(", ");
     }
     if (stringBuilder.Length > 0)
       stringBuilder.Length -= 2;

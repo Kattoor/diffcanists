@@ -1,7 +1,6 @@
 
 using UnityEngine;
 
-#nullable disable
 public class FamiliarFlame : Familiar
 {
   public float maxDistance = 4f;

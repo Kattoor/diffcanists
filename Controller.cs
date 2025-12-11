@@ -9,19 +9,25 @@ using System.Security.Cryptography;
 using TMPro;
 using UnityEngine;
 
-#nullable disable
 public class Controller : MonoBehaviour
 {
+  public static float realtimeSinceStartup = 0.0f;
+  public static List<GameObject> _gameObjects = new List<GameObject>();
+  public static string OperatingSystem = "None";
+  public static string HWID = "None";
+  public static bool ApplicationFocused = true;
+  private List<UnityEngine.Object> deleteOnExit = new List<UnityEngine.Object>();
+  public bool isActive = true;
+  private int lastScreenHeight = -1;
+  private int lastScreenWidth = -1;
+  internal List<Controller.Stack> stack = new List<Controller.Stack>();
   public hardManager keysKeyboard;
   public hardManager keysController;
-  private List<UnityEngine.Object> deleteOnExit = new List<UnityEngine.Object>();
   public GameObject TransitionObj;
   public Material _Radial;
   public float _RadialSpeed;
-  public bool isActive = true;
   public bool useColorScheme;
   public Controller schemeController;
-  public static float realtimeSinceStartup = 0.0f;
   public Inert inert;
   public ClientResources clientResources;
   public RectTransform canvasRect;
@@ -90,13 +96,7 @@ public class Controller : MonoBehaviour
   public MyMessageBox messageBox;
   public KeyBoard mobileKeyboard;
   public static Camera miniCameraObj;
-  public static List<GameObject> _gameObjects = new List<GameObject>();
-  public static string OperatingSystem = "None";
-  public static string HWID = "None";
   private GameObject gameBG;
-  private int lastScreenHeight = -1;
-  private int lastScreenWidth = -1;
-  public static bool ApplicationFocused = true;
   public Controller otherController;
   [Header("Fonts")]
   public TMP_FontAsset fontArc;
@@ -106,7 +106,6 @@ public class Controller : MonoBehaviour
   private float _removeTempIgnored;
   private float _next;
   private float _cur;
-  internal List<Controller.Stack> stack = new List<Controller.Stack>();
   private GameObject openedMenu;
   private GameObject openHandle;
   private Dictionary<GameObject, BetaButtons> menuMapping;
@@ -166,10 +165,10 @@ public class Controller : MonoBehaviour
 
   public T CreateAndApply<T>(T t, Transform parent) where T : MonoBehaviour
   {
-    T andApply = UnityEngine.Object.Instantiate<T>(t, parent);
+    T obj = UnityEngine.Object.Instantiate<T>(t, parent);
     if (this.useColorScheme && t.name.Contains("2"))
-      Client.colorScheme?.Apply(andApply.gameObject);
-    return andApply;
+      Client.colorScheme?.Apply(obj.gameObject);
+    return obj;
   }
 
   public void ApplyScheme(GameObject t)
@@ -280,7 +279,10 @@ public class Controller : MonoBehaviour
     Controller.Instance = (Controller) null;
   }
 
-  public void RefreshKeepAliveTimer() => this._keepalive = Time.realtimeSinceStartup + 20f;
+  public void RefreshKeepAliveTimer()
+  {
+    this._keepalive = Time.realtimeSinceStartup + 20f;
+  }
 
   private void Update()
   {
@@ -312,17 +314,20 @@ public class Controller : MonoBehaviour
     if (Client.isConnected && (double) this._keepalive < (double) Time.realtimeSinceStartup)
     {
       this._keepalive = Time.realtimeSinceStartup + 20f;
-      Client.connection.SendBytes(new byte[1]{ (byte) 34 });
+      Client.connection.SendBytes(new byte[1]
+      {
+        (byte) 34
+      }, SendOption.None);
       UnityEngine.ClusterModule.Resources.Release();
       if (Spectator.isConnected)
         Spectator.connection.SendBytes(new byte[1]
         {
           (byte) 34
-        });
+        }, SendOption.None);
     }
     if (this.stack.Count > 0 && Input.GetKeyDown(KeyCode.Escape))
       this.Pop();
-    if (!Input.GetKeyDown(KeyCode.F12) || !Input.GetKey(KeyCode.LeftShift) || !Client.MyAccount.accountType.isDev() || !((UnityEngine.Object) HUD.instance == (UnityEngine.Object) null))
+    if (!Input.GetKeyDown(KeyCode.F12) || !Input.GetKey(KeyCode.LeftShift) || (!Client.MyAccount.accountType.isDev() || !((UnityEngine.Object) HUD.instance == (UnityEngine.Object) null)))
       return;
     SpellOverridesUI.Create();
   }
@@ -419,7 +424,7 @@ public class Controller : MonoBehaviour
       return;
     List<PfabChatMsg.contain> getList = ChatBox.Instance.recycled.GetList;
     this.DestroyChatBox();
-    this.ShowChatBox();
+    this.ShowChatBox(true);
     foreach (PfabChatMsg.contain contain in getList)
       ChatBox.Instance.recycled.Add(contain);
   }
@@ -571,7 +576,7 @@ public class Controller : MonoBehaviour
     this.HandleMenu(m);
     MyContextMenu.CloseInstance();
     MyToolTip.Close();
-    this.DestroyMap();
+    this.DestroyMap(false, true);
     Controller.CloseDialogs();
     if ((UnityEngine.Object) this.gameBG == (UnityEngine.Object) null)
       this.gameBG = Camera.main.transform.GetChild(0).gameObject;
@@ -588,7 +593,7 @@ public class Controller : MonoBehaviour
     this.openHandle = Controller.Instance.CreateAndApply(m, (Transform) this.canvasRect);
     this.openHandle.transform.SetAsFirstSibling();
     if (showchatbox)
-      this.ShowChatBox();
+      this.ShowChatBox(true);
     else
       this.DestroyChatBox();
     if ((UnityEngine.Object) ChessUI.Instance != (UnityEngine.Object) null)
@@ -677,8 +682,8 @@ public class Controller : MonoBehaviour
     if ((UnityEngine.Object) ChatBox.Instance == (UnityEngine.Object) null)
       Controller.Instance.CreateAndApply(this.chatBox, (Transform) this.canvasRect);
     ChatBox.Instance.UpdatePostion(defaultPosition);
-    ChatBox.Instance.SetActive(defaultPosition || Client.game != null && Client.game.isSandbox || Global.GetPrefBool("prefChatHIdden", false));
-    ChatBox.Instance.AllowInput(defaultPosition || Client.game.isSpectator && ChatBox.Instance.Active && !Client.game.isReplay || Client.game.isSandbox && !Client.game.isTutorial);
+    ChatBox.Instance.SetActive(defaultPosition || (Client.game != null && Client.game.isSandbox || Global.GetPrefBool("prefChatHIdden", false)));
+    ChatBox.Instance.AllowInput(defaultPosition || (Client.game.isSpectator && ChatBox.Instance.Active && !Client.game.isReplay || Client.game.isSandbox && !Client.game.isTutorial));
     ChatBox.Instance.transform.SetAsLastSibling();
   }
 

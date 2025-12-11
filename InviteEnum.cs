@@ -1,5 +1,4 @@
 
-#nullable disable
 public enum InviteEnum
 {
   Dont_Mind = -1, // 0xFFFFFFFF

@@ -1,7 +1,6 @@
 
 using UnityEngine;
 
-#nullable disable
 public class CameraShake : MonoBehaviour
 {
   public Vector3 Amount = new Vector3(1f, 1f, 0.0f);
@@ -39,7 +38,7 @@ public class CameraShake : MonoBehaviour
       cameraShake.Curve = curve;
     cameraShake.DeltaMovement = deltaMovement;
     cameraShake.destroyAfterPlay = true;
-    cameraShake.Shake();
+    cameraShake.Shake(0.7f, 1f);
   }
 
   public void Shake(float intensity = 0.7f, float dur = 1f)

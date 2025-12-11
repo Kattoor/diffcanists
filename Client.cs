@@ -15,7 +15,6 @@ using System.Text;
 using UnityEngine;
 using UnityThreading;
 
-#nullable disable
 public static class Client
 {
   public static Connection connection = (Connection) null;
@@ -31,7 +30,6 @@ public static class Client
   public static ZGame game = (ZGame) null;
   public static BitBools badges = new BitBools();
   private static Cosmetics _cosmetics = Server.DefaultCosmetics;
-  public static Client.JoinLocation joinedFrom;
   public static ArcanistsStore.Item previewItem = (ArcanistsStore.Item) null;
   public static string sharingWith = "";
   public static float accountSticker = 0.0f;
@@ -49,7 +47,6 @@ public static class Client
     "$HOME/.config/user-dirs.dirs",
     "$HOME/Downloads"
   };
-  public static ZGame.GameType gameType;
   public static bool viewLTS = true;
   public static bool viewHTS = true;
   public static bool viewPMO = true;
@@ -59,7 +56,6 @@ public static class Client
   public static bool displayName = true;
   public static bool displayMinionType = true;
   public static bool displayTeam = true;
-  public static Tutorial _tutorial;
   public static GameFacts _gameFacts = new GameFacts();
   public static RatedContainer _ratedFacts = new RatedContainer();
   public static GameSettings _gameSettings = new GameSettings();
@@ -83,9 +79,6 @@ public static class Client
   public static bool local = false;
   public static bool offlineMode = true;
   public static ulong discordID = 0;
-  public static byte[] bytePass;
-  public static AesManaged aes;
-  public static EncryptionType en;
   public static ChatSetting lobbyChat = ChatSetting.On;
   public static ChatSetting gameChat = ChatSetting.On;
   public static ChatSetting friendChat = ChatSetting.On;
@@ -128,10 +121,16 @@ public static class Client
   private static FixedInt _power = (FixedInt) 1;
   private static int debugLogchat = 0;
   internal static Queue<byte[]> delayedChatQue = new Queue<byte[]>();
-  private static IEnumerator<float> IEChatQue;
   private static float chatquetime = 0.0f;
   private static float sharequetime = 0.0f;
   public static bool showBlood = true;
+  public static Client.JoinLocation joinedFrom;
+  public static ZGame.GameType gameType;
+  public static Tutorial _tutorial;
+  public static byte[] bytePass;
+  public static AesManaged aes;
+  public static EncryptionType en;
+  private static IEnumerator<float> IEChatQue;
 
   public static ColorScheme colorScheme
   {
@@ -141,7 +140,10 @@ public static class Client
         Client._scheme = ColorScheme.From(ClientResources.Instance._texturePalette);
       return Client._scheme;
     }
-    set => Client._scheme = value;
+    set
+    {
+      Client._scheme = value;
+    }
   }
 
   public static ColorScheme defaultScheme
@@ -156,31 +158,67 @@ public static class Client
 
   public static bool renderEmoji
   {
-    get => Global.GetPrefBool("toggleOverheadRender", true);
-    set => Global.SetPrefBool("toggleOverheadRender", value);
+    get
+    {
+      return Global.GetPrefBool("toggleOverheadRender", true);
+    }
+    set
+    {
+      Global.SetPrefBool("toggleOverheadRender", value);
+    }
   }
 
   public static bool renderEmojiSpectator
   {
-    get => Global.GetPrefBool("toggleOverheadSpectator", true);
-    set => Global.SetPrefBool("toggleOverheadSpectator", value);
+    get
+    {
+      return Global.GetPrefBool("toggleOverheadSpectator", true);
+    }
+    set
+    {
+      Global.SetPrefBool("toggleOverheadSpectator", value);
+    }
   }
 
   public static bool emojiSound
   {
-    get => Global.GetPrefBool("toggleOverheadSound", true);
-    set => Global.SetPrefBool("toggleOverheadSound", value);
+    get
+    {
+      return Global.GetPrefBool("toggleOverheadSound", true);
+    }
+    set
+    {
+      Global.SetPrefBool("toggleOverheadSound", value);
+    }
   }
 
-  public static ZMyWorld world => Client.game.world;
+  public static ZMyWorld world
+  {
+    get
+    {
+      return Client.game.world;
+    }
+  }
 
-  public static ZMap map => Client.game?.map;
+  public static ZMap map
+  {
+    get
+    {
+      return Client.game?.map;
+    }
+  }
 
-  public static Transform GetMapTransform() => Client.game.GetMapTransform();
+  public static Transform GetMapTransform()
+  {
+    return Client.game.GetMapTransform();
+  }
 
   public static Cosmetics cosmetics
   {
-    get => Client._cosmetics;
+    get
+    {
+      return Client._cosmetics;
+    }
     set
     {
       Client._cosmetics = value;
@@ -190,8 +228,14 @@ public static class Client
 
   public static float bonusPrestige
   {
-    get => Client.MyAccount.bonusExperience;
-    set => Client.MyAccount.bonusExperience = value;
+    get
+    {
+      return Client.MyAccount.bonusExperience;
+    }
+    set
+    {
+      Client.MyAccount.bonusExperience = value;
+    }
   }
 
   public static string DownloadsFolder
@@ -211,15 +255,15 @@ public static class Client
 
   public static void RefreshIgnore()
   {
-    UnratedMenu.instance?.RefreshIgnore();
-    LobbyMenu.instance?.RefreshIgnore();
-    RatedMenu.instance?.RefreshIgnore();
+    UnratedMenu.instance?.RefreshIgnore(false);
+    LobbyMenu.instance?.RefreshIgnore(false);
+    RatedMenu.instance?.RefreshIgnore(false);
   }
 
   public static void RefreshNames()
   {
-    UnratedMenu.instance?.RefreshNames();
-    LobbyMenu.instance?.RefreshNames();
+    UnratedMenu.instance?.RefreshNames(true, false);
+    LobbyMenu.instance?.RefreshNames(false);
   }
 
   public static bool HasAccount(string n)
@@ -244,11 +288,20 @@ public static class Client
 
   public static bool steamVerified
   {
-    get => Client.MyAccount.steamVerified;
-    set => Client.MyAccount.steamVerified = value;
+    get
+    {
+      return Client.MyAccount.steamVerified;
+    }
+    set
+    {
+      Client.MyAccount.steamVerified = value;
+    }
   }
 
-  public static bool HasFriend(string name) => Client.friends.Contains(name);
+  public static bool HasFriend(string name)
+  {
+    return Client.friends.Contains(name);
+  }
 
   public static bool IsIgnored(string name)
   {
@@ -266,22 +319,25 @@ public static class Client
   {
     if (Client.connection == null)
       return;
-    Client.connection.SendBytes(b);
+    Client.connection.SendBytes(b, SendOption.None);
   }
 
   public static void SendToGameServer(byte[] b)
   {
     if (Client.connection != null && !Client.game.isServer)
-      Client.connection.SendBytes(b);
+      Client.connection.SendBytes(b, SendOption.None);
     if (!((UnityEngine.Object) Player.Instance != (UnityEngine.Object) null) || b[0] == (byte) 153 || !Client.game.isServer && b[0] == (byte) 220)
       return;
-    Client.game.GameHandler(Player.Instance.person, b, false);
+    Client.game.GameHandler(Player.Instance.person, b, false, true);
     if (Client.game.MoveQue.Count <= 0 || Client.game.ongoing.NumberOfSlowUpdateCoroutines != 0)
       return;
     Client.game.MoveQue.DequeueAndInvoke();
   }
 
-  public static string GetTime() => DateTime.Now.ToString("M/d h:mm tt");
+  public static string GetTime()
+  {
+    return DateTime.Now.ToString("M/d h:mm tt");
+  }
 
   public static void OnApplicationQuit()
   {
@@ -294,7 +350,10 @@ public static class Client
 
   public static bool isConnected
   {
-    get => Client.connection != null && Client.connection.State == ConnectionState.Connected;
+    get
+    {
+      return Client.connection != null && Client.connection.State == ConnectionState.Connected;
+    }
   }
 
   public static void RemoveAllDataReceived()
@@ -347,13 +406,13 @@ public static class Client
     Client.currentIP = PlayerPrefs.GetString("prefserver", Client.serverIP);
     if (string.IsNullOrWhiteSpace(Client.currentIP))
       Client.currentIP = Client.serverIP;
-    Client.ReConnectToServer();
+    Client.ReConnectToServer(Client.JoinLocation.Mainmenu);
   }
 
   public static void ConnectToLocalServer()
   {
     Client.currentIP = PlayerPrefs.GetString("localispserver", "127.0.0.1");
-    Client.ReConnectToServer();
+    Client.ReConnectToServer(Client.JoinLocation.Mainmenu);
   }
 
   public static void InitializeConnection()
@@ -379,13 +438,13 @@ public static class Client
     }
     if (string.IsNullOrEmpty(Client.currentIP))
       return;
-    Client.connection = (Connection) new TcpConnection(new NetworkEndPoint(Client.currentIP, Client.port));
+    Client.connection = (Connection) new TcpConnection(new NetworkEndPoint(Client.currentIP, Client.port, IPMode.IPv4));
     Client.connection.DataReceived += new EventHandler<DataReceivedEventArgs>(Client.AuthHandler);
     Client.connection.Disconnected += new EventHandler<DisconnectedEventArgs>(Client.Disconnected);
     Controller.Instance?.RefreshKeepAliveTimer();
     try
     {
-      Client.connection.Connect();
+      Client.connection.Connect((byte[]) null, 5000);
       FpsToText.Instance?.StartPing();
     }
     catch (Exception ex)
@@ -428,9 +487,9 @@ public static class Client
         HUD.instance.panelReconnect.SetActive(true);
       }
       else if ((UnityEngine.Object) Player.Instance != (UnityEngine.Object) null && Player.Instance.person.offeringRematch)
-        Client.game.QuitToMainMenu(true, Client.JoinLocation.Game);
+        Client.game.QuitToMainMenu(true, Client.JoinLocation.Game, false);
       else
-        Client.game.QuitToMainMenu(true, Client.JoinLocation.Lobby);
+        Client.game.QuitToMainMenu(true, Client.JoinLocation.Lobby, false);
     }));
   }
 
@@ -466,8 +525,8 @@ public static class Client
     {
       case 42:
         Account a = new Account();
-        a.Deserialize(r);
-        Account account1 = Client.GetAccount(a.name);
+        a.Deserialize(r, false);
+        Account account1 = Client.GetAccount(a.name, false);
         a.pfabName = account1.pfabName;
         Client._accounts[a.name] = a;
         if (string.Equals(a.name, Client.Name))
@@ -584,7 +643,7 @@ public static class Client
             string str1 = r.ReadString();
             byte num5 = r.ReadByte();
             Client.clan?.members.Add(str1, (Clan.Roles) num5);
-            ChatBox.Instance?.NewChatMsg("", "Welcome <#6633ff>" + str1 + "</color> to the clan!", (Color) ColorScheme.GetColor(Global.ColorClanText), str1, ChatOrigination.Clan);
+            ChatBox.Instance?.NewChatMsg("", "Welcome <#6633ff>" + str1 + "</color> to the clan!", (Color) ColorScheme.GetColor(Global.ColorClanText), str1, ChatOrigination.Clan, ContentType.STRING, (object) null);
             Client.UpdateClanUI();
             return true;
           case 3:
@@ -593,17 +652,17 @@ public static class Client
             if (string.Equals(str2, Client.Name))
             {
               Client.clan = (Clan) null;
-              ChatBox.Instance?.NewChatMsg("", "You have left the clan.", (Color) ColorScheme.GetColor(Global.ColorClanText), str2, ChatOrigination.Clan);
+              ChatBox.Instance?.NewChatMsg("", "You have left the clan.", (Color) ColorScheme.GetColor(Global.ColorClanText), str2, ChatOrigination.Clan, ContentType.STRING, (object) null);
             }
             else
-              ChatBox.Instance?.NewChatMsg("", "Player: <#6633ff>" + str2 + "</color> left the clan.", (Color) ColorScheme.GetColor(Global.ColorClanText), str2, ChatOrigination.Clan);
+              ChatBox.Instance?.NewChatMsg("", "Player: <#6633ff>" + str2 + "</color> left the clan.", (Color) ColorScheme.GetColor(Global.ColorClanText), str2, ChatOrigination.Clan, ContentType.STRING, (object) null);
             Client.UpdateClanUI();
             return true;
           case 4:
-            string str3 = r.ReadString();
+            string RightClickName = r.ReadString();
             byte num6 = r.ReadByte();
-            Client.clan.members[str3] = (Clan.Roles) num6;
-            ChatBox.Instance?.NewChatMsg("", "Player: <#6633ff>" + str3 + "</color> clan role changed to " + (object) Client.clan.members[str3], (Color) ColorScheme.GetColor(Global.ColorClanText), str3, ChatOrigination.Clan);
+            Client.clan.members[RightClickName] = (Clan.Roles) num6;
+            ChatBox.Instance?.NewChatMsg("", "Player: <#6633ff>" + RightClickName + "</color> clan role changed to " + (object) Client.clan.members[RightClickName], (Color) ColorScheme.GetColor(Global.ColorClanText), RightClickName, ChatOrigination.Clan, ContentType.STRING, (object) null);
             Client.UpdateClanUI();
             return true;
           case 5:
@@ -632,13 +691,13 @@ public static class Client
             ClanMenu.Instance?.Populate();
             return true;
           case 11:
-            string key1 = r.ReadString();
-            string key2 = r.ReadString();
+            string key = r.ReadString();
+            string index1 = r.ReadString();
             Clan.Roles roles = (Clan.Roles) r.ReadByte();
             if (Client.clan != null)
             {
-              Client.clan.members.Remove(key1);
-              Client.clan.members[key2] = roles;
+              Client.clan.members.Remove(key);
+              Client.clan.members[index1] = roles;
               Client.UpdateClanUI();
             }
             return true;
@@ -647,8 +706,7 @@ public static class Client
         }
       case 85:
         string n1 = r.ReadString();
-        Location location = r.ReadBoolean() ? Location.Ingame : Location.Disconnecting;
-        Client.GetAccount(n1, true).location = location;
+        Client.GetAccount(n1, true).location = r.ReadBoolean() ? Location.Ingame : Location.Disconnecting;
         Client.UpdateOnlineUI(n1);
         return true;
       case 87:
@@ -673,9 +731,9 @@ public static class Client
               }
               StringBuilder stringBuilder = new StringBuilder();
               bool flag = true;
-              foreach (string str4 in b1.notation)
+              foreach (string str3 in b1.notation)
               {
-                stringBuilder.Append(flag ? "<color=white>" + str4 + "</color>\n" : str4 + "\n");
+                stringBuilder.Append(flag ? "<color=white>" + str3 + "</color>\n" : str3 + "\n");
                 flag = !flag;
               }
               b1.ui.txtNotation.text = stringBuilder.ToString();
@@ -750,7 +808,7 @@ public static class Client
         switch (r.ReadByte())
         {
           case 1:
-            MyPollUI.Create(MyPoll.FromBytes<MyPoll>(r.ReadBytes()));
+            MyPollUI.Create(MyPoll.FromBytes<MyPoll>(r.ReadBytes()), false);
             break;
           case 3:
             Client.pollName = r.ReadString();
@@ -771,7 +829,7 @@ public static class Client
         if (r.ReadByte() == (byte) 1)
         {
           int id = r.ReadInt32();
-          MyMessageBox.Create("Your game is ongoing. Would you like to rejoin it? You can rejoin from the lobby if you change your mind.", (Action) (() => Client.Ask((byte) 93, id)));
+          MyMessageBox.Create("Your game is ongoing. Would you like to rejoin it? You can rejoin from the lobby if you change your mind.", (Action) (() => Client.Ask((byte) 93, id)), "Ok", "Cancel", (Action) null, (Action) null, (Sprite) null, (string) null, (Action) null);
         }
         return true;
       case 95:
@@ -812,7 +870,7 @@ public static class Client
       case 112:
         string n2 = r.ReadString();
         long num8 = r.ReadInt64();
-        Account account2 = Client.GetAccount(n2);
+        Account account2 = Client.GetAccount(n2, false);
         account2.afkTimer = num8;
         if ((UnityEngine.Object) account2.pfabName != (UnityEngine.Object) null)
           account2.pfabName.RefreshActivity();
@@ -922,9 +980,9 @@ public static class Client
                   byte[] numArray = new byte[10];
                   using (RNGCryptoServiceProvider cryptoServiceProvider = new RNGCryptoServiceProvider())
                     cryptoServiceProvider.GetBytes(numArray);
-                  using (MemoryStream memoryStream3 = new MemoryStream())
+                  using (MemoryStream memoryStream2 = new MemoryStream())
                   {
-                    using (myBinaryWriter w = new myBinaryWriter((Stream) memoryStream3))
+                    using (myBinaryWriter w = new myBinaryWriter((Stream) memoryStream2))
                     {
                       w.Write((byte) 46);
                       w.Write(numArray);
@@ -937,7 +995,7 @@ public static class Client
                       w.Write(buffer);
                       Client.SetupEncryption(w);
                     }
-                    Client.connection.SendBytesUnencrypted(Client.FirstEncrypt(memoryStream3.ToArray()));
+                    Client.connection.SendBytesUnencrypted(Client.FirstEncrypt(memoryStream2.ToArray()));
                     Client.connection.SetupEncryption();
                     break;
                   }
@@ -951,9 +1009,9 @@ public static class Client
                   switch (LocalServerConn.authenticationMethod)
                   {
                     case AuthenticationMethod.Arcanists:
-                      using (MemoryStream memoryStream4 = new MemoryStream())
+                      using (MemoryStream memoryStream2 = new MemoryStream())
                       {
-                        using (myBinaryWriter w = new myBinaryWriter((Stream) memoryStream4))
+                        using (myBinaryWriter w = new myBinaryWriter((Stream) memoryStream2))
                         {
                           w.Write((byte) 1);
                           w.Write(numArray);
@@ -966,14 +1024,14 @@ public static class Client
                           w.Write(Client.randomBytes);
                           Client.SetupEncryption(w);
                         }
-                        Client.connection.SendBytesUnencrypted(Client.FirstEncrypt(memoryStream4.ToArray()));
+                        Client.connection.SendBytesUnencrypted(Client.FirstEncrypt(memoryStream2.ToArray()));
                         Client.connection.SetupEncryption();
                         break;
                       }
                     case AuthenticationMethod.Steam:
-                      using (MemoryStream memoryStream5 = new MemoryStream())
+                      using (MemoryStream memoryStream2 = new MemoryStream())
                       {
-                        using (myBinaryWriter w = new myBinaryWriter((Stream) memoryStream5))
+                        using (myBinaryWriter w = new myBinaryWriter((Stream) memoryStream2))
                         {
                           w.Write((byte) 107);
                           w.Write((byte) 1);
@@ -982,7 +1040,7 @@ public static class Client
                           w.Write(Controller.HWID);
                           Client.SetupEncryption(w);
                         }
-                        Client.connection.SendBytesUnencrypted(Client.FirstEncrypt(memoryStream5.ToArray()));
+                        Client.connection.SendBytesUnencrypted(Client.FirstEncrypt(memoryStream2.ToArray()));
                         Client.connection.SetupEncryption();
                         break;
                       }
@@ -1016,7 +1074,7 @@ public static class Client
                 Client.RemoveAllDataReceived();
                 Client.connection.DataReceived += new EventHandler<DataReceivedEventArgs>(Client.MainMenuHandler);
                 Account other = new Account();
-                other.Deserialize(r1);
+                other.Deserialize(r1, false);
                 Client.cosmetics = Cosmetics.Deserialize(r1);
                 Client.badges.Deserialize(r1);
                 Client.bonusPrestige = r1.ReadSingle();
@@ -1044,9 +1102,9 @@ public static class Client
                 Account.DeserializeList(Client.friends, r1);
                 Account.DeserializeList(Client.ignore, r1);
                 Server.compressedGameFacts = r1.ReadBytes();
-                using (MemoryStream memoryStream6 = new MemoryStream(Server.compressedGameFacts))
+                using (MemoryStream memoryStream2 = new MemoryStream(Server.compressedGameFacts))
                 {
-                  using (myBinaryReader r2 = new myBinaryReader((Stream) memoryStream6))
+                  using (myBinaryReader r2 = new myBinaryReader((Stream) memoryStream2))
                     Server.DeserializePreGameFacts(r2);
                 }
                 if (r1.ReadByte() == (byte) 1)
@@ -1055,7 +1113,7 @@ public static class Client
                   Client.clan = clan;
                   foreach (KeyValuePair<string, Clan.Roles> member in clan.members)
                   {
-                    Account account = Client.GetAccount(member.Key);
+                    Account account = Client.GetAccount(member.Key, false);
                     account.clanRole = member.Value;
                     account.clan = clan.name;
                     Client._accounts[member.Key] = account;
@@ -1078,7 +1136,7 @@ public static class Client
                   default:
                     UnityThreadHelper.Dispatcher.Dispatch2((Action) (() =>
                     {
-                      Controller.Instance.DestroyMap();
+                      Controller.Instance.DestroyMap(false, true);
                       Controller.Instance.OpenMenu(Controller.Instance.MenuMain, false);
                     }));
                     break;
@@ -1167,15 +1225,15 @@ public static class Client
                 byte[] b = ZGame.CopyByteArray(args.Bytes);
                 UnityThreadHelper.Dispatcher.Dispatch2((Action) (() =>
                 {
-                  Controller.Instance.DestroyMap(true);
-                  Client.game?.Reset();
-                  using (MemoryStream memoryStream7 = new MemoryStream(b))
+                  Controller.Instance.DestroyMap(true, true);
+                  Client.game?.Reset(true);
+                  using (MemoryStream memoryStream = new MemoryStream(b))
                   {
-                    using (myBinaryReader myBinaryReader = new myBinaryReader((Stream) memoryStream7))
+                    using (myBinaryReader myBinaryReader = new myBinaryReader((Stream) memoryStream))
                     {
                       int num1 = (int) myBinaryReader.ReadByte();
                       Account account1 = new Account();
-                      account1.Deserialize(myBinaryReader);
+                      account1.Deserialize(myBinaryReader, false);
                       Client.cosmetics = Cosmetics.Deserialize(myBinaryReader);
                       Client.bonusPrestige = myBinaryReader.ReadSingle();
                       Client.Name = account1.name;
@@ -1183,7 +1241,7 @@ public static class Client
                       for (int index = 0; index < num2; ++index)
                       {
                         Account account2 = new Account();
-                        account2.Deserialize(myBinaryReader);
+                        account2.Deserialize(myBinaryReader, false);
                         Client._accounts[account2.name] = account2;
                       }
                       Client.HandleStartGame(myBinaryReader);
@@ -1219,15 +1277,15 @@ public static class Client
                 switch (r1.ReadByte())
                 {
                   case 1:
-                    using (MemoryStream memoryStream8 = new MemoryStream())
+                    using (MemoryStream memoryStream2 = new MemoryStream())
                     {
-                      using (myBinaryWriter myBinaryWriter = new myBinaryWriter((Stream) memoryStream8))
+                      using (myBinaryWriter myBinaryWriter = new myBinaryWriter((Stream) memoryStream2))
                       {
                         myBinaryWriter.Write((byte) 107);
                         myBinaryWriter.Write((byte) 2);
                         myBinaryWriter.Write(SteamManager.ByteArrayToString(SteamManager.Instance.ticket.Value.m_rgubTicket));
                       }
-                      Client.connection.SendBytes(memoryStream8.ToArray());
+                      Client.connection.SendBytes(memoryStream2.ToArray(), SendOption.None);
                       break;
                     }
                   case 3:
@@ -1310,7 +1368,7 @@ public static class Client
     for (int index = 0; index < num1; ++index)
     {
       Account account = new Account();
-      account.Deserialize(reader);
+      account.Deserialize(reader, false);
       Client._accounts[account.name] = account;
     }
     Client.MyAccount.CopyClient(Client._accounts[Client.Name]);
@@ -1324,7 +1382,7 @@ public static class Client
     for (int index = 0; index < num3; ++index)
     {
       GameFacts gf = new GameFacts();
-      gf.ManualDeserialize(reader);
+      gf.ManualDeserialize(reader, false, false, (byte) 0);
       Client._games.Add(gf.id, gf);
     }
     int num4 = reader.ReadInt32();
@@ -1343,7 +1401,7 @@ public static class Client
     Client.connection.player.inBoat = false;
     UnityThreadHelper.Dispatcher.Dispatch2((Action) (() =>
     {
-      Controller.Instance.DestroyMap();
+      Controller.Instance.DestroyMap(false, true);
       if (goToLobby >= 0 && !Client._games.TryGetValue(goToLobby, out Client._gameFacts))
       {
         Client.AskToJoinLobby();
@@ -1359,12 +1417,12 @@ public static class Client
         Client.AskToChangeOutfit(Client.settingsPlayer);
         Client.AskToChangeSpells(Client.settingsPlayer);
         if (!string.IsNullOrEmpty(serverJoinMsg))
-          ChatBox.Instance?.NewChatMsg("", serverJoinMsg, (Color) ColorScheme.GetColor(Global.ColorAnnoucement), "[Annoucement]", ChatOrigination.System);
-        Account account = Client.GetAccount(Client.Name);
-        if (!account.accountType.IsMuted() || account.discord != 0UL || Client.steamVerified || !string.IsNullOrEmpty(account.steamKey) || !Client.firstChatOnly)
+          ChatBox.Instance?.NewChatMsg("", serverJoinMsg, (Color) ColorScheme.GetColor(Global.ColorAnnoucement), "[Annoucement]", ChatOrigination.System, ContentType.STRING, (object) null);
+        Account account = Client.GetAccount(Client.Name, false);
+        if (!account.accountType.IsMuted() || account.discord != 0UL || (Client.steamVerified || !string.IsNullOrEmpty(account.steamKey)) || !Client.firstChatOnly)
           return;
         Client.firstChatOnly = false;
-        ChatBox.Instance?.NewChatMsg("", "Verify your account to talk... and join the discord! (Right-Click for options)", (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen), "[Discord]", ChatOrigination.System);
+        ChatBox.Instance?.NewChatMsg("", "Verify your account to talk... and join the discord! (Right-Click for options)", (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen), "[Discord]", ChatOrigination.System, ContentType.STRING, (object) null);
         ChatBox.Instance?.NewChatMsg("You can quickchat using the blue megaphone <sprite name=\"Emoji2_1352\"> on the right side of the chat box", (Color) ColorScheme.GetColor(MyContextMenu.ColorBlue));
       }
     }));
@@ -1392,7 +1450,7 @@ public static class Client
           {
             case 5:
               Account a = new Account();
-              a.Deserialize(myBinaryReader);
+              a.Deserialize(myBinaryReader, false);
               Client._accounts[a.name] = a;
               if (string.Equals(a.name, Client.Name))
                 Client.MyAccount.CopyClient(a);
@@ -1408,7 +1466,7 @@ public static class Client
                 if ((UnityEngine.Object) LobbyMenu.instance != (UnityEngine.Object) null)
                 {
                   if (refresh)
-                    LobbyMenu.instance.RefreshNames();
+                    LobbyMenu.instance.RefreshNames(false);
                   else
                     LobbyMenu.instance.AddName(a);
                 }
@@ -1461,7 +1519,7 @@ public static class Client
                   {
                     Client._games.GetValue(g1).players.RemoveAll((Predicate<string>) (x => x == n1));
                     UnratedMenu.instance.SetReadyStatesOff();
-                    UnratedMenu.instance.RefreshNames();
+                    UnratedMenu.instance.RefreshNames(true, false);
                   }
                 }
                 else
@@ -1478,7 +1536,7 @@ public static class Client
               }));
               break;
             case 10:
-              Controller.Instance.DestroyMap();
+              Controller.Instance.DestroyMap(false, true);
               Client.SyncLobby(myBinaryReader);
               break;
             case 11:
@@ -1492,7 +1550,7 @@ public static class Client
                   Client.AskToInvite(name);
                 if ((UnityEngine.Object) LobbyMenu.instance != (UnityEngine.Object) null)
                 {
-                  LobbyMenu.instance.RefreshNames();
+                  LobbyMenu.instance.RefreshNames(false);
                 }
                 else
                 {
@@ -1524,7 +1582,7 @@ public static class Client
               GameFacts g3 = (GameFacts) null;
               if (Client._games.TryGetValue(id2, out g3))
               {
-                g3.settings.Deserialize(myBinaryReader);
+                g3.settings.Deserialize(myBinaryReader, (byte) 5);
                 UnityThreadHelper.Dispatcher.Dispatch2((Action) (() =>
                 {
                   if ((UnityEngine.Object) LobbyMenu.instance != (UnityEngine.Object) null)
@@ -1575,7 +1633,7 @@ public static class Client
                 {
                   Client._gameFacts.players = players;
                   UnratedMenu.instance.SetReadyStatesOff();
-                  UnratedMenu.instance.RefreshNames();
+                  UnratedMenu.instance.RefreshNames(true, false);
                 }
                 else
                 {
@@ -1591,7 +1649,7 @@ public static class Client
               break;
             case 29:
               GameFacts gf = new GameFacts();
-              gf.ManualDeserialize(myBinaryReader);
+              gf.ManualDeserialize(myBinaryReader, false, false, (byte) 0);
               if (Client._games.ContainsKey(gf.id))
               {
                 Debug.Log((object) ("Game already exists! " + (object) gf.id));
@@ -1619,20 +1677,20 @@ public static class Client
                     {
                       if (!Global.GetPrefBool("prefshowcreatedgames", true))
                         return;
-                      ChatBox.Instance?.Notification(gf.players[0] + " created a rated team lobby", gf.players[0]);
+                      ChatBox.Instance?.Notification(gf.players[0] + " created a rated team lobby", gf.players[0], ChatOrigination.System);
                     }
                     else
                     {
                       if (!Global.GetPrefBool("prefshowstartedgames", true))
                         return;
-                      ChatBox.Instance?.Notification("Rated Game Started: " + string.Join(", ", (IEnumerable<string>) gf.players), gf.players[0]);
+                      ChatBox.Instance?.Notification("Rated Game Started: " + string.Join(", ", (IEnumerable<string>) gf.players), gf.players[0], ChatOrigination.System);
                     }
                   }
                   else
                   {
                     if (gf.status != (byte) 0 || gf.GetInviteMode() != InviteEnum.Open || !Global.GetPrefBool("prefshowcreatedgames", true))
                       return;
-                    ChatBox.Instance?.Notification(gf.players[0] + " created an unrated lobby", gf.players[0]);
+                    ChatBox.Instance?.Notification(gf.players[0] + " created an unrated lobby", gf.players[0], ChatOrigination.System);
                   }
                 }
               }));
@@ -1650,7 +1708,7 @@ public static class Client
                   g5.connections.Clear();
                   g5.accounts.Clear();
                   g5.settingsPlayer.Clear();
-                  g5.settings.Deserialize(myBinaryReader);
+                  g5.settings.Deserialize(myBinaryReader, (byte) 5);
                   int num4 = myBinaryReader.ReadInt32();
                   List<string> stringList = new List<string>();
                   for (int index = 0; index < num4; ++index)
@@ -1682,15 +1740,15 @@ public static class Client
               {
                 if (!((UnityEngine.Object) ChatBox.Instance != (UnityEngine.Object) null))
                   return;
-                ChatBox.Instance.NewChatMsg("", msg1, (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System);
+                ChatBox.Instance.NewChatMsg("", msg1, (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
               }));
               break;
             case 36:
               if (Client.game != null)
-                Controller.Instance.DestroyMap();
+                Controller.Instance.DestroyMap(false, true);
               myBinaryReader.ReadInt32();
               Client.cryp = myBinaryReader.ReadBytes();
-              Client._gameFacts.ManualDeserialize(myBinaryReader, true, true);
+              Client._gameFacts.ManualDeserialize(myBinaryReader, true, true, (byte) 0);
               Client.game = Client._gameFacts.game;
               Client.game.isSpectator = true;
               Client.game.MAPCREATED = false;
@@ -1698,7 +1756,7 @@ public static class Client
               {
                 Client.game.serverState = new ServerState();
                 Client.joinedFrom = Client.JoinLocation.Lobby;
-                Controller.Instance.InitMap(false);
+                Controller.Instance.InitMap(false, false, true);
                 Client.game.isSandbox = false;
                 Client.game.isServer = false;
                 Client.game.isClient = true;
@@ -1729,7 +1787,7 @@ public static class Client
                   switch (Client.inviteChat)
                   {
                     case ChatSetting.On:
-                      ChatBox.Instance?.Notification(g6.players[0] + " invited you to a game", g6.players[0]);
+                      ChatBox.Instance?.Notification(g6.players[0] + " invited you to a game", g6.players[0], ChatOrigination.System);
                       break;
                     case ChatSetting.Friends:
                       if (!Client.HasFriend(g6.players[0]))
@@ -1748,7 +1806,7 @@ public static class Client
             case 44:
               SettingsPlayer b1 = new SettingsPlayer();
               b1.Deserialize(myBinaryReader);
-              Client.settingsPlayer.CopySpells(b1);
+              Client.settingsPlayer.CopySpells(b1, false);
               UnityThreadHelper.Dispatcher.Dispatch2((Action) (() =>
               {
                 if ((UnityEngine.Object) UnratedMenu.instance != (UnityEngine.Object) null)
@@ -1781,7 +1839,7 @@ public static class Client
                 Spectator.Disconnect();
                 if (Client.game == null || !Client.game.isSpectator)
                   break;
-                Controller.Instance.DestroyMap();
+                Controller.Instance.DestroyMap(false, true);
                 break;
               }
               catch (Exception ex)
@@ -1792,12 +1850,12 @@ public static class Client
             case 56:
               string str1_1 = myBinaryReader.ReadString();
               ulong id5 = myBinaryReader.ReadUInt64();
-              UnityThreadHelper.Dispatcher.Dispatch2((Action) (() => ChatBox.Instance.NewChatMsg("", str1_1 + "'s Discord ID: " + id5.ToString(), (Color) ColorScheme.GetColor(Global.ColorSystem), str1_1, ChatOrigination.System)));
+              UnityThreadHelper.Dispatcher.Dispatch2((Action) (() => ChatBox.Instance.NewChatMsg("", str1_1 + "'s Discord ID: " + id5.ToString(), (Color) ColorScheme.GetColor(Global.ColorSystem), str1_1, ChatOrigination.System, ContentType.STRING, (object) null)));
               break;
             case 58:
               string str1_2 = myBinaryReader.ReadString();
               string str2_1 = myBinaryReader.ReadString();
-              UnityThreadHelper.Dispatcher.Dispatch2((Action) (() => ChatBox.Instance.NewChatMsg("", str1_2 + " " + str2_1, (Color) ColorScheme.GetColor(Global.ColorSystem), str1_2, ChatOrigination.System)));
+              UnityThreadHelper.Dispatcher.Dispatch2((Action) (() => ChatBox.Instance.NewChatMsg("", str1_2 + " " + str2_1, (Color) ColorScheme.GetColor(Global.ColorSystem), str1_2, ChatOrigination.System, ContentType.STRING, (object) null)));
               break;
             case 59:
               string n4 = myBinaryReader.ReadString();
@@ -1842,8 +1900,8 @@ public static class Client
               break;
             case 70:
               RatedTab.FindingOpponents = false;
-              Controller.Instance.DestroyMap(true);
-              Client.game?.Reset();
+              Controller.Instance.DestroyMap(true, true);
+              Client.game?.Reset(true);
               Client.HandleStartGame(myBinaryReader);
               break;
             case 73:
@@ -1867,9 +1925,9 @@ public static class Client
               {
                 if ((UnityEngine.Object) LobbyMenu.instance != (UnityEngine.Object) null)
                   LobbyMenu.instance.RefreshGames();
-                if (Spectator.connection == null || Client.game == null || !Client.game.isSpectator || Client.game.gameFacts == null || Client.game.gameFacts.id != id6 || !((UnityEngine.Object) HUD.instance != (UnityEngine.Object) null) || !HUD.instance.LoadingPanel.activeInHierarchy || Client.game.timeline.Count >= 100)
+                if (Spectator.connection == null || Client.game == null || (!Client.game.isSpectator || Client.game.gameFacts == null) || (Client.game.gameFacts.id != id6 || !((UnityEngine.Object) HUD.instance != (UnityEngine.Object) null) || (!HUD.instance.LoadingPanel.activeInHierarchy || Client.game.timeline.Count >= 100)))
                   return;
-                Client.game.QuitToMainMenu(exitToLobby: Client.JoinLocation.Lobby);
+                Client.game.QuitToMainMenu(false, Client.JoinLocation.Lobby, false);
                 ChatBox.Instance?.NewChatMsg("This game ended. Returning to lobby.", (Color) ColorScheme.GetColor(Global.ColorSystem));
               }));
               break;
@@ -1889,7 +1947,7 @@ public static class Client
               UnityThreadHelper.Dispatcher.Dispatch2((Action) (() =>
               {
                 if ((UnityEngine.Object) ChatBox.Instance != (UnityEngine.Object) null)
-                  ChatBox.Instance.NewChatMsg("", msg2 + " " + Global.ToTime(time), (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System);
+                  ChatBox.Instance.NewChatMsg("", msg2 + " " + Global.ToTime(time), (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
                 SystemUpdate.Create(msg2, time);
               }));
               break;
@@ -1908,14 +1966,14 @@ public static class Client
               {
                 if (!((UnityEngine.Object) ChatBox.Instance != (UnityEngine.Object) null))
                   return;
-                ChatBox.Instance.NewChatMsg("[Clan] " + str1_3, str2_2, (Color) ColorScheme.GetColor(Global.ColorClanText), str1_3, ChatOrigination.Clan);
+                ChatBox.Instance.NewChatMsg("[Clan] " + str1_3, str2_2, (Color) ColorScheme.GetColor(Global.ColorClanText), str1_3, ChatOrigination.Clan, ContentType.STRING, (object) null);
               }));
               break;
             case 151:
               string sender = myBinaryReader.ReadString();
               myBinaryReader.ReadString();
               string msg3 = myBinaryReader.ReadString();
-              UnityThreadHelper.Dispatcher.Dispatch2((Action) (() => ChatBox.Instance?.NewChatMsg("From " + sender, msg3, (Color) ColorScheme.GetColor(Global.ColorReceivedPrivate), sender, ChatOrigination.Private)));
+              UnityThreadHelper.Dispatcher.Dispatch2((Action) (() => ChatBox.Instance?.NewChatMsg("From " + sender, msg3, (Color) ColorScheme.GetColor(Global.ColorReceivedPrivate), sender, ChatOrigination.Private, ContentType.STRING, (object) null)));
               break;
             case 153:
               string str1_4 = myBinaryReader.ReadString();
@@ -1924,7 +1982,7 @@ public static class Client
               {
                 if (!((UnityEngine.Object) ChatBox.Instance != (UnityEngine.Object) null))
                   return;
-                ChatBox.Instance.NewChatMsg(str1_4, str2_3, (Color) ((UnityEngine.Object) UnratedMenu.instance != (UnityEngine.Object) null ? ColorScheme.GetColor(Global.ColorGameText) : ColorScheme.GetColor(Global.ColorLobbyText)), str1_4, (UnityEngine.Object) UnratedMenu.instance != (UnityEngine.Object) null ? ChatOrigination.Game : ChatOrigination.Lobby);
+                ChatBox.Instance.NewChatMsg(str1_4, str2_3, (Color) ((UnityEngine.Object) UnratedMenu.instance != (UnityEngine.Object) null ? ColorScheme.GetColor(Global.ColorGameText) : ColorScheme.GetColor(Global.ColorLobbyText)), str1_4, (UnityEngine.Object) UnratedMenu.instance != (UnityEngine.Object) null ? ChatOrigination.Game : ChatOrigination.Lobby, ContentType.STRING, (object) null);
               }));
               break;
             case 155:
@@ -1936,7 +1994,7 @@ public static class Client
               {
                 if (!((UnityEngine.Object) ChatBox.Instance != (UnityEngine.Object) null))
                   return;
-                ChatBox.Instance.NewChatMsg(Quickchat.GetDestination(d.destination) + "<sprite name=\"Emoji2_1352\"> " + d.name, msg4, (Color) ColorScheme.GetColor(d.destination), d.name, d.destination);
+                ChatBox.Instance.NewChatMsg(Quickchat.GetDestination(d.destination) + "<sprite name=\"Emoji2_1352\"> " + d.name, msg4, (Color) ColorScheme.GetColor(d.destination), d.name, d.destination, ContentType.STRING, (object) null);
               }));
               break;
             default:
@@ -1962,7 +2020,7 @@ public static class Client
   public static void HandleStartGame(myBinaryReader reader)
   {
     reader.ReadInt32();
-    Client._gameFacts.ManualDeserialize(reader, true, true);
+    Client._gameFacts.ManualDeserialize(reader, true, true, (byte) 0);
     if (Client._gameFacts.GetMultiTeamMode())
     {
       SpellsOnly b1 = SpellsOnly.Deserialize(reader);
@@ -2001,7 +2059,7 @@ public static class Client
     {
       Client.game.serverState = new ServerState();
       Client.joinedFrom = Client.JoinLocation.Game;
-      Controller.Instance.InitMap(false);
+      Controller.Instance.InitMap(false, false, true);
       Client.game.isSandbox = false;
       Client.game.isServer = false;
       Client.game.isClient = true;
@@ -2011,7 +2069,10 @@ public static class Client
     }));
   }
 
-  public static void ConnectToGame() => Client.ReConnectToServer();
+  public static void ConnectToGame()
+  {
+    Client.ReConnectToServer(Client.JoinLocation.Mainmenu);
+  }
 
   public static void SomeSetup()
   {
@@ -2026,7 +2087,7 @@ public static class Client
       HUD.instance.FindPlayer();
       HUD.FindFullBooks(Client.game);
       HUD.instance.SetupStartPanel();
-      Client.game.init_Client();
+      Client.game.init_Client(ServerState.Busy.Not_started);
       if ((UnityEngine.Object) CameraMovement.Instance != (UnityEngine.Object) null && (UnityEngine.Object) Player.Instance != (UnityEngine.Object) null)
       {
         CameraMovement.Instance.GotoPosition(Player.Instance.GetTransform.position);
@@ -2074,7 +2135,7 @@ public static class Client
         w.Write((byte) 80);
         r.Serialize(w);
       }
-      Client.connection.SendBytes(memoryStream.ToArray());
+      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -2089,7 +2150,7 @@ public static class Client
         w.Write((byte) 79);
         r.Serialize(w);
       }
-      Client.connection.SendBytes(memoryStream.ToArray());
+      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -2107,7 +2168,7 @@ public static class Client
             myBinaryWriter.Write(name);
         }
       }
-      Client.connection.SendBytes(memoryStream.ToArray());
+      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -2125,11 +2186,11 @@ public static class Client
         myBinaryWriter.Write(fixedInt.RawValue);
         myBinaryWriter.Write(myLocation);
       }
-      Client.connection.SendBytes(memoryStream.ToArray());
+      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
     if (!Client.game.isSandbox)
       return;
-    Client.DevConsole(s, Client.game);
+    Client.DevConsole(s, Client.game, new FixedInt?(), new MyLocation?());
   }
 
   public static void AskToChangeDisplayIcon(int id)
@@ -2141,7 +2202,7 @@ public static class Client
         myBinaryWriter.Write((byte) 75);
         myBinaryWriter.Write(id);
       }
-      Client.connection.SendBytes(memoryStream.ToArray());
+      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -2154,7 +2215,7 @@ public static class Client
         myBinaryWriter.Write((byte) 88);
         myBinaryWriter.Write(gameType);
       }
-      Client.connection.SendBytes(memoryStream.ToArray());
+      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -2167,7 +2228,7 @@ public static class Client
         myBinaryWriter.Write((byte) 26);
         myBinaryWriter.Write(id);
       }
-      Client.connection.SendBytes(memoryStream.ToArray());
+      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -2181,7 +2242,7 @@ public static class Client
         myBinaryWriter.Write((byte) 9);
         myBinaryWriter.Write(n);
       }
-      Client.connection.SendBytes(memoryStream.ToArray());
+      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -2195,7 +2256,7 @@ public static class Client
         myBinaryWriter.Write(id);
         myBinaryWriter.Write(forceSpectator);
       }
-      Client.connection.SendBytes(memoryStream.ToArray());
+      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -2209,7 +2270,7 @@ public static class Client
         myBinaryWriter.Write(msg);
         myBinaryWriter.Write(n);
       }
-      Client.connection.SendBytes(memoryStream.ToArray());
+      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -2224,7 +2285,7 @@ public static class Client
         myBinaryWriter.Write(n);
         myBinaryWriter.Write(rank);
       }
-      Client.connection.SendBytes(memoryStream.ToArray());
+      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -2238,7 +2299,7 @@ public static class Client
         myBinaryWriter.Write(n);
         myBinaryWriter.Write(!Client._gameFacts.invitedPlayers.Contains(n));
       }
-      Client.connection.SendBytes(memoryStream.ToArray());
+      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -2251,7 +2312,7 @@ public static class Client
         myBinaryWriter.Write((byte) 43);
         myBinaryWriter.Write(n);
       }
-      Client.connection.SendBytes(memoryStream.ToArray());
+      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -2264,7 +2325,7 @@ public static class Client
         myBinaryWriter.Write((byte) 36);
         myBinaryWriter.Write(id);
       }
-      Client.connection.SendBytes(memoryStream.ToArray());
+      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -2324,10 +2385,10 @@ public static class Client
         if (v)
         {
           w.Write(Global.GetPrefBool("prefbroadcast", true));
-          Client._ratedFacts.Serialize(w);
+          Client._ratedFacts.Serialize(w, true);
         }
       }
-      Client.connection.SendBytes(memoryStream.ToArray());
+      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -2337,7 +2398,7 @@ public static class Client
     {
       using (myBinaryWriter myBinaryWriter = new myBinaryWriter((Stream) memoryStream))
         myBinaryWriter.Write((byte) 12);
-      Client.connection.SendBytes(memoryStream.ToArray());
+      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
     Client._gameFacts.settings.gameType = (ZGame.GameType) Mathf.Clamp((int) Client._gameFacts.settings.gameType, 0, 2);
     Client._gameSettings = Global.Copy<GameSettings>(Client._gameFacts.settings);
@@ -2355,11 +2416,11 @@ public static class Client
       }
       if (Client.connection == null || Client.connection.State != ConnectionState.Connected)
       {
-        Controller.Instance.DestroyMap();
+        Controller.Instance.DestroyMap(false, true);
         Controller.Instance.OpenMenu(Controller.Instance.MenuLogin, false);
       }
       else
-        Client.connection.SendBytes(memoryStream.ToArray());
+        Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -2375,11 +2436,11 @@ public static class Client
       }
       if (Client.connection == null || Client.connection.State != ConnectionState.Connected)
       {
-        Controller.Instance.DestroyMap();
+        Controller.Instance.DestroyMap(false, true);
         Controller.Instance.OpenMenu(Controller.Instance.MenuLogin, false);
       }
       else
-        Client.connection.SendBytes(memoryStream.ToArray());
+        Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -2389,7 +2450,7 @@ public static class Client
     {
       using (myBinaryWriter myBinaryWriter = new myBinaryWriter((Stream) memoryStream))
         myBinaryWriter.Write((byte) 28);
-      Client.connection.SendBytes(memoryStream.ToArray());
+      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -2403,7 +2464,7 @@ public static class Client
         myBinaryWriter.Write(Player.Instance.person.id);
         myBinaryWriter.Write(bid);
       }
-      Client.connection.SendBytes(memoryStream.ToArray());
+      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -2416,7 +2477,7 @@ public static class Client
         myBinaryWriter.Write(tag);
         myBinaryWriter.Write(msg);
       }
-      Client.connection?.SendBytes(memoryStream.ToArray());
+      Client.connection?.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -2429,7 +2490,7 @@ public static class Client
         myBinaryWriter.Write(tag);
         myBinaryWriter.Write(msg);
       }
-      Client.connection?.SendBytes(memoryStream.ToArray());
+      Client.connection?.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -2439,7 +2500,7 @@ public static class Client
     {
       using (myBinaryWriter myBinaryWriter = new myBinaryWriter((Stream) memoryStream))
         myBinaryWriter.Write(msg);
-      Client.connection.SendBytes(memoryStream.ToArray());
+      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -2455,7 +2516,7 @@ public static class Client
         for (int index = 0; index < num; ++index)
           Client.multiSettingsPlayer[index].Serialize(w);
       }
-      Client.connection.SendBytes(memoryStream.ToArray());
+      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -2468,7 +2529,7 @@ public static class Client
         w.Write((byte) 39);
         Client._gameSettings.Serialize(w);
       }
-      Client.connection.SendBytes(memoryStream.ToArray());
+      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -2481,7 +2542,7 @@ public static class Client
         w.Write((byte) 29);
         Client._gameSettings.Serialize(w);
       }
-      Client.connection.SendBytes(memoryStream.ToArray());
+      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -2508,7 +2569,7 @@ public static class Client
         myBinaryWriter.Write(pivot);
         myBinaryWriter.Write(t.EncodeToPNG());
       }
-      Client.connection.SendBytes(memoryStream.ToArray());
+      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -2524,7 +2585,7 @@ public static class Client
         new SpellsOnly().Copy(sp).Serialize(w);
         sp.Serialize(w);
       }
-      Client.connection.SendBytes(memoryStream.ToArray());
+      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -2540,7 +2601,7 @@ public static class Client
         w.Write((byte) 44);
         sp.Serialize(w);
       }
-      Client.connection.SendBytes(memoryStream.ToArray());
+      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -2553,7 +2614,7 @@ public static class Client
         myBinaryWriter.Write((byte) 60);
         myBinaryWriter.Write(fullBook);
       }
-      Client.connection.SendBytes(memoryStream.ToArray());
+      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -2566,7 +2627,7 @@ public static class Client
         w.Write((byte) 45);
         sp.Serialize(w);
       }
-      Client.connection.SendBytes(memoryStream.ToArray());
+      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -2588,7 +2649,7 @@ public static class Client
       {
         if (Client.connection == null || Client.connection.State != ConnectionState.Connected)
           return;
-        Client.connection.SendBytes(memoryStream.ToArray());
+        Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
       }
     }
   }
@@ -2597,7 +2658,7 @@ public static class Client
   {
     if (Client.connection.State != ConnectionState.Connected)
     {
-      MyContextMenu.ShowSimple("Not Connected");
+      MyContextMenu.ShowSimple("Not Connected", (Action) null, new Color?());
     }
     else
     {
@@ -2611,7 +2672,7 @@ public static class Client
           myBinaryWriter.Write(add);
           myBinaryWriter.Write(n);
         }
-        Client.connection.SendBytes(memoryStream.ToArray());
+        Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
       }
       if (friend)
       {
@@ -2622,9 +2683,9 @@ public static class Client
         }
         else
           Client.friends.Remove(n);
-        UnratedMenu.instance?.RefreshFriends();
-        LobbyMenu.instance?.RefreshFriends();
-        RatedMenu.instance?.RefreshFriends();
+        UnratedMenu.instance?.RefreshFriends(false);
+        LobbyMenu.instance?.RefreshFriends(false);
+        RatedMenu.instance?.RefreshFriends(false);
       }
       else
       {
@@ -2644,7 +2705,7 @@ public static class Client
   {
     if (Client.connection == null || Client.connection.State != ConnectionState.Connected)
     {
-      MyContextMenu.ShowSimple("Not Connected");
+      MyContextMenu.ShowSimple("Not Connected", (Action) null, new Color?());
     }
     else
     {
@@ -2657,7 +2718,7 @@ public static class Client
           myBinaryWriter.Write(lgf);
           myBinaryWriter.Write((byte) s);
         }
-        Client.connection.SendBytes(memoryStream.ToArray());
+        Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
       }
       switch (lgf)
       {
@@ -2687,11 +2748,11 @@ public static class Client
           ChatBox.Instance?.butClan.Set(s);
           UnratedMenu instance1 = UnratedMenu.instance;
           if ((instance1 != null ? (instance1.viewing == Viewing.Lobby ? 1 : 0) : 0) != 0)
-            UnratedMenu.instance?.RefreshNames(false);
+            UnratedMenu.instance?.RefreshNames(false, false);
           LobbyMenu instance2 = LobbyMenu.instance;
           if ((instance2 != null ? (instance2.viewing == Viewing.Lobby ? 1 : 0) : 0) == 0)
             break;
-          LobbyMenu.instance?.RefreshNames();
+          LobbyMenu.instance?.RefreshNames(false);
           break;
         case 6:
           Client.teamChat = s;
@@ -2726,7 +2787,7 @@ public static class Client
           myBinaryWriter.Write((byte) msg);
           myBinaryWriter.Write(which);
         }
-        Client.connection.SendBytes(memoryStream.ToArray());
+        Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
       }
     }
   }
@@ -2742,7 +2803,7 @@ public static class Client
         myBinaryWriter.Write((byte) 82);
         myBinaryWriter.Write(msg);
       }
-      Client.connection.SendBytes(memoryStream.ToArray());
+      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -2751,10 +2812,10 @@ public static class Client
     if (s.Length > 600)
       s = s.Substring(0, 600);
     if (Client.friendChat == ChatSetting.Off)
-      ChatBox.Instance?.NewChatMsg("", "Private chat is disabled - Enable to Send/Receive private messages", (Color) ColorScheme.GetColor(Global.ColorGrayChat), "", ChatOrigination.System);
+      ChatBox.Instance?.NewChatMsg("", "Private chat is disabled - Enable to Send/Receive private messages", (Color) ColorScheme.GetColor(Global.ColorGrayChat), "", ChatOrigination.System, ContentType.STRING, (object) null);
     else if (string.Equals(n, Client.Name, StringComparison.OrdinalIgnoreCase))
     {
-      ChatBox.Instance?.NewChatMsg("Note to self", s, (Color) ColorScheme.GetColor(Global.ColorGrayChat), "", ChatOrigination.System);
+      ChatBox.Instance?.NewChatMsg("Note to self", s, (Color) ColorScheme.GetColor(Global.ColorGrayChat), "", ChatOrigination.System, ContentType.STRING, (object) null);
     }
     else
     {
@@ -2767,12 +2828,12 @@ public static class Client
           myBinaryWriter.Write(n);
           myBinaryWriter.Write(s);
         }
-        Client.SendChatMsg(memoryStream.ToArray());
+        Client.SendChatMsg(memoryStream.ToArray(), 0.6f);
       }
-      ChatBox.Instance?.NewChatMsg("To " + n, s, (Color) ColorScheme.GetColor(Global.ColorSentPrivate), n, ChatOrigination.System);
+      ChatBox.Instance?.NewChatMsg("To " + n, s, (Color) ColorScheme.GetColor(Global.ColorSentPrivate), n, ChatOrigination.System, ContentType.STRING, (object) null);
       if (Client.friendChat != ChatSetting.Friends || Client.HasFriend(n))
         return;
-      ChatBox.Instance?.NewChatMsg("", n + " is not on your Friends List - Add them or Enable Friend Chat to see their messages", (Color) ColorScheme.GetColor(Global.ColorGrayChat), n, ChatOrigination.System);
+      ChatBox.Instance?.NewChatMsg("", n + " is not on your Friends List - Add them or Enable Friend Chat to see their messages", (Color) ColorScheme.GetColor(Global.ColorGrayChat), n, ChatOrigination.System, ContentType.STRING, (object) null);
     }
   }
 
@@ -2782,7 +2843,7 @@ public static class Client
       s = s.Substring(0, 600);
     if (Client.clanChat == ChatSetting.Off)
     {
-      ChatBox.Instance?.NewChatMsg("", "Clan chat is disabled - Enable to Send/Receive clan messages", (Color) ColorScheme.GetColor(Global.ColorGrayChat), "", ChatOrigination.System);
+      ChatBox.Instance?.NewChatMsg("", "Clan chat is disabled - Enable to Send/Receive clan messages", (Color) ColorScheme.GetColor(Global.ColorGrayChat), "", ChatOrigination.System, ContentType.STRING, (object) null);
     }
     else
     {
@@ -2794,7 +2855,7 @@ public static class Client
           myBinaryWriter.Write(Client.Name);
           myBinaryWriter.Write(s);
         }
-        Client.SendChatMsg(memoryStream.ToArray());
+        Client.SendChatMsg(memoryStream.ToArray(), 0.6f);
       }
     }
   }
@@ -2805,7 +2866,7 @@ public static class Client
       s = s.Substring(0, 600);
     if (Client.gameChat == ChatSetting.Off)
     {
-      ChatBox.Instance?.NewChatMsg("", "Game chat is disabled - Enable to Send/Receive game messages", (Color) ColorScheme.GetColor(Global.ColorGrayChat), "", ChatOrigination.System);
+      ChatBox.Instance?.NewChatMsg("", "Game chat is disabled - Enable to Send/Receive game messages", (Color) ColorScheme.GetColor(Global.ColorGrayChat), "", ChatOrigination.System, ContentType.STRING, (object) null);
     }
     else
     {
@@ -2818,7 +2879,7 @@ public static class Client
           myBinaryWriter.Write(Client.Name);
           myBinaryWriter.Write(s);
         }
-        Client.SendChatMsg(memoryStream.ToArray());
+        Client.SendChatMsg(memoryStream.ToArray(), 0.6f);
       }
     }
   }
@@ -2847,9 +2908,9 @@ public static class Client
         if (Client.game != null && (Client.game.isSandbox || Client.game.isReplay))
           Client.game.GameHandler(Player.Instance.person, memoryStream.ToArray(), true, false);
         else if (Spectator.isConnected)
-          Spectator.connection.SendBytes(memoryStream.ToArray());
+          Spectator.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
         else
-          Client.connection.SendBytes(memoryStream.ToArray());
+          Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
       }
     }
   }
@@ -2872,9 +2933,9 @@ public static class Client
     for (int i = 0; i < Inert.Instance.presentIndex && !((ZComponent) c == (object) null); ++i)
     {
       Spell spell = Inert.Instance.spells[i];
-      if (spell.spellEnum != SpellEnum.Arcane_Gate && spell.spellEnum != SpellEnum.Santas_Magic && spell.spellEnum != SpellEnum.Recall && spell.spellEnum != SpellEnum.The_ol_swaparoo && spell.spellEnum != SpellEnum.Blink)
+      if (spell.spellEnum != SpellEnum.Arcane_Gate && spell.spellEnum != SpellEnum.Santas_Magic && (spell.spellEnum != SpellEnum.Recall && spell.spellEnum != SpellEnum.The_ol_swaparoo) && spell.spellEnum != SpellEnum.Blink)
       {
-        ZSpell.FireWhich(spell, c, c.position, angle, Client._power, m, c.position);
+        ZSpell.FireWhich(spell, c, c.position, angle, Client._power, m, c.position, 0, false, (SpellSlot) null, false);
         yield return 0.0f;
       }
     }
@@ -2886,15 +2947,15 @@ public static class Client
       Controller.Instance.DestroyChatBox();
     else if (string.Equals("help", s, StringComparison.OrdinalIgnoreCase))
     {
-      ChatBox.Instance?.NewChatMsg("", "Type a spell name to cast it (must be exact) ex ---> Arcane Tower", (Color) ColorScheme.GetColor(Global.ColorTeamText), "", ChatOrigination.System);
-      ChatBox.Instance?.NewChatMsg("", "m# -  to select a minion (the player is a minion (zero based index)) ex---> m1.Arcane Tower", (Color) ColorScheme.GetColor(Global.ColorTeamText), "", ChatOrigination.System);
-      ChatBox.Instance?.NewChatMsg("", "\".\" to seperate commands (used in the example above)", (Color) ColorScheme.GetColor(Global.ColorTeamText), "", ChatOrigination.System);
-      ChatBox.Instance?.NewChatMsg("", "pie", (Color) ColorScheme.GetColor(Global.ColorTeamText), "", ChatOrigination.System);
-      ChatBox.Instance?.NewChatMsg("", "quiz (.optional set max) displays/sets completed seasonal quizzes", (Color) ColorScheme.GetColor(Global.ColorTeamText), "", ChatOrigination.System);
-      ChatBox.Instance?.NewChatMsg("", "spawn (.optional name - default Zezima) Spawns a new character with name and book/outfit if you have one saved with that name", (Color) ColorScheme.GetColor(Global.ColorTeamText), "", ChatOrigination.System);
-      ChatBox.Instance?.NewChatMsg("", "If Zezima is on the map you can use \"z\" to select him like a minion", (Color) ColorScheme.GetColor(Global.ColorTeamText), "", ChatOrigination.System);
-      ChatBox.Instance?.NewChatMsg("", "power.# to set fire power can only be used as the first argument (10-2000)", (Color) ColorScheme.GetColor(Global.ColorTeamText), "", ChatOrigination.System);
-      ChatBox.Instance?.NewChatMsg("", "arma.Spell Name ---> Add that spell name as an Armageddon (Leave blank to remove all custom Armageddon spells)", (Color) ColorScheme.GetColor(Global.ColorTeamText), "", ChatOrigination.System);
+      ChatBox.Instance?.NewChatMsg("", "Type a spell name to cast it (must be exact) ex ---> Arcane Tower", (Color) ColorScheme.GetColor(Global.ColorTeamText), "", ChatOrigination.System, ContentType.STRING, (object) null);
+      ChatBox.Instance?.NewChatMsg("", "m# -  to select a minion (the player is a minion (zero based index)) ex---> m1.Arcane Tower", (Color) ColorScheme.GetColor(Global.ColorTeamText), "", ChatOrigination.System, ContentType.STRING, (object) null);
+      ChatBox.Instance?.NewChatMsg("", "\".\" to seperate commands (used in the example above)", (Color) ColorScheme.GetColor(Global.ColorTeamText), "", ChatOrigination.System, ContentType.STRING, (object) null);
+      ChatBox.Instance?.NewChatMsg("", "pie", (Color) ColorScheme.GetColor(Global.ColorTeamText), "", ChatOrigination.System, ContentType.STRING, (object) null);
+      ChatBox.Instance?.NewChatMsg("", "quiz (.optional set max) displays/sets completed seasonal quizzes", (Color) ColorScheme.GetColor(Global.ColorTeamText), "", ChatOrigination.System, ContentType.STRING, (object) null);
+      ChatBox.Instance?.NewChatMsg("", "spawn (.optional name - default Zezima) Spawns a new character with name and book/outfit if you have one saved with that name", (Color) ColorScheme.GetColor(Global.ColorTeamText), "", ChatOrigination.System, ContentType.STRING, (object) null);
+      ChatBox.Instance?.NewChatMsg("", "If Zezima is on the map you can use \"z\" to select him like a minion", (Color) ColorScheme.GetColor(Global.ColorTeamText), "", ChatOrigination.System, ContentType.STRING, (object) null);
+      ChatBox.Instance?.NewChatMsg("", "power.# to set fire power can only be used as the first argument (10-2000)", (Color) ColorScheme.GetColor(Global.ColorTeamText), "", ChatOrigination.System, ContentType.STRING, (object) null);
+      ChatBox.Instance?.NewChatMsg("", "arma.Spell Name ---> Add that spell name as an Armageddon (Leave blank to remove all custom Armageddon spells)", (Color) ColorScheme.GetColor(Global.ColorTeamText), "", ChatOrigination.System, ContentType.STRING, (object) null);
     }
     else
     {
@@ -2927,7 +2988,7 @@ label_206:
             else if (result < 10)
               result = 10;
             Client._power = (FixedInt) ((float) result / 1000f);
-            ChatBox.Instance?.NewChatMsg("", "power set to: " + (object) result, (Color) ColorScheme.GetColor(Global.ColorTeamText), "", ChatOrigination.System);
+            ChatBox.Instance?.NewChatMsg("", "power set to: " + (object) result, (Color) ColorScheme.GetColor(Global.ColorTeamText), "", ChatOrigination.System, ContentType.STRING, (object) null);
             if (commands.Length != 2)
               i = 2;
             else
@@ -2938,7 +2999,7 @@ label_206:
             ChatBox instance = ChatBox.Instance;
             if (instance != null)
             {
-              instance.NewChatMsg("", "power requires a number (ex: power.20)", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System);
+              instance.NewChatMsg("", "power requires a number (ex: power.20)", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
               continue;
             }
             continue;
@@ -2954,11 +3015,11 @@ label_206:
               FixedInt x = Mathd.Clamp((FixedInt) (float) result, (FixedInt) 0, (FixedInt) 100);
               Client.game.map.windSpeed = Mathd.Clamp(x, (FixedInt) 0, (FixedInt) 100) * ZMap.MaxWindSpeed;
               Client.game.map.wind = Global.Velocity(Client.game.map.windDir, Client.game.map.windSpeed);
-              ChatBox.Instance?.NewChatMsg("", "windspeed set to: " + (object) x + "% " + (object) Client.game.map.wind, (Color) ColorScheme.GetColor(Global.ColorTeamText), "", ChatOrigination.System);
+              ChatBox.Instance?.NewChatMsg("", "windspeed set to: " + (object) x + "% " + (object) Client.game.map.wind, (Color) ColorScheme.GetColor(Global.ColorTeamText), "", ChatOrigination.System, ContentType.STRING, (object) null);
               WindIndicatorUI.Instance?.Refresh();
             }
             else
-              ChatBox.Instance?.NewChatMsg("", "windspeed requires a number (ex: windspeed.20) ... current: " + (object) Client.game.map.windSpeed, (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System);
+              ChatBox.Instance?.NewChatMsg("", "windspeed requires a number (ex: windspeed.20) ... current: " + (object) Client.game.map.windSpeed, (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
             Client.game.isWindy = true;
             WindIndicatorUI instance = WindIndicatorUI.Instance;
             if (instance != null)
@@ -2975,11 +3036,11 @@ label_206:
             {
               Client.game.map.windDir = (FixedInt) (float) result;
               Client.game.map.wind = Global.Velocity(Client.game.map.windDir, Client.game.map.windSpeed);
-              ChatBox.Instance?.NewChatMsg("", "winddir set to: " + (object) result + " " + (object) Client.game.map.wind, (Color) ColorScheme.GetColor(Global.ColorTeamText), "", ChatOrigination.System);
+              ChatBox.Instance?.NewChatMsg("", "winddir set to: " + (object) result + " " + (object) Client.game.map.wind, (Color) ColorScheme.GetColor(Global.ColorTeamText), "", ChatOrigination.System, ContentType.STRING, (object) null);
               WindIndicatorUI.Instance?.Refresh();
             }
             else
-              ChatBox.Instance?.NewChatMsg("", "winddir requires a number (ex: winddir.20) ... current: " + (object) Client.game.map.windDir, (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System);
+              ChatBox.Instance?.NewChatMsg("", "winddir requires a number (ex: winddir.20) ... current: " + (object) Client.game.map.windDir, (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
             Client.game.isWindy = true;
             WindIndicatorUI instance = WindIndicatorUI.Instance;
             if (instance != null)
@@ -3050,10 +3111,10 @@ label_206:
           }
           if (commands[i].StartsWith("m") && commands[i].Length > 1)
           {
-            string s2 = commands[i].Substring(1);
+            string s1 = commands[i].Substring(1);
             int index = 0;
             ref int local = ref index;
-            if (int.TryParse(s2, out local) && index < c.parent.controlled.Count && index > 0)
+            if (int.TryParse(s1, out local) && index < c.parent.controlled.Count && index > 0)
             {
               c = c.parent.controlled[index];
               ++i;
@@ -3061,10 +3122,10 @@ label_206:
           }
           if (commands[i].StartsWith("t") && commands[i].Length > 1)
           {
-            string s3 = commands[i].Substring(1);
+            string s1 = commands[i].Substring(1);
             int num2 = 0;
             ref int local = ref num2;
-            if (int.TryParse(s3, out local))
+            if (int.TryParse(s1, out local))
             {
               c.game.PlayersMaxTurnTime += (float) num2;
               HUD instance = HUD.instance;
@@ -3081,11 +3142,11 @@ label_206:
         {
           if (string.Equals(commands[i], "all", StringComparison.CurrentCultureIgnoreCase))
           {
-            game.ongoing.RunSpell(Client.FireAllSpells(c ?? game.players[0].first(), game, angle, pos));
+            game.ongoing.RunSpell(Client.FireAllSpells(c ?? game.players[0].first(), game, angle, pos), true);
             ChatBox instance = ChatBox.Instance;
             if (instance != null)
             {
-              instance.NewChatMsg("", c.name + " Firing All Spells", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System);
+              instance.NewChatMsg("", c.name + " Firing All Spells", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
               goto label_206;
             }
             else
@@ -3102,7 +3163,7 @@ label_206:
                 ChatBox instance = ChatBox.Instance;
                 if (instance != null)
                 {
-                  instance.NewChatMsg("", "Set max quizzes: " + (object) result + "(" + (object) PlayerPrefs.GetInt("quizcorrectcount") + " completed", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System);
+                  instance.NewChatMsg("", "Set max quizzes: " + (object) result + "(" + (object) PlayerPrefs.GetInt("quizcorrectcount") + " completed", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
                   goto label_206;
                 }
                 else
@@ -3113,7 +3174,7 @@ label_206:
                 ChatBox instance = ChatBox.Instance;
                 if (instance != null)
                 {
-                  instance.NewChatMsg("", "Max quizzes must be a valid integer." + (object) result, (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System);
+                  instance.NewChatMsg("", "Max quizzes must be a valid integer." + (object) result, (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
                   goto label_206;
                 }
                 else
@@ -3125,7 +3186,7 @@ label_206:
               ChatBox instance = ChatBox.Instance;
               if (instance != null)
               {
-                instance.NewChatMsg("", "Correct Quizzes: " + (object) PlayerPrefs.GetInt("quizcorrectcount") + " out of " + (object) PlayerPrefs.GetInt("quiz_max", 10), (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System);
+                instance.NewChatMsg("", "Correct Quizzes: " + (object) PlayerPrefs.GetInt("quizcorrectcount") + " out of " + (object) PlayerPrefs.GetInt("quiz_max", 10), (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
                 goto label_206;
               }
               else
@@ -3138,7 +3199,7 @@ label_206:
             ChatBox instance = ChatBox.Instance;
             if (instance != null)
             {
-              instance.NewChatMsg("", "Created the spectator ship", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System);
+              instance.NewChatMsg("", "Created the spectator ship", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
               goto label_206;
             }
             else
@@ -3151,7 +3212,7 @@ label_206:
             ChatBox instance = ChatBox.Instance;
             if (instance != null)
             {
-              instance.NewChatMsg("", "Before: " + (object) targetFrameRate + " After: " + (object) Application.targetFrameRate, (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System);
+              instance.NewChatMsg("", "Before: " + (object) targetFrameRate + " After: " + (object) Application.targetFrameRate, (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
               goto label_206;
             }
             else
@@ -3166,7 +3227,7 @@ label_206:
               ChatBox instance = ChatBox.Instance;
               if (instance != null)
               {
-                instance.NewChatMsg("", "Reached Player Limit", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System);
+                instance.NewChatMsg("", "Reached Player Limit", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
                 goto label_206;
               }
               else
@@ -3188,7 +3249,7 @@ label_206:
                 }
                 name = Client.spawnNames[n];
               }
-              ZPerson zperson = Player.SpawnZezima((MyLocation) Camera.main.ScreenToWorldPoint(Input.mousePosition), true, name, HUD.instance.game.players.Count);
+              ZPerson zperson = Player.SpawnZezima((MyLocation) Camera.main.ScreenToWorldPoint(Input.mousePosition), true, name, HUD.instance.game.players.Count, (SettingsPlayer) null, true, 0);
               if (Player.Instance.summonedPerson == null)
                 Player.Instance.summonedPerson = zperson;
               if (game.players.Count > 8)
@@ -3202,16 +3263,16 @@ label_206:
           }
           else if (string.Equals(commands[i], "log", StringComparison.CurrentCultureIgnoreCase))
           {
-            int num3 = (int) (RandomExtensions.LastBook() + 1) * 12;
-            int num4 = 0;
+            int num2 = (int) (RandomExtensions.LastBook() + 1) * 12;
+            int num3 = 0;
             using (IEnumerator<KeyValuePair<string, Spell>> enumerator = Inert.Instance.spells.GetEnumerator())
             {
               while (enumerator.MoveNext())
               {
                 KeyValuePair<string, Spell> current = enumerator.Current;
-                ChatBox.Instance?.NewChatMsg("", "<sprite name=\"" + current.Key + "\"> - " + current.Key, (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System);
-                ++num4;
-                if (num4 >= num3)
+                ChatBox.Instance?.NewChatMsg("", "<sprite name=\"" + current.Key + "\"> - " + current.Key, (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System, ContentType.STRING, (object) null);
+                ++num3;
+                if (num3 >= num2)
                   break;
               }
               goto label_206;
@@ -3239,7 +3300,7 @@ label_206:
               ChatBox instance = ChatBox.Instance;
               if (instance != null)
               {
-                instance.NewChatMsg("", "Moved to: " + (object) new MyLocation(result, yInt), (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System);
+                instance.NewChatMsg("", "Moved to: " + (object) new MyLocation(result, yInt), (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System, ContentType.STRING, (object) null);
                 goto label_206;
               }
               else
@@ -3253,7 +3314,7 @@ label_206:
                 ChatBox instance = ChatBox.Instance;
                 if (instance != null)
                 {
-                  instance.NewChatMsg("", c.name + " health is: " + (object) c.health, (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System);
+                  instance.NewChatMsg("", c.name + " health is: " + (object) c.health, (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System, ContentType.STRING, (object) null);
                   goto label_206;
                 }
                 else
@@ -3272,7 +3333,7 @@ label_206:
                 ChatBox instance = ChatBox.Instance;
                 if (instance != null)
                 {
-                  instance.NewChatMsg("", c.name + " changed health: " + (object) c.health, (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System);
+                  instance.NewChatMsg("", c.name + " changed health: " + (object) c.health, (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System, ContentType.STRING, (object) null);
                   goto label_206;
                 }
                 else
@@ -3287,7 +3348,7 @@ label_206:
                 ChatBox instance = ChatBox.Instance;
                 if (instance != null)
                 {
-                  instance.NewChatMsg("", c.name + " max health is: " + (object) c.maxHealth, (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System);
+                  instance.NewChatMsg("", c.name + " max health is: " + (object) c.maxHealth, (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System, ContentType.STRING, (object) null);
                   goto label_206;
                 }
                 else
@@ -3296,14 +3357,14 @@ label_206:
               else
               {
                 int.TryParse(commands[i] + (object) 1, out result);
-                int num5 = Mathf.Clamp(result, 1, 10000);
-                c.health = num5;
-                c.maxHealth = num5;
+                int num2 = Mathf.Clamp(result, 1, 10000);
+                c.health = num2;
+                c.maxHealth = num2;
                 c.UpdateHealthTxt();
                 ChatBox instance = ChatBox.Instance;
                 if (instance != null)
                 {
-                  instance.NewChatMsg("", c.name + " changed max health: " + (object) c.maxHealth, (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System);
+                  instance.NewChatMsg("", c.name + " changed max health: " + (object) c.maxHealth, (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System, ContentType.STRING, (object) null);
                   goto label_206;
                 }
                 else
@@ -3320,7 +3381,7 @@ label_206:
                 ChatBox instance = ChatBox.Instance;
                 if (instance != null)
                 {
-                  instance.NewChatMsg("", "Removed any custom Armageddons", (Color) ColorScheme.GetColor(Global.ColorGameText), "", ChatOrigination.System);
+                  instance.NewChatMsg("", "Removed any custom Armageddons", (Color) ColorScheme.GetColor(Global.ColorGameText), "", ChatOrigination.System, ContentType.STRING, (object) null);
                   goto label_206;
                 }
                 else
@@ -3328,20 +3389,20 @@ label_206:
               }
               else
               {
-                Spell s4 = (Spell) null;
-                if (Inert.Instance.spells.TryGetValue(commands[i + 1], out s4) || Inert.Instance.TryGetSpell(commands[i + 1], out s4))
+                Spell s1 = (Spell) null;
+                if (Inert.Instance.spells.TryGetValue(commands[i + 1], out s1) || Inert.Instance.TryGetSpell(commands[i + 1], out s1))
                 {
                   if (c.game.gameFacts.settings.customArmageddon == null)
                     c.game.gameFacts.settings.customArmageddon = new List<SpellEnum>();
-                  c.game.gameFacts.settings.customArmageddon.Add(s4.spellEnum);
+                  c.game.gameFacts.settings.customArmageddon.Add(s1.spellEnum);
                   if (c.game.customArmageddon == null)
                     c.game.customArmageddon = new List<Spell>();
-                  c.game.customArmageddon.Add(s4);
+                  c.game.customArmageddon.Add(s1);
                   HUD.instance.SetArmageddonIcon();
                   ChatBox instance = ChatBox.Instance;
                   if (instance != null)
                   {
-                    instance.NewChatMsg("", "Added " + s4.name + " as an Armageddon", (Color) ColorScheme.GetColor(Global.ColorGameText), "", ChatOrigination.System);
+                    instance.NewChatMsg("", "Added " + s1.name + " as an Armageddon", (Color) ColorScheme.GetColor(Global.ColorGameText), "", ChatOrigination.System, ContentType.STRING, (object) null);
                     goto label_206;
                   }
                   else
@@ -3352,7 +3413,7 @@ label_206:
                   ChatBox instance = ChatBox.Instance;
                   if (instance != null)
                   {
-                    instance.NewChatMsg("", "Unknown spell: " + commands[i + 1], (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System);
+                    instance.NewChatMsg("", "Unknown spell: " + commands[i + 1], (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
                     goto label_206;
                   }
                   else
@@ -3362,10 +3423,10 @@ label_206:
             }
             else if (string.Equals(commands[i], "add", StringComparison.CurrentCultureIgnoreCase))
             {
-              Spell s5 = (Spell) null;
-              if (Inert.Instance.spells.TryGetValue(commands[i + 1], out s5) || Inert.Instance.TryGetSpell(commands[i + 1], out s5))
+              Spell s1 = (Spell) null;
+              if (Inert.Instance.spells.TryGetValue(commands[i + 1], out s1) || Inert.Instance.TryGetSpell(commands[i + 1], out s1))
               {
-                SpellSlot spellSlot = new SpellSlot(s5);
+                SpellSlot spellSlot = new SpellSlot(s1);
                 spellSlot.MaxUses = -1;
                 spellSlot.TurnsTillFirstUse = -1;
                 c.spells.Add(spellSlot);
@@ -3374,7 +3435,7 @@ label_206:
                 ChatBox instance = ChatBox.Instance;
                 if (instance != null)
                 {
-                  instance.NewChatMsg("", "Added the present: " + s5.name, (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System);
+                  instance.NewChatMsg("", "Added the present: " + s1.name, (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
                   goto label_206;
                 }
                 else
@@ -3385,12 +3446,12 @@ label_206:
             }
             else if (string.Equals(commands[i], "addAll", StringComparison.CurrentCultureIgnoreCase))
             {
-              int num6 = 0;
+              int num2 = 0;
               foreach (KeyValuePair<string, Spell> spell in Inert.Instance.spells)
               {
-                if (num6 < Inert.Instance.presentIndex)
+                if (num2 < Inert.Instance.presentIndex)
                 {
-                  ++num6;
+                  ++num2;
                   if (spell.Value.level < 4)
                   {
                     if (ClientResources.Instance.icons.ContainsKey(spell.Key))
@@ -3405,7 +3466,7 @@ label_206:
               ChatBox instance = ChatBox.Instance;
               if (instance != null)
               {
-                instance.NewChatMsg("", "Added all spells", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System);
+                instance.NewChatMsg("", "Added all spells", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
                 goto label_206;
               }
               else
@@ -3416,17 +3477,17 @@ label_206:
               for (int index = 0; index < 99; ++index)
               {
                 ++Client.debugLogchat;
-                ChatBox.Instance?.NewChatMsg("", Client.debugLogchat.ToString() + ")", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System);
+                ChatBox.Instance?.NewChatMsg("", Client.debugLogchat.ToString() + ")", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
               }
               goto label_206;
             }
-            Spell s6;
-            if (Inert.Instance.spells.TryGetValue(commands[i], out s6) || Inert.Instance.TryGetSpell(commands[i], out s6))
+            Spell s2;
+            if (Inert.Instance.spells.TryGetValue(commands[i], out s2) || Inert.Instance.TryGetSpell(commands[i], out s2))
             {
               Vector3 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
               FixedInt rot_z = !angle.HasValue ? Inert.AngleOfVelocity(new MyLocation((int) worldPoint.x, (int) worldPoint.y) - c.position) : angle.Value;
               MyLocation target = !pos.HasValue ? new MyLocation((int) worldPoint.x, (int) worldPoint.y) : pos.Value;
-              ZSpell.FireWhich(s6, c, c.position, rot_z, Client._power, target, new MyLocation(c.position.x, c.position.y + 100));
+              ZSpell.FireWhich(s2, c, c.position, rot_z, Client._power, target, new MyLocation(c.position.x, c.position.y + 100), 0, false, (SpellSlot) null, false);
               goto label_206;
             }
             else
@@ -3439,7 +3500,7 @@ label_206:
             }
           }
         }
-        ChatBox.Instance?.NewChatMsg("", "Unknown command: " + s, (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System);
+        ChatBox.Instance?.NewChatMsg("", "Unknown command: " + s, (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
       }
     }
   }
@@ -3450,7 +3511,7 @@ label_206:
     {
       if ((double) Client.chatquetime < (double) Time.realtimeSinceStartup)
       {
-        Client.SendChatMsg(Client.delayedChatQue.Dequeue());
+        Client.SendChatMsg(Client.delayedChatQue.Dequeue(), 0.6f);
         Client.chatquetime = Time.realtimeSinceStartup + delay;
       }
       yield return 0.0f;
@@ -3470,7 +3531,7 @@ label_206:
     }
     else
     {
-      Client.connection?.SendBytes(b);
+      Client.connection?.SendBytes(b, SendOption.None);
       Client.chatquetime = Time.realtimeSinceStartup + delay;
     }
   }
@@ -3483,7 +3544,7 @@ label_206:
     }
     else
     {
-      Client.connection?.SendBytes(b);
+      Client.connection?.SendBytes(b, SendOption.None);
       Client.sharequetime = Time.realtimeSinceStartup + 2f;
     }
   }
@@ -3492,11 +3553,11 @@ label_206:
   {
     if (Client.game != null && Client.game.isTutorial && (UnityEngine.Object) HUD.instance != (UnityEngine.Object) null)
     {
-      Client.DevConsole(s, Client.game);
+      Client.DevConsole(s, Client.game, new FixedInt?(), new MyLocation?());
     }
     else
     {
-      Account account = Client.GetAccount(Client.Name);
+      Account account = Client.GetAccount(Client.Name, false);
       if (s.Length > 600 && (!account.accountType.IsModPlus() || s[0] != '?'))
         s = s.Substring(0, 600);
       if (s[0] == '/')
@@ -3520,7 +3581,7 @@ label_206:
       }
       else
       {
-        if (s[0] == '.' && s.Length > 1 && s[1] != '.' && Client.clan != null)
+        if (s[0] == '.' && s.Length > 1 && (s[1] != '.' && Client.clan != null))
         {
           Client.SendClanChatMsg(s.Substring(1));
           return;
@@ -3532,7 +3593,7 @@ label_206:
         }
         if (s[0] == '\\' && s.Length > 1)
         {
-          ChatBox.Instance?.NewChatMsg("[Note] " + Client.Name, s.Substring(1), (Color) ColorScheme.GetColor(Global.ColorNoteText), Client.Name, ChatOrigination.System);
+          ChatBox.Instance?.NewChatMsg("[Note] " + Client.Name, s.Substring(1), (Color) ColorScheme.GetColor(Global.ColorNoteText), Client.Name, ChatOrigination.System, ContentType.STRING, (object) null);
           return;
         }
       }
@@ -3548,7 +3609,7 @@ label_206:
               ZGame game = Client.game;
               if ((game != null ? (!game.isTeam ? 1 : 0) : 1) != 0)
               {
-                ChatBox.Instance?.NewChatMsg("[Note] " + Client.Name, s, (Color) ColorScheme.GetColor(Global.ColorNoteText), Client.Name, ChatOrigination.System);
+                ChatBox.Instance?.NewChatMsg("[Note] " + Client.Name, s, (Color) ColorScheme.GetColor(Global.ColorNoteText), Client.Name, ChatOrigination.System, ContentType.STRING, (object) null);
                 return;
               }
               myBinaryWriter.Write((byte) 152);
@@ -3562,9 +3623,9 @@ label_206:
           myBinaryWriter.Write(s);
         }
         if (Client.connection != null)
-          Client.SendChatMsg(memoryStream.ToArray());
+          Client.SendChatMsg(memoryStream.ToArray(), 0.6f);
         else
-          ChatBox.Instance.NewChatMsg("", "Oops, looks like you're disconnected.", (Color) ColorScheme.GetColor(Global.ColorGrayChat), "", ChatOrigination.System);
+          ChatBox.Instance.NewChatMsg("", "Oops, looks like you're disconnected.", (Color) ColorScheme.GetColor(Global.ColorGrayChat), "", ChatOrigination.System, ContentType.STRING, (object) null);
       }
     }
   }
@@ -3580,9 +3641,9 @@ label_206:
         myBinaryWriter.Write(type);
         myBinaryWriter.Write(pos);
       }
-      if (Client.connection != null && Client.game != null && !Client.game.isSandbox && !Client.game.isReplay && Client.game.isTeam && !Client.game.isMulti)
+      if (Client.connection != null && Client.game != null && (!Client.game.isSandbox && !Client.game.isReplay) && (Client.game.isTeam && !Client.game.isMulti))
       {
-        Client.connection.SendBytes(memoryStream.ToArray());
+        Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
       }
       else
       {
@@ -3614,9 +3675,9 @@ label_206:
         if (string.IsNullOrEmpty(nameOfObject))
           nameOfObject = Server.RandomString(8);
         Client._Share(with, nameOfObject, t, obj, alreadyBytes);
-      }), nameOfObject, true);
+      }), nameOfObject, true, true);
       myContextMenu.SetOnCancel((Action) (() => Client.sharingWith = ""));
-      myContextMenu.Rebuild();
+      myContextMenu.Rebuild(false);
     }
   }
 
@@ -3708,15 +3769,18 @@ label_206:
         else
           msg = "[" + str + "] uploaded a private " + contentType.ToString() + " - " + name1;
         Color color = (Color) ColorScheme.GetColor(Global.ColorNotification);
-        int origination = flag ? 2 : 0;
-        int t = (int) contentType;
+        int num1 = flag ? 2 : 0;
+        int num2 = (int) contentType;
         object data = content;
-        instance.NewContent(name3, msg, color, (ChatOrigination) origination, (ContentType) t, data);
+        instance.NewContent(name3, msg, color, (ChatOrigination) num1, (ContentType) num2, data);
         break;
     }
   }
 
-  public static void CheckBloodToggle() => Client.showBlood = Global.GetPrefBool("showblood", true);
+  public static void CheckBloodToggle()
+  {
+    Client.showBlood = Global.GetPrefBool("showblood", true);
+  }
 
   public static void ToggleBlood(bool v)
   {
@@ -3758,7 +3822,10 @@ label_206:
       Client.RefreshIgnore();
     }
 
-    public bool Ignored(string n) => this.ignored.Contains(n);
+    public bool Ignored(string n)
+    {
+      return this.ignored.Contains(n);
+    }
 
     public void Add(string n, long t)
     {

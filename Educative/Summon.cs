@@ -1,24 +1,23 @@
 
 using MoonSharp.Interpreter;
 
-#nullable disable
 namespace Educative
 {
   public class Summon
   {
-    public object spell;
     public Point position = new Point(750.0, 750.0);
     public int team = 1;
-    public bool onPlayersPanel;
     public bool useAI = true;
-    public bool no_AI_still_use_turn;
     public string name = "";
     public bool playSound = true;
+    public BookOf elemental = BookOf.Nothing;
+    public object spell;
+    public bool onPlayersPanel;
+    public bool no_AI_still_use_turn;
     public int prestige;
     public Table colors;
     public Table spells;
     public Table outfit;
-    public BookOf elemental = BookOf.Nothing;
 
     public static Summon construct(
       object spell = null,

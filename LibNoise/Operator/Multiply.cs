@@ -1,5 +1,4 @@
 
-#nullable disable
 namespace LibNoise.Operator
 {
   public class Multiply : ModuleBase

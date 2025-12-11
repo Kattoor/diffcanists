@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-#nullable disable
 [Serializable]
 public class MinerMarket
 {
@@ -12,7 +11,10 @@ public class MinerMarket
   public int count;
   public GameObject clientObj;
 
-  public bool Has(MinerMarket.Types t) => this.bought[(int) t];
+  public bool Has(MinerMarket.Types t)
+  {
+    return this.bought[(int) t];
+  }
 
   public void Buy(MinerMarket.Types t)
   {
@@ -25,7 +27,10 @@ public class MinerMarket
     return !this.Has(t) && c.health > Inert.Instance.minerMarket[(int) t].cost;
   }
 
-  public MinerMarket() => this.bought = new bool[16];
+  public MinerMarket()
+  {
+    this.bought = new bool[16];
+  }
 
   public void Serialize(myBinaryWriter writer)
   {
@@ -66,9 +71,9 @@ public class MinerMarket
     if (this.curHolesDug <= 100 || c.game.RandomInt(0, 100) <= 97)
       return;
     this.curHolesDug = 0;
-    MinerMarket.Types y = this.RandomUnbought(c.game);
-    if (y != MinerMarket.Types.None)
-      ZSpell.FireMinerMarket((Spell) null, c, (int) y, false);
+    MinerMarket.Types types = this.RandomUnbought(c.game);
+    if (types != MinerMarket.Types.None)
+      ZSpell.FireMinerMarket((Spell) null, c, (int) types, false);
     else
       ZSpell.AddPresents((GameObject) null, c, 1);
     if (!c.game.isClient || c.game.resyncing || !((UnityEngine.Object) c.transform != (UnityEngine.Object) null))
@@ -108,9 +113,9 @@ public class MinerMarket
           }), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen), Inert.Instance.minerMarket[y].description);
       }
       else
-        myContextMenu.AddItemWithImage("<s>" + Inert.Instance.minerMarket[index].name + "</s>", Inert.Instance.minerMarket[index].icon, (Action) null, (Color) ColorScheme.GetColor(MyContextMenu.ColorGray));
+        myContextMenu.AddItemWithImage("<s>" + Inert.Instance.minerMarket[index].name + "</s>", Inert.Instance.minerMarket[index].icon, (Action) null, (Color) ColorScheme.GetColor(MyContextMenu.ColorGray), "");
     }
-    myContextMenu.Rebuild();
+    myContextMenu.Rebuild(false);
   }
 
   public MinerMarket.Types RandomUnbought(ZGame game)

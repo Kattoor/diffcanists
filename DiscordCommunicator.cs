@@ -6,9 +6,9 @@ using System.IO;
 using System.Text;
 using UnityEngine;
 
-#nullable disable
 public class DiscordCommunicator
 {
+  public static bool LogResync = true;
   private ConnectionListener listener;
   private Connection connection;
   public const byte MsgStrikes = 101;
@@ -21,13 +21,24 @@ public class DiscordCommunicator
   public const byte MsgAccountBlocked = 106;
   public const byte MsgTournamentGame = 107;
   public const byte MsgPlayerCount = 108;
-  public static bool LogResync = true;
 
-  public Connection GetConnection => this.connection;
+  public Connection GetConnection
+  {
+    get
+    {
+      return this.connection;
+    }
+  }
 
-  public DiscordCommunicator() => this.BroadCast();
+  public DiscordCommunicator()
+  {
+    this.BroadCast();
+  }
 
-  public void SetConnection(Connection c) => this.connection = c;
+  public void SetConnection(Connection c)
+  {
+    this.connection = c;
+  }
 
   public static byte[] GameToResync(ZGame g, string msg, string who, bool isClient)
   {
@@ -64,8 +75,8 @@ public class DiscordCommunicator
     if (!DiscordCommunicator.LogResync || this.connection == null || this.connection.State != ConnectionState.Connected)
       return;
     byte[] resync = DiscordCommunicator.GameToResync(g, msg, "Server", false);
-    this.connection?.SendBytes(resync);
-    if (!((UnityEngine.Object) Server.Instance == (UnityEngine.Object) null) && Server.Instance.communicator != null && Server.Instance.communicator.GetConnection != null && Server.Instance.communicator.GetConnection.State == ConnectionState.Connected)
+    this.connection?.SendBytes(resync, SendOption.None);
+    if (!((UnityEngine.Object) Server.Instance == (UnityEngine.Object) null) && Server.Instance.communicator != null && (Server.Instance.communicator.GetConnection != null && Server.Instance.communicator.GetConnection.State == ConnectionState.Connected))
       return;
     using (MemoryStream memoryStream = new MemoryStream(resync))
     {
@@ -134,7 +145,7 @@ public class DiscordCommunicator
           writer.Write(g.timeline[index]);
         writer.Write(0);
       }
-      this.connection?.SendBytes(memoryStream.ToArray());
+      this.connection?.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -149,7 +160,7 @@ public class DiscordCommunicator
         myBinaryWriter.Write((byte) 102);
         myBinaryWriter.Write(s);
       }
-      this.connection?.SendBytes(memoryStream.ToArray());
+      this.connection?.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -164,7 +175,7 @@ public class DiscordCommunicator
         myBinaryWriter.Write((byte) 153);
         myBinaryWriter.Write(s);
       }
-      this.connection?.SendBytes(memoryStream.ToArray());
+      this.connection?.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -179,7 +190,7 @@ public class DiscordCommunicator
         myBinaryWriter.Write((byte) 207);
         myBinaryWriter.Write(s);
       }
-      this.connection?.SendBytes(memoryStream.ToArray());
+      this.connection?.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -194,7 +205,7 @@ public class DiscordCommunicator
         myBinaryWriter.Write((byte) 105);
         myBinaryWriter.Write(s);
       }
-      this.connection?.SendBytes(memoryStream.ToArray());
+      this.connection?.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -209,7 +220,7 @@ public class DiscordCommunicator
         myBinaryWriter.Write((byte) 106);
         myBinaryWriter.Write(s);
       }
-      this.connection?.SendBytes(memoryStream.ToArray());
+      this.connection?.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -224,7 +235,7 @@ public class DiscordCommunicator
         myBinaryWriter.Write((byte) 100);
         myBinaryWriter.Write(MyLog.GetAllText());
       }
-      this.connection?.SendBytes(memoryStream.ToArray());
+      this.connection?.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -241,7 +252,7 @@ public class DiscordCommunicator
         myBinaryWriter.Write(responses);
         myBinaryWriter.Write(isPublic);
       }
-      this.connection?.SendBytes(memoryStream.ToArray());
+      this.connection?.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -258,7 +269,7 @@ public class DiscordCommunicator
         myBinaryWriter.Write(responses);
         myBinaryWriter.Write(isPublic);
       }
-      this.connection?.SendBytes(memoryStream.ToArray());
+      this.connection?.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -273,7 +284,7 @@ public class DiscordCommunicator
         writer.Write((byte) 55);
         r.Serialize(writer);
       }
-      this.connection?.SendBytes(memoryStream.ToArray());
+      this.connection?.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -288,7 +299,7 @@ public class DiscordCommunicator
         myBinaryWriter.Write((byte) 33);
         myBinaryWriter.Write(s);
       }
-      this.connection?.SendBytes(memoryStream.ToArray());
+      this.connection?.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -303,7 +314,7 @@ public class DiscordCommunicator
         myBinaryWriter.Write((byte) 65);
         myBinaryWriter.Write(s);
       }
-      this.connection?.SendBytes(memoryStream.ToArray());
+      this.connection?.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -321,7 +332,7 @@ public class DiscordCommunicator
         myBinaryWriter.Write(user);
         myBinaryWriter.Write(acc);
       }
-      this.connection?.SendBytes(memoryStream.ToArray());
+      this.connection?.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -329,7 +340,7 @@ public class DiscordCommunicator
   {
     if (this.connection == null || this.connection.State != ConnectionState.Connected)
       return;
-    this.connection?.SendBytes(b);
+    this.connection?.SendBytes(b, SendOption.None);
   }
 
   public void StopBroadCast()
@@ -343,7 +354,7 @@ public class DiscordCommunicator
   {
     try
     {
-      this.listener = (ConnectionListener) new TcpConnectionListener(new NetworkEndPoint("127.0.0.1", 4199));
+      this.listener = (ConnectionListener) new TcpConnectionListener(new NetworkEndPoint("127.0.0.1", 4199, IPMode.IPv4));
       this.listener.NewConnection += new EventHandler<NewConnectionEventArgs>(this.NewConnectionHandler);
       this.listener.Start();
     }
@@ -362,7 +373,7 @@ public class DiscordCommunicator
     {
       using (myBinaryWriter myBinaryWriter = new myBinaryWriter((Stream) memoryStream))
         myBinaryWriter.Write((byte) 1);
-      args.Connection.SendBytes(memoryStream.ToArray());
+      args.Connection.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
     args.Recycle();
   }

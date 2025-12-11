@@ -1,5 +1,4 @@
 
-#nullable disable
 namespace SevenZip
 {
   public enum CoderPropID

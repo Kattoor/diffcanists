@@ -2,7 +2,6 @@
 using System;
 using UnityEngine;
 
-#nullable disable
 [Serializable]
 public class Recolor
 {
@@ -25,7 +24,7 @@ public class Recolor
   {
     for (int index = 1; index < this.colors.Length; ++index)
     {
-      if (!Global.CompareColors(this.colors[0].red, this.colors[index].red) || !Global.CompareColors(this.colors[0].green, this.colors[index].green) || !Global.CompareColors(this.colors[0].blue, this.colors[index].blue) || !Global.CompareColors(this.colors[0].gray, this.colors[index].gray))
+      if (!Global.CompareColors(this.colors[0].red, this.colors[index].red) || !Global.CompareColors(this.colors[0].green, this.colors[index].green) || (!Global.CompareColors(this.colors[0].blue, this.colors[index].blue) || !Global.CompareColors(this.colors[0].gray, this.colors[index].gray)))
         return true;
     }
     return false;
@@ -140,7 +139,9 @@ public class Recolor
 
   public static Color ZeroAlpha(Color a)
   {
-    return a with { a = 0.0f };
+    Color color = a;
+    color.a = 0.0f;
+    return color;
   }
 
   public static Sprite Copy(Sprite spriteorigonal)
@@ -273,7 +274,7 @@ public class Recolor
     for (int index = 0; index < pixels.Length; ++index)
     {
       Color32 color32 = (Color32) pixels[index];
-      if (color32.a != (byte) 0 && (int) color32.r == (int) color32.g && (int) color32.r == (int) color32.b && color32.r > (byte) 0)
+      if (color32.a != (byte) 0 && (int) color32.r == (int) color32.g && ((int) color32.r == (int) color32.b && color32.r > (byte) 0))
       {
         byte r = color32.r;
         pixels[index] = gray * (Color) new Color32(r, r, r, color32.a);

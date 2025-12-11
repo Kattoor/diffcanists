@@ -2,149 +2,148 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-#nullable disable
 public class ZSpellCallingBell : ZSpell
 {
   public override IEnumerator<float> SpellMove(bool gotoStatic = false, bool checkEffectors = true)
   {
-    ZSpellCallingBell spell = this;
-    spell.isMoving = true;
-    spell.zb = MapGenerator.getOutlineArray(spell.radius);
+    ZSpellCallingBell zspellCallingBell = this;
+    zspellCallingBell.isMoving = true;
+    zspellCallingBell.zb = MapGenerator.getOutlineArray(zspellCallingBell.radius);
     if (gotoStatic)
       yield return 0.0f;
 label_47:
-    while (!spell.isDead)
+    while (!zspellCallingBell.isDead)
     {
-      spell.pX = spell.position.x;
-      spell.pY = spell.position.y;
-      FixedInt fixedInt1 = spell.position.x + spell.velocity.x;
-      FixedInt fixedInt2 = spell.position.y + spell.velocity.y;
-      spell.validX = spell.pX;
-      spell.validY = spell.pY;
-      spell.steps = 1;
-      FixedInt x1 = spell.velocity.x;
-      FixedInt y1 = spell.velocity.y;
-      FixedInt fixedInt3 = spell.velocity.x;
-      FixedInt fixedInt4 = spell.velocity.y;
-      if (x1 > 1 || x1 < -1 || y1 > 1 || y1 < -1)
+      zspellCallingBell.pX = zspellCallingBell.position.x;
+      zspellCallingBell.pY = zspellCallingBell.position.y;
+      FixedInt fixedInt1 = zspellCallingBell.position.x + zspellCallingBell.velocity.x;
+      FixedInt fixedInt2 = zspellCallingBell.position.y + zspellCallingBell.velocity.y;
+      zspellCallingBell.validX = zspellCallingBell.pX;
+      zspellCallingBell.validY = zspellCallingBell.pY;
+      zspellCallingBell.steps = 1;
+      FixedInt x1 = zspellCallingBell.velocity.x;
+      FixedInt y1 = zspellCallingBell.velocity.y;
+      FixedInt fixedInt3 = zspellCallingBell.velocity.x;
+      FixedInt fixedInt4 = zspellCallingBell.velocity.y;
+      if (x1 > 1 || x1 < -1 || (y1 > 1 || y1 < -1))
       {
         if (FixedInt.Abs(x1) > FixedInt.Abs(y1))
-          spell.steps = (int) FixedInt.Abs(x1) + 1;
+          zspellCallingBell.steps = (int) FixedInt.Abs(x1) + 1;
         else
-          spell.steps = (int) FixedInt.Abs(y1) + 1;
-        fixedInt3 = spell.velocity.x / spell.steps;
-        fixedInt4 = spell.velocity.y / spell.steps;
+          zspellCallingBell.steps = (int) FixedInt.Abs(y1) + 1;
+        fixedInt3 = zspellCallingBell.velocity.x / zspellCallingBell.steps;
+        fixedInt4 = zspellCallingBell.velocity.y / zspellCallingBell.steps;
       }
-      while (spell.steps > 0)
+      while (zspellCallingBell.steps > 0)
       {
-        if (spell.map.SpellCheckEffectors(spell.toCollideCheck, (ZSpell) spell, (int) spell.validX, (int) spell.validY))
+        if (zspellCallingBell.map.SpellCheckEffectors(zspellCallingBell.toCollideCheck, (ZSpell) zspellCallingBell, (int) zspellCallingBell.validX, (int) zspellCallingBell.validY))
         {
-          spell.position = new MyLocation(spell.validX, spell.validY);
+          zspellCallingBell.position = new MyLocation(zspellCallingBell.validX, zspellCallingBell.validY);
           yield return 0.0f;
           goto label_47;
         }
         else
         {
-          --spell.steps;
-          int num1 = (int) (((FixedInt) 360 - (Inert.AngleOfVelocity(spell.velocity) - 90)) * FixedInt.ThreeSixtyBy1 * spell.zb.Count) - spell.radius;
+          --zspellCallingBell.steps;
+          int num1 = (int) (((FixedInt) 360 - (Inert.AngleOfVelocity(zspellCallingBell.velocity) - 90)) * FixedInt.ThreeSixtyBy1 * zspellCallingBell.zb.Count) - zspellCallingBell.radius;
           if (num1 < 0)
-            num1 += spell.zb.Count;
-          for (int index1 = 0; index1 < spell.radius * 2; ++index1)
+            num1 += zspellCallingBell.zb.Count;
+          for (int index1 = 0; index1 < zspellCallingBell.radius * 2; ++index1)
           {
-            int index2 = (index1 + num1) % spell.zb.Count;
-            if (!spell.map.SpellCheckPosition((int) (fixedInt3 + spell.pX) + spell.zb[index2].x, (int) (fixedInt4 + spell.pY) + spell.zb[index2].y, spell.toCollideCheck, Inert.mask_spell_movement))
+            int index2 = (index1 + num1) % zspellCallingBell.zb.Count;
+            if (!zspellCallingBell.map.SpellCheckPosition((int) (fixedInt3 + zspellCallingBell.pX) + zspellCallingBell.zb[index2].x, (int) (fixedInt4 + zspellCallingBell.pY) + zspellCallingBell.zb[index2].y, zspellCallingBell.toCollideCheck, Inert.mask_spell_movement))
             {
-              int num2 = (int) (fixedInt3 + spell.pX);
-              int num3 = (int) (fixedInt4 + spell.pY);
-              int x2 = spell.zb[index2].x;
+              int num2 = (int) (fixedInt3 + zspellCallingBell.pX);
+              int num3 = (int) (fixedInt4 + zspellCallingBell.pY);
+              int x2 = zspellCallingBell.zb[index2].x;
               int x3 = num2 + x2;
-              int y2 = num3 + spell.zb[index2].y;
-              if (!spell.map.CheckPositionOnlyMap(x3, y2))
+              int y2 = num3 + zspellCallingBell.zb[index2].y;
+              if (!zspellCallingBell.map.CheckPositionOnlyMap(x3, y2))
               {
-                spell.isDead = true;
-                spell.isNull = true;
-                if (spell.game.isClient && !spell.game.resyncing)
-                  ZComponent.Instantiate<GameObject>(spell.explosion, new Vector3((float) x3, (float) y2), Quaternion.identity, spell.game.GetMapTransform());
-                ZComponent.Destroy<GameObject>(spell.gameObject);
+                zspellCallingBell.isDead = true;
+                zspellCallingBell.isNull = true;
+                if (zspellCallingBell.game.isClient && !zspellCallingBell.game.resyncing)
+                  ZComponent.Instantiate<GameObject>(zspellCallingBell.explosion, new Vector3((float) x3, (float) y2), Quaternion.identity, zspellCallingBell.game.GetMapTransform());
+                ZComponent.Destroy<GameObject>(zspellCallingBell.gameObject);
                 yield break;
               }
               else
               {
-                ZCreature c = spell.map.PhysicsCollideCreature(spell.toCollideCheck, x3, y2);
+                ZCreature c = zspellCallingBell.map.PhysicsCollideCreature(zspellCallingBell.toCollideCheck, x3, y2, 0);
                 if ((ZComponent) c != (object) null && c.race != CreatureRace.Effector && c.type != CreatureType.Recall_Device)
                 {
-                  while (spell.game.recallDevices.Count > 0)
+                  while (zspellCallingBell.game.recallDevices.Count > 0)
                   {
-                    int index3 = spell.game.RandomInt(0, spell.game.recallDevices.Count);
-                    ZCreature recallDevice = spell.game.recallDevices[index3];
+                    int index3 = zspellCallingBell.game.RandomInt(0, zspellCallingBell.game.recallDevices.Count);
+                    ZCreature recallDevice = zspellCallingBell.game.recallDevices[index3];
                     if (!ZComponent.IsNull((ZComponent) recallDevice))
                     {
-                      spell.game.recallDevices.RemoveAt(index3);
+                      zspellCallingBell.game.recallDevices.RemoveAt(index3);
                       recallDevice.OnDeath(true);
                       if ((ZComponent) c != (object) null)
                       {
-                        ZSpell.FireTeleportNoDetower(spell.baseSpell, c, recallDevice.position);
+                        ZSpell.FireTeleportNoDetower(zspellCallingBell.baseSpell, c, recallDevice.position);
                         break;
                       }
                       break;
                     }
-                    spell.game.recallDevices.RemoveAt(index3);
+                    zspellCallingBell.game.recallDevices.RemoveAt(index3);
                   }
-                  spell.isDead = true;
-                  spell.isNull = true;
-                  if (spell.game.isClient && !spell.game.resyncing)
-                    ZComponent.Instantiate<GameObject>(spell.explosion, new Vector3((float) x3, (float) y2), Quaternion.identity, spell.game.GetMapTransform());
-                  ZComponent.Destroy<GameObject>(spell.gameObject);
+                  zspellCallingBell.isDead = true;
+                  zspellCallingBell.isNull = true;
+                  if (zspellCallingBell.game.isClient && !zspellCallingBell.game.resyncing)
+                    ZComponent.Instantiate<GameObject>(zspellCallingBell.explosion, new Vector3((float) x3, (float) y2), Quaternion.identity, zspellCallingBell.game.GetMapTransform());
+                  ZComponent.Destroy<GameObject>(zspellCallingBell.gameObject);
                   yield break;
                 }
                 else
                 {
-                  spell.isDead = true;
-                  spell.isNull = true;
-                  if (spell.game.isClient && !spell.game.resyncing)
-                    ZComponent.Instantiate<GameObject>(spell.explosion, new Vector3((float) x3, (float) y2), Quaternion.identity, spell.game.GetMapTransform());
-                  ZComponent.Destroy<GameObject>(spell.gameObject);
+                  zspellCallingBell.isDead = true;
+                  zspellCallingBell.isNull = true;
+                  if (zspellCallingBell.game.isClient && !zspellCallingBell.game.resyncing)
+                    ZComponent.Instantiate<GameObject>(zspellCallingBell.explosion, new Vector3((float) x3, (float) y2), Quaternion.identity, zspellCallingBell.game.GetMapTransform());
+                  ZComponent.Destroy<GameObject>(zspellCallingBell.gameObject);
                   yield break;
                 }
               }
             }
           }
-          spell.validX = spell.pX;
-          spell.validY = spell.pY;
-          spell.pX = spell.pX + fixedInt3;
-          spell.pY = spell.pY + fixedInt4;
+          zspellCallingBell.validX = zspellCallingBell.pX;
+          zspellCallingBell.validY = zspellCallingBell.pY;
+          zspellCallingBell.pX = zspellCallingBell.pX + fixedInt3;
+          zspellCallingBell.pY = zspellCallingBell.pY + fixedInt4;
         }
       }
-      spell.position = spell.position + spell.velocity;
-      if (spell.position.y < spell.radius)
+      zspellCallingBell.position = zspellCallingBell.position + zspellCallingBell.velocity;
+      if (zspellCallingBell.position.y < zspellCallingBell.radius)
       {
-        spell.moving = (IEnumerator<float>) null;
-        spell.velocity = MyLocation.zero;
-        spell.isMoving = false;
-        spell.Splash();
-        spell.DestroyDelay();
+        zspellCallingBell.moving = (IEnumerator<float>) null;
+        zspellCallingBell.velocity = MyLocation.zero;
+        zspellCallingBell.isMoving = false;
+        zspellCallingBell.Splash();
+        zspellCallingBell.DestroyDelay();
         break;
       }
-      if (spell.addVelocity)
+      if (zspellCallingBell.addVelocity)
       {
-        spell.addVelocity = false;
-        spell.velocity = spell.velocity + spell.addedVelocity;
-        spell.velocity.x = Mathd.Clamp(spell.velocity.x, (FixedInt) -50, (FixedInt) 50);
-        spell.velocity.y = Mathd.Clamp(spell.velocity.y, (FixedInt) -50, (FixedInt) 50);
-        spell.addedVelocity.x = (FixedInt) 0;
-        spell.addedVelocity.y = (FixedInt) 0;
+        zspellCallingBell.addVelocity = false;
+        zspellCallingBell.velocity = zspellCallingBell.velocity + zspellCallingBell.addedVelocity;
+        zspellCallingBell.velocity.x = Mathd.Clamp(zspellCallingBell.velocity.x, (FixedInt) -50, (FixedInt) 50);
+        zspellCallingBell.velocity.y = Mathd.Clamp(zspellCallingBell.velocity.y, (FixedInt) -50, (FixedInt) 50);
+        zspellCallingBell.addedVelocity.x = (FixedInt) 0;
+        zspellCallingBell.addedVelocity.y = (FixedInt) 0;
       }
-      else if (spell.affectedByGravity && spell.velocity.y > -ZMap.MaxSpeed)
-        spell.velocity.y += spell.map.Gravity;
-      else if (!spell.affectedByGravity && spell.velocity.y > -10 && spell.maxDuration > 150)
-        spell.affectedByGravity = true;
-      spell.Wind();
-      if (spell.Rotates)
-        spell.transform.rotation = Quaternion.Euler(0.0f, 0.0f, Mathf.Atan2(spell.velocity.y.ToFloat(), spell.velocity.x.ToFloat()) * 57.29578f);
-      ++spell.curDuration;
-      if (spell.curDuration >= spell.maxDuration)
+      else if (zspellCallingBell.affectedByGravity && zspellCallingBell.velocity.y > -ZMap.MaxSpeed)
+        zspellCallingBell.velocity.y += zspellCallingBell.map.Gravity;
+      else if (!zspellCallingBell.affectedByGravity && zspellCallingBell.velocity.y > -10 && zspellCallingBell.maxDuration > 150)
+        zspellCallingBell.affectedByGravity = true;
+      zspellCallingBell.Wind();
+      if (zspellCallingBell.Rotates)
+        zspellCallingBell.transform.rotation = Quaternion.Euler(0.0f, 0.0f, Mathf.Atan2(zspellCallingBell.velocity.y.ToFloat(), zspellCallingBell.velocity.x.ToFloat()) * 57.29578f);
+      ++zspellCallingBell.curDuration;
+      if (zspellCallingBell.curDuration >= zspellCallingBell.maxDuration)
       {
-        spell.DestroyDelay();
+        zspellCallingBell.DestroyDelay();
         break;
       }
       yield return 0.0f;

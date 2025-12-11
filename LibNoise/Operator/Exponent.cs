@@ -1,7 +1,6 @@
 
 using System;
 
-#nullable disable
 namespace LibNoise.Operator
 {
   public class Exponent : ModuleBase
@@ -28,8 +27,14 @@ namespace LibNoise.Operator
 
     public double Value
     {
-      get => this._exponent;
-      set => this._exponent = value;
+      get
+      {
+        return this._exponent;
+      }
+      set
+      {
+        this._exponent = value;
+      }
     }
 
     public override double GetValue(double x, double y, double z)

@@ -1,7 +1,6 @@
 
 using System;
 
-#nullable disable
 namespace Ninja.WebSockets
 {
   public class WebSocketServerOptions

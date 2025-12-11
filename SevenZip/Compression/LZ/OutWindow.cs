@@ -1,7 +1,6 @@
 
 using System.IO;
 
-#nullable disable
 namespace SevenZip.Compression.LZ
 {
   public class OutWindow
@@ -42,15 +41,15 @@ namespace SevenZip.Compression.LZ
       this._streamPos = this._pos = 0U;
       while (num1 > 0U)
       {
-        uint count = this._windowSize - this._pos;
-        if (num1 < count)
-          count = num1;
-        int num2 = stream.Read(this._buffer, (int) this._pos, (int) count);
-        if (num2 == 0)
+        uint num2 = this._windowSize - this._pos;
+        if (num1 < num2)
+          num2 = num1;
+        int num3 = stream.Read(this._buffer, (int) this._pos, (int) num2);
+        if (num3 == 0)
           return false;
-        num1 -= (uint) num2;
-        this._pos += (uint) num2;
-        this._streamPos += (uint) num2;
+        num1 -= (uint) num3;
+        this._pos += (uint) num3;
+        this._streamPos += (uint) num3;
         if ((int) this._pos == (int) this._windowSize)
           this._streamPos = this._pos = 0U;
       }
@@ -65,10 +64,10 @@ namespace SevenZip.Compression.LZ
 
     public void Flush()
     {
-      uint count = this._pos - this._streamPos;
-      if (count == 0U)
+      uint num = this._pos - this._streamPos;
+      if (num == 0U)
         return;
-      this._stream.Write(this._buffer, (int) this._streamPos, (int) count);
+      this._stream.Write(this._buffer, (int) this._streamPos, (int) num);
       if (this._pos >= this._windowSize)
         this._pos = 0U;
       this._streamPos = this._pos;
@@ -99,10 +98,10 @@ namespace SevenZip.Compression.LZ
 
     public byte GetByte(uint distance)
     {
-      uint index = (uint) ((int) this._pos - (int) distance - 1);
-      if (index >= this._windowSize)
-        index += this._windowSize;
-      return this._buffer[(int) index];
+      uint num = (uint) ((int) this._pos - (int) distance - 1);
+      if (num >= this._windowSize)
+        num += this._windowSize;
+      return this._buffer[(int) num];
     }
   }
 }

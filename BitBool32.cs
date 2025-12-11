@@ -1,14 +1,16 @@
 
 using System.Text;
 
-#nullable disable
 public class BitBool32
 {
   private int array;
 
   public bool this[int index]
   {
-    get => 1 << index != 0;
+    get
+    {
+      return (uint) (1 << index) > 0U;
+    }
     set
     {
       if (value)
@@ -18,11 +20,20 @@ public class BitBool32
     }
   }
 
-  public void Copy(BitBool32 b) => this.array = b.array;
+  public void Copy(BitBool32 b)
+  {
+    this.array = b.array;
+  }
 
-  public void ResetAll() => this.array = 0;
+  public void ResetAll()
+  {
+    this.array = 0;
+  }
 
-  public void SetAll() => this.array = -1;
+  public void SetAll()
+  {
+    this.array = -1;
+  }
 
   public override string ToString()
   {
@@ -32,7 +43,13 @@ public class BitBool32
     return stringBuilder.ToString();
   }
 
-  public void Serialize(myBinaryWriter w) => w.Write(this.array);
+  public void Serialize(myBinaryWriter w)
+  {
+    w.Write(this.array);
+  }
 
-  public void Deserialize(myBinaryReader r) => this.array = r.ReadInt32();
+  public void Deserialize(myBinaryReader r)
+  {
+    this.array = r.ReadInt32();
+  }
 }

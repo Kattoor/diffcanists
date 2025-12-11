@@ -1,11 +1,17 @@
 
-#nullable disable
 namespace Telepathy
 {
-  public struct Message(int connectionId, EventType eventType, byte[] data)
+  public struct Message
   {
-    public readonly int connectionId = connectionId;
-    public readonly EventType eventType = eventType;
-    public readonly byte[] data = data;
+    public readonly int connectionId;
+    public readonly EventType eventType;
+    public readonly byte[] data;
+
+    public Message(int connectionId, EventType eventType, byte[] data)
+    {
+      this.connectionId = connectionId;
+      this.eventType = eventType;
+      this.data = data;
+    }
   }
 }

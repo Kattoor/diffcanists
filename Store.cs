@@ -3,16 +3,15 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-#nullable disable
 public class Store : MonoBehaviour
 {
-  public static Store Instance;
   public ArcanistsStore tomatoes = new ArcanistsStore();
   public ArcanistsStore pets = new ArcanistsStore();
   public ArcanistsStore monsters = new ArcanistsStore();
   public ArcanistsStore spellSkins = new ArcanistsStore();
   public ArcanistsStore playerAnimation = new ArcanistsStore();
   public ArcanistsStore icons = new ArcanistsStore();
+  public static Store Instance;
 
   public List<ArcanistsStore.Item> Get(ArcanistsStore.Which which)
   {

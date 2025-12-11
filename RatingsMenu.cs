@@ -5,9 +5,14 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-#nullable disable
 public class RatingsMenu : MonoBehaviour
 {
+  public static readonly string[] Accuracy = new string[3]
+  {
+    "0",
+    "0.0",
+    "0.00"
+  };
   public RectTransform mainBox;
   public RectTransform bg;
   public RectTransform container;
@@ -28,12 +33,6 @@ public class RatingsMenu : MonoBehaviour
   private bool obtainFriends;
   private bool obtainGlobal;
   private static DateTime nextStatGet;
-  public static readonly string[] Accuracy = new string[3]
-  {
-    "0",
-    "0.0",
-    "0.00"
-  };
 
   public static RatingsMenu Instance { get; private set; }
 
@@ -56,9 +55,15 @@ public class RatingsMenu : MonoBehaviour
     RatingsMenu.nextStatGet = new DateTime(1, 1, 1);
   }
 
-  private void Start() => this.ClickDefault();
+  private void Start()
+  {
+    this.ClickDefault();
+  }
 
-  public void ClickToggleItems() => this.pfab.ShowContextMenu();
+  public void ClickToggleItems()
+  {
+    this.pfab.ShowContextMenu();
+  }
 
   public void ResizeContainer()
   {
@@ -96,10 +101,13 @@ public class RatingsMenu : MonoBehaviour
   public IEnumerator TryAgain()
   {
     yield return (object) new WaitForSecondsRealtime(5f);
-    Client.AskGetRank();
+    Client.AskGetRank(0, (string) null);
   }
 
-  public void HideToolTip() => MyToolTip.Close();
+  public void HideToolTip()
+  {
+    MyToolTip.Close();
+  }
 
   public void ClickMyStats()
   {
@@ -107,9 +115,9 @@ public class RatingsMenu : MonoBehaviour
       return;
     MyContextMenu myContextMenu = MyContextMenu.Show();
     myContextMenu.AddItem(this.GetStats(), (Action) null, (Color) ColorScheme.GetColor(MyContextMenu.ColorCream));
-    myContextMenu.AddSeperator();
+    myContextMenu.AddSeperator("--------------------------");
     myContextMenu.AddItem("Copy to clipboard", new Action(this.ClickCopyStats), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
-    myContextMenu.Rebuild();
+    myContextMenu.Rebuild(false);
   }
 
   public void ClickAccuracy()
@@ -118,7 +126,7 @@ public class RatingsMenu : MonoBehaviour
     myContextMenu.AddItem("0", (Action) (() => this.SetAccuracy(0)), (Color) ColorScheme.GetColor(MyContextMenu.ColorCream));
     myContextMenu.AddItem("0.0", (Action) (() => this.SetAccuracy(1)), (Color) ColorScheme.GetColor(MyContextMenu.ColorCream));
     myContextMenu.AddItem("0.00", (Action) (() => this.SetAccuracy(2)), (Color) ColorScheme.GetColor(MyContextMenu.ColorCream));
-    myContextMenu.Rebuild();
+    myContextMenu.Rebuild(false);
   }
 
   private void SetAccuracy(int i)
@@ -128,7 +136,10 @@ public class RatingsMenu : MonoBehaviour
     this.ClickDefault();
   }
 
-  public void ClickCopyStats() => Global.systemCopyBuffer = this.GetStats();
+  public void ClickCopyStats()
+  {
+    Global.systemCopyBuffer = this.GetStats();
+  }
 
   private string GetStats()
   {
@@ -163,7 +174,10 @@ public class RatingsMenu : MonoBehaviour
     RatingsMenu.Instance = (RatingsMenu) null;
   }
 
-  public void ClickMainMenu() => UnityEngine.Object.Destroy((UnityEngine.Object) this.gameObject);
+  public void ClickMainMenu()
+  {
+    UnityEngine.Object.Destroy((UnityEngine.Object) this.gameObject);
+  }
 
   [EnumAction(typeof (RatingsMenu.Sorter))]
   public void ClickSorter(int i)
@@ -227,12 +241,12 @@ public class RatingsMenu : MonoBehaviour
       case RatingsMenu.Sorter.FirstTurn:
         this.headerWhich.text += " (by first turn percentage)";
         this.infoTxt.SetActive(true);
-        cache.Sort((Comparison<T>) ((a, b) => (b.games.totalRatedGames > 50 ? Global.Divide((float) b.games.gamesWentFirst, (float) (b.games.totalRatedGames - b.games.teamGames)) : Global.Divide((float) b.games.gamesWentFirst, (float) (b.games.totalRatedGames - b.games.teamGames)) - 66666664f).CompareTo(a.games.totalRatedGames > 50 ? Global.Divide((float) a.games.gamesWentFirst, (float) (a.games.totalRatedGames - a.games.teamGames)) : Global.Divide((float) a.games.gamesWentFirst, (float) (a.games.totalRatedGames - a.games.teamGames)) - 66666664f)));
+        cache.Sort((Comparison<T>) ((a, b) => (b.games.totalRatedGames > 50 ? Global.Divide((float) b.games.gamesWentFirst, (float) (b.games.totalRatedGames - b.games.teamGames)) : Global.Divide((float) b.games.gamesWentFirst, (float) (b.games.totalRatedGames - b.games.teamGames)) - 6.666666E+07f).CompareTo(a.games.totalRatedGames > 50 ? Global.Divide((float) a.games.gamesWentFirst, (float) (a.games.totalRatedGames - a.games.teamGames)) : Global.Divide((float) a.games.gamesWentFirst, (float) (a.games.totalRatedGames - a.games.teamGames)) - 6.666666E+07f)));
         break;
       case RatingsMenu.Sorter.FTW:
         this.headerWhich.text += " (by first turn win percentage)";
         this.infoTxt.SetActive(true);
-        cache.Sort((Comparison<T>) ((a, b) => (b.games.totalRatedGames > 50 ? Global.Divide((float) b.games.gamesWentFirstWon, (float) b.games.gamesWentFirst) : Global.Divide((float) b.games.gamesWentFirstWon, (float) b.games.gamesWentFirst) - 66666664f).CompareTo(a.games.totalRatedGames > 50 ? Global.Divide((float) a.games.gamesWentFirstWon, (float) a.games.gamesWentFirst) : Global.Divide((float) a.games.gamesWentFirstWon, (float) a.games.gamesWentFirst) - 66666664f)));
+        cache.Sort((Comparison<T>) ((a, b) => (b.games.totalRatedGames > 50 ? Global.Divide((float) b.games.gamesWentFirstWon, (float) b.games.gamesWentFirst) : Global.Divide((float) b.games.gamesWentFirstWon, (float) b.games.gamesWentFirst) - 6.666666E+07f).CompareTo(a.games.totalRatedGames > 50 ? Global.Divide((float) a.games.gamesWentFirstWon, (float) a.games.gamesWentFirst) : Global.Divide((float) a.games.gamesWentFirstWon, (float) a.games.gamesWentFirst) - 6.666666E+07f)));
         break;
       case RatingsMenu.Sorter.Teams:
         this.headerWhich.text += " (by team games)";
@@ -251,7 +265,7 @@ public class RatingsMenu : MonoBehaviour
         return;
       this.loading.SetActive(true);
       this.obtainGlobal = true;
-      Client.AskGetRank();
+      Client.AskGetRank(0, (string) null);
     }
     else
       this.Populate<JsonGamesLow>(RatingsMenu.cached.low, RatingsMenu.selfRank?.low);
@@ -267,7 +281,7 @@ public class RatingsMenu : MonoBehaviour
         return;
       this.loading.SetActive(true);
       this.obtainGlobal = true;
-      Client.AskGetRank();
+      Client.AskGetRank(0, (string) null);
     }
     else
       this.Populate<JsonGamesHigh>(RatingsMenu.cached.high, RatingsMenu.selfRank?.high);
@@ -283,7 +297,7 @@ public class RatingsMenu : MonoBehaviour
         return;
       this.loading.SetActive(true);
       this.obtainGlobal = true;
-      Client.AskGetRank();
+      Client.AskGetRank(0, (string) null);
     }
     else
       this.Populate<JsonGamesParty>(RatingsMenu.cached.party, RatingsMenu.selfRank?.party);
@@ -296,15 +310,15 @@ public class RatingsMenu : MonoBehaviour
     this.container.DestroyChildern();
     this.Sort<T>(cache);
     this.recycled.Clear();
-    List<object> data = new List<object>();
+    List<object> objectList = new List<object>();
     foreach (T obj in cache)
     {
       IJsonGames jsonGames = (IJsonGames) obj;
       if (string.Equals(jsonGames.name, Client.Name) && self != null && self.Count > 0)
         self[0].rank = jsonGames.rank;
-      data.Add((object) jsonGames);
+      objectList.Add((object) jsonGames);
     }
-    this.recycled.Set((IEnumerable<object>) data);
+    this.recycled.Set((IEnumerable<object>) objectList);
     if (self != null && self.Count > 0)
       this.Set(this.pfab, (IJsonGames) self[0]);
     this.recycled.Scroll(1f);

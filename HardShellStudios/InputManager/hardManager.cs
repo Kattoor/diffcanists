@@ -6,18 +6,17 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-#nullable disable
 namespace HardShellStudios.InputManager
 {
   [AddComponentMenu("Hard Shell Studios/Input Manager/Input Manager")]
   [Serializable]
   public class hardManager : MonoBehaviour
   {
-    public hardManager.SetupType setupType;
     [SerializeField]
     public hardManager.givenInputs[] inputs = new hardManager.givenInputs[0];
     public Dictionary<string, hardKey> keyMaps = new Dictionary<string, hardKey>();
     private string currentRebind = "";
+    public hardManager.SetupType setupType;
     private bool replaceSecond;
     private GameObject currentBindFrom;
     public bool saveControllerType;
@@ -30,9 +29,15 @@ namespace HardShellStudios.InputManager
     private hardKey tempKey;
     private hardKey tempAxis;
 
-    private void Awake() => hardManager.singleton = this;
+    private void Awake()
+    {
+      hardManager.singleton = this;
+    }
 
-    private void Update() => ++this.frame;
+    private void Update()
+    {
+      ++this.frame;
+    }
 
     private void Start()
     {
@@ -50,7 +55,10 @@ namespace HardShellStudios.InputManager
       this.loadBindings();
     }
 
-    private KeyCode translateController(KeyCode keyName, hardKey.controllerMap inputName, int axis)
+    private KeyCode translateController(
+      KeyCode keyName,
+      hardKey.controllerMap inputName,
+      int axis)
     {
       if (axis == 5 && this.useController)
         return this.getFromController(inputName);
@@ -133,22 +141,22 @@ namespace HardShellStudios.InputManager
 
     public bool GetKeyDownSecondaryOnly(string keyName)
     {
-      bool downSecondaryOnly = false;
+      bool flag = false;
       this.tempKey = this.keyMaps[keyName];
       if (this.tempKey.keyWheelState2 == 0 || this.tempKey.keyWheelState2 == 5)
       {
         if (Input.GetKeyDown(this.tempKey.keyInput2))
-          downSecondaryOnly = true;
+          flag = true;
       }
       else if (this.tempKey.keyWheelState2 == 1)
       {
         if ((double) Input.mouseScrollDelta.y > 0.0)
-          downSecondaryOnly = true;
+          flag = true;
       }
       else if (this.tempKey.keyWheelState2 == 2)
       {
         if ((double) Input.mouseScrollDelta.y < 0.0)
-          downSecondaryOnly = true;
+          flag = true;
       }
       else if (this.useController)
       {
@@ -156,261 +164,261 @@ namespace HardShellStudios.InputManager
         {
           if ((double) Input.GetAxis("DPADVER") == 1.0 && (double) Input.GetAxis("DPADVER") != (double) this.tempKey.keyValue)
           {
-            downSecondaryOnly = true;
+            flag = true;
             this.tempKey.pressedFrame = this.frame;
           }
           else if (this.tempKey.pressedFrame == this.frame)
-            downSecondaryOnly = true;
+            flag = true;
           this.tempKey.keyValue = Input.GetAxis("DPADVER");
         }
         else if (this.tempKey.keyWheelState2 == 11)
         {
           if ((double) Input.GetAxis("DPADVER") == -1.0 && (double) Input.GetAxis("DPADVER") != (double) this.tempKey.keyValue)
           {
-            downSecondaryOnly = true;
+            flag = true;
             this.tempKey.pressedFrame = this.frame;
           }
           else if (this.tempKey.pressedFrame == this.frame)
-            downSecondaryOnly = true;
+            flag = true;
           this.tempKey.keyValue = Input.GetAxis("DPADVER");
         }
         else if (this.tempKey.keyWheelState2 == 12)
         {
           if ((double) Input.GetAxis("DPADHOR") == 1.0 && (double) Input.GetAxis("DPADHOR") != (double) this.tempKey.keyValue)
           {
-            downSecondaryOnly = true;
+            flag = true;
             this.tempKey.pressedFrame = this.frame;
           }
           else if (this.tempKey.pressedFrame == this.frame)
-            downSecondaryOnly = true;
+            flag = true;
           this.tempKey.keyValue = Input.GetAxis("DPADHOR");
         }
         else if (this.tempKey.keyWheelState2 == 13)
         {
           if ((double) Input.GetAxis("DPADHOR") == -1.0 && (double) Input.GetAxis("DPADHOR") != (double) this.tempKey.keyValue)
           {
-            downSecondaryOnly = true;
+            flag = true;
             this.tempKey.pressedFrame = this.frame;
           }
           else if (this.tempKey.pressedFrame == this.frame)
-            downSecondaryOnly = true;
+            flag = true;
           this.tempKey.keyValue = Input.GetAxis("DPADHOR");
         }
         else if (this.tempKey.keyWheelState2 == 14)
         {
           if ((double) Input.GetAxis("Left Trigger") == 1.0 && (double) Input.GetAxis("Left Trigger") != (double) this.tempKey.keyValue)
           {
-            downSecondaryOnly = true;
+            flag = true;
             this.tempKey.pressedFrame = this.frame;
           }
           else if (this.tempKey.pressedFrame == this.frame)
-            downSecondaryOnly = true;
+            flag = true;
           this.tempKey.keyValue = Input.GetAxis("Left Trigger");
         }
         else if (this.tempKey.keyWheelState2 == 15)
         {
           if ((double) Input.GetAxis("Right Trigger") == 1.0 && (double) Input.GetAxis("Right Trigger") != (double) this.tempKey.keyValue)
           {
-            downSecondaryOnly = true;
+            flag = true;
             this.tempKey.pressedFrame = this.frame;
           }
           else if (this.tempKey.pressedFrame == this.frame)
-            downSecondaryOnly = true;
+            flag = true;
           this.tempKey.keyValue = Input.GetAxis("Right Trigger");
         }
       }
-      return downSecondaryOnly;
+      return flag;
     }
 
     public bool GetKeyDownPrimaryOnly(string keyName)
     {
-      bool keyDownPrimaryOnly = false;
+      bool flag = false;
       this.tempKey = this.keyMaps[keyName];
       if (this.tempKey.keyWheelState == 0 || this.tempKey.keyWheelState == 5)
       {
         if (Input.GetKeyDown(this.tempKey.keyInput))
-          keyDownPrimaryOnly = true;
+          flag = true;
       }
       else if (this.tempKey.keyWheelState == 1)
       {
         if ((double) Input.mouseScrollDelta.y > 0.0)
-          keyDownPrimaryOnly = true;
+          flag = true;
       }
       else if (this.tempKey.keyWheelState == 2)
       {
         if ((double) Input.mouseScrollDelta.y < 0.0)
-          keyDownPrimaryOnly = true;
+          flag = true;
       }
       else if (this.tempKey.keyWheelState == 10)
       {
         if ((double) Input.GetAxis("DPADVER") == 1.0 && (double) Input.GetAxis("DPADVER") != (double) this.tempKey.keyValue)
         {
-          keyDownPrimaryOnly = true;
+          flag = true;
           this.tempKey.pressedFrame = this.frame;
         }
         else if (this.tempKey.pressedFrame == this.frame)
-          keyDownPrimaryOnly = true;
+          flag = true;
         this.tempKey.keyValue = Input.GetAxis("DPADVER");
       }
       else if (this.tempKey.keyWheelState == 11)
       {
         if ((double) Input.GetAxis("DPADVER") == -1.0 && (double) Input.GetAxis("DPADVER") != (double) this.tempKey.keyValue)
         {
-          keyDownPrimaryOnly = true;
+          flag = true;
           this.tempKey.pressedFrame = this.frame;
         }
         else if (this.tempKey.pressedFrame == this.frame)
-          keyDownPrimaryOnly = true;
+          flag = true;
         this.tempKey.keyValue = Input.GetAxis("DPADVER");
       }
       else if (this.tempKey.keyWheelState == 12)
       {
         if ((double) Input.GetAxis("DPADHOR") == 1.0 && (double) Input.GetAxis("DPADHOR") != (double) this.tempKey.keyValue)
         {
-          keyDownPrimaryOnly = true;
+          flag = true;
           this.tempKey.pressedFrame = this.frame;
         }
         else if (this.tempKey.pressedFrame == this.frame)
-          keyDownPrimaryOnly = true;
+          flag = true;
         this.tempKey.keyValue = Input.GetAxis("DPADHOR");
       }
       else if (this.tempKey.keyWheelState == 13)
       {
         if ((double) Input.GetAxis("DPADHOR") == -1.0 && (double) Input.GetAxis("DPADHOR") != (double) this.tempKey.keyValue)
         {
-          keyDownPrimaryOnly = true;
+          flag = true;
           this.tempKey.pressedFrame = this.frame;
         }
         else if (this.tempKey.pressedFrame == this.frame)
-          keyDownPrimaryOnly = true;
+          flag = true;
         this.tempKey.keyValue = Input.GetAxis("DPADHOR");
       }
       else if (this.tempKey.keyWheelState == 14)
       {
         if ((double) Input.GetAxis("Left Trigger") == 1.0 && (double) Input.GetAxis("Left Trigger") != (double) this.tempKey.keyValue)
         {
-          keyDownPrimaryOnly = true;
+          flag = true;
           this.tempKey.pressedFrame = this.frame;
         }
         else if (this.tempKey.pressedFrame == this.frame)
-          keyDownPrimaryOnly = true;
+          flag = true;
         this.tempKey.keyValue = Input.GetAxis("Left Trigger");
       }
       else if (this.tempKey.keyWheelState == 15)
       {
         if ((double) Input.GetAxis("Right Trigger") == 1.0 && (double) Input.GetAxis("Right Trigger") != (double) this.tempKey.keyValue)
         {
-          keyDownPrimaryOnly = true;
+          flag = true;
           this.tempKey.pressedFrame = this.frame;
         }
         else if (this.tempKey.pressedFrame == this.frame)
-          keyDownPrimaryOnly = true;
+          flag = true;
         this.tempKey.keyValue = Input.GetAxis("Right Trigger");
       }
-      return keyDownPrimaryOnly;
+      return flag;
     }
 
     public bool GetKeyDown(string keyName)
     {
-      bool keyDown = false;
+      bool flag = false;
       this.tempKey = this.keyMaps[keyName];
       if (this.tempKey.keyWheelState == 0 || this.tempKey.keyWheelState == 5)
       {
         if (Input.GetKeyDown(this.tempKey.keyInput))
-          keyDown = true;
+          flag = true;
       }
       else if (this.tempKey.keyWheelState == 1)
       {
         if ((double) Input.mouseScrollDelta.y > 0.0)
-          keyDown = true;
+          flag = true;
       }
       else if (this.tempKey.keyWheelState == 2)
       {
         if ((double) Input.mouseScrollDelta.y < 0.0)
-          keyDown = true;
+          flag = true;
       }
       else if (this.tempKey.keyWheelState == 10)
       {
         if ((double) Input.GetAxis("DPADVER") == 1.0 && (double) Input.GetAxis("DPADVER") != (double) this.tempKey.keyValue)
         {
-          keyDown = true;
+          flag = true;
           this.tempKey.pressedFrame = this.frame;
         }
         else if (this.tempKey.pressedFrame == this.frame)
-          keyDown = true;
+          flag = true;
         this.tempKey.keyValue = Input.GetAxis("DPADVER");
       }
       else if (this.tempKey.keyWheelState == 11)
       {
         if ((double) Input.GetAxis("DPADVER") == -1.0 && (double) Input.GetAxis("DPADVER") != (double) this.tempKey.keyValue)
         {
-          keyDown = true;
+          flag = true;
           this.tempKey.pressedFrame = this.frame;
         }
         else if (this.tempKey.pressedFrame == this.frame)
-          keyDown = true;
+          flag = true;
         this.tempKey.keyValue = Input.GetAxis("DPADVER");
       }
       else if (this.tempKey.keyWheelState == 12)
       {
         if ((double) Input.GetAxis("DPADHOR") == 1.0 && (double) Input.GetAxis("DPADHOR") != (double) this.tempKey.keyValue)
         {
-          keyDown = true;
+          flag = true;
           this.tempKey.pressedFrame = this.frame;
         }
         else if (this.tempKey.pressedFrame == this.frame)
-          keyDown = true;
+          flag = true;
         this.tempKey.keyValue = Input.GetAxis("DPADHOR");
       }
       else if (this.tempKey.keyWheelState == 13)
       {
         if ((double) Input.GetAxis("DPADHOR") == -1.0 && (double) Input.GetAxis("DPADHOR") != (double) this.tempKey.keyValue)
         {
-          keyDown = true;
+          flag = true;
           this.tempKey.pressedFrame = this.frame;
         }
         else if (this.tempKey.pressedFrame == this.frame)
-          keyDown = true;
+          flag = true;
         this.tempKey.keyValue = Input.GetAxis("DPADHOR");
       }
       else if (this.tempKey.keyWheelState == 14)
       {
         if ((double) Input.GetAxis("Left Trigger") == 1.0 && (double) Input.GetAxis("Left Trigger") != (double) this.tempKey.keyValue)
         {
-          keyDown = true;
+          flag = true;
           this.tempKey.pressedFrame = this.frame;
         }
         else if (this.tempKey.pressedFrame == this.frame)
-          keyDown = true;
+          flag = true;
         this.tempKey.keyValue = Input.GetAxis("Left Trigger");
       }
       else if (this.tempKey.keyWheelState == 15)
       {
         if ((double) Input.GetAxis("Right Trigger") == 1.0 && (double) Input.GetAxis("Right Trigger") != (double) this.tempKey.keyValue)
         {
-          keyDown = true;
+          flag = true;
           this.tempKey.pressedFrame = this.frame;
         }
         else if (this.tempKey.pressedFrame == this.frame)
-          keyDown = true;
+          flag = true;
         this.tempKey.keyValue = Input.GetAxis("Right Trigger");
       }
-      if (keyDown)
+      if (flag)
         return true;
       if (this.tempKey.keyWheelState2 == 0 || this.tempKey.keyWheelState2 == 5)
       {
         if (Input.GetKeyDown(this.tempKey.keyInput2))
-          keyDown = true;
+          flag = true;
       }
       else if (this.tempKey.keyWheelState2 == 1)
       {
         if ((double) Input.mouseScrollDelta.y > 0.0)
-          keyDown = true;
+          flag = true;
       }
       else if (this.tempKey.keyWheelState2 == 2)
       {
         if ((double) Input.mouseScrollDelta.y < 0.0)
-          keyDown = true;
+          flag = true;
       }
       else if (this.useController)
       {
@@ -418,44 +426,44 @@ namespace HardShellStudios.InputManager
         {
           if ((double) Input.GetAxis("DPADVER") == 1.0 && (double) Input.GetAxis("DPADVER") != (double) this.tempKey.keyValue)
           {
-            keyDown = true;
+            flag = true;
             this.tempKey.pressedFrame = this.frame;
           }
           else if (this.tempKey.pressedFrame == this.frame)
-            keyDown = true;
+            flag = true;
           this.tempKey.keyValue = Input.GetAxis("DPADVER");
         }
         else if (this.tempKey.keyWheelState2 == 11)
         {
           if ((double) Input.GetAxis("DPADVER") == -1.0 && (double) Input.GetAxis("DPADVER") != (double) this.tempKey.keyValue)
           {
-            keyDown = true;
+            flag = true;
             this.tempKey.pressedFrame = this.frame;
           }
           else if (this.tempKey.pressedFrame == this.frame)
-            keyDown = true;
+            flag = true;
           this.tempKey.keyValue = Input.GetAxis("DPADVER");
         }
         else if (this.tempKey.keyWheelState2 == 12)
         {
           if ((double) Input.GetAxis("DPADHOR") == 1.0 && (double) Input.GetAxis("DPADHOR") != (double) this.tempKey.keyValue)
           {
-            keyDown = true;
+            flag = true;
             this.tempKey.pressedFrame = this.frame;
           }
           else if (this.tempKey.pressedFrame == this.frame)
-            keyDown = true;
+            flag = true;
           this.tempKey.keyValue = Input.GetAxis("DPADHOR");
         }
         else if (this.tempKey.keyWheelState2 == 13)
         {
           if ((double) Input.GetAxis("DPADHOR") == -1.0 && (double) Input.GetAxis("DPADHOR") != (double) this.tempKey.keyValue)
           {
-            keyDown = true;
+            flag = true;
             this.tempKey.pressedFrame = this.frame;
           }
           else if (this.tempKey.pressedFrame == this.frame)
-            keyDown = true;
+            flag = true;
           this.tempKey.keyValue = Input.GetAxis("DPADHOR");
         }
       }
@@ -463,137 +471,137 @@ namespace HardShellStudios.InputManager
       {
         if ((double) Input.GetAxis("Left Trigger") == 1.0 && (double) Input.GetAxis("Left Trigger") != (double) this.tempKey.keyValue)
         {
-          keyDown = true;
+          flag = true;
           this.tempKey.pressedFrame = this.frame;
         }
         else if (this.tempKey.pressedFrame == this.frame)
-          keyDown = true;
+          flag = true;
         this.tempKey.keyValue = Input.GetAxis("Left Trigger");
       }
       else if (this.tempKey.keyWheelState2 == 15)
       {
         if ((double) Input.GetAxis("Right Trigger") == 1.0 && (double) Input.GetAxis("Right Trigger") != (double) this.tempKey.keyValue)
         {
-          keyDown = true;
+          flag = true;
           this.tempKey.pressedFrame = this.frame;
         }
         else if (this.tempKey.pressedFrame == this.frame)
-          keyDown = true;
+          flag = true;
         this.tempKey.keyValue = Input.GetAxis("Right Trigger");
       }
-      return keyDown;
+      return flag;
     }
 
     public bool GetKeyUp(string keyName)
     {
-      bool keyUp = false;
+      bool flag = false;
       this.tempKey = this.keyMaps[keyName];
       if ((this.tempKey.keyWheelState == 0 || this.tempKey.keyWheelState == 5) && Input.GetKeyUp(this.tempKey.keyInput))
-        keyUp = true;
-      if (keyUp)
+        flag = true;
+      if (flag)
         return true;
       if ((this.tempKey.keyWheelState2 == 0 || this.tempKey.keyWheelState2 == 5) && Input.GetKeyUp(this.tempKey.keyInput2))
-        keyUp = true;
-      return keyUp;
+        flag = true;
+      return flag;
     }
 
     public bool GetKey(string keyName)
     {
-      bool key = false;
+      bool flag = false;
       this.tempKey = this.keyMaps[keyName];
       if (this.tempKey.keyWheelState == 0 || this.tempKey.keyWheelState == 5)
       {
         if (Input.GetKey(this.tempKey.keyInput))
-          key = true;
+          flag = true;
       }
       else if (this.tempKey.keyWheelState == 1)
       {
         if ((double) Input.mouseScrollDelta.y > 0.0)
-          key = true;
+          flag = true;
       }
       else if (this.tempKey.keyWheelState == 2)
       {
         if ((double) Input.mouseScrollDelta.y < 0.0)
-          key = true;
+          flag = true;
       }
       else if (this.useController)
       {
         if (this.tempKey.keyWheelState == 10)
         {
           if ((double) Input.GetAxis("DPADVER") == 1.0)
-            key = true;
+            flag = true;
         }
         else if (this.tempKey.keyWheelState == 11)
         {
           if ((double) Input.GetAxis("DPADVER") == -1.0)
-            key = true;
+            flag = true;
         }
         else if (this.tempKey.keyWheelState == 12)
         {
           if ((double) Input.GetAxis("DPADHOR") == 1.0)
-            key = true;
+            flag = true;
         }
         else if (this.tempKey.keyWheelState == 13)
         {
           if ((double) Input.GetAxis("DPADHOR") == -1.0)
-            key = true;
+            flag = true;
         }
         else if (this.tempKey.keyWheelState == 14)
         {
           if ((double) Input.GetAxis("Left Trigger") == 1.0)
-            key = true;
+            flag = true;
         }
         else if (this.tempKey.keyWheelState == 15 && (double) Input.GetAxis("Right Trigger") == 1.0)
-          key = true;
+          flag = true;
       }
-      if (key)
+      if (flag)
         return true;
       if (this.tempKey.keyWheelState2 == 0 || this.tempKey.keyWheelState2 == 5)
       {
         if (Input.GetKey(this.tempKey.keyInput2))
-          key = true;
+          flag = true;
       }
       else if (this.tempKey.keyWheelState2 == 1)
       {
         if ((double) Input.mouseScrollDelta.y > 0.0)
-          key = true;
+          flag = true;
       }
       else if (this.tempKey.keyWheelState2 == 2)
       {
         if ((double) Input.mouseScrollDelta.y < 0.0)
-          key = true;
+          flag = true;
       }
       else if (this.useController)
       {
         if (this.tempKey.keyWheelState2 == 10)
         {
           if ((double) Input.GetAxis("DPADVER") == 1.0)
-            key = true;
+            flag = true;
         }
         else if (this.tempKey.keyWheelState2 == 11)
         {
           if ((double) Input.GetAxis("DPADVER") == -1.0)
-            key = true;
+            flag = true;
         }
         else if (this.tempKey.keyWheelState2 == 12)
         {
           if ((double) Input.GetAxis("DPADHOR") > 0.0)
-            key = true;
+            flag = true;
         }
         else if (this.tempKey.keyWheelState2 == 13)
         {
           if ((double) Input.GetAxis("DPADHOR") < 0.0)
-            key = true;
+            flag = true;
         }
         else if (this.tempKey.keyWheelState2 == 14)
         {
           if ((double) Input.GetAxis("Left Trigger") > 0.0)
-            key = true;
+            flag = true;
         }
         else if (this.tempKey.keyWheelState2 == 15 && (double) Input.GetAxis("Right Trigger") > 0.0)
-          key = true;
+          flag = true;
       }
-      return key;
+      return flag;
     }
 
     private float MoveTowards(float cur, float tar, float max)
@@ -717,192 +725,290 @@ namespace HardShellStudios.InputManager
         case 5:
           if (this.controllerType == 0)
           {
-            switch (keyString)
+            if (keyString == "Joystick1Button0")
             {
-              case "Joystick1Button0":
-                keyString = "Cross";
-                break;
-              case "Joystick1Button1":
-                keyString = "Circle";
-                break;
-              case "Joystick1Button2":
-                keyString = "Square";
-                break;
-              case "Joystick1Button3":
-                keyString = "Triangle";
-                break;
-              case "Joystick1Button4":
-                keyString = "L1";
-                break;
-              case "Joystick1Button5":
-                keyString = "R1";
-                break;
-              case "Joystick1Button6":
-                keyString = "Share";
-                break;
-              case "Joystick1Button7":
-                keyString = "Options";
-                break;
-              case "Joystick1Button8":
-                keyString = "Left S Click";
-                break;
-              case "Joystick1Button9":
-                keyString = "Right S Click";
-                break;
-              case "Joystick1Button10":
-                keyString = "????";
-                break;
-              case "Joystick1Button11":
-                keyString = "?????";
-                break;
-              case "Joystick1Button12":
-                keyString = "PS Home";
-                break;
-              case "JoystickButton13":
-                keyString = "Trackpad";
-                break;
+              keyString = "Cross";
+              break;
             }
-          }
-          else if (this.controllerType == 1)
-          {
-            switch (keyString)
+            if (keyString == "Joystick1Button1")
             {
-              case "Joystick1Button0":
-                keyString = "Cross";
-                break;
-              case "Joystick1Button1":
-                keyString = "Circle";
-                break;
-              case "Joystick1Button2":
-                keyString = "Square";
-                break;
-              case "Joystick1Button3":
-                keyString = "Triangle";
-                break;
-              case "Joystick1Button4":
-                keyString = "L1";
-                break;
-              case "Joystick1Button5":
-                keyString = "R1";
-                break;
-              case "Joystick1Button6":
-                keyString = "Share";
-                break;
-              case "Joystick1Button7":
-                keyString = "Options";
-                break;
-              case "Joystick1Button8":
-                keyString = "Left S Click";
-                break;
-              case "Joystick1Button9":
-                keyString = "Right S Click";
-                break;
-              case "Joystick1Button10":
-                keyString = "????";
-                break;
-              case "Joystick1Button11":
-                keyString = "?????";
-                break;
-              case "Joystick1Button12":
-                keyString = "PS Home";
-                break;
-              case "JoystickButton13":
-                keyString = "Trackpad";
-                break;
+              keyString = "Circle";
+              break;
             }
-          }
-          else if (this.controllerType == 2)
-          {
-            switch (keyString)
+            if (keyString == "Joystick1Button2")
             {
-              case "Joystick1Button0":
-                keyString = "A";
-                break;
-              case "Joystick1Button1":
-                keyString = "B";
-                break;
-              case "Joystick1Button2":
-                keyString = "X";
-                break;
-              case "Joystick1Button3":
-                keyString = "Y";
-                break;
-              case "Joystick1Button4":
-                keyString = "LB";
-                break;
-              case "Joystick1Button5":
-                keyString = "RB";
-                break;
-              case "Joystick1Button6":
-                keyString = "Back";
-                break;
-              case "Joystick1Button7":
-                keyString = "Start";
-                break;
-              case "Joystick1Button8":
-                keyString = "Left S Click";
-                break;
-              case "Joystick1Button9":
-                keyString = "Right S Click";
-                break;
-              case "Joystick1Button10":
-                keyString = "LT";
-                break;
-              case "Joystick1Button11":
-                keyString = "RT";
-                break;
-              case "Joystick1Button12":
-                keyString = "Xbox Home";
-                break;
+              keyString = "Square";
+              break;
             }
-          }
-          else if (this.controllerType == 3)
-          {
-            switch (keyString)
+            if (keyString == "Joystick1Button3")
             {
-              case "Joystick1Button0":
-                keyString = "A";
-                break;
-              case "Joystick1Button1":
-                keyString = "B";
-                break;
-              case "Joystick1Button2":
-                keyString = "X";
-                break;
-              case "Joystick1Button3":
-                keyString = "Y";
-                break;
-              case "Joystick1Button4":
-                keyString = "LB";
-                break;
-              case "Joystick1Button5":
-                keyString = "RB";
-                break;
-              case "Joystick1Button6":
-                keyString = "Back";
-                break;
-              case "Joystick1Button7":
-                keyString = "Start";
-                break;
-              case "Joystick1Button8":
-                keyString = "Left S Click";
-                break;
-              case "Joystick1Button9":
-                keyString = "Right S Click";
-                break;
-              case "Joystick1Button10":
-                keyString = "LT";
-                break;
-              case "Joystick1Button11":
-                keyString = "RT";
-                break;
-              case "Joystick1Button12":
-                keyString = "Xbox Home";
-                break;
+              keyString = "Triangle";
+              break;
             }
-          }
-          else
+            if (keyString == "Joystick1Button4")
+            {
+              keyString = "L1";
+              break;
+            }
+            if (keyString == "Joystick1Button5")
+            {
+              keyString = "R1";
+              break;
+            }
+            if (keyString == "Joystick1Button6")
+            {
+              keyString = "Share";
+              break;
+            }
+            if (keyString == "Joystick1Button7")
+            {
+              keyString = "Options";
+              break;
+            }
+            if (keyString == "Joystick1Button8")
+            {
+              keyString = "Left S Click";
+              break;
+            }
+            if (keyString == "Joystick1Button9")
+            {
+              keyString = "Right S Click";
+              break;
+            }
+            if (keyString == "Joystick1Button10")
+            {
+              keyString = "????";
+              break;
+            }
+            if (keyString == "Joystick1Button11")
+            {
+              keyString = "?????";
+              break;
+            }
+            if (keyString == "Joystick1Button12")
+            {
+              keyString = "PS Home";
+              break;
+            }
+            if (keyString == "JoystickButton13")
+            {
+              keyString = "Trackpad";
+              break;
+            }
             break;
+          }
+          if (this.controllerType == 1)
+          {
+            if (keyString == "Joystick1Button0")
+            {
+              keyString = "Cross";
+              break;
+            }
+            if (keyString == "Joystick1Button1")
+            {
+              keyString = "Circle";
+              break;
+            }
+            if (keyString == "Joystick1Button2")
+            {
+              keyString = "Square";
+              break;
+            }
+            if (keyString == "Joystick1Button3")
+            {
+              keyString = "Triangle";
+              break;
+            }
+            if (keyString == "Joystick1Button4")
+            {
+              keyString = "L1";
+              break;
+            }
+            if (keyString == "Joystick1Button5")
+            {
+              keyString = "R1";
+              break;
+            }
+            if (keyString == "Joystick1Button6")
+            {
+              keyString = "Share";
+              break;
+            }
+            if (keyString == "Joystick1Button7")
+            {
+              keyString = "Options";
+              break;
+            }
+            if (keyString == "Joystick1Button8")
+            {
+              keyString = "Left S Click";
+              break;
+            }
+            if (keyString == "Joystick1Button9")
+            {
+              keyString = "Right S Click";
+              break;
+            }
+            if (keyString == "Joystick1Button10")
+            {
+              keyString = "????";
+              break;
+            }
+            if (keyString == "Joystick1Button11")
+            {
+              keyString = "?????";
+              break;
+            }
+            if (keyString == "Joystick1Button12")
+            {
+              keyString = "PS Home";
+              break;
+            }
+            if (keyString == "JoystickButton13")
+            {
+              keyString = "Trackpad";
+              break;
+            }
+            break;
+          }
+          if (this.controllerType == 2)
+          {
+            if (keyString == "Joystick1Button0")
+            {
+              keyString = "A";
+              break;
+            }
+            if (keyString == "Joystick1Button1")
+            {
+              keyString = "B";
+              break;
+            }
+            if (keyString == "Joystick1Button2")
+            {
+              keyString = "X";
+              break;
+            }
+            if (keyString == "Joystick1Button3")
+            {
+              keyString = "Y";
+              break;
+            }
+            if (keyString == "Joystick1Button4")
+            {
+              keyString = "LB";
+              break;
+            }
+            if (keyString == "Joystick1Button5")
+            {
+              keyString = "RB";
+              break;
+            }
+            if (keyString == "Joystick1Button6")
+            {
+              keyString = "Back";
+              break;
+            }
+            if (keyString == "Joystick1Button7")
+            {
+              keyString = "Start";
+              break;
+            }
+            if (keyString == "Joystick1Button8")
+            {
+              keyString = "Left S Click";
+              break;
+            }
+            if (keyString == "Joystick1Button9")
+            {
+              keyString = "Right S Click";
+              break;
+            }
+            if (keyString == "Joystick1Button10")
+            {
+              keyString = "LT";
+              break;
+            }
+            if (keyString == "Joystick1Button11")
+            {
+              keyString = "RT";
+              break;
+            }
+            if (keyString == "Joystick1Button12")
+            {
+              keyString = "Xbox Home";
+              break;
+            }
+            break;
+          }
+          if (this.controllerType == 3)
+          {
+            if (keyString == "Joystick1Button0")
+            {
+              keyString = "A";
+              break;
+            }
+            if (keyString == "Joystick1Button1")
+            {
+              keyString = "B";
+              break;
+            }
+            if (keyString == "Joystick1Button2")
+            {
+              keyString = "X";
+              break;
+            }
+            if (keyString == "Joystick1Button3")
+            {
+              keyString = "Y";
+              break;
+            }
+            if (keyString == "Joystick1Button4")
+            {
+              keyString = "LB";
+              break;
+            }
+            if (keyString == "Joystick1Button5")
+            {
+              keyString = "RB";
+              break;
+            }
+            if (keyString == "Joystick1Button6")
+            {
+              keyString = "Back";
+              break;
+            }
+            if (keyString == "Joystick1Button7")
+            {
+              keyString = "Start";
+              break;
+            }
+            if (keyString == "Joystick1Button8")
+            {
+              keyString = "Left S Click";
+              break;
+            }
+            if (keyString == "Joystick1Button9")
+            {
+              keyString = "Right S Click";
+              break;
+            }
+            if (keyString == "Joystick1Button10")
+            {
+              keyString = "LT";
+              break;
+            }
+            if (keyString == "Joystick1Button11")
+            {
+              keyString = "RT";
+              break;
+            }
+            if (keyString == "Joystick1Button12")
+            {
+              keyString = "Xbox Home";
+              break;
+            }
+            break;
+          }
           break;
         case 10:
           keyString = "D-Pad Up";
@@ -956,7 +1062,10 @@ namespace HardShellStudios.InputManager
         Cursor.lockState = CursorLockMode.None;
     }
 
-    public void MouseVisble(bool visibleOrNot) => Cursor.visible = visibleOrNot;
+    public void MouseVisble(bool visibleOrNot)
+    {
+      Cursor.visible = visibleOrNot;
+    }
 
     public void loadBindings()
     {
@@ -997,24 +1106,24 @@ namespace HardShellStudios.InputManager
         current = enumerator2.Current;
         if (PlayerPrefs.HasKey("settings_bindings_sec_" + current.Value.keyName))
         {
-          Dictionary<string, hardKey> keyMaps4 = this.keyMaps;
+          Dictionary<string, hardKey> keyMaps1 = this.keyMaps;
           current = enumerator2.Current;
-          string keyName4 = current.Value.keyName;
-          if (keyMaps4[keyName4].saveKey)
+          string keyName1 = current.Value.keyName;
+          if (keyMaps1[keyName1].saveKey)
           {
             current = enumerator2.Current;
             string[] strArray = PlayerPrefs.GetString("settings_bindings_sec_" + current.Value.keyName).Split('^');
             int num = int.Parse(strArray[1]);
             if (this.useController || !this.useController && num <= 10 && num >= 13)
             {
-              Dictionary<string, hardKey> keyMaps5 = this.keyMaps;
+              Dictionary<string, hardKey> keyMaps2 = this.keyMaps;
               current = enumerator2.Current;
-              string keyName5 = current.Value.keyName;
-              keyMaps5[keyName5].keyInput2 = (KeyCode) Enum.Parse(typeof (KeyCode), strArray[0]);
-              Dictionary<string, hardKey> keyMaps6 = this.keyMaps;
+              string keyName2 = current.Value.keyName;
+              keyMaps2[keyName2].keyInput2 = (KeyCode) Enum.Parse(typeof (KeyCode), strArray[0]);
+              Dictionary<string, hardKey> keyMaps3 = this.keyMaps;
               current = enumerator2.Current;
-              string keyName6 = current.Value.keyName;
-              keyMaps6[keyName6].keyWheelState2 = int.Parse(strArray[1]);
+              string keyName3 = current.Value.keyName;
+              keyMaps3[keyName3].keyWheelState2 = int.Parse(strArray[1]);
             }
           }
         }
@@ -1045,11 +1154,11 @@ namespace HardShellStudios.InputManager
         current = enumerator2.Current;
         string key = "settings_bindings_sec_" + current.Value.keyName;
         current = enumerator2.Current;
-        string str4 = current.Value.keyInput2.ToString();
+        string str1 = current.Value.keyInput2.ToString();
         current = enumerator2.Current;
-        string str5 = current.Value.keyWheelState2.ToString();
-        string str6 = str4 + "^" + str5;
-        PlayerPrefs.SetString(key, str6);
+        string str2 = current.Value.keyWheelState2.ToString();
+        string str3 = str1 + "^" + str2;
+        PlayerPrefs.SetString(key, str3);
       }
       PlayerPrefs.Save();
     }
@@ -1093,7 +1202,7 @@ namespace HardShellStudios.InputManager
       }
       else
       {
-        while (!Input.anyKeyDown && (double) Input.mouseScrollDelta.y == 0.0 && (double) Input.GetAxis("DPADHOR") == 0.0 && (double) Input.GetAxis("DPADVER") == 0.0 && (double) Input.GetAxis("Left Trigger") == 0.0 && (double) Input.GetAxis("Right Trigger") == 0.0)
+        while (!Input.anyKeyDown && (double) Input.mouseScrollDelta.y == 0.0 && ((double) Input.GetAxis("DPADHOR") == 0.0 && (double) Input.GetAxis("DPADVER") == 0.0) && ((double) Input.GetAxis("Left Trigger") == 0.0 && (double) Input.GetAxis("Right Trigger") == 0.0))
           yield return (object) null;
       }
       if ((double) Input.mouseScrollDelta.y != 0.0)
@@ -1260,7 +1369,10 @@ namespace HardShellStudios.InputManager
       return !hardManager.IsUsingController() ? "Vertical" : "Right Stick Vertical";
     }
 
-    public static bool HasController() => Input.GetJoystickNames().Length != 0;
+    public static bool HasController()
+    {
+      return (uint) Input.GetJoystickNames().Length > 0U;
+    }
 
     public void LoadSetup(hardManager.SetupType t)
     {
@@ -1357,8 +1469,8 @@ namespace HardShellStudios.InputManager
     [Serializable]
     public class SavedKeys
     {
-      public hardManager.SetupType setupType;
       public List<hardManager.SavedKeys.Key> keys = new List<hardManager.SavedKeys.Key>();
+      public hardManager.SetupType setupType;
 
       [Serializable]
       public class Key

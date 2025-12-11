@@ -4,7 +4,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-#nullable disable
 public class NotificationMenu : MonoBehaviour
 {
   public TMP_Text text;
@@ -56,19 +55,22 @@ public class NotificationMenu : MonoBehaviour
 
   private void Alpha(Image x, float a)
   {
-    Color color = x.color with { a = a };
+    Color color = x.color;
+    color.a = a;
     x.color = color;
   }
 
   private void Alpha(Outline x, float a)
   {
-    Color effectColor = x.effectColor with { a = a };
+    Color effectColor = x.effectColor;
+    effectColor.a = a;
     x.effectColor = effectColor;
   }
 
   private void Alpha(TMP_Text x, float a)
   {
-    Color color = x.color with { a = a };
+    Color color = x.color;
+    color.a = a;
     x.color = color;
   }
 }

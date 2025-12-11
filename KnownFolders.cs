@@ -3,7 +3,6 @@ using Microsoft.Win32;
 using System;
 using System.IO;
 
-#nullable disable
 public static class KnownFolders
 {
   public static string GetHomePath()

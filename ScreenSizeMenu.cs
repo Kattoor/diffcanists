@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-#nullable disable
 public class ScreenSizeMenu : MonoBehaviour
 {
   public List<GameObject> androidHide = new List<GameObject>();
@@ -10,7 +9,10 @@ public class ScreenSizeMenu : MonoBehaviour
 
   public static ScreenSizeMenu Instance { get; private set; }
 
-  private void Awake() => ScreenSizeMenu.Instance = this;
+  private void Awake()
+  {
+    ScreenSizeMenu.Instance = this;
+  }
 
   private void OnDestroy()
   {
@@ -51,5 +53,8 @@ public class ScreenSizeMenu : MonoBehaviour
     Screen.SetResolution(width, height, FullScreenMode.MaximizedWindow);
   }
 
-  public void Back() => Object.Destroy((Object) this.gameObject);
+  public void Back()
+  {
+    Object.Destroy((Object) this.gameObject);
+  }
 }

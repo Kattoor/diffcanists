@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-#nullable disable
 public class ZCreatureBeehive : ZCreature
 {
   public List<ZCreature> bees = new List<ZCreature>();
@@ -33,19 +32,19 @@ public class ZCreatureBeehive : ZCreature
             else
               bee.effectors[index2].TurnPassed(index2, false, false);
           }
-          for (int index3 = bee.destroyableEffectors.Count - 1; index3 >= 0; --index3)
+          for (int index2 = bee.destroyableEffectors.Count - 1; index2 >= 0; --index2)
           {
-            if (ZComponent.IsNull((ZComponent) bee.destroyableEffectors[index3]))
-              bee.destroyableEffectors.RemoveAt(index3);
+            if (ZComponent.IsNull((ZComponent) bee.destroyableEffectors[index2]))
+              bee.destroyableEffectors.RemoveAt(index2);
             else
-              bee.destroyableEffectors[index3].TurnPassed(index3, true, false);
+              bee.destroyableEffectors[index2].TurnPassed(index2, true, false);
           }
           if (bee.halfHealing > 0)
             --bee.halfHealing;
           if (bee.bleeding && bee.health > 1)
           {
             --bee.bleedCounter;
-            bee.DoDamage(Mathf.Min(bee.health - 1, 10));
+            bee.DoDamage(Mathf.Min(bee.health - 1, 10), DamageType.None, (ZCreature) null, false, (ISpellBridge) null);
             ZSpell.RandomBlood(bee.game, bee.position);
           }
         }
@@ -75,7 +74,7 @@ public class ZCreatureBeehive : ZCreature
       MyLocation target = this.position + new MyLocation(this.game.RandomInt(-50, 50), this.game.RandomInt(-50, 50));
       if (this.bees.Count < 3 && this.game.map.CheckCircle((int) target.x, (int) target.y, Inert.Instance.undeadBee.radius, (ZCreature) null, Inert.mask_movement_NoEffector))
       {
-        ZSpell.FireSummon(Inert.GetSpell(SpellEnum.Summon_Undead_Bees), this.game, (ZCreature) this, target, 1);
+        ZSpell.FireSummon(Inert.GetSpell(SpellEnum.Summon_Undead_Bees), this.game, (ZCreature) this, target, 1, false, (ZPerson) null);
         break;
       }
     }
@@ -112,10 +111,10 @@ public class ZCreatureBeehive : ZCreature
           {
             bee.velocity = new MyLocation((FixedInt) ((double) bee.transformscale < 0.0 ? -11010048L : -6291456L), (FixedInt) 0);
             bee.SetScale(-1f);
-            bee.moving = this.game.ongoing.RunCoroutine(bee.FlyMove(true));
+            bee.moving = this.game.ongoing.RunCoroutine(bee.FlyMove(true), true);
           }
           else
-            bee.MoveLeft();
+            bee.MoveLeft(0);
         }
       }
     }
@@ -137,10 +136,10 @@ public class ZCreatureBeehive : ZCreature
           {
             bee.velocity = new MyLocation((FixedInt) ((double) bee.transformscale > 0.0 ? 9437184L : 4194304L), (FixedInt) 0);
             bee.SetScale(1f);
-            bee.moving = this.game.ongoing.RunCoroutine(bee.FlyMove(true));
+            bee.moving = this.game.ongoing.RunCoroutine(bee.FlyMove(true), true);
           }
           else
-            bee.MoveRight();
+            bee.MoveRight(0);
         }
       }
     }

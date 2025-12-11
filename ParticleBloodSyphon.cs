@@ -1,17 +1,16 @@
 
 using UnityEngine;
 
-#nullable disable
 public class ParticleBloodSyphon : MonoBehaviour
 {
+  private bool goend = true;
+  public float speed = 1f;
   public Vector3 start;
   public Vector3 end;
   public Vector3 velocity;
   public ParticleSystem p;
   public GameObject explosion;
-  private bool goend = true;
   private float cur;
-  public float speed = 1f;
 
   private void Start()
   {

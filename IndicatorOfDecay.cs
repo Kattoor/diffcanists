@@ -1,17 +1,16 @@
 
 using UnityEngine;
 
-#nullable disable
 public class IndicatorOfDecay : MonoBehaviour
 {
+  internal static ZMyCollider[] MyColliders = new ZMyCollider[20];
+  private static ContactFilter2D filter = IndicatorOfDecay.InitFilter();
   private ZCreature creature;
   private ZMyCollider col;
   private ZMyCollider colTower;
   private ZMyCollider fastCheck;
   public SpriteRenderer sp;
-  internal static ZMyCollider[] MyColliders = new ZMyCollider[20];
   private static int x;
-  private static ContactFilter2D filter = IndicatorOfDecay.InitFilter();
   private int counter;
 
   public void Setup(ZCreature c, ZEffector e)

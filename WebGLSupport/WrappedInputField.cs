@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using WebGLSupport.Detail;
 
-#nullable disable
 namespace WebGLSupport
 {
   internal class WrappedInputField : IInputField
@@ -11,12 +10,24 @@ namespace WebGLSupport
     private InputField input;
     private RebuildChecker checker;
 
-    public bool ReadOnly => this.input.readOnly;
+    public bool ReadOnly
+    {
+      get
+      {
+        return this.input.readOnly;
+      }
+    }
 
     public string text
     {
-      get => this.input.text;
-      set => this.input.text = value;
+      get
+      {
+        return this.input.text;
+      }
+      set
+      {
+        this.input.text = value;
+      }
     }
 
     public string placeholder
@@ -30,31 +41,85 @@ namespace WebGLSupport
       }
     }
 
-    public int fontSize => this.input.textComponent.fontSize;
+    public int fontSize
+    {
+      get
+      {
+        return this.input.textComponent.fontSize;
+      }
+    }
 
-    public ContentType contentType => (ContentType) this.input.contentType;
+    public ContentType contentType
+    {
+      get
+      {
+        return (ContentType) this.input.contentType;
+      }
+    }
 
-    public LineType lineType => (LineType) this.input.lineType;
+    public LineType lineType
+    {
+      get
+      {
+        return (LineType) this.input.lineType;
+      }
+    }
 
-    public int characterLimit => this.input.characterLimit;
+    public int characterLimit
+    {
+      get
+      {
+        return this.input.characterLimit;
+      }
+    }
 
-    public int caretPosition => this.input.caretPosition;
+    public int caretPosition
+    {
+      get
+      {
+        return this.input.caretPosition;
+      }
+    }
 
-    public bool isFocused => this.input.isFocused;
+    public bool isFocused
+    {
+      get
+      {
+        return this.input.isFocused;
+      }
+    }
 
     public int selectionFocusPosition
     {
-      get => this.input.selectionFocusPosition;
-      set => this.input.selectionFocusPosition = value;
+      get
+      {
+        return this.input.selectionFocusPosition;
+      }
+      set
+      {
+        this.input.selectionFocusPosition = value;
+      }
     }
 
     public int selectionAnchorPosition
     {
-      get => this.input.selectionAnchorPosition;
-      set => this.input.selectionAnchorPosition = value;
+      get
+      {
+        return this.input.selectionAnchorPosition;
+      }
+      set
+      {
+        this.input.selectionAnchorPosition = value;
+      }
     }
 
-    public bool OnFocusSelectAll => true;
+    public bool OnFocusSelectAll
+    {
+      get
+      {
+        return true;
+      }
+    }
 
     public WrappedInputField(InputField input)
     {
@@ -62,15 +127,24 @@ namespace WebGLSupport
       this.checker = new RebuildChecker((IInputField) this);
     }
 
-    public UnityEngine.RectTransform RectTransform() => this.input.GetComponent<UnityEngine.RectTransform>();
+    public UnityEngine.RectTransform RectTransform()
+    {
+      return this.input.GetComponent<UnityEngine.RectTransform>();
+    }
 
-    public void ActivateInputField() => this.input.ActivateInputField();
+    public void ActivateInputField()
+    {
+      this.input.ActivateInputField();
+    }
 
-    public void DeactivateInputField() => this.input.DeactivateInputField();
+    public void DeactivateInputField()
+    {
+      this.input.DeactivateInputField();
+    }
 
     public void Rebuild()
     {
-      if (!this.checker.NeedRebuild())
+      if (!this.checker.NeedRebuild(false))
         return;
       this.input.textComponent.SetAllDirty();
       this.input.Rebuild(CanvasUpdate.LatePreRender);

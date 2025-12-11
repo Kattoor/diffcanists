@@ -1,7 +1,6 @@
 
 using System.Threading;
 
-#nullable disable
 public static class BidenLog
 {
   private static MyLog log;

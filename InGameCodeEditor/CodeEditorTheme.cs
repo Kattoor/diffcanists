@@ -2,7 +2,6 @@
 using System;
 using UnityEngine;
 
-#nullable disable
 namespace InGameCodeEditor
 {
   [CreateAssetMenu(fileName = "Code Editor Theme", menuName = "InGame Code Editor/Code Editor Theme")]
@@ -20,7 +19,10 @@ namespace InGameCodeEditor
 
     public static CodeEditorTheme DefaultTheme
     {
-      get => ScriptableObject.CreateInstance<CodeEditorTheme>();
+      get
+      {
+        return ScriptableObject.CreateInstance<CodeEditorTheme>();
+      }
     }
   }
 }

@@ -1,5 +1,4 @@
 
-#nullable disable
 public static class SinLut
 {
   public static readonly long[] lut = new long[205887]

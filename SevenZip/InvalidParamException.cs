@@ -1,7 +1,6 @@
 
 using System;
 
-#nullable disable
 namespace SevenZip
 {
   internal class InvalidParamException : ApplicationException

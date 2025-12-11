@@ -1,14 +1,16 @@
 
 using UnityEngine;
 
-#nullable disable
 public class AnimLance : MonoBehaviour
 {
   private IAnimator c;
   private int state;
   private float cur;
 
-  private void Start() => this.c = this.GetComponentInParent<IAnimator>();
+  private void Start()
+  {
+    this.c = this.GetComponentInParent<IAnimator>();
+  }
 
   private void Update()
   {
@@ -59,5 +61,8 @@ public class AnimLance : MonoBehaviour
     }
   }
 
-  private bool Moving() => this.c.currentState == AnimateState.Walk;
+  private bool Moving()
+  {
+    return this.c.currentState == AnimateState.Walk;
+  }
 }

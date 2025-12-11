@@ -11,36 +11,46 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 
-#nullable disable
 namespace Hazel.Websocket
 {
   public class WebServer
   {
-    private const int MaxMessageSize = 262144;
-    private TcpListener listener;
     private readonly IWebSocketServerFactory webSocketServerFactory = (IWebSocketServerFactory) new WebSocketServerFactory();
-    private CancellationTokenSource cancellation;
     private Dictionary<int, WebConnectionOld> clients = new Dictionary<int, WebConnectionOld>();
     public bool NoDelay = true;
+    private const int MaxMessageSize = 262144;
+    private TcpListener listener;
+    private CancellationTokenSource cancellation;
     private static int counter;
     public bool _secure;
     public WebServer.SslConfiguration _sslConfig;
 
-    public event Action<WebConnectionOld> Connected;
+    public event System.Action<WebConnectionOld> Connected;
 
-    public event Action<WebConnectionOld> Disconnected;
+    public event System.Action<WebConnectionOld> Disconnected;
 
-    public event Action<int, Exception> ReceivedError;
+    public event System.Action<int, Exception> ReceivedError;
 
     public static int NextConnectionId()
     {
       int num = Interlocked.Increment(ref WebServer.counter);
-      return num != int.MaxValue ? num : throw new Exception("connection id limit reached: " + (object) num);
+      if (num == int.MaxValue)
+        throw new Exception("connection id limit reached: " + (object) num);
+      return num;
     }
 
-    public bool Active => this.listener != null;
+    public bool Active
+    {
+      get
+      {
+        return this.listener != null;
+      }
+    }
 
-    public WebConnectionOld GetClient(int connectionId) => this.clients[connectionId];
+    public WebConnectionOld GetClient(int connectionId)
+    {
+      return this.clients[connectionId];
+    }
 
     public async void Listen(int port)
     {
@@ -61,7 +71,7 @@ namespace Hazel.Websocket
       }
       catch (Exception ex)
       {
-        Action<int, Exception> receivedError = this.ReceivedError;
+        System.Action<int, Exception> receivedError = this.ReceivedError;
         if (receivedError == null)
           return;
         receivedError(0, ex);
@@ -88,7 +98,7 @@ namespace Hazel.Websocket
           KeepAliveInterval = TimeSpan.FromSeconds(30.0),
           SubProtocol = "binary"
         };
-        WebSocket webSocket = await webServer.webSocketServerFactory.AcceptWebSocketAsync(context, options);
+        WebSocket webSocket = await webServer.webSocketServerFactory.AcceptWebSocketAsync(context, options, new CancellationToken());
         await webServer.ReceiveLoopAsync(webSocket, token, ip);
       }
       catch (ObjectDisposedException ex)
@@ -96,7 +106,7 @@ namespace Hazel.Websocket
       }
       catch (Exception ex)
       {
-        Action<int, Exception> receivedError = webServer.ReceivedError;
+        System.Action<int, Exception> receivedError = webServer.ReceivedError;
         if (receivedError == null)
           return;
         receivedError(0, ex);
@@ -110,7 +120,7 @@ namespace Hazel.Websocket
         }
         catch (Exception ex)
         {
-          Action<int, Exception> receivedError = webServer.ReceivedError;
+          System.Action<int, Exception> receivedError = webServer.ReceivedError;
           if (receivedError != null)
             receivedError(0, ex);
         }
@@ -126,7 +136,10 @@ namespace Hazel.Websocket
       return true;
     }
 
-    private async Task ReceiveLoopAsync(WebSocket webSocket, CancellationToken token, string ip)
+    private async Task ReceiveLoopAsync(
+      WebSocket webSocket,
+      CancellationToken token,
+      string ip)
     {
       int connectionId = WebServer.NextConnectionId();
       WebConnectionOld con = new WebConnectionOld(webSocket, ip, connectionId);
@@ -134,7 +147,7 @@ namespace Hazel.Websocket
       byte[] buffer = new byte[262144];
       try
       {
-        Action<WebConnectionOld> connected = this.Connected;
+        System.Action<WebConnectionOld> connected = this.Connected;
         if (connected != null)
           connected(con);
         while (true)
@@ -152,7 +165,7 @@ namespace Hazel.Websocket
               }
               catch (Exception ex)
               {
-                Action<int, Exception> receivedError = this.ReceivedError;
+                System.Action<int, Exception> receivedError = this.ReceivedError;
                 if (receivedError != null)
                   receivedError(connectionId, ex);
               }
@@ -168,7 +181,7 @@ label_2:;
       }
       catch (Exception ex)
       {
-        Action<int, Exception> receivedError = this.ReceivedError;
+        System.Action<int, Exception> receivedError = this.ReceivedError;
         if (receivedError == null)
           return;
         receivedError(connectionId, ex);
@@ -177,7 +190,7 @@ label_2:;
       {
         con.Connected = false;
         this.clients.Remove(connectionId);
-        Action<WebConnectionOld> disconnected = this.Disconnected;
+        System.Action<WebConnectionOld> disconnected = this.Disconnected;
         if (disconnected != null)
           disconnected(con);
       }
@@ -196,7 +209,7 @@ label_2:;
         if (count >= 262144)
         {
           await webSocket.CloseAsync(WebSocketCloseStatus.MessageTooBig, string.Format("Maximum message size: {0} bytes.", (object) 262144), CancellationToken.None);
-          Action<int, Exception> receivedError = this.ReceivedError;
+          System.Action<int, Exception> receivedError = this.ReceivedError;
           if (receivedError != null)
             receivedError(connectionId, (Exception) new WebSocketException(WebSocketError.HeaderError));
           return new byte[0];
@@ -204,9 +217,9 @@ label_2:;
         result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer, count, 262144 - count), CancellationToken.None);
         count += result.Count;
       }
-      byte[] dst = new byte[count];
-      System.Buffer.BlockCopy((Array) buffer, 0, (Array) dst, 0, count);
-      return dst;
+      byte[] numArray = new byte[count];
+      System.Buffer.BlockCopy((Array) buffer, 0, (Array) numArray, 0, count);
+      return numArray;
     }
 
     public void Stop()
@@ -237,7 +250,7 @@ label_2:;
         {
           if (this.clients.ContainsKey(connectionId))
           {
-            Action<int, Exception> receivedError = this.ReceivedError;
+            System.Action<int, Exception> receivedError = this.ReceivedError;
             if (receivedError != null)
               receivedError(connectionId, ex);
           }
@@ -246,7 +259,7 @@ label_2:;
       }
       else
       {
-        Action<int, Exception> receivedError = this.ReceivedError;
+        System.Action<int, Exception> receivedError = this.ReceivedError;
         if (receivedError == null)
           return;
         receivedError(connectionId, (Exception) new SocketException(10057));
@@ -267,7 +280,7 @@ label_2:;
       {
         if (this.clients.ContainsKey(client.id))
         {
-          Action<int, Exception> receivedError = this.ReceivedError;
+          System.Action<int, Exception> receivedError = this.ReceivedError;
           if (receivedError != null)
             receivedError(client.id, ex);
         }
@@ -283,7 +296,7 @@ label_2:;
       webConnectionOld.Connected = false;
       this.clients.Remove(connectionId);
       webConnectionOld.socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);
-      Action<WebConnectionOld> disconnected = this.Disconnected;
+      System.Action<WebConnectionOld> disconnected = this.Disconnected;
       if (disconnected != null)
         disconnected(webConnectionOld);
       return true;

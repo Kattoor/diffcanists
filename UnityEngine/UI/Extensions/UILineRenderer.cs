@@ -3,13 +3,18 @@ using System;
 using System.Collections.Generic;
 using UnityEngine.Sprites;
 
-#nullable disable
 namespace UnityEngine.UI.Extensions
 {
   [AddComponentMenu("UI/Extensions/Primitives/UILineRenderer")]
   [RequireComponent(typeof (RectTransform))]
   public class UILineRenderer : UIPrimitiveBase
   {
+    [SerializeField]
+    [Tooltip("Thickness of the line")]
+    internal float lineThickness = 2f;
+    [SerializeField]
+    [Tooltip("Resolution of the Bezier curve, different to line Resolution")]
+    internal int bezierSegmentsPerCurve = 10;
     private const float MIN_MITER_JOIN = 0.2617994f;
     private const float MIN_BEVEL_NICE_JOIN = 0.5235988f;
     private static Vector2 UV_TOP_LEFT;
@@ -28,9 +33,6 @@ namespace UnityEngine.UI.Extensions
     [Tooltip("Points to draw lines between\n Can be improved using the Resolution Option")]
     internal Vector2[] m_points;
     [SerializeField]
-    [Tooltip("Thickness of the line")]
-    internal float lineThickness = 2f;
-    [SerializeField]
     [Tooltip("Use the relative bounds of the Rect Transform (0,0 -> 0,1) or screen space coordinates")]
     internal bool relativeSize;
     [SerializeField]
@@ -39,9 +41,6 @@ namespace UnityEngine.UI.Extensions
     [SerializeField]
     [Tooltip("Add end caps to each line\nMultiple caps when used with Line List")]
     internal bool lineCaps;
-    [SerializeField]
-    [Tooltip("Resolution of the Bezier curve, different to line Resolution")]
-    internal int bezierSegmentsPerCurve = 10;
     [Tooltip("The type of Join used between lines, Square/Mitre or Curved/Bevel")]
     public UILineRenderer.JoinType LineJoins;
     [Tooltip("Bezier method to apply to line, see docs for options\nCan't be used in conjunction with Resolution as Bezier already changes the resolution")]
@@ -51,7 +50,10 @@ namespace UnityEngine.UI.Extensions
 
     public float LineThickness
     {
-      get => this.lineThickness;
+      get
+      {
+        return this.lineThickness;
+      }
       set
       {
         this.lineThickness = value;
@@ -61,7 +63,10 @@ namespace UnityEngine.UI.Extensions
 
     public bool RelativeSize
     {
-      get => this.relativeSize;
+      get
+      {
+        return this.relativeSize;
+      }
       set
       {
         this.relativeSize = value;
@@ -71,7 +76,10 @@ namespace UnityEngine.UI.Extensions
 
     public bool LineList
     {
-      get => this.lineList;
+      get
+      {
+        return this.lineList;
+      }
       set
       {
         this.lineList = value;
@@ -81,7 +89,10 @@ namespace UnityEngine.UI.Extensions
 
     public bool LineCaps
     {
-      get => this.lineCaps;
+      get
+      {
+        return this.lineCaps;
+      }
       set
       {
         this.lineCaps = value;
@@ -91,13 +102,22 @@ namespace UnityEngine.UI.Extensions
 
     public int BezierSegmentsPerCurve
     {
-      get => this.bezierSegmentsPerCurve;
-      set => this.bezierSegmentsPerCurve = value;
+      get
+      {
+        return this.bezierSegmentsPerCurve;
+      }
+      set
+      {
+        this.bezierSegmentsPerCurve = value;
+      }
     }
 
     public Vector2[] Points
     {
-      get => this.m_points;
+      get
+      {
+        return this.m_points;
+      }
       set
       {
         if (this.m_points == value)
@@ -185,39 +205,39 @@ namespace UnityEngine.UI.Extensions
       {
         if (!this.lineList && index < uiVertexArrayList.Count - 1)
         {
-          Vector3 from = uiVertexArrayList[index][1].position - uiVertexArrayList[index][2].position;
-          Vector3 to = uiVertexArrayList[index + 1][2].position - uiVertexArrayList[index + 1][1].position;
-          float num5 = Vector2.Angle((Vector2) from, (Vector2) to) * ((float) Math.PI / 180f);
-          float num6 = Mathf.Sign(Vector3.Cross(from.normalized, to.normalized).z);
+          Vector3 vector3_1 = uiVertexArrayList[index][1].position - uiVertexArrayList[index][2].position;
+          Vector3 vector3_2 = uiVertexArrayList[index + 1][2].position - uiVertexArrayList[index + 1][1].position;
+          float num5 = Vector2.Angle((Vector2) vector3_1, (Vector2) vector3_2) * ((float) Math.PI / 180f);
+          float num6 = Mathf.Sign(Vector3.Cross(vector3_1.normalized, vector3_2.normalized).z);
           float num7 = this.lineThickness / (2f * Mathf.Tan(num5 / 2f));
-          Vector3 vector3_1 = uiVertexArrayList[index][2].position - from.normalized * num7 * num6;
-          Vector3 vector3_2 = uiVertexArrayList[index][3].position + from.normalized * num7 * num6;
+          Vector3 vector3_3 = uiVertexArrayList[index][2].position - vector3_1.normalized * num7 * num6;
+          Vector3 vector3_4 = uiVertexArrayList[index][3].position + vector3_1.normalized * num7 * num6;
           UILineRenderer.JoinType joinType = this.LineJoins;
           if (joinType == UILineRenderer.JoinType.Miter)
           {
-            if ((double) num7 < (double) from.magnitude / 2.0 && (double) num7 < (double) to.magnitude / 2.0 && (double) num5 > 0.2617993950843811)
+            if ((double) num7 < (double) vector3_1.magnitude / 2.0 && (double) num7 < (double) vector3_2.magnitude / 2.0 && (double) num5 > 0.261799395084381)
             {
-              uiVertexArrayList[index][2].position = vector3_1;
-              uiVertexArrayList[index][3].position = vector3_2;
-              uiVertexArrayList[index + 1][0].position = vector3_2;
-              uiVertexArrayList[index + 1][1].position = vector3_1;
+              uiVertexArrayList[index][2].position = vector3_3;
+              uiVertexArrayList[index][3].position = vector3_4;
+              uiVertexArrayList[index + 1][0].position = vector3_4;
+              uiVertexArrayList[index + 1][1].position = vector3_3;
             }
             else
               joinType = UILineRenderer.JoinType.Bevel;
           }
           if (joinType == UILineRenderer.JoinType.Bevel)
           {
-            if ((double) num7 < (double) from.magnitude / 2.0 && (double) num7 < (double) to.magnitude / 2.0 && (double) num5 > 0.52359879016876221)
+            if ((double) num7 < (double) vector3_1.magnitude / 2.0 && (double) num7 < (double) vector3_2.magnitude / 2.0 && (double) num5 > 0.523598790168762)
             {
               if ((double) num6 < 0.0)
               {
-                uiVertexArrayList[index][2].position = vector3_1;
-                uiVertexArrayList[index + 1][1].position = vector3_1;
+                uiVertexArrayList[index][2].position = vector3_3;
+                uiVertexArrayList[index + 1][1].position = vector3_3;
               }
               else
               {
-                uiVertexArrayList[index][3].position = vector3_2;
-                uiVertexArrayList[index + 1][0].position = vector3_2;
+                uiVertexArrayList[index][3].position = vector3_4;
+                uiVertexArrayList[index + 1][0].position = vector3_4;
               }
             }
             UIVertex[] verts = new UIVertex[4]
@@ -238,7 +258,10 @@ namespace UnityEngine.UI.Extensions
       vh.Clear();
     }
 
-    private UIVertex[] CreateLineCap(Vector2 start, Vector2 end, UILineRenderer.SegmentType type)
+    private UIVertex[] CreateLineCap(
+      Vector2 start,
+      Vector2 end,
+      UILineRenderer.SegmentType type)
     {
       if (type == UILineRenderer.SegmentType.Start)
         return this.CreateLineSegment(start - (end - start).normalized * this.lineThickness / 2f, start, UILineRenderer.SegmentType.Start);

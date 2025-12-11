@@ -1,7 +1,6 @@
 
 using UnityEngine;
 
-#nullable disable
 public class RectDimensionsChanged : MonoBehaviour
 {
   private void OnRectTransformDimensionsChange()

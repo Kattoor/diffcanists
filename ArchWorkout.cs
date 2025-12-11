@@ -1,12 +1,11 @@
 
 using UnityEngine;
 
-#nullable disable
 public class ArchWorkout : MonoBehaviour
 {
+  private Vector3 small = new Vector3(0.9f, 0.9f, 1f);
   public Vector3 startPos;
   private Vector3 endPos;
-  private Vector3 small = new Vector3(0.9f, 0.9f, 1f);
   internal IAnimator animator;
   internal ZCreature creature;
   private float cur;

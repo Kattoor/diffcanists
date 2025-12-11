@@ -1,7 +1,6 @@
 
 using System;
 
-#nullable disable
 [Serializable]
 public class Restrictions
 {
@@ -11,9 +10,15 @@ public class Restrictions
   public int alternateEle = -1;
   public const byte Version = 2;
 
-  public int GetElementals(bool altBook) => !altBook ? this.elementals : this.alternateEle;
+  public int GetElementals(bool altBook)
+  {
+    return !altBook ? this.elementals : this.alternateEle;
+  }
 
-  public BitBools Getspells(bool altBook) => !altBook ? this.availableSpells : this.altSpells;
+  public BitBools Getspells(bool altBook)
+  {
+    return !altBook ? this.availableSpells : this.altSpells;
+  }
 
   public Restrictions()
   {
@@ -201,12 +206,12 @@ public class Restrictions
     if (alt)
     {
       this.alternateEle ^= 1 << i;
-      PopupRestrictions.Instance.ElementalEnabled(i, (this.alternateEle & 1 << i) != 0, alt);
-      return (this.alternateEle & 1 << i) != 0;
+      PopupRestrictions.Instance.ElementalEnabled(i, (uint) (this.alternateEle & 1 << i) > 0U, alt);
+      return (uint) (this.alternateEle & 1 << i) > 0U;
     }
     this.elementals ^= 1 << i;
-    PopupRestrictions.Instance.ElementalEnabled(i, (this.elementals & 1 << i) != 0, alt);
-    return (this.elementals & 1 << i) != 0;
+    PopupRestrictions.Instance.ElementalEnabled(i, (uint) (this.elementals & 1 << i) > 0U, alt);
+    return (uint) (this.elementals & 1 << i) > 0U;
   }
 
   public bool ToggleCastType(int e)

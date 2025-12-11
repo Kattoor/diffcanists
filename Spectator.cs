@@ -5,7 +5,6 @@ using System;
 using System.IO;
 using UnityEngine;
 
-#nullable disable
 public class Spectator
 {
   public static Connection connection;
@@ -22,7 +21,10 @@ public class Spectator
 
   public static bool isConnected
   {
-    get => Spectator.connection != null && Spectator.connection.State == ConnectionState.Connected;
+    get
+    {
+      return Spectator.connection != null && Spectator.connection.State == ConnectionState.Connected;
+    }
   }
 
   public static Connection GetBoatConnection()
@@ -33,9 +35,9 @@ public class Spectator
   public static void AskToJoinBoat()
   {
     Connection connection = Spectator.isConnected ? Spectator.connection : Client.connection;
-    if (connection == null || connection.State != ConnectionState.Connected || connection.player.inBoat || Client.game.resyncing)
+    if (connection == null || connection.State != ConnectionState.Connected || (connection.player.inBoat || Client.game.resyncing))
       return;
-    connection.SendBytes(new byte[2]{ (byte) 83, (byte) 1 });
+    connection.SendBytes(new byte[2]{ (byte) 83, (byte) 1 }, SendOption.None);
   }
 
   public static void AskToLeaveBoat()
@@ -43,7 +45,7 @@ public class Spectator
     Connection connection = Spectator.isConnected ? Spectator.connection : Client.connection;
     if (connection == null || connection.State != ConnectionState.Connected || !connection.player.inBoat)
       return;
-    connection.SendBytes(new byte[2]{ (byte) 83, (byte) 2 });
+    connection.SendBytes(new byte[2]{ (byte) 83, (byte) 2 }, SendOption.None);
   }
 
   public static void AskToMove(int x, int y)
@@ -61,7 +63,7 @@ public class Spectator
         myBinaryWriter.Write((short) x);
         myBinaryWriter.Write((short) y);
       }
-      connection.SendBytes(memoryStream.ToArray());
+      connection.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 
@@ -87,7 +89,7 @@ public class Spectator
           myBinaryWriter.Write(angle);
           myBinaryWriter.Write(power);
         }
-        connection.SendBytes(memoryStream.ToArray());
+        connection.SendBytes(memoryStream.ToArray(), SendOption.None);
       }
     }
   }
@@ -114,7 +116,7 @@ public class Spectator
           myBinaryWriter.Write(angle);
           myBinaryWriter.Write(power);
         }
-        connection.SendBytes(memoryStream.ToArray());
+        connection.SendBytes(memoryStream.ToArray(), SendOption.None);
       }
     }
   }
@@ -126,12 +128,12 @@ public class Spectator
 
   public static void ConnectToGame()
   {
-    Spectator.connection = (Connection) new TcpConnection(new NetworkEndPoint(Client.currentIP, Client.port));
+    Spectator.connection = (Connection) new TcpConnection(new NetworkEndPoint(Client.currentIP, Client.port, IPMode.IPv4));
     Spectator.connection.DataReceived += new EventHandler<DataReceivedEventArgs>(Spectator.GameClientHandler);
     Spectator.connection.Disconnected += new EventHandler<DisconnectedEventArgs>(Spectator.Disconnected);
     try
     {
-      Spectator.connection.Connect();
+      Spectator.connection.Connect((byte[]) null, 5000);
     }
     catch (Exception ex)
     {

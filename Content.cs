@@ -2,7 +2,6 @@
 using Educative;
 using UnityEngine;
 
-#nullable disable
 public static class Content
 {
   public static object GetContent(myBinaryReader reader, ContentType contentType)
@@ -11,15 +10,15 @@ public static class Content
     {
       case ContentType.Outfit:
       case ContentType.SpellBook:
-        SettingsPlayer content1 = new SettingsPlayer();
-        content1.Deserialize(reader);
-        return (object) content1;
+        SettingsPlayer settingsPlayer = new SettingsPlayer();
+        settingsPlayer.Deserialize(reader);
+        return (object) settingsPlayer;
       case ContentType.ArcTutorial:
         return (object) Tutorial.FromBytes(reader.ReadBytes());
       case ContentType.GameSettings:
-        GameSettings content2 = new GameSettings();
-        content2.Deserialize(reader);
-        return (object) content2;
+        GameSettings gameSettings = new GameSettings();
+        gameSettings.Deserialize(reader, (byte) 5);
+        return (object) gameSettings;
       case ContentType.ClanInvite:
         return (object) new ClanInvite()
         {
@@ -79,7 +78,7 @@ public static class Content
         ((RatedFacts) d).Share(writer);
         break;
       case ContentType.RatedContainer:
-        ((RatedContainer) d).Serialize(writer);
+        ((RatedContainer) d).Serialize(writer, true);
         break;
     }
   }

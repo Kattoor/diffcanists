@@ -14,7 +14,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
-#nullable disable
 namespace Ninja.WebSockets
 {
   public class WebSocketClientFactory : IWebSocketClientFactory
@@ -146,17 +145,17 @@ namespace Ninja.WebSockets
 
     private Stream GetStream(Guid guid, TcpClient tcpClient, bool isSecure, string host)
     {
-      Stream stream1 = (Stream) tcpClient.GetStream();
+      Stream stream = (Stream) tcpClient.GetStream();
       if (isSecure)
       {
-        SslStream stream2 = new SslStream(stream1, false, new RemoteCertificateValidationCallback(WebSocketClientFactory.ValidateServerCertificate), (LocalCertificateSelectionCallback) null);
+        SslStream sslStream = new SslStream(stream, false, new RemoteCertificateValidationCallback(WebSocketClientFactory.ValidateServerCertificate), (LocalCertificateSelectionCallback) null);
         Events.Log.AttemtingToSecureSslConnection(guid);
-        stream2.AuthenticateAsClient(host);
+        sslStream.AuthenticateAsClient(host);
         Events.Log.ConnectionSecured(guid);
-        return (Stream) stream2;
+        return (Stream) sslStream;
       }
       Events.Log.ConnectionNotSecure(guid);
-      return stream1;
+      return stream;
     }
 
     private static bool ValidateServerCertificate(

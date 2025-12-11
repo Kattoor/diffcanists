@@ -1,13 +1,15 @@
 
 using UnityEngine;
 
-#nullable disable
 public class FollowEntity : IFollowTarget
 {
-  private ZEntity s;
   private float time = -1f;
+  private ZEntity s;
 
-  public FollowEntity(ZEntity e) => this.s = e;
+  public FollowEntity(ZEntity e)
+  {
+    this.s = e;
+  }
 
   public Vector3 GetTarget()
   {

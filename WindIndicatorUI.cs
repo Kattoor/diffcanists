@@ -3,7 +3,6 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-#nullable disable
 public class WindIndicatorUI : MonoBehaviour
 {
   public RectTransform needle;
@@ -58,7 +57,10 @@ public class WindIndicatorUI : MonoBehaviour
     this.img_speed.fillAmount = this.targetPow;
   }
 
-  private void Awake() => WindIndicatorUI.Instance = this;
+  private void Awake()
+  {
+    WindIndicatorUI.Instance = this;
+  }
 
   private void OnDestroy()
   {

@@ -7,9 +7,17 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-#nullable disable
 public class LobbyMenu : Catalogue
 {
+  private float[] scrollValues = new float[4]
+  {
+    1f,
+    1f,
+    1f,
+    1f
+  };
+  private List<object> gameList = new List<object>();
+  private List<List<object>> sortedSearches = new List<List<object>>();
   public RatedTab ratedTab;
   public RectTransform _containerGames;
   public RectTransform _containerAccounts;
@@ -39,13 +47,6 @@ public class LobbyMenu : Catalogue
   public GameObject buttonPoll;
   public TMP_Text txtPoll;
   public GameObject buttonPollResults;
-  private float[] scrollValues = new float[4]
-  {
-    1f,
-    1f,
-    1f,
-    1f
-  };
   [Header("Scroll")]
   public ScrollRect scrollRect;
   public TMP_FontAsset fontArc;
@@ -55,8 +56,6 @@ public class LobbyMenu : Catalogue
   public const string viewPMO = "prefviewpmo";
   public const string viewRatedGames = "prefviewratedgames";
   public const string viewUnratedGames = "prefviewunratedgames";
-  private List<object> gameList = new List<object>();
-  private List<List<object>> sortedSearches = new List<List<object>>();
 
   public static LobbyMenu instance { get; private set; }
 
@@ -184,7 +183,10 @@ public class LobbyMenu : Catalogue
       Client.Ask((byte) 90, (byte) 1);
   }
 
-  public void ClickPollResults() => Client.Ask((byte) 90, (byte) 4);
+  public void ClickPollResults()
+  {
+    Client.Ask((byte) 90, (byte) 4);
+  }
 
   public void ClickAddFriend()
   {
@@ -195,13 +197,19 @@ public class LobbyMenu : Catalogue
       if (string.IsNullOrEmpty(s) || s.Length > 13)
         return;
       Client.AskToAddFriend(true, true, s);
-    }));
-    myContextMenu.Rebuild();
+    }), (string) null, false, true);
+    myContextMenu.Rebuild(false);
   }
 
-  public void ClickSettings() => Controller.ShowSettingsMenu();
+  public void ClickSettings()
+  {
+    Controller.ShowSettingsMenu(false);
+  }
 
-  public void ClickPrestige() => Controller.ShowPrestigeMenu();
+  public void ClickPrestige()
+  {
+    Controller.ShowPrestigeMenu();
+  }
 
   public static void DestroyChildern(RectTransform p)
   {
@@ -232,21 +240,21 @@ public class LobbyMenu : Catalogue
       return;
     this.txtRating.text = "Friends " + (object) Client.friends.Count + " / 200";
     this.txtRateType.text = "";
-    int num = (int) ((RectTransform) this.pfabFriend.transform).sizeDelta.y + 2;
-    int x = 2;
+    int num1 = (int) ((RectTransform) this.pfabFriend.transform).sizeDelta.y + 2;
+    int num2 = 2;
     List<(string, int)> valueTupleList = new List<(string, int)>();
     foreach (string friend in Client.friends)
-      valueTupleList.Add((friend, Client.GetAccount(friend).location.Online() ? 1 : 0));
+      valueTupleList.Add((friend, Client.GetAccount(friend, false).location.Online() ? 1 : 0));
     valueTupleList.Sort((Comparison<(string, int)>) ((a, b) => a.online == b.online ? a.name.CompareTo(b.name) : b.online - a.online));
     this._containerAccounts.DestroyChildern();
-    this._containerAccounts.sizeDelta = new Vector2(this._containerAccounts.sizeDelta.x, (float) (num * valueTupleList.Count + 35));
+    this._containerAccounts.sizeDelta = new Vector2(this._containerAccounts.sizeDelta.x, (float) (num1 * valueTupleList.Count + 35));
     for (int index1 = 0; index1 < valueTupleList.Count; ++index1)
     {
       GameObject andApply = Controller.Instance.CreateAndApply(this.pfabFriend, (Transform) this._containerAccounts);
-      ((RectTransform) andApply.transform).anchoredPosition = new Vector2((float) x, (float) (-index1 * num - 2 - 35));
+      ((RectTransform) andApply.transform).anchoredPosition = new Vector2((float) num2, (float) (-index1 * num1 - 2 - 35));
       pfabName component = andApply.GetComponent<pfabName>();
-      component.Setup(valueTupleList[index1].Item1);
-      int server = Client.GetAccount(valueTupleList[index1].Item1).server;
+      component.Setup(valueTupleList[index1].Item1, false);
+      int server = Client.GetAccount(valueTupleList[index1].Item1, false).server;
       int index2 = valueTupleList[index1].Item2 == 1 ? (Client.MyAccount.server == server ? 1 : 2) : 0;
       if (server > 0)
         component.txtName.text += string.Format(" ({0})", (object) server);
@@ -264,8 +272,8 @@ public class LobbyMenu : Catalogue
       return;
     this.txtRating.text = "Ignored " + (object) Client.ignore.Count + " / 100";
     this.txtRateType.text = "";
-    int num = (int) ((RectTransform) this.pfabFriend.transform).sizeDelta.y + 2;
-    int x = 2;
+    int num1 = (int) ((RectTransform) this.pfabFriend.transform).sizeDelta.y + 2;
+    int num2 = 2;
     List<string> stringList = new List<string>();
     foreach (string str in Client.ignore)
       stringList.Add(str);
@@ -275,17 +283,17 @@ public class LobbyMenu : Catalogue
       whoList.Add(who);
     whoList.Sort((Comparison<Client.TempIgnored.Who>) ((a, b) => a.name.CompareTo(b.name)));
     this._containerAccounts.DestroyChildern();
-    this._containerAccounts.sizeDelta = new Vector2(this._containerAccounts.sizeDelta.x, (float) (num * (stringList.Count + whoList.Count)));
+    this._containerAccounts.sizeDelta = new Vector2(this._containerAccounts.sizeDelta.x, (float) (num1 * (stringList.Count + whoList.Count)));
     for (int index = 0; index < stringList.Count; ++index)
     {
       GameObject andApply = Controller.Instance.CreateAndApply(this.pfabFriend, (Transform) this._containerAccounts);
-      ((RectTransform) andApply.transform).anchoredPosition = new Vector2((float) x, (float) (-index * num - 2));
-      andApply.GetComponent<pfabName>().Setup(stringList[index]);
+      ((RectTransform) andApply.transform).anchoredPosition = new Vector2((float) num2, (float) (-index * num1 - 2));
+      andApply.GetComponent<pfabName>().Setup(stringList[index], false);
     }
     for (int index = 0; index < whoList.Count; ++index)
     {
       GameObject andApply = Controller.Instance.CreateAndApply(this.pfabFriend, (Transform) this._containerAccounts);
-      ((RectTransform) andApply.transform).anchoredPosition = new Vector2((float) x, (float) ((-index - stringList.Count) * num - 2));
+      ((RectTransform) andApply.transform).anchoredPosition = new Vector2((float) num2, (float) ((-index - stringList.Count) * num1 - 2));
       andApply.GetComponent<pfabName>().SetupIgnored(whoList[index].name, whoList[index].TimeTill());
     }
     if (!updatePos)
@@ -307,27 +315,27 @@ public class LobbyMenu : Catalogue
     else
     {
       this.txtRating.text = "Clan " + (object) Client.clan.members.Count + " / 100";
-      int num = (int) ((RectTransform) this.pfabFriend.transform).sizeDelta.y + 2;
-      int x = 2;
+      int num1 = (int) ((RectTransform) this.pfabFriend.transform).sizeDelta.y + 2;
+      int num2 = 2;
       List<Clan.MemberX> memberXList = new List<Clan.MemberX>();
       foreach (KeyValuePair<string, Clan.Roles> member in Client.clan.members)
         memberXList.Add(new Clan.MemberX()
         {
           name = member.Key,
           role = member.Value,
-          acc = Client.GetAccount(member.Key)
+          acc = Client.GetAccount(member.Key, false)
         });
       memberXList.Sort((Comparison<Clan.MemberX>) ((a, b) => b.acc.location.Online() == a.acc.location.Online() ? (b.role == a.role ? a.name.CompareTo(b.name) : (int) (b.role - a.role)) : (!b.acc.location.Online() ? -1 : 1)));
       this._containerAccounts.DestroyChildern();
-      this._containerAccounts.sizeDelta = new Vector2(this._containerAccounts.sizeDelta.x, (float) (num * memberXList.Count + 2));
+      this._containerAccounts.sizeDelta = new Vector2(this._containerAccounts.sizeDelta.x, (float) (num1 * memberXList.Count + 2));
       for (int index1 = 0; index1 < memberXList.Count; ++index1)
       {
         GameObject andApply = Controller.Instance.CreateAndApply(this.pfabFriend, (Transform) this._containerAccounts);
-        ((RectTransform) andApply.transform).anchoredPosition = new Vector2((float) x, (float) (-index1 * num - 2));
+        ((RectTransform) andApply.transform).anchoredPosition = new Vector2((float) num2, (float) (-index1 * num1 - 2));
         pfabName component = andApply.GetComponent<pfabName>();
-        component.Setup(memberXList[index1].name);
+        component.Setup(memberXList[index1].name, false);
         component.txtRating.text = "(" + memberXList[index1].role.ToString().Replace('_', ' ') + ")";
-        int server = Client.GetAccount(memberXList[index1].name).server;
+        int server = Client.GetAccount(memberXList[index1].name, false).server;
         int index2 = memberXList[index1].acc.location.Online() ? (Client.MyAccount.server == server ? 1 : 2) : 0;
         if (server > 0)
           component.txtName.text += string.Format(" ({0})", (object) server);
@@ -345,22 +353,22 @@ public class LobbyMenu : Catalogue
   {
     for (int count = Client._lobby.Count; count < 13; ++count)
       Client._lobby.Add("temp" + (object) Client._lobby.Count, "temp" + (object) Client._lobby.Count);
-    this.RefreshNames();
+    this.RefreshNames(false);
   }
 
   [ContextMenu("Remove")]
   public void RemoveAccount()
   {
     Client._lobby.RemoveAt(Client._lobby.Count - 1);
-    this.RefreshNames();
+    this.RefreshNames(false);
   }
 
   public void RefreshActive()
   {
-    this.RefreshNames();
-    this.RefreshFriends();
-    this.RefreshIgnore();
-    this.RefreshClan();
+    this.RefreshNames(false);
+    this.RefreshFriends(false);
+    this.RefreshIgnore(false);
+    this.RefreshClan(false);
   }
 
   public void RefreshNames(bool updatePos = false)
@@ -373,28 +381,34 @@ public class LobbyMenu : Catalogue
     if ((UnityEngine.Object) this.txtName != (UnityEngine.Object) null)
       this.txtName.text = Client.Name;
     int num1 = (int) ((RectTransform) this.pfabNames.transform).sizeDelta.y + 2;
-    int x = 2;
+    int num2 = 2;
     int index1 = 0;
     this._containerAccounts.sizeDelta = new Vector2(this._containerAccounts.sizeDelta.x, (float) (num1 * Client._lobby.Count));
     for (; index1 < Client._lobby.Count && index1 < this._containerAccounts.childCount; ++index1)
-      this._containerAccounts.GetChild(index1).GetComponent<pfabName>().Setup(Client.GetAccount(Client._lobby.GetItem(index1).Key));
+      this._containerAccounts.GetChild(index1).GetComponent<pfabName>().Setup(Client.GetAccount(Client._lobby.GetItem(index1).Key, false), false);
     for (; index1 < Client._lobby.Count; ++index1)
     {
       GameObject andApply = Controller.Instance.CreateAndApply(this.pfabNames, (Transform) this._containerAccounts);
-      ((RectTransform) andApply.transform).anchoredPosition = new Vector2((float) x, (float) (-index1 * num1 - 2));
-      andApply.GetComponent<pfabName>().Setup(Client.GetAccount(Client._lobby.GetItem(index1).Key));
+      ((RectTransform) andApply.transform).anchoredPosition = new Vector2((float) num2, (float) (-index1 * num1 - 2));
+      andApply.GetComponent<pfabName>().Setup(Client.GetAccount(Client._lobby.GetItem(index1).Key, false), false);
     }
-    int num2 = index1;
-    for (int index2 = this._containerAccounts.childCount - 1; index2 >= num2; --index2)
+    int num3 = index1;
+    for (int index2 = this._containerAccounts.childCount - 1; index2 >= num3; --index2)
       UnityEngine.Object.Destroy((UnityEngine.Object) this._containerAccounts.GetChild(index2).gameObject);
     if (!updatePos)
       return;
     this.SetScrollValue();
   }
 
-  public void ShowToolTip(string s) => MyToolTip.Show(s);
+  public void ShowToolTip(string s)
+  {
+    MyToolTip.Show(s, -1f);
+  }
 
-  public void HideToolTip() => MyToolTip.Close();
+  public void HideToolTip()
+  {
+    MyToolTip.Close();
+  }
 
   public void InitLists()
   {
@@ -492,13 +506,16 @@ public class LobbyMenu : Catalogue
     this.recycledGames.Set((IEnumerable<object>) this.gameList);
   }
 
-  public void AddGame(GameFacts game) => this.RefreshGames();
+  public void AddGame(GameFacts game)
+  {
+    this.RefreshGames();
+  }
 
   public void AddName(Account a)
   {
     if (this.viewing != Viewing.Lobby)
       return;
-    this.RefreshNames();
+    this.RefreshNames(false);
   }
 
   public void ViewLobby()
@@ -554,29 +571,50 @@ public class LobbyMenu : Catalogue
   {
     if (this.viewing == Viewing.Friends && Client.HasFriend(n))
     {
-      this.RefreshFriends();
+      this.RefreshFriends(false);
     }
     else
     {
       if (this.viewing != Viewing.Clan || Client.clan == null || !Client.clan.members.ContainsKey(n))
         return;
-      this.RefreshClan();
+      this.RefreshClan(false);
     }
   }
 
-  public void UpdateGame(GameFacts g) => this.RefreshGames();
+  public void UpdateGame(GameFacts g)
+  {
+    this.RefreshGames();
+  }
 
-  public void UpdateName(Account a) => this.RefreshNames();
+  public void UpdateName(Account a)
+  {
+    this.RefreshNames(false);
+  }
 
-  public void ClickMainMenu() => Client.AskToGoToMainMenu();
+  public void ClickMainMenu()
+  {
+    Client.AskToGoToMainMenu();
+  }
 
-  public void ClickRated() => this.ratedTab.gameObject.SetActive(true);
+  public void ClickRated()
+  {
+    this.ratedTab.gameObject.SetActive(true);
+  }
 
-  public void ClickRatedLobby() => Client.AskToCreateRatedLobby();
+  public void ClickRatedLobby()
+  {
+    Client.AskToCreateRatedLobby();
+  }
 
-  public void ClickUnrated() => Client.AskToCreateGame();
+  public void ClickUnrated()
+  {
+    Client.AskToCreateGame();
+  }
 
-  public void UpdateSpellIcons() => this.spellImageList.SetSpells();
+  public void UpdateSpellIcons()
+  {
+    this.spellImageList.SetSpells();
+  }
 
   public void UpdateOutfit()
   {

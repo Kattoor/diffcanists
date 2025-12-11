@@ -6,16 +6,15 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 
-#nullable disable
 namespace Hazel.Udp
 {
   public class UdpBroadcastListener : IDisposable
   {
+    private byte[] buffer = new byte[1024];
+    private List<BroadcastPacket> packets = new List<BroadcastPacket>();
     private Socket socket;
     private EndPoint endpoint;
     private Action<string> logger;
-    private byte[] buffer = new byte[1024];
-    private List<BroadcastPacket> packets = new List<BroadcastPacket>();
 
     public bool Running { get; private set; }
 

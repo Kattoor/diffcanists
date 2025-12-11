@@ -2,16 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-#nullable disable
 public class AStarWithGravity : MonoBehaviour
 {
   public AStarWithGravity.Grid grid;
   public Vector2 unitSize;
   public Vector2 gravity;
 
-  private void Start() => this.grid.SetGravity(this.gravity);
+  private void Start()
+  {
+    this.grid.SetGravity(this.gravity);
+  }
 
-  public List<AStarWithGravity.Node> GetPath(Vector3 startPos, Vector3 targetPos)
+  public List<AStarWithGravity.Node> GetPath(
+    Vector3 startPos,
+    Vector3 targetPos)
   {
     List<AStarWithGravity.Node> nodeList = new List<AStarWithGravity.Node>();
     HashSet<AStarWithGravity.Node> nodeSet = new HashSet<AStarWithGravity.Node>();
@@ -47,7 +51,9 @@ public class AStarWithGravity : MonoBehaviour
     return (List<AStarWithGravity.Node>) null;
   }
 
-  private List<AStarWithGravity.Node> RetracePath(Vector3 startPos, Vector3 endPos)
+  private List<AStarWithGravity.Node> RetracePath(
+    Vector3 startPos,
+    Vector3 endPos)
   {
     List<AStarWithGravity.Node> nodeList = new List<AStarWithGravity.Node>();
     for (AStarWithGravity.Node node = this.grid.NodeFromWorldPoint(endPos, this.unitSize); node != this.grid.NodeFromWorldPoint(startPos, this.unitSize); node = node.parent)
@@ -70,13 +76,30 @@ public class AStarWithGravity : MonoBehaviour
     public Vector2 gridWorldSize;
     public float nodeRadius;
 
-    public void SetGravity(Vector2 v) => this.gravity = v;
+    public void SetGravity(Vector2 v)
+    {
+      this.gravity = v;
+    }
 
-    public int x => this.nodes.GetLength(0);
+    public int x
+    {
+      get
+      {
+        return this.nodes.GetLength(0);
+      }
+    }
 
-    public int y => this.nodes.GetLength(1);
+    public int y
+    {
+      get
+      {
+        return this.nodes.GetLength(1);
+      }
+    }
 
-    public AStarWithGravity.Node NodeFromWorldPoint(Vector3 worldPos, Vector2 unitSize)
+    public AStarWithGravity.Node NodeFromWorldPoint(
+      Vector3 worldPos,
+      Vector2 unitSize)
     {
       double num1 = ((double) worldPos.x + (double) this.gridWorldSize.x / 2.0) / (double) this.gridWorldSize.x;
       float num2 = (worldPos.y + this.gridWorldSize.y / 2f) / this.gridWorldSize.y;
@@ -90,7 +113,7 @@ public class AStarWithGravity : MonoBehaviour
       AStarWithGravity.Node currentNode,
       float jumpHeight)
     {
-      List<AStarWithGravity.Node> neighbours = new List<AStarWithGravity.Node>();
+      List<AStarWithGravity.Node> nodeList = new List<AStarWithGravity.Node>();
       Vector3 worldPosition = (Vector3) currentNode.worldPosition;
       for (int index1 = -1; index1 <= 1; ++index1)
       {
@@ -100,12 +123,12 @@ public class AStarWithGravity : MonoBehaviour
           {
             worldPosition.x = (float) (currentNode.gridX + index1);
             worldPosition.y = (float) (currentNode.gridY + index2);
-            if ((double) worldPosition.x >= 0.0 && (double) worldPosition.x < (double) index1 && (double) worldPosition.y >= 0.0 && (double) worldPosition.y < (double) index2)
+            if ((double) worldPosition.x >= 0.0 && (double) worldPosition.x < (double) index1 && ((double) worldPosition.y >= 0.0 && (double) worldPosition.y < (double) index2))
             {
               if ((bool) (Object) Physics2D.OverlapCircle((Vector2) worldPosition, this.nodeRadius))
               {
                 AStarWithGravity.Node node = this.nodes[(int) worldPosition.x, (int) worldPosition.y];
-                neighbours.Add(node);
+                nodeList.Add(node);
               }
               else
               {
@@ -113,21 +136,21 @@ public class AStarWithGravity : MonoBehaviour
                 if ((bool) (Object) Physics2D.OverlapCircle((Vector2) worldPosition, this.nodeRadius))
                 {
                   AStarWithGravity.Node node = this.nodes[(int) worldPosition.x, (int) worldPosition.y];
-                  neighbours.Add(node);
+                  nodeList.Add(node);
                 }
               }
             }
           }
         }
       }
-      return neighbours;
+      return nodeList;
     }
 
     public List<AStarWithGravity.Node> GetNeighboursWithGravity(
       AStarWithGravity.Node currentNode,
       Vector2 unitSize)
     {
-      List<AStarWithGravity.Node> neighboursWithGravity = new List<AStarWithGravity.Node>();
+      List<AStarWithGravity.Node> nodeList = new List<AStarWithGravity.Node>();
       for (int index1 = -1; index1 <= 1; ++index1)
       {
         for (int index2 = -1; index2 <= 1; ++index2)
@@ -136,8 +159,8 @@ public class AStarWithGravity : MonoBehaviour
           {
             int index3 = currentNode.gridX + index1;
             int index4 = currentNode.gridY + index2;
-            if (index3 >= 0 && (double) index3 < (double) this.gridWorldSize.x && index4 >= 0 && (double) index4 < (double) this.gridWorldSize.y && this.CanMoveToNode(currentNode, this.nodes[index3, index4], unitSize))
-              neighboursWithGravity.Add(this.nodes[index3, index4]);
+            if (index3 >= 0 && (double) index3 < (double) this.gridWorldSize.x && (index4 >= 0 && (double) index4 < (double) this.gridWorldSize.y) && this.CanMoveToNode(currentNode, this.nodes[index3, index4], unitSize))
+              nodeList.Add(this.nodes[index3, index4]);
           }
         }
       }
@@ -145,9 +168,9 @@ public class AStarWithGravity : MonoBehaviour
       int y = (int) this.gravity.y;
       int index5 = currentNode.gridX + x;
       int index6 = currentNode.gridY + y;
-      if (index5 >= 0 && (double) index5 < (double) this.gridWorldSize.x && index6 >= 0 && (double) index6 < (double) this.gridWorldSize.y && this.CanMoveToNode(currentNode, this.nodes[index5, index6], unitSize))
-        neighboursWithGravity.Add(this.nodes[index5, index6]);
-      return neighboursWithGravity;
+      if (index5 >= 0 && (double) index5 < (double) this.gridWorldSize.x && (index6 >= 0 && (double) index6 < (double) this.gridWorldSize.y) && this.CanMoveToNode(currentNode, this.nodes[index5, index6], unitSize))
+        nodeList.Add(this.nodes[index5, index6]);
+      return nodeList;
     }
 
     private bool CanMoveToNode(
@@ -191,21 +214,32 @@ public class AStarWithGravity : MonoBehaviour
     public int gridY;
     public bool walkable;
 
-    public Vector2 worldPosition => new Vector2((float) this.gridX, (float) this.gridY);
+    public Vector2 worldPosition
+    {
+      get
+      {
+        return new Vector2((float) this.gridX, (float) this.gridY);
+      }
+    }
   }
 
   public class AStar : MonoBehaviour
   {
-    public LayerMask platformLayer;
     public float jumpHeight = 2f;
     public float moveSpeed = 2f;
+    public LayerMask platformLayer;
     private AStarWithGravity.Grid grid;
     private Vector3 startPos;
     private Vector3 targetPos;
 
-    private void Start() => this.grid = this.GetComponent<AStarWithGravity.Grid>();
+    private void Start()
+    {
+      this.grid = this.GetComponent<AStarWithGravity.Grid>();
+    }
 
-    public List<AStarWithGravity.Node> FindPath(Vector3 startPos, Vector3 targetPos)
+    public List<AStarWithGravity.Node> FindPath(
+      Vector3 startPos,
+      Vector3 targetPos)
     {
       this.startPos = startPos;
       this.targetPos = targetPos;

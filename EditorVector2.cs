@@ -2,7 +2,6 @@
 using System;
 using UnityEngine;
 
-#nullable disable
 [Serializable]
 public class EditorVector2
 {
@@ -13,10 +12,13 @@ public class EditorVector2
   {
     return new EditorVector2()
     {
-      x = (long) ((Decimal) v.x * 1048576M),
-      y = (long) ((Decimal) v.y * 1048576M)
+      x = (long) ((Decimal) v.x * new Decimal(1048576)),
+      y = (long) ((Decimal) v.y * new Decimal(1048576))
     };
   }
 
-  public MyLocation To() => new MyLocation((FixedInt) this.x, (FixedInt) this.y);
+  public MyLocation To()
+  {
+    return new MyLocation((FixedInt) this.x, (FixedInt) this.y);
+  }
 }

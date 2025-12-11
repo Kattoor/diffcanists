@@ -1,5 +1,4 @@
 
-#nullable disable
 namespace Educative
 {
   public class CWaitForSpellCast : Command
@@ -7,6 +6,9 @@ namespace Educative
     public int entity = -2;
     public SpellEnum spellEnum;
 
-    public CWaitForSpellCast() => this.type = Command.Type.WaitForSpellCast;
+    public CWaitForSpellCast()
+    {
+      this.type = Command.Type.WaitForSpellCast;
+    }
   }
 }

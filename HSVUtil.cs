@@ -2,7 +2,6 @@
 using System;
 using UnityEngine;
 
-#nullable disable
 public static class HSVUtil
 {
   public static HsvColor ConvertRgbToHsv(Color color)
@@ -44,14 +43,14 @@ public static class HSVUtil
 
   public static Color ConvertHsvToRgb(double h, double s, double v, float alpha)
   {
-    double r;
-    double g;
-    double b;
+    double num1;
+    double num2;
+    double num3;
     if (s == 0.0)
     {
-      r = v;
-      g = v;
-      b = v;
+      num1 = v;
+      num2 = v;
+      num3 = v;
     }
     else
     {
@@ -59,45 +58,45 @@ public static class HSVUtil
         h = 0.0;
       else
         h /= 60.0;
-      int num1 = (int) h;
-      double num2 = h - (double) num1;
-      double num3 = v * (1.0 - s);
-      double num4 = v * (1.0 - s * num2);
-      double num5 = v * (1.0 - s * (1.0 - num2));
-      switch (num1)
+      int num4 = (int) h;
+      double num5 = h - (double) num4;
+      double num6 = v * (1.0 - s);
+      double num7 = v * (1.0 - s * num5);
+      double num8 = v * (1.0 - s * (1.0 - num5));
+      switch (num4)
       {
         case 0:
-          r = v;
-          g = num5;
-          b = num3;
+          num1 = v;
+          num2 = num8;
+          num3 = num6;
           break;
         case 1:
-          r = num4;
-          g = v;
-          b = num3;
+          num1 = num7;
+          num2 = v;
+          num3 = num6;
           break;
         case 2:
-          r = num3;
-          g = v;
-          b = num5;
+          num1 = num6;
+          num2 = v;
+          num3 = num8;
           break;
         case 3:
-          r = num3;
-          g = num4;
-          b = v;
+          num1 = num6;
+          num2 = num7;
+          num3 = v;
           break;
         case 4:
-          r = num5;
-          g = num3;
-          b = v;
+          num1 = num8;
+          num2 = num6;
+          num3 = v;
           break;
         default:
-          r = v;
-          g = num3;
-          b = num4;
+          num1 = v;
+          num2 = num6;
+          num3 = num7;
           break;
       }
     }
-    return new Color((float) r, (float) g, (float) b, alpha);
+    return new Color((float) num1, (float) num2, (float) num3, alpha);
   }
 }

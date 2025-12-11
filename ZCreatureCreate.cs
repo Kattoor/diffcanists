@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-#nullable disable
 public static class ZCreatureCreate
 {
   public static ZCreature CreateCreature(
@@ -42,7 +41,7 @@ public static class ZCreatureCreate
     Creature creature = Inert.GetCreature(reader.ReadString());
     bool flag = reader.ReadBoolean();
     MyLocation pos = reader.ReadMyLocation();
-    ZCreature z = !flag ? Inert.CreateCharacter(parent, parent.settingsPlayer, pos, index, noSpells: true) : (typeof (CreatureThorn) == ((object) creature).GetType() ? (ZCreature) ZCreatureCreate.CreateThorn(parent.game, parent, (CreatureThorn) creature, pos.ToSinglePrecision(), Quaternion.identity, parent.game.GetMapTransform()) : (typeof (CreatureJavelin) == ((object) creature).GetType() ? (ZCreature) ZCreatureCreate.CreateJavalin(parent.game, (CreatureJavelin) creature, pos.ToSinglePrecision(), Quaternion.identity, parent.game.GetMapTransform()) : ZCreatureCreate.CreateCreature(parent, creature, pos.ToSinglePrecision(), Quaternion.identity, parent.game.GetMapTransform(), false)));
+    ZCreature z = !flag ? Inert.CreateCharacter(parent, parent.settingsPlayer, pos, index, true, true) : (typeof (CreatureThorn) == creature.GetType() ? (ZCreature) ZCreatureCreate.CreateThorn(parent.game, parent, (CreatureThorn) creature, pos.ToSinglePrecision(), Quaternion.identity, parent.game.GetMapTransform()) : (typeof (CreatureJavelin) == creature.GetType() ? (ZCreature) ZCreatureCreate.CreateJavalin(parent.game, (CreatureJavelin) creature, pos.ToSinglePrecision(), Quaternion.identity, parent.game.GetMapTransform()) : ZCreatureCreate.CreateCreature(parent, creature, pos.ToSinglePrecision(), Quaternion.identity, parent.game.GetMapTransform(), false)));
     z.id = id;
     z.position = pos;
     z.parent = parent;
@@ -191,7 +190,7 @@ public static class ZCreatureCreate
     {
       writer.Write(c.spells.Count);
       for (int index = 0; index < c.spells.Count; ++index)
-        c.spells[index].Serialize(c.game, writer);
+        c.spells[index].Serialize(c.game, writer, false);
     }
     writer.Write(c.moneyBags);
     writer.Write(c.audioBags);
@@ -250,18 +249,22 @@ public static class ZCreatureCreate
     c.collider.Serialize(c.game, writer);
   }
 
-  public static ZCreature Clone(ZGame game, ZCreature old, Transform p, MyLocation position)
+  public static ZCreature Clone(
+    ZGame game,
+    ZCreature old,
+    Transform p,
+    MyLocation position)
   {
     ZCreature zcreature = old.baseCreature.Get();
     zcreature.id = ++game.nextCreatureID;
     zcreature.game = game;
-    zcreature.Clone(old);
+    zcreature.Clone(old, false);
     zcreature.ClientSetup(old.baseCreature, position.ToSinglePrecision(), Quaternion.identity, p);
     zcreature.gliding = false;
     zcreature.invulnerable = -1;
     zcreature.game = game;
     zcreature.collider.world = game.world;
-    ZSpell.ApplyEffectors(game, zcreature, zcreature.position);
+    ZSpell.ApplyEffectors(game, zcreature, zcreature.position, -1, (Spell) null, (ZCreature) null, false);
     zcreature.spells.Clear();
     foreach (SpellSlot spell in old.spells)
       zcreature.spells.Add(new SpellSlot(spell));

@@ -10,14 +10,15 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-#nullable disable
 public class TutorialEditorMenu : MonoBehaviour
 {
+  private static string prefOpened = "preftutopened";
   internal JObject json = new JObject();
   internal JObject defaultJson = new JObject();
+  internal int selectedListIndex = -1;
+  internal string editing = "";
   internal Educative.Command.Type containerType;
   internal TMP_Text selectedListText;
-  internal int selectedListIndex = -1;
   private JArray activeList;
   internal JToken item;
   internal Tutorial raw;
@@ -45,11 +46,9 @@ public class TutorialEditorMenu : MonoBehaviour
   public Image imgRef;
   public RectTransform imgRefBehind;
   public GameObject att_builds_button;
-  private static string prefOpened = "preftutopened";
   private JObject copiedCommand;
   internal bool edited;
   internal bool changesMade;
-  internal string editing = "";
 
   public static TutorialEditorMenu Instance { get; private set; }
 
@@ -62,7 +61,7 @@ public class TutorialEditorMenu : MonoBehaviour
     TutorialEditorMenu.Instance = this;
     if (Client.game == null)
       return;
-    Client.game.CleanUp();
+    Client.game.CleanUp(false);
     Client.game = (ZGame) null;
   }
 
@@ -86,10 +85,10 @@ public class TutorialEditorMenu : MonoBehaviour
     {
       this.raw = new Tutorial();
       Tutorial raw = this.raw;
-      CInfo c = new CInfo();
-      c.message = "Welcome to this Arcanists Tutorial! Click to Continue...";
-      c.Name = "Welcome";
-      raw.CreateCommand((Educative.Command) c);
+      CInfo cinfo = new CInfo();
+      cinfo.message = "Welcome to this Arcanists Tutorial! Click to Continue...";
+      cinfo.Name = "Welcome";
+      raw.CreateCommand((Educative.Command) cinfo);
       this.ToggleCodeTest(false);
     }
     this.raw.ValidateIdentifiers();
@@ -123,12 +122,12 @@ public class TutorialEditorMenu : MonoBehaviour
       this.selectedListText.GetComponent<UIOnHover>().AlwaysOn = false;
     this.DeselectItem();
     int i1 = -2;
-    this.CreateHeader(ref i1, "~ Basic Tutorial Settings ~");
+    this.CreateHeader(ref i1, "~ Basic Tutorial Settings ~", false, (Action) null, 200);
     int i2 = i1 + 1;
     foreach (JProperty x in this.json.Values<JProperty>())
     {
       if (string.Equals(x.Name, "Name") || string.Equals(x.Name, "message") || string.Equals(x.Name, "settings"))
-        this.PopulateItem(x, ref i2);
+        this.PopulateItem(x, ref i2, -1);
     }
     this.buttonDelete.SetActive(false);
     this.buttonMoveUp.SetActive(false);
@@ -182,7 +181,7 @@ public class TutorialEditorMenu : MonoBehaviour
   {
     if (this.selectedListIndex == -1)
       return;
-    this.UpdateRaw();
+    this.UpdateRaw(true);
     this.copiedCommand = ClipboardExtension.ToJson<ContainerCommand>(new ContainerCommand()
     {
       command = this.raw.commands[this.selectedListIndex]
@@ -194,7 +193,7 @@ public class TutorialEditorMenu : MonoBehaviour
   {
     if (this.selectedListIndex == -1 || this.copiedCommand == null)
       return;
-    this.UpdateRaw();
+    this.UpdateRaw(true);
     Educative.Command command = ClipboardExtension.FromJson<ContainerCommand>(this.copiedCommand).command;
     command.identifier = this.raw.lastID;
     ++this.raw.lastID;
@@ -211,12 +210,12 @@ public class TutorialEditorMenu : MonoBehaviour
     int i1 = this.selectedListIndex;
     if (i1 == -1)
       i1 = 0;
-    this.UpdateRaw();
+    this.UpdateRaw(true);
     Tutorial raw = this.raw;
     int i2 = i1;
-    CInfo c = new CInfo();
-    c.Name = "Info";
-    raw.InsertCommand(i2, (Educative.Command) c);
+    CInfo cinfo = new CInfo();
+    cinfo.Name = "Info";
+    raw.InsertCommand(i2, (Educative.Command) cinfo);
     this.json = this.raw.ToJson();
     this.PopulateList();
     this.RefreshSelectedUI(i1);
@@ -226,14 +225,14 @@ public class TutorialEditorMenu : MonoBehaviour
   public void CommandInsertAfter()
   {
     int selectedListIndex = this.selectedListIndex;
-    this.UpdateRaw();
+    this.UpdateRaw(true);
     int i1 = selectedListIndex != -1 ? selectedListIndex + 1 : this.raw.commands.Count;
     this.selectedListIndex = i1;
     Tutorial raw = this.raw;
     int i2 = i1;
-    CInfo c = new CInfo();
-    c.Name = "Info";
-    raw.InsertCommand(i2, (Educative.Command) c);
+    CInfo cinfo = new CInfo();
+    cinfo.Name = "Info";
+    raw.InsertCommand(i2, (Educative.Command) cinfo);
     this.json = this.raw.ToJson();
     this.PopulateList();
     this.RefreshSelectedUI(i1);
@@ -245,7 +244,7 @@ public class TutorialEditorMenu : MonoBehaviour
     int selectedListIndex = this.selectedListIndex;
     if (selectedListIndex == -1)
       return;
-    this.UpdateRaw();
+    this.UpdateRaw(true);
     this.raw.commands.RemoveAt(selectedListIndex);
     this.json = this.raw.ToJson();
     this.PopulateList();
@@ -259,7 +258,7 @@ public class TutorialEditorMenu : MonoBehaviour
     int selectedListIndex1 = this.selectedListIndex;
     if (selectedListIndex1 == -1)
       return;
-    this.UpdateRaw();
+    this.UpdateRaw(true);
     Educative.Command command1 = this.raw.commands[selectedListIndex1];
     Educative.Command command2 = Educative.Command.From(t);
     command2.Name = t.ToString();
@@ -287,7 +286,7 @@ public class TutorialEditorMenu : MonoBehaviour
     int selectedListIndex = this.selectedListIndex;
     if (selectedListIndex <= 0)
       return;
-    this.UpdateRaw();
+    this.UpdateRaw(true);
     Educative.Command command = this.raw.commands[selectedListIndex - 1];
     this.raw.commands[selectedListIndex - 1] = this.raw.commands[selectedListIndex];
     this.raw.commands[selectedListIndex] = command;
@@ -303,7 +302,7 @@ public class TutorialEditorMenu : MonoBehaviour
     int selectedListIndex = this.selectedListIndex;
     if (selectedListIndex == -1)
       return;
-    this.UpdateRaw();
+    this.UpdateRaw(true);
     if (selectedListIndex >= this.raw.commands.Count - 1)
       return;
     Educative.Command command = this.raw.commands[selectedListIndex + 1];
@@ -319,7 +318,7 @@ public class TutorialEditorMenu : MonoBehaviour
   public void CommandUpdated()
   {
     int selectedListIndex = this.selectedListIndex;
-    this.UpdateRaw();
+    this.UpdateRaw(true);
     this.json = this.raw.ToJson();
     this.PopulateList();
     this.listContainer.GetChild(selectedListIndex).GetComponent<UIOnHover>().onClick.Invoke();
@@ -431,7 +430,7 @@ public class TutorialEditorMenu : MonoBehaviour
     else
     {
       foreach (JProperty x in this.item.Values<JProperty>())
-        this.PopulateItem(x, ref i);
+        this.PopulateItem(x, ref i, -1);
       this.editContainer.sizeDelta = new Vector2(this.editContainer.sizeDelta.x, (float) (i * 50 + 16));
     }
   }
@@ -441,7 +440,7 @@ public class TutorialEditorMenu : MonoBehaviour
     if (x.Value.Type == JTokenType.Object)
     {
       if (!string.Equals(x.Name, "settings"))
-        this.CreateHeader(ref i, x.Name);
+        this.CreateHeader(ref i, x.Name, false, (Action) null, 200);
       if (x.Name.StartsWith("point_"))
       {
         int result1 = 0;
@@ -491,7 +490,7 @@ public class TutorialEditorMenu : MonoBehaviour
           sp.CopySpells(set, true);
           x.Value = JToken.FromObject((object) sp);
           TutorialEditorMenu.Instance.Edited();
-        }), true)));
+        }), true, Validation.Default, false, (Action) null)));
         ++i;
         return;
       }
@@ -503,23 +502,23 @@ public class TutorialEditorMenu : MonoBehaviour
           foreach (object obj in (IEnumerable<JToken>) x.Values())
             name = obj.ToString();
           int i1 = -1;
-          this.CreateHeader(ref i1, name);
+          this.CreateHeader(ref i1, name, false, (Action) null, 200);
         }
         else
-          this.CreateItem(property, ref i);
+          this.CreateItem(property, ref i, -1);
       }
     }
     else if (x.Value.Type == JTokenType.Array)
     {
       bool flag = !string.Equals(x.Name, "parts");
-      this.CreateHeader(ref i, x.Name);
+      this.CreateHeader(ref i, x.Name, false, (Action) null, 200);
       int num = 1;
       foreach (JObject child in x.Value.Children<JObject>())
       {
         int zz = num - 1;
-        int i2 = i;
+        int i1 = i;
         if (flag)
-          this.CreateHeader(ref i2, num.ToString(), true, (Action) (() =>
+          this.CreateHeader(ref i1, num.ToString(), true, (Action) (() =>
           {
             ((JArray) x.Value).RemoveAt(zz);
             this.PopulateEdit();
@@ -531,7 +530,7 @@ public class TutorialEditorMenu : MonoBehaviour
       }
       if (!flag)
         return;
-      GameObject header = this.CreateHeader(ref i, "--- Add Item ---");
+      GameObject header = this.CreateHeader(ref i, "--- Add Item ---", false, (Action) null, 200);
       JArray jt = (JArray) x.Value;
       header.GetComponent<UIOnHover>().onClick.AddListener((UnityAction) (() =>
       {
@@ -555,18 +554,18 @@ public class TutorialEditorMenu : MonoBehaviour
     }
     else if (string.Equals(x.Name, "Name"))
     {
-      int i3 = -1;
-      this.CreateItem(x, ref i3, arrayIndex);
+      int i1 = -1;
+      this.CreateItem(x, ref i1, arrayIndex);
     }
     else if (string.Equals(x.Name, "type"))
     {
-      int i4 = -3;
-      this.CreateItem(x, ref i4, arrayIndex);
+      int i1 = -3;
+      this.CreateItem(x, ref i1, arrayIndex);
     }
     else if (string.Equals(x.Name, "tabIndex"))
     {
-      int i5 = -2;
-      this.CreateItem(x, ref i5, arrayIndex);
+      int i1 = -2;
+      this.CreateItem(x, ref i1, arrayIndex);
     }
     else
       this.CreateItem(x, ref i, arrayIndex);
@@ -639,39 +638,39 @@ public class TutorialEditorMenu : MonoBehaviour
     switch (property.Name)
     {
       case "algorithm":
-        this.CreateDropDown<MyMaths>(property, ref i, MyMaths.Addition);
+        this.CreateDropDown<MyMaths>(property, ref i, MyMaths.Addition, (Action<int>) null);
         break;
       case "armageddon":
-        this.CreateDropDown<MapEnum>(property, ref i, MapEnum.Grassy_Hills);
+        this.CreateDropDown<MapEnum>(property, ref i, MapEnum.Grassy_Hills, (Action<int>) null);
         break;
       case "bookOf":
-        this.CreateDropDown<BookOf>(property, ref i, BookOf.Arcane);
+        this.CreateDropDown<BookOf>(property, ref i, BookOf.Arcane, (Action<int>) null);
         break;
       case "castType":
-        this.CreateDropDown<CastType>(property, ref i, CastType.Power);
+        this.CreateDropDown<CastType>(property, ref i, CastType.Power, (Action<int>) null);
         break;
       case "commandID":
-        this.CreateDropDownCommandID(property, ref i);
+        this.CreateDropDownCommandID(property, ref i, (Action<int>) null);
         break;
       case "comparison":
-        this.CreateDropDown<Comparison>(property, ref i, Comparison.Equal);
+        this.CreateDropDown<Comparison>(property, ref i, Comparison.Equal, (Action<int>) null);
         break;
       case "entity":
-        this.CreateDropDownEntity(property, ref i);
+        this.CreateDropDownEntity(property, ref i, (Action<int>) null);
         break;
       case "identifier":
         break;
       case "kind":
-        this.CreateDropDown<CCreateIndicator.Kinds>(property, ref i, CCreateIndicator.Kinds.Area);
+        this.CreateDropDown<CCreateIndicator.Kinds>(property, ref i, CCreateIndicator.Kinds.Area, (Action<int>) null);
         break;
       case "spellEnum":
-        this.CreateDropDown<SpellEnum>(property, ref i, SpellEnum.None);
+        this.CreateDropDown<SpellEnum>(property, ref i, SpellEnum.None, (Action<int>) null);
         break;
       case "spellType":
-        this.CreateDropDown<SpellType>(property, ref i, SpellType.None);
+        this.CreateDropDown<SpellType>(property, ref i, SpellType.None, (Action<int>) null);
         break;
       case "summon":
-        this.CreateDropDownSummon(property, ref i);
+        this.CreateDropDownSummon(property, ref i, (Action<int>) null);
         break;
       case "tabIndex":
         this.CreateDropDown<Educative.Command.TabIndex>(property, ref i, Educative.Command.TabIndex.Zero, (Action<int>) (v => this.CommandUpdated()));
@@ -680,7 +679,7 @@ public class TutorialEditorMenu : MonoBehaviour
         this.CreateDropDown<Educative.Command.Type>(property, ref i, Educative.Command.Type.Info, (Action<int>) (v => this.CommandChange((Educative.Command.Type) v)));
         break;
       case "which":
-        this.CreateDropDownVariables(property, ref i);
+        this.CreateDropDownVariables(property, ref i, (Action<int>) null);
         break;
       default:
         if (property.Name.StartsWith("bool_"))
@@ -701,7 +700,7 @@ public class TutorialEditorMenu : MonoBehaviour
           transform.localScale = new Vector3(1f, 1f, 1f);
           transform.anchoredPosition = new Vector2(200f, (float) (i * -50 - 8));
           pfabEditJsonItem.gameObject.SetActive(true);
-          pfabEditJsonItem.init(property, arrayIndex);
+          pfabEditJsonItem.init(property, arrayIndex, (string) null, false);
           i += 5;
           break;
         }
@@ -715,7 +714,7 @@ public class TutorialEditorMenu : MonoBehaviour
           pfabEditJsonItem.init(property, arrayIndex, property.Name, true);
           i += 8;
           pfabEditJsonItem.value.Select();
-          this.CreateButton(ref i, "Spells (Clipboard)", (UnityAction) (() => SpellLobbyChange.Create(onEnd: (Action<SettingsPlayer>) (set =>
+          this.CreateButton(ref i, "Spells (Clipboard)", (UnityAction) (() => SpellLobbyChange.Create((SettingsPlayer) null, (Action<SettingsPlayer>) (set =>
           {
             StringBuilder stringBuilder = new StringBuilder("sum.spells = {");
             foreach (byte spell in set.spells)
@@ -734,15 +733,15 @@ public class TutorialEditorMenu : MonoBehaviour
             stringBuilder.Append("} ");
             stringBuilder.Append("\n sum.elemental = BookOf.").Append((object) (BookOf) set.fullBook);
             Global.systemCopyBuffer = stringBuilder.ToString();
-          }), center: true)));
-          this.CreateButton(ref i, "Outfit (Clipboard)", (UnityAction) (() => ChangeOutfitMenu.Create(false, onEnd: (Action<SettingsPlayer>) (set =>
+          }), true, Validation.Default, false, (Action) null)));
+          this.CreateButton(ref i, "Outfit (Clipboard)", (UnityAction) (() => ChangeOutfitMenu.Create(false, true, (SettingsPlayer) null, (Action<SettingsPlayer>) (set =>
           {
             StringBuilder stringBuilder = new StringBuilder("sum.outfit = {");
-            for (int o = 0; o < 9; ++o)
+            for (int index = 0; index < 9; ++index)
             {
-              if (o > 0)
+              if (index > 0)
                 stringBuilder.Append(", ");
-              stringBuilder.Append(set.GetOutfitIndex((Outfit) o));
+              stringBuilder.Append(set.GetOutfitIndex((Outfit) index));
             }
             stringBuilder.Append("} \nsum.colors = {");
             for (int i1 = 0; i1 < 4; ++i1)
@@ -766,7 +765,7 @@ public class TutorialEditorMenu : MonoBehaviour
         transform1.anchoredPosition = new Vector2(200f, (float) (i * -50 - 8));
         pfabEditJsonItem1.gameObject.SetActive(true);
         int num = property.Name.IndexOf('_');
-        pfabEditJsonItem1.init(property, arrayIndex, num > -1 ? property.Name.Substring(num + 1) : (string) null);
+        pfabEditJsonItem1.init(property, arrayIndex, num > -1 ? property.Name.Substring(num + 1) : (string) null, false);
         ++i;
         break;
     }
@@ -794,7 +793,7 @@ public class TutorialEditorMenu : MonoBehaviour
     uiOnHover.transform.GetChild(0).GetComponent<TMP_Text>().text = "Convert to code only";
     uiOnHover.onClick.AddListener((UnityAction) (() => ChooseJsonDialog.Create(true, ChooseJsonDialog.Viewing.Custom, (Action<string, Tutorial, int>) ((s, tut, _index) =>
     {
-      this.UpdateRaw();
+      this.UpdateRaw(true);
       StringBuilder stringBuilder = new StringBuilder();
       stringBuilder.Append("--NAME = ").Append(this.raw.Name);
       stringBuilder.Append("\n--DESCRIPTION = ").Append(this.raw.message);
@@ -811,27 +810,32 @@ public class TutorialEditorMenu : MonoBehaviour
       stringBuilder.Append("\n\n--CODE--\n\n");
       stringBuilder.Append(((CScript) this.raw.commands[this.selectedListIndex]).code);
       this.Editing(s);
-      Global.SaveTutorialCode(s, stringBuilder.ToString());
-    }))));
+      Global.SaveTutorialCode(s, stringBuilder.ToString(), true);
+    }), false, (Action<string, string, int>) null)));
     ++i;
   }
 
-  private GameObject CreateHeader(ref int i, string name, bool canDelete = false, Action a = null, int offsetX = 200)
+  private GameObject CreateHeader(
+    ref int i,
+    string name,
+    bool canDelete = false,
+    Action a = null,
+    int offsetX = 200)
   {
-    GameObject header = UnityEngine.Object.Instantiate<GameObject>(this.pfabListItem, (Transform) this.editContainer);
-    RectTransform transform = (RectTransform) header.transform;
+    GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(this.pfabListItem, (Transform) this.editContainer);
+    RectTransform transform = (RectTransform) gameObject.transform;
     transform.localScale = new Vector3(1f, 1f, 1f);
     transform.anchoredPosition = new Vector2((float) offsetX, (float) (i * -50 - 8));
-    header.gameObject.SetActive(true);
+    gameObject.gameObject.SetActive(true);
     int num = name.IndexOf('_');
     if (num > 0)
-      header.GetComponent<TMP_Text>().text = name.Substring(num + 1);
+      gameObject.GetComponent<TMP_Text>().text = name.Substring(num + 1);
     else
-      header.GetComponent<TMP_Text>().text = name;
+      gameObject.GetComponent<TMP_Text>().text = name;
     ++i;
     if (canDelete)
     {
-      Transform child = header.transform.GetChild(0);
+      Transform child = gameObject.transform.GetChild(0);
       child.gameObject.SetActive(true);
       child.GetComponent<UIOnHover>().onClick.AddListener((UnityAction) (() =>
       {
@@ -841,7 +845,7 @@ public class TutorialEditorMenu : MonoBehaviour
         action();
       }));
     }
-    return header;
+    return gameObject;
   }
 
   public bool FindInputByName(string s, string value)
@@ -891,15 +895,18 @@ public class TutorialEditorMenu : MonoBehaviour
     {
       Global.SaveTutorial(s, this.json.ToString());
       this.Editing(s + ".arcTutorial");
-    }));
+    }), false, (Action<string, string, int>) null);
   }
 
   public void ClickOpen()
   {
-    ChooseJsonDialog.Create(false, ChooseJsonDialog.Viewing.Custom, (Action<string, Tutorial, int>) ((s, tut, _index) => this.OnOpen(s, tut)), true);
+    ChooseJsonDialog.Create(false, ChooseJsonDialog.Viewing.Custom, (Action<string, Tutorial, int>) ((s, tut, _index) => this.OnOpen(s, tut)), true, (Action<string, string, int>) null);
   }
 
-  public void ClickNew() => this.OnOpen("", Tutorial.Default);
+  public void ClickNew()
+  {
+    this.OnOpen("", Tutorial.Default);
+  }
 
   public void OnOpen(string s, Tutorial j)
   {
@@ -928,7 +935,10 @@ public class TutorialEditorMenu : MonoBehaviour
     this.FindMapImage();
   }
 
-  public void ToggleCodeTest(bool v) => this.buttonCodeFile.SetActive(true);
+  public void ToggleCodeTest(bool v)
+  {
+    this.buttonCodeFile.SetActive(true);
+  }
 
   public void FindMapImage()
   {
@@ -971,9 +981,15 @@ public class TutorialEditorMenu : MonoBehaviour
     this.txt_editing.text = s.Substring(0, s.Length - Path.GetExtension(s).Length);
   }
 
-  public void Hover(string s) => MyToolTip.Show(s);
+  public void Hover(string s)
+  {
+    MyToolTip.Show(s, -1f);
+  }
 
-  public void HoverLeave() => MyToolTip.Close();
+  public void HoverLeave()
+  {
+    MyToolTip.Close();
+  }
 
   public void CheckSave()
   {
@@ -1000,7 +1016,7 @@ public class TutorialEditorMenu : MonoBehaviour
     }
     catch (Exception ex)
     {
-      MyContextMenu.ShowSimple("Save Failed - An error occured:\n" + ex.Message);
+      MyContextMenu.ShowSimple("Save Failed - An error occured:\n" + ex.Message, (Action) null, new Color?());
     }
   }
 

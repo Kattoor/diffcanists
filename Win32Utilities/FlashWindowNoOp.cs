@@ -1,15 +1,26 @@
 
-#nullable disable
 namespace Win32Utilities
 {
   internal class FlashWindowNoOp : IFlashWindow
   {
-    public bool Flash() => false;
+    public bool Flash()
+    {
+      return false;
+    }
 
-    public bool Flash(uint count) => false;
+    public bool Flash(uint count)
+    {
+      return false;
+    }
 
-    public bool Start() => false;
+    public bool Start()
+    {
+      return false;
+    }
 
-    public bool Stop() => false;
+    public bool Stop()
+    {
+      return false;
+    }
   }
 }

@@ -6,47 +6,8 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-#nullable disable
 public class AccountInfo
 {
-  public const byte AttributeIgnore = 1;
-  [NonSerialized]
-  public bool fake;
-  public string name = "";
-  public string oldName = "";
-  public AccountType accountType = AccountType.Muted;
-  public byte experience;
-  public byte prestige;
-  public ulong discord;
-  public byte displayedIcon;
-  public byte displayClanPrefix;
-  public int points;
-  public long lastLogin;
-  public int dust = 100;
-  public int poll;
-  public Location location;
-  public Connection activeConnection;
-  public short version = 10028;
-  public BitBools tutorials = new BitBools();
-  public int wands;
-  public int totalWands;
-  public ChatSetting lobbyChat;
-  public ChatSetting gameChat;
-  public ChatSetting friendChat;
-  public ChatSetting inviteChat;
-  public ChatSetting spectatorChat;
-  public ChatSetting clanChat;
-  public ChatSetting teamChat;
-  public ChatSetting miniGameChat;
-  public HashSet<string> friends = new HashSet<string>();
-  public HashSet<string> ignored = new HashSet<string>();
-  public GamesPlayed games = new GamesPlayed();
-  public Cosmetics cosmetics;
-  public float bonusExperience;
-  public string clan = "";
-  public Clan.Roles clanRole = Clan.Roles.Member;
-  public string state = "";
-  internal bool saveCosmetics;
   private static int[] digitsValues = new int[13]
   {
     1,
@@ -93,21 +54,83 @@ public class AccountInfo
     "pur extreme",
     "pure xtreme"
   };
+  public string name = "";
+  public string oldName = "";
+  public AccountType accountType = AccountType.Muted;
+  public int dust = 100;
+  public short version = 10028;
+  public BitBools tutorials = new BitBools();
+  public HashSet<string> friends = new HashSet<string>();
+  public HashSet<string> ignored = new HashSet<string>();
+  public GamesPlayed games = new GamesPlayed();
+  public string clan = "";
+  public Clan.Roles clanRole = Clan.Roles.Member;
+  public string state = "";
+  public const byte AttributeIgnore = 1;
+  [NonSerialized]
+  public bool fake;
+  public byte experience;
+  public byte prestige;
+  public ulong discord;
+  public byte displayedIcon;
+  public byte displayClanPrefix;
+  public int points;
+  public long lastLogin;
+  public int poll;
+  public Location location;
+  public Connection activeConnection;
+  public int wands;
+  public int totalWands;
+  public ChatSetting lobbyChat;
+  public ChatSetting gameChat;
+  public ChatSetting friendChat;
+  public ChatSetting inviteChat;
+  public ChatSetting spectatorChat;
+  public ChatSetting clanChat;
+  public ChatSetting teamChat;
+  public ChatSetting miniGameChat;
+  public Cosmetics cosmetics;
+  public float bonusExperience;
+  internal bool saveCosmetics;
   public const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
   public short rating
   {
-    get => this.games.rating;
-    set => this.games.rating = value;
+    get
+    {
+      return this.games.rating;
+    }
+    set
+    {
+      this.games.rating = value;
+    }
   }
 
-  public int similiarRating => Mathf.Max((int) this.games.rating, 1000);
+  public int similiarRating
+  {
+    get
+    {
+      return Mathf.Max((int) this.games.rating, 1000);
+    }
+  }
 
-  public string ratingString => this.games.rating >= (short) 0 ? this.games.rating.ToString() : "-";
+  public string ratingString
+  {
+    get
+    {
+      return this.games.rating >= (short) 0 ? this.games.rating.ToString() : "-";
+    }
+  }
 
-  public int experienceIndex() => (int) this.experience;
+  public int experienceIndex()
+  {
+    return (int) this.experience;
+  }
 
-  public static string numberplus(int i) => i.ToString() + AccountInfo.number(i);
+  public static string numberplus(int i)
+  {
+    return i.ToString() + AccountInfo.number(i);
+  }
 
   public static string number(int i)
   {
@@ -133,11 +156,20 @@ public class AccountInfo
     Server.ReturnServerMsg(c, "You are now level " + (object) this.experienceIndex() + "!");
   }
 
-  public short RequiredRating() => (short) ((int) this.experience * 200);
+  public short RequiredRating()
+  {
+    return (short) ((int) this.experience * 200);
+  }
 
-  public int RequiredAchievements() => Mathf.Clamp((int) this.experience, 0, 10) * 2500 + 500;
+  public int RequiredAchievements()
+  {
+    return Mathf.Clamp((int) this.experience, 0, 10) * 2500 + 500;
+  }
 
-  public int RequiredPoints() => ((int) this.experience + 1) * 156;
+  public int RequiredPoints()
+  {
+    return ((int) this.experience + 1) * 156;
+  }
 
   public void AddWands(int x)
   {
@@ -165,7 +197,10 @@ public class AccountInfo
   {
   }
 
-  public AccountInfo(string n) => this.name = n;
+  public AccountInfo(string n)
+  {
+    this.name = n;
+  }
 
   public void Serialize(myBinaryWriter w)
   {

@@ -1,7 +1,6 @@
 
 using UnityEngine;
 
-#nullable disable
 public class TwiddleScale : MonoBehaviour
 {
   public float minScale = 0.5f;

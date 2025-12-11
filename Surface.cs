@@ -1,7 +1,6 @@
 
 using UnityEngine;
 
-#nullable disable
 public class Surface
 {
   public Color32[] pixels;
@@ -17,14 +16,14 @@ public class Surface
 
   public void set_Item(int x, int y, Color32 c)
   {
-    if (y >= this.height || y < 0 || x >= this.width || x < 0 || c.a == (byte) 0)
+    if (y >= this.height || y < 0 || (x >= this.width || x < 0) || c.a == (byte) 0)
       return;
     this.pixels[x + y * this.width] = c;
   }
 
   public Color32 get_Item(int x, int y)
   {
-    return y >= this.height || y < 0 || x >= this.width || x < 0 ? (Color32) Color.clear : this.pixels[x + y * this.width];
+    return y >= this.height || y < 0 || (x >= this.width || x < 0) ? (Color32) Color.clear : this.pixels[x + y * this.width];
   }
 
   public Surface(Texture2D tex)

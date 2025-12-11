@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Video;
 
-#nullable disable
 public class IntroVideo : MonoBehaviour
 {
   public VideoPlayer video;
@@ -31,7 +30,10 @@ public class IntroVideo : MonoBehaviour
     }
   }
 
-  public void OnEnd(VideoPlayer p) => this.SkipOnce();
+  public void OnEnd(VideoPlayer p)
+  {
+    this.SkipOnce();
+  }
 
   public void SkipOnce()
   {

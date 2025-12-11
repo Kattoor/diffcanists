@@ -9,42 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-#nullable disable
 public class Account
 {
-  [JsonIgnore]
-  public long afkTimer;
-  [JsonIgnore]
-  public pfabName pfabName;
-  public const byte AttributeIgnore = 1;
-  [JsonIgnore]
-  public int sessionWinningStreak;
-  [JsonIgnore]
-  public NewGamesPlayed gameLowTime = new NewGamesPlayed();
-  [JsonIgnore]
-  public NewGamesPlayed gameHighTime = new NewGamesPlayed();
-  [JsonIgnore]
-  public NewGamesPlayed gameFun = new NewGamesPlayed();
-  [JsonIgnore]
-  public NewGamesPlayed _oldGames = new NewGamesPlayed();
-  [JsonIgnore]
-  public bool fake;
-  [JsonIgnore]
-  public Connection activeConnection;
-  [JsonIgnore]
-  public int server;
-  private HashSet<string> _friends = new HashSet<string>((IEqualityComparer<string>) StringComparer.OrdinalIgnoreCase);
-  private HashSet<string> _ignored = new HashSet<string>((IEqualityComparer<string>) StringComparer.OrdinalIgnoreCase);
-  [JsonProperty("at")]
-  public int tomatoes;
-  [JsonIgnore]
-  public string state = "";
-  [JsonIgnore]
-  public bool activeItemsChanged;
-  [JsonIgnore]
-  public bool steamVerified;
-  [JsonIgnore]
-  internal bool saveCosmetics;
   private static int[] digitsValues = new int[13]
   {
     1,
@@ -91,6 +57,39 @@ public class Account
     "pur extreme",
     "pure xtreme"
   };
+  [JsonIgnore]
+  public NewGamesPlayed gameLowTime = new NewGamesPlayed();
+  [JsonIgnore]
+  public NewGamesPlayed gameHighTime = new NewGamesPlayed();
+  [JsonIgnore]
+  public NewGamesPlayed gameFun = new NewGamesPlayed();
+  [JsonIgnore]
+  public NewGamesPlayed _oldGames = new NewGamesPlayed();
+  private HashSet<string> _friends = new HashSet<string>((IEqualityComparer<string>) StringComparer.OrdinalIgnoreCase);
+  private HashSet<string> _ignored = new HashSet<string>((IEqualityComparer<string>) StringComparer.OrdinalIgnoreCase);
+  [JsonIgnore]
+  public string state = "";
+  [JsonIgnore]
+  public long afkTimer;
+  [JsonIgnore]
+  public pfabName pfabName;
+  public const byte AttributeIgnore = 1;
+  [JsonIgnore]
+  public int sessionWinningStreak;
+  [JsonIgnore]
+  public bool fake;
+  [JsonIgnore]
+  public Connection activeConnection;
+  [JsonIgnore]
+  public int server;
+  [JsonProperty("at")]
+  public int tomatoes;
+  [JsonIgnore]
+  public bool activeItemsChanged;
+  [JsonIgnore]
+  public bool steamVerified;
+  [JsonIgnore]
+  internal bool saveCosmetics;
   public const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   public const string charsExpanded = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+=-<>,./?;:[{]}|";
 
@@ -104,7 +103,13 @@ public class Account
   }
 
   [JsonIgnore]
-  public short similarRating => Math.Max((short) 1000, this.HighestRating);
+  public short similarRating
+  {
+    get
+    {
+      return Math.Max((short) 1000, this.HighestRating);
+    }
+  }
 
   [JsonIgnore]
   public string ratingString
@@ -143,11 +148,17 @@ public class Account
     return this.afkTimer != 0L && (DateTime.UtcNow - DateTime.FromBinary(this.afkTimer)).TotalMinutes > 10.0;
   }
 
-  public static async Task<Account> FromFile(string n, bool all = true) => new Account();
+  public static async Task<Account> FromFile(string n, bool all = true)
+  {
+    return new Account();
+  }
 
   public string key
   {
-    get => this.name.ToLower();
+    get
+    {
+      return this.name.ToLower();
+    }
     set
     {
     }
@@ -213,22 +224,40 @@ public class Account
   [JsonIgnore]
   public int spellbookWinningStreak
   {
-    get => this.extraStuff.spellbookWinningStreak;
-    set => this.extraStuff.spellbookWinningStreak = value;
+    get
+    {
+      return this.extraStuff.spellbookWinningStreak;
+    }
+    set
+    {
+      this.extraStuff.spellbookWinningStreak = value;
+    }
   }
 
   [JsonIgnore]
   public int spellbookWinningStreak_Maps
   {
-    get => this.extraStuff.spellbookWinningStreak_Maps;
-    set => this.extraStuff.spellbookWinningStreak_Maps = value;
+    get
+    {
+      return this.extraStuff.spellbookWinningStreak_Maps;
+    }
+    set
+    {
+      this.extraStuff.spellbookWinningStreak_Maps = value;
+    }
   }
 
   [JsonIgnore]
   public byte[] lastSpellBook
   {
-    get => this.extraStuff.lastSpellBook;
-    set => this.extraStuff.lastSpellBook = value;
+    get
+    {
+      return this.extraStuff.lastSpellBook;
+    }
+    set
+    {
+      this.extraStuff.lastSpellBook = value;
+    }
   }
 
   [JsonIgnore]
@@ -263,282 +292,519 @@ public class Account
   [Indexed(null)]
   public short Rating
   {
-    get => this.gameLowTime.rating;
-    set => this.gameLowTime.rating = value;
+    get
+    {
+      return this.gameLowTime.rating;
+    }
+    set
+    {
+      this.gameLowTime.rating = value;
+    }
   }
 
   [JsonProperty("gg2")]
   public int RatedGamesWon
   {
-    get => this.gameLowTime.ratedGamesWon;
-    set => this.gameLowTime.ratedGamesWon = value;
+    get
+    {
+      return this.gameLowTime.ratedGamesWon;
+    }
+    set
+    {
+      this.gameLowTime.ratedGamesWon = value;
+    }
   }
 
   [JsonProperty("gg3")]
   public int TotalRatedGames
   {
-    get => this.gameLowTime.totalRatedGames;
-    set => this.gameLowTime.totalRatedGames = value;
+    get
+    {
+      return this.gameLowTime.totalRatedGames;
+    }
+    set
+    {
+      this.gameLowTime.totalRatedGames = value;
+    }
   }
 
   [JsonProperty("gg4")]
   public int CurrentWinningStreak
   {
-    get => this.gameLowTime.currentWinningStreak;
-    set => this.gameLowTime.currentWinningStreak = value;
+    get
+    {
+      return this.gameLowTime.currentWinningStreak;
+    }
+    set
+    {
+      this.gameLowTime.currentWinningStreak = value;
+    }
   }
 
   [JsonProperty("gg5")]
   public int LongestWinningStreak
   {
-    get => this.gameLowTime.longestWinningStreak;
-    set => this.gameLowTime.longestWinningStreak = value;
+    get
+    {
+      return this.gameLowTime.longestWinningStreak;
+    }
+    set
+    {
+      this.gameLowTime.longestWinningStreak = value;
+    }
   }
 
   [JsonProperty("gg6")]
   public long DamageDealt
   {
-    get => this.gameLowTime.damageDealt;
-    set => this.gameLowTime.damageDealt = value;
+    get
+    {
+      return this.gameLowTime.damageDealt;
+    }
+    set
+    {
+      this.gameLowTime.damageDealt = value;
+    }
   }
 
   [JsonProperty("gg7")]
   public int GamesSurvived
   {
-    get => this.gameLowTime.gamesSurvived;
-    set => this.gameLowTime.gamesSurvived = value;
+    get
+    {
+      return this.gameLowTime.gamesSurvived;
+    }
+    set
+    {
+      this.gameLowTime.gamesSurvived = value;
+    }
   }
 
   [JsonProperty("gg8")]
   public int Kills
   {
-    get => this.gameLowTime.kills;
-    set => this.gameLowTime.kills = value;
+    get
+    {
+      return this.gameLowTime.kills;
+    }
+    set
+    {
+      this.gameLowTime.kills = value;
+    }
   }
 
   [JsonProperty("gg9")]
   public int GamesWentFirst
   {
-    get => this.gameLowTime.gamesWentFirst;
-    set => this.gameLowTime.gamesWentFirst = value;
+    get
+    {
+      return this.gameLowTime.gamesWentFirst;
+    }
+    set
+    {
+      this.gameLowTime.gamesWentFirst = value;
+    }
   }
 
   [JsonProperty("gg10")]
   public int GamesWentFirstWon
   {
-    get => this.gameLowTime.gamesWentFirstWon;
-    set => this.gameLowTime.gamesWentFirstWon = value;
+    get
+    {
+      return this.gameLowTime.gamesWentFirstWon;
+    }
+    set
+    {
+      this.gameLowTime.gamesWentFirstWon = value;
+    }
   }
 
   [JsonProperty("gg11")]
   public int Draws
   {
-    get => this.gameLowTime.draws;
-    set => this.gameLowTime.draws = value;
+    get
+    {
+      return this.gameLowTime.draws;
+    }
+    set
+    {
+      this.gameLowTime.draws = value;
+    }
   }
 
   [JsonProperty("gg12")]
   public long LastGamePlayed
   {
-    get => this.gameLowTime.lastGamePlayed;
-    set => this.gameLowTime.lastGamePlayed = value;
+    get
+    {
+      return this.gameLowTime.lastGamePlayed;
+    }
+    set
+    {
+      this.gameLowTime.lastGamePlayed = value;
+    }
   }
 
   [JsonProperty("gg13")]
   public int TeamGames
   {
-    get => this.gameLowTime.teamGames;
-    set => this.gameLowTime.teamGames = value;
+    get
+    {
+      return this.gameLowTime.teamGames;
+    }
+    set
+    {
+      this.gameLowTime.teamGames = value;
+    }
   }
 
   [JsonProperty("ratehigh")]
   [Indexed(null)]
   public short Rating1
   {
-    get => this.gameHighTime.rating;
-    set => this.gameHighTime.rating = value;
+    get
+    {
+      return this.gameHighTime.rating;
+    }
+    set
+    {
+      this.gameHighTime.rating = value;
+    }
   }
 
   [JsonProperty("gh2")]
   public int RatedGamesWon1
   {
-    get => this.gameHighTime.ratedGamesWon;
-    set => this.gameHighTime.ratedGamesWon = value;
+    get
+    {
+      return this.gameHighTime.ratedGamesWon;
+    }
+    set
+    {
+      this.gameHighTime.ratedGamesWon = value;
+    }
   }
 
   [JsonProperty("gh3")]
   public int TotalRatedGames1
   {
-    get => this.gameHighTime.totalRatedGames;
-    set => this.gameHighTime.totalRatedGames = value;
+    get
+    {
+      return this.gameHighTime.totalRatedGames;
+    }
+    set
+    {
+      this.gameHighTime.totalRatedGames = value;
+    }
   }
 
   [JsonProperty("gh4")]
   public int CurrentWinningStreak1
   {
-    get => this.gameHighTime.currentWinningStreak;
-    set => this.gameHighTime.currentWinningStreak = value;
+    get
+    {
+      return this.gameHighTime.currentWinningStreak;
+    }
+    set
+    {
+      this.gameHighTime.currentWinningStreak = value;
+    }
   }
 
   [JsonProperty("gh5")]
   public int LongestWinningStreak1
   {
-    get => this.gameHighTime.longestWinningStreak;
-    set => this.gameHighTime.longestWinningStreak = value;
+    get
+    {
+      return this.gameHighTime.longestWinningStreak;
+    }
+    set
+    {
+      this.gameHighTime.longestWinningStreak = value;
+    }
   }
 
   [JsonProperty("gh6")]
   public long DamageDealt1
   {
-    get => this.gameHighTime.damageDealt;
-    set => this.gameHighTime.damageDealt = value;
+    get
+    {
+      return this.gameHighTime.damageDealt;
+    }
+    set
+    {
+      this.gameHighTime.damageDealt = value;
+    }
   }
 
   [JsonProperty("gh7")]
   public int GamesSurvived1
   {
-    get => this.gameHighTime.gamesSurvived;
-    set => this.gameHighTime.gamesSurvived = value;
+    get
+    {
+      return this.gameHighTime.gamesSurvived;
+    }
+    set
+    {
+      this.gameHighTime.gamesSurvived = value;
+    }
   }
 
   [JsonProperty("gh8")]
   public int Kills1
   {
-    get => this.gameHighTime.kills;
-    set => this.gameHighTime.kills = value;
+    get
+    {
+      return this.gameHighTime.kills;
+    }
+    set
+    {
+      this.gameHighTime.kills = value;
+    }
   }
 
   [JsonProperty("gh9")]
   public int GamesWentFirst1
   {
-    get => this.gameHighTime.gamesWentFirst;
-    set => this.gameHighTime.gamesWentFirst = value;
+    get
+    {
+      return this.gameHighTime.gamesWentFirst;
+    }
+    set
+    {
+      this.gameHighTime.gamesWentFirst = value;
+    }
   }
 
   [JsonProperty("gh10")]
   public int GamesWentFirstWon1
   {
-    get => this.gameHighTime.gamesWentFirstWon;
-    set => this.gameHighTime.gamesWentFirstWon = value;
+    get
+    {
+      return this.gameHighTime.gamesWentFirstWon;
+    }
+    set
+    {
+      this.gameHighTime.gamesWentFirstWon = value;
+    }
   }
 
   [JsonProperty("gh11")]
   public int Draws1
   {
-    get => this.gameHighTime.draws;
-    set => this.gameHighTime.draws = value;
+    get
+    {
+      return this.gameHighTime.draws;
+    }
+    set
+    {
+      this.gameHighTime.draws = value;
+    }
   }
 
   [JsonProperty("gh12")]
   public long LastGamePlayed1
   {
-    get => this.gameHighTime.lastGamePlayed;
-    set => this.gameHighTime.lastGamePlayed = value;
+    get
+    {
+      return this.gameHighTime.lastGamePlayed;
+    }
+    set
+    {
+      this.gameHighTime.lastGamePlayed = value;
+    }
   }
 
   [JsonProperty("gh13")]
   public int TeamGames1
   {
-    get => this.gameHighTime.teamGames;
-    set => this.gameHighTime.teamGames = value;
+    get
+    {
+      return this.gameHighTime.teamGames;
+    }
+    set
+    {
+      this.gameHighTime.teamGames = value;
+    }
   }
 
   [JsonProperty("rateparty")]
   [Indexed(null)]
   public short Rating2
   {
-    get => this.gameFun.rating;
-    set => this.gameFun.rating = value;
+    get
+    {
+      return this.gameFun.rating;
+    }
+    set
+    {
+      this.gameFun.rating = value;
+    }
   }
 
   [JsonProperty("gi2")]
   public int RatedGamesWon2
   {
-    get => this.gameFun.ratedGamesWon;
-    set => this.gameFun.ratedGamesWon = value;
+    get
+    {
+      return this.gameFun.ratedGamesWon;
+    }
+    set
+    {
+      this.gameFun.ratedGamesWon = value;
+    }
   }
 
   [JsonProperty("gi3")]
   public int TotalRatedGames2
   {
-    get => this.gameFun.totalRatedGames;
-    set => this.gameFun.totalRatedGames = value;
+    get
+    {
+      return this.gameFun.totalRatedGames;
+    }
+    set
+    {
+      this.gameFun.totalRatedGames = value;
+    }
   }
 
   [JsonProperty("gi4")]
   public int CurrentWinningStreak2
   {
-    get => this.gameFun.currentWinningStreak;
-    set => this.gameFun.currentWinningStreak = value;
+    get
+    {
+      return this.gameFun.currentWinningStreak;
+    }
+    set
+    {
+      this.gameFun.currentWinningStreak = value;
+    }
   }
 
   [JsonProperty("gi5")]
   public int LongestWinningStreak2
   {
-    get => this.gameFun.longestWinningStreak;
-    set => this.gameFun.longestWinningStreak = value;
+    get
+    {
+      return this.gameFun.longestWinningStreak;
+    }
+    set
+    {
+      this.gameFun.longestWinningStreak = value;
+    }
   }
 
   [JsonProperty("gi6")]
   public long DamageDealt2
   {
-    get => this.gameFun.damageDealt;
-    set => this.gameFun.damageDealt = value;
+    get
+    {
+      return this.gameFun.damageDealt;
+    }
+    set
+    {
+      this.gameFun.damageDealt = value;
+    }
   }
 
   [JsonProperty("gi7")]
   public int GamesSurvived2
   {
-    get => this.gameFun.gamesSurvived;
-    set => this.gameFun.gamesSurvived = value;
+    get
+    {
+      return this.gameFun.gamesSurvived;
+    }
+    set
+    {
+      this.gameFun.gamesSurvived = value;
+    }
   }
 
   [JsonProperty("gi8")]
   public int Kills2
   {
-    get => this.gameFun.kills;
-    set => this.gameFun.kills = value;
+    get
+    {
+      return this.gameFun.kills;
+    }
+    set
+    {
+      this.gameFun.kills = value;
+    }
   }
 
   [JsonProperty("gi9")]
   public int GamesWentFirst2
   {
-    get => this.gameFun.gamesWentFirst;
-    set => this.gameFun.gamesWentFirst = value;
+    get
+    {
+      return this.gameFun.gamesWentFirst;
+    }
+    set
+    {
+      this.gameFun.gamesWentFirst = value;
+    }
   }
 
   [JsonProperty("gi10")]
   public int GamesWentFirstWon2
   {
-    get => this.gameFun.gamesWentFirstWon;
-    set => this.gameFun.gamesWentFirstWon = value;
+    get
+    {
+      return this.gameFun.gamesWentFirstWon;
+    }
+    set
+    {
+      this.gameFun.gamesWentFirstWon = value;
+    }
   }
 
   [JsonProperty("gi11")]
   public int Draws2
   {
-    get => this.gameFun.draws;
-    set => this.gameFun.draws = value;
+    get
+    {
+      return this.gameFun.draws;
+    }
+    set
+    {
+      this.gameFun.draws = value;
+    }
   }
 
   [JsonProperty("gi12")]
   public long LastGamePlayed2
   {
-    get => this.gameFun.lastGamePlayed;
-    set => this.gameFun.lastGamePlayed = value;
+    get
+    {
+      return this.gameFun.lastGamePlayed;
+    }
+    set
+    {
+      this.gameFun.lastGamePlayed = value;
+    }
   }
 
   [JsonProperty("gi13")]
   public int TeamGames2
   {
-    get => this.gameFun.teamGames;
-    set => this.gameFun.teamGames = value;
+    get
+    {
+      return this.gameFun.teamGames;
+    }
+    set
+    {
+      this.gameFun.teamGames = value;
+    }
   }
 
   [JsonProperty("k")]
   public string OLD_GAMES
   {
-    get => this._oldGames != null ? JsonConvert.SerializeObject((object) this._oldGames) : "";
+    get
+    {
+      return this._oldGames != null ? JsonConvert.SerializeObject((object) this._oldGames) : "";
+    }
     set
     {
       this._oldGames = string.IsNullOrEmpty(value) ? (NewGamesPlayed) null : JsonConvert.DeserializeObject<NewGamesPlayed>(value);
@@ -583,19 +849,43 @@ public class Account
   public int poll { get; set; }
 
   [JsonIgnore]
-  public int DisplayedBadge => this.displayedIcon - 256;
+  public int DisplayedBadge
+  {
+    get
+    {
+      return this.displayedIcon - 256;
+    }
+  }
 
   [JsonIgnore]
   public Location location { get; set; }
 
   [JsonIgnore]
-  public ulong p => this.discord;
+  public ulong p
+  {
+    get
+    {
+      return this.discord;
+    }
+  }
 
   [JsonIgnore]
-  public string g => this.steamKey;
+  public string g
+  {
+    get
+    {
+      return this.steamKey;
+    }
+  }
 
   [JsonIgnore]
-  public bool OnAnotherServer => this.server > 0 && this.server != Server.ID;
+  public bool OnAnotherServer
+  {
+    get
+    {
+      return this.server > 0 && this.server != Server.ID;
+    }
+  }
 
   [JsonProperty("x")]
   public short version { get; set; } = 10032;
@@ -636,7 +926,10 @@ public class Account
   [JsonProperty("aj")]
   public HashSet<string> friends
   {
-    get => this._friends;
+    get
+    {
+      return this._friends;
+    }
     set
     {
       this._friends = value != null ? new HashSet<string>((IEnumerable<string>) value, (IEqualityComparer<string>) StringComparer.OrdinalIgnoreCase) : new HashSet<string>((IEqualityComparer<string>) StringComparer.OrdinalIgnoreCase);
@@ -646,7 +939,10 @@ public class Account
   [JsonProperty("ak")]
   public HashSet<string> ignored
   {
-    get => this._ignored;
+    get
+    {
+      return this._ignored;
+    }
     set
     {
       this._ignored = value != null ? new HashSet<string>((IEnumerable<string>) value, (IEqualityComparer<string>) StringComparer.OrdinalIgnoreCase) : new HashSet<string>((IEqualityComparer<string>) StringComparer.OrdinalIgnoreCase);
@@ -674,14 +970,20 @@ public class Account
   [JsonProperty("as")]
   public SerializedActiveItem activeItems { get; set; } = new SerializedActiveItem();
 
-  public bool AccountLinked() => this.discord != 0UL || !string.IsNullOrEmpty(this.steamKey);
+  public bool AccountLinked()
+  {
+    return this.discord != 0UL || !string.IsNullOrEmpty(this.steamKey);
+  }
 
-  public bool AccountNotLinked() => !this.AccountLinked();
+  public bool AccountNotLinked()
+  {
+    return !this.AccountLinked();
+  }
 
   public NewGamesPlayed GetGamesPlayed(ZGame.GameType f)
   {
-    int i = (int) f;
-    return i < 0 || i > 2 ? this.gameFun : this[i];
+    int index = (int) f;
+    return index < 0 || index > 2 ? this.gameFun : this[index];
   }
 
   public NewGamesPlayed GetGamesPlayed(GameFacts f)
@@ -691,9 +993,15 @@ public class Account
     return f.GetTimeInSeconds() >= 30 ? this.gameHighTime : this.gameLowTime;
   }
 
-  public int experienceIndex() => (int) this.experience;
+  public int experienceIndex()
+  {
+    return (int) this.experience;
+  }
 
-  public static string numberplus(int i) => i.ToString() + Account.number(i);
+  public static string numberplus(int i)
+  {
+    return i.ToString() + Account.number(i);
+  }
 
   public static string number(int ii)
   {
@@ -719,14 +1027,23 @@ public class Account
       this.bonusExperience = 0.0f;
     ++this.experience;
     Server.ReturnServerMsg(c, "You are now level " + (object) this.experienceIndex() + "!");
-    Server.UpdateAccountInfo(this);
+    Server.UpdateAccountInfo(this, true);
   }
 
-  public short RequiredRating() => (short) ((int) this.experience * 200);
+  public short RequiredRating()
+  {
+    return (short) ((int) this.experience * 200);
+  }
 
-  public int RequiredAchievements() => Mathf.Clamp((int) this.experience, 0, 10) * 2500 + 500;
+  public int RequiredAchievements()
+  {
+    return Mathf.Clamp((int) this.experience, 0, 10) * 2500 + 500;
+  }
 
-  public int RequiredPoints() => ((int) this.experience + 1) * 156;
+  public int RequiredPoints()
+  {
+    return ((int) this.experience + 1) * 156;
+  }
 
   public void AddWands(int x)
   {
@@ -783,7 +1100,10 @@ public class Account
   {
   }
 
-  public Account(string n) => this.name = n;
+  public Account(string n)
+  {
+    this.name = n;
+  }
 
   public void Serialize(myBinaryWriter w, bool includeActiveItems = false)
   {
@@ -851,7 +1171,13 @@ public class Account
     this.afkTimer = other.afkTimer;
   }
 
-  public static int MaxNameLength => 13;
+  public static int MaxNameLength
+  {
+    get
+    {
+      return 13;
+    }
+  }
 
   public static string ValidName(string s)
   {

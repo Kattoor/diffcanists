@@ -3,13 +3,18 @@ using System.IO;
 using System.Text;
 using UnityEngine;
 
-#nullable disable
 public class myBinaryReader : BinaryReader
 {
   private int readLength;
   private int i;
 
-  private long Length => this.BaseStream.Length;
+  private long Length
+  {
+    get
+    {
+      return this.BaseStream.Length;
+    }
+  }
 
   internal myBinaryReader(Stream stream)
     : base(stream)
@@ -60,13 +65,12 @@ public class myBinaryReader : BinaryReader
 
   public virtual Quaternion ReadQuaternion()
   {
-    return Quaternion.identity with
-    {
-      x = this.ReadSingle(),
-      y = this.ReadSingle(),
-      z = this.ReadSingle(),
-      w = this.ReadSingle()
-    };
+    Quaternion identity = Quaternion.identity;
+    identity.x = this.ReadSingle();
+    identity.y = this.ReadSingle();
+    identity.z = this.ReadSingle();
+    identity.w = this.ReadSingle();
+    return identity;
   }
 
   public virtual Vector4 ReadVector4()

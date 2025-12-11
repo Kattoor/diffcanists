@@ -2,16 +2,15 @@
 using System;
 using UnityEngine;
 
-#nullable disable
 public class IndirectRenderer
 {
+  private uint[] args = new uint[5];
   private ComputeBuffer ArgsBuffer;
   private ComputeBuffer TransformBuffer;
   private ComputeBuffer ColorBuffer;
   public static Vector4[] TransformData;
   private Mesh Mesh;
   private Material Material;
-  private uint[] args = new uint[5];
 
   public IndirectRenderer(int maxProjectiles, Material material, Mesh mesh)
   {

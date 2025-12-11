@@ -5,24 +5,26 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using UnityEngine;
 
-#nullable disable
 namespace UnityThreading
 {
   public abstract class Task
   {
     private object syncRoot = new object();
-    private bool hasEnded;
-    public string Name;
-    public volatile int Priority;
     private ManualResetEvent abortEvent = new ManualResetEvent(false);
     private ManualResetEvent endedEvent = new ManualResetEvent(false);
     private ManualResetEvent endingEvent = new ManualResetEvent(false);
+    private bool hasEnded;
+    public string Name;
+    public volatile int Priority;
     private bool hasStarted;
     [ThreadStatic]
     private static Task current;
     private bool disposed;
 
-    ~Task() => this.Dispose();
+    ~Task()
+    {
+      this.Dispose();
+    }
 
     private event TaskEndedEventHandler taskEnded;
 
@@ -61,17 +63,53 @@ namespace UnityThreading
 
     protected abstract IEnumerator Do();
 
-    public static Task Current => Task.current;
+    public static Task Current
+    {
+      get
+      {
+        return Task.current;
+      }
+    }
 
-    public bool ShouldAbort => this.abortEvent.InterWaitOne(0);
+    public bool ShouldAbort
+    {
+      get
+      {
+        return this.abortEvent.InterWaitOne(0);
+      }
+    }
 
-    public bool HasEnded => this.hasEnded || this.endedEvent.InterWaitOne(0);
+    public bool HasEnded
+    {
+      get
+      {
+        return this.hasEnded || this.endedEvent.InterWaitOne(0);
+      }
+    }
 
-    public bool IsEnding => this.endingEvent.InterWaitOne(0);
+    public bool IsEnding
+    {
+      get
+      {
+        return this.endingEvent.InterWaitOne(0);
+      }
+    }
 
-    public bool IsSucceeded => this.endingEvent.InterWaitOne(0) && !this.abortEvent.InterWaitOne(0);
+    public bool IsSucceeded
+    {
+      get
+      {
+        return this.endingEvent.InterWaitOne(0) && !this.abortEvent.InterWaitOne(0);
+      }
+    }
 
-    public bool IsFailed => this.endingEvent.InterWaitOne(0) && this.abortEvent.InterWaitOne(0);
+    public bool IsFailed
+    {
+      get
+      {
+        return this.endingEvent.InterWaitOne(0) && this.abortEvent.InterWaitOne(0);
+      }
+    }
 
     public void Abort()
     {
@@ -205,15 +243,30 @@ namespace UnityThreading
       return this;
     }
 
-    public static Task Create(Action<Task> action) => (Task) new Task<Task.Unit>(action);
+    public static Task Create(Action<Task> action)
+    {
+      return (Task) new Task<Task.Unit>(action);
+    }
 
-    public static Task Create(Action action) => (Task) new Task<Task.Unit>(action);
+    public static Task Create(Action action)
+    {
+      return (Task) new Task<Task.Unit>(action);
+    }
 
-    public static Task<T> Create<T>(Func<Task, T> func) => new Task<T>(func);
+    public static Task<T> Create<T>(Func<Task, T> func)
+    {
+      return new Task<T>(func);
+    }
 
-    public static Task<T> Create<T>(Func<T> func) => new Task<T>(func);
+    public static Task<T> Create<T>(Func<T> func)
+    {
+      return new Task<T>(func);
+    }
 
-    public static Task Create(IEnumerator enumerator) => (Task) new Task<IEnumerator>(enumerator);
+    public static Task Create(IEnumerator enumerator)
+    {
+      return (Task) new Task<IEnumerator>(enumerator);
+    }
 
     public static Task<T> Create<T>(System.Type type, string methodName, params object[] args)
     {

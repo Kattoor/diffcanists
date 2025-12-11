@@ -1,7 +1,6 @@
 
 using UnityEngine;
 
-#nullable disable
 public class AnimateWave : MonoBehaviour
 {
   public float scrollSpeed = 32f;
@@ -9,8 +8,9 @@ public class AnimateWave : MonoBehaviour
   public float stopSpeed = 1f;
   public float minY = -32f;
   public float maxY = 32f;
-  public float offsetY;
   public float timeToFinish = 1f;
+  private bool down = true;
+  public float offsetY;
   public Sprite[] sprites;
   private float curTime;
   private float curOffsetX;
@@ -18,7 +18,6 @@ public class AnimateWave : MonoBehaviour
   private float lastCamX;
   private float timeBetweenFrames;
   private int index;
-  private bool down = true;
   private bool stop;
   private float curStop;
   public SpriteRenderer[] rend;

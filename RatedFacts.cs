@@ -4,15 +4,14 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-#nullable disable
 public class RatedFacts
 {
-  public const int DONT_MIND = -1;
   public int playerCount = -1;
   public int turnTime = -1;
   public int mapStyle = -1;
   public int extraOptions = 4096;
   public int teams = -1;
+  public const int DONT_MIND = -1;
   public int armageddon;
   public int gameType;
   public const byte Version = 4;
@@ -21,11 +20,14 @@ public class RatedFacts
 
   public int customQueue { get; set; }
 
-  public override bool Equals(object obj) => this.EqualsRatedFacts(obj as RatedFacts);
+  public override bool Equals(object obj)
+  {
+    return this.EqualsRatedFacts(obj as RatedFacts);
+  }
 
   private bool EqualsRatedFacts(RatedFacts b)
   {
-    return b != null && this.gameType == b.gameType && this.turnTime == b.turnTime && this.mapStyle == b.mapStyle && this.extraOptions == b.extraOptions && this.playerCount == b.playerCount && this.armageddon == b.armageddon && this.teams == b.teams;
+    return b != null && this.gameType == b.gameType && (this.turnTime == b.turnTime && this.mapStyle == b.mapStyle) && (this.extraOptions == b.extraOptions && this.playerCount == b.playerCount && this.armageddon == b.armageddon) && this.teams == b.teams;
   }
 
   public override int GetHashCode()
@@ -119,9 +121,15 @@ public class RatedFacts
     return gameType == 1 ? "High Time Standard" : "Party Mode On";
   }
 
-  public string GetGameTypeAsString() => RatedFacts.GetGameTypeAsString(this.gameType);
+  public string GetGameTypeAsString()
+  {
+    return RatedFacts.GetGameTypeAsString(this.gameType);
+  }
 
-  public string GetGameTypeAsStringLong() => RatedFacts.GetGameTypeAsStringLong(this.gameType);
+  public string GetGameTypeAsStringLong()
+  {
+    return RatedFacts.GetGameTypeAsStringLong(this.gameType);
+  }
 
   public string ToString(bool breaks = false, pfabLobbyGame p = null)
   {
@@ -135,7 +143,7 @@ public class RatedFacts
       p.txtRatedFacts.text = stringBuilderPlus.ToString();
       stringBuilderPlus.Clear();
     }
-    if (this.turnTime == -1 || this.gameType == 0 && (TimeEnum) this.turnTime == GameFacts.GetLowTimes() || this.gameType == 1 && (TimeEnum) this.turnTime == GameFacts.GetHighTimes() || this.gameType == 2 && (TimeEnum) this.turnTime == GameFacts.GetPartyTimes())
+    if (this.turnTime == -1 || this.gameType == 0 && (TimeEnum) this.turnTime == GameFacts.GetLowTimes() || (this.gameType == 1 && (TimeEnum) this.turnTime == GameFacts.GetHighTimes() || this.gameType == 2 && (TimeEnum) this.turnTime == GameFacts.GetPartyTimes()))
     {
       stringBuilderPlus.Append("Time DM");
     }
@@ -324,7 +332,7 @@ public class RatedFacts
     List<MapEnum> mapEnumList = new List<MapEnum>();
     foreach (MapEnum mapEnum in (MapEnum[]) Enum.GetValues(typeof (MapEnum)))
     {
-      if ((this.mapStyle != -1 || mapEnum != MapEnum.Dark_Fortress) && ((MapEnum) this.mapStyle & mapEnum) != ~MapEnum.Dont_Mind && mapEnum != MapEnum.Dont_Mind)
+      if ((this.mapStyle != -1 || mapEnum != MapEnum.Dark_Fortress) && (((MapEnum) this.mapStyle & mapEnum) != ~MapEnum.Dont_Mind && mapEnum != MapEnum.Dont_Mind))
         mapEnumList.Add(mapEnum);
     }
     return mapEnumList.Count > 0 ? mapEnumList[Server.random.Next(0, mapEnumList.Count)] : MapEnum.Grassy_Hills;
@@ -391,17 +399,17 @@ public class RatedFacts
       case 1:
         return false;
       case 2:
-        return (67108864 & this.playerCount) != 0;
+        return (uint) (67108864 & this.playerCount) > 0U;
       case 3:
-        return (134217728 & this.playerCount) != 0;
+        return (uint) (134217728 & this.playerCount) > 0U;
       case 4:
-        return (268435456 & this.playerCount) != 0;
+        return (uint) (268435456 & this.playerCount) > 0U;
       case 5:
-        return (536870912 & this.playerCount) != 0;
+        return (uint) (536870912 & this.playerCount) > 0U;
       case 6:
-        return (1073741824 & this.playerCount) != 0;
+        return (uint) (1073741824 & this.playerCount) > 0U;
       default:
-        return (33554432 & this.playerCount) != 0;
+        return (uint) (33554432 & this.playerCount) > 0U;
     }
   }
 
@@ -409,9 +417,9 @@ public class RatedFacts
   {
     if (a.customQueue == b.customQueue && a.customQueue == a.gameType + 1)
       return true;
-    if (a.customQueue != b.customQueue || a.gameType != b.gameType || a.gameType > 1 && (a.playerCount & b.playerCount) == 0 || (a.turnTime & b.turnTime) == 0 || (a.mapStyle & b.mapStyle) == 0 || !a.MatchExtraOption(GameStyle.Random_Spells, b) || !a.MatchExtraOption(GameStyle.Original_Spells_Only, b) || !a.MatchExtraOption(GameStyle.Elementals, b) || !a.MatchExtraOption(GameStyle.First_Turn_Teleport, b) || !a.MatchExtraOption(GameStyle.Bid, b) || !a.MatchExtraOption(GameStyle.Watchtower, b) || (a.teams & b.teams) == 0)
+    if (a.customQueue != b.customQueue || a.gameType != b.gameType || a.gameType > 1 && (a.playerCount & b.playerCount) == 0 || ((a.turnTime & b.turnTime) == 0 || (a.mapStyle & b.mapStyle) == 0 || (!a.MatchExtraOption(GameStyle.Random_Spells, b) || !a.MatchExtraOption(GameStyle.Original_Spells_Only, b))) || (!a.MatchExtraOption(GameStyle.Elementals, b) || !a.MatchExtraOption(GameStyle.First_Turn_Teleport, b) || (!a.MatchExtraOption(GameStyle.Bid, b) || !a.MatchExtraOption(GameStyle.Watchtower, b)) || (a.teams & b.teams) == 0))
       return false;
-    if ((a.armageddon & b.armageddon) != 0 || a.armageddon == b.armageddon || b.armageddon == -1 || a.armageddon == -1)
+    if ((a.armageddon & b.armageddon) != 0 || a.armageddon == b.armageddon || (b.armageddon == -1 || a.armageddon == -1))
       return true;
     if (a.armageddon == 0 && (a.mapStyle & b.mapStyle & b.armageddon) != 0)
     {
@@ -506,7 +514,7 @@ public class RatedFacts
       using (myBinaryWriter w = new myBinaryWriter((Stream) memoryStream))
       {
         w.Write((byte) 4);
-        this.Serialize(w);
+        this.Serialize(w, true);
       }
       File.WriteAllBytes(s, memoryStream.ToArray());
     }

@@ -1,11 +1,10 @@
 
-#nullable disable
 namespace SevenZip
 {
   internal class CRC
   {
-    public static readonly uint[] Table = new uint[256];
     private uint _value = uint.MaxValue;
+    public static readonly uint[] Table = new uint[256];
 
     static CRC()
     {
@@ -23,7 +22,10 @@ namespace SevenZip
       }
     }
 
-    public void Init() => this._value = uint.MaxValue;
+    public void Init()
+    {
+      this._value = uint.MaxValue;
+    }
 
     public void UpdateByte(byte b)
     {
@@ -36,7 +38,10 @@ namespace SevenZip
         this._value = CRC.Table[(int) (byte) this._value ^ (int) data[(int) offset + (int) index]] ^ this._value >> 8;
     }
 
-    public uint GetDigest() => this._value ^ uint.MaxValue;
+    public uint GetDigest()
+    {
+      return this._value ^ uint.MaxValue;
+    }
 
     private static uint CalculateDigest(byte[] data, uint offset, uint size)
     {

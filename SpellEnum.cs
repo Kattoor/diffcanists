@@ -1,5 +1,4 @@
 
-#nullable disable
 public enum SpellEnum
 {
   Player = -2, // 0xFFFFFFFE
@@ -294,7 +293,7 @@ public enum SpellEnum
   Blood_Clot = 287, // 0x0000011F
   Old_Mud_Ball = 288, // 0x00000120
   Large_Bite = 289, // 0x00000121
-  Pack_Mentality = 290, // 0x00000122
+  Herd_Mentality = 290, // 0x00000122
   Pack_Leader = 291, // 0x00000123
   Storm_Jolt = 292, // 0x00000124
   Frost_Nova = 293, // 0x00000125

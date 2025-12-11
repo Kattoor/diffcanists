@@ -3,32 +3,43 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-#nullable disable
 public class MyCollider : MonoBehaviour
 {
-  internal ZMyCollider serverObj;
   public int layer = 256;
+  public int radius = 1;
+  public List<MyCollider.XY> points = new List<MyCollider.XY>();
+  internal ZMyCollider serverObj;
   public int offsetX;
   public int offsetY;
   public int x;
   public int y;
-  public int radius = 1;
   public int radiusY;
   public List<MyCollider.Vertex> polygon;
-  public List<MyCollider.XY> points = new List<MyCollider.XY>();
   public MyLocation Center;
   public MyCollider.Shape shape;
   public StaticPolygons.CachedPolygonEnums cachedPolygon;
   internal Coords boundsMin;
   internal Coords boundsMax;
 
-  public int GetRectMinX() => this.boundsMin.x;
+  public int GetRectMinX()
+  {
+    return this.boundsMin.x;
+  }
 
-  public int GetRectMaxX() => this.boundsMax.x;
+  public int GetRectMaxX()
+  {
+    return this.boundsMax.x;
+  }
 
-  public int GetRectMinY() => this.boundsMin.y;
+  public int GetRectMinY()
+  {
+    return this.boundsMin.y;
+  }
 
-  public int GetRectMaxY() => this.boundsMax.y;
+  public int GetRectMaxY()
+  {
+    return this.boundsMax.y;
+  }
 
   [ContextMenu("Setup")]
   private void setup()
@@ -36,7 +47,7 @@ public class MyCollider : MonoBehaviour
     Collider2D component = this.GetComponent<Collider2D>();
     if (!((UnityEngine.Object) component != (UnityEngine.Object) null))
       return;
-    if (typeof (CircleCollider2D) == ((object) component).GetType())
+    if (typeof (CircleCollider2D) == component.GetType())
     {
       this.radius = (int) ((CircleCollider2D) component).radius;
     }
@@ -80,7 +91,7 @@ public class MyCollider : MonoBehaviour
     Collider2D component = this.GetComponent<Collider2D>();
     if (!((UnityEngine.Object) component != (UnityEngine.Object) null))
       return;
-    if (typeof (CircleCollider2D) == ((object) component).GetType())
+    if (typeof (CircleCollider2D) == component.GetType())
     {
       this.radius = (int) ((CircleCollider2D) component).radius;
     }
@@ -205,5 +216,10 @@ public class MyCollider : MonoBehaviour
     public int y1;
     public int x2;
     public int y2;
+
+    public override string ToString()
+    {
+      return "(" + (object) this.x1 + ", " + (object) this.x2 + ", " + (object) this.y1 + ", " + (object) this.y2 + ")";
+    }
   }
 }

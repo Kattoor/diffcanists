@@ -1,7 +1,6 @@
 
 using System.IO;
 
-#nullable disable
 namespace SevenZip.Buffer
 {
   public class InBuffer
@@ -41,7 +40,10 @@ namespace SevenZip.Buffer
       return !this.m_StreamWasExhausted;
     }
 
-    public void ReleaseStream() => this.m_Stream = (Stream) null;
+    public void ReleaseStream()
+    {
+      this.m_Stream = (Stream) null;
+    }
 
     public bool ReadByte(byte b)
     {
@@ -56,6 +58,9 @@ namespace SevenZip.Buffer
       return this.m_Pos >= this.m_Limit && !this.ReadBlock() ? byte.MaxValue : this.m_Buffer[(int) this.m_Pos++];
     }
 
-    public ulong GetProcessedSize() => this.m_ProcessedSize + (ulong) this.m_Pos;
+    public ulong GetProcessedSize()
+    {
+      return this.m_ProcessedSize + (ulong) this.m_Pos;
+    }
   }
 }

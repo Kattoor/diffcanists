@@ -3,7 +3,6 @@ using System;
 using System.Runtime.InteropServices;
 using System.Text;
 
-#nullable disable
 namespace Win32Utilities
 {
   public static class Win32API

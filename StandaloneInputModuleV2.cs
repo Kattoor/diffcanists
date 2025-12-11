@@ -2,7 +2,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-#nullable disable
 public class StandaloneInputModuleV2 : StandaloneInputModule
 {
   private static StandaloneInputModuleV2 currentInput;
@@ -12,7 +11,10 @@ public class StandaloneInputModuleV2 : StandaloneInputModule
     return this.GetLastPointerEventData(pointerId)?.pointerCurrentRaycast.gameObject;
   }
 
-  public GameObject GameObjectUnderPointer() => this.GameObjectUnderPointer(-1);
+  public GameObject GameObjectUnderPointer()
+  {
+    return this.GameObjectUnderPointer(-1);
+  }
 
   public static StandaloneInputModuleV2 CurrentInput
   {

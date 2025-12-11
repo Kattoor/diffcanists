@@ -2,7 +2,6 @@
 using System;
 using System.IO;
 
-#nullable disable
 namespace SevenZip.Compression.LZMA
 {
   public static class SevenZipHelper
@@ -34,39 +33,39 @@ namespace SevenZip.Compression.LZMA
 
     public static byte[] Compress(byte[] inputBytes)
     {
-      MemoryStream inStream = new MemoryStream(inputBytes);
-      MemoryStream outStream = new MemoryStream();
+      MemoryStream memoryStream1 = new MemoryStream(inputBytes);
+      MemoryStream memoryStream2 = new MemoryStream();
       Encoder encoder = new Encoder();
       encoder.SetCoderProperties(SevenZipHelper.propIDs, SevenZipHelper.properties);
-      encoder.WriteCoderProperties((Stream) outStream);
-      long length = inStream.Length;
+      encoder.WriteCoderProperties((Stream) memoryStream2);
+      long length = memoryStream1.Length;
       for (int index = 0; index < 8; ++index)
-        outStream.WriteByte((byte) (length >> 8 * index));
-      encoder.Code((Stream) inStream, (Stream) outStream, -1L, -1L, (ICodeProgress) null);
-      return outStream.ToArray();
+        memoryStream2.WriteByte((byte) (length >> 8 * index));
+      encoder.Code((Stream) memoryStream1, (Stream) memoryStream2, -1L, -1L, (ICodeProgress) null);
+      return memoryStream2.ToArray();
     }
 
     public static byte[] Decompress(byte[] inputBytes)
     {
-      MemoryStream inStream = new MemoryStream(inputBytes);
+      MemoryStream memoryStream1 = new MemoryStream(inputBytes);
       Decoder decoder = new Decoder();
-      inStream.Seek(0L, SeekOrigin.Begin);
-      MemoryStream outStream = new MemoryStream();
+      memoryStream1.Seek(0L, SeekOrigin.Begin);
+      MemoryStream memoryStream2 = new MemoryStream();
       byte[] numArray = new byte[5];
-      if (inStream.Read(numArray, 0, 5) != 5)
+      if (memoryStream1.Read(numArray, 0, 5) != 5)
         throw new Exception("input .lzma is too short");
       long outSize = 0;
       for (int index = 0; index < 8; ++index)
       {
-        int num = inStream.ReadByte();
+        int num = memoryStream1.ReadByte();
         if (num < 0)
           throw new Exception("Can't Read 1");
         outSize |= (long) (byte) num << 8 * index;
       }
       decoder.SetDecoderProperties(numArray);
-      long inSize = inStream.Length - inStream.Position;
-      decoder.Code((Stream) inStream, (Stream) outStream, inSize, outSize, (ICodeProgress) null);
-      return outStream.ToArray();
+      long inSize = memoryStream1.Length - memoryStream1.Position;
+      decoder.Code((Stream) memoryStream1, (Stream) memoryStream2, inSize, outSize, (ICodeProgress) null);
+      return memoryStream2.ToArray();
     }
   }
 }

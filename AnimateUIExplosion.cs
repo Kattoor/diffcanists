@@ -2,7 +2,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-#nullable disable
 public class AnimateUIExplosion : MonoBehaviour
 {
   public float timeToFinish = 1f;
@@ -12,7 +11,10 @@ public class AnimateUIExplosion : MonoBehaviour
   private int index;
   public Image sp;
 
-  private void Start() => this.timeBetweenFrames = this.timeToFinish / (float) this.sprites.Length;
+  private void Start()
+  {
+    this.timeBetweenFrames = this.timeToFinish / (float) this.sprites.Length;
+  }
 
   private void Update()
   {

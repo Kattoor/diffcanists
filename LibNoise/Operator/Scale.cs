@@ -1,5 +1,4 @@
 
-#nullable disable
 namespace LibNoise.Operator
 {
   public class Scale : ModuleBase
@@ -30,20 +29,38 @@ namespace LibNoise.Operator
 
     public double X
     {
-      get => this._x;
-      set => this._x = value;
+      get
+      {
+        return this._x;
+      }
+      set
+      {
+        this._x = value;
+      }
     }
 
     public double Y
     {
-      get => this._y;
-      set => this._y = value;
+      get
+      {
+        return this._y;
+      }
+      set
+      {
+        this._y = value;
+      }
     }
 
     public double Z
     {
-      get => this._z;
-      set => this._z = value;
+      get
+      {
+        return this._z;
+      }
+      set
+      {
+        this._z = value;
+      }
     }
 
     public override double GetValue(double x, double y, double z)

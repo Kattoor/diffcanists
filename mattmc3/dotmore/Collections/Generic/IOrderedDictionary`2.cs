@@ -3,17 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 
-#nullable disable
 namespace mattmc3.dotmore.Collections.Generic
 {
-  public interface IOrderedDictionary<TKey, TValue> : 
-    IDictionary<TKey, TValue>,
-    ICollection<KeyValuePair<TKey, TValue>>,
-    IEnumerable<KeyValuePair<TKey, TValue>>,
-    IEnumerable,
-    IOrderedDictionary,
-    ICollection,
-    IDictionary
+  public interface IOrderedDictionary<TKey, TValue> : IDictionary<TKey, TValue>, ICollection<KeyValuePair<TKey, TValue>>, IEnumerable<KeyValuePair<TKey, TValue>>, IEnumerable, IOrderedDictionary, ICollection, IDictionary
   {
     TValue this[int index] { get; set; }
 

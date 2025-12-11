@@ -2,7 +2,6 @@
 using System;
 using UnityEngine;
 
-#nullable disable
 public struct MyLocation
 {
   public static MyLocation zero = new MyLocation(0, 0);
@@ -105,7 +104,10 @@ public struct MyLocation
     return new MyLocation(FixedInt.Create(v.x), FixedInt.Create(v.y));
   }
 
-  public override bool Equals(object o) => base.Equals(o);
+  public override bool Equals(object o)
+  {
+    return base.Equals(o);
+  }
 
   public static bool operator !=(MyLocation x, MyLocation b)
   {
@@ -117,7 +119,10 @@ public struct MyLocation
     return x.x.RawValue == b.x.RawValue && x.y.RawValue == b.y.RawValue;
   }
 
-  public static explicit operator Point(MyLocation v) => new Point(v.x.ToInt(), v.y.ToInt());
+  public static explicit operator Point(MyLocation v)
+  {
+    return new Point(v.x.ToInt(), v.y.ToInt());
+  }
 
   public static explicit operator MyLocation(Vector3 v)
   {
@@ -183,7 +188,10 @@ public struct MyLocation
     return a;
   }
 
-  public static MyLocation operator -(MyLocation a) => new MyLocation(-a.x, -a.y);
+  public static MyLocation operator -(MyLocation a)
+  {
+    return new MyLocation(-a.x, -a.y);
+  }
 
   public static MyLocation operator *(MyLocation a, long d)
   {
@@ -273,7 +281,10 @@ public struct MyLocation
     this.Divide(ret3.RawValue, out this);
   }
 
-  public Vector2 ToSinglePrecision() => new Vector2(this.x.ToFloat(), this.y.ToFloat());
+  public Vector2 ToSinglePrecision()
+  {
+    return new Vector2(this.x.ToFloat(), this.y.ToFloat());
+  }
 
   public override string ToString()
   {
@@ -290,7 +301,10 @@ public struct MyLocation
     return "(" + this.x.ToDouble().ToString(format) + ", " + this.y.ToDouble().ToString(format) + ")";
   }
 
-  public override int GetHashCode() => this.x.GetHashCode() ^ this.y.GetHashCode() << 2;
+  public override int GetHashCode()
+  {
+    return this.x.GetHashCode() ^ this.y.GetHashCode() << 2;
+  }
 
   public bool Equals(ref MyLocation other)
   {
@@ -322,11 +336,11 @@ public struct MyLocation
 
   public static int DistanceDirty(MyLocation a, MyLocation b)
   {
-    int a1 = (int) Mathd.Abs(a.x - b.x);
-    int b1 = (int) Mathd.Abs(a.y - b.y);
-    int num1 = (int) Mathd.Min((FixedInt) a1, (FixedInt) b1);
-    int num2 = (int) Mathd.Max((FixedInt) a1, (FixedInt) b1);
-    return num2 != 0 ? num1 * num1 / num2 + num2 : 0;
+    int num1 = (int) Mathd.Abs(a.x - b.x);
+    int num2 = (int) Mathd.Abs(a.y - b.y);
+    int num3 = (int) Mathd.Min((FixedInt) num1, (FixedInt) num2);
+    int num4 = (int) Mathd.Max((FixedInt) num1, (FixedInt) num2);
+    return num4 != 0 ? num3 * num3 / num4 + num4 : 0;
   }
 
   public static int FastDistance(MyLocation a, MyLocation b)
@@ -386,5 +400,11 @@ public struct MyLocation
       ret = target;
   }
 
-  public MyLocation localright => new MyLocation(this.y, -this.x);
+  public MyLocation localright
+  {
+    get
+    {
+      return new MyLocation(this.y, -this.x);
+    }
+  }
 }

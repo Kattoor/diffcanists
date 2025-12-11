@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using UnityEngine;
 
-#nullable disable
 public static class GameSerializer
 {
   public static void Serialize(ZGame game, ZPerson x, myBinaryWriter writer)
@@ -49,8 +48,8 @@ public static class GameSerializer
     game.SerializeList(writer, x.takenMinions);
     writer.Write(ZGame.GetID(x.bloodBank));
     writer.Write(x.armaWarnings.Count);
-    foreach (int armaWarning in x.armaWarnings)
-      writer.Write(armaWarning);
+    foreach (ArmaWarning armaWarning in x.armaWarnings)
+      armaWarning.Serialize(writer);
     if (x.familiars == null)
     {
       writer.Write(0);
@@ -74,7 +73,7 @@ public static class GameSerializer
     x.bloodBank = game.helper.GetCreature(reader.ReadInt32());
     int num1 = reader.ReadInt32();
     for (int index = 0; index < num1; ++index)
-      x.armaWarnings.Enqueue(reader.ReadInt32());
+      x.armaWarnings.Enqueue(ArmaWarning.Deserialize(reader));
     int num2 = reader.ReadInt32();
     for (int index = 0; index < num2; ++index)
     {
@@ -83,11 +82,11 @@ public static class GameSerializer
     }
     if (!((ZComponent) x.first() != (object) null))
       return;
-    for (int book = 0; book < x.familiarLevels.Length; ++book)
+    for (int index = 0; index < x.familiarLevels.Length; ++index)
     {
-      if (x.familiarLevels[book] > 0 && book != 5 && (ZComponent) x.GetFamiliar((BookOf) book) == (object) null && (book != 10 || !x.seasonISHoliday))
+      if (x.familiarLevels[index] > 0 && index != 5 && (ZComponent) x.GetFamiliar((BookOf) index) == (object) null && (index != 10 || !x.seasonISHoliday))
       {
-        Familiar component = Inert.Instance.familiars[book].GetComponent<Familiar>();
+        Familiar component = Inert.Instance.familiars[index].GetComponent<Familiar>();
         ZFamiliar zfamiliar = ZFamiliar.Create(x.first(), component);
         if (x.familiars == null)
           x.familiars = new List<ZFamiliar>();
@@ -186,8 +185,8 @@ public static class GameSerializer
     x.colliderB?.Serialize(x.game, writer);
     x.collider?.Serialize(x.game, writer);
     if (!fromEffector)
-      x.effector?.Serialize(writer);
-    x.effector2?.Serialize(writer);
+      x.effector?.Serialize(writer, false);
+    x.effector2?.Serialize(writer, false);
   }
 
   public static ZSpell DeserializeSpell(ZGame game, myBinaryReader reader, ZCreature cre)
@@ -198,7 +197,7 @@ public static class GameSerializer
       return game.helper.Getspell(num2);
     Spell spell = Inert.GetSpell(reader.ReadString());
     MyLocation myLocation = reader.ReadMyLocation();
-    ZSpell z = !((Object) spell != (Object) null) ? new ZSpell() : (!(typeof (FlameWallSpell) == ((object) spell).GetType()) ? ZSpell.Create(game, spell, (Vector3) myLocation.ToSinglePrecision(), Quaternion.identity, game.GetMapTransform(), cre, true) : (ZSpell) ZSpell.Create(game, (FlameWallSpell) spell, (Vector3) myLocation.ToSinglePrecision(), Quaternion.identity, game.GetMapTransform(), cre, true));
+    ZSpell z = !((Object) spell != (Object) null) ? new ZSpell() : (!(typeof (FlameWallSpell) == spell.GetType()) ? ZSpell.Create(game, spell, (Vector3) myLocation.ToSinglePrecision(), Quaternion.identity, game.GetMapTransform(), cre, true) : (ZSpell) ZSpell.Create(game, (FlameWallSpell) spell, (Vector3) myLocation.ToSinglePrecision(), Quaternion.identity, game.GetMapTransform(), cre, true));
     game.helper.spellID.Add(num2, z);
     z.id = num2;
     z.position = myLocation;
@@ -250,7 +249,7 @@ public static class GameSerializer
       z.effector2 = ZEffector.Deserialze(game, game.helper.GetCreature(num3), reader, z.effector2);
     if (num4 != 0)
     {
-      IEnumerator<float> enumerator = z.SpellMove(true);
+      IEnumerator<float> enumerator = z.SpellMove(true, true);
       enumerator.MoveNext();
       z.moving = enumerator;
     }
@@ -294,7 +293,7 @@ public static class GameSerializer
             else
             {
               writer.Write(true);
-              ZCreatureCreate.Serialize(zcreatureBeehive.bees[index1], writer);
+              ZCreatureCreate.Serialize(zcreatureBeehive.bees[index1], writer, true);
               writer.Write(zcreatureBeehive.bees[index1].effectors.Count);
               for (int index2 = 0; index2 < zcreatureBeehive.bees[index1].effectors.Count; ++index2)
               {
@@ -305,7 +304,7 @@ public static class GameSerializer
                 else
                 {
                   writer.Write(true);
-                  zcreatureBeehive.bees[index1].effectors[index2].Serialize(writer);
+                  zcreatureBeehive.bees[index1].effectors[index2].Serialize(writer, false);
                 }
               }
             }
@@ -325,7 +324,7 @@ public static class GameSerializer
           else
           {
             writer.Write(true);
-            c.effectors[index].Serialize(writer);
+            c.effectors[index].Serialize(writer, false);
           }
         }
         writer.Write(c.destroyableEffectors.Count);
@@ -338,7 +337,7 @@ public static class GameSerializer
           else
           {
             writer.Write(true);
-            c.destroyableEffectors[index].Serialize(writer);
+            c.destroyableEffectors[index].Serialize(writer, false);
           }
         }
         writer.Write(c.followingColliders.Count);
@@ -380,7 +379,7 @@ public static class GameSerializer
             HUD.ClientFullArcane(game, zperson, zcreature1, i);
         }
         else
-          ZSpell.ApplyEffectors(game, zcreature1, zcreature1.position, cre: zperson.first(), isDeserialization: true);
+          ZSpell.ApplyEffectors(game, zcreature1, zcreature1.position, -1, (Spell) null, zperson.first(), true);
         if (zcreature1.spellEnum != SpellEnum.Summon_Tutorial_Target)
           zperson.controlled.Add(zcreature1);
         zcreature1.SetScaleOnResync(zcreature1.transformscale);
@@ -413,16 +412,16 @@ public static class GameSerializer
         }
         if (zcreature1.type == CreatureType.Beehive)
         {
-          ZCreatureBeehive cre = (ZCreatureBeehive) zcreature1;
+          ZCreatureBeehive zcreatureBeehive = (ZCreatureBeehive) zcreature1;
           int num3 = reader.ReadInt32();
           for (int index2 = 0; index2 < num3; ++index2)
           {
             if (reader.ReadBoolean())
             {
               ZCreature zcreature2 = ZCreatureCreate.Deserialize(zperson, reader, i);
-              cre.bees.Add(zcreature2);
+              zcreatureBeehive.bees.Add(zcreature2);
               zcreature2.parent = zperson;
-              ZSpell.ApplyEffectors(game, zcreature2, zcreature2.position, cre: (ZCreature) cre);
+              ZSpell.ApplyEffectors(game, zcreature2, zcreature2.position, -1, (Spell) null, (ZCreature) zcreatureBeehive, false);
               zcreature2.UpdateHealthTxt();
               int num4 = reader.ReadInt32();
               for (int index3 = 0; index3 < num4; ++index3)
@@ -447,7 +446,7 @@ public static class GameSerializer
           ZSpell.ChangeSprites(zcreature1, ClientResources.Instance.wispPhantomSprites);
         zcreature1.UpdateHealthTxt();
         int num5 = reader.ReadInt32();
-        for (int index4 = 0; index4 < num5; ++index4)
+        for (int index2 = 0; index2 < num5; ++index2)
         {
           if (reader.ReadBoolean())
           {
@@ -457,7 +456,7 @@ public static class GameSerializer
           }
         }
         int num6 = reader.ReadInt32();
-        for (int index5 = 0; index5 < num6; ++index5)
+        for (int index2 = 0; index2 < num6; ++index2)
         {
           if (reader.ReadBoolean())
           {
@@ -467,7 +466,7 @@ public static class GameSerializer
           }
         }
         int num7 = reader.ReadInt32();
-        for (int index6 = 0; index6 < num7; ++index6)
+        for (int index2 = 0; index2 < num7; ++index2)
           game.helper.id_followColliders.Add(new ZGame.ID2(zcreature1, reader.ReadInt32()));
       }
     }

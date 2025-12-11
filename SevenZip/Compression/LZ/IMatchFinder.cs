@@ -1,5 +1,4 @@
 
-#nullable disable
 namespace SevenZip.Compression.LZ
 {
   internal interface IMatchFinder : IInWindowStream

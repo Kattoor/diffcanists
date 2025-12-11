@@ -8,9 +8,19 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-#nullable disable
 public class ColorSchemeUI : MonoBehaviour
 {
+  private Color32 defaultColor = (Color32) Color.black;
+  private Color32 startingColor = (Color32) Color.black;
+  private Dictionary<Color32, List<TMP_Text>> dText = new Dictionary<Color32, List<TMP_Text>>();
+  private Dictionary<Color32, List<UIOnHoverChild>> dColorNormal = new Dictionary<Color32, List<UIOnHoverChild>>();
+  private Dictionary<Color32, List<UIOnHoverChild>> dColorHighlighted = new Dictionary<Color32, List<UIOnHoverChild>>();
+  private Dictionary<Color32, List<UIOnHoverChild>> dColorPressed = new Dictionary<Color32, List<UIOnHoverChild>>();
+  private Dictionary<Color32, List<UIOnHoverChild>> dColorDisabled = new Dictionary<Color32, List<UIOnHoverChild>>();
+  private Dictionary<Color32, List<RectTransform>> highlightRects = new Dictionary<Color32, List<RectTransform>>();
+  private Dictionary<Material, List<RectTransform>> highlightMaterials = new Dictionary<Material, List<RectTransform>>();
+  private string subDir = "";
+  private string selectedFilePath = "";
   public PoolColoredImage pool;
   public Texture2D baseTexture;
   internal ColorScheme scheme;
@@ -42,23 +52,12 @@ public class ColorSchemeUI : MonoBehaviour
   public Image imgBG;
   public Image imgBG2;
   public Image imgBG3;
-  private Color32 defaultColor = (Color32) Color.black;
-  private Color32 startingColor = (Color32) Color.black;
-  private Dictionary<Color32, List<TMP_Text>> dText = new Dictionary<Color32, List<TMP_Text>>();
-  private Dictionary<Color32, List<UIOnHoverChild>> dColorNormal = new Dictionary<Color32, List<UIOnHoverChild>>();
-  private Dictionary<Color32, List<UIOnHoverChild>> dColorHighlighted = new Dictionary<Color32, List<UIOnHoverChild>>();
-  private Dictionary<Color32, List<UIOnHoverChild>> dColorPressed = new Dictionary<Color32, List<UIOnHoverChild>>();
-  private Dictionary<Color32, List<UIOnHoverChild>> dColorDisabled = new Dictionary<Color32, List<UIOnHoverChild>>();
-  private Dictionary<Color32, List<RectTransform>> highlightRects = new Dictionary<Color32, List<RectTransform>>();
-  private Dictionary<Material, List<RectTransform>> highlightMaterials = new Dictionary<Material, List<RectTransform>>();
   public static bool ForceApply;
   [Header("Load/Save")]
   public RectTransform containerFolder;
   public GameObject pfabFolder;
   public GameObject pfabBook;
   private GameObject selectedSchemeObj;
-  private string subDir = "";
-  private string selectedFilePath = "";
 
   public static ColorSchemeUI Instance { get; private set; }
 
@@ -178,7 +177,7 @@ public class ColorSchemeUI : MonoBehaviour
   public void ClickShare()
   {
     Client.sharingWith = "";
-    Client.AskToShare(this.scheme.name, ContentType.ColorScheme, (object) this.scheme);
+    Client.AskToShare(this.scheme.name, ContentType.ColorScheme, (object) this.scheme, false);
     if ((UnityEngine.Object) OptionsMenu.Instance != (UnityEngine.Object) null)
       UnityEngine.Object.Destroy((UnityEngine.Object) OptionsMenu.Instance.gameObject);
     this.ClickCancel();
@@ -278,7 +277,10 @@ public class ColorSchemeUI : MonoBehaviour
     this.colorPicker.CurrentColor = (Color) this.startingColor;
   }
 
-  public void ClickDefaultColor() => this.colorPicker.CurrentColor = (Color) this.defaultColor;
+  public void ClickDefaultColor()
+  {
+    this.colorPicker.CurrentColor = (Color) this.defaultColor;
+  }
 
   public void ClickBackgroundColor()
   {
@@ -498,7 +500,10 @@ public class ColorSchemeUI : MonoBehaviour
     }
   }
 
-  public void ApplyColors() => this.scheme.SetColors();
+  public void ApplyColors()
+  {
+    this.scheme.SetColors();
+  }
 
   public void ClickOk()
   {
@@ -571,7 +576,10 @@ public class ColorSchemeUI : MonoBehaviour
     this.txtSave.text = "Save";
   }
 
-  public void ClickFileLocation() => Global.OpenFileLocation("Schemes");
+  public void ClickFileLocation()
+  {
+    Global.OpenFileLocation("Schemes");
+  }
 
   public void ConfirmSave()
   {
@@ -614,7 +622,7 @@ public class ColorSchemeUI : MonoBehaviour
       UIOnHover component1 = gameObject1.GetComponent<UIOnHover>();
       component1.textNormalColor = Color.green;
       gameObject1.GetComponent<TMP_Text>().color = Color.green;
-      component1.onClick.AddListener((UnityAction) (() => this.Load()));
+      component1.onClick.AddListener((UnityAction) (() => this.Load("")));
       gameObject1.SetActive(true);
       GameObject gameObject2 = UnityEngine.Object.Instantiate<GameObject>(this.pfabFolder, (Transform) this.containerFolder);
       RectTransform rect = (RectTransform) gameObject2.transform;
@@ -708,9 +716,10 @@ public class ColorSchemeUI : MonoBehaviour
     if (!File.Exists(s))
       return;
     MyContextMenu myContextMenu = MyContextMenu.Show();
-    myContextMenu.AddSeperator();
+    myContextMenu.AddSeperator("--------------------------");
     myContextMenu.AddItem("Rename", (Action) (() => MyContextMenu.Show().AddInput((Action<string>) (ss =>
     {
+      ColorSchemeUI.\u003C\u003Ec__DisplayClass84_0 cDisplayClass840 = this;
       if (string.IsNullOrEmpty(ss))
         return;
       string dir = s.Substring(0, s.Length - Path.GetFileName(s).Length) + ss + Path.GetExtension(s);
@@ -719,13 +728,13 @@ public class ColorSchemeUI : MonoBehaviour
       gameObject.GetComponent<UIOnHover>().onRightClick.RemoveAllListeners();
       gameObject.name = dir;
       gameObject.GetComponent<TextMeshProUGUI>().text = ss;
-      gameObject.GetComponent<UIOnHover>().onRightClick.AddListener((UnityAction) (() => this.OnRightClick(dir, gameObject)));
-    }))), (Color) ColorScheme.GetColor(MyContextMenu.ColorYellow));
+      gameObject.GetComponent<UIOnHover>().onRightClick.AddListener((UnityAction) (() => cDisplayClass840.\u003C\u003E4__this.OnRightClick(dir, cDisplayClass840.gameObject)));
+    }), (string) null, false, true)), (Color) ColorScheme.GetColor(MyContextMenu.ColorYellow));
     myContextMenu.AddItem("Delete " + Path.GetFileNameWithoutExtension(s), (Action) (() =>
     {
       Global.DeleteFile(s);
       UnityEngine.Object.Destroy((UnityEngine.Object) gameObject);
     }), (Color) ColorScheme.GetColor(MyContextMenu.ColorRed));
-    myContextMenu.Rebuild();
+    myContextMenu.Rebuild(false);
   }
 }

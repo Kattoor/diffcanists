@@ -7,23 +7,8 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-#nullable disable
 public class PrestigeMenu : MonoBehaviour
 {
-  public RectTransform bgrect;
-  public GameObject[] panels;
-  public UIOnHover[] buttons;
-  public TMP_Text txtMinionSwitch;
-  public TMP_Text txtPrestigeRequirments;
-  public TMP_Text txtExperience;
-  [Header("Spell Types")]
-  public Image[] pfabSpellTypes;
-  private bool spellIconsInit;
-  [Header("Map")]
-  public UIOnHover pfabMapButton;
-  public Image mapImage;
-  public Image armageddonImage;
-  public TMP_Text mapDescription;
   private List<UIOnHover> mapButtons = new List<UIOnHover>();
   private int viewing = -1;
   private List<string> mapLore = new List<string>()
@@ -48,6 +33,20 @@ public class PrestigeMenu : MonoBehaviour
     "These ethereal halls were once a bastion of great magical power, now haunted by restless spirits. Eerie whispers and flickering apparitions fill the air as the echoes of past enchantments linger.",
     "Remnants of a past civilization, once lush and green, now the battle grounds of aspiring Arcanists. Just don't stay to long or the heat my get to you."
   };
+  public RectTransform bgrect;
+  public GameObject[] panels;
+  public UIOnHover[] buttons;
+  public TMP_Text txtMinionSwitch;
+  public TMP_Text txtPrestigeRequirments;
+  public TMP_Text txtExperience;
+  [Header("Spell Types")]
+  public Image[] pfabSpellTypes;
+  private bool spellIconsInit;
+  [Header("Map")]
+  public UIOnHover pfabMapButton;
+  public Image mapImage;
+  public Image armageddonImage;
+  public TMP_Text mapDescription;
 
   public static PrestigeMenu Instance { get; private set; }
 
@@ -59,7 +58,10 @@ public class PrestigeMenu : MonoBehaviour
     this.bgrect.anchoredPosition = Vector2.zero;
   }
 
-  private void Start() => this.TogglePanel(0);
+  private void Start()
+  {
+    this.TogglePanel(0);
+  }
 
   private void OnDestroy()
   {
@@ -83,7 +85,7 @@ public class PrestigeMenu : MonoBehaviour
           this.txtPrestigeRequirments.text = string.Format(this.txtPrestigeRequirments.text, (object) "<color=green>Congratulations, You've reached the highest prestige!");
           break;
         }
-        if (Prestige.ReadyToPrestige(Client.MyAccount) && Prestige.AboveRating(Client.MyAccount))
+        if (Prestige.ReadyToPrestige(Client.MyAccount) && Prestige.AboveRating(Client.MyAccount, 0))
         {
           this.txtPrestigeRequirments.text = string.Format(this.txtPrestigeRequirments.text, (object) ("<color=green>Requirements for the</color> " + Account.numberplus((int) Client.MyAccount.prestige + 1) + "<color=green> prestige =</color> " + (object) Prestige.RequiredRating(Client.MyAccount) + "<color=green> rating and</color> " + (object) Prestige.MaxWands(Client.MyAccount) + "<color=green> wands.</color>"));
           break;
@@ -205,5 +207,8 @@ public class PrestigeMenu : MonoBehaviour
       this.mapButtons[index].AlwaysOn = index == button;
   }
 
-  public void ClickClose() => UnityEngine.Object.Destroy((UnityEngine.Object) this.gameObject);
+  public void ClickClose()
+  {
+    UnityEngine.Object.Destroy((UnityEngine.Object) this.gameObject);
+  }
 }

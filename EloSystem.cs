@@ -1,7 +1,6 @@
 
 using UnityEngine;
 
-#nullable disable
 public static class EloSystem
 {
   public static void RatingDebug(short a, short b)

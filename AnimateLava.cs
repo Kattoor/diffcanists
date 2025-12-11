@@ -1,7 +1,6 @@
 
 using UnityEngine;
 
-#nullable disable
 public class AnimateLava : MonoBehaviour
 {
   public float scrollSpeed = 32f;
@@ -15,7 +14,10 @@ public class AnimateLava : MonoBehaviour
   private int index;
   public SpriteRenderer rend;
 
-  private void Start() => this.timeBetweenFrames = this.timeToFinish / (float) this.sprites.Length;
+  private void Start()
+  {
+    this.timeBetweenFrames = this.timeToFinish / (float) this.sprites.Length;
+  }
 
   private void Update()
   {

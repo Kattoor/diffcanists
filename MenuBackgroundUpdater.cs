@@ -2,13 +2,15 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-#nullable disable
 public class MenuBackgroundUpdater : MonoBehaviour
 {
   public Image bgImage;
   public Image fgImage;
 
-  private void Awake() => MenuBackgroundUpdater.SwitchBackgrounds(this.bgImage, this.fgImage);
+  private void Awake()
+  {
+    MenuBackgroundUpdater.SwitchBackgrounds(this.bgImage, this.fgImage);
+  }
 
   public static void SwitchBackgrounds(Image bgImage, Image fgImage)
   {

@@ -1,5 +1,4 @@
 
-#nullable disable
 namespace UnityConstants
 {
   public static class Tags

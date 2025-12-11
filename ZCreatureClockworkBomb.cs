@@ -1,7 +1,6 @@
 
 using System.Collections.Generic;
 
-#nullable disable
 public class ZCreatureClockworkBomb : ZCreature
 {
   public ZSpellClockworkBomb spell;
@@ -10,7 +9,10 @@ public class ZCreatureClockworkBomb : ZCreature
   {
   }
 
-  public ZCreatureClockworkBomb(Creature s) => this.Copy(s);
+  public ZCreatureClockworkBomb(Creature s)
+  {
+    this.Copy(s);
+  }
 
   public override int ApplyDamage(
     SpellEnum spellEnum,
@@ -40,7 +42,10 @@ public class ZCreatureClockworkBomb : ZCreature
   {
   }
 
-  internal override void Awake() => this.collider.enabled = false;
+  internal override void Awake()
+  {
+    this.collider.enabled = false;
+  }
 
   public override IEnumerator<float> Move(bool fromSerialization = false)
   {
@@ -65,10 +70,13 @@ public class ZCreatureClockworkBomb : ZCreature
       return;
     this.velocity.y = (FixedInt) -1;
     this.spell.velocity = this.velocity;
-    this.spell.moving = this.game.ongoing.RunSpell(this.spell.SpellMove(false, true));
+    this.spell.moving = this.game.ongoing.RunSpell(this.spell.SpellMove(false, true), true);
   }
 
-  public override void StartMoving(bool fromInput = false) => this.Fall(false);
+  public override void StartMoving(bool fromInput = false)
+  {
+    this.Fall(false);
+  }
 
   public override void ApplyHeal(DamageType dt, int damage, ZCreature enemy)
   {

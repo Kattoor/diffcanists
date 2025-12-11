@@ -3,7 +3,6 @@ using MoonSharp.Interpreter;
 using System;
 using UnityEngine;
 
-#nullable disable
 namespace Educative
 {
   [Serializable]
@@ -40,9 +39,15 @@ namespace Educative
       return (double) MyLocation.Distance(this.ToMyLocation(), b.ToMyLocation());
     }
 
-    public static Point construct(int x, int y) => new Point((double) x, (double) y);
+    public static Point construct(int x, int y)
+    {
+      return new Point((double) x, (double) y);
+    }
 
-    public Point copy() => new Point(this.x, this.y);
+    public Point copy()
+    {
+      return new Point(this.x, this.y);
+    }
 
     public Point normalized()
     {
@@ -62,7 +67,10 @@ namespace Educative
       return !(typeof (Point) != obj?.GetType()) && this.x == ((Point) obj).x && this.y == ((Point) obj).y;
     }
 
-    public override int GetHashCode() => base.GetHashCode();
+    public override int GetHashCode()
+    {
+      return base.GetHashCode();
+    }
 
     public static bool operator ==(Point v, Point x)
     {
@@ -71,25 +79,55 @@ namespace Educative
       return x.x == v.x && x.y == v.y;
     }
 
-    public static Point operator -(Point x, double v) => new Point(x.x - v, x.y - v);
+    public static Point operator -(Point x, double v)
+    {
+      return new Point(x.x - v, x.y - v);
+    }
 
-    public static Point operator +(Point x, double v) => new Point(x.x + v, x.y + v);
+    public static Point operator +(Point x, double v)
+    {
+      return new Point(x.x + v, x.y + v);
+    }
 
-    public static Point operator *(Point x, double v) => new Point(x.x * v, x.y * v);
+    public static Point operator *(Point x, double v)
+    {
+      return new Point(x.x * v, x.y * v);
+    }
 
-    public static Point operator /(Point x, double v) => new Point(x.x / v, x.y / v);
+    public static Point operator /(Point x, double v)
+    {
+      return new Point(x.x / v, x.y / v);
+    }
 
-    public static Point operator %(Point x, double v) => new Point(x.x % v, x.y % v);
+    public static Point operator %(Point x, double v)
+    {
+      return new Point(x.x % v, x.y % v);
+    }
 
-    public static Point operator -(Point x, Point v) => new Point(x.x - v.x, x.y - v.y);
+    public static Point operator -(Point x, Point v)
+    {
+      return new Point(x.x - v.x, x.y - v.y);
+    }
 
-    public static Point operator +(Point x, Point v) => new Point(x.x + v.x, x.y + v.y);
+    public static Point operator +(Point x, Point v)
+    {
+      return new Point(x.x + v.x, x.y + v.y);
+    }
 
-    public static Point operator *(Point x, Point v) => new Point(x.x * v.x, x.y * v.y);
+    public static Point operator *(Point x, Point v)
+    {
+      return new Point(x.x * v.x, x.y * v.y);
+    }
 
-    public static Point operator /(Point x, Point v) => new Point(x.x / v.x, x.y / v.y);
+    public static Point operator /(Point x, Point v)
+    {
+      return new Point(x.x / v.x, x.y / v.y);
+    }
 
-    public static Point operator %(Point x, Point v) => new Point(x.x % v.x, x.y % v.y);
+    public static Point operator %(Point x, Point v)
+    {
+      return new Point(x.x % v.x, x.y % v.y);
+    }
 
     public static bool operator !=(Point v, Point x)
     {
@@ -99,6 +137,9 @@ namespace Educative
     }
 
     [MoonSharpHidden]
-    public override string ToString() => " (" + (object) this.x + ", " + (object) this.y + ")";
+    public override string ToString()
+    {
+      return " (" + (object) this.x + ", " + (object) this.y + ")";
+    }
   }
 }

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-#nullable disable
 public class ParticleAbduction : MonoBehaviour
 {
+  public float stage2 = 1f;
   public SpriteRenderer zLight;
   public List<SpriteRenderer> ship;
   public ParticleSystem part;
@@ -12,17 +12,14 @@ public class ParticleAbduction : MonoBehaviour
   public Transform ufoTransform;
   private int state;
   private float cur;
-  public float stage2 = 1f;
 
   private void Update()
   {
     this.cur += Time.deltaTime;
     if (this.state == 0)
     {
-      Color color = this.zLight.color with
-      {
-        a = this.curve.Evaluate(this.cur)
-      };
+      Color color = this.zLight.color;
+      color.a = this.curve.Evaluate(this.cur);
       this.zLight.color = color;
       this.SetColor(new Color(1f, 1f, 1f, color.a));
       if ((double) this.cur < 1.0)
@@ -40,10 +37,8 @@ public class ParticleAbduction : MonoBehaviour
     }
     else
     {
-      Color color = this.zLight.color with
-      {
-        a = this.curve.Evaluate(1f - this.cur)
-      };
+      Color color = this.zLight.color;
+      color.a = this.curve.Evaluate(1f - this.cur);
       this.zLight.color = color;
       this.SetColor(new Color(1f, 1f, 1f, color.a));
       if ((double) this.cur < 1.0)

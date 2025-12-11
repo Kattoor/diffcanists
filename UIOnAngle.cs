@@ -4,28 +4,31 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-#nullable disable
-public class UIOnAngle : 
-  MonoBehaviour,
-  IPointerDownHandler,
-  IEventSystemHandler,
-  IPointerUpHandler,
-  IPointerEnterHandler,
-  IPointerExitHandler,
-  IDragHandler,
-  IEndDragHandler
+public class UIOnAngle : MonoBehaviour, IPointerDownHandler, IEventSystemHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler, IDragHandler, IEndDragHandler
 {
-  public RectTransform handle;
   public bool interactable = true;
+  public RectTransform handle;
   public UIOnAngle.OnClick onClick;
   private bool isHovering;
   private RectTransform rectTransform;
 
-  public bool IsHovering => this.gameObject.activeInHierarchy && this.isHovering;
+  public bool IsHovering
+  {
+    get
+    {
+      return this.gameObject.activeInHierarchy && this.isHovering;
+    }
+  }
 
-  private void Awake() => this.rectTransform = (RectTransform) this.transform;
+  private void Awake()
+  {
+    this.rectTransform = (RectTransform) this.transform;
+  }
 
-  private void OnDisable() => this.isHovering = false;
+  private void OnDisable()
+  {
+    this.isHovering = false;
+  }
 
   public void Interactable(bool v)
   {
@@ -45,15 +48,30 @@ public class UIOnAngle :
   {
   }
 
-  public void OnDrag(PointerEventData eventData) => this.CallBack((Vector3) eventData.position);
+  public void OnDrag(PointerEventData eventData)
+  {
+    this.CallBack((Vector3) eventData.position);
+  }
 
-  public void OnEndDrag(PointerEventData eventData) => this.CallBack((Vector3) eventData.position);
+  public void OnEndDrag(PointerEventData eventData)
+  {
+    this.CallBack((Vector3) eventData.position);
+  }
 
-  public void OnPointerEnter(PointerEventData eventData) => this.isHovering = true;
+  public void OnPointerEnter(PointerEventData eventData)
+  {
+    this.isHovering = true;
+  }
 
-  public void OnPointerExit(PointerEventData eventData) => this.isHovering = false;
+  public void OnPointerExit(PointerEventData eventData)
+  {
+    this.isHovering = false;
+  }
 
-  public void SetValue(float f) => this.handle.localEulerAngles = new Vector3(0.0f, 0.0f, f);
+  public void SetValue(float f)
+  {
+    this.handle.localEulerAngles = new Vector3(0.0f, 0.0f, f);
+  }
 
   private void CallBack(Vector3 eventData)
   {

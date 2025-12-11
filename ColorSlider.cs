@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-#nullable disable
 [RequireComponent(typeof (Slider))]
 public class ColorSlider : MonoBehaviour
 {

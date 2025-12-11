@@ -7,9 +7,11 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-#nullable disable
 public class SpellLobbyChange : MonoBehaviour
 {
+  internal SettingsPlayer settingsPlayer = new SettingsPlayer();
+  [NonSerialized]
+  internal BookOf viewingExtraSpells = BookOf.Nothing;
   public PrestigeSpellIcon pfabItem;
   public UIOnHover pfabBook;
   public RectTransform containerItem;
@@ -46,7 +48,6 @@ public class SpellLobbyChange : MonoBehaviour
   public TMP_Text txtPrestige;
   [Header("Share")]
   public UIOnHover buttonShare;
-  internal SettingsPlayer settingsPlayer = new SettingsPlayer();
   internal BookOf openBook;
   private Action<SettingsPlayer> onEnd;
   private Action onCancel;
@@ -58,8 +59,6 @@ public class SpellLobbyChange : MonoBehaviour
   internal Spell viewingSpellMinion;
   [NonSerialized]
   internal Creature viewingMinion;
-  [NonSerialized]
-  internal BookOf viewingExtraSpells = BookOf.Nothing;
   private float alpha;
 
   public static SpellLobbyChange Instance { get; private set; }
@@ -78,7 +77,7 @@ public class SpellLobbyChange : MonoBehaviour
     {
       if (sp == null)
         return;
-      SpellLobbyChange.Instance.settingsPlayer.CopySpells(sp);
+      SpellLobbyChange.Instance.settingsPlayer.CopySpells(sp, false);
       SpellLobbyChange.Instance.RefreshList();
     }
     else
@@ -91,10 +90,8 @@ public class SpellLobbyChange : MonoBehaviour
         {
           if (!componentsInChild.gameObject.CompareTag("PopupNotAlpha"))
           {
-            Color color = componentsInChild.color with
-            {
-              a = 0.3f
-            };
+            Color color = componentsInChild.color;
+            color.a = 0.3f;
             componentsInChild.color = color;
           }
         }
@@ -132,11 +129,11 @@ public class SpellLobbyChange : MonoBehaviour
       this.toggleRated.Interactable(false);
     }
     if (this.toggleSandbox.AlwaysOn && Global.GetPrefBool("prefflashsandbox", true))
-      this.StartCoroutine(this.Flash((UIOnHoverChild) this.toggleSandbox, Color.white));
-    this.Refresh();
-    if (!Prestige.ReadyToPrestige(Client.MyAccount) || !Prestige.AboveRating(Client.MyAccount) || !this.toggleSandbox.AlwaysOn || !Global.GetPrefBool("prefflashprestige", true))
+      this.StartCoroutine(this.Flash((UIOnHoverChild) this.toggleSandbox, Color.white, 1f, 10f));
+    this.Refresh(false);
+    if (!Prestige.ReadyToPrestige(Client.MyAccount) || !Prestige.AboveRating(Client.MyAccount, 0) || (!this.toggleSandbox.AlwaysOn || !Global.GetPrefBool("prefflashprestige", true)))
       return;
-    this.StartCoroutine(this.Flash(this.buttonPrestige.transform.GetChild(0).GetComponent<UIOnHoverChild>(), Color.red));
+    this.StartCoroutine(this.Flash(this.buttonPrestige.transform.GetChild(0).GetComponent<UIOnHoverChild>(), Color.red, 1f, 10f));
   }
 
   private IEnumerator Flash(UIOnHoverChild button, Color r2, float f = 1f, float speed = 10f)
@@ -186,7 +183,7 @@ public class SpellLobbyChange : MonoBehaviour
     this.buttonPrestige.SetActive(prestige || Client.MyAccount.prestige > (byte) 0 && (!prestige || Client.MyAccount.prestige < byte.MaxValue));
     this.txtPrestige.text = prestige ? "Prestige" : "Downgrade";
     this.buttonPrestige.GetComponent<UIOnHover>().Interactable(true);
-    if (prestige && !Prestige.AboveRating(Client.MyAccount))
+    if (prestige && !Prestige.AboveRating(Client.MyAccount, 0))
     {
       this.buttonPrestige.GetComponent<UIOnHover>().Interactable(false);
       this.txtPrestige.text = Client.MyAccount.HighestRating.ToString() + " / " + (object) Prestige.RequiredRating(Client.MyAccount) + " rating";
@@ -218,22 +215,25 @@ public class SpellLobbyChange : MonoBehaviour
     }
     if (string.IsNullOrEmpty(str))
       str = "Mixed";
-    Client.AskToShare(str + (object) num2, ContentType.SpellBook, (object) this.settingsPlayer);
+    Client.AskToShare(str + (object) num2, ContentType.SpellBook, (object) this.settingsPlayer, false);
   }
 
-  public void ClickHelp() => Controller.ShowPrestigeMenu();
+  public void ClickHelp()
+  {
+    Controller.ShowPrestigeMenu();
+  }
 
   public void ClickPrestige()
   {
     if (Prestige.ReadyToPrestige(Client.MyAccount))
     {
       if (Client.MyAccount.prestige < (byte) 2)
-        MyMessageBox.Create("Clicking 'Prestige' will reset all your spells to Arcane, Flame Levels 1 & 2, Cogs, and a book of your choosing. Set your wands to 50 and increase your prestige level by 1: giving you the next prestige hat and the ability to unlock all of the books.", (Action) (() => this.Prestiging()), "Prestige!");
+        MyMessageBox.Create("Clicking 'Prestige' will reset all your spells to Arcane, Flame Levels 1 & 2, Cogs, and a book of your choosing. Set your wands to 50 and increase your prestige level by 1: giving you the next prestige hat and the ability to unlock all of the books.", (Action) (() => this.Prestiging()), "Prestige!", "Cancel", (Action) null, (Action) null, (Sprite) null, (string) null, (Action) null);
       else
-        MyMessageBox.Create("Clicking 'Prestige' will reset all your spells to Arcane, Flame Levels 1 & 2, Cogs, and a book of your choosing. Set your wands to 0 and increase your prestige level by 1: giving you the next prestige hat. You <color=red>CANNOT gain wands in unrated games</color> after the second prestige.", (Action) (() => this.Prestiging()), "Prestige!");
+        MyMessageBox.Create("Clicking 'Prestige' will reset all your spells to Arcane, Flame Levels 1 & 2, Cogs, and a book of your choosing. Set your wands to 0 and increase your prestige level by 1: giving you the next prestige hat. You <color=red>CANNOT gain wands in unrated games</color> after the second prestige.", (Action) (() => this.Prestiging()), "Prestige!", "Cancel", (Action) null, (Action) null, (Sprite) null, (string) null, (Action) null);
     }
     else
-      MyMessageBox.Create("Clicking 'Downgrade' will decrease your prestige by 1, remove all wands you currently have and unlock all your spells. ONLY do this if you are stuck and cannot gain wands.", (Action) (() => Prestige.Ask((byte) 5, 0)), "Downgrade...");
+      MyMessageBox.Create("Clicking 'Downgrade' will decrease your prestige by 1, remove all wands you currently have and unlock all your spells. ONLY do this if you are stuck and cannot gain wands.", (Action) (() => Prestige.Ask((byte) 5, 0)), "Downgrade...", "Cancel", (Action) null, (Action) null, (Sprite) null, (string) null, (Action) null);
   }
 
   public void Prestiging()
@@ -241,13 +241,16 @@ public class SpellLobbyChange : MonoBehaviour
     ElementalSelection.Create((RectTransform) this.transform, this.settingsPlayer._spells, (Action<BookOf>) (b => Prestige.Ask((byte) 4, (int) b)), false, BookOf.Arcane, BookOf.Flame, BookOf.Cogs);
   }
 
-  public void ClickSave() => ChangeSpellBookMenu.Create(true, this.settingsPlayer);
+  public void ClickSave()
+  {
+    ChangeSpellBookMenu.Create(true, this.settingsPlayer, (Action<SettingsPlayer>) null);
+  }
 
   public void ClicOpen()
   {
     ChangeSpellBookMenu.Create(false, this.settingsPlayer, (Action<SettingsPlayer>) (s =>
     {
-      this.settingsPlayer.CopySpells(s);
+      this.settingsPlayer.CopySpells(s, false);
       this.RefreshList();
     }));
   }
@@ -292,7 +295,7 @@ public class SpellLobbyChange : MonoBehaviour
   internal void Init(SettingsPlayer sp, Action<SettingsPlayer> onEnd)
   {
     SpellLobbyChange.Instance = this;
-    this.settingsPlayer.CopySpells(sp ?? Client.settingsPlayer);
+    this.settingsPlayer.CopySpells(sp ?? Client.settingsPlayer, false);
     this.onEnd = onEnd;
     this.CreateHeaders();
     this.RefreshList();
@@ -309,13 +312,15 @@ public class SpellLobbyChange : MonoBehaviour
 
   private void ColorThis(TMP_Text r)
   {
-    Color color = r.color with { a = this.alpha };
+    Color color = r.color;
+    color.a = this.alpha;
     r.color = color;
   }
 
   private void ColorThis(Image r)
   {
-    Color color = r.color with { a = this.alpha };
+    Color color = r.color;
+    color.a = this.alpha;
     r.color = color;
   }
 
@@ -388,7 +393,7 @@ public class SpellLobbyChange : MonoBehaviour
       this.settingsPlayer.fullBook = (byte) (b + 1);
       this.UpdateElementalIcon();
       this.UpdateHolidaySprites();
-    }));
+    }), true);
   }
 
   public void CickHoliday()
@@ -439,7 +444,7 @@ public class SpellLobbyChange : MonoBehaviour
     int num;
     if (this.settingsPlayer.fullBook > (byte) 0)
     {
-      if (!Restrictions.IsElementalRestricted(this.settingsPlayer._spells, (int) this.settingsPlayer.fullBook - 1))
+      if (!Restrictions.IsElementalRestricted(this.settingsPlayer._spells, (int) this.settingsPlayer.fullBook - 1, (Restrictions) null))
       {
         if (Client.viewSpellLocks.ViewRestricted())
         {
@@ -454,8 +459,7 @@ public class SpellLobbyChange : MonoBehaviour
     }
     else
       num = 0;
-    bool flag = num != 0;
-    this.imageElemental.transform.GetChild(0).gameObject.SetActive(flag);
+    this.imageElemental.transform.GetChild(0).gameObject.SetActive(num != 0);
     if (!Client.viewSpellLocks.ViewLocked() || Prestige.CanUseElemental(Client.MyAccount, (int) this.settingsPlayer.fullBook - 1))
       this.imageElemental.transform.GetChild(1).gameObject.SetActive(false);
     else
@@ -478,8 +482,8 @@ public class SpellLobbyChange : MonoBehaviour
       }
       else
       {
-        this.txtHeader.text = i == 0 ? "Arcane Book" : "Book of " + ((BookOf) i).ToStringX();
-        this.txtDescription.text = Descriptions.GetBookHeader((BookOf) i) + "\nFamiliar - " + Descriptions.GetBookDescription((BookOf) i);
+        this.txtHeader.text = i == 0 ? "Arcane Book" : "Book of " + ((BookOf) i).ToStringX(false);
+        this.txtDescription.text = Descriptions.GetBookHeader((BookOf) i, false) + "\nFamiliar - " + Descriptions.GetBookDescription((BookOf) i, false);
         this.ToggleMouserOverImage(true);
       }
       if (Client.viewSpellLocks.ViewLocked() && !Prestige.IsUnlocked(Client.MyAccount, (BookOf) i))
@@ -505,7 +509,10 @@ public class SpellLobbyChange : MonoBehaviour
     }
   }
 
-  public void PostClickBook() => this.HoverBook((int) this.openBook);
+  public void PostClickBook()
+  {
+    this.HoverBook((int) this.openBook, false);
+  }
 
   public void HoverBook2()
   {
@@ -525,30 +532,39 @@ public class SpellLobbyChange : MonoBehaviour
   public void HoverSpell(string n, int myRealIndex)
   {
     this.txtHeader.text = n;
-    (this.txtDescription.text, this.txtExtraText.text) = Descriptions.GetSpellDescription(n);
+    (this.txtDescription.text, this.txtExtraText.text) = Descriptions.GetSpellDescription(n, (SpellSlot) null, false);
     this.ToggleMouserOverImage(true);
   }
 
-  public void Hover(string s) => MyToolTip.Show(s);
+  public void Hover(string s)
+  {
+    MyToolTip.Show(s, -1f);
+  }
 
-  public void HoverLeave() => MyToolTip.Close();
+  public void HoverLeave()
+  {
+    MyToolTip.Close();
+  }
 
-  public void HideMouseOver() => this.ToggleMouserOverImage(false);
+  public void HideMouseOver()
+  {
+    this.ToggleMouserOverImage(false);
+  }
 
   public void CreateHeaders()
   {
-    int x = 0;
-    int y = -6;
+    int num1 = 0;
+    int num2 = -6;
     int length = (int) (RandomExtensions.LastBook() + 1);
     this.containerBook.DestroyChildern();
     this.imgNormalBook = new Image[length];
-    for (int book = 0; book < length; ++book)
+    for (int index = 0; index < length; ++index)
     {
       UIOnHover uiOnHover = UnityEngine.Object.Instantiate<UIOnHover>(this.pfabBook, (Transform) this.containerBook);
-      ((RectTransform) uiOnHover.transform).anchoredPosition = new Vector2((float) x, (float) y);
-      uiOnHover.GetComponent<Image>().sprite = ClientResources.Instance.spellBookIcons[book + 1];
+      ((RectTransform) uiOnHover.transform).anchoredPosition = new Vector2((float) num1, (float) num2);
+      uiOnHover.GetComponent<Image>().sprite = ClientResources.Instance.spellBookIcons[index + 1];
       UIOnHover component = uiOnHover.GetComponent<UIOnHover>();
-      int e = book;
+      int e = index;
       component.onEnter.AddListener((UnityAction) (() => this.HoverBook(e, true)));
       component.onClick.AddListener((UnityAction) (() =>
       {
@@ -560,12 +576,12 @@ public class SpellLobbyChange : MonoBehaviour
         this.OpenExtraSpells((BookOf) e);
         this.PostClickBook();
       }));
-      x += 60;
+      num1 += 60;
       uiOnHover.gameObject.SetActive(true);
-      this.imgNormalBook[book] = uiOnHover.GetComponent<Image>();
-      if (Client.viewSpellLocks.ViewLocked() && !Prestige.IsUnlocked(Client.MyAccount, (BookOf) book))
+      this.imgNormalBook[index] = uiOnHover.GetComponent<Image>();
+      if (Client.viewSpellLocks.ViewLocked() && !Prestige.IsUnlocked(Client.MyAccount, (BookOf) index))
       {
-        uiOnHover.transform.GetChild(0).GetComponent<Image>().sprite = Prestige.CanUnlock(Client.MyAccount, (BookOf) book) == 0 ? ClientResources.Instance.imgBuyable : ClientResources.Instance.imgLocked;
+        uiOnHover.transform.GetChild(0).GetComponent<Image>().sprite = Prestige.CanUnlock(Client.MyAccount, (BookOf) index) == 0 ? ClientResources.Instance.imgBuyable : ClientResources.Instance.imgLocked;
         uiOnHover.transform.GetChild(0).gameObject.SetActive(true);
       }
     }
@@ -626,7 +642,7 @@ public class SpellLobbyChange : MonoBehaviour
       this.viewingMinion = (Creature) null;
       int index = 0;
       this.bookIcon.sprite = !this.settingsPlayer._spells.UsingAltBook(this.openBook) ? ClientResources.Instance.spellBookIcons[(int) (this.openBook + 1)] : ClientResources.Instance.altSpellBookIcons[(int) (this.openBook + 1)];
-      this.ResizeBookIcon();
+      this.ResizeBookIcon(1f);
       foreach (Spell familiarSpell in ClientResources.Instance.familiarSpells)
       {
         if (familiarSpell.bookOf == this.openBook && this.settingsPlayer._spells.UsingAltBook(this.openBook) == familiarSpell.altBook)
@@ -650,10 +666,10 @@ public class SpellLobbyChange : MonoBehaviour
     Sprite sprite = this.bookIcon.sprite;
     RectTransform rectTransform = this.bookIcon.rectTransform;
     Rect rect = sprite.rect;
-    double x = (double) rect.width * (double) scale;
+    double num1 = (double) rect.width * (double) scale;
     rect = sprite.rect;
-    double y = (double) rect.height * (double) scale;
-    Vector2 vector2 = new Vector2((float) x, (float) y);
+    double num2 = (double) rect.height * (double) scale;
+    Vector2 vector2 = new Vector2((float) num1, (float) num2);
     rectTransform.sizeDelta = vector2;
   }
 
@@ -663,36 +679,36 @@ public class SpellLobbyChange : MonoBehaviour
     {
       this.bookIcon.sprite = !this.settingsPlayer._spells.UsingAltBook(b) ? ClientResources.Instance.spellBookIcons[(int) (b + 1)] : ClientResources.Instance.altSpellBookIcons[(int) (b + 1)];
       this.openBook = b;
-      this.ResizeBookIcon();
+      this.ResizeBookIcon(1f);
     }
     this.viewingMinion = (Creature) null;
     this.viewingExtraSpells = BookOf.Nothing;
-    int index = (int) b * 12;
-    int num = index + 12;
+    int index1 = (int) b * 12;
+    int num = index1 + 12;
     if (this.settingsPlayer._spells.UsingAltBook(b))
     {
-      int spellID = 0;
-      while (index < num)
+      int index2 = 0;
+      while (index1 < num)
       {
-        Spell altSpell = Inert.Instance.altSpells[index];
-        bool equipped = this.HasSpell((byte) spellID);
-        this.buttonSpells[spellID].SetSprite(ClientResources.Instance.icons[altSpell.name], altSpell.level, equipped, equipped || this.settingsPlayer.CanEquipSpell(15, (byte) (spellID + (int) this.openBook * 12)), index);
-        this.buttonSpells[spellID].gameObject.SetActive(true);
-        ++index;
-        ++spellID;
+        Spell altSpell = Inert.Instance.altSpells[index1];
+        bool equipped = this.HasSpell((byte) index2);
+        this.buttonSpells[index2].SetSprite(ClientResources.Instance.icons[altSpell.name], altSpell.level, equipped, equipped || this.settingsPlayer.CanEquipSpell(15, (byte) (index2 + (int) this.openBook * 12)), index1);
+        this.buttonSpells[index2].gameObject.SetActive(true);
+        ++index1;
+        ++index2;
       }
     }
     else
     {
-      int spellID = 0;
-      while (index < num)
+      int index2 = 0;
+      while (index1 < num)
       {
-        Spell spell = Inert.Instance.spells.GetItem(index).Value;
-        bool equipped = this.HasSpell((byte) spellID);
-        this.buttonSpells[spellID].SetSprite(ClientResources.Instance.icons[spell.name], spell.level, equipped, equipped || this.settingsPlayer.CanEquipSpell(15, (byte) (spellID + (int) this.openBook * 12)), index);
-        this.buttonSpells[spellID].gameObject.SetActive(true);
-        ++index;
-        ++spellID;
+        Spell spell = Inert.Instance.spells.GetItem(index1).Value;
+        bool equipped = this.HasSpell((byte) index2);
+        this.buttonSpells[index2].SetSprite(ClientResources.Instance.icons[spell.name], spell.level, equipped, equipped || this.settingsPlayer.CanEquipSpell(15, (byte) (index2 + (int) this.openBook * 12)), index1);
+        this.buttonSpells[index2].gameObject.SetActive(true);
+        ++index1;
+        ++index2;
       }
     }
     if (!((UnityEngine.Object) this.imgLocked != (UnityEngine.Object) null))
@@ -713,13 +729,13 @@ public class SpellLobbyChange : MonoBehaviour
     if ((UnityEngine.Object) this.viewingMinion != (UnityEngine.Object) null || this.viewingExtraSpells != BookOf.Nothing)
     {
       this.OpenBook(this.openBook);
-      this.HoverBook((int) this.openBook);
+      this.HoverBook((int) this.openBook, false);
     }
     else if (Client.viewSpellLocks.ViewLocked() && !Prestige.IsUnlocked(Client.MyAccount, this.openBook))
     {
       int i = Prestige.CanUnlock(Client.MyAccount, this.openBook);
       if (i == 0)
-        MyMessageBox.Create("Buy the Book of " + this.openBook.ToStringX() + " with 5 wands?", (Action) (() => Prestige.AskUnlock(this.openBook)));
+        MyMessageBox.Create("Buy the Book of " + this.openBook.ToStringX(false) + " with 5 wands?", (Action) (() => Prestige.AskUnlock(this.openBook)), "Ok", "Cancel", (Action) null, (Action) null, (Sprite) null, (string) null, (Action) null);
       else
         MyToolTip.Show(Prestige.BookErrorCode(i), 5f);
     }
@@ -731,17 +747,20 @@ public class SpellLobbyChange : MonoBehaviour
         if (this.settingsPlayer.spells[index] != byte.MaxValue)
           --length;
       }
-      for (int spellID = 0; spellID < 12 && spellID < length; ++spellID)
+      for (int index = 0; index < 12 && index < length; ++index)
       {
-        if (!SpellLobbyChange.Instance.HasSpell((byte) spellID))
-          this.buttonSpells[spellID].UpdatedFromSpellSelection_FullBook();
+        if (!SpellLobbyChange.Instance.HasSpell((byte) index))
+          this.buttonSpells[index].UpdatedFromSpellSelection_FullBook();
         else
           ++length;
       }
     }
   }
 
-  public void HoverFullBook() => this.HoverBook((int) this.openBook);
+  public void HoverFullBook()
+  {
+    this.HoverBook((int) this.openBook, false);
+  }
 
   public void RefreshList()
   {
@@ -862,7 +881,7 @@ public class SpellLobbyChange : MonoBehaviour
   public void ShowDescription(string s, int myRealIndex)
   {
     this.txtHeader.text = !((UnityEngine.Object) this.viewingMinion != (UnityEngine.Object) null) ? s : ClickSpell.GetSpellNameUI(s, Inert.GetSpell(s), this.viewingMinion);
-    (this.txtDescription.text, this.txtExtraText.text) = Descriptions.GetSpellDescription(s);
+    (this.txtDescription.text, this.txtExtraText.text) = Descriptions.GetSpellDescription(s, (SpellSlot) null, false);
     this.textError.text += this.GetIsMinionSpell(s);
     this.ToggleMouserOverImage(true);
   }
@@ -870,7 +889,7 @@ public class SpellLobbyChange : MonoBehaviour
   public string GetIsMinionSpell(string spell)
   {
     Spell spell1 = Inert.GetSpell(spell);
-    return (UnityEngine.Object) spell1 == (UnityEngine.Object) null || (UnityEngine.Object) spell1.toSummon == (UnityEngine.Object) null || !((UnityEngine.Object) spell1.toSummon?.GetComponent<Creature>() != (UnityEngine.Object) null) || !spell1.IsMinionSpell() ? "" : "<br><color=#0093FF>Right-Click to see this minions spells</color>";
+    return (UnityEngine.Object) spell1 == (UnityEngine.Object) null || (UnityEngine.Object) spell1.toSummon == (UnityEngine.Object) null || (!((UnityEngine.Object) spell1.toSummon?.GetComponent<Creature>() != (UnityEngine.Object) null) || !spell1.IsMinionSpell()) ? "" : "<br><color=#0093FF>Right-Click to see this minions spells</color>";
   }
 
   public void LeaveSpell()

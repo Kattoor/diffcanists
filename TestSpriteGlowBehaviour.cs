@@ -3,7 +3,6 @@ using SpriteGlow;
 using System.Collections;
 using UnityEngine;
 
-#nullable disable
 public class TestSpriteGlowBehaviour : MonoBehaviour
 {
   private IEnumerator Start()

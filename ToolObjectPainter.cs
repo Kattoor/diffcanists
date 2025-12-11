@@ -1,7 +1,6 @@
 
 using UnityEngine;
 
-#nullable disable
 public class ToolObjectPainter : IMapEditorTool
 {
   public void OnMouseDown(bool leftClick)

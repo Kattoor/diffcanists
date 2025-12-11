@@ -1,5 +1,4 @@
 
-#nullable disable
 namespace UnityThreading
 {
   public class NullDispatcher : DispatcherBase
@@ -10,6 +9,9 @@ namespace UnityThreading
     {
     }
 
-    internal override void AddTask(Task task) => task.DoInternal();
+    internal override void AddTask(Task task)
+    {
+      task.DoInternal();
+    }
   }
 }

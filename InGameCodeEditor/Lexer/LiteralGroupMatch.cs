@@ -3,20 +3,25 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-#nullable disable
 namespace InGameCodeEditor.Lexer
 {
   [Serializable]
   public sealed class LiteralGroupMatch : MatchLexer
   {
-    [NonSerialized]
-    private string htmlColor;
     [Tooltip("Should literals inside quotes be highlghted")]
     public bool highlightLiterals = true;
     [Tooltip("The color that all literal strings will be highglighted with")]
     public Color highlightColor = Color.black;
+    [NonSerialized]
+    private string htmlColor;
 
-    public bool HasLiteralHighlighting => this.highlightLiterals;
+    public bool HasLiteralHighlighting
+    {
+      get
+      {
+        return this.highlightLiterals;
+      }
+    }
 
     public override string HTMLColor
     {
@@ -46,7 +51,10 @@ namespace InGameCodeEditor.Lexer
       }
     }
 
-    public override void Invalidate() => this.htmlColor = (string) null;
+    public override void Invalidate()
+    {
+      this.htmlColor = (string) null;
+    }
 
     public override bool IsImplicitMatch(ILexer lexer)
     {

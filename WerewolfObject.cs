@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-#nullable disable
 public class WerewolfObject : MonoBehaviour
 {
+  private List<Sprite> sprites = new List<Sprite>();
   public SpriteRenderer body;
   public SpriteRenderer leftArm;
   public SpriteRenderer rightArm;
-  private List<Sprite> sprites = new List<Sprite>();
 
   internal void Init(ZPerson p, ZCreature creature, SettingsPlayer settingsPlayer, string name)
   {

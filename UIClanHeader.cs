@@ -3,7 +3,6 @@ using System;
 using TMPro;
 using UnityEngine;
 
-#nullable disable
 public class UIClanHeader : MonoBehaviour
 {
   public TMP_Text txtName;

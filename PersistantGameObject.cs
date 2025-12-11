@@ -1,7 +1,6 @@
 
 using UnityEngine;
 
-#nullable disable
 public class PersistantGameObject : MonoBehaviour
 {
   private static PersistantGameObject Instance { get; set; }
@@ -24,7 +23,10 @@ public class PersistantGameObject : MonoBehaviour
     Object.DontDestroyOnLoad((Object) this.gameObject);
   }
 
-  private void OnApplicationQuit() => Client.OnApplicationQuit();
+  private void OnApplicationQuit()
+  {
+    Client.OnApplicationQuit();
+  }
 
   private void OnDestroy()
   {

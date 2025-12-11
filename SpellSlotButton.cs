@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-#nullable disable
 public class SpellSlotButton : MonoBehaviour
 {
   public Image image;
@@ -25,7 +24,7 @@ public class SpellSlotButton : MonoBehaviour
     {
       GameObject gameObject = this.restricted.gameObject;
       int num;
-      if (!Restrictions.IsSpellRestricted(SpellLobbyChange.Instance.settingsPlayer._spells, index))
+      if (!Restrictions.IsSpellRestricted(SpellLobbyChange.Instance.settingsPlayer._spells, index, (Restrictions) null))
       {
         if (Client.viewSpellLocks.ViewRestricted())
         {
@@ -65,7 +64,7 @@ public class SpellSlotButton : MonoBehaviour
   public void RightClick()
   {
     Spell spell = this.GetSpell();
-    if ((Object) spell == (Object) null || (Object) spell.toSummon == (Object) null || !((Object) spell.toSummon?.GetComponent<Creature>() != (Object) null) || !spell.IsMinionSpell())
+    if ((Object) spell == (Object) null || (Object) spell.toSummon == (Object) null || (!((Object) spell.toSummon?.GetComponent<Creature>() != (Object) null) || !spell.IsMinionSpell()))
       return;
     SpellLobbyChange.Instance?.OpenMinion(spell, spell.toSummon.GetComponent<Creature>());
   }

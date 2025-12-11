@@ -6,21 +6,12 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-#nullable disable
-public class UIOnSlider : 
-  UIOnHoverChild,
-  IPointerDownHandler,
-  IEventSystemHandler,
-  IPointerUpHandler,
-  IPointerEnterHandler,
-  IPointerExitHandler,
-  IDragHandler,
-  IEndDragHandler
+public class UIOnSlider : UIOnHoverChild, IPointerDownHandler, IEventSystemHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler, IDragHandler, IEndDragHandler
 {
+  public bool interactable = true;
   public RectTransform handle;
   public float minHandleX;
   public float maxHandleX;
-  public bool interactable = true;
   public bool OnEnterExitWhenDisabled;
   public UIOnSlider.OnClick onClick;
   public UIOnSlider.OnClick onPointerUp;
@@ -34,7 +25,13 @@ public class UIOnSlider :
   public AudioClip audioClick;
   private RectTransform rectTransform;
 
-  public bool IsHovering => this.gameObject.activeInHierarchy && this.isHovering;
+  public bool IsHovering
+  {
+    get
+    {
+      return this.gameObject.activeInHierarchy && this.isHovering;
+    }
+  }
 
   private void Awake()
   {
@@ -74,11 +71,17 @@ public class UIOnSlider :
       this.X();
   }
 
-  public void FindChildern() => this.uiChildern = this.GetComponentsInChildren<UIOnHoverChild>();
+  public void FindChildern()
+  {
+    this.uiChildern = this.GetComponentsInChildren<UIOnHoverChild>();
+  }
 
   public bool AlwaysOn
   {
-    get => this.alwaysOn;
+    get
+    {
+      return this.alwaysOn;
+    }
     set
     {
       this.alwaysOn = value;
@@ -134,9 +137,15 @@ public class UIOnSlider :
       this.X();
   }
 
-  public void OnDrag(PointerEventData eventData) => this.CallBack((Vector3) eventData.position);
+  public void OnDrag(PointerEventData eventData)
+  {
+    this.CallBack((Vector3) eventData.position);
+  }
 
-  public void OnEndDrag(PointerEventData eventData) => this.CallBack((Vector3) eventData.position);
+  public void OnEndDrag(PointerEventData eventData)
+  {
+    this.CallBack((Vector3) eventData.position);
+  }
 
   public void OnPointerEnter(PointerEventData eventData)
   {
@@ -189,7 +198,7 @@ public class UIOnSlider :
     foreach (UIOnHoverChild uiOnHoverChild in this.uiChildern)
     {
       if ((UnityEngine.Object) uiOnHoverChild != (UnityEngine.Object) null)
-        uiOnHoverChild.OnUp();
+        uiOnHoverChild.OnUp(false);
     }
   }
 
@@ -198,7 +207,7 @@ public class UIOnSlider :
     foreach (UIOnHoverChild uiOnHoverChild in this.uiChildern)
     {
       if ((UnityEngine.Object) uiOnHoverChild != (UnityEngine.Object) null)
-        uiOnHoverChild.OnDown();
+        uiOnHoverChild.OnDown(false);
     }
   }
 
@@ -207,7 +216,7 @@ public class UIOnSlider :
     foreach (UIOnHoverChild uiOnHoverChild in this.uiChildern)
     {
       if ((UnityEngine.Object) uiOnHoverChild != (UnityEngine.Object) null)
-        uiOnHoverChild.OnExit();
+        uiOnHoverChild.OnExit(false);
     }
   }
 
@@ -218,7 +227,7 @@ public class UIOnSlider :
     foreach (UIOnHoverChild uiOnHoverChild in this.uiChildern)
     {
       if ((UnityEngine.Object) uiOnHoverChild != (UnityEngine.Object) null)
-        uiOnHoverChild.OnEnter();
+        uiOnHoverChild.OnEnter(false);
     }
   }
 
@@ -239,10 +248,9 @@ public class UIOnSlider :
 
   public void SetValue(float f)
   {
-    this.handle.anchoredPosition = Vector2.zero with
-    {
-      x = Mathf.Lerp(this.minHandleX, this.maxHandleX, f)
-    };
+    Vector2 zero = Vector2.zero;
+    zero.x = Mathf.Lerp(this.minHandleX, this.maxHandleX, f);
+    this.handle.anchoredPosition = zero;
   }
 
   private void CallBack(Vector3 eventData)

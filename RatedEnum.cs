@@ -1,5 +1,4 @@
 
-#nullable disable
 public enum RatedEnum
 {
   No = 0,

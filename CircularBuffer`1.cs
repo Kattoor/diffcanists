@@ -1,12 +1,14 @@
 
-#nullable disable
 public class CircularBuffer<T>
 {
   private T[] list;
   private int curIndex;
   private bool full;
 
-  public CircularBuffer(int count) => this.list = new T[count];
+  public CircularBuffer(int count)
+  {
+    this.list = new T[count];
+  }
 
   public void Add(T item)
   {
@@ -18,9 +20,21 @@ public class CircularBuffer<T>
     this.curIndex = 0;
   }
 
-  public int Count => !this.full ? this.curIndex : this.list.Length;
+  public int Count
+  {
+    get
+    {
+      return !this.full ? this.curIndex : this.list.Length;
+    }
+  }
 
-  public int Capacity => this.list.Length;
+  public int Capacity
+  {
+    get
+    {
+      return this.list.Length;
+    }
+  }
 
   public T this[int index]
   {

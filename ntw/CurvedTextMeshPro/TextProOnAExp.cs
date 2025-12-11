@@ -2,7 +2,6 @@
 using TMPro;
 using UnityEngine;
 
-#nullable disable
 namespace ntw.CurvedTextMeshPro
 {
   [ExecuteInEditMode]

@@ -1,7 +1,6 @@
 
 using UnityEngine;
 
-#nullable disable
 public class Phasing : MonoBehaviour
 {
   public ZMyCollider cre;

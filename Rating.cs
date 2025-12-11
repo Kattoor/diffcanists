@@ -1,7 +1,6 @@
 
 using UnityEngine;
 
-#nullable disable
 public static class Rating
 {
   public static int Winner1v1(int winner, int loser)

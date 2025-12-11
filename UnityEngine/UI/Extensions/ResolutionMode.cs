@@ -1,5 +1,4 @@
 
-#nullable disable
 namespace UnityEngine.UI.Extensions
 {
   public enum ResolutionMode

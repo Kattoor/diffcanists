@@ -1,7 +1,6 @@
 
 using UnityEngine;
 
-#nullable disable
 public class AnimateRepeat : MonoBehaviour
 {
   public float timeToFinish = 1f;
@@ -12,7 +11,13 @@ public class AnimateRepeat : MonoBehaviour
   private SpriteRenderer sp;
   internal bool deleteOnDestroy;
 
-  public SpriteRenderer GetSpriteRenderer => this.sp ?? this.GetComponent<SpriteRenderer>();
+  public SpriteRenderer GetSpriteRenderer
+  {
+    get
+    {
+      return this.sp ?? this.GetComponent<SpriteRenderer>();
+    }
+  }
 
   private void Start()
   {

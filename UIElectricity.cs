@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI.Extensions;
 
-#nullable disable
 public class UIElectricity : MonoBehaviour
 {
   public UILineRenderer lRend;
@@ -67,7 +66,7 @@ public class UIElectricity : MonoBehaviour
 
   protected List<Vector2> CreateBolt(Vector2 source, Vector2 dest)
   {
-    List<Vector2> bolt = new List<Vector2>();
+    List<Vector2> vector2List = new List<Vector2>();
     Vector2 vector2_1 = dest - source;
     Vector2 normalized = new Vector2(vector2_1.y, -vector2_1.x).normalized;
     float magnitude = vector2_1.magnitude;
@@ -76,20 +75,20 @@ public class UIElectricity : MonoBehaviour
     int num1 = (int) magnitude / 80;
     for (int index = 0; index < num1; ++index)
       floatList.Add(1f * (float) index / (float) num1);
-    bolt.Add(source);
+    vector2List.Add(source);
     float num2 = 0.0f;
     for (int index = 1; index < floatList.Count; ++index)
     {
       float num3 = floatList[index];
-      float num4 = (float) ((double) magnitude * 0.0083333337679505348 * ((double) num3 - (double) floatList[index - 1]));
+      float num4 = (float) ((double) magnitude * 0.00833333376795053 * ((double) num3 - (double) floatList[index - 1]));
       float num5 = (double) num3 > 0.949999988079071 ? (float) (20.0 * (1.0 - (double) num3)) : 1f;
       float num6 = (float) this.random.Next(-8000, 8000) / 100f;
       float num7 = (num6 - (float) (((double) num6 - (double) num2) * (1.0 - (double) num4))) * num5;
       Vector2 vector2_2 = source + num3 * vector2_1 + num7 * normalized;
-      bolt.Add(vector2_2);
+      vector2List.Add(vector2_2);
       num2 = num7;
     }
-    bolt.Add(dest);
-    return bolt;
+    vector2List.Add(dest);
+    return vector2List;
   }
 }

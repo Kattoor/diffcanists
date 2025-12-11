@@ -17,138 +17,8 @@ using UnityEngine.SceneManagement;
 using UnityThreading;
 using Win32Utilities;
 
-#nullable disable
 public class ZGame
 {
-  public bool limitSandStormActive;
-  public ZMyWorld world = new ZMyWorld();
-  public ZMap map = new ZMap();
-  private Transform _map;
-  public MapEnum armageddon;
-  public List<Spell> customArmageddon;
-  public int nextCreatureID = 1;
-  public int nextSpellID = 1;
-  public int nextColliderID = 1;
-  public int nextEffectorID = 1;
-  public bool receivedInitialMsg;
-  private bool _alreadySavedReplay;
-  public int turn = -1;
-  public int everIncreasingVariable;
-  public int armageddonTurn = 10;
-  public int seasonTurn = -1;
-  public int MaxTurnTime = 60;
-  public float PlayersMaxTurnTime = 60f;
-  public int shouldUpdateTurnTime;
-  public ServerState serverState = new ServerState();
-  public bool originalSpellsOnly;
-  public bool isWindy;
-  public int sandboxTime;
-  public bool tutorialPaused;
-  public bool winOnDeath = true;
-  public bool isSandbox;
-  public bool isClient;
-  public bool isServer;
-  public bool isReplay;
-  public bool isTeam;
-  public bool isMulti;
-  public bool isSpectator;
-  public bool isCountdown;
-  public bool countdownLose;
-  public float countdownTime;
-  public bool isTutorial;
-  public bool _resyncing;
-  public bool AllowDKH;
-  public bool firstOceanFury = true;
-  public bool hasArcaneMonster;
-  public bool AllowCallbacks = true;
-  public bool AllowBounce = true;
-  public bool AllowMovement = true;
-  public bool AllowTerrainDestruction = true;
-  public bool AllowInput = true;
-  public bool AllowMinionMovement = true;
-  public bool AllowMinionSpells = true;
-  public bool AllowEnemyDamage = true;
-  public GameSeason currentSeason;
-  public List<ZGame.Resurection> lastMinionToDie = new List<ZGame.Resurection>();
-  public PoolElectricity electricityPool;
-  public bool MAPCREATED;
-  public IsaacCipher random;
-  public IEnumerator<float> serverUpdate;
-  public IEnumerator<float> resyncUpdate;
-  public GameFacts gameFacts;
-  public ZGame.MyQueue MoveQue = new ZGame.MyQueue();
-  public HashSet<PastBlits> _pastBlits = new HashSet<PastBlits>();
-  public ZPerson _uncontrolledPlayer = new ZPerson()
-  {
-    name = "The Environment",
-    id = 26
-  };
-  public List<ZPerson> _playersExtended = new List<ZPerson>();
-  public List<ZPerson> players = new List<ZPerson>();
-  public List<ZPerson> team1Players = new List<ZPerson>();
-  public List<ZPerson> team2Players = new List<ZPerson>();
-  public List<ZPerson> team3Players = new List<ZPerson>();
-  public List<ZPerson> team4Players = new List<ZPerson>();
-  public List<ZPerson> team5Players = new List<ZPerson>();
-  public List<ZPerson> team6Players = new List<ZPerson>();
-  public List<ZPerson> team7Players = new List<ZPerson>();
-  public List<ZPerson> team8Players = new List<ZPerson>();
-  public List<ZPerson> team9Players = new List<ZPerson>();
-  public List<ZPerson> team10Players = new List<ZPerson>();
-  public List<ZPerson> team11Players = new List<ZPerson>();
-  public List<ZPerson> team12Players = new List<ZPerson>();
-  public int[] teamIndex = new int[12];
-  public int lastTeamsTurn;
-  public int TEAM_COUNT;
-  public CoroutineInstance ongoing = new CoroutineInstance();
-  public CoroutineInstance spectatorOngoing = new CoroutineInstance();
-  public List<ZEffector> globalEffectors = new List<ZEffector>();
-  public List<ZEffector> windShieldEffectors = new List<ZEffector>();
-  public List<ZEffector> elfEffectors = new List<ZEffector>();
-  public List<ZEffector> staticCharge = new List<ZEffector>();
-  public List<ZCreatureThorn> thorns = new List<ZCreatureThorn>();
-  public List<ZCreature> recallDevices = new List<ZCreature>();
-  public ZEffector targetEffector;
-  public ZEffector dwarfMapEffector;
-  public MyLocation? zombieCharge;
-  public ZEffector naturesWrath;
-  public ZEffector blackhole;
-  public bool ArcaneZero;
-  public bool First_Turn_Teleport;
-  public int TurnToLoseArcaneZero;
-  internal SpellEnum lastSpellCast = SpellEnum.None;
-  internal int sinksThisTurn;
-  internal int playersKilledThisTurn;
-  internal bool playerKilledByArmageddon;
-  internal bool with_the_fishes;
-  internal bool portalUsedThisSpellTurn;
-  internal bool skimmed_on_water;
-  internal int armageddonTurnVariable = -1;
-  internal bool decreasePlayer2Cooldowns = true;
-  private bool loggedToDiscord;
-  public int currentFrame;
-  public WaterStyle waterType = WaterStyle.Water;
-  internal ZCreature _lastActiveCreature;
-  public List<Connection> spectators = new List<Connection>();
-  public int nextSpectatorID = 50;
-  public Thread mapCreationThread;
-  public List<ZPerson> resigned = new List<ZPerson>();
-  private bool sentGameOver;
-  private List<ZPerson> tempResignFix = new List<ZPerson>();
-  public int totalTurnsCombined;
-  private bool firstTurn = true;
-  private bool firstRerplayTurn = true;
-  public List<ZCreature> tempList = new List<ZCreature>(5);
-  internal int _nextturn;
-  internal List<ZEffector> turnEffectors = new List<ZEffector>();
-  private float frameTime = 0.0333333351f;
-  public float tickTime;
-  private IEnumerator<float> ieKillWait;
-  private BanStage curBanStage;
-  private float timeTillStart;
-  private int waitTime = 15;
-  private float nextKeepAlive = 360f;
-  internal Dictionary<Connection, int> _oldData = new Dictionary<Connection, int>();
   public static readonly string[,] MoreGameOptions = new string[5, 2]
   {
     {
@@ -172,17 +42,146 @@ public class ZGame
       "Enemies cannot damage each other"
     }
   };
-  public List<byte[]> timeline = new List<byte[]>();
-  public int numExplosionsAndMovement;
-  private bool resyncOnError = true;
-  private bool rematchSent;
-  internal List<ZGame.DynamicType> returnData = new List<ZGame.DynamicType>();
-  public List<ZGame.TimelineData> timelineList;
-  private string replayName = "";
   public static int targetTimelineFrame = 0;
   public static bool replayShowStartPanel = true;
-  public int curReplayIndex;
+  public ZMyWorld world = new ZMyWorld();
+  public ZMap map = new ZMap();
+  public int nextCreatureID = 1;
+  public int nextSpellID = 1;
+  public int nextColliderID = 1;
+  public int nextEffectorID = 1;
+  public int turn = -1;
+  public int armageddonTurn = 10;
+  public int seasonTurn = -1;
+  public int MaxTurnTime = 60;
+  public float PlayersMaxTurnTime = 60f;
+  public ServerState serverState = new ServerState();
+  public bool winOnDeath = true;
+  public bool firstOceanFury = true;
+  public bool AllowCallbacks = true;
+  public bool AllowBounce = true;
+  public bool AllowMovement = true;
+  public bool AllowTerrainDestruction = true;
+  public bool AllowInput = true;
+  public bool AllowMinionMovement = true;
+  public bool AllowMinionSpells = true;
+  public bool AllowEnemyDamage = true;
+  public List<ZGame.Resurection> lastMinionToDie = new List<ZGame.Resurection>();
+  public ZGame.MyQueue MoveQue = new ZGame.MyQueue();
+  public HashSet<PastBlits> _pastBlits = new HashSet<PastBlits>();
+  public ZPerson _uncontrolledPlayer = new ZPerson()
+  {
+    name = "The Environment",
+    id = 26
+  };
+  public List<ZPerson> _playersExtended = new List<ZPerson>();
+  public List<ZPerson> players = new List<ZPerson>();
+  public List<ZPerson> team1Players = new List<ZPerson>();
+  public List<ZPerson> team2Players = new List<ZPerson>();
+  public List<ZPerson> team3Players = new List<ZPerson>();
+  public List<ZPerson> team4Players = new List<ZPerson>();
+  public List<ZPerson> team5Players = new List<ZPerson>();
+  public List<ZPerson> team6Players = new List<ZPerson>();
+  public List<ZPerson> team7Players = new List<ZPerson>();
+  public List<ZPerson> team8Players = new List<ZPerson>();
+  public List<ZPerson> team9Players = new List<ZPerson>();
+  public List<ZPerson> team10Players = new List<ZPerson>();
+  public List<ZPerson> team11Players = new List<ZPerson>();
+  public List<ZPerson> team12Players = new List<ZPerson>();
+  public int[] teamIndex = new int[12];
+  public CoroutineInstance ongoing = new CoroutineInstance();
+  public CoroutineInstance spectatorOngoing = new CoroutineInstance();
+  public List<ZEffector> globalEffectors = new List<ZEffector>();
+  public List<ZEffector> windShieldEffectors = new List<ZEffector>();
+  public List<ZEffector> elfEffectors = new List<ZEffector>();
+  public List<ZEffector> staticCharge = new List<ZEffector>();
+  public List<ZCreatureThorn> thorns = new List<ZCreatureThorn>();
+  public List<ZCreature> recallDevices = new List<ZCreature>();
+  internal SpellEnum lastSpellCast = SpellEnum.None;
+  internal int armageddonTurnVariable = -1;
+  internal bool decreasePlayer2Cooldowns = true;
+  public WaterStyle waterType = WaterStyle.Water;
+  public List<Connection> spectators = new List<Connection>();
+  public int nextSpectatorID = 50;
+  public List<ZPerson> resigned = new List<ZPerson>();
+  private List<ZPerson> tempResignFix = new List<ZPerson>();
+  private bool firstTurn = true;
+  private bool firstRerplayTurn = true;
+  public List<ZCreature> tempList = new List<ZCreature>(5);
+  internal List<ZEffector> turnEffectors = new List<ZEffector>();
+  private float frameTime = 0.03333334f;
+  private int waitTime = 15;
+  private float nextKeepAlive = 360f;
+  internal Dictionary<Connection, int> _oldData = new Dictionary<Connection, int>();
+  public List<byte[]> timeline = new List<byte[]>();
+  private bool resyncOnError = true;
+  internal List<ZGame.DynamicType> returnData = new List<ZGame.DynamicType>();
+  private string replayName = "";
   private string lastReplayFile = "";
+  public bool limitSandStormActive;
+  private Transform _map;
+  public MapEnum armageddon;
+  public List<Spell> customArmageddon;
+  public bool receivedInitialMsg;
+  private bool _alreadySavedReplay;
+  public int everIncreasingVariable;
+  public int shouldUpdateTurnTime;
+  public bool originalSpellsOnly;
+  public bool isWindy;
+  public int sandboxTime;
+  public bool tutorialPaused;
+  public bool isSandbox;
+  public bool isClient;
+  public bool isServer;
+  public bool isReplay;
+  public bool isTeam;
+  public bool isMulti;
+  public bool isSpectator;
+  public bool isCountdown;
+  public bool countdownLose;
+  public float countdownTime;
+  public bool isTutorial;
+  public bool _resyncing;
+  public bool AllowDKH;
+  public bool hasArcaneMonster;
+  public GameSeason currentSeason;
+  public PoolElectricity electricityPool;
+  public bool MAPCREATED;
+  public IsaacCipher random;
+  public IEnumerator<float> serverUpdate;
+  public IEnumerator<float> resyncUpdate;
+  public GameFacts gameFacts;
+  public int lastTeamsTurn;
+  public int TEAM_COUNT;
+  public ZEffector targetEffector;
+  public ZEffector dwarfMapEffector;
+  public MyLocation? zombieCharge;
+  public ZEffector naturesWrath;
+  public ZEffector blackhole;
+  public bool ArcaneZero;
+  public bool First_Turn_Teleport;
+  public int TurnToLoseArcaneZero;
+  internal int sinksThisTurn;
+  internal int playersKilledThisTurn;
+  internal bool playerKilledByArmageddon;
+  internal bool with_the_fishes;
+  internal bool portalUsedThisSpellTurn;
+  internal bool skimmed_on_water;
+  private bool loggedToDiscord;
+  public int currentFrame;
+  internal ZCreature _lastActiveCreature;
+  public Thread mapCreationThread;
+  private bool sentGameOver;
+  public int totalTurnsCombined;
+  internal int _nextturn;
+  public float tickTime;
+  private IEnumerator<float> ieKillWait;
+  private BanStage curBanStage;
+  private float timeTillStart;
+  public int numExplosionsAndMovement;
+  private bool rematchSent;
+  public List<ZGame.TimelineData> timelineList;
+  public int curReplayIndex;
   public float replayScrollPos;
   public int replayPastTimeLine;
   private bool replayPaused;
@@ -196,7 +195,13 @@ public class ZGame
   public HashSet<ZMyCollider> xCollider;
   private bool canSafelyClose;
 
-  public ZGame.GameType gameType => this.gameFacts.gameType;
+  public ZGame.GameType gameType
+  {
+    get
+    {
+      return this.gameFacts.gameType;
+    }
+  }
 
   public void OnLog(string s)
   {
@@ -209,13 +214,37 @@ public class ZGame
     return this._map;
   }
 
-  public float DeltaTime => Mathf.Clamp(Time.deltaTime, 0.0f, 0.04f);
+  public float DeltaTime
+  {
+    get
+    {
+      return Mathf.Clamp(Time.deltaTime, 0.0f, 0.04f);
+    }
+  }
 
-  public FixedInt gravity => this.map.Gravity;
+  public FixedInt gravity
+  {
+    get
+    {
+      return this.map.Gravity;
+    }
+  }
 
-  public bool AllowExpansion => !this.originalSpellsOnly;
+  public bool AllowExpansion
+  {
+    get
+    {
+      return !this.originalSpellsOnly;
+    }
+  }
 
-  public bool isOver => this.serverState.busy == ServerState.Busy.Ended;
+  public bool isOver
+  {
+    get
+    {
+      return this.serverState.busy == ServerState.Busy.Ended;
+    }
+  }
 
   public bool resyncing
   {
@@ -225,19 +254,37 @@ public class ZGame
         return true;
       return this.isReplay && this.curReplayIndex < ZGame.targetTimelineFrame;
     }
-    set => this._resyncing = value;
+    set
+    {
+      this._resyncing = value;
+    }
   }
 
-  public bool isElementals => this.gameFacts.GetStyle().HasStyle(GameStyle.Elementals);
+  public bool isElementals
+  {
+    get
+    {
+      return this.gameFacts.GetStyle().HasStyle(GameStyle.Elementals);
+    }
+  }
 
   public int MaxHealth(ZCreature c)
   {
     return !((ZComponent) c == (object) null) && !c.isPawn ? (int) this.gameFacts.startHealth : 250;
   }
 
-  public bool isRated => this.gameFacts.GetRatedMode();
+  public bool isRated
+  {
+    get
+    {
+      return this.gameFacts.GetRatedMode();
+    }
+  }
 
-  public bool CanMove(ZCreature c) => (this.AllowMinionMovement || !c.isPawn) && this.AllowMovement;
+  public bool CanMove(ZCreature c)
+  {
+    return (this.AllowMinionMovement || !c.isPawn) && this.AllowMovement;
+  }
 
   public ZGame()
   {
@@ -263,12 +310,18 @@ public class ZGame
 
   public ZCreature ClientCurrentCreature()
   {
-    return ZComponent.IsNull((ZComponent) this._lastActiveCreature) || this._lastActiveCreature.isDead || this._lastActiveCreature.parent == null || !this._lastActiveCreature.parent.yourTurn ? this.CurrentCreature() : this._lastActiveCreature;
+    return ZComponent.IsNull((ZComponent) this._lastActiveCreature) || this._lastActiveCreature.isDead || (this._lastActiveCreature.parent == null || !this._lastActiveCreature.parent.yourTurn) ? this.CurrentCreature() : this._lastActiveCreature;
   }
 
-  public int GetSpectatorID() => this.nextSpectatorID++;
+  public int GetSpectatorID()
+  {
+    return this.nextSpectatorID++;
+  }
 
-  public int RandomInt(int min, int max) => max < min ? min : this.random.Next(min, max);
+  public int RandomInt(int min, int max)
+  {
+    return max < min ? min : this.random.Next(min, max);
+  }
 
   public FixedInt RandomFixedInt(FixedInt min, FixedInt max)
   {
@@ -362,7 +415,7 @@ public class ZGame
 
   public void init_BanStage()
   {
-    SpellLobbyChange.Create(Client.settingsPlayer, (Action<SettingsPlayer>) (set => Client.AskBanStage(set)), validate: this.curBanStage == BanStage.Pick ? Validation.Level3Only : Validation.None, transparent: true, onCancel: (Action) (() => this.init_BanStage()));
+    SpellLobbyChange.Create(Client.settingsPlayer, (Action<SettingsPlayer>) (set => Client.AskBanStage(set)), false, this.curBanStage == BanStage.Pick ? Validation.Level3Only : Validation.None, true, (Action) (() => this.init_BanStage()));
   }
 
   public void init_Client(ServerState.Busy busy = ServerState.Busy.Not_started)
@@ -482,7 +535,7 @@ public class ZGame
       if (player.controlled.Count > 0)
       {
         ++num;
-        if (num >= 2 || num >= 1 && this.isSandbox && !this.isReplay && !this.isTutorial)
+        if (num >= 2 || num >= 1 && this.isSandbox && (!this.isReplay && !this.isTutorial))
           return false;
       }
     }
@@ -512,7 +565,7 @@ public class ZGame
       {
         if (!this.isSandbox)
           return;
-        this.QuitToMainMenu();
+        this.QuitToMainMenu(false, Client.JoinLocation.Mainmenu, false);
       }
     }
     else
@@ -653,7 +706,7 @@ label_57:
       Time.timeScale = 1f;
       try
       {
-        Controller.Instance.DestroyMap();
+        Controller.Instance.DestroyMap(false, true);
       }
       catch (Exception ex)
       {
@@ -686,7 +739,7 @@ label_57:
               Controller.Instance.OpenMenu(Controller.Instance.MenuMain, false);
               Client._gameFacts = new GameFacts();
               Client.joinedFrom = Client.JoinLocation.Mainmenu;
-              Controller.Instance.InitMap(true);
+              Controller.Instance.InitMap(true, false, true);
               return;
             }
             if (Client.joinedFrom == Client.JoinLocation.Store)
@@ -700,7 +753,7 @@ label_57:
               Controller.Instance.OpenMenu(Controller.Instance.MenuMain, false);
               break;
             }
-            Client.ReConnectToServer();
+            Client.ReConnectToServer(Client.JoinLocation.Mainmenu);
             break;
         }
       }
@@ -766,7 +819,7 @@ label_57:
       if (index < p.controlled.Count)
       {
         if (p.controlled[index].tempFlight)
-          p.controlled[index].RemoveFlight();
+          p.controlled[index].RemoveFlight(false, true);
         p.controlled[index].sprinting = 0;
         if (p.controlled[index]._FourSeasonsCastAtEndOfTurn)
         {
@@ -781,7 +834,7 @@ label_57:
       {
         if (zcreature.health < 8)
         {
-          zcreature.DoDamage(5 * p.waterMultipler);
+          zcreature.DoDamage(5 * p.waterMultipler, DamageType.None, (ZCreature) null, false, (ISpellBridge) null);
           this.SendCreatureHealth(zcreature);
           if (zcreature.health > 0)
             return;
@@ -802,7 +855,7 @@ label_57:
         zcreature.UpdateHealthTxt();
         this.with_the_fishes = true;
         if (this.isClient && Global.GetPrefBool("prefdeathmsg", true))
-          ChatBox.Instance?.NewChatMsg("", Descriptions.GetDrownMessage(zcreature), (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System);
+          ChatBox.Instance?.NewChatMsg("", Descriptions.GetDrownMessage(zcreature), (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System, ContentType.STRING, (object) null);
         zcreature.OnDeath(true);
       }
     }
@@ -816,14 +869,14 @@ label_57:
     {
       if (!this.zombieCharge.HasValue)
         return;
-      ZSpell.FireCallOfTheDead(Inert.GetSpell(SpellEnum.Call_of_the_Dead), p.first(), this.zombieCharge.Value);
+      ZSpell.FireCallOfTheDead(Inert.GetSpell(SpellEnum.Call_of_the_Dead), p.first(), this.zombieCharge.Value, 0, false);
       this.zombieCharge = new MyLocation?();
     }
   }
 
   public void Resign(ZPerson p, bool force)
   {
-    if (p == null || !(!this.isRated | force) || p.controlled.Count <= 0 || this.resigned.Contains(p) || p.didResign)
+    if (p == null || !(!this.isRated | force) || (p.controlled.Count <= 0 || this.resigned.Contains(p)) || p.didResign)
       return;
     this.SendVisualResigned(p, false);
     p.didResign = true;
@@ -1063,7 +1116,7 @@ label_13:;
         if (this.players[(int) this.serverState.playersTurn].didResign)
           this.SendResigned(this.players[(int) this.serverState.playersTurn]);
         else
-          this.SendResyncMsg(this.players[(int) this.serverState.playersTurn], "move queue was not empty when turn ended");
+          this.SendResyncMsg(this.players[(int) this.serverState.playersTurn], "move queue was not empty when turn ended", true, (Action) null);
       }
       this.MoveQue.Clear();
     }
@@ -1083,7 +1136,7 @@ label_13:;
       this.ServerPreTurn(this.players[(int) this.serverState.playersTurn]);
       this.SendNextTurn(playersTurn);
       this.SendGameTime();
-      this.NextTurn(this.players[(int) this.serverState.playersTurn]);
+      this.NextTurn(this.players[(int) this.serverState.playersTurn], true);
     }
     else
     {
@@ -1112,7 +1165,7 @@ label_13:;
             this.lastTeamsTurn = 0;
           if (lastTeamsTurn == this.lastTeamsTurn && this.team2Players.Count > 0)
           {
-            this.SendGameOver();
+            this.SendGameOver(false);
             goto label_46;
           }
           else
@@ -1137,7 +1190,7 @@ label_13:;
           }
         }
         while (num <= this.players.Count + 1);
-        this.SendGameOver();
+        this.SendGameOver(false);
       }
       else
       {
@@ -1149,7 +1202,7 @@ label_13:;
           ++num;
           if (num > this.players.Count + 1)
           {
-            this.SendGameOver();
+            this.SendGameOver(false);
             break;
           }
         }
@@ -1163,7 +1216,7 @@ label_46:
       this.SendGameTime();
       if (this.players[(int) this.serverState.playersTurn].ai != null)
         this.players[(int) this.serverState.playersTurn].ai.DoTurn();
-      this.NextTurn(this.players[(int) this.serverState.playersTurn]);
+      this.NextTurn(this.players[(int) this.serverState.playersTurn], true);
     }
   }
 
@@ -1249,7 +1302,7 @@ label_46:
     }
     ++p.inactiveTurns;
     p.movedThisTurn = false;
-    this.PlayersMaxTurnTime = p.GetLevel(BookOf.Cogs) > 0 ? (float) this.MaxTurnTime + (float) p.GetLevel(BookOf.Cogs) * Mathf.Min(this.originalSpellsOnly ? 6f : (float) this.MaxTurnTime / 5f, 6f) : (float) this.MaxTurnTime;
+    this.PlayersMaxTurnTime = p.GetLevel(BookOf.Cogs, false) > 0 ? (float) this.MaxTurnTime + (float) p.GetLevel(BookOf.Cogs, false) * Mathf.Min(this.originalSpellsOnly ? 6f : (float) this.MaxTurnTime / 5f, 6f) : (float) this.MaxTurnTime;
     if (this.isCountdown)
     {
       if ((double) p.countdown > 0.0)
@@ -1290,10 +1343,10 @@ label_46:
         p.controlled[0].CreatureMoveSurroundings();
     }
     this.tempList.Clear();
-    foreach (ZCreature z in p.controlled)
+    foreach (ZCreature zcreature in p.controlled)
     {
-      if (!ZComponent.IsNull((ZComponent) z) && !z.isDead)
-        this.tempList.Add(z);
+      if (!ZComponent.IsNull((ZComponent) zcreature) && !zcreature.isDead)
+        this.tempList.Add(zcreature);
     }
     for (int index = 0; index < this.tempList.Count; ++index)
       this.NextTurn(this.tempList[index]);
@@ -1333,13 +1386,13 @@ label_46:
       Armageddon.NextTurn(p);
     if (this.isClient & first)
     {
-      HUD.instance.NextTurn(p);
+      HUD.instance.NextTurn(p, false);
       if (p.controlled.Count > 0 && (ZComponent) p.controlled[0] != (object) null && !p.controlled[0].isDead)
-        CameraMovement.Instance.LerpToTransform(p.controlled[0]);
+        CameraMovement.Instance.LerpToTransform(p.controlled[0], false);
     }
     else
       this.CheckDraw(p);
-    if (!this.isSandbox && !this.isTutorial && p.localTurn > 0 && this.AllowMovement)
+    if (!this.isSandbox && !this.isTutorial && (p.localTurn > 0 && this.AllowMovement))
       this.AllowMovement = !this.gameFacts.GetStyle().HasStyle(GameStyle.No_Movement);
     if ((UnityEngine.Object) p.panelPlayer != (UnityEngine.Object) null && p.game.players.Count > 1)
       p.panelPlayer.MyTurn(true);
@@ -1395,9 +1448,9 @@ label_46:
       x.stunned = false;
     if ((ZComponent) x.tower != (object) null)
       x.tower.NextTurn();
-    if (x.shiningPower && x.health < x.maxHealth && !x.inWater && x.health < x.maxHealth)
+    if (x.shiningPower && x.health < x.maxHealth && (!x.inWater && x.health < x.maxHealth))
     {
-      x.DoHeal(10);
+      x.DoHeal(10, DamageType.None, (ZCreature) null, false);
       if (x.health > x.maxHealth)
         x.health = x.maxHealth;
     }
@@ -1405,19 +1458,19 @@ label_46:
     {
       if (x.maxHealth < 100)
         x.maxHealth += 25;
-      x.DoHeal(25, DamageType.Heal);
+      x.DoHeal(25, DamageType.Heal, (ZCreature) null, false);
       if (x.health > x.maxHealth)
         x.health = x.maxHealth;
     }
-    if (x.type == CreatureType.Dragon && x.race == CreatureRace.Arcane && !x.FullArcane && x.health < x.maxHealth)
+    if (x.type == CreatureType.Dragon && x.race == CreatureRace.Arcane && (!x.FullArcane && x.health < x.maxHealth))
     {
-      x.DoHeal(25);
+      x.DoHeal(25, DamageType.None, (ZCreature) null, false);
       if (x.health > x.maxHealth)
         x.health = x.maxHealth;
     }
     else if (x.type == CreatureType.DragonJr && x.health < x.maxHealth)
     {
-      x.DoHeal(15);
+      x.DoHeal(15, DamageType.None, (ZCreature) null, false);
       if (x.health > x.maxHealth)
         x.health = x.maxHealth;
     }
@@ -1425,7 +1478,7 @@ label_46:
     {
       if (x.fusion >= x.parent.localTurn)
       {
-        x.DoHeal(10);
+        x.DoHeal(10, DamageType.None, (ZCreature) null, false);
       }
       else
       {
@@ -1446,11 +1499,11 @@ label_46:
       }
       else
       {
-        x.CreateProtectionShield();
+        x.CreateProtectionShield(false);
         x.shield += x.familiarLevelOverlight;
       }
     }
-    if (x.familiarLevelSeas > 0 && !x.isPawn && x.waterShield < 50 && this.AllowExpansion)
+    if (x.familiarLevelSeas > 0 && !x.isPawn && (x.waterShield < 50 && this.AllowExpansion))
     {
       x.waterShield += x.familiarLevelSeas * 5;
       if (x.waterShield > 50)
@@ -1458,20 +1511,20 @@ label_46:
     }
     if (x.type == CreatureType.Beehive)
     {
-      x.DoHeal(15);
+      x.DoHeal(15, DamageType.None, (ZCreature) null, false);
       if (x.health > x.maxHealth)
         x.health = x.maxHealth;
       x.OnNextTurn();
     }
     if (x.race == CreatureRace.Undead && x.isPawn && (x.type != CreatureType.Gargoyle || x.canMove) && x.familiarLevelNecromancy < 5)
     {
-      x.DoDamage(5);
+      x.DoDamage(5, DamageType.None, (ZCreature) null, false, (ISpellBridge) null);
       if (x.health <= 0)
         x.health = 1;
     }
     else if (x.type == CreatureType.Vampire && x.health > 1 && x.InSunlight())
     {
-      x.DoDamage(Mathf.Min(x.health - 1, 10));
+      x.DoDamage(Mathf.Min(x.health - 1, 10), DamageType.None, (ZCreature) null, false, (ISpellBridge) null);
       if (x.health <= 0)
         x.health = 1;
     }
@@ -1480,7 +1533,7 @@ label_46:
     if (x.bleeding && x.health > 1)
     {
       --x.bleedCounter;
-      x.DoDamage(Mathf.Min(x.health - 1, 10));
+      x.DoDamage(Mathf.Min(x.health - 1, 10), DamageType.None, (ZCreature) null, false, (ISpellBridge) null);
       ZSpell.RandomBlood(x.game, x.position);
     }
     if ((ZComponent) x != (object) null && !x.isDead)
@@ -1496,7 +1549,7 @@ label_46:
     ZMyCollider col = null,
     bool forceLeaf = false)
   {
-    List<ZMyCollider> zmyColliderList = this.world.OverlapCircleAll((Point) pos, radius + 15, col);
+    List<ZMyCollider> zmyColliderList = this.world.OverlapCircleAll((Point) pos, radius + 15, col, -1);
     for (int index = 0; index < zmyColliderList.Count; ++index)
     {
       if (zmyColliderList[index].gameObjectLayer == 8 || zmyColliderList[index].gameObjectLayer == 16)
@@ -1504,10 +1557,10 @@ label_46:
         ZCreature creature = zmyColliderList[index].creature;
         if ((ZComponent) creature != (object) null && (ZComponent) creature.mount == (object) null)
         {
-          if (!creature.isMoving && creature.ShouldFall())
-            creature.Fall();
+          if (!creature.isMoving && creature.ShouldFall(true, false))
+            creature.Fall(false);
         }
-        else if ((ZComponent) zmyColliderList[index].spell != (object) null && !zmyColliderList[index].spell.isMoving && zmyColliderList[index].spell.ShouldSpellFall())
+        else if ((ZComponent) zmyColliderList[index].spell != (object) null && !zmyColliderList[index].spell.isMoving && zmyColliderList[index].spell.ShouldSpellFall(false))
           zmyColliderList[index].spell.SpellFall();
       }
       else if (zmyColliderList[index].gameObjectLayer == 13)
@@ -1525,15 +1578,15 @@ label_46:
           {
             if (forceLeaf && spell.spellLogic == SpellLogic.Leaf)
               spell.Fall();
-            else if (spell.ShouldSpellFall())
+            else if (spell.ShouldSpellFall(false))
               spell.SpellFall();
           }
         }
         else
         {
           ZCreature creature = zmyColliderList[index].creature;
-          if (!ZComponent.IsNull((ZComponent) creature) && creature.ShouldFall())
-            creature.Fall();
+          if (!ZComponent.IsNull((ZComponent) creature) && creature.ShouldFall(true, false))
+            creature.Fall(false);
         }
       }
     }
@@ -1554,7 +1607,7 @@ label_46:
       if ((ZComponent) Player.Instance.person.first() != (object) null && Player.Instance.person.first().inWater)
         Player.Instance.NextRecallDevice(true);
       else
-        Player.Instance.NextControlled(true);
+        Player.Instance.NextControlled(true, true);
     }
   }
 
@@ -1562,14 +1615,14 @@ label_46:
   {
     if (this.ieKillWait != null || this.serverState.busy == ServerState.Busy.Ended)
       return;
-    this.ieKillWait = this.ongoing.RunSpell(this.waitNextTurnClient());
+    this.ieKillWait = this.ongoing.RunSpell(this.waitNextTurnClient(), true);
   }
 
   public void DelayKill()
   {
     if (this.ieKillWait != null || this.serverState.busy == ServerState.Busy.Ended)
       return;
-    this.ieKillWait = this.ongoing.RunSpell(this.waitToQuit());
+    this.ieKillWait = this.ongoing.RunSpell(this.waitToQuit(), true);
   }
 
   private IEnumerator<float> waitToQuit()
@@ -1894,7 +1947,7 @@ label_46:
         {
           if (!this.ongoing.isRunningSpell)
             this.serverState.turnTime += this.DeltaTime;
-          if (this.ongoing.NumberOfSlowUpdateCoroutines == 0 && this.players[(int) this.serverState.playersTurn].InWater() && (double) this.serverState.turnTime < (double) this.PlayersMaxTurnTime + (this.isClient ? 0.0 : 2.0) && !this.resigned.Contains(this.players[(int) this.serverState.playersTurn]) && !this.players[(int) this.serverState.playersTurn].first()._sandsOfTime.HasValue)
+          if (this.ongoing.NumberOfSlowUpdateCoroutines == 0 && this.players[(int) this.serverState.playersTurn].InWater() && ((double) this.serverState.turnTime < (double) this.PlayersMaxTurnTime + (this.isClient ? 0.0 : 2.0) && !this.resigned.Contains(this.players[(int) this.serverState.playersTurn]) && !this.players[(int) this.serverState.playersTurn].first()._sandsOfTime.HasValue))
           {
             this.players[(int) this.serverState.playersTurn].yourTurn = true;
             this.serverState.busy = ServerState.Busy.No;
@@ -1919,7 +1972,7 @@ label_46:
       return false;
     foreach (ZPerson player in this.players)
     {
-      if (player == player.connection.player.player && (!player.Connected || !player.canStart) && player.controlled.Count > 0 && !player.didResign && !player.isFake)
+      if (player == player.connection.player.player && (!player.Connected || !player.canStart) && (player.controlled.Count > 0 && !player.didResign && !player.isFake))
         return false;
     }
     return true;
@@ -1982,7 +2035,7 @@ label_46:
           this.serverState.turnTime += this.DeltaTime;
         if (this.ongoing.NumberOfSlowUpdateCoroutines == 0)
         {
-          if ((int) this.serverState.playersTurn < this.players.Count && this.players[(int) this.serverState.playersTurn].InWater() && (double) this.serverState.turnTime < (double) this.PlayersMaxTurnTime + (this.isClient ? 0.0 : 2.0) && (this.players[(int) this.serverState.playersTurn].localTurn > -1 || !this.First_Turn_Teleport) && !this.resigned.Contains(this.players[(int) this.serverState.playersTurn]))
+          if ((int) this.serverState.playersTurn < this.players.Count && this.players[(int) this.serverState.playersTurn].InWater() && ((double) this.serverState.turnTime < (double) this.PlayersMaxTurnTime + (this.isClient ? 0.0 : 2.0) && (this.players[(int) this.serverState.playersTurn].localTurn > -1 || !this.First_Turn_Teleport) && !this.resigned.Contains(this.players[(int) this.serverState.playersTurn])))
           {
             if (this.players[(int) this.serverState.playersTurn].first()._sandsOfTime.HasValue)
             {
@@ -2026,7 +2079,7 @@ label_46:
       {
         if (!this.ongoing.isRunningSpell)
           this.serverState.turnTime += !this.isSandbox || this.sandboxTime != 0 ? this.DeltaTime : -this.DeltaTime;
-        if (this.isCountdown && (double) this.serverState.turnTime < (double) this.PlayersMaxTurnTime + 0.20000000298023224)
+        if (this.isCountdown && (double) this.serverState.turnTime < (double) this.PlayersMaxTurnTime + 0.200000002980232)
           this.CurrentPlayer()?.UpdateCountdown();
         if ((double) this.serverState.turnTime >= (double) this.PlayersMaxTurnTime + (this.isClient ? 0.0 : 3.0))
           this.NextTurn();
@@ -2258,12 +2311,12 @@ label_46:
         SpellSlot spellSlot3 = p.controlled[0].GetSpellSlot(SpellEnum.Glide);
         if (spellSlot3 != null && spellSlot3.TurnsTillFirstUse > 0)
           --spellSlot3.TurnsTillFirstUse;
-        if (p.GetLevel(b00k) == 1)
+        if (p.GetLevel(b00k, false) == 1)
         {
           p.controlled[0].AddLevel5Spell(new SpellSlot(Inert.Instance.spells.GetValue("Blink")), b00k);
           break;
         }
-        if (p.GetLevel(b00k) != 5)
+        if (p.GetLevel(b00k, false) != 5)
           break;
         using (List<SpellSlot>.Enumerator enumerator = p.first().spells.GetEnumerator())
         {
@@ -2353,7 +2406,7 @@ label_46:
           zcreature1.SetScale(1f);
           if (this.isClient && (UnityEngine.Object) Player.Instance != (UnityEngine.Object) null && p == Player.Instance.person)
             Player.Instance.UnselectSpell();
-          double num = (double) ((FixedInt) p.GetLevel(BookOf.Seasons) * (FixedInt) 62914L + 1).ToFloat();
+          double num = (double) ((FixedInt) p.GetLevel(BookOf.Seasons, false) * (FixedInt) 62914L + 1).ToFloat();
           zcreature1.CalculateMass();
           zcreature1.CalculateSize();
           this.forceRysncPause = true;
@@ -2376,10 +2429,10 @@ label_46:
         }
         else
         {
-          foreach (ZCreature zcreature4 in p.controlled)
+          foreach (ZCreature zcreature3 in p.controlled)
           {
-            if ((ZComponent) zcreature4 != (object) zcreature2 && zcreature4.health < zcreature4.maxHealth)
-              zcreatureList.Add(zcreature4);
+            if ((ZComponent) zcreature3 != (object) zcreature2 && zcreature3.health < zcreature3.maxHealth)
+              zcreatureList.Add(zcreature3);
           }
         }
         if (zcreatureList.Count > 0 && !this.isReplay)
@@ -2388,32 +2441,32 @@ label_46:
           int damage = 20;
           while (damage > 0 && zcreatureList.Count > 0)
           {
-            ZCreature zcreature5 = zcreatureList[0];
-            zcreature5.DoHeal(damage);
+            ZCreature zcreature3 = zcreatureList[0];
+            zcreature3.DoHeal(damage, DamageType.None, (ZCreature) null, false);
             damage = 0;
-            if (zcreature5.health >= zcreature5.maxHealth)
+            if (zcreature3.health >= zcreature3.maxHealth)
             {
-              damage = zcreature5.health - zcreature5.maxHealth;
-              zcreature5.health = zcreature5.maxHealth;
+              damage = zcreature3.health - zcreature3.maxHealth;
+              zcreature3.health = zcreature3.maxHealth;
               zcreatureList.RemoveAt(0);
             }
             if (this.isClient)
-              zcreature5.UpdateHealthTxt();
+              zcreature3.UpdateHealthTxt();
           }
         }
-        ZCreature zcreature6 = p.first();
-        double num1 = (double) ((FixedInt) 1 - (FixedInt) ((long) p.GetLevel(BookOf.Illusion) * 125829L)).ToFloat();
-        zcreature6.CalculateMass();
-        zcreature6.CalculateSize();
+        ZCreature zcreature4 = p.first();
+        double num1 = (double) ((FixedInt) 1 - (FixedInt) ((long) p.GetLevel(BookOf.Illusion, false) * 125829L)).ToFloat();
+        zcreature4.CalculateMass();
+        zcreature4.CalculateSize();
         this.forceRysncPause = true;
-        if ((ZComponent) zcreature6.tower == (object) null)
+        if ((ZComponent) zcreature4.tower == (object) null)
         {
-          if ((ZComponent) zcreature6.mount != (object) null)
-            zcreature6.RiderMoveToPosition = zcreature6.mount.position + Global.GetMountOffset(zcreature6.mount.transformscale, zcreature6.mount.type);
+          if ((ZComponent) zcreature4.mount != (object) null)
+            zcreature4.RiderMoveToPosition = zcreature4.mount.position + Global.GetMountOffset(zcreature4.mount.transformscale, zcreature4.mount.type);
           else
-            zcreature6.InstantFall();
+            zcreature4.InstantFall();
         }
-        zcreature6.CreatureMoveSurroundings();
+        zcreature4.CreatureMoveSurroundings();
         break;
     }
     if (!this.originalSpellsOnly)
@@ -2421,13 +2474,13 @@ label_46:
       switch (b00k)
       {
         case BookOf.Arcane:
-          if (p.GetLevel(b00k) == 5)
+          if (p.GetLevel(b00k, false) == 5)
           {
-            ZCreature zcreature7 = p.first();
-            for (int index = 0; index < zcreature7.effectors.Count; ++index)
+            ZCreature zcreature3 = p.first();
+            for (int index = 0; index < zcreature3.effectors.Count; ++index)
             {
-              if (zcreature7.effectors[index].type == EffectorType.Arcane_Energizer)
-                zcreature7.effectors[index].MaxTurnsAlive = 9000;
+              if (zcreature3.effectors[index].type == EffectorType.Arcane_Energizer)
+                zcreature3.effectors[index].MaxTurnsAlive = 9000;
             }
           }
           if (p.game.isClient)
@@ -2474,13 +2527,13 @@ label_46:
     }
     if (b00k == BookOf.Seas)
     {
-      foreach (ZCreature zcreature8 in p.controlled)
-        zcreature8.waterWalking = true;
+      foreach (ZCreature zcreature3 in p.controlled)
+        zcreature3.waterWalking = true;
     }
     ZFamiliar familiar = p.GetFamiliar(b00k);
     if (!ZComponent.IsNull((ZComponent) familiar))
     {
-      if (familiar.bookOf != BookOf.Underdark || p.GetLevel(b00k) <= 0)
+      if (familiar.bookOf != BookOf.Underdark || p.GetLevel(b00k, false) <= 0)
         return;
       MyLocation pos = !p.first().inWater || p.localTurn > 0 || !p.game.First_Turn_Teleport ? p.first().position : new MyLocation(p.map.Width / 2, p.map.Height);
       if ((UnityEngine.Object) familiar.transform != (UnityEngine.Object) null)
@@ -2537,13 +2590,13 @@ label_46:
       }
       else
       {
-        if (zfamiliar.bookOf != BookOf.Frost || p.GetLevel(BookOf.Frost) != 1 || !p.InWater() || p.localTurn <= 0 && this.First_Turn_Teleport)
+        if (zfamiliar.bookOf != BookOf.Frost || p.GetLevel(BookOf.Frost, false) != 1 || !p.InWater() || p.localTurn <= 0 && this.First_Turn_Teleport)
           return;
-        ZCreature zcreature9 = p.first();
-        if (!((ZComponent) zcreature9 != (object) null) || !(zcreature9.position.x > 0) || !(zcreature9.position.x < this.map.Width))
+        ZCreature zcreature3 = p.first();
+        if (!((ZComponent) zcreature3 != (object) null) || !(zcreature3.position.x > 0) || !(zcreature3.position.x < this.map.Width))
           return;
-        zcreature9.MoveToPosition = new MyLocation(zcreature9.position.x, (FixedInt) zcreature9.radius);
-        zcreature9.Fall();
+        zcreature3.MoveToPosition = new MyLocation(zcreature3.position.x, (FixedInt) zcreature3.radius);
+        zcreature3.Fall(false);
         if (!this.isClient || !((UnityEngine.Object) Player.Instance != (UnityEngine.Object) null))
           return;
         Player.Instance.UnselectSpell();
@@ -2583,14 +2636,14 @@ label_46:
     bool wait,
     Action onTrue)
   {
-    while (this.ongoing.NumberOfSlowUpdateCoroutines > 0 && c.State == ConnectionState.Connected && this.serverState.busy != ServerState.Busy.Ended && this.gameFacts != null && c.player.gameNumber == this.gameFacts.id)
+    while (this.ongoing.NumberOfSlowUpdateCoroutines > 0 && c.State == ConnectionState.Connected && (this.serverState.busy != ServerState.Busy.Ended && this.gameFacts != null) && c.player.gameNumber == this.gameFacts.id)
       yield return 0.0f;
     int offset = 0;
     if (!this._oldData.TryGetValue(c, out offset))
       offset = 0;
     int count = this.timeline.Count;
     int len = count - offset;
-    if (c.State != ConnectionState.Connected || this.serverState.busy == ServerState.Busy.Ended || this.gameFacts == null || c.player.gameNumber != this.gameFacts.id)
+    if (c.State != ConnectionState.Connected || this.serverState.busy == ServerState.Busy.Ended || (this.gameFacts == null || c.player.gameNumber != this.gameFacts.id))
     {
       if (p != null)
       {
@@ -2608,7 +2661,7 @@ label_46:
     }
     else
     {
-      c.SendBytes(this.SerializeAll(c, offset, len, (SpellOverrides) null));
+      c.SendBytes(this.SerializeAll(c, offset, len, (SpellOverrides) null), SendOption.None);
       this._oldData[c] = count;
       if (p != null)
       {
@@ -2632,7 +2685,7 @@ label_46:
   {
     if (wait)
     {
-      while (this.ongoing.NumberOfSlowUpdateCoroutines > 0 && c.State == ConnectionState.Connected && this.serverState.busy != ServerState.Busy.Ended && this.gameFacts != null && c.player.gameNumber == this.gameFacts.id)
+      while (this.ongoing.NumberOfSlowUpdateCoroutines > 0 && c.State == ConnectionState.Connected && (this.serverState.busy != ServerState.Busy.Ended && this.gameFacts != null) && c.player.gameNumber == this.gameFacts.id)
         yield return 0.0f;
     }
     int num1 = 0;
@@ -2640,7 +2693,7 @@ label_46:
       num1 = 0;
     int count = this.timeline.Count;
     int num2 = count - num1;
-    if (c.State != ConnectionState.Connected || this.serverState.busy == ServerState.Busy.Ended || this.gameFacts == null || c.player.gameNumber != this.gameFacts.id)
+    if (c.State != ConnectionState.Connected || this.serverState.busy == ServerState.Busy.Ended || (this.gameFacts == null || c.player.gameNumber != this.gameFacts.id))
       p.resyncIE = (IEnumerator<float>) null;
     else if (num2 == 0)
     {
@@ -2667,7 +2720,7 @@ label_46:
         if (c != null)
         {
           if (c.State == ConnectionState.Connected)
-            c.SendBytes(memoryStream.ToArray());
+            c.SendBytes(memoryStream.ToArray(), SendOption.None);
         }
       }
       this._oldData[c] = count;
@@ -2698,7 +2751,7 @@ label_46:
     }
     else
     {
-      if (this.isServer || this.isReplay || this.isSandbox || Client.connection == null || Client.connection.State != ConnectionState.Connected)
+      if (this.isServer || this.isReplay || (this.isSandbox || Client.connection == null) || Client.connection.State != ConnectionState.Connected)
         return;
       using (MemoryStream memoryStream = new MemoryStream())
       {
@@ -2707,7 +2760,7 @@ label_46:
           myBinaryWriter.Write((byte) 64);
           myBinaryWriter.Write(err);
         }
-        Client.connection.SendBytes(memoryStream.ToArray());
+        Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
       }
     }
   }
@@ -2776,7 +2829,7 @@ label_46:
           myBinaryWriter.Write(this.players[(int) this.serverState.playersTurn].countdown);
         }
         if (this.players[(int) this.serverState.playersTurn].GetMultiConnected)
-          this.players[(int) this.serverState.playersTurn].GetMultiConnection.SendBytes(memoryStream.ToArray());
+          this.players[(int) this.serverState.playersTurn].GetMultiConnection.SendBytes(memoryStream.ToArray(), SendOption.None);
       }
     }
     if (!this.isClient || !((UnityEngine.Object) HUD.instance != (UnityEngine.Object) null) || this.resyncing)
@@ -2791,7 +2844,7 @@ label_46:
     {
       try
       {
-        this.players[team].GetMultiConnection.SendBytes(b);
+        this.players[team].GetMultiConnection.SendBytes(b, SendOption.None);
       }
       catch (Exception ex)
       {
@@ -2802,7 +2855,7 @@ label_46:
       foreach (ZPerson zperson in this.GetTeam(team))
       {
         if (zperson.Connected)
-          zperson.connection?.SendBytes(b);
+          zperson.connection?.SendBytes(b, SendOption.None);
       }
     }
   }
@@ -2812,7 +2865,7 @@ label_46:
     foreach (ZPerson player in this.players)
     {
       if (player.Connected)
-        player.connection?.SendBytes(b);
+        player.connection?.SendBytes(b, SendOption.None);
     }
   }
 
@@ -2821,7 +2874,7 @@ label_46:
     for (int index = this.spectators.Count - 1; index >= 0; --index)
     {
       if (this.spectators[index] != null && this.spectators[index].State == ConnectionState.Connected)
-        this.spectators[index].SendBytes(b);
+        this.spectators[index].SendBytes(b, SendOption.None);
       else if (this.spectators[index] != null && this.spectators[index].player.inBoat)
       {
         Connection spectator = this.spectators[index];
@@ -2838,7 +2891,7 @@ label_46:
     foreach (ZPerson player in this.players)
     {
       if (player.Connected && player.ready)
-        player.connection?.SendBytes(b);
+        player.connection?.SendBytes(b, SendOption.None);
       else if (player.connection != null && player.connection.player.inBoat)
         this.RemoveFromBoat(player.connection);
     }
@@ -2849,7 +2902,7 @@ label_46:
     for (int index = this.spectators.Count - 1; index >= 0; --index)
     {
       if (this.spectators[index] != null && this.spectators[index].State == ConnectionState.Connected)
-        this.spectators[index].SendBytes(b);
+        this.spectators[index].SendBytes(b, SendOption.None);
       else if (this.spectators[index] != null && this.spectators[index].player.inBoat)
       {
         Connection spectator = this.spectators[index];
@@ -2866,7 +2919,7 @@ label_46:
     foreach (ZPerson player in this.players)
     {
       if (player.Connected)
-        player.connection?.SendBytes(b);
+        player.connection?.SendBytes(b, SendOption.None);
     }
     if (b[0] == (byte) 153 || b[0] == (byte) 33)
       return;
@@ -2875,7 +2928,7 @@ label_46:
     for (int index = this.spectators.Count - 1; index >= 0; --index)
     {
       if (this.spectators[index] != null && this.spectators[index].State == ConnectionState.Connected)
-        this.spectators[index].SendBytes(b);
+        this.spectators[index].SendBytes(b, SendOption.None);
     }
   }
 
@@ -2976,7 +3029,7 @@ label_46:
     if (!this.isSandbox && !this.isTutorial)
     {
       this.armageddonTurn = (int) g.settings.armageddonTurn;
-      this.isCountdown = g.settings.countdownTime != (short) 0;
+      this.isCountdown = (uint) g.settings.countdownTime > 0U;
       this.countdownLose = g.settings.countdownTime < (short) 0;
       this.countdownTime = (float) Mathf.Abs((int) g.settings.countdownTime);
     }
@@ -3015,8 +3068,8 @@ label_46:
       if (g.realSpells.Count > index)
         p.settingsPlayer.CopySpells(g.realSpells[index]);
       else
-        p.settingsPlayer.CopySpells(g.settingsPlayer[index]);
-      ZCreature character = Inert.CreateCharacter(p, p.settingsPlayer, new MyLocation(0, 1000), index);
+        p.settingsPlayer.CopySpells(g.settingsPlayer[index], false);
+      ZCreature character = Inert.CreateCharacter(p, p.settingsPlayer, new MyLocation(0, 1000), index, true, false);
       if (this.gameFacts.settings.startHealth != (ushort) 250)
       {
         character.health = (int) this.gameFacts.settings.startHealth;
@@ -3152,7 +3205,7 @@ label_46:
             {
               if (num1 == (byte) 206 || num1 == (byte) 220)
                 return;
-              this.SendResyncMsg(p, "your turn already ended");
+              this.SendResyncMsg(p, "your turn already ended", true, (Action) null);
             }
             else
             {
@@ -3167,7 +3220,7 @@ label_46:
               {
                 if (num1 != (byte) 207)
                   return;
-                this.init_Resync();
+                this.init_Resync(false);
               }
               else
               {
@@ -3179,19 +3232,19 @@ label_46:
                     {
                       p.inactiveTurns = 0;
                       if (!fromServer && !p.yourTurn || p.localTurn <= 0 && this.First_Turn_Teleport)
-                        this.SendResyncMsg(p, "was not your turn - When using familiar");
+                        this.SendResyncMsg(p, "was not your turn - When using familiar", true, (Action) null);
                       else if (p.controlled.Count == 0)
                       {
                         if (fromServer)
                           return;
-                        this.SendResyncMsg(p, "you seem to be dead :(");
+                        this.SendResyncMsg(p, "you seem to be dead :(", true, (Action) null);
                       }
                       else
                       {
                         ZCreature zcreature = p.controlled[0];
                         if (this.isServer && fam != zcreature.parent.ActivateableFamiliar)
                         {
-                          this.SendResyncMsg(p, "unable to process - When using familiar");
+                          this.SendResyncMsg(p, "unable to process - When using familiar", true, (Action) null);
                         }
                         else
                         {
@@ -3199,16 +3252,16 @@ label_46:
                             zcreature.parent.ActivateableFamiliar = fam;
                           zcreature.parent.familiarBook |= (FamiliarType) (1 << (int) (fam & (BookOf) 31));
                           if (this.isServer && (zcreature.familiarLevelActivateable >= 5 || zcreature.familiar == FamiliarType.Nothing) || zcreature.health <= 20)
-                            this.SendResyncMsg(p, "unable to process - When using familiar");
+                            this.SendResyncMsg(p, "unable to process - When using familiar", true, (Action) null);
                           else if (zcreature.FullArcane)
                           {
                             if (zcreature.health <= 100)
                             {
-                              this.SendResyncMsg(p, "full arcane less then 100 hp - When using familiar");
+                              this.SendResyncMsg(p, "full arcane less then 100 hp - When using familiar", true, (Action) null);
                             }
                             else
                             {
-                              zcreature.DoDamage(100);
+                              zcreature.DoDamage(100, DamageType.None, (ZCreature) null, false, (ISpellBridge) null);
                               this.RemoveFamiliars();
                               if (!this.isClient)
                                 this.SendAllMessage(b);
@@ -3220,12 +3273,12 @@ label_46:
                           else
                           {
                             p.IncreaseLevel();
-                            zcreature.DoDamage(20);
+                            zcreature.DoDamage(20, DamageType.None, (ZCreature) null, false, (ISpellBridge) null);
                             if (zcreature.hasDarkDefenses)
                               zcreature.DarkDefenses(true);
                             if (!this.isClient)
                               this.SendAllMessage(b);
-                            this.CreateFamiliar(p.ActivateableFamiliar, p);
+                            this.CreateFamiliar(p.ActivateableFamiliar, p, true, false);
                             if (!this.isClient)
                               return;
                             zcreature.UpdateHealthTxt();
@@ -3250,7 +3303,7 @@ label_46:
                       p.inactiveTurns = 0;
                       if (!fromServer && !p.yourTurn)
                       {
-                        this.SendResyncMsg(p, "could not move left - not your turn");
+                        this.SendResyncMsg(p, "could not move left - not your turn", true, (Action) null);
                       }
                       else
                       {
@@ -3272,7 +3325,7 @@ label_46:
                           }
                           else
                           {
-                            this.SendResyncMsg(p, "invalid position on move right #id" + (object) moveID + ": " + (object) validPos1 + " expected: " + (object) cre.position, onTrue: (Action) (() =>
+                            this.SendResyncMsg(p, "invalid position on move right #id" + (object) moveID + ": " + (object) validPos1 + " expected: " + (object) cre.position, true, (Action) (() =>
                             {
                               if (this.loggedToDiscord)
                                 return;
@@ -3282,7 +3335,7 @@ label_46:
                             return;
                           }
                         }
-                        if (ZComponent.IsNull((ZComponent) cre) || cre.stunned || !this.CanMove(cre) || p.InWater() && cre.type != CreatureType.Recall_Device || !fromServer && !p.yourTurn || !cre.canMove && !cre.flying || !cre.controllable || cre.InDarkTotem())
+                        if (ZComponent.IsNull((ZComponent) cre) || cre.stunned || !this.CanMove(cre) || (p.InWater() && cre.type != CreatureType.Recall_Device || !fromServer && !p.yourTurn) || (!cre.canMove && !cre.flying || (!cre.controllable || cre.InDarkTotem())))
                           return;
                         this.serverState.busy = ServerState.Busy.No;
                         if (!this.isClient)
@@ -3293,9 +3346,9 @@ label_46:
                         {
                           this._lastActiveCreature = cre;
                           if (cre.pawn || !cre.flying || cre.entangledOrGravity)
-                            cre.animator?.Play(AnimateState.Walk, 0.05f);
+                            cre.animator?.Play(AnimateState.Walk, 0.05f, true);
                           if (CameraMovement.FOLLOWTARGETS && (ZComponent) CameraMovement.Instance.target != (object) cre.transform && !CameraMovement.Instance.IsfollowingBee(cre))
-                            CameraMovement.Instance.LerpToTransform(cre);
+                            CameraMovement.Instance.LerpToTransform(cre, false);
                         }
                         cre.parent.movedThisTurn = true;
                         cre.OnMoved();
@@ -3304,7 +3357,7 @@ label_46:
                         {
                           cre.velocity = new MyLocation((FixedInt) ((double) scaleX1 < 0.0 ? -11010048L : -6291456L), (FixedInt) 0);
                           cre.SetScale(-1f);
-                          cre.moving = this.ongoing.RunCoroutine(cre.FlyMove(true));
+                          cre.moving = this.ongoing.RunCoroutine(cre.FlyMove(true), true);
                         }
                         else
                         {
@@ -3335,7 +3388,7 @@ label_46:
                       p.inactiveTurns = 0;
                       if (!fromServer && !p.yourTurn)
                       {
-                        this.SendResyncMsg(p, "could not move right - not your turn");
+                        this.SendResyncMsg(p, "could not move right - not your turn", true, (Action) null);
                       }
                       else
                       {
@@ -3357,7 +3410,7 @@ label_46:
                           }
                           else
                           {
-                            this.SendResyncMsg(p, "invalid position on move left #id" + (object) moveID + ": " + (object) validPos2 + " expected: " + (object) cre.position, onTrue: (Action) (() =>
+                            this.SendResyncMsg(p, "invalid position on move left #id" + (object) moveID + ": " + (object) validPos2 + " expected: " + (object) cre.position, true, (Action) (() =>
                             {
                               if (this.loggedToDiscord)
                                 return;
@@ -3367,7 +3420,7 @@ label_46:
                             return;
                           }
                         }
-                        if (ZComponent.IsNull((ZComponent) cre) || cre.stunned || !this.CanMove(cre) || p.InWater() && cre.type != CreatureType.Recall_Device || !fromServer && !p.yourTurn || !cre.canMove && !cre.flying || !cre.controllable || cre.InDarkTotem())
+                        if (ZComponent.IsNull((ZComponent) cre) || cre.stunned || !this.CanMove(cre) || (p.InWater() && cre.type != CreatureType.Recall_Device || !fromServer && !p.yourTurn) || (!cre.canMove && !cre.flying || (!cre.controllable || cre.InDarkTotem())))
                           return;
                         this.serverState.busy = ServerState.Busy.No;
                         if (!this.isClient)
@@ -3378,9 +3431,9 @@ label_46:
                         {
                           this._lastActiveCreature = cre;
                           if (cre.pawn || !cre.flying || cre.entangledOrGravity)
-                            cre.animator?.Play(AnimateState.Walk, 0.05f);
+                            cre.animator?.Play(AnimateState.Walk, 0.05f, true);
                           if (CameraMovement.FOLLOWTARGETS && (ZComponent) CameraMovement.Instance.target != (object) cre.transform && !CameraMovement.Instance.IsfollowingBee(cre))
-                            CameraMovement.Instance.LerpToTransform(cre);
+                            CameraMovement.Instance.LerpToTransform(cre, false);
                         }
                         cre.parent.movedThisTurn = true;
                         cre.OnMoved();
@@ -3389,7 +3442,7 @@ label_46:
                         {
                           cre.velocity = new MyLocation((FixedInt) ((double) scaleX2 > 0.0 ? 9437184L : 4194304L), (FixedInt) 0);
                           cre.SetScale(1f);
-                          cre.moving = this.ongoing.RunCoroutine(cre.FlyMove(true));
+                          cre.moving = this.ongoing.RunCoroutine(cre.FlyMove(true), true);
                         }
                         else
                         {
@@ -3420,7 +3473,7 @@ label_46:
                       p.inactiveTurns = 0;
                       if (!fromServer && !p.yourTurn)
                       {
-                        this.SendResyncMsg(p, "could high jump - not your turn");
+                        this.SendResyncMsg(p, "could high jump - not your turn", true, (Action) null);
                       }
                       else
                       {
@@ -3442,7 +3495,7 @@ label_46:
                           }
                           else
                           {
-                            this.SendResyncMsg(p, "invalid position on high jump #id" + (object) moveID + ": " + (object) validPos3 + " expected: " + (object) cre.position, onTrue: (Action) (() =>
+                            this.SendResyncMsg(p, "invalid position on high jump #id" + (object) moveID + ": " + (object) validPos3 + " expected: " + (object) cre.position, true, (Action) (() =>
                             {
                               if (this.loggedToDiscord)
                                 return;
@@ -3452,7 +3505,7 @@ label_46:
                             return;
                           }
                         }
-                        if (ZComponent.IsNull((ZComponent) cre) || cre.stunned || !this.CanMove(cre) || p.InWater() && cre.type != CreatureType.Recall_Device || !fromServer && !p.yourTurn || !cre.canMove && !cre.flying || !cre.controllable || cre.InDarkTotem())
+                        if (ZComponent.IsNull((ZComponent) cre) || cre.stunned || !this.CanMove(cre) || (p.InWater() && cre.type != CreatureType.Recall_Device || !fromServer && !p.yourTurn) || (!cre.canMove && !cre.flying || (!cre.controllable || cre.InDarkTotem())))
                           return;
                         if ((ZComponent) cre.tower != (object) null)
                         {
@@ -3469,7 +3522,7 @@ label_46:
                           cre.OnMoved();
                           ++this.numExplosionsAndMovement;
                           if (cre.pawn || !cre.flying || cre.entangledOrGravity)
-                            cre.animator?.Play(AnimateState.Jump);
+                            cre.animator?.Play(AnimateState.Jump, 0.0f, true);
                           if (!this.isClient)
                           {
                             this.SendAllMessage(bites3);
@@ -3478,7 +3531,7 @@ label_46:
                           {
                             this._lastActiveCreature = cre;
                             if (CameraMovement.FOLLOWTARGETS && (ZComponent) CameraMovement.Instance.target != (object) cre.transform && !CameraMovement.Instance.IsfollowingBee(cre))
-                              CameraMovement.Instance.LerpToTransform(cre);
+                              CameraMovement.Instance.LerpToTransform(cre, false);
                           }
                           if ((double) cre.transformscale != (double) scaleX3)
                             cre.SetScale(scaleX3);
@@ -3503,7 +3556,7 @@ label_46:
                       p.inactiveTurns = 0;
                       if (!fromServer && !p.yourTurn)
                       {
-                        this.SendResyncMsg(p, "could not long jump - not your turn");
+                        this.SendResyncMsg(p, "could not long jump - not your turn", true, (Action) null);
                       }
                       else
                       {
@@ -3525,7 +3578,7 @@ label_46:
                           }
                           else
                           {
-                            this.SendResyncMsg(p, "invalid position on long jump #id" + (object) moveID + ": " + (object) validPos4 + " expected: " + (object) cre.position, onTrue: (Action) (() =>
+                            this.SendResyncMsg(p, "invalid position on long jump #id" + (object) moveID + ": " + (object) validPos4 + " expected: " + (object) cre.position, true, (Action) (() =>
                             {
                               if (this.loggedToDiscord)
                                 return;
@@ -3535,7 +3588,7 @@ label_46:
                             return;
                           }
                         }
-                        if (ZComponent.IsNull((ZComponent) cre) || cre.stunned || !this.CanMove(cre) || p.InWater() && cre.type != CreatureType.Recall_Device || !fromServer && !p.yourTurn || !cre.canMove && !cre.flying || !cre.controllable || cre.InDarkTotem())
+                        if (ZComponent.IsNull((ZComponent) cre) || cre.stunned || !this.CanMove(cre) || (p.InWater() && cre.type != CreatureType.Recall_Device || !fromServer && !p.yourTurn) || (!cre.canMove && !cre.flying || (!cre.controllable || cre.InDarkTotem())))
                           return;
                         if ((ZComponent) cre.tower != (object) null)
                         {
@@ -3552,11 +3605,11 @@ label_46:
                           cre.OnMoved();
                           ++this.numExplosionsAndMovement;
                           if (cre.pawn || !cre.flying || cre.entangledOrGravity)
-                            cre.animator?.Play(AnimateState.Jump);
+                            cre.animator?.Play(AnimateState.Jump, 0.0f, true);
                           if (!this.isClient)
                             this.SendAllMessage(bites4);
                           else if (CameraMovement.FOLLOWTARGETS && (ZComponent) CameraMovement.Instance.target != (object) cre.transform && !CameraMovement.Instance.IsfollowingBee(cre))
-                            CameraMovement.Instance.LerpToTransform(cre);
+                            CameraMovement.Instance.LerpToTransform(cre, false);
                           if ((double) cre.transformscale != (double) scaleX4)
                             cre.SetScale(scaleX4);
                           if (!sprinting4)
@@ -3592,7 +3645,7 @@ label_46:
                       p.inactiveTurns = 0;
                       if (!fromServer && !p.yourTurn)
                       {
-                        this.SendResyncMsg(p, "could not flip flop - not your turn");
+                        this.SendResyncMsg(p, "could not flip flop - not your turn", true, (Action) null);
                       }
                       else
                       {
@@ -3600,14 +3653,14 @@ label_46:
                         {
                           if ((int) playerOffset >= this.players.Count || this.players[(int) playerOffset].team != p.team || (int) playerOffset != (int) p.id && selectedIndex == (byte) 0)
                           {
-                            this.SendResyncMsg(p, "could not flip flop - Invalid player index");
+                            this.SendResyncMsg(p, "could not flip flop - Invalid player index", true, (Action) null);
                             return;
                           }
                           person5 = this.players[(int) playerOffset];
                         }
                         if (person5.controlled.Count <= (int) selectedIndex)
                         {
-                          this.SendResyncMsg(p, "could not flip flop - Invalid minion index");
+                          this.SendResyncMsg(p, "could not flip flop - Invalid minion index", true, (Action) null);
                         }
                         else
                         {
@@ -3621,7 +3674,7 @@ label_46:
                             }
                             else
                             {
-                              this.SendResyncMsg(p, "invalid position on flip flop #id" + (object) moveID + ": " + (object) validPos5 + " expected: " + (object) cre.position, onTrue: (Action) (() =>
+                              this.SendResyncMsg(p, "invalid position on flip flop #id" + (object) moveID + ": " + (object) validPos5 + " expected: " + (object) cre.position, true, (Action) (() =>
                               {
                                 if (this.loggedToDiscord)
                                   return;
@@ -3633,7 +3686,7 @@ label_46:
                           }
                           if (ZComponent.IsNull((ZComponent) cre) || p.InWater() && cre.type != CreatureType.Recall_Device)
                           {
-                            this.SendResyncMsg(p, "could not flip flop");
+                            this.SendResyncMsg(p, "could not flip flop", true, (Action) null);
                           }
                           else
                           {
@@ -3659,7 +3712,7 @@ label_46:
                       p.inactiveTurns = 0;
                       if (!fromServer && !p.yourTurn)
                       {
-                        this.SendResyncMsg(p, "could not flip flop - not your turn");
+                        this.SendResyncMsg(p, "could not flip flop - not your turn", true, (Action) null);
                       }
                       else
                       {
@@ -3667,14 +3720,14 @@ label_46:
                         {
                           if ((int) playerOffset >= this.players.Count || this.players[(int) playerOffset].team != p.team || (int) playerOffset != (int) p.id && selectedIndex == (byte) 0)
                           {
-                            this.SendResyncMsg(p, "could not flip flop - Invalid player index");
+                            this.SendResyncMsg(p, "could not flip flop - Invalid player index", true, (Action) null);
                             return;
                           }
                           person6 = this.players[(int) playerOffset];
                         }
                         if (person6.controlled.Count <= (int) selectedIndex)
                         {
-                          this.SendResyncMsg(p, "could not flip flop - Invalid minion index");
+                          this.SendResyncMsg(p, "could not flip flop - Invalid minion index", true, (Action) null);
                         }
                         else
                         {
@@ -3688,7 +3741,7 @@ label_46:
                             }
                             else
                             {
-                              this.SendResyncMsg(p, "invalid position on detower #id" + (object) moveID + ": " + (object) validPos6 + " expected: " + (object) cre.position, onTrue: (Action) (() =>
+                              this.SendResyncMsg(p, "invalid position on detower #id" + (object) moveID + ": " + (object) validPos6 + " expected: " + (object) cre.position, true, (Action) (() =>
                               {
                                 if (this.loggedToDiscord)
                                   return;
@@ -3700,7 +3753,7 @@ label_46:
                           }
                           if (ZComponent.IsNull((ZComponent) cre))
                           {
-                            this.SendResyncMsg(p, "could not detower");
+                            this.SendResyncMsg(p, "could not detower", true, (Action) null);
                           }
                           else
                           {
@@ -3710,7 +3763,7 @@ label_46:
                               this.SendAllMessage(bites6);
                             else
                               this._lastActiveCreature = cre;
-                            cre.DestroyTower();
+                            cre.DestroyTower(false, true);
                             cre.sprinting = 0;
                           }
                         }
@@ -3730,7 +3783,7 @@ label_46:
                       p.inactiveTurns = 0;
                       if (!fromServer && !p.yourTurn)
                       {
-                        this.SendResyncMsg(p, "could not controlled jump - not your turn");
+                        this.SendResyncMsg(p, "could not controlled jump - not your turn", true, (Action) null);
                       }
                       else
                       {
@@ -3752,7 +3805,7 @@ label_46:
                           }
                           else
                           {
-                            this.SendResyncMsg(p, "invalid position on controlled jump #id" + (object) moveID + ": " + (object) validPos7 + " expected: " + (object) cre.position, onTrue: (Action) (() =>
+                            this.SendResyncMsg(p, "invalid position on controlled jump #id" + (object) moveID + ": " + (object) validPos7 + " expected: " + (object) cre.position, true, (Action) (() =>
                             {
                               if (this.loggedToDiscord)
                                 return;
@@ -3764,22 +3817,22 @@ label_46:
                         }
                         if (cre.minerMarket == null || !cre.minerMarket.Has(MinerMarket.Types.Platinum_Climbing_Hooks))
                         {
-                          this.SendResyncMsg(p, "This minion cannot use controlled jumps :(");
+                          this.SendResyncMsg(p, "This minion cannot use controlled jumps :(", true, (Action) null);
                         }
                         else
                         {
-                          if (ZComponent.IsNull((ZComponent) cre) || cre.stunned || !this.CanMove(cre) || p.InWater() && cre.type != CreatureType.Recall_Device || !fromServer && !p.yourTurn || !cre.canMove && !cre.flying || !cre.controllable || cre.InDarkTotem() || (ZComponent) cre.tower != (object) null)
+                          if (ZComponent.IsNull((ZComponent) cre) || cre.stunned || !this.CanMove(cre) || (p.InWater() && cre.type != CreatureType.Recall_Device || !fromServer && !p.yourTurn) || (!cre.canMove && !cre.flying || (!cre.controllable || cre.InDarkTotem()) || (ZComponent) cre.tower != (object) null))
                             return;
                           this.serverState.busy = ServerState.Busy.Moving;
                           cre.parent.movedThisTurn = true;
                           cre.OnMoved();
                           ++this.numExplosionsAndMovement;
                           if (cre.pawn || !cre.flying || cre.entangledOrGravity)
-                            cre.animator?.Play(AnimateState.Jump);
+                            cre.animator?.Play(AnimateState.Jump, 0.0f, true);
                           if (!this.isClient)
                             this.SendAllMessage(bites7);
                           else if (CameraMovement.FOLLOWTARGETS && (ZComponent) CameraMovement.Instance.target != (object) cre.transform && !CameraMovement.Instance.IsfollowingBee(cre))
-                            CameraMovement.Instance.LerpToTransform(cre);
+                            CameraMovement.Instance.LerpToTransform(cre, false);
                           if ((double) cre.transformscale != (double) scaleX6)
                             cre.SetScale(scaleX6);
                           cre.velocity = Inert.Velocity(rot_z1, cre.GetHighJumpY(!ExtraMoveBits.NoIceJump((int) extraMoveBits)) + (cre.minerMarket.Has(MinerMarket.Types.Light) ? 1 : 0));
@@ -3812,12 +3865,12 @@ label_46:
                       person8.lastMoveID = moveID;
                       p.inactiveTurns = 0;
                       if (!fromServer && !p.yourTurn)
-                        this.SendResyncMsg(p, "was not your turn - When casting a spell");
+                        this.SendResyncMsg(p, "was not your turn - When casting a spell", true, (Action) null);
                       else if (p.controlled.Count == 0)
                       {
                         if (fromServer)
                           return;
-                        this.SendResyncMsg(p, "you seem to be dead :(");
+                        this.SendResyncMsg(p, "you seem to be dead :(", true, (Action) null);
                       }
                       else
                       {
@@ -3825,14 +3878,14 @@ label_46:
                         {
                           if ((int) playerOffset >= this.players.Count || this.players[(int) playerOffset].team != p.team || (int) playerOffset != (int) p.id && selectedIndex == (byte) 0)
                           {
-                            this.SendResyncMsg(p, "invalid team - When casting a spell");
+                            this.SendResyncMsg(p, "invalid team - When casting a spell", true, (Action) null);
                             return;
                           }
                           person8 = this.players[(int) playerOffset];
                         }
                         if (person8.controlled.Count <= (int) selectedIndex)
                         {
-                          this.SendResyncMsg(p, "minion index mismatch - When casting a spell");
+                          this.SendResyncMsg(p, "minion index mismatch - When casting a spell", true, (Action) null);
                         }
                         else
                         {
@@ -3847,11 +3900,11 @@ label_46:
                           }
                           if (!creature.inWater && creature.spells.Count <= (int) selectedZSpell)
                           {
-                            this.SendResyncMsg(p, "server spell count does not match");
+                            this.SendResyncMsg(p, "server spell count does not match", true, (Action) null);
                           }
                           else
                           {
-                            SpellSlot spellSlot = creature.inWater ? creature.GetAvailableGate(ref selectedZSpell) ?? Inert.Instance.waterGate : creature.spells[(int) selectedZSpell];
+                            SpellSlot spellSlot = creature.inWater ? creature.GetAvailableGate(ref selectedZSpell, 0) ?? Inert.Instance.waterGate : creature.spells[(int) selectedZSpell];
                             if (this.isClient)
                             {
                               if (spellSlot.spell.spellEnum != spellEnum)
@@ -3878,45 +3931,45 @@ label_46:
                             Spell spell = spellSlot.spell;
                             if ((UnityEngine.Object) spell == (UnityEngine.Object) null)
                             {
-                              this.SendResyncMsg(p, "spell is null - When casting a spell");
+                              this.SendResyncMsg(p, "spell is null - When casting a spell", true, (Action) null);
                             }
                             else
                             {
                               int localTurn = creature.parent.localTurn;
                               if (this.isServer)
                               {
-                                if (spellSlot.spell.spellEnum != spellEnum || spellSlot.bonusDmg != bonusDmg || spellSlot.isPresent != isPresent || spellSlot.EndsTurn != endsTurn)
+                                if (spellSlot.spell.spellEnum != spellEnum || spellSlot.bonusDmg != bonusDmg || (spellSlot.isPresent != isPresent || spellSlot.EndsTurn != endsTurn))
                                 {
-                                  this.SendResyncMsg(p, "spell mismatch");
+                                  this.SendResyncMsg(p, "spell mismatch", true, (Action) null);
                                   return;
                                 }
                                 if (spellSlot.MaxUses >= 0 && spellSlot.UsedUses >= spellSlot.MaxUses && !creature.inWater)
                                 {
-                                  this.SendResyncMsg(p, "uses mismatch - When casting a spell");
+                                  this.SendResyncMsg(p, "uses mismatch - When casting a spell", true, (Action) null);
                                   return;
                                 }
                                 if (spellSlot.TurnsTillFirstUse > localTurn && !creature.inWater)
                                 {
-                                  this.SendResyncMsg(p, "not enough turns have passed to cast this spell");
+                                  this.SendResyncMsg(p, "not enough turns have passed to cast this spell", true, (Action) null);
                                   return;
                                 }
-                                if ((spellSlot.LastTurnFired == localTurn && (!creature.flying || !spell.spellEnum.IsFlight()) || (spellSlot.RechargeTime > 0 || spellSlot.LastTurnFired > localTurn) && spellSlot.LastTurnFired + spellSlot.RechargeTime >= localTurn && (!spellSlot.spell.spellEnum.IsFlight() || !creature.flying) && (spellSlot.TurnsTillFirstUse > localTurn || spellSlot.LastTurnFired > -1)) && !creature.inWater)
+                                if ((spellSlot.LastTurnFired == localTurn && (!creature.flying || !spell.spellEnum.IsFlight()) || (spellSlot.RechargeTime > 0 || spellSlot.LastTurnFired > localTurn) && spellSlot.LastTurnFired + spellSlot.RechargeTime >= localTurn && ((!spellSlot.spell.spellEnum.IsFlight() || !creature.flying) && (spellSlot.TurnsTillFirstUse > localTurn || spellSlot.LastTurnFired > -1))) && !creature.inWater)
                                 {
-                                  this.SendResyncMsg(p, "unable to cast this turn " + (object) spellSlot.spell + " ltf: " + (object) spellSlot.LastTurnFired + " flying: " + creature.flying.ToString() + " recharge: " + (object) spellSlot.RechargeTime + " curTurn: " + (object) localTurn + " ttfs: " + (object) spellSlot.TurnsTillFirstUse);
+                                  this.SendResyncMsg(p, "unable to cast this turn " + (object) spellSlot.spell + " ltf: " + (object) spellSlot.LastTurnFired + " flying: " + creature.flying.ToString() + " recharge: " + (object) spellSlot.RechargeTime + " curTurn: " + (object) localTurn + " ttfs: " + (object) spellSlot.TurnsTillFirstUse, true, (Action) null);
                                   return;
                                 }
                                 if (!creature.inWater)
                                 {
-                                  if (creature.phantom && !spellSlot.isPresent && spell.bookOf != BookOf.Arcane && spell.bookOf != BookOf.Illusion && spell.spellEnum != SpellEnum.Spirit_Link && spell.spellEnum != SpellEnum.Spirit_Walk)
+                                  if (creature.phantom && !spellSlot.isPresent && (spell.bookOf != BookOf.Arcane && spell.bookOf != BookOf.Illusion) && (spell.spellEnum != SpellEnum.Spirit_Link && spell.spellEnum != SpellEnum.Spirit_Walk))
                                   {
-                                    this.SendResyncMsg(p, "spell unavailable when phantom");
+                                    this.SendResyncMsg(p, "spell unavailable when phantom", true, (Action) null);
                                     return;
                                   }
                                   if (creature.race == CreatureRace.Undead && !creature.pawn)
                                   {
                                     if (spell.bookOf != BookOf.Arcane && spell.bookOf != BookOf.Underdark && !spellSlot.isPresent || spell.type == CastType.Tower)
                                     {
-                                      this.SendResyncMsg(p, "spell unavailable when undead");
+                                      this.SendResyncMsg(p, "spell unavailable when undead", true, (Action) null);
                                       return;
                                     }
                                   }
@@ -3924,29 +3977,29 @@ label_46:
                                   {
                                     if (spell.bookOf != BookOf.Arcane && spell.bookOf != BookOf.OverLight && !spellSlot.isPresent)
                                     {
-                                      this.SendResyncMsg(p, "spell unavailable when an angel");
+                                      this.SendResyncMsg(p, "spell unavailable when an angel", true, (Action) null);
                                       return;
                                     }
                                   }
                                   else if (spell.type == CastType.Tower && (creature.flying || (ZComponent) creature.mount != (object) null || creature.radius > 30))
                                   {
-                                    this.SendResyncMsg(p, "tower not valid in the current state");
+                                    this.SendResyncMsg(p, "tower not valid in the current state", true, (Action) null);
                                     return;
                                   }
                                   if (!creature.inWater && spellSlot.disabledturn >= creature.parent.localTurn)
                                   {
-                                    this.SendResyncMsg(p, "spell is disabled");
+                                    this.SendResyncMsg(p, "spell is disabled", true, (Action) null);
                                     return;
                                   }
                                 }
                                 if (ClickSpell.Level3(spell, spell.spellEnum, creature, spellSlot) != 0 && !creature.inWater)
                                 {
-                                  this.SendResyncMsg(p, "spell could not be cast");
+                                  this.SendResyncMsg(p, "spell could not be cast", true, (Action) null);
                                   return;
                                 }
                                 if (this.ArcaneZero && (spell.damage > 0 || spell.spellEnum == SpellEnum.Snowball) && !creature.inWater)
                                 {
-                                  this.SendResyncMsg(p, "Zero shield was active (damaging spell)");
+                                  this.SendResyncMsg(p, "Zero shield was active (damaging spell)", true, (Action) null);
                                   return;
                                 }
                               }
@@ -3959,7 +4012,7 @@ label_46:
                                 }
                                 else
                                 {
-                                  this.SendResyncMsg(p, "invalid position when casting: " + (object) validPos8 + " expected: " + (object) creature.position, onTrue: (Action) (() =>
+                                  this.SendResyncMsg(p, "invalid position when casting: " + (object) validPos8 + " expected: " + (object) creature.position, true, (Action) (() =>
                                   {
                                     if (this.loggedToDiscord)
                                       return;
@@ -3977,14 +4030,14 @@ label_46:
                               {
                                 if (!ZSpell.ServerCanFire(spell, (int) target.x, (int) target.y, (int) secTarget.x, (int) secTarget.y, creature, rot_z2, power, new MyLocation(target.x, target.y)))
                                 {
-                                  this.SendResyncMsg(p, "spell could not be fired");
+                                  this.SendResyncMsg(p, "spell could not be fired", true, (Action) null);
                                   return;
                                 }
                                 if (spell.spellEnum == SpellEnum.Sands_of_Time)
                                 {
-                                  using (MemoryStream memoryStream2 = new MemoryStream())
+                                  using (MemoryStream memoryStream = new MemoryStream())
                                   {
-                                    using (myBinaryWriter myBinaryWriter = new myBinaryWriter((Stream) memoryStream2))
+                                    using (myBinaryWriter myBinaryWriter = new myBinaryWriter((Stream) memoryStream))
                                     {
                                       myBinaryWriter.Write((byte) 220);
                                       myBinaryWriter.Write(person8.id);
@@ -4006,7 +4059,7 @@ label_46:
                                       myBinaryWriter.Write(validPos8);
                                       myBinaryWriter.Write(secTarget);
                                     }
-                                    bites8 = memoryStream2.ToArray();
+                                    bites8 = memoryStream.ToArray();
                                   }
                                 }
                                 this.SendAllMessage(bites8);
@@ -4020,14 +4073,14 @@ label_46:
                                     if (creature.health < 8)
                                       this.MoveQue.Enqueue((Action) (() =>
                                       {
-                                        creature.DoDamage(5);
+                                        creature.DoDamage(5, DamageType.None, (ZCreature) null, false, (ISpellBridge) null);
                                         this.SendCreatureHealth(creature);
                                         creature.UpdateHealthTxt();
                                         if (creature.health > 0)
                                           return;
                                         this.with_the_fishes = true;
                                         if (this.isClient && Global.GetPrefBool("prefdeathmsg", true))
-                                          ChatBox.Instance?.NewChatMsg("", Descriptions.GetDrownMessage(creature), (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System);
+                                          ChatBox.Instance?.NewChatMsg("", Descriptions.GetDrownMessage(creature), (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System, ContentType.STRING, (object) null);
                                         creature.OnDeath(true);
                                       }), false);
                                     else
@@ -4100,7 +4153,7 @@ label_46:
                                     position += Global.VelocityRight(rot_z2, force / 6);
                                 }
                               }
-                              if (spell.type == CastType.Naplem || spell.type == CastType.Flash || spell.type == CastType.Power || spell.type == CastType.Target_Power || spell.type == CastType.Double_Naplem)
+                              if (spell.type == CastType.Naplem || spell.type == CastType.Flash || (spell.type == CastType.Power || spell.type == CastType.Target_Power) || spell.type == CastType.Double_Naplem)
                                 position += Global.VelocityRight(rot_z2, force);
                               if (creature.invulnerable > 0 && creature.invulnerable < 1000)
                                 creature.invulnerable = 0;
@@ -4115,7 +4168,7 @@ label_46:
                               {
                                 if (!this.isSandbox && !this.isTutorial)
                                   this.serverState.turnTime += 2f;
-                                this.ongoing.RunCoroutine(this.castWait(110f));
+                                this.ongoing.RunCoroutine(this.castWait(110f), true);
                               }
                               if (creature.fusion > 0)
                               {
@@ -4124,7 +4177,7 @@ label_46:
                               }
                               if (this.isClient && !this.resyncing && (spellSlot.EndsTurn || (UnityEngine.Object) Player.Instance == (UnityEngine.Object) null || !Player.Instance.person.yourTurn))
                                 HUD.instance.CastSpell(spell, creature);
-                              if (this.isClient && !this.resyncing && HUD.instance.FollowSpells && spell.spellEnum != SpellEnum.Sand_Trap && spell.spellEnum != SpellEnum.Stalk && spell.spellEnum != SpellEnum.Sands_of_Time)
+                              if (this.isClient && !this.resyncing && (HUD.instance.FollowSpells && spell.spellEnum != SpellEnum.Sand_Trap) && (spell.spellEnum != SpellEnum.Stalk && spell.spellEnum != SpellEnum.Sands_of_Time))
                               {
                                 CameraMovement.FOLLOWTARGETS = true;
                                 CameraMovement.Instance.activeTarget = (IFollowTarget) null;
@@ -4145,7 +4198,7 @@ label_46:
                               if (!creature.isPawn)
                                 person8.IncreaseCastCount(spell.spellEnum);
                               ++this.everIncreasingVariable;
-                              ZSpell.FireWhich(spell, creature, position, rot_z2, power, target, secTarget, (int) realSpellSlot, extended, spellSlot);
+                              ZSpell.FireWhich(spell, creature, position, rot_z2, power, target, secTarget, (int) realSpellSlot, extended, spellSlot, false);
                               if (this.isTutorial && Client._tutorial.onCast != null)
                                 Client._tutorial.onCast(new ContainerCreature(creature), new ContainerSpell(spellSlot));
                               if (!spellSlot.isPresent)
@@ -4169,9 +4222,9 @@ label_46:
               case 1:
                 if (this.isReplay)
                   break;
-                using (MemoryStream memoryStream3 = new MemoryStream())
+                using (MemoryStream memoryStream2 = new MemoryStream())
                 {
-                  using (myBinaryWriter myBinaryWriter = new myBinaryWriter((Stream) memoryStream3))
+                  using (myBinaryWriter myBinaryWriter = new myBinaryWriter((Stream) memoryStream2))
                   {
                     if (this.isSpectator)
                     {
@@ -4186,10 +4239,10 @@ label_46:
                   }
                   if (Spectator.isConnected)
                   {
-                    Spectator.connection.SendBytes(Client.FirstEncrypt(memoryStream3.ToArray()));
+                    Spectator.connection.SendBytes(Client.FirstEncrypt(memoryStream2.ToArray()), SendOption.None);
                     break;
                   }
-                  Client.connection.SendBytes(memoryStream3.ToArray());
+                  Client.connection.SendBytes(memoryStream2.ToArray(), SendOption.None);
                   break;
                 }
               case 7:
@@ -4202,7 +4255,7 @@ label_46:
               case 10:
                 if (Global.GetPrefBool("prefsavereplay", true))
                   this.SaveReplay();
-                Controller.Instance.DestroyMap();
+                Controller.Instance.DestroyMap(false, true);
                 Client.SyncLobby(myBinaryReader);
                 break;
               case 13:
@@ -4279,7 +4332,7 @@ label_46:
                 Client.connection.SendBytes(new byte[1]
                 {
                   (byte) 9
-                });
+                }, SendOption.None);
                 break;
               case 17:
                 break;
@@ -4292,21 +4345,21 @@ label_46:
                 if (this.isSpectator)
                 {
                   this.resyncing = true;
-                  this.resyncUpdate = Timing.RunCoroutine(this.Resync());
+                  this.resyncUpdate = Timing.RunCoroutine(this.Resync(0, false));
                   break;
                 }
-                this.init_Resync();
+                this.init_Resync(false);
                 break;
               case 64:
                 this.receivedInitialMsg = true;
                 int index5 = myBinaryReader.ReadInt32();
                 int num8 = myBinaryReader.ReadInt32();
                 this.timeline.RemoveRange(index5, this.timeline.Count - index5);
-                for (int index6 = 0; index6 < num8; ++index6)
+                for (int index4 = 0; index4 < num8; ++index4)
                   this.timeline.Add(myBinaryReader.ReadBytes());
                 string str1 = myBinaryReader.ReadString();
                 if (!string.IsNullOrEmpty(str1))
-                  ChatBox.Instance?.NewChatMsg("", "Resync because - " + str1, (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System);
+                  ChatBox.Instance?.NewChatMsg("", "Resync because - " + str1, (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
                 bool flag1 = myBinaryReader.ReadBoolean();
                 try
                 {
@@ -4315,118 +4368,118 @@ label_46:
                     this.serverState.playersTurn = myBinaryReader.ReadByte();
                     if (myBinaryReader.ReadInt32() == this.map._pastBits.Count)
                     {
-                      int num9 = myBinaryReader.ReadInt32();
-                      if (num9 == this.players.Count)
+                      int num3 = myBinaryReader.ReadInt32();
+                      if (num3 == this.players.Count)
                       {
-                        for (int index7 = 0; index7 < num9; ++index7)
+                        for (int index4 = 0; index4 < num3; ++index4)
                         {
-                          this.players[index7].yourTurn = myBinaryReader.ReadBoolean();
-                          List<ZCreature> controlled = this.players[index7].controlled;
-                          int num10 = myBinaryReader.ReadInt32();
-                          if (num10 == controlled.Count)
+                          this.players[index4].yourTurn = myBinaryReader.ReadBoolean();
+                          List<ZCreature> controlled = this.players[index4].controlled;
+                          int num4 = myBinaryReader.ReadInt32();
+                          if (num4 == controlled.Count)
                           {
-                            for (int index8 = 0; index8 < num10; ++index8)
+                            for (int index6 = 0; index6 < num4; ++index6)
                             {
                               bool flag2 = myBinaryReader.ReadBoolean();
-                              if (flag2 == ((ZComponent) controlled[index8] != (object) null))
+                              if (flag2 == ((ZComponent) controlled[index6] != (object) null))
                               {
                                 if (flag2)
                                 {
-                                  controlled[index8].KillMovement();
+                                  controlled[index6].KillMovement();
                                   MyLocation pos = myBinaryReader.ReadMyLocation();
-                                  controlled[index8].position = pos;
-                                  controlled[index8].collider?.Move(pos);
-                                  controlled[index8].health = myBinaryReader.ReadInt32();
-                                  ZCreature rider = controlled[index8].rider;
-                                  controlled[index8].rider = (ZCreature) null;
-                                  controlled[index8].SetScale(myBinaryReader.ReadSingle());
-                                  controlled[index8].rider = rider;
-                                  controlled[index8].retribution = myBinaryReader.ReadInt32();
-                                  int num11 = myBinaryReader.ReadInt32();
-                                  if (num11 > 0)
-                                    controlled[index8].CreateProtectionShield();
-                                  controlled[index8].shield = num11;
+                                  controlled[index6].position = pos;
+                                  controlled[index6].collider?.Move(pos);
+                                  controlled[index6].health = myBinaryReader.ReadInt32();
+                                  ZCreature rider = controlled[index6].rider;
+                                  controlled[index6].rider = (ZCreature) null;
+                                  controlled[index6].SetScale(myBinaryReader.ReadSingle());
+                                  controlled[index6].rider = rider;
+                                  controlled[index6].retribution = myBinaryReader.ReadInt32();
+                                  int num9 = myBinaryReader.ReadInt32();
+                                  if (num9 > 0)
+                                    controlled[index6].CreateProtectionShield(false);
+                                  controlled[index6].shield = num9;
                                   bool flag3 = myBinaryReader.ReadBoolean();
-                                  controlled[index8].stunned = flag3;
+                                  controlled[index6].stunned = flag3;
                                   if (flag3)
-                                    controlled[index8].OnStunned();
+                                    controlled[index6].OnStunned();
                                   if (myBinaryReader.ReadBoolean())
                                   {
-                                    int index9 = myBinaryReader.ReadInt32();
-                                    int index10 = myBinaryReader.ReadInt32();
-                                    controlled[index8].mount = this.players[index9].controlled[index10];
-                                    controlled[index8].mount.rider = controlled[index8];
+                                    int index7 = myBinaryReader.ReadInt32();
+                                    int index8 = myBinaryReader.ReadInt32();
+                                    controlled[index6].mount = this.players[index7].controlled[index8];
+                                    controlled[index6].mount.rider = controlled[index6];
                                   }
-                                  else if ((ZComponent) controlled[index8].mount != (object) null)
+                                  else if ((ZComponent) controlled[index6].mount != (object) null)
                                   {
-                                    controlled[index8].mount.rider = (ZCreature) null;
-                                    controlled[index8].mount = (ZCreature) null;
+                                    controlled[index6].mount.rider = (ZCreature) null;
+                                    controlled[index6].mount = (ZCreature) null;
                                   }
                                   if (myBinaryReader.ReadBoolean())
                                   {
-                                    controlled[index8].tower.SetPositionResync(myBinaryReader.ReadMyLocation());
-                                    controlled[index8].tower.Health = myBinaryReader.ReadInt32();
+                                    controlled[index6].tower.SetPositionResync(myBinaryReader.ReadMyLocation());
+                                    controlled[index6].tower.Health = myBinaryReader.ReadInt32();
                                   }
-                                  int num12 = myBinaryReader.ReadInt32();
-                                  if (controlled[index8].effectors.Count == num12)
+                                  int num10 = myBinaryReader.ReadInt32();
+                                  if (controlled[index6].effectors.Count == num10)
                                   {
-                                    for (int index11 = 0; index11 < num12; ++index11)
+                                    for (int index7 = 0; index7 < num10; ++index7)
                                     {
                                       bool flag4 = myBinaryReader.ReadBoolean();
-                                      if (flag4 == ((ZComponent) controlled[index8].effectors[index11] != (object) null))
+                                      if (flag4 == ((ZComponent) controlled[index6].effectors[index7] != (object) null))
                                       {
                                         if (flag4)
                                         {
-                                          controlled[index8].effectors[index11].position = myBinaryReader.ReadMyLocation();
-                                          controlled[index8].effectors[index11].active = myBinaryReader.ReadBoolean();
-                                          controlled[index8].effectors[index11].variable = myBinaryReader.ReadInt32();
-                                          controlled[index8].effectors[index11].VisualUpdate();
+                                          controlled[index6].effectors[index7].position = myBinaryReader.ReadMyLocation();
+                                          controlled[index6].effectors[index7].active = myBinaryReader.ReadBoolean();
+                                          controlled[index6].effectors[index7].variable = myBinaryReader.ReadInt32();
+                                          controlled[index6].effectors[index7].VisualUpdate();
                                         }
                                       }
                                       else
                                         goto label_158;
                                     }
-                                    int num13 = myBinaryReader.ReadInt32();
-                                    if (controlled[index8].destroyableEffectors.Count == num13)
+                                    int num11 = myBinaryReader.ReadInt32();
+                                    if (controlled[index6].destroyableEffectors.Count == num11)
                                     {
-                                      for (int index12 = 0; index12 < num13; ++index12)
+                                      for (int index7 = 0; index7 < num11; ++index7)
                                       {
-                                        bool flag5 = myBinaryReader.ReadBoolean();
-                                        if (flag5 == ((ZComponent) controlled[index8].destroyableEffectors[index12] != (object) null))
+                                        bool flag4 = myBinaryReader.ReadBoolean();
+                                        if (flag4 == ((ZComponent) controlled[index6].destroyableEffectors[index7] != (object) null))
                                         {
-                                          if (flag5)
+                                          if (flag4)
                                           {
-                                            controlled[index8].destroyableEffectors[index12].position = myBinaryReader.ReadMyLocation();
-                                            controlled[index8].destroyableEffectors[index12].active = myBinaryReader.ReadBoolean();
-                                            controlled[index8].destroyableEffectors[index12].variable = myBinaryReader.ReadInt32();
-                                            controlled[index8].destroyableEffectors[index12].VisualUpdate();
+                                            controlled[index6].destroyableEffectors[index7].position = myBinaryReader.ReadMyLocation();
+                                            controlled[index6].destroyableEffectors[index7].active = myBinaryReader.ReadBoolean();
+                                            controlled[index6].destroyableEffectors[index7].variable = myBinaryReader.ReadInt32();
+                                            controlled[index6].destroyableEffectors[index7].VisualUpdate();
                                           }
                                         }
                                         else
                                           goto label_158;
                                       }
-                                      int num14 = myBinaryReader.ReadInt32();
-                                      if (controlled[index8].followingColliders.Count == num14)
+                                      int num12 = myBinaryReader.ReadInt32();
+                                      if (controlled[index6].followingColliders.Count == num12)
                                       {
-                                        for (int index13 = 0; index13 < num14; ++index13)
+                                        for (int index7 = 0; index7 < num12; ++index7)
                                         {
-                                          bool flag6 = myBinaryReader.ReadBoolean();
-                                          if (flag6 == ((ZComponent) controlled[index8].followingColliders[index13] != (object) null))
+                                          bool flag4 = myBinaryReader.ReadBoolean();
+                                          if (flag4 == ((ZComponent) controlled[index6].followingColliders[index7] != (object) null))
                                           {
-                                            if (flag6)
-                                              controlled[index8].followingColliders[index13].Move(myBinaryReader.ReadMyLocation());
-                                            if (flag6 && (ZComponent) controlled[index8].followingColliders[index13].effector != (object) null)
+                                            if (flag4)
+                                              controlled[index6].followingColliders[index7].Move(myBinaryReader.ReadMyLocation());
+                                            if (flag4 && (ZComponent) controlled[index6].followingColliders[index7].effector != (object) null)
                                             {
-                                              controlled[index8].followingColliders[index13].effector.position = controlled[index8].followingColliders[index13].position;
-                                              controlled[index8].followingColliders[index13].effector.active = myBinaryReader.ReadBoolean();
-                                              controlled[index8].followingColliders[index13].effector.variable = myBinaryReader.ReadInt32();
-                                              controlled[index8].followingColliders[index13].effector.VisualUpdate();
+                                              controlled[index6].followingColliders[index7].effector.position = controlled[index6].followingColliders[index7].position;
+                                              controlled[index6].followingColliders[index7].effector.active = myBinaryReader.ReadBoolean();
+                                              controlled[index6].followingColliders[index7].effector.variable = myBinaryReader.ReadInt32();
+                                              controlled[index6].followingColliders[index7].effector.VisualUpdate();
                                             }
                                           }
                                           else
                                             goto label_158;
                                         }
-                                        controlled[index8].UpdateHealthTxt();
+                                        controlled[index6].UpdateHealthTxt();
                                       }
                                       else
                                         goto label_158;
@@ -4445,25 +4498,25 @@ label_46:
                           else
                             goto label_158;
                         }
-                        int num15 = myBinaryReader.ReadInt32();
-                        if (this.globalEffectors.Count == num15)
+                        int num13 = myBinaryReader.ReadInt32();
+                        if (this.globalEffectors.Count == num13)
                         {
-                          for (int index14 = 0; index14 < num15; ++index14)
+                          for (int index4 = 0; index4 < num13; ++index4)
                           {
-                            bool flag7 = myBinaryReader.ReadBoolean();
-                            if (flag7 == ((ZComponent) this.globalEffectors[index14] != (object) null))
+                            bool flag2 = myBinaryReader.ReadBoolean();
+                            if (flag2 == ((ZComponent) this.globalEffectors[index4] != (object) null))
                             {
-                              if (flag7)
+                              if (flag2)
                               {
-                                this.globalEffectors[index14].active = myBinaryReader.ReadBoolean();
-                                this.globalEffectors[index14].variable = myBinaryReader.ReadInt32();
-                                this.globalEffectors[index14].VisualUpdate();
+                                this.globalEffectors[index4].active = myBinaryReader.ReadBoolean();
+                                this.globalEffectors[index4].variable = myBinaryReader.ReadInt32();
+                                this.globalEffectors[index4].VisualUpdate();
                               }
                             }
                             else
                               goto label_158;
                           }
-                          ChatBox.Instance?.NewChatMsg("", "Fast Resync Successful.", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System);
+                          ChatBox.Instance?.NewChatMsg("", "Fast Resync Successful.", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
                           break;
                         }
                       }
@@ -4478,10 +4531,10 @@ label_158:
                 if (this.isSpectator)
                 {
                   this.resyncing = true;
-                  this.resyncUpdate = Timing.RunCoroutine(this.Resync());
+                  this.resyncUpdate = Timing.RunCoroutine(this.Resync(0, false));
                   break;
                 }
-                this.init_Resync();
+                this.init_Resync(false);
                 break;
               case 73:
                 Client.cosmetics = Cosmetics.Deserialize(myBinaryReader);
@@ -4498,15 +4551,15 @@ label_158:
                   case 1:
                     int id1 = myBinaryReader.ReadInt32();
                     Account other = new Account();
-                    other.Deserialize(myBinaryReader);
+                    other.Deserialize(myBinaryReader, false);
                     Client._accounts[other.name] = other;
                     if (string.Equals(other.name, Client.Name))
                       Client.MyAccount.CopyClient(other);
                     SettingsPlayer sp = new SettingsPlayer();
                     sp.DeserializeBasicOutfit(myBinaryReader);
-                    Vector2 pos3 = myBinaryReader.ReadVector2();
+                    Vector2 vector2 = myBinaryReader.ReadVector2();
                     BoatSpectators.Create(other.name);
-                    BoatSpectators.Instance.CreateCharacter(id1, other.name, (Vector3) pos3, sp);
+                    BoatSpectators.Instance.CreateCharacter(id1, other.name, (Vector3) vector2, sp);
                     return;
                   case 2:
                     BoatSpectators.Instance?.Remove(myBinaryReader.ReadInt32());
@@ -4553,10 +4606,10 @@ label_158:
               case 100:
                 this.receivedInitialMsg = true;
                 GameFacts gf = new GameFacts();
-                gf.ManualDeserialize(myBinaryReader, true, true);
-                int index15 = myBinaryReader.ReadInt32();
-                int num16 = myBinaryReader.ReadInt32();
-                int num17 = myBinaryReader.ReadInt32();
+                gf.ManualDeserialize(myBinaryReader, true, true, (byte) 0);
+                int index9 = myBinaryReader.ReadInt32();
+                int num14 = myBinaryReader.ReadInt32();
+                int num15 = myBinaryReader.ReadInt32();
                 try
                 {
                   if ((UnityEngine.Object) Player.Instance != (UnityEngine.Object) null)
@@ -4570,7 +4623,7 @@ label_158:
                           if (Server.DebugResyncs)
                           {
                             Player.Instance.person.sendResync = true;
-                            Client.connection.SendBytes(DiscordCommunicator.GameToResync(this, "Client responding to resync - Timeline: " + (object) this.timeline.Count + " Len: " + (object) num16 + " Off: " + (object) index15 + " Count: " + (object) num17, Client.Name, true));
+                            Client.connection.SendBytes(DiscordCommunicator.GameToResync(this, "Client responding to resync - Timeline: " + (object) this.timeline.Count + " Len: " + (object) num14 + " Off: " + (object) index9 + " Count: " + (object) num15, Client.Name, true), SendOption.None);
                           }
                         }
                       }
@@ -4580,11 +4633,11 @@ label_158:
                 catch (Exception ex)
                 {
                 }
-                if (index15 == 0)
+                if (index9 == 0)
                   this.timeline.Clear();
                 else
-                  this.timeline.RemoveRange(index15, this.timeline.Count - index15);
-                for (int index16 = 0; index16 < num17; ++index16)
+                  this.timeline.RemoveRange(index9, this.timeline.Count - index9);
+                for (int index4 = 0; index4 < num15; ++index4)
                   this.timeline.Add(myBinaryReader.ReadBytes());
                 byte[] data1 = myBinaryReader.ReadBytes();
                 this.init_Deserialize(gf, this.timeline, data1, true);
@@ -4599,66 +4652,66 @@ label_158:
                 string msg1 = myBinaryReader.ReadString();
                 if (msg1.Length > 600 || str2.Length > 200 || RightClickName1.Length > 200)
                   break;
-                ChatBox.Instance?.NewChatMsg("From " + RightClickName1, msg1, (Color) ColorScheme.GetColor(Global.ColorReceivedPrivate), RightClickName1, ChatOrigination.Private);
+                ChatBox.Instance?.NewChatMsg("From " + RightClickName1, msg1, (Color) ColorScheme.GetColor(Global.ColorReceivedPrivate), RightClickName1, ChatOrigination.Private, ContentType.STRING, (object) null);
                 break;
               case 152:
                 string RightClickName2 = myBinaryReader.ReadString();
                 string msg2 = myBinaryReader.ReadString();
                 if (msg2.Length > 600 || RightClickName2.Length > 200)
                   break;
-                ChatBox.Instance.NewChatMsg("[Team] " + RightClickName2, msg2, (Color) ColorScheme.GetColor(Global.ColorTeamText), RightClickName2, ChatOrigination.Team);
+                ChatBox.Instance.NewChatMsg("[Team] " + RightClickName2, msg2, (Color) ColorScheme.GetColor(Global.ColorTeamText), RightClickName2, ChatOrigination.Team, ContentType.STRING, (object) null);
                 break;
               case 153:
                 string str3 = myBinaryReader.ReadString();
                 string msg3 = myBinaryReader.ReadString();
                 if (str3.Length > 200 || msg3.Length > 600)
                   break;
-                ChatBox.Instance.NewChatMsg(str3, msg3, (Color) ColorScheme.GetColor(Global.ColorGameText), str3, ChatOrigination.Game);
+                ChatBox.Instance.NewChatMsg(str3, msg3, (Color) ColorScheme.GetColor(Global.ColorGameText), str3, ChatOrigination.Game, ContentType.STRING, (object) null);
                 break;
               case 154:
-                int index17 = myBinaryReader.ReadInt32();
+                int index10 = myBinaryReader.ReadInt32();
                 int type = myBinaryReader.ReadInt32();
-                Vector2 pos4 = myBinaryReader.ReadVector2();
-                string name = this.players[index17].name;
+                Vector2 pos3 = myBinaryReader.ReadVector2();
+                string name = this.players[index10].name;
                 if (this.resyncing || Client.IsIgnored(name))
                   break;
-                ClientResources.Instance.CreatePing(type, name, this.players[index17].clientColor, pos4);
+                ClientResources.Instance.CreatePing(type, name, this.players[index10].clientColor, pos3);
                 break;
               case 155:
                 Quickchat.Data data2 = Quickchat.Data.Deserialize(myBinaryReader);
                 string command = Quickchat.TryGetCommand(data2.id, data2.options);
                 if (command == null)
                   break;
-                ChatBox.Instance.NewChatMsg(Quickchat.GetDestination(data2.destination) + "<sprite name=\"Emoji2_1352\"> " + data2.name, command, (Color) ((UnityEngine.Object) UnratedMenu.instance != (UnityEngine.Object) null ? ColorScheme.GetColor(Global.ColorGameText) : ColorScheme.GetColor(data2.destination)), data2.name, data2.destination);
+                ChatBox.Instance.NewChatMsg(Quickchat.GetDestination(data2.destination) + "<sprite name=\"Emoji2_1352\"> " + data2.name, command, (Color) ((UnityEngine.Object) UnratedMenu.instance != (UnityEngine.Object) null ? ColorScheme.GetColor(Global.ColorGameText) : ColorScheme.GetColor(data2.destination)), data2.name, data2.destination, ContentType.STRING, (object) null);
                 break;
               case 157:
-                int index18 = myBinaryReader.ReadInt32();
-                int index19 = myBinaryReader.ReadInt32();
-                ZCreature zcreature1 = this.players[index18].first();
+                int index11 = myBinaryReader.ReadInt32();
+                int index12 = myBinaryReader.ReadInt32();
+                ZCreature zcreature1 = this.players[index11].first();
                 if (zcreature1 == null)
                   break;
-                zcreature1.clientObj?.OnEmoji(index19);
+                zcreature1.clientObj?.OnEmoji(index12, false);
                 break;
               case 185:
-                int index20 = myBinaryReader.ReadInt32();
+                int index13 = myBinaryReader.ReadInt32();
                 MyLocation myLocation = myBinaryReader.ReadMyLocation();
-                p.controlled[index20].effectors.Find((Predicate<ZEffector>) (z => z.type == EffectorType.Sands_of_Time)).target = myLocation;
+                p.controlled[index13].effectors.Find((Predicate<ZEffector>) (z => z.type == EffectorType.Sands_of_Time)).target = myLocation;
                 break;
               case 186:
                 this.curBanStage = (BanStage) myBinaryReader.ReadInt32();
                 this.gameFacts.restrictions = Restrictions.Deserialize(myBinaryReader, (byte) 2);
                 break;
               case 187:
-                int index21 = myBinaryReader.ReadInt32();
-                int num18 = myBinaryReader.ReadInt32();
-                p.towerHealth[index21] = num18;
+                int index14 = myBinaryReader.ReadInt32();
+                int num16 = myBinaryReader.ReadInt32();
+                p.towerHealth[index14] = num16;
                 break;
               case 188:
                 int index1 = myBinaryReader.ReadInt32();
                 int count = myBinaryReader.ReadInt32();
                 bool sync = myBinaryReader.ReadBoolean();
                 List<SpellSlot> ss = new List<SpellSlot>();
-                for (int index22 = 0; index22 < count; ++index22)
+                for (int index4 = 0; index4 < count; ++index4)
                   ss.Add(SpellSlot.Deserialize(p, myBinaryReader));
                 this.MoveQue.Enqueue((Action) (() =>
                 {
@@ -4666,11 +4719,11 @@ label_158:
                     return;
                   ZCreature sum = p.controlled[index1];
                   sum.spells.Clear();
-                  for (int index23 = 0; index23 < count; ++index23)
-                    sum.spells.Add(ss[index23]);
+                  for (int index = 0; index < count; ++index)
+                    sum.spells.Add(ss[index]);
                   if (!sync)
                     return;
-                  ZSpell.SyncSpellsWithParent(sum.parent.first(), sum);
+                  ZSpell.SyncSpellsWithParent(sum.parent.first(), sum, false);
                 }));
                 break;
               case 189:
@@ -4685,7 +4738,7 @@ label_158:
                   if (p.controlled[index2].health > 0)
                     return;
                   if (this.isClient && Global.GetPrefBool("prefdeathmsg", true))
-                    ChatBox.Instance?.NewChatMsg("", Descriptions.GetDrownMessage(p.controlled[index2]), (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System);
+                    ChatBox.Instance?.NewChatMsg("", Descriptions.GetDrownMessage(p.controlled[index2]), (Color) ColorScheme.GetColor(Global.ColorWhiteText), "", ChatOrigination.System, ContentType.STRING, (object) null);
                   p.controlled[index2].OnDeath(true);
                 }), false);
                 break;
@@ -4696,17 +4749,17 @@ label_158:
                 p.MinionMaster = myBinaryReader.ReadBoolean();
                 p.BombMaster = myBinaryReader.ReadBoolean();
                 p.FullArcane = myBinaryReader.ReadBoolean();
-                int num19 = myBinaryReader.ReadInt32();
-                bool flag8 = myBinaryReader.ReadBoolean();
+                int num17 = myBinaryReader.ReadInt32();
+                bool flag5 = myBinaryReader.ReadBoolean();
                 p.minionBookTitans.Clear();
-                for (int index24 = 0; index24 < num19; ++index24)
+                for (int index4 = 0; index4 < num17; ++index4)
                   p.minionBookTitans.Add(new ZGame.MinionBookTitan()
                   {
                     spell = (SpellEnum) myBinaryReader.ReadInt32(),
                     used = myBinaryReader.ReadBoolean()
                   });
-                int num20 = myBinaryReader.ReadInt32();
-                for (int index25 = 0; index25 < num20; ++index25)
+                int num18 = myBinaryReader.ReadInt32();
+                for (int index4 = 0; index4 < num18; ++index4)
                 {
                   SpellEnum s = (SpellEnum) myBinaryReader.ReadInt32();
                   HUD.instance.uiPlayerCharacters[(int) p.id].AddLevel3(Inert.GetSpell(s));
@@ -4717,12 +4770,12 @@ label_158:
                   ZFamiliar.CreateBombMaster(p);
                 if (p.MinionMaster && !minionMaster)
                   ZFamiliar.CreateMinionMaster(p);
-                if (!flag8 || p.first().gliding)
+                if (!flag5 || p.first().gliding)
                   break;
                 ZSpell.FireGlide(Inert.GetSpell(SpellEnum.Glide), p.first());
                 break;
               case 191:
-                bool flag9 = myBinaryReader.ReadBoolean();
+                bool flag6 = myBinaryReader.ReadBoolean();
                 if (this.serverState.busy == ServerState.Busy.Ended)
                   break;
                 if (this.isMulti)
@@ -4732,9 +4785,9 @@ label_158:
                     while (enumerator.MoveNext())
                     {
                       ZPerson current = enumerator.Current;
-                      if (current.controlled.Count > 0 || !flag9)
+                      if (current.controlled.Count > 0 || !flag6)
                         current.panelPlayer.Resigned();
-                      if (flag9)
+                      if (flag6)
                         current.panelPlayer.Left();
                     }
                     break;
@@ -4742,26 +4795,26 @@ label_158:
                 }
                 else
                 {
-                  if (p.controlled.Count > 0 || !flag9)
+                  if (p.controlled.Count > 0 || !flag6)
                     p.panelPlayer.Resigned();
-                  if (!flag9)
+                  if (!flag6)
                     break;
                   p.panelPlayer.Left();
                   break;
                 }
               case 192:
-                for (int index26 = 0; index26 < this.players.Count; ++index26)
-                  this.players[index26].bid = myBinaryReader.ReadInt32();
-                int index27 = myBinaryReader.ReadInt32();
+                for (int index4 = 0; index4 < this.players.Count; ++index4)
+                  this.players[index4].bid = myBinaryReader.ReadInt32();
+                int index15 = myBinaryReader.ReadInt32();
                 if (!this.isTeam && this.players.Count > 2)
                 {
                   this.SortByBidFFA();
                   break;
                 }
-                if (index27 == -1 || !((ZComponent) this.players[index27].first() != (object) null) || this.players[index27].bid <= 0)
+                if (index15 == -1 || !((ZComponent) this.players[index15].first() != (object) null) || this.players[index15].bid <= 0)
                   break;
-                this.players[index27].first().health -= this.players[index27].bid;
-                this.players[index27].first().UpdateHealthTxt();
+                this.players[index15].first().health -= this.players[index15].bid;
+                this.players[index15].first().UpdateHealthTxt();
                 break;
               case 193:
               case 195:
@@ -4817,47 +4870,47 @@ label_158:
                 HUD.instance.UpdateRematch((int) p.id);
                 break;
               case 197:
-                ZCreature zcreature2 = p.first();
-                if (ZComponent.IsNull((ZComponent) zcreature2) || zcreature2.isDead)
+                ZCreature creature1 = p.first();
+                if (ZComponent.IsNull((ZComponent) creature1) || creature1.isDead)
                   break;
                 SettingsPlayer settingsPlayer1 = new SettingsPlayer();
                 settingsPlayer1.Deserialize(myBinaryReader);
                 p.settingsPlayer.CopyOutfit(settingsPlayer1);
-                if (!zcreature2.FullArcane)
+                if (!creature1.FullArcane)
                 {
                   p.clientColor = (int) settingsPlayer1.indexBody != SettingsPlayer.sno_body2 ? TeamColors.GetColor((int) p.id) : new Color(0.5f, 0.5f, 0.5f);
-                  zcreature2.gameObject.GetComponent<ConfigurePlayer>().EquipAll(p.name, p.settingsPlayer);
-                  p.panelPlayer.Init(p.name, p.settingsPlayer, p.clientColor, zcreature2.clientObj, true);
+                  creature1.gameObject.GetComponent<ConfigurePlayer>().EquipAll(p.name, p.settingsPlayer);
+                  p.panelPlayer.Init(p.name, p.settingsPlayer, p.clientColor, creature1.clientObj, true);
                 }
                 else
                 {
-                  zcreature2.gameObject.GetComponent<ConfigurePlayer>().ModEquipAll(p.name, p.settingsPlayer, ClientResources.Instance.ModColors);
-                  p.panelPlayer.Init(p.name, p.settingsPlayer, p.clientColor, zcreature2.clientObj, true);
-                  p.panelPlayer.TurnMod(settingsPlayer1, ClientResources.Instance.ModColors[0], zcreature2.clientObj);
+                  creature1.gameObject.GetComponent<ConfigurePlayer>().ModEquipAll(p.name, p.settingsPlayer, ClientResources.Instance.ModColors, true);
+                  p.panelPlayer.Init(p.name, p.settingsPlayer, p.clientColor, creature1.clientObj, true);
+                  p.panelPlayer.TurnMod(settingsPlayer1, ClientResources.Instance.ModColors[0], creature1.clientObj);
                 }
                 HUD.instance.uiPlayerCharacters[(int) p.id].Copy(p);
-                zcreature2.bg.color = p.clientColor;
-                zcreature2.transform.GetChild(0).GetChild(1).GetComponent<SpriteRenderer>().color = p.clientColor;
-                zcreature2.txtHealth.color = p.clientColor;
-                zcreature2.ColorPrestigeHat();
+                creature1.bg.color = p.clientColor;
+                creature1.transform.GetChild(0).GetChild(1).GetComponent<SpriteRenderer>().color = p.clientColor;
+                creature1.txtHealth.color = p.clientColor;
+                creature1.ColorPrestigeHat();
                 if ((UnityEngine.Object) Player.Instance != (UnityEngine.Object) null && Player.Instance.person == p)
                   ClickSpell.Instance.SetBGColor(p.clientColor);
-                Inert.AddTorquingAndOrArchStaffs(p, zcreature2, settingsPlayer1, false);
-                if (!this.resyncing && (UnityEngine.Object) zcreature2.transform != (UnityEngine.Object) null)
+                Inert.AddTorquingAndOrArchStaffs(p, creature1, settingsPlayer1, false, true);
+                if (!this.resyncing && (UnityEngine.Object) creature1.transform != (UnityEngine.Object) null)
                 {
-                  UnityEngine.Object.Instantiate<GameObject>(Inert.Instance.fountain, zcreature2.transform.position, Quaternion.identity, zcreature2.game.GetMapTransform());
+                  UnityEngine.Object.Instantiate<GameObject>(Inert.Instance.fountain, creature1.transform.position, Quaternion.identity, creature1.game.GetMapTransform());
                   AudioManager.Play(ClientResources.Instance.clipChangeSpellBook);
                 }
-                foreach (ZCreature zcreature3 in p.controlled)
+                foreach (ZCreature zcreature2 in p.controlled)
                 {
-                  if ((UnityEngine.Object) zcreature3.bg != (UnityEngine.Object) null)
-                    zcreature3.bg.color = p.clientColor;
-                  if ((UnityEngine.Object) zcreature3.miniMapBg != (UnityEngine.Object) null)
-                    zcreature3.miniMapBg.color = p.clientColor;
-                  if ((UnityEngine.Object) zcreature3.txtHealth != (UnityEngine.Object) null)
-                    zcreature3.txtHealth.color = p.clientColor;
+                  if ((UnityEngine.Object) zcreature2.bg != (UnityEngine.Object) null)
+                    zcreature2.bg.color = p.clientColor;
+                  if ((UnityEngine.Object) zcreature2.miniMapBg != (UnityEngine.Object) null)
+                    zcreature2.miniMapBg.color = p.clientColor;
+                  if ((UnityEngine.Object) zcreature2.txtHealth != (UnityEngine.Object) null)
+                    zcreature2.txtHealth.color = p.clientColor;
                 }
-                zcreature2.animator?.Play(AnimateState.Stop);
+                creature1.animator?.Play(AnimateState.Stop, 0.0f, true);
                 break;
               case 198:
                 int turn = this.turn;
@@ -4885,7 +4938,7 @@ label_158:
                   Player.Instance?.UpdateVisuals();
                   if (this.isReplay)
                     this.ReplayNextTurn();
-                  this.NextTurn(p);
+                  this.NextTurn(p, true);
                   if ((UnityEngine.Object) Player.Instance != (UnityEngine.Object) null)
                   {
                     Player.Instance.UnselectSpell();
@@ -4930,7 +4983,7 @@ label_158:
                 this._alreadySavedReplay = true;
                 p.sendResync = true;
                 Server.Instance?.communicator?.SendBytes(b);
-                if (!((UnityEngine.Object) Server.Instance == (UnityEngine.Object) null) && Server.Instance.communicator != null && Server.Instance.communicator.GetConnection != null && Server.Instance.communicator.GetConnection.State == ConnectionState.Connected)
+                if (!((UnityEngine.Object) Server.Instance == (UnityEngine.Object) null) && Server.Instance.communicator != null && (Server.Instance.communicator.GetConnection != null && Server.Instance.communicator.GetConnection.State == ConnectionState.Connected))
                   break;
                 DiscordCommunicator.SaveReplayAnyway(myBinaryReader, p.name);
                 break;
@@ -4938,10 +4991,10 @@ label_158:
                 if (p.ready)
                   break;
                 p.ready = true;
-                if (p.clientResyncing || p.connection == null || p.connection.player.gameNumber != this.gameFacts.id || p.connection == null || p.connection.State != ConnectionState.Connected)
+                if (p.clientResyncing || p.connection == null || (p.connection.player.gameNumber != this.gameFacts.id || p.connection == null) || p.connection.State != ConnectionState.Connected)
                   break;
-                for (int index28 = 0; index28 < this.timeline.Count; ++index28)
-                  p.connection?.SendBytes(this.timeline[index28]);
+                for (int index4 = 0; index4 < this.timeline.Count; ++index4)
+                  p.connection?.SendBytes(this.timeline[index4], SendOption.None);
                 break;
               case 50:
                 myBinaryReader.ReadString();
@@ -4956,15 +5009,15 @@ label_158:
                 break;
               case 64:
                 string str4 = myBinaryReader.ReadString();
-                this.SendResyncMsg(p, "Client - " + str4);
+                this.SendResyncMsg(p, "Client - " + str4, true, (Action) null);
                 break;
               case 71:
                 if (this.serverState.busy == ServerState.Busy.Not_started)
                   break;
-                this.SendResyncMsg(p, "Connected late", false);
+                this.SendResyncMsg(p, "Connected late", false, (Action) null);
                 break;
               case 77:
-                Server.ValidateShare(p.connection, myBinaryReader, b, false);
+                Server.ValidateShare(p.connection, myBinaryReader, b, false, false);
                 break;
               case 83:
                 if (!((ZComponent) p.first() == (object) null) && !p.first().isDead && !this.resigned.Contains(p))
@@ -5019,8 +5072,8 @@ label_158:
                 p.connection.OnChat("[Game #" + this.gameFacts.id.ToString() + "]" + str8);
                 break;
               case 154:
-                int num21 = myBinaryReader.ReadInt32();
-                if (!this.isTeam || p.connection.player.lastShareMsg + 100L >= p.connection.stopwatch.ElapsedMilliseconds || num21 != (int) p.id)
+                int num19 = myBinaryReader.ReadInt32();
+                if (!this.isTeam || p.connection.player.lastShareMsg + 100L >= p.connection.stopwatch.ElapsedMilliseconds || num19 != (int) p.id)
                   break;
                 p.connection.player.lastShareMsg = p.connection.stopwatch.ElapsedMilliseconds;
                 this.SendTeamMessage(b, p.team);
@@ -5029,9 +5082,9 @@ label_158:
                 Server.ValidateQuickChat(p.connection, myBinaryReader, b, false);
                 break;
               case 157:
-                int index29 = myBinaryReader.ReadInt32();
+                int index16 = myBinaryReader.ReadInt32();
                 myBinaryReader.ReadInt32();
-                if (index29 < 0 || index29 >= this.players.Count)
+                if (index16 < 0 || index16 >= this.players.Count)
                   break;
                 if (p.GetMultiConnection.player.account.AccountNotLinked())
                 {
@@ -5043,7 +5096,7 @@ label_158:
                   Server.ReturnServerMsg(p.GetMultiConnection, "Looks like you're muted, try to behave yourself next time.");
                   break;
                 }
-                ZPerson player1 = this.players[index29];
+                ZPerson player1 = this.players[index16];
                 if ((int) player1.id != (int) p.id && (!this.isMulti || player1.team != p.team))
                   break;
                 this.SendAllMessage(b);
@@ -5069,10 +5122,10 @@ label_158:
               case 192:
                 if (p.bid >= 0)
                   break;
-                byte num22 = myBinaryReader.ReadByte();
-                if ((int) num22 > (int) this.gameFacts.startHealth - 1)
-                  num22 = (byte) ((uint) this.gameFacts.startHealth - 1U);
-                p.bid = (int) num22;
+                byte num20 = myBinaryReader.ReadByte();
+                if ((int) num20 > (int) this.gameFacts.startHealth - 1)
+                  num20 = (byte) ((uint) this.gameFacts.startHealth - 1U);
+                p.bid = (int) num20;
                 break;
               case 193:
               case 195:
@@ -5114,7 +5167,7 @@ label_158:
                       if (current.connection.State == ConnectionState.Connected)
                       {
                         Server.MovePlayer(current.connection, Location.Lobby);
-                        Server.SyncLobby(current.connection);
+                        Server.SyncLobby(current.connection, true, false);
                       }
                     }
                     break;
@@ -5126,16 +5179,16 @@ label_158:
                   p.connection.DataReceived -= new EventHandler<DataReceivedEventArgs>(this.GameHandler);
                   p.connection.player.gameNumber = -1;
                   Server.MovePlayer(p.connection, Location.Lobby);
-                  Server.SyncLobby(p.connection);
+                  Server.SyncLobby(p.connection, true, false);
                   break;
                 }
               case 194:
                 if (!p.CanOfferDraw() || this.serverState.busy == ServerState.Busy.Ended || this.ieKillWait != null)
                   break;
-                int num23 = p.offeringDraw ? 1 : 0;
+                int num21 = p.offeringDraw ? 1 : 0;
                 p.offeringDraw = myBinaryReader.ReadBoolean();
-                int num24 = p.offeringDraw ? 1 : 0;
-                if (num23 == num24)
+                int num22 = p.offeringDraw ? 1 : 0;
+                if (num21 == num22)
                   break;
                 if (this.isMulti)
                 {
@@ -5149,10 +5202,10 @@ label_158:
               case 196:
                 if (this.serverState.busy != ServerState.Busy.Ended)
                   break;
-                int num25 = p.offeringRematch ? 1 : 0;
+                int num23 = p.offeringRematch ? 1 : 0;
                 p.offeringRematch = myBinaryReader.ReadByte() != (byte) 0;
-                int num26 = p.offeringRematch ? 1 : 0;
-                if (num25 == num26)
+                int num24 = p.offeringRematch ? 1 : 0;
+                if (num23 == num24)
                   break;
                 if (this.isMulti)
                 {
@@ -5160,25 +5213,25 @@ label_158:
                     zperson.offeringRematch = p.offeringRematch;
                 }
                 if (p.offeringRematch)
-                  UnityThreadHelper.Dispatcher.Dispatch2((Action) (() => this.CheckRematch()));
+                  UnityThreadHelper.Dispatcher.Dispatch2((Action) (() => this.CheckRematch(false)));
                 this.SendAllMessage(b);
                 break;
               case 197:
-                if (p.account.extraStuff.outfitLocked || !p.account.cosmetics.achievements[(int) SettingsPlayer.Achievement_GameOutfit] || !p.yourTurn || p.timesOutfitChanged >= 10)
+                if (p.account.extraStuff.outfitLocked || !p.account.cosmetics.achievements[(int) SettingsPlayer.Achievement_GameOutfit] || (!p.yourTurn || p.timesOutfitChanged >= 10))
                   break;
                 SettingsPlayer settingsPlayer3 = new SettingsPlayer();
                 settingsPlayer3.Deserialize(myBinaryReader);
                 settingsPlayer3.VerifyOutfit(p.account.cosmetics, p.account);
                 ++p.timesOutfitChanged;
-                using (MemoryStream memoryStream4 = new MemoryStream())
+                using (MemoryStream memoryStream2 = new MemoryStream())
                 {
-                  using (myBinaryWriter w = new myBinaryWriter((Stream) memoryStream4))
+                  using (myBinaryWriter w = new myBinaryWriter((Stream) memoryStream2))
                   {
                     w.Write((byte) 197);
                     w.Write(num2);
                     settingsPlayer3.Serialize(w);
                   }
-                  this.SendAllMessage(memoryStream4.ToArray());
+                  this.SendAllMessage(memoryStream2.ToArray());
                   break;
                 }
               case 199:
@@ -5196,7 +5249,7 @@ label_158:
           if (!this.resyncOnError)
             return;
           Debug.LogError((object) ex.ToString());
-          this.SendResyncMsg(p, ex.Message, false);
+          this.SendResyncMsg(p, ex.Message, false, (Action) null);
         }
       }
     }
@@ -5268,7 +5321,7 @@ label_158:
     int num = 0;
     foreach (ZPerson player in this.players)
     {
-      if (player.offeringDraw || player.controlled.Count == 0 || player.controlled[0].health <= 0 || !player.GetMultiConnected)
+      if (player.offeringDraw || player.controlled.Count == 0 || (player.controlled[0].health <= 0 || !player.GetMultiConnected))
         ++num;
     }
     if (num != this.players.Count && p.localTurn < (this.isCountdown ? 200 : 60))
@@ -5326,7 +5379,7 @@ label_158:
       GameFacts gf = new GameFacts();
       gf.id = Server.NextGameID();
       gf.settings.Copy(this.gameFacts.settings);
-      this.CleanUp();
+      this.CleanUp(false);
       foreach (Tuple<Connection, int> tuple in tupleList)
       {
         tuple.Item1.player.gameNumber = gf.id;
@@ -5342,7 +5395,7 @@ label_158:
         if (player.ConnectedToOld(gameFacts.id))
         {
           Server.MovePlayer(player.connection, player.offeringRematch ? Location.LobbyCreateGame : Location.Lobby);
-          Server.SyncLobby(player.connection, !player.offeringRematch);
+          Server.SyncLobby(player.connection, !player.offeringRematch, false);
           if (player.connection.player.gameNumber == gameFacts.id)
             player.connection.player.gameNumber = -1;
           if (player.connection.player.player == this.players[index])
@@ -5476,7 +5529,7 @@ label_158:
           reader.ReadBoolean();
           reader.ReadString();
           GameFacts gameFacts = new GameFacts();
-          gameFacts.ManualDeserialize(reader, true);
+          gameFacts.ManualDeserialize(reader, true, false, (byte) 0);
           Client._gameFacts = gameFacts;
           Client.game = gameFacts.game;
           Client.game.timelineList = new List<ZGame.TimelineData>();
@@ -5532,7 +5585,7 @@ label_158:
     Client.game.Awake();
     Client.game.serverState = new ServerState();
     Client.joinedFrom = Client.JoinLocation.Replay;
-    Controller.Instance.InitMap(false);
+    Controller.Instance.InitMap(false, false, true);
   }
 
   public static string GetFiredSpellName(GameFacts f, byte[] b)
@@ -5551,8 +5604,8 @@ label_158:
           myBinaryReader.ReadInt32();
           myBinaryReader.ReadInt32();
           int num2 = (int) myBinaryReader.ReadByte();
-          byte index1 = myBinaryReader.ReadByte();
-          byte index2 = myBinaryReader.ReadByte();
+          byte num3 = myBinaryReader.ReadByte();
+          byte num4 = myBinaryReader.ReadByte();
           FixedInt fixedInt = (FixedInt) myBinaryReader.ReadInt64();
           myBinaryReader.ReadBoolean();
           myBinaryReader.ReadMyLocation();
@@ -5561,8 +5614,8 @@ label_158:
           myBinaryReader.ReadInt32();
           myBinaryReader.ReadMyLocation();
           myBinaryReader.ReadMyLocation();
-          if (num2 == 0 && f.settingsPlayer[(int) index1].spells.Length > (int) index2)
-            return Inert.Instance._spells[(int) f.settingsPlayer[(int) index1].spells[(int) index2]].name;
+          if (num2 == 0 && f.settingsPlayer[(int) num3].spells.Length > (int) num4)
+            return Inert.Instance._spells[(int) f.settingsPlayer[(int) num3].spells[(int) num4]].name;
           Mathd.Clamp(x, (FixedInt) 10485L, (FixedInt) 1);
         }
         catch (Exception ex)
@@ -5587,7 +5640,7 @@ label_158:
 
   private IEnumerator<float> redoReplay()
   {
-    Controller.Instance.DestroyMap();
+    Controller.Instance.DestroyMap(false, true);
     yield return 0.0f;
     Controller.Instance.OpenMenu(Controller.Instance.RewindingPanel, false);
     yield return 0.0f;
@@ -5603,9 +5656,9 @@ label_158:
     HUD.instance.replayTimeline._bar.onValueChanged.AddListener(new UnityAction<float>(game.\u003CPushReplay\u003Eb__265_0));
     game.replayPaused = false;
     Time.timeScale = 1f;
-    ChatBox.Instance?.NewChatMsg("", "Press F2 to take control right away", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System);
-    ChatBox.Instance?.NewChatMsg("", "Hold F3 to take control on the next turn", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System);
-    ChatBox.Instance?.NewChatMsg("", "Hold F4 to take control right before the next attack", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System);
+    ChatBox.Instance?.NewChatMsg("", "Press F2 to take control right away", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
+    ChatBox.Instance?.NewChatMsg("", "Hold F3 to take control on the next turn", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
+    ChatBox.Instance?.NewChatMsg("", "Hold F4 to take control right before the next attack", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
     foreach (ZGame.TimelineData timeline in game.timelineList)
       HUD.instance.replayTimeline.Add(timeline.description);
     yield return 0.0f;
@@ -5624,7 +5677,7 @@ label_158:
         if (Input.GetKeyDown(KeyCode.Space))
           yield return 0.0f;
       }
-      else if (!game.resyncing && (Input.GetKey(KeyCode.F4) && game.timeline[game.curReplayIndex][0] == (byte) 220 || Input.GetKeyDown(KeyCode.F2) || Input.GetKey(KeyCode.F3) & nextTurn))
+      else if (!game.resyncing && (Input.GetKey(KeyCode.F4) && game.timeline[game.curReplayIndex][0] == (byte) 220 || (Input.GetKeyDown(KeyCode.F2) || Input.GetKey(KeyCode.F3) & nextTurn)))
       {
         game.random = new IsaacCipher(new int[1]
         {
@@ -5657,15 +5710,15 @@ label_158:
         HUD.FindFullBooks(game);
         foreach (ZPerson player in game.players)
         {
-          for (int b00k = 0; b00k < player.familiarLevels.Length; ++b00k)
+          for (int index = 0; index < player.familiarLevels.Length; ++index)
           {
-            for (int lvl = 0; lvl <= player.familiarLevels[b00k]; ++lvl)
-              game.GiveFamiliarSpells(player, player.first(), (BookOf) b00k, lvl);
+            for (int lvl = 0; lvl <= player.familiarLevels[index]; ++lvl)
+              game.GiveFamiliarSpells(player, player.first(), (BookOf) index, lvl);
           }
         }
         game.isReplay = false;
         Client.NameOrReplay = game.CurrentPlayer().name;
-        HUD.instance.buttonShowSpells.transform.GetChild(0).GetComponent<TMP_Text>().SetText("Dev Console");
+        HUD.instance.buttonShowSpells.transform.GetChild(0).GetComponent<TMP_Text>().SetText("Dev Console", true);
         HUD.instance.FindPlayer();
         game.serverUpdate = Timing.RunCoroutine(game.FixedUpdate(), Segment.Update);
         HUD.instance.buttonHideChat.gameObject.SetActive(false);
@@ -5726,7 +5779,7 @@ label_158:
       else
         yield return 0.0f;
       ++safeFreeze;
-      if (game.curReplayIndex > ZGame.targetTimelineFrame || game.forceRysncPause || safeFreeze > 1000 || game.curReplayIndex % 100 == 0)
+      if (game.curReplayIndex > ZGame.targetTimelineFrame || game.forceRysncPause || (safeFreeze > 1000 || game.curReplayIndex % 100 == 0))
         yield return 0.0f;
       if (game.forceRysncPause)
         game.forceRysncPause = false;
@@ -5736,7 +5789,7 @@ label_158:
     game.timeline.Clear();
     if ((UnityEngine.Object) ChatBox.Instance != (UnityEngine.Object) null)
     {
-      ChatBox.Instance.NewChatMsg("[Replay]", "End of Replay", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System);
+      ChatBox.Instance.NewChatMsg("[Replay]", "End of Replay", (Color) ColorScheme.GetColor(Global.ColorSystem), "", ChatOrigination.System, ContentType.STRING, (object) null);
       if (!ChatBox.Instance.Active)
         ChatBox.Instance.SetActive(true);
     }
@@ -5776,9 +5829,9 @@ label_158:
       Client.game.gameFacts = Client._gameFacts;
     Client._gameFacts.game = Client.game;
     Client.joinedFrom = Client.JoinLocation.Game;
-    Controller.Instance.InitMap(false);
+    Controller.Instance.InitMap(false, false, true);
     Client.SomeSetup();
-    Client.game.resyncUpdate = Timing.RunCoroutine(Client.game.Resync());
+    Client.game.resyncUpdate = Timing.RunCoroutine(Client.game.Resync(0, false));
   }
 
   public void init_Deserialize(GameFacts gf, List<byte[]> timeline, byte[] data, bool force = false)
@@ -5790,7 +5843,7 @@ label_158:
     this.serverState.busy = ServerState.Busy.Not_started;
     ZGame game = Client.game;
     Controller.Instance.DestroyMap(true, false);
-    this.Reset();
+    this.Reset(true);
     Client.game = new ZGame();
     Client.game.isClient = true;
     Client.game.resyncing = true;
@@ -5808,7 +5861,7 @@ label_158:
     Client.game.timeline = timeline;
     Client._gameFacts.game = Client.game;
     Client.joinedFrom = Client.JoinLocation.Game;
-    Controller.Instance.InitMap(false);
+    Controller.Instance.InitMap(false, false, true);
     Client.game.resyncUpdate = Timing.RunCoroutine(ZGame.StartGame(data, timeline.Count));
   }
 
@@ -5882,12 +5935,12 @@ label_158:
         if (player1 != null)
         {
           if (args.Bytes.Length == 1 || !Global.HasPlayerID(args.Bytes[0]) || (int) args.Bytes[1] == (int) player1.id)
-            this.GameHandler(player1, args.Bytes, false);
-          else if (this.isMulti && Global.HasPlayerID(args.Bytes[0]) && args.Bytes.Length > 1 && (int) args.Bytes[1] < this.players.Count)
+            this.GameHandler(player1, args.Bytes, false, true);
+          else if (this.isMulti && Global.HasPlayerID(args.Bytes[0]) && (args.Bytes.Length > 1 && (int) args.Bytes[1] < this.players.Count))
           {
             ZPerson player2 = this.players[(int) args.Bytes[1]];
             if (player2.team == player1.team)
-              this.GameHandler(player2, args.Bytes, false);
+              this.GameHandler(player2, args.Bytes, false, true);
           }
         }
         args.Recycle();
@@ -5934,7 +5987,7 @@ label_158:
         }
         else
         {
-          if (args.Bytes.Length > 1 && args.Bytes[0] != (byte) 15 && args.Bytes[0] != (byte) 35 && !Global.IsChatMsg(args.Bytes[0]) && args.Bytes[0] != (byte) 85 && args.Bytes[0] != (byte) 84 && args.Bytes[0] != (byte) 42 && args.Bytes[0] != (byte) 64 && args.Bytes[0] != (byte) 98 && args.Bytes[0] != (byte) 100 && args.Bytes[0] != (byte) 96)
+          if (args.Bytes.Length > 1 && args.Bytes[0] != (byte) 15 && (args.Bytes[0] != (byte) 35 && !Global.IsChatMsg(args.Bytes[0])) && (args.Bytes[0] != (byte) 85 && args.Bytes[0] != (byte) 84 && (args.Bytes[0] != (byte) 42 && args.Bytes[0] != (byte) 64)) && (args.Bytes[0] != (byte) 98 && args.Bytes[0] != (byte) 100 && args.Bytes[0] != (byte) 96))
             Client.game.timeline.Add(ZGame.CopyByteArray(args.Bytes));
           if (!Client.game.resyncing || args.Bytes[0] == (byte) 35 || args.Bytes[0] == (byte) 100)
           {
@@ -5949,16 +6002,16 @@ label_158:
               {
                 if (args.Bytes.Length != 0)
                   Debug.Log((object) args.Bytes[0]);
-                Client.game.GameHandler((ZPerson) null, args.Bytes, true);
+                Client.game.GameHandler((ZPerson) null, args.Bytes, true, true);
                 args.Recycle();
                 return;
               }
               ZPerson player = Client.game.players[flag ? 0 : (int) args.Bytes[1]];
-              Client.game.GameHandler(player, args.Bytes, true);
+              Client.game.GameHandler(player, args.Bytes, true, true);
             }
           }
           else if (args.Bytes.Length > 1 && Global.IsChatMsg(args.Bytes[0]))
-            Client.game.GameHandler((ZPerson) null, args.Bytes, true);
+            Client.game.GameHandler((ZPerson) null, args.Bytes, true, true);
           args.Recycle();
         }
       }));
@@ -6096,7 +6149,7 @@ label_158:
     for (int index = 0; index < this.map._pastBits.Count; ++index)
       this.map._pastBits[index].Serialize(writer);
     writer.Write(this._nextturn);
-    GameSerializer.SerializePerson(this, this._uncontrolledPlayer, writer);
+    GameSerializer.SerializePerson(this, this._uncontrolledPlayer, writer, true);
     writer.Write(this.players.Count);
     foreach (ZPerson player in this.players)
       GameSerializer.SerializePerson(this, player, writer, string.Equals(c.name, player.name));
@@ -6112,7 +6165,7 @@ label_158:
       else
       {
         writer.Write(true);
-        this.globalEffectors[index].Serialize(writer);
+        this.globalEffectors[index].Serialize(writer, false);
       }
     }
     writer.Write(this.thorns.Count);
@@ -6126,7 +6179,7 @@ label_158:
       {
         writer.Write(true);
         writer.Write((ZComponent) this.thorns[index].spell?.parent != (object) null ? this.thorns[index].spell.parent.id : -1);
-        ZCreatureCreate.Serialize((ZCreature) this.thorns[index], writer);
+        ZCreatureCreate.Serialize((ZCreature) this.thorns[index], writer, true);
       }
     }
     this.SerializeList(writer, this._playersExtended);
@@ -6148,16 +6201,16 @@ label_158:
     this.SerializeList(writer, this.recallDevices);
     writer.Write((ZComponent) this.targetEffector != (object) null);
     if ((ZComponent) this.targetEffector != (object) null)
-      this.targetEffector.Serialize(writer);
+      this.targetEffector.Serialize(writer, false);
     writer.Write((ZComponent) this.dwarfMapEffector != (object) null);
     if ((ZComponent) this.dwarfMapEffector != (object) null)
-      this.dwarfMapEffector.Serialize(writer);
+      this.dwarfMapEffector.Serialize(writer, false);
     writer.Write((ZComponent) this.naturesWrath != (object) null);
     if ((ZComponent) this.naturesWrath != (object) null)
-      this.naturesWrath.Serialize(writer);
+      this.naturesWrath.Serialize(writer, false);
     writer.Write((ZComponent) this.blackhole != (object) null);
     if ((ZComponent) this.blackhole != (object) null)
-      this.blackhole.Serialize(writer);
+      this.blackhole.Serialize(writer, false);
     writer.Write(this.ArcaneZero);
     writer.Write(this.First_Turn_Teleport);
     writer.Write(this.TurnToLoseArcaneZero);
@@ -6281,13 +6334,13 @@ label_158:
         if (player.game.isClient)
           player.clientColor = (int) player.settingsPlayer.indexBody != SettingsPlayer.sno_body2 ? TeamColors.GetColor(i1) : new Color(0.5f, 0.5f, 0.5f);
         HUD.instance.AddPanelPlayer(player);
-        if (player.localTurn < 0 && (ZComponent) player.first() != (object) null && (UnityEngine.Object) player.first().transform != (UnityEngine.Object) null && !player.game.originalSpellsOnly)
+        if (player.localTurn < 0 && (ZComponent) player.first() != (object) null && ((UnityEngine.Object) player.first().transform != (UnityEngine.Object) null && !player.game.originalSpellsOnly))
           UnityEngine.Object.Instantiate<BigBubble>(ClientResources.Instance.big_bubble, player.first().transform.position, Quaternion.identity, player.first().transform).creature = player.first();
       }
       if ((UnityEngine.Object) player.panelPlayer != (UnityEngine.Object) null)
       {
         if (player.controlled.Count == 0)
-          player.panelPlayer.SetHP(-1);
+          player.panelPlayer.SetHP(-1, 0, 250f);
         if (player.didResign)
           player.panelPlayer.Resigned();
         if (player.didLeave)
@@ -6295,7 +6348,7 @@ label_158:
         player.panelPlayer.SetSummons(player);
         player.panelPlayer.SetFamiliar(player);
       }
-      foreach (int armaWarning in player.armaWarnings)
+      foreach (ArmaWarning armaWarning in player.armaWarnings)
         HUD.AddArmaWarning(player, armaWarning);
       ++i1;
     }
@@ -6447,7 +6500,7 @@ label_158:
     foreach (ZGame.IDSpell idSpell in this.helper.spell_parent)
     {
       idSpell.creature.parent = this.helper.GetCreature(idSpell.index);
-      StoreObject.OnSpell(idSpell.creature, idSpell.creature.parent);
+      StoreObject.OnSpell(idSpell.creature, idSpell.creature.parent, false);
     }
     foreach (ZGame.IDSpell idSpell in this.helper.spell_hit)
       idSpell.creature.hitCreature = this.helper.GetCreature(idSpell.index);
@@ -6455,7 +6508,7 @@ label_158:
       idSpell.creature.effector = this.helper.GetEffector(idSpell.index);
     foreach (KeyValuePair<int, ZEffector> keyValuePair in this.helper.effectorID)
     {
-      if ((ZComponent) keyValuePair.Value != (object) null && keyValuePair.Value.followParent && (UnityEngine.Object) keyValuePair.Value.transform != (UnityEngine.Object) null && (ZComponent) keyValuePair.Value.whoSummoned != (object) null && !keyValuePair.Value.doNotCreateObjectOnResync)
+      if ((ZComponent) keyValuePair.Value != (object) null && keyValuePair.Value.followParent && ((UnityEngine.Object) keyValuePair.Value.transform != (UnityEngine.Object) null && (ZComponent) keyValuePair.Value.whoSummoned != (object) null) && !keyValuePair.Value.doNotCreateObjectOnResync)
         keyValuePair.Value.transform.SetParent(keyValuePair.Value.whoSummoned.transform);
       if ((ZComponent) keyValuePair.Value != (object) null)
       {
@@ -6586,15 +6639,30 @@ label_158:
       list.Add(this.helper.GetCreature(r.ReadInt32()));
   }
 
-  public static int GetID(ZCreature z) => !((ZComponent) z == (object) null) ? z.id : -1;
+  public static int GetID(ZCreature z)
+  {
+    return !((ZComponent) z == (object) null) ? z.id : -1;
+  }
 
-  public static int GetID(ZPerson z) => z != null ? (int) z.id : -1;
+  public static int GetID(ZPerson z)
+  {
+    return z != null ? (int) z.id : -1;
+  }
 
-  public static int GetID(ZEffector z) => !((ZComponent) z == (object) null) ? z.id : -1;
+  public static int GetID(ZEffector z)
+  {
+    return !((ZComponent) z == (object) null) ? z.id : -1;
+  }
 
-  public static int GetID(ZSpell z) => !((ZComponent) z == (object) null) ? z.id : -1;
+  public static int GetID(ZSpell z)
+  {
+    return !((ZComponent) z == (object) null) ? z.id : -1;
+  }
 
-  public static int GetID(ZMyCollider z) => !((ZComponent) z == (object) null) ? z.id : -1;
+  public static int GetID(ZMyCollider z)
+  {
+    return !((ZComponent) z == (object) null) ? z.id : -1;
+  }
 
   public void CloseGame()
   {
@@ -6625,9 +6693,9 @@ label_158:
       }
     }
     foreach (Connection c in connectionList)
-      Server.SyncLobby(c);
+      Server.SyncLobby(c, true, false);
     connectionList.Clear();
-    this.CleanUp();
+    this.CleanUp(false);
   }
 
   private IEnumerator<float> Cleanup()
@@ -6638,7 +6706,7 @@ label_158:
     {
       for (float e = 0.0f; (double) e < 1.0; e += Time.deltaTime)
         yield return 0.0f;
-      if (this.canSafelyClose || this.CheckRematch())
+      if (this.canSafelyClose || this.CheckRematch(false))
         yield break;
     }
     if (!this.CheckRematch(true))
@@ -6685,7 +6753,7 @@ label_158:
     int num = this.IsGameOver() ? 1 : 0;
     if (num == 0)
       return num != 0;
-    this.SendGameOver();
+    this.SendGameOver(false);
     return num != 0;
   }
 
@@ -6738,7 +6806,7 @@ label_158:
       CameraMovement.followTargets.Clear();
       Client._tutorial?.CleanUp();
     }
-    if (!this.isClient || resyncing || Client.connection == null || this.isSpectator)
+    if (!this.isClient || resyncing || (Client.connection == null || this.isSpectator))
       return;
     Client.RemoveAllDataReceived();
     Client.connection.DataReceived += new EventHandler<DataReceivedEventArgs>(Client.LobbyHandler);
@@ -6784,7 +6852,10 @@ label_158:
       Global.RedPngMap(file);
   }
 
-  public void OnMapGeneratedCompleted() => this.SendAllMessage(this.map.serializedMap);
+  public void OnMapGeneratedCompleted()
+  {
+    this.SendAllMessage(this.map.serializedMap);
+  }
 
   public enum GameType
   {
@@ -6810,11 +6881,23 @@ label_158:
   {
     public Queue<ZGame.MyAction> queue = new Queue<ZGame.MyAction>();
 
-    public int Count => this.queue.Count;
+    public int Count
+    {
+      get
+      {
+        return this.queue.Count;
+      }
+    }
 
-    public void Enqueue(Action a) => this.queue.Enqueue(new ZGame.MyAction(a));
+    public void Enqueue(Action a)
+    {
+      this.queue.Enqueue(new ZGame.MyAction(a));
+    }
 
-    public void Enqueue(Action a, bool v) => this.queue.Enqueue(new ZGame.MyAction(a, v));
+    public void Enqueue(Action a, bool v)
+    {
+      this.queue.Enqueue(new ZGame.MyAction(a, v));
+    }
 
     public void DequeueAndInvoke()
     {
@@ -6825,17 +6908,26 @@ label_158:
       while (this.queue.Count > 0 && !this.queue.Peek().wait);
     }
 
-    public ZGame.MyAction Dequeue() => this.queue.Dequeue();
+    public ZGame.MyAction Dequeue()
+    {
+      return this.queue.Dequeue();
+    }
 
-    public void Clear() => this.queue.Clear();
+    public void Clear()
+    {
+      this.queue.Clear();
+    }
   }
 
   public class MyAction
   {
-    public Action action;
     public bool wait = true;
+    public Action action;
 
-    public MyAction(Action a) => this.action = a;
+    public MyAction(Action a)
+    {
+      this.action = a;
+    }
 
     public MyAction(Action a, bool wait)
     {
@@ -6843,9 +6935,15 @@ label_158:
       this.wait = wait;
     }
 
-    public void Invoke() => this.action();
+    public void Invoke()
+    {
+      this.action();
+    }
 
-    public static implicit operator ZGame.MyAction(Action v) => new ZGame.MyAction(v);
+    public static implicit operator ZGame.MyAction(Action v)
+    {
+      return new ZGame.MyAction(v);
+    }
   }
 
   public class TimelineData
@@ -6931,28 +7029,52 @@ label_158:
     }
   }
 
-  public struct ID2(ZCreature z, int i)
+  public struct ID2
   {
-    public ZCreature creature = z;
-    public int index = i;
+    public ZCreature creature;
+    public int index;
+
+    public ID2(ZCreature z, int i)
+    {
+      this.creature = z;
+      this.index = i;
+    }
   }
 
-  public struct IDEffector(ZEffector z, int i)
+  public struct IDEffector
   {
-    public ZEffector creature = z;
-    public int index = i;
+    public ZEffector creature;
+    public int index;
+
+    public IDEffector(ZEffector z, int i)
+    {
+      this.creature = z;
+      this.index = i;
+    }
   }
 
-  public struct IDSpell(ZSpell z, int i)
+  public struct IDSpell
   {
-    public ZSpell creature = z;
-    public int index = i;
+    public ZSpell creature;
+    public int index;
+
+    public IDSpell(ZSpell z, int i)
+    {
+      this.creature = z;
+      this.index = i;
+    }
   }
 
-  public struct IDCollider(ZMyCollider z, int i)
+  public struct IDCollider
   {
-    public ZMyCollider creature = z;
-    public int index = i;
+    public ZMyCollider creature;
+    public int index;
+
+    public IDCollider(ZMyCollider z, int i)
+    {
+      this.creature = z;
+      this.index = i;
+    }
   }
 
   public class SerializationHelper
@@ -6987,23 +7109,23 @@ label_158:
 
     public ZPerson GetPlayer(int id)
     {
-      ZPerson player;
-      this.playerID.TryGetValue(id, out player);
-      return player;
+      ZPerson zperson;
+      this.playerID.TryGetValue(id, out zperson);
+      return zperson;
     }
 
     public ZCreatureThorn GetThorn(int id)
     {
-      ZCreatureThorn thorn;
-      this.thornID.TryGetValue(id, out thorn);
-      return thorn;
+      ZCreatureThorn zcreatureThorn;
+      this.thornID.TryGetValue(id, out zcreatureThorn);
+      return zcreatureThorn;
     }
 
     public ZCreature GetCreature(int id)
     {
-      ZCreature creature;
-      this.creatureID.TryGetValue(id, out creature);
-      return creature;
+      ZCreature zcreature;
+      this.creatureID.TryGetValue(id, out zcreature);
+      return zcreature;
     }
 
     public ZSpell Getspell(int id)
@@ -7015,16 +7137,16 @@ label_158:
 
     public ZEffector GetEffector(int id)
     {
-      ZEffector effector;
-      this.effectorID.TryGetValue(id, out effector);
-      return effector;
+      ZEffector zeffector;
+      this.effectorID.TryGetValue(id, out zeffector);
+      return zeffector;
     }
 
     public ZMyCollider GetCollider(int id)
     {
-      ZMyCollider collider;
-      this.colliderID.TryGetValue(id, out collider);
-      return collider;
+      ZMyCollider zmyCollider;
+      this.colliderID.TryGetValue(id, out zmyCollider);
+      return zmyCollider;
     }
   }
 }

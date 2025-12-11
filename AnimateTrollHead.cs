@@ -1,15 +1,14 @@
 
 using UnityEngine;
 
-#nullable disable
 public class AnimateTrollHead : MonoBehaviour
 {
+  private Vector3 curRot = Vector3.zero;
+  private bool down = true;
   internal ZEffector effector;
   public Transform head;
-  private Vector3 curRot = Vector3.zero;
   private bool animating;
   private float t;
-  private bool down = true;
 
   private void Start()
   {

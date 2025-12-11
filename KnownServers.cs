@@ -1,7 +1,6 @@
 
 using System;
 
-#nullable disable
 [Serializable]
 public class KnownServers
 {

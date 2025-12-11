@@ -1,5 +1,4 @@
 
-#nullable disable
 public class RatingLineInfo
 {
   public int rank;

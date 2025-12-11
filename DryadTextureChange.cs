@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-#nullable disable
 public class DryadTextureChange : MonoBehaviour
 {
   internal Creature creature;

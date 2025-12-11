@@ -4,13 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-#nullable disable
 [Serializable]
 public class PoolColoredImage
 {
+  private List<Image> com = new List<Image>();
   public GameObject type;
   public RectTransform container;
-  private List<Image> com = new List<Image>();
   private int index;
 
   public void SetColor(Color c)

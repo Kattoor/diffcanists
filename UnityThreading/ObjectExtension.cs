@@ -1,5 +1,4 @@
 
-#nullable disable
 namespace UnityThreading
 {
   public static class ObjectExtension
@@ -18,7 +17,10 @@ namespace UnityThreading
       return (Task) that.RunAsync<object>(methodName, target, args);
     }
 
-    public static Task<T> RunAsync<T>(this object that, string methodName, params object[] args)
+    public static Task<T> RunAsync<T>(
+      this object that,
+      string methodName,
+      params object[] args)
     {
       return that.RunAsync<T>(methodName, (TaskDistributor) null, args);
     }

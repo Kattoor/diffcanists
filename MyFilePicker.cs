@@ -7,9 +7,13 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
-#nullable disable
 public class MyFilePicker : MonoBehaviour
 {
+  private string selectedBook = "";
+  private string selectedFilePath = "";
+  private string folder = "";
+  private string ext = "";
+  private string subDir = "";
   public GameObject buttonOpenFileExplorer;
   public InputFieldPlus input;
   public RectTransform container;
@@ -18,15 +22,11 @@ public class MyFilePicker : MonoBehaviour
   public UIOnHover buttonSelect;
   public TMP_Text txtSelected;
   public TMP_Text txtHeader;
-  private string selectedBook = "";
-  private string selectedFilePath = "";
   private GameObject selectedGameObject;
   public UIOnHover buttonDelete;
   public UIOnHover buttonRename;
   public static MyFilePicker Instance;
   private float lastClick;
-  private string folder = "";
-  private string ext = "";
   [Header("Folders")]
   public RectTransform containerFolder;
   public GameObject pfabFolder;
@@ -34,7 +34,6 @@ public class MyFilePicker : MonoBehaviour
   public UIOnHover buttonShare;
   private Action<string> onEnd;
   private ContentType contentType;
-  private string subDir = "";
 
   public static void Create(
     string header,
@@ -59,11 +58,11 @@ public class MyFilePicker : MonoBehaviour
     {
       andApply.input.onEnd.AddListener(new UnityAction<string>(andApply.OnEndEdit));
       andApply.input.gameObject.SetActive(true);
-      andApply.input.SetAsActive();
+      andApply.input.SetAsActive(true);
     }
     if ((((UnityEngine.Object) LobbyMenu.instance != (UnityEngine.Object) null || (UnityEngine.Object) UnratedMenu.instance != (UnityEngine.Object) null ? 1 : (!((UnityEngine.Object) RatedMenu.instance != (UnityEngine.Object) null) ? 0 : (!string.IsNullOrEmpty(Client.sharingWith) ? 1 : 0))) & (shareable ? 1 : 0)) != 0)
       andApply.buttonShare.gameObject.SetActive(true);
-    andApply.Load();
+    andApply.Load("");
   }
 
   public void ClickShare()
@@ -133,7 +132,7 @@ public class MyFilePicker : MonoBehaviour
       gameObject.GetComponent<TextMeshProUGUI>().text = ss;
       gameObject.GetComponent<UIOnHover>().onRightClick.AddListener((UnityAction) (() => this.OnRightClick(dir, gameObject)));
     });
-    myContextMenu.AddInput(a);
+    myContextMenu.AddInput(a, (string) null, false, true);
   }
 
   public void OnRightClick(string s, GameObject gameObject)
@@ -141,9 +140,10 @@ public class MyFilePicker : MonoBehaviour
     if (!File.Exists(s))
       return;
     MyContextMenu myContextMenu = MyContextMenu.Show();
-    myContextMenu.AddSeperator();
+    myContextMenu.AddSeperator("--------------------------");
     myContextMenu.AddItem("Rename", (Action) (() => MyContextMenu.Show().AddInput((Action<string>) (ss =>
     {
+      MyFilePicker.\u003C\u003Ec__DisplayClass29_0 cDisplayClass290 = this;
       if (string.IsNullOrEmpty(ss))
         return;
       string dir = s.Substring(0, s.Length - Path.GetFileName(s).Length) + ss + Path.GetExtension(s);
@@ -152,14 +152,14 @@ public class MyFilePicker : MonoBehaviour
       gameObject.GetComponent<UIOnHover>().onRightClick.RemoveAllListeners();
       gameObject.name = dir;
       gameObject.GetComponent<TextMeshProUGUI>().text = ss;
-      gameObject.GetComponent<UIOnHover>().onRightClick.AddListener((UnityAction) (() => this.OnRightClick(dir, gameObject)));
-    }))), (Color) ColorScheme.GetColor(MyContextMenu.ColorYellow));
+      gameObject.GetComponent<UIOnHover>().onRightClick.AddListener((UnityAction) (() => cDisplayClass290.\u003C\u003E4__this.OnRightClick(dir, cDisplayClass290.gameObject)));
+    }), (string) null, false, true)), (Color) ColorScheme.GetColor(MyContextMenu.ColorYellow));
     myContextMenu.AddItem("Delete " + Path.GetFileNameWithoutExtension(s), (Action) (() =>
     {
       Global.DeleteFile(s);
       UnityEngine.Object.Destroy((UnityEngine.Object) gameObject);
     }), (Color) ColorScheme.GetColor(MyContextMenu.ColorRed));
-    myContextMenu.Rebuild();
+    myContextMenu.Rebuild(false);
   }
 
   private void Load(string subFolder = "")
@@ -206,7 +206,7 @@ public class MyFilePicker : MonoBehaviour
       UIOnHover component1 = gameObject1.GetComponent<UIOnHover>();
       component1.textNormalColor = Color.green;
       gameObject1.GetComponent<TMP_Text>().color = Color.green;
-      component1.onClick.AddListener((UnityAction) (() => this.Load()));
+      component1.onClick.AddListener((UnityAction) (() => this.Load("")));
       gameObject1.SetActive(true);
       GameObject gameObject2 = UnityEngine.Object.Instantiate<GameObject>(this.pfabFolder, (Transform) this.containerFolder);
       RectTransform rect = (RectTransform) gameObject2.transform;
@@ -215,19 +215,19 @@ public class MyFilePicker : MonoBehaviour
       rect.GetComponent<TMP_Text>().text = "Up One Folder";
       string fullName = Directory.GetParent(Directory.GetParent(path).FullName).FullName;
       RectTransform rectTransform = rect;
-      string str5;
+      string str3;
       if (fullName.Length <= length)
       {
-        str5 = "";
+        str3 = "";
       }
       else
       {
-        string str6 = fullName.Substring(length);
+        string str4 = fullName.Substring(length);
         directorySeparatorChar = Path.DirectorySeparatorChar;
-        string str7 = directorySeparatorChar.ToString();
-        str5 = str6 + str7;
+        string str5 = directorySeparatorChar.ToString();
+        str3 = str4 + str5;
       }
-      rectTransform.name = str5;
+      rectTransform.name = str3;
       UIOnHover component2 = gameObject2.GetComponent<UIOnHover>();
       component2.textNormalColor = Color.green;
       gameObject2.GetComponent<TMP_Text>().color = Color.green;
@@ -243,11 +243,11 @@ public class MyFilePicker : MonoBehaviour
       rect.localScale = new Vector3(1f, 1f, 1f);
       rect.GetComponent<TMP_Text>().text = directories[index].Substring(path.Length);
       RectTransform rectTransform = rect;
-      string str8 = directories[index].Substring(length);
+      string str3 = directories[index].Substring(length);
       directorySeparatorChar = Path.DirectorySeparatorChar;
-      string str9 = directorySeparatorChar.ToString();
-      string str10 = str8 + str9;
-      rectTransform.name = str10;
+      string str4 = directorySeparatorChar.ToString();
+      string str5 = str3 + str4;
+      rectTransform.name = str5;
       gameObject.GetComponent<UIOnHover>().onClick.AddListener((UnityAction) (() => this.Load(rect.name)));
       gameObject.SetActive(true);
     }
@@ -258,13 +258,13 @@ public class MyFilePicker : MonoBehaviour
       numArray[index] = this.column[index].anchoredPosition.y;
     int index1 = 0;
     float num2 = 0.0f;
-    foreach (string str11 in list)
+    foreach (string str3 in list)
     {
       GameObject g = UnityEngine.Object.Instantiate<GameObject>(this.pfabBook, (Transform) this.container);
       RectTransform transform = (RectTransform) g.transform;
       transform.localScale = new Vector3(1f, 1f, 1f);
       transform.anchoredPosition = new Vector2(this.column[index1].anchoredPosition.x, numArray[index1]);
-      string s = str11;
+      string s = str3;
       g.name = s;
       g.GetComponent<TextMeshProUGUI>().text = Path.GetFileNameWithoutExtension(g.name);
       g.GetComponent<UIOnHover>().onClick.AddListener((UnityAction) (() =>
@@ -353,7 +353,10 @@ public class MyFilePicker : MonoBehaviour
     this.Cancel();
   }
 
-  public void OpenFileLocation() => Global.OpenFileLocation(this.folder);
+  public void OpenFileLocation()
+  {
+    Global.OpenFileLocation(this.folder);
+  }
 
   public void OnTouch()
   {

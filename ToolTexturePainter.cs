@@ -1,7 +1,6 @@
 
 using UnityEngine;
 
-#nullable disable
 public class ToolTexturePainter : IMapEditorTool
 {
   public void OnMouseDown(bool leftClick)
@@ -39,7 +38,13 @@ public class ToolTexturePainter : IMapEditorTool
     MapEditor.Instance.selectedLayer.Apply();
   }
 
-  public void OnMouseDrag(bool leftClick) => this.OnMouseDown(leftClick);
+  public void OnMouseDrag(bool leftClick)
+  {
+    this.OnMouseDown(leftClick);
+  }
 
-  public void OnMouseUp(bool leftClick) => MapEditor.Instance.SaveDo_Pixels();
+  public void OnMouseUp(bool leftClick)
+  {
+    MapEditor.Instance.SaveDo_Pixels();
+  }
 }

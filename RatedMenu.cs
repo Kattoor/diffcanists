@@ -8,9 +8,22 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-#nullable disable
 public class RatedMenu : MonoBehaviour
 {
+  private float[] scrollValues = new float[4]
+  {
+    1f,
+    1f,
+    1f,
+    1f
+  };
+  private string[] period = new string[4]
+  {
+    "Searching",
+    "Searching.",
+    "Searching..",
+    "Searching..."
+  };
   public GameObject[] lowGameObjects;
   public GameObject[] highGameObjects;
   public GameObject[] neitherGameObjects;
@@ -48,31 +61,20 @@ public class RatedMenu : MonoBehaviour
   public AudioClip discoMusic;
   public PoolColoredImage pool;
   private int curRatedFacts;
-  private float[] scrollValues = new float[4]
-  {
-    1f,
-    1f,
-    1f,
-    1f
-  };
   [Header("Scroll")]
   public ScrollRect scrollRect;
   private bool closeDisco;
   private int periods;
   private float _time;
-  private string[] period = new string[4]
-  {
-    "Searching",
-    "Searching.",
-    "Searching..",
-    "Searching..."
-  };
 
   public static RatedMenu instance { get; private set; }
 
   public static bool FindingOpponents
   {
-    get => (UnityEngine.Object) RatedMenu.instance != (UnityEngine.Object) null && RatedMenu.instance.findingOpponents;
+    get
+    {
+      return (UnityEngine.Object) RatedMenu.instance != (UnityEngine.Object) null && RatedMenu.instance.findingOpponents;
+    }
   }
 
   private RatedFacts _ratedFacts
@@ -100,10 +102,16 @@ public class RatedMenu : MonoBehaviour
   }
 
   [ContextMenu("Find Matches")]
-  public void SearchQue() => Server.FindRatedMatches();
+  public void SearchQue()
+  {
+    Server.FindRatedMatches();
+  }
 
   [ContextMenu("Remove All")]
-  public void removeall() => Server._ratedQueue.Clear();
+  public void removeall()
+  {
+    Server._ratedQueue.Clear();
+  }
 
   private void Update()
   {
@@ -140,7 +148,10 @@ public class RatedMenu : MonoBehaviour
     RatedMenu.instance = (RatedMenu) null;
   }
 
-  public void ClickDiscoClose() => this.closeDisco = true;
+  public void ClickDiscoClose()
+  {
+    this.closeDisco = true;
+  }
 
   private IEnumerator IEDisco()
   {
@@ -208,13 +219,19 @@ public class RatedMenu : MonoBehaviour
       if (string.IsNullOrEmpty(s) || s.Length > 13)
         return;
       Client.AskToAddFriend(true, true, s);
-    }));
-    myContextMenu.Rebuild();
+    }), (string) null, false, true);
+    myContextMenu.Rebuild(false);
   }
 
-  public void ClickSettings() => Controller.ShowSettingsMenu();
+  public void ClickSettings()
+  {
+    Controller.ShowSettingsMenu(false);
+  }
 
-  public void ClickPrestige() => Controller.ShowPrestigeMenu();
+  public void ClickPrestige()
+  {
+    Controller.ShowPrestigeMenu();
+  }
 
   public void ToggleAll(UIOnHover[] group)
   {
@@ -227,9 +244,9 @@ public class RatedMenu : MonoBehaviour
 
   public void RefreshActive()
   {
-    this.RefreshFriends();
-    this.RefreshIgnore();
-    this.RefreshClan();
+    this.RefreshFriends(false);
+    this.RefreshIgnore(false);
+    this.RefreshClan(false);
   }
 
   public void RefreshFriends(bool updatePos = false)
@@ -238,20 +255,20 @@ public class RatedMenu : MonoBehaviour
       return;
     this.txtRateType.text = "";
     this.txtRating.text = "Friends " + (object) Client.friends.Count + " / 200";
-    int num = (int) ((RectTransform) this.pfabFriend.transform).sizeDelta.y + 2;
-    int x = 0;
+    int num1 = (int) ((RectTransform) this.pfabFriend.transform).sizeDelta.y + 2;
+    int num2 = 0;
     List<(string, int)> valueTupleList = new List<(string, int)>();
     foreach (string friend in Client.friends)
-      valueTupleList.Add((friend, Client.GetAccount(friend).location.Online() ? 1 : 0));
+      valueTupleList.Add((friend, Client.GetAccount(friend, false).location.Online() ? 1 : 0));
     valueTupleList.Sort((Comparison<(string, int)>) ((a, b) => a.online == b.online ? a.name.CompareTo(b.name) : b.online - a.online));
     this._containerAccounts.DestroyChildern();
-    this._containerAccounts.sizeDelta = new Vector2(this._containerAccounts.sizeDelta.x, (float) (num * valueTupleList.Count + 35));
+    this._containerAccounts.sizeDelta = new Vector2(this._containerAccounts.sizeDelta.x, (float) (num1 * valueTupleList.Count + 35));
     for (int index = 0; index < valueTupleList.Count; ++index)
     {
       GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(this.pfabFriend, (Transform) this._containerAccounts);
-      ((RectTransform) gameObject.transform).anchoredPosition = new Vector2((float) x, (float) (-index * num - 2 - 35));
+      ((RectTransform) gameObject.transform).anchoredPosition = new Vector2((float) num2, (float) (-index * num1 - 2 - 35));
       pfabName component = gameObject.GetComponent<pfabName>();
-      component.Setup(valueTupleList[index].Item1);
+      component.Setup(valueTupleList[index].Item1, false);
       component.ready.color = pfabName.colorStatus[valueTupleList[index].Item2];
       component.txtName.color = pfabName.colorStatus[valueTupleList[index].Item2];
     }
@@ -266,8 +283,8 @@ public class RatedMenu : MonoBehaviour
       return;
     this.txtRateType.text = "";
     this.txtRating.text = "Ignored " + (object) Client.ignore.Count + " / 100";
-    int num = (int) ((RectTransform) this.pfabFriend.transform).sizeDelta.y + 2;
-    int x = 0;
+    int num1 = (int) ((RectTransform) this.pfabFriend.transform).sizeDelta.y + 2;
+    int num2 = 0;
     List<string> stringList = new List<string>();
     foreach (string str in Client.ignore)
       stringList.Add(str);
@@ -277,17 +294,17 @@ public class RatedMenu : MonoBehaviour
       whoList.Add(who);
     whoList.Sort((Comparison<Client.TempIgnored.Who>) ((a, b) => a.name.CompareTo(b.name)));
     this._containerAccounts.DestroyChildern();
-    this._containerAccounts.sizeDelta = new Vector2(this._containerAccounts.sizeDelta.x, (float) (num * (stringList.Count + whoList.Count)));
+    this._containerAccounts.sizeDelta = new Vector2(this._containerAccounts.sizeDelta.x, (float) (num1 * (stringList.Count + whoList.Count)));
     for (int index = 0; index < stringList.Count; ++index)
     {
       GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(this.pfabFriend, (Transform) this._containerAccounts);
-      ((RectTransform) gameObject.transform).anchoredPosition = new Vector2((float) x, (float) (-index * num - 2));
-      gameObject.GetComponent<pfabName>().Setup(stringList[index]);
+      ((RectTransform) gameObject.transform).anchoredPosition = new Vector2((float) num2, (float) (-index * num1 - 2));
+      gameObject.GetComponent<pfabName>().Setup(stringList[index], false);
     }
     for (int index = 0; index < whoList.Count; ++index)
     {
       GameObject andApply = Controller.Instance.CreateAndApply(this.pfabFriend, (Transform) this._containerAccounts);
-      ((RectTransform) andApply.transform).anchoredPosition = new Vector2((float) x, (float) ((-index - stringList.Count) * num - 2));
+      ((RectTransform) andApply.transform).anchoredPosition = new Vector2((float) num2, (float) ((-index - stringList.Count) * num1 - 2));
       andApply.GetComponent<pfabName>().SetupIgnored(whoList[index].name, whoList[index].TimeTill());
     }
     if (!updatePos)
@@ -309,25 +326,25 @@ public class RatedMenu : MonoBehaviour
     else
     {
       this.txtRating.text = "Clan " + (object) Client.clan.members.Count + " / 100";
-      int num = (int) ((RectTransform) this.pfabFriend.transform).sizeDelta.y + 2;
-      int x = 0;
+      int num1 = (int) ((RectTransform) this.pfabFriend.transform).sizeDelta.y + 2;
+      int num2 = 0;
       List<Clan.MemberX> memberXList = new List<Clan.MemberX>();
       foreach (KeyValuePair<string, Clan.Roles> member in Client.clan.members)
         memberXList.Add(new Clan.MemberX()
         {
           name = member.Key,
           role = member.Value,
-          acc = Client.GetAccount(member.Key)
+          acc = Client.GetAccount(member.Key, false)
         });
       memberXList.Sort((Comparison<Clan.MemberX>) ((a, b) => b.acc.location.Online() == a.acc.location.Online() ? (b.role == a.role ? a.name.CompareTo(b.name) : (int) (b.role - a.role)) : (!b.acc.location.Online() ? -1 : 1)));
       this._containerAccounts.DestroyChildern();
-      this._containerAccounts.sizeDelta = new Vector2(this._containerAccounts.sizeDelta.x, (float) (num * memberXList.Count + 2));
+      this._containerAccounts.sizeDelta = new Vector2(this._containerAccounts.sizeDelta.x, (float) (num1 * memberXList.Count + 2));
       for (int index = 0; index < memberXList.Count; ++index)
       {
         GameObject andApply = Controller.Instance.CreateAndApply(this.pfabFriend, (Transform) this._containerAccounts);
-        ((RectTransform) andApply.transform).anchoredPosition = new Vector2((float) x, (float) (-index * num - 2));
+        ((RectTransform) andApply.transform).anchoredPosition = new Vector2((float) num2, (float) (-index * num1 - 2));
         pfabName component = andApply.GetComponent<pfabName>();
-        component.Setup(memberXList[index].name);
+        component.Setup(memberXList[index].name, false);
         component.txtRating.text = "(" + memberXList[index].role.ToString().Replace('_', ' ') + ")";
         component.ready.color = pfabName.colorStatus[memberXList[index].acc.location.Online() ? 1 : 0];
         component.txtName.color = pfabName.colorStatus[memberXList[index].acc.location.Online() ? 1 : 0];
@@ -363,7 +380,10 @@ public class RatedMenu : MonoBehaviour
   }
 
   [EnumAction(typeof (MapEnum))]
-  public void AskToChangeGameModeMap(int x) => Client.AskToChangeGameMode(GameFacts.Message.Map, x);
+  public void AskToChangeGameModeMap(int x)
+  {
+    Client.AskToChangeGameMode(GameFacts.Message.Map, x);
+  }
 
   [EnumAction(typeof (MapEnum))]
   public void AskToChangeArmageddon(int x)
@@ -484,7 +504,7 @@ public class RatedMenu : MonoBehaviour
       default:
         return;
     }
-    ratedFacts.VerifyGameType();
+    ratedFacts.VerifyGameType(false);
     this.RefreshGameOptions();
     Inert.SaveSettingsPlayer();
   }
@@ -492,7 +512,7 @@ public class RatedMenu : MonoBehaviour
   public void RefreshGameOptions()
   {
     for (int index = 0; index < this.lowGameObjects.Length; ++index)
-      this.lowGameObjects[index].SetActive(this._ratedFacts.gameType != 0);
+      this.lowGameObjects[index].SetActive((uint) this._ratedFacts.gameType > 0U);
     for (int index = 0; index < this.highGameObjects.Length; ++index)
       this.highGameObjects[index].SetActive(this._ratedFacts.gameType != 1);
     for (int index = 0; index < this.neitherGameObjects.Length; ++index)
@@ -679,21 +699,30 @@ public class RatedMenu : MonoBehaviour
   {
     if (this.viewing == Viewing.Friends && Client.HasFriend(n))
     {
-      this.RefreshFriends();
+      this.RefreshFriends(false);
     }
     else
     {
       if (this.viewing != Viewing.Clan || Client.clan == null || !Client.clan.members.ContainsKey(n))
         return;
-      this.RefreshClan();
+      this.RefreshClan(false);
     }
   }
 
-  public void Tooltip(string s) => MyToolTip.Show(s);
+  public void Tooltip(string s)
+  {
+    MyToolTip.Show(s, -1f);
+  }
 
-  public void HideTooltip() => MyToolTip.Close();
+  public void HideTooltip()
+  {
+    MyToolTip.Close();
+  }
 
-  public void ClickLobby() => Client.AskToJoinLobbyFromeQue();
+  public void ClickLobby()
+  {
+    Client.AskToJoinLobbyFromeQue();
+  }
 
   public void ClickInvitePlayers()
   {
@@ -707,8 +736,8 @@ public class RatedMenu : MonoBehaviour
     if (this._ratedFacts.spellOverrides != null)
       sp.CopySpells(this._ratedFacts.spellOverrides);
     else
-      sp.CopySpells(Client.settingsPlayer);
-    SpellLobbyChange.Create(sp, new Action<SettingsPlayer>(this.OnPickSpellOverrides));
+      sp.CopySpells(Client.settingsPlayer, false);
+    SpellLobbyChange.Create(sp, new Action<SettingsPlayer>(this.OnPickSpellOverrides), false, Validation.Default, false, (Action) null);
   }
 
   public void ClickAddAlternative()
@@ -785,9 +814,15 @@ public class RatedMenu : MonoBehaviour
     Client.AskToFindOpponents(!this.findingOpponents);
   }
 
-  public void UpdateSpellIcons() => this.spellImageList.SetSpells();
+  public void UpdateSpellIcons()
+  {
+    this.spellImageList.SetSpells();
+  }
 
-  public void UpdateOutfit() => this.spellImageList.UpdateOutfit();
+  public void UpdateOutfit()
+  {
+    this.spellImageList.UpdateOutfit();
+  }
 
   public void ClickReset()
   {
@@ -802,12 +837,12 @@ public class RatedMenu : MonoBehaviour
     {
       Client._ratedFacts = RatedContainer.DeserializeFromFile(s);
       this.RefreshGameOptions();
-    }));
+    }), ContentType.GameSettings, false);
   }
 
   public void SaveSettings()
   {
     RatedContainer x = Global.Copy<RatedContainer>(Client._ratedFacts);
-    MyFilePicker.Create("Save Settings", "RatedSettings", ".ratedSettings", true, (Action<string>) (s => x.SerializeToFile(s)));
+    MyFilePicker.Create("Save Settings", "RatedSettings", ".ratedSettings", true, (Action<string>) (s => x.SerializeToFile(s)), ContentType.GameSettings, false);
   }
 }

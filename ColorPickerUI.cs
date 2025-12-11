@@ -3,7 +3,6 @@ using System;
 using UnityEngine;
 using UnityEngine.Events;
 
-#nullable disable
 public class ColorPickerUI : MonoBehaviour
 {
   public ColorPicker picker;

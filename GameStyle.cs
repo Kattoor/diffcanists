@@ -1,5 +1,4 @@
 
-#nullable disable
 public enum GameStyle
 {
   Dont_Mind = -1, // 0xFFFFFFFF

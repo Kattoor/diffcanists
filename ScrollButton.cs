@@ -4,14 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-#nullable disable
-public class ScrollButton : 
-  MonoBehaviour,
-  IPointerDownHandler,
-  IEventSystemHandler,
-  IPointerUpHandler,
-  IPointerEnterHandler,
-  IPointerExitHandler
+public class ScrollButton : MonoBehaviour, IPointerDownHandler, IEventSystemHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler
 {
   public Sprite hoverSprite;
   public Sprite defaultSprite;
@@ -96,8 +89,8 @@ public class ScrollButton :
     double height1 = (double) rect.height;
     double num1 = y2 - height1;
     double num2 = scrollSensitivity1 / num1;
-    double y3 = y1 - num2;
-    Vector2 vector2_1 = new Vector2((float) x1, (float) y3);
+    double num3 = y1 - num2;
+    Vector2 vector2_1 = new Vector2((float) x1, (float) num3);
     chatScrollbar1.normalizedPosition = vector2_1;
     while (this.isDown && (double) cur < 1.0)
     {
@@ -108,15 +101,15 @@ public class ScrollButton :
     {
       ScrollRect chatScrollbar2 = this._chatScrollbar;
       double x2 = (double) this._chatScrollbar.normalizedPosition.x;
-      double y4 = (double) this._chatScrollbar.normalizedPosition.y;
+      double y3 = (double) this._chatScrollbar.normalizedPosition.y;
       double scrollSensitivity2 = (double) this._chatScrollbar.scrollSensitivity;
-      double y5 = (double) this.content.sizeDelta.y;
+      double y4 = (double) this.content.sizeDelta.y;
       rect = ((RectTransform) this.content.parent).rect;
       double height2 = (double) rect.height;
-      double num3 = y5 - height2;
-      double num4 = scrollSensitivity2 / num3;
-      double y6 = y4 - num4;
-      Vector2 vector2_2 = new Vector2((float) x2, (float) y6);
+      double num4 = y4 - height2;
+      double num5 = scrollSensitivity2 / num4;
+      double num6 = y3 - num5;
+      Vector2 vector2_2 = new Vector2((float) x2, (float) num6);
       chatScrollbar2.normalizedPosition = vector2_2;
       yield return (object) new WaitForSecondsRealtime(0.1f);
     }
@@ -134,8 +127,8 @@ public class ScrollButton :
     double height1 = (double) rect.height;
     double num1 = y2 - height1;
     double num2 = scrollSensitivity1 / num1;
-    double y3 = y1 + num2;
-    Vector2 vector2_1 = new Vector2((float) x1, (float) y3);
+    double num3 = y1 + num2;
+    Vector2 vector2_1 = new Vector2((float) x1, (float) num3);
     chatScrollbar1.normalizedPosition = vector2_1;
     while (this.isDown && (double) cur < 1.0)
     {
@@ -146,29 +139,31 @@ public class ScrollButton :
     {
       ScrollRect chatScrollbar2 = this._chatScrollbar;
       double x2 = (double) this._chatScrollbar.normalizedPosition.x;
-      double y4 = (double) this._chatScrollbar.normalizedPosition.y;
+      double y3 = (double) this._chatScrollbar.normalizedPosition.y;
       double scrollSensitivity2 = (double) this._chatScrollbar.scrollSensitivity;
-      double y5 = (double) this.content.sizeDelta.y;
+      double y4 = (double) this.content.sizeDelta.y;
       rect = ((RectTransform) this.content.parent).rect;
       double height2 = (double) rect.height;
-      double num3 = y5 - height2;
-      double num4 = scrollSensitivity2 / num3;
-      double y6 = y4 + num4;
-      Vector2 vector2_2 = new Vector2((float) x2, (float) y6);
+      double num4 = y4 - height2;
+      double num5 = scrollSensitivity2 / num4;
+      double num6 = y3 + num5;
+      Vector2 vector2_2 = new Vector2((float) x2, (float) num6);
       chatScrollbar2.normalizedPosition = vector2_2;
       yield return (object) new WaitForSecondsRealtime(0.1f);
     }
   }
 
-  private void OnApplicationFocus(bool focus) => this.isDown = false;
+  private void OnApplicationFocus(bool focus)
+  {
+    this.isDown = false;
+  }
 
   private void ScrollTo(Transform target)
   {
     Canvas.ForceUpdateCanvases();
     Vector2 vector2 = (Vector2) this._chatScrollbar.transform.InverseTransformPoint(this.content.position) - (Vector2) this._chatScrollbar.transform.InverseTransformPoint(target.position);
-    this.content.anchoredPosition = this.content.anchoredPosition with
-    {
-      y = vector2.y
-    };
+    Vector2 anchoredPosition = this.content.anchoredPosition;
+    anchoredPosition.y = vector2.y;
+    this.content.anchoredPosition = anchoredPosition;
   }
 }

@@ -1,7 +1,6 @@
 
 using System;
 
-#nullable disable
 namespace LibNoise.Generator
 {
   public class Voronoi : ModuleBase
@@ -27,26 +26,50 @@ namespace LibNoise.Generator
 
     public double Displacement
     {
-      get => this._displacement;
-      set => this._displacement = value;
+      get
+      {
+        return this._displacement;
+      }
+      set
+      {
+        this._displacement = value;
+      }
     }
 
     public double Frequency
     {
-      get => this._frequency;
-      set => this._frequency = value;
+      get
+      {
+        return this._frequency;
+      }
+      set
+      {
+        this._frequency = value;
+      }
     }
 
     public int Seed
     {
-      get => this._seed;
-      set => this._seed = value;
+      get
+      {
+        return this._seed;
+      }
+      set
+      {
+        this._seed = value;
+      }
     }
 
     public bool UseDistance
     {
-      get => this._distance;
-      set => this._distance = value;
+      get
+      {
+        return this._distance;
+      }
+      set
+      {
+        this._distance = value;
+      }
     }
 
     public override double GetValue(double x, double y, double z)
@@ -87,10 +110,10 @@ namespace LibNoise.Generator
       double num12;
       if (this._distance)
       {
-        double num13 = d1 - x;
-        double num14 = d2 - y;
-        double num15 = d3 - z;
-        num12 = Math.Sqrt(num13 * num13 + num14 * num14 + num15 * num15) * 1.7320508075688772 - 1.0;
+        double num5 = d1 - x;
+        double num6 = d2 - y;
+        double num7 = d3 - z;
+        num12 = Math.Sqrt(num5 * num5 + num6 * num6 + num7 * num7) * 1.73205080756888 - 1.0;
       }
       else
         num12 = 0.0;

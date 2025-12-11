@@ -1,7 +1,6 @@
 
 using UnityEngine;
 
-#nullable disable
 public class MapObjects : MonoBehaviour
 {
   [Header("Waves")]
@@ -67,7 +66,7 @@ public class MapObjects : MonoBehaviour
         this.Adjust(0.08611111f, 0.0f, 0.06f);
         break;
       case MapEnum.Dark_Fortress:
-        this.Adjust(0.49444443f, 0.0f, -0.2f);
+        this.Adjust(0.4944444f, 0.0f, -0.2f);
         break;
       case MapEnum.Wasteland:
         foreach (SpriteRenderer wave in this.waves)
@@ -91,7 +90,7 @@ public class MapObjects : MonoBehaviour
         this.Adjust(0.0f, -0.6f, -0.3f);
         break;
       case MapEnum.Alien_World:
-        this.Adjust(-0.169444442f, 0.0f, -0.13f);
+        this.Adjust(-0.1694444f, 0.0f, -0.13f);
         break;
       case MapEnum.Ghostly_Halls:
         this.Adjust(0.2f, -0.68f, 0.16f);
@@ -100,7 +99,7 @@ public class MapObjects : MonoBehaviour
         this.Adjust(0.08611111f, 0.0f, 0.06f);
         break;
       case MapEnum.Space_Nexus:
-        this.Adjust(0.308333337f, 0.0f, -0.2f);
+        this.Adjust(0.3083333f, 0.0f, -0.2f);
         break;
     }
   }
@@ -114,10 +113,10 @@ public class MapObjects : MonoBehaviour
 
   public void SetWaves()
   {
-    int x = Client.game.map.Width + 2164;
+    int num = Client.game.map.Width + 2164;
     foreach (SpriteRenderer wave in this.waves)
-      wave.size = new Vector2((float) x, wave.size.y);
-    this.water.size = new Vector2((float) x, 860f);
+      wave.size = new Vector2((float) num, wave.size.y);
+    this.water.size = new Vector2((float) num, 860f);
   }
 
   public void SetDashes()

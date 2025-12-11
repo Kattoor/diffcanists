@@ -1,7 +1,6 @@
 
 using System;
 
-#nullable disable
 public struct Rectangle
 {
   public static readonly Rectangle Empty;
@@ -10,11 +9,17 @@ public struct Rectangle
   private int width;
   private int height;
 
-  public bool IsNull() => this.height == 0 && this.width == 0 && this.y == 0 && this.x == 0;
+  public bool IsNull()
+  {
+    return this.height == 0 && this.width == 0 && this.y == 0 && this.x == 0;
+  }
 
   public Point Location
   {
-    get => new Point(this.X, this.Y);
+    get
+    {
+      return new Point(this.X, this.Y);
+    }
     set
     {
       this.X = value.x;
@@ -24,7 +29,10 @@ public struct Rectangle
 
   public Size Size
   {
-    get => new Size(this.Width, this.Height);
+    get
+    {
+      return new Size(this.Width, this.Height);
+    }
     set
     {
       this.Width = value.Width;
@@ -34,45 +42,99 @@ public struct Rectangle
 
   public int X
   {
-    get => this.x;
-    set => this.x = value;
+    get
+    {
+      return this.x;
+    }
+    set
+    {
+      this.x = value;
+    }
   }
 
   public int Y
   {
-    get => this.y;
-    set => this.y = value;
+    get
+    {
+      return this.y;
+    }
+    set
+    {
+      this.y = value;
+    }
   }
 
   public int Width
   {
-    get => this.width;
-    set => this.width = value;
+    get
+    {
+      return this.width;
+    }
+    set
+    {
+      this.width = value;
+    }
   }
 
   public int Height
   {
-    get => this.height;
-    set => this.height = value;
+    get
+    {
+      return this.height;
+    }
+    set
+    {
+      this.height = value;
+    }
   }
 
-  public int Left => this.X;
+  public int Left
+  {
+    get
+    {
+      return this.X;
+    }
+  }
 
-  public int Top => this.Y;
+  public int Top
+  {
+    get
+    {
+      return this.Y;
+    }
+  }
 
-  public int Right => this.X + this.Width;
+  public int Right
+  {
+    get
+    {
+      return this.X + this.Width;
+    }
+  }
 
-  public int Bottom => this.Y + this.Height;
+  public int Bottom
+  {
+    get
+    {
+      return this.Y + this.Height;
+    }
+  }
 
-  public bool IsEmpty => this.height == 0 && this.width == 0 && this.x == 0 && this.y == 0;
+  public bool IsEmpty
+  {
+    get
+    {
+      return this.height == 0 && this.width == 0 && this.x == 0 && this.y == 0;
+    }
+  }
 
   public void Add(double newx, double newy)
   {
-    double x = Math.Min((double) this.x, newx);
-    double num1 = Math.Max((double) (this.x + this.width), newx);
-    double y = Math.Min((double) this.y, newy);
-    double num2 = Math.Max((double) (this.y + this.height), newy);
-    this.setRect((int) x, (int) y, (int) (num1 - x), (int) (num2 - y));
+    double num1 = Math.Min((double) this.x, newx);
+    double num2 = Math.Max((double) (this.x + this.width), newx);
+    double num3 = Math.Min((double) this.y, newy);
+    double num4 = Math.Max((double) (this.y + this.height), newy);
+    this.setRect((int) num1, (int) num3, (int) (num2 - num1), (int) (num4 - num3));
   }
 
   private void setRect(int x, int y, int w, int h)
@@ -104,7 +166,10 @@ public struct Rectangle
     return left.X == right.X && left.Y == right.Y && left.Width == right.Width && left.Height == right.Height;
   }
 
-  public static bool operator !=(Rectangle left, Rectangle right) => !(left == right);
+  public static bool operator !=(Rectangle left, Rectangle right)
+  {
+    return !(left == right);
+  }
 
   public static Rectangle FromLTRB(int left, int top, int right, int bottom)
   {
@@ -113,7 +178,7 @@ public struct Rectangle
 
   public override bool Equals(object obj)
   {
-    return obj is Rectangle rectangle && rectangle.X == this.X && rectangle.Y == this.Y && rectangle.Width == this.Width && rectangle.Height == this.Height;
+    return obj is Rectangle rectangle && rectangle.X == this.X && (rectangle.Y == this.Y && rectangle.Width == this.Width) && rectangle.Height == this.Height;
   }
 
   public bool Contains(int x, int y)
@@ -121,7 +186,10 @@ public struct Rectangle
     return this.X <= x && x < this.X + this.Width && this.Y <= y && y < this.Y + this.Height;
   }
 
-  public bool Contains(Point pt) => this.Contains(pt.x, pt.y);
+  public bool Contains(Point pt)
+  {
+    return this.Contains(pt.x, pt.y);
+  }
 
   public bool Contains(Rectangle rect)
   {
@@ -130,7 +198,7 @@ public struct Rectangle
 
   public override int GetHashCode()
   {
-    return this.X ^ (this.Y << 13 | this.Y >>> 19) ^ (this.Width << 26 | this.Width >>> 6) ^ (this.Height << 7 | this.Height >>> 25);
+    return this.X ^ (this.Y << 13 | (int) ((uint) this.Y >> 19)) ^ (this.Width << 26 | (int) ((uint) this.Width >> 6)) ^ (this.Height << 7 | (int) ((uint) this.Height >> 25));
   }
 
   public void Inflate(int width, int height)
@@ -141,7 +209,10 @@ public struct Rectangle
     this.Height += 2 * height;
   }
 
-  public void Inflate(Size size) => this.Inflate(size.Width, size.Height);
+  public void Inflate(Size size)
+  {
+    this.Inflate(size.Width, size.Height);
+  }
 
   public static Rectangle Inflate(Rectangle rect, int x, int y)
   {
@@ -182,7 +253,10 @@ public struct Rectangle
     return new Rectangle(x, y, num1 - x, num2 - y);
   }
 
-  public void Offset(Point pos) => this.Offset(pos.x, pos.y);
+  public void Offset(Point pos)
+  {
+    this.Offset(pos.x, pos.y);
+  }
 
   public void Offset(int x, int y)
   {
@@ -195,7 +269,10 @@ public struct Rectangle
     return "{X=" + this.X.ToString() + ",Y=" + this.Y.ToString() + ",Width=" + this.Width.ToString() + ",Height=" + this.Height.ToString() + "}";
   }
 
-  internal Rectangle getBounds() => new Rectangle(this.X, this.Y, this.Width, this.Height);
+  internal Rectangle getBounds()
+  {
+    return new Rectangle(this.X, this.Y, this.Width, this.Height);
+  }
 
   public void translate(int dx, int dy)
   {

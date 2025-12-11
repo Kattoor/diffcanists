@@ -7,9 +7,10 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-#nullable disable
 public class ClickSpell : MonoBehaviour
 {
+  public static float curAlpha = 1f;
+  public static bool isTransparent = false;
   public TMP_Text selectedSpellNameText;
   public Image staffIcon;
   public Image bar_bg;
@@ -21,8 +22,6 @@ public class ClickSpell : MonoBehaviour
   public RectTransform backdrop;
   public List<Image> allImages;
   public List<TMP_Text> allText;
-  public static float curAlpha = 1f;
-  public static bool isTransparent = false;
   private SpellButton active;
   private int elementalOffset;
 
@@ -149,7 +148,7 @@ public class ClickSpell : MonoBehaviour
     string text = a.txtName.text;
     if (string.IsNullOrEmpty(text))
       return;
-    (HUD.instance.textSpellDescription.text, HUD.instance.textSpellExtraText.text) = Descriptions.GetSpellDescription(text, slot);
+    (HUD.instance.textSpellDescription.text, HUD.instance.textSpellExtraText.text) = Descriptions.GetSpellDescription(text, slot, false);
     HUD.instance.ShowPanelDescription();
   }
 
@@ -177,7 +176,10 @@ public class ClickSpell : MonoBehaviour
     this.OnPointerExit(this.active);
   }
 
-  public static void Unselect() => ClickSpell.Instance.OnClickIndex(-1);
+  public static void Unselect()
+  {
+    ClickSpell.Instance.OnClickIndex(-1);
+  }
 
   public bool OnClickIndex(int i)
   {
@@ -220,7 +222,7 @@ public class ClickSpell : MonoBehaviour
     if ((UnityEngine.Object) Player.Instance == (UnityEngine.Object) null)
       return;
     byte spellIndex = 0;
-    string spellName = ClickSpell.GetSpellName(Player.Instance.selected.inWater ? Player.Instance.person.first()?.GetAvailableGate(ref spellIndex)?.spell ?? Inert.Instance.waterGate.spell : Player.Instance.selected.spells[i].spell, Player.Instance.selected);
+    string spellName = ClickSpell.GetSpellName(Player.Instance.selected.inWater ? Player.Instance.person.first()?.GetAvailableGate(ref spellIndex, 0)?.spell ?? Inert.Instance.waterGate.spell : Player.Instance.selected.spells[i].spell, Player.Instance.selected);
     this.selectedSpellNameText.text = spellName;
     this.selectedSpellImage.SetVisual(spellName);
     AudioManager.Play(AudioManager.instance.clipSelectSpell[(int) Player.Instance.selected.spells[i].spell.bookOf]);
@@ -282,32 +284,32 @@ public class ClickSpell : MonoBehaviour
   public void SetSpells()
   {
     this.elementalOffset = 0;
-    int num = 0;
-    if ((UnityEngine.Object) Player.Instance == (UnityEngine.Object) null || (ZComponent) Player.Instance.selected == (object) null || Player.Instance.person.controlled.Count == 0 || Player.Instance.selected.isDead)
+    int i = 0;
+    if ((UnityEngine.Object) Player.Instance == (UnityEngine.Object) null || (ZComponent) Player.Instance.selected == (object) null || (Player.Instance.person.controlled.Count == 0 || Player.Instance.selected.isDead))
       return;
     this.secondSpellLine.anchoredPosition = Player.Instance.selected.inWater || Player.Instance.selected.spells.Count <= 20 ? new Vector2(0.0f, 91f) : (Player.Instance.selected.spells.Count <= 32 ? new Vector2(0.0f, 137f) : new Vector2(0.0f, 198f));
     if (Player.Instance.selected.inWater)
     {
       this.ExtraEffectsInWater();
-      num = 1;
+      i = 1;
     }
     else if (Client.game.ArcaneZero)
     {
-      for (; num < Player.Instance.selected.spells.Count; ++num)
+      for (; i < Player.Instance.selected.spells.Count; ++i)
       {
-        Spell spell = Player.Instance.selected.spells[num].spell;
-        this.ExtraEffects(num);
+        Spell spell = Player.Instance.selected.spells[i].spell;
+        this.ExtraEffects(i);
         if (spell.damage > 0 || spell.spellEnum == SpellEnum.Snowball)
-          this.spellButtons[num].ArcaneZero();
+          this.spellButtons[i].ArcaneZero();
       }
     }
     else
     {
-      for (; num < Player.Instance.selected.spells.Count; ++num)
-        this.ExtraEffects(num);
+      for (; i < Player.Instance.selected.spells.Count; ++i)
+        this.ExtraEffects(i);
     }
-    for (; num < this.spellButtons.Count; ++num)
-      this.spellButtons[num].Hide();
+    for (; i < this.spellButtons.Count; ++i)
+      this.spellButtons[i].Hide();
   }
 
   public void ExtraEffectsInWater()
@@ -416,7 +418,7 @@ public class ClickSpell : MonoBehaviour
         return;
       }
     }
-    else if (spell2.type == CastType.Tower && (Player.Instance.selected.flying || (ZComponent) Player.Instance.selected.mount != (object) null || Player.Instance.selected.FullArcane || Player.Instance.selected.radius > 30))
+    else if (spell2.type == CastType.Tower && (Player.Instance.selected.flying || (ZComponent) Player.Instance.selected.mount != (object) null || (Player.Instance.selected.FullArcane || Player.Instance.selected.radius > 30)))
     {
       if (Player.Instance.selected.flying)
         this.spellButtons[i].error = 3;
@@ -428,14 +430,14 @@ public class ClickSpell : MonoBehaviour
     }
     if (!maxedSummons)
     {
-      int num5 = ClickSpell.Level3(spell2, spell2.spellEnum, Player.Instance.selected, spell1);
-      if (num5 != 0)
-        this.spellButtons[i].error = num5;
-      maxedSummons = num5 != 0;
+      int num3 = ClickSpell.Level3(spell2, spell2.spellEnum, Player.Instance.selected, spell1);
+      if (num3 != 0)
+        this.spellButtons[i].error = num3;
+      maxedSummons = (uint) num3 > 0U;
     }
     if (Player.Instance.selected.phantom)
     {
-      if (spell2.bookOf != BookOf.Arcane && spell2.bookOf != BookOf.Illusion && !spell1.isPresent && spell2.spellEnum != SpellEnum.Spirit_Link && spell2.spellEnum != SpellEnum.Spirit_Walk)
+      if (spell2.bookOf != BookOf.Arcane && spell2.bookOf != BookOf.Illusion && (!spell1.isPresent && spell2.spellEnum != SpellEnum.Spirit_Link) && spell2.spellEnum != SpellEnum.Spirit_Walk)
       {
         this.spellButtons[i].error = 104;
         maxedSummons = true;
@@ -600,7 +602,7 @@ public class ClickSpell : MonoBehaviour
   {
     if (c.inWater)
       return 0;
-    if (c.collider.gameObjectLayer == 21 && (s == SpellEnum.Arcane_Gate || s == SpellEnum.Santas_Magic || s == SpellEnum.Blink || s == SpellEnum.The_ol_swaparoo || s == SpellEnum.Sands_of_Time))
+    if (c.collider.gameObjectLayer == 21 && (s == SpellEnum.Arcane_Gate || s == SpellEnum.Santas_Magic || (s == SpellEnum.Blink || s == SpellEnum.The_ol_swaparoo) || s == SpellEnum.Sands_of_Time))
       return 135;
     if (c.type == CreatureType.Gargoyle && (!c.canMove && s != SpellEnum.Stone_Form || s == SpellEnum.Stone_Form && c.race == CreatureRace.Undead && c.canMove))
       return c.race == CreatureRace.Undead ? 7 : 112;
@@ -620,7 +622,7 @@ public class ClickSpell : MonoBehaviour
         return 4;
       return c.flying ? 6 : 0;
     }
-    if (s == SpellEnum.Shining_Power || s == SpellEnum.Lichdom || s == SpellEnum.Apparition || s == SpellEnum.Bear_Form)
+    if (s == SpellEnum.Shining_Power || s == SpellEnum.Lichdom || (s == SpellEnum.Apparition || s == SpellEnum.Bear_Form))
     {
       if ((ZComponent) c.tower != (object) null)
         return 1;
@@ -658,7 +660,7 @@ label_44:
       case SpellEnum.Social_Distancing:
         return c.socialDistancing ? 11 : 0;
       default:
-        if (s == SpellEnum.Arcane_Gate || s == SpellEnum.Santas_Magic || s == SpellEnum.The_ol_swaparoo || s == SpellEnum.Blink || s == SpellEnum.Sands_of_Time)
+        if (s == SpellEnum.Arcane_Gate || s == SpellEnum.Santas_Magic || (s == SpellEnum.The_ol_swaparoo || s == SpellEnum.Blink) || s == SpellEnum.Sands_of_Time)
           return c.entangled ? 12 : 0;
         if (s == SpellEnum.Charge || s == SpellEnum.Mine || s == SpellEnum.Rampage)
           return c.stunned ? 13 : 0;
@@ -742,6 +744,7 @@ label_44:
   [Serializable]
   public class bg_image
   {
+    private static Color DarkGray = new Color(0.3f, 0.3f, 0.3f);
     public GameObject bg;
     public GameObject zero;
     public Image bgColor;
@@ -749,7 +752,6 @@ label_44:
     public TMP_Text txtName;
     public TMP_Text txtText;
     public string nameOfSpell;
-    private static Color DarkGray = new Color(0.3f, 0.3f, 0.3f);
 
     public void SetVisual(string s)
     {

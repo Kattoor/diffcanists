@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 
-#nullable disable
 namespace mattmc3.dotmore.Collections.Generic
 {
   public class OrderedSet<T> : ICollection<T>, IEnumerable<T>, IEnumerable
@@ -21,11 +20,26 @@ namespace mattmc3.dotmore.Collections.Generic
       this.m_LinkedList = new LinkedList<T>();
     }
 
-    public int Count => this.m_Dictionary.Count;
+    public int Count
+    {
+      get
+      {
+        return this.m_Dictionary.Count;
+      }
+    }
 
-    public virtual bool IsReadOnly => this.m_Dictionary.IsReadOnly;
+    public virtual bool IsReadOnly
+    {
+      get
+      {
+        return this.m_Dictionary.IsReadOnly;
+      }
+    }
 
-    void ICollection<T>.Add(T item) => this.Add(item);
+    void ICollection<T>.Add(T item)
+    {
+      this.Add(item);
+    }
 
     public bool Add(T item)
     {
@@ -52,12 +66,24 @@ namespace mattmc3.dotmore.Collections.Generic
       return true;
     }
 
-    public IEnumerator<T> GetEnumerator() => (IEnumerator<T>) this.m_LinkedList.GetEnumerator();
+    public IEnumerator<T> GetEnumerator()
+    {
+      return (IEnumerator<T>) this.m_LinkedList.GetEnumerator();
+    }
 
-    IEnumerator IEnumerable.GetEnumerator() => (IEnumerator) this.GetEnumerator();
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+      return (IEnumerator) this.GetEnumerator();
+    }
 
-    public bool Contains(T item) => (object) item != null && this.m_Dictionary.ContainsKey(item);
+    public bool Contains(T item)
+    {
+      return (object) item != null && this.m_Dictionary.ContainsKey(item);
+    }
 
-    public void CopyTo(T[] array, int arrayIndex) => this.m_LinkedList.CopyTo(array, arrayIndex);
+    public void CopyTo(T[] array, int arrayIndex)
+    {
+      this.m_LinkedList.CopyTo(array, arrayIndex);
+    }
   }
 }

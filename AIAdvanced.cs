@@ -3,10 +3,12 @@ using MovementEffects;
 using System.Collections.Generic;
 using UnityEngine;
 
-#nullable disable
 public class AIAdvanced : IAI
 {
-  public override void DoTurn() => Timing.RunCoroutine(this.Loop());
+  public override void DoTurn()
+  {
+    Timing.RunCoroutine(this.Loop());
+  }
 
   public IEnumerator<float> Loop()
   {
@@ -36,7 +38,7 @@ public class AIAdvanced : IAI
             }
             else if ((double) aiAdvanced.creature.transformscale < 0.0)
               aiAdvanced.creature.SetScale(1f);
-            ZSpell.FireWhich(spell.spell, aiAdvanced.creature, aiAdvanced.creature.position, rot_z, (FixedInt) 1, enemy.GetPositionAI, NullMyLocation.Get());
+            ZSpell.FireWhich(spell.spell, aiAdvanced.creature, aiAdvanced.creature.position, rot_z, (FixedInt) 1, enemy.GetPositionAI, NullMyLocation.Get(), 0, false, (SpellSlot) null, false);
             break;
           }
           if (Random.Range(0, 2) < 1)

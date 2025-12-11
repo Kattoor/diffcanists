@@ -9,12 +9,24 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-#nullable disable
 public class Inert : MonoBehaviour
 {
-  public static string Version = "v8.0";
+  public static string Version = "v8.0a";
   public static int _Version = 62;
+  public static int mask_Jar = 262144;
+  public static int mask_ButterflyJar = 2097152;
+  public static int mask_Phantom = 65536;
+  public static int mask_entity_movement = 47872;
+  public static int mask_spell_movement = 12544;
+  public static int mask_movement_NoEffector = 12544;
+  public static int mask_all = Inert.mask_movement_NoEffector | 1024 | 2048 | 512 | 65536 | Inert.mask_Jar;
   public string achievement = "";
+  internal Dictionary<string, Creature> Creatures = new Dictionary<string, Creature>();
+  internal Dictionary<string, Tower> Towers = new Dictionary<string, Tower>();
+  public OrderedDictionary<string, Spell> spells = new OrderedDictionary<string, Spell>((IEqualityComparer<string>) Server._caseInsensitiveComparer);
+  public OrderedDictionary<SpellEnum, Spell> spellsEnums = new OrderedDictionary<SpellEnum, Spell>();
+  public OrderedDictionary<string, Effector> baseEffectors = new OrderedDictionary<string, Effector>((IEqualityComparer<string>) Server._caseInsensitiveComparer);
+  public OrderedDictionary<string, MyCollider> baseColliders = new OrderedDictionary<string, MyCollider>((IEqualityComparer<string>) Server._caseInsensitiveComparer);
   public KnownServersList servers;
   public ClientResources clientResources;
   public OutfitDataList _characterBody;
@@ -36,8 +48,6 @@ public class Inert : MonoBehaviour
   public Creature[] _creatures;
   public Tower[] _towers;
   public GameObject[] _otherObjects;
-  internal Dictionary<string, Creature> Creatures = new Dictionary<string, Creature>();
-  internal Dictionary<string, Tower> Towers = new Dictionary<string, Tower>();
   public Spell[] ArmageddonObjects;
   public Sprite[] ArmageddonIcons;
   public MyCollider basicCircleCollider;
@@ -121,21 +131,13 @@ public class Inert : MonoBehaviour
   public FixedAnimationCurve DropOffFixed;
   public FixedAnimationCurve ZeroDamage;
   internal int presentIndex;
-  public OrderedDictionary<string, Spell> spells = new OrderedDictionary<string, Spell>((IEqualityComparer<string>) Server._caseInsensitiveComparer);
-  public OrderedDictionary<SpellEnum, Spell> spellsEnums = new OrderedDictionary<SpellEnum, Spell>();
-  public OrderedDictionary<string, Effector> baseEffectors = new OrderedDictionary<string, Effector>((IEqualityComparer<string>) Server._caseInsensitiveComparer);
-  public OrderedDictionary<string, MyCollider> baseColliders = new OrderedDictionary<string, MyCollider>((IEqualityComparer<string>) Server._caseInsensitiveComparer);
   public static byte[] Version_As_Bytes;
   public List<MinerMarket.Item> minerMarket;
-  public static int mask_Jar = 262144;
-  public static int mask_ButterflyJar = 2097152;
-  public static int mask_Phantom = 65536;
-  public static int mask_entity_movement = 47872;
-  public static int mask_spell_movement = 12544;
-  public static int mask_movement_NoEffector = 12544;
-  public static int mask_all = Inert.mask_movement_NoEffector | 1024 | 2048 | 512 | 65536 | Inert.mask_Jar;
 
-  public void QuickLink_Inert() => this.QuickLink_InertExtra();
+  public void QuickLink_Inert()
+  {
+    this.QuickLink_InertExtra();
+  }
 
   public IEnumerable<OutfitDataList> GetOutfitData()
   {
@@ -239,18 +241,18 @@ public class Inert : MonoBehaviour
 
   public static MyCollider GetBaseCollider(string n)
   {
-    MyCollider baseCollider;
-    Inert.Instance.baseColliders.TryGetValue(n, out baseCollider);
-    return baseCollider;
+    MyCollider myCollider;
+    Inert.Instance.baseColliders.TryGetValue(n, out myCollider);
+    return myCollider;
   }
 
   public static Effector GetBaseEffector(string n)
   {
     if (string.IsNullOrEmpty(n))
       return (Effector) null;
-    Effector baseEffector;
-    Inert.Instance.baseEffectors.TryGetValue(n, out baseEffector);
-    return baseEffector;
+    Effector effector;
+    Inert.Instance.baseEffectors.TryGetValue(n, out effector);
+    return effector;
   }
 
   public static Creature GetCreature(string n)
@@ -462,7 +464,10 @@ public class Inert : MonoBehaviour
     this.DestroyAllSprites();
   }
 
-  private void OnDestroy() => Inert.Instance = (Inert) null;
+  private void OnDestroy()
+  {
+    Inert.Instance = (Inert) null;
+  }
 
   public static FixedAnimationCurve GetCurve(Curve v)
   {
@@ -508,7 +513,8 @@ public class Inert : MonoBehaviour
     sum.bg.color = sum.parent.clientColor;
     if ((double) sum.bg.color.a < 1.0)
     {
-      Color color = sum.bg.color with { a = 1f };
+      Color color = sum.bg.color;
+      color.a = 1f;
       sum.bg.color = color;
     }
     if ((UnityEngine.Object) sum.miniMapBg != (UnityEngine.Object) null)
@@ -605,7 +611,7 @@ public class Inert : MonoBehaviour
     bool first,
     bool destroyOld = true)
   {
-    if ((int) sp.indexBody == SettingsPlayer.sno_body2 || sp.indexRightHand == (byte) 54 && p.account.discord == 247247946557423616UL || (int) sp.indexRightHand == SettingsPlayer.sno_pHand || sp.indexLeftHand == (byte) 67 || sp.indexRightHand == (byte) 103 || sp.indexRightHand == (byte) 104)
+    if ((int) sp.indexBody == SettingsPlayer.sno_body2 || sp.indexRightHand == (byte) 54 && p.account.discord == 247247946557423616UL || ((int) sp.indexRightHand == SettingsPlayer.sno_pHand || sp.indexLeftHand == (byte) 67 || (sp.indexRightHand == (byte) 103 || sp.indexRightHand == (byte) 104)))
     {
       GameObject gameObject = creature.transform.GetChild(0).gameObject;
       gameObject.transform.rotation = Quaternion.identity;
@@ -682,14 +688,14 @@ public class Inert : MonoBehaviour
     bool noSpells = false)
   {
     Inert.SetClientColor(p, index);
-    ZCreature creature = ZCreatureCreate.CreateCreature(p, Inert.Instance.Player_Character_GO.GetComponent<Creature>(), pos.ToSinglePrecision(), Quaternion.identity, p.game.GetMapTransform());
+    ZCreature creature = ZCreatureCreate.CreateCreature(p, Inert.Instance.Player_Character_GO.GetComponent<Creature>(), pos.ToSinglePrecision(), Quaternion.identity, p.game.GetMapTransform(), true);
     creature.game = p.game;
     creature.parent = p;
     creature.collider.Initialize(pos, p.game.world);
     creature.collider.creature = creature;
     creature.position = pos;
     sp.indexMouth = sp.indexHead == (byte) 106 ? (byte) p.game.RandomInt(25, 28) : (byte) p.game.RandomInt(0, 24);
-    Inert.CreateStuff(creature, p, sp);
+    Inert.CreateStuff(creature, p, sp, true);
     if (p.game.isClient && onPlayerPanel)
       HUD.instance.AddPanelPlayer(creature);
     if (noSpells)
@@ -704,73 +710,73 @@ public class Inert : MonoBehaviour
     }
     if (p.game.gameFacts.GetStyle().HasStyle(GameStyle.Random_Spells))
     {
-      for (int index2 = creature.spells.Count - 1; index2 >= 0; --index2)
+      for (int index1 = creature.spells.Count - 1; index1 >= 0; --index1)
       {
-        if (creature.spells[index2].spell.spellEnum == SpellEnum.Flurry)
+        if (creature.spells[index1].spell.spellEnum == SpellEnum.Flurry)
         {
           if (!creature.HasSpell(SpellEnum.Summon_Elves))
           {
             SpellSlot spellSlot = new SpellSlot(Inert.Instance.spells["Summon Elves"]);
-            creature.spells.Insert(index2, spellSlot);
+            creature.spells.Insert(index1, spellSlot);
           }
         }
-        else if (creature.spells[index2].spell.spellEnum == SpellEnum.Vine_Bloom)
+        else if (creature.spells[index1].spell.spellEnum == SpellEnum.Vine_Bloom)
         {
           if (!creature.HasSpell(SpellEnum.Summon_Man_Trap))
           {
             SpellSlot spellSlot = new SpellSlot(Inert.Instance.spells["Summon Man-Trap"]);
-            creature.spells.Insert(index2, spellSlot);
+            creature.spells.Insert(index1, spellSlot);
           }
         }
-        else if (creature.spells[index2].spell.spellEnum == SpellEnum.Calling_Bell)
+        else if (creature.spells[index1].spell.spellEnum == SpellEnum.Calling_Bell)
         {
           if (!creature.HasSpell(SpellEnum.Recall_Device))
           {
             SpellSlot spellSlot = new SpellSlot(Inert.Instance.spells["Recall Device"]);
-            creature.spells.Insert(index2, spellSlot);
+            creature.spells.Insert(index1, spellSlot);
           }
         }
-        else if (creature.spells[index2].spell.spellEnum == SpellEnum.Summon_Elves)
+        else if (creature.spells[index1].spell.spellEnum == SpellEnum.Summon_Elves)
         {
           if (!creature.HasSpell(SpellEnum.Flurry))
           {
             SpellSlot spellSlot = new SpellSlot(Inert.Instance.spells["Flurry"]);
-            creature.spells.Insert(index2 + 1, spellSlot);
+            creature.spells.Insert(index1 + 1, spellSlot);
           }
         }
-        else if (creature.spells[index2].spell.spellEnum == SpellEnum.Summon_Man_Trap)
+        else if (creature.spells[index1].spell.spellEnum == SpellEnum.Summon_Man_Trap)
         {
           if (!creature.HasSpell(SpellEnum.Vine_Bloom))
           {
             SpellSlot spellSlot = new SpellSlot(Inert.Instance.spells["Vine Bloom"]);
-            creature.spells.Insert(index2 + 1, spellSlot);
+            creature.spells.Insert(index1 + 1, spellSlot);
           }
         }
-        else if (creature.spells[index2].spell.spellEnum == SpellEnum.Recall_Device)
+        else if (creature.spells[index1].spell.spellEnum == SpellEnum.Recall_Device)
         {
           if (!creature.HasSpell(SpellEnum.Calling_Bell))
           {
             SpellSlot spellSlot = new SpellSlot(Inert.Instance.spells["Calling Bell"]);
-            creature.spells.Insert(index2 + 1, spellSlot);
+            creature.spells.Insert(index1 + 1, spellSlot);
           }
         }
-        else if (creature.spells[index2].spell.spellEnum == SpellEnum.Imp_Destruction)
+        else if (creature.spells[index1].spell.spellEnum == SpellEnum.Imp_Destruction)
         {
           if (!creature.HasSpell(SpellEnum.Summon_Imps))
           {
             SpellSlot spellSlot = new SpellSlot(Inert.Instance.spells["Summon Imps"]);
-            creature.spells.Insert(index2, spellSlot);
+            creature.spells.Insert(index1, spellSlot);
           }
         }
-        else if (creature.spells[index2].spell.spellEnum == SpellEnum.Arcane_Energiser)
+        else if (creature.spells[index1].spell.spellEnum == SpellEnum.Arcane_Energiser)
         {
           if (!creature.HasSpell(SpellEnum.Arcane_Arrow))
           {
             SpellSlot spellSlot = new SpellSlot(Inert.Instance.spells["Arcane Arrow"]);
-            creature.spells.Insert(index2, spellSlot);
+            creature.spells.Insert(index1, spellSlot);
           }
         }
-        else if (creature.spells[index2].spell.spellEnum == SpellEnum.Sandbag)
+        else if (creature.spells[index1].spell.spellEnum == SpellEnum.Sandbag)
         {
           bool flag = false;
           foreach (SpellSlot spell in creature.spells)
@@ -783,14 +789,14 @@ public class Inert : MonoBehaviour
           }
           if (!flag)
           {
-            int index3 = creature.game.RandomInt(0, Inert.Instance._towers.Length - 1);
-            if (index3 >= 10)
-              ++index3;
-            Spell fromSpell = Inert.Instance._towers[index3].FromSpell;
+            int index2 = creature.game.RandomInt(0, Inert.Instance._towers.Length - 1);
+            if (index2 >= 10)
+              ++index2;
+            Spell fromSpell = Inert.Instance._towers[index2].FromSpell;
             if ((UnityEngine.Object) fromSpell != (UnityEngine.Object) null)
             {
               SpellSlot spellSlot = new SpellSlot(fromSpell);
-              creature.spells.Insert(index2, spellSlot);
+              creature.spells.Insert(index1, spellSlot);
             }
           }
         }
@@ -862,7 +868,7 @@ public class Inert : MonoBehaviour
       using (myBinaryWriter w = new myBinaryWriter((Stream) memoryStream))
       {
         Client.settingsPlayer.Serialize(w);
-        Client._ratedFacts.Serialize(w);
+        Client._ratedFacts.Serialize(w, true);
         w.Write((byte) 5);
         Client._gameSettings.Serialize(w);
       }
@@ -886,5 +892,8 @@ public class Inert : MonoBehaviour
     }
   }
 
-  public void QuickLink_InertExtra() => this.QuickLink_Inert();
+  public void QuickLink_InertExtra()
+  {
+    this.QuickLink_Inert();
+  }
 }

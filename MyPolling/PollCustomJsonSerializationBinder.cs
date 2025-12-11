@@ -2,7 +2,6 @@
 using System;
 using System.Runtime.Serialization;
 
-#nullable disable
 namespace MyPolling
 {
   public class PollCustomJsonSerializationBinder : SerializationBinder

@@ -6,32 +6,10 @@ using System.IO;
 using System.Text;
 using UnityEngine;
 
-#nullable disable
 [Serializable]
 public class GamesPlayed
 {
-  public const byte version = 3;
   public short rating = 1000;
-  public int totalUnratedGames;
-  public int totalRatedGames;
-  public int ratedGamesWon;
-  public int teamGames;
-  [JsonIgnore]
-  public int currentWinningStreak;
-  public int longestWinningStreak;
-  public long damageDealt;
-  public int gamesSurvived;
-  public int kills;
-  public int gamesWentFirst;
-  public int gamesWentFirstWon;
-  public int draws;
-  public long lastGamePlayed;
-  [JsonIgnore]
-  public int wands;
-  [JsonIgnore]
-  public int spellbookWinningStreak;
-  [JsonIgnore]
-  public int spellbookWinningStreak_Maps;
   [JsonIgnore]
   public byte[] lastSpellBook = new byte[16]
   {
@@ -52,6 +30,27 @@ public class GamesPlayed
     byte.MaxValue,
     byte.MaxValue
   };
+  public const byte version = 3;
+  public int totalUnratedGames;
+  public int totalRatedGames;
+  public int ratedGamesWon;
+  public int teamGames;
+  [JsonIgnore]
+  public int currentWinningStreak;
+  public int longestWinningStreak;
+  public long damageDealt;
+  public int gamesSurvived;
+  public int kills;
+  public int gamesWentFirst;
+  public int gamesWentFirstWon;
+  public int draws;
+  public long lastGamePlayed;
+  [JsonIgnore]
+  public int wands;
+  [JsonIgnore]
+  public int spellbookWinningStreak;
+  [JsonIgnore]
+  public int spellbookWinningStreak_Maps;
   [JsonIgnore]
   [NonSerialized]
   public int sessionWinningStreak;

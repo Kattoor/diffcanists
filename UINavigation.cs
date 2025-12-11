@@ -4,7 +4,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
-#nullable disable
 public class UINavigation : MonoBehaviour
 {
   public TMP_InputField previous_inputfield;

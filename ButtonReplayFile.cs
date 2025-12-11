@@ -6,7 +6,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
-#nullable disable
 public class ButtonReplayFile : MonoBehaviour, IRecycledScrollViewGenericItem
 {
   public TMP_Text text;
@@ -33,7 +32,7 @@ public class ButtonReplayFile : MonoBehaviour, IRecycledScrollViewGenericItem
     if (!File.Exists(this.name))
       return;
     MyContextMenu myContextMenu = MyContextMenu.Show();
-    myContextMenu.AddSeperator();
+    myContextMenu.AddSeperator("--------------------------");
     myContextMenu.AddItem("Rename", (Action) (() => MyContextMenu.Show().AddInput((Action<string>) (s =>
     {
       if (string.IsNullOrEmpty(s))
@@ -48,7 +47,7 @@ public class ButtonReplayFile : MonoBehaviour, IRecycledScrollViewGenericItem
       if (index <= -1)
         return;
       ReplayMenu.Instance.games[index] = new ReplayMenu.CleanReplayName(Path.GetFileNameWithoutExtension(str), str);
-    }))), (Color) ColorScheme.GetColor(MyContextMenu.ColorYellow));
+    }), (string) null, false, true)), (Color) ColorScheme.GetColor(MyContextMenu.ColorYellow));
     myContextMenu.AddItem("Delete " + Path.GetFileNameWithoutExtension(this.name), (Action) (() =>
     {
       Global.DeleteFile(this.name);
@@ -58,7 +57,7 @@ public class ButtonReplayFile : MonoBehaviour, IRecycledScrollViewGenericItem
         ReplayMenu.Instance.games.RemoveAt(index);
       ReplayMenu.Instance.watchButton.Interactable(false);
     }), (Color) ColorScheme.GetColor(MyContextMenu.ColorRed));
-    myContextMenu.Rebuild();
+    myContextMenu.Rebuild(false);
   }
 
   [ContextMenu("hi")]
@@ -86,5 +85,8 @@ public class ButtonReplayFile : MonoBehaviour, IRecycledScrollViewGenericItem
   }
 
   [SpecialName]
-  GameObject IRecycledScrollViewGenericItem.get_gameObject() => this.gameObject;
+  GameObject IRecycledScrollViewGenericItem.get_gameObject()
+  {
+    return this.gameObject;
+  }
 }

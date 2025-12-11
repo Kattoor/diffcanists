@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Threading;
 
-#nullable disable
 namespace UnityThreading
 {
   internal sealed class TaskWorker : ThreadBase
@@ -11,7 +10,13 @@ namespace UnityThreading
 
     public TaskDistributor TaskDistributor { get; private set; }
 
-    public bool IsWorking => this.Dispatcher.IsWorking;
+    public bool IsWorking
+    {
+      get
+      {
+        return this.Dispatcher.IsWorking;
+      }
+    }
 
     public TaskWorker(string name, TaskDistributor taskDistributor)
       : base(name, false)

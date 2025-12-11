@@ -1,7 +1,6 @@
 
 using UnityEngine;
 
-#nullable disable
 public class TwiddleBob : MonoBehaviour
 {
   public float speed = 1f;
@@ -30,9 +29,8 @@ public class TwiddleBob : MonoBehaviour
       }
       this.curTime += Time.deltaTime * this.speed;
     }
-    this.transform.localPosition = this.transform.localPosition with
-    {
-      y = Mathf.Lerp(this.minY, this.maxY, this.curTime)
-    };
+    Vector3 localPosition = this.transform.localPosition;
+    localPosition.y = Mathf.Lerp(this.minY, this.maxY, this.curTime);
+    this.transform.localPosition = localPosition;
   }
 }

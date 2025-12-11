@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-#nullable disable
 public class ZSpellSand : ZSpell
 {
   public Color32 color = (Color32) new Color(0.7372549f, 0.6745098f, 0.4862745f);
@@ -52,7 +51,7 @@ label_2:
       FixedInt y1 = zspellSand.velocity.y;
       FixedInt fixedInt3 = zspellSand.velocity.x;
       FixedInt fixedInt4 = zspellSand.velocity.y;
-      if (x1 > 1 || x1 < -1 || y1 > 1 || y1 < -1)
+      if (x1 > 1 || x1 < -1 || (y1 > 1 || y1 < -1))
       {
         if (FixedInt.Abs(x1) > FixedInt.Abs(y1))
           zspellSand.steps = (int) FixedInt.Abs(x1) + 1;
@@ -76,7 +75,7 @@ label_2:
           int y2 = (int) (zspellSand.velocity.y + zspellSand.pY);
           if ((zspellSand.curDuration > collisionFrame ? (!zspellSand.map.SpellCheckPosition(x2, y2, zspellSand.toCollideCheck, Inert.mask_spell_movement) ? 1 : 0) : (!zspellSand.map.CheckPositionOnlyMap(x2, y2) ? 1 : 0)) != 0)
           {
-            ZCreature zcreature = zspellSand.map.PhysicsCollideCreature(zspellSand.toCollideCheck, x2, y2);
+            ZCreature zcreature = zspellSand.map.PhysicsCollideCreature(zspellSand.toCollideCheck, x2, y2, 0);
             if ((ZComponent) zcreature != (object) null && typeof (ZCreatureThorn) != zcreature.GetType())
             {
               zspellSand.velocity.y = (FixedInt) 0;
@@ -85,7 +84,7 @@ label_2:
               zspellSand.position = new MyLocation(zspellSand.validX, zspellSand.validY);
               zspellSand.moving = (IEnumerator<float>) null;
               zspellSand.isMoving = false;
-              zcreature.ApplyDamage(zspellSand.spellEnum, zspellSand.damageType, zspellSand.damage, zspellSand.parent, zspellSand.game.turn, (ISpellBridge) zspellSand);
+              zcreature.ApplyDamage(zspellSand.spellEnum, zspellSand.damageType, zspellSand.damage, zspellSand.parent, zspellSand.game.turn, (ISpellBridge) zspellSand, false);
               if ((Object) zspellSand.explosion != (Object) null)
                 zspellSand.OnExplosion();
               ZComponent.Destroy<GameObject>(zspellSand.gameObject);
@@ -170,7 +169,7 @@ label_31:
       }
       else if (zspellSand.affectedByGravity && zspellSand.velocity.y > -ZMap.MaxSpeed)
         zspellSand.velocity.y += zspellSand.map.Gravity;
-      else if (!zspellSand.affectedByGravity && zspellSand.velocity.y > -10 && zspellSand.maxDuration > 150 && zspellSand.curDuration > 10)
+      else if (!zspellSand.affectedByGravity && zspellSand.velocity.y > -10 && (zspellSand.maxDuration > 150 && zspellSand.curDuration > 10))
         zspellSand.affectedByGravity = true;
       zspellSand.Wind();
       ++zspellSand.curDuration;
@@ -235,7 +234,7 @@ label_31:
       FixedInt y3 = velocity.y;
       FixedInt fixedInt3 = velocity.x;
       FixedInt fixedInt4 = velocity.y;
-      if (x3 > 1 || x3 < -1 || y3 > 1 || y3 < -1)
+      if (x3 > 1 || x3 < -1 || (y3 > 1 || y3 < -1))
       {
         num1 = !(FixedInt.Abs(x3) > FixedInt.Abs(y3)) ? (int) FixedInt.Abs(y3) + 1 : (int) FixedInt.Abs(x3) + 1;
         fixedInt3 = velocity.x / num1;
@@ -250,13 +249,13 @@ label_31:
         int y4 = (int) (fixedInt4 + y1);
         if ((curDuration <= collisionFrame || num1 != 0 ? (!map.CheckPositionOnlyMap(x4, y4) ? 1 : 0) : (!map.SpellCheckPosition(x4, y4, toCollideCheck, Inert.mask_spell_movement) ? 1 : 0)) != 0)
         {
-          ZCreature zcreature = map.PhysicsCollideCreature(toCollideCheck, x4, y4);
+          ZCreature zcreature = map.PhysicsCollideCreature(toCollideCheck, x4, y4, 0);
           if ((ZComponent) zcreature != (object) null && typeof (ZCreatureThorn) != zcreature.GetType())
           {
             velocity.y = (FixedInt) 0;
             velocity.x = (FixedInt) 0;
             position = new MyLocation(x2, y2);
-            zcreature.ApplyDamage(spell.GetSpellEnum, spell.GetDamageType, 1, parent, game.turn, spell);
+            zcreature.ApplyDamage(spell.GetSpellEnum, spell.GetDamageType, 1, parent, game.turn, spell, false);
             yield break;
           }
           else

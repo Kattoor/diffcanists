@@ -1,7 +1,6 @@
 
 using UnityEngine;
 
-#nullable disable
 public class CreatureTree : Creature
 {
   public Texture2D texture;
@@ -23,7 +22,7 @@ public class CreatureTree : Creature
     Texture2D texture = this.GetComponent<SpriteRenderer>().sprite.texture;
     Color32[] pixels32 = texture.GetPixels32();
     new Coords[1][0] = new Coords(1, 1);
-    string str = "Coords[] c = { ";
+    string str1 = "Coords[] c = { ";
     int num1 = 0;
     int num2 = texture.width / 2;
     int num3 = texture.height / 2;
@@ -33,13 +32,13 @@ public class CreatureTree : Creature
       {
         if ((index2 == 0 || pixels32[index1 + index2 * texture.width].a == (byte) 0) && pixels32[index1 + (index2 - 1) * texture.width].a != (byte) 0)
         {
-          str = str + "new Coords(" + (object) (index1 - num2) + ", " + (object) (index2 - num3) + "), ";
+          str1 = str1 + "new Coords(" + (object) (index1 - num2) + ", " + (object) (index2 - num3) + "), ";
           ++num1;
         }
       }
     }
-    string message = str + " };";
+    string str2 = str1 + " };";
     Debug.Log((object) ("Found: " + (object) num1));
-    Debug.Log((object) message);
+    Debug.Log((object) str2);
   }
 }

@@ -4,9 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
 
-#nullable disable
 public class SpellButton : MonoBehaviour
 {
+  private static Color DarkGray = new Color(0.3f, 0.3f, 0.3f);
+  private static Color DarkerGray = new Color(0.15f, 0.15f, 0.15f);
   public RectTransform rectTransform;
   public RectTransform backdrop;
   public GameObject bg;
@@ -20,8 +21,6 @@ public class SpellButton : MonoBehaviour
   public int index;
   public string nameOfSpell;
   public int error;
-  private static Color DarkGray = new Color(0.3f, 0.3f, 0.3f);
-  private static Color DarkerGray = new Color(0.15f, 0.15f, 0.15f);
 
   public void SetVisual(string s)
   {
@@ -49,13 +48,25 @@ public class SpellButton : MonoBehaviour
       this.bgColor.sprite = ClientResources.Instance.spellBGIconOld;
   }
 
-  private void OnDisable() => ClickSpell.Instance.OnPointerExit(this);
+  private void OnDisable()
+  {
+    ClickSpell.Instance.OnPointerExit(this);
+  }
 
-  public void OnClick() => ClickSpell.Instance.OnClickIndex(this.index);
+  public void OnClick()
+  {
+    ClickSpell.Instance.OnClickIndex(this.index);
+  }
 
-  public void OnHover() => ClickSpell.Instance.OnPointerEnter(this.index);
+  public void OnHover()
+  {
+    ClickSpell.Instance.OnPointerEnter(this.index);
+  }
 
-  public void OnExit() => ClickSpell.Instance.OnPointerExit(this.index);
+  public void OnExit()
+  {
+    ClickSpell.Instance.OnPointerExit(this.index);
+  }
 
   public void SetVisual(string realName, string s, int uses, int rechargeTime, bool maxedSummons)
   {

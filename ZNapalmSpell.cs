@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-#nullable disable
 public class ZNapalmSpell : ZSpell
 {
   public override void OnDeath(bool playDeathClip = true)
@@ -15,86 +14,86 @@ public class ZNapalmSpell : ZSpell
     AudioManager.PlayNapalm(this.explosionClip);
     ZMyCollider collider = this.collider;
     if ((ZComponent) collider != (object) null && collider.enabled)
-      collider.Disable();
+      collider.Disable(true);
     this.DestroyDelay();
   }
 
   public override IEnumerator<float> SpellMove(bool gotoStatic = false, bool checkEffectors = true)
   {
-    ZNapalmSpell spell = this;
-    spell.isMoving = true;
-    spell.zb = MapGenerator.getOutlineArray(spell.radius);
-    ZMyCollider col = spell.collider;
+    ZNapalmSpell znapalmSpell = this;
+    znapalmSpell.isMoving = true;
+    znapalmSpell.zb = MapGenerator.getOutlineArray(znapalmSpell.radius);
+    ZMyCollider col = znapalmSpell.collider;
     col.Disable(false);
-    col.world = spell.world;
-    col.spell = (ZSpell) spell;
-    ZEffector effector = spell.effector;
-    effector.position = spell.position;
+    col.world = znapalmSpell.world;
+    col.spell = (ZSpell) znapalmSpell;
+    ZEffector effector = znapalmSpell.effector;
+    effector.position = znapalmSpell.position;
     effector.collider = col;
     col.effector = effector;
     if (gotoStatic)
       yield return 0.0f;
 label_49:
-    while (!spell.isDead)
+    while (!znapalmSpell.isDead)
     {
-      spell.pX = spell.position.x;
-      spell.pY = spell.position.y;
-      FixedInt fixedInt1 = spell.position.x + spell.velocity.x;
-      FixedInt fixedInt2 = spell.position.y + spell.velocity.y;
-      spell.validX = spell.pX;
-      spell.validY = spell.pY;
-      spell.steps = 1;
-      FixedInt x1 = spell.velocity.x;
-      FixedInt y1 = spell.velocity.y;
-      FixedInt fixedInt3 = spell.velocity.x;
-      FixedInt fixedInt4 = spell.velocity.y;
-      if (x1 > 1 || x1 < -1 || y1 > 1 || y1 < -1)
+      znapalmSpell.pX = znapalmSpell.position.x;
+      znapalmSpell.pY = znapalmSpell.position.y;
+      FixedInt fixedInt1 = znapalmSpell.position.x + znapalmSpell.velocity.x;
+      FixedInt fixedInt2 = znapalmSpell.position.y + znapalmSpell.velocity.y;
+      znapalmSpell.validX = znapalmSpell.pX;
+      znapalmSpell.validY = znapalmSpell.pY;
+      znapalmSpell.steps = 1;
+      FixedInt x1 = znapalmSpell.velocity.x;
+      FixedInt y1 = znapalmSpell.velocity.y;
+      FixedInt fixedInt3 = znapalmSpell.velocity.x;
+      FixedInt fixedInt4 = znapalmSpell.velocity.y;
+      if (x1 > 1 || x1 < -1 || (y1 > 1 || y1 < -1))
       {
         if (FixedInt.Abs(x1) > FixedInt.Abs(y1))
-          spell.steps = (int) FixedInt.Abs(x1) + 1;
+          znapalmSpell.steps = (int) FixedInt.Abs(x1) + 1;
         else
-          spell.steps = (int) FixedInt.Abs(y1) + 1;
-        fixedInt3 = spell.velocity.x / spell.steps;
-        fixedInt4 = spell.velocity.y / spell.steps;
+          znapalmSpell.steps = (int) FixedInt.Abs(y1) + 1;
+        fixedInt3 = znapalmSpell.velocity.x / znapalmSpell.steps;
+        fixedInt4 = znapalmSpell.velocity.y / znapalmSpell.steps;
       }
-      while (spell.steps > 0)
+      while (znapalmSpell.steps > 0)
       {
-        if (spell.map.SpellCheckEffectors(spell.toCollideCheck, (ZSpell) spell, (int) spell.validX, (int) spell.validY))
+        if (znapalmSpell.map.SpellCheckEffectors(znapalmSpell.toCollideCheck, (ZSpell) znapalmSpell, (int) znapalmSpell.validX, (int) znapalmSpell.validY))
         {
-          spell.position = new MyLocation(spell.validX, spell.validY);
+          znapalmSpell.position = new MyLocation(znapalmSpell.validX, znapalmSpell.validY);
           yield return 0.0f;
           goto label_49;
         }
         else
         {
-          --spell.steps;
-          int num1 = (int) (((FixedInt) 360 - (Inert.AngleOfVelocity(spell.velocity) - 90)) * FixedInt.ThreeSixtyBy1 * spell.zb.Count) - spell.radius;
+          --znapalmSpell.steps;
+          int num1 = (int) (((FixedInt) 360 - (Inert.AngleOfVelocity(znapalmSpell.velocity) - 90)) * FixedInt.ThreeSixtyBy1 * znapalmSpell.zb.Count) - znapalmSpell.radius;
           if (num1 < 0)
-            num1 += spell.zb.Count;
-          for (int index1 = 0; index1 < spell.radius * 2; ++index1)
+            num1 += znapalmSpell.zb.Count;
+          for (int index1 = 0; index1 < znapalmSpell.radius * 2; ++index1)
           {
-            int index2 = (index1 + num1) % spell.zb.Count;
-            int num2 = (int) (fixedInt3 + spell.pX);
-            int num3 = (int) (fixedInt4 + spell.pY);
-            if (!spell.map.SpellCheckPosition(num2 + spell.zb[index2].x, num3 + spell.zb[index2].y, spell.toCollideCheck, Inert.mask_spell_movement))
+            int index2 = (index1 + num1) % znapalmSpell.zb.Count;
+            int num2 = (int) (fixedInt3 + znapalmSpell.pX);
+            int num3 = (int) (fixedInt4 + znapalmSpell.pY);
+            if (!znapalmSpell.map.SpellCheckPosition(num2 + znapalmSpell.zb[index2].x, num3 + znapalmSpell.zb[index2].y, znapalmSpell.toCollideCheck, Inert.mask_spell_movement))
             {
-              int x2 = num2 + spell.zb[index2].x;
-              int y2 = num3 + spell.zb[index2].y;
-              if (!spell.map.CheckPositionOnlyMap(x2, y2))
+              int x2 = num2 + znapalmSpell.zb[index2].x;
+              int y2 = num3 + znapalmSpell.zb[index2].y;
+              if (!znapalmSpell.map.CheckPositionOnlyMap(x2, y2))
               {
-                if (!spell.explodeOnImpact)
+                if (!znapalmSpell.explodeOnImpact)
                 {
-                  AudioManager.PlayNapalm(spell.explosionClip);
-                  spell.explodeOnImpact = true;
-                  spell.position = new MyLocation(spell.validX, spell.validY);
+                  AudioManager.PlayNapalm(znapalmSpell.explosionClip);
+                  znapalmSpell.explodeOnImpact = true;
+                  znapalmSpell.position = new MyLocation(znapalmSpell.validX, znapalmSpell.validY);
                   MyLocation zero = MyLocation.zero;
-                  int num4 = num2 + spell.zb[index2].x;
-                  int num5 = num3 + spell.zb[index2].y;
+                  int num4 = num2 + znapalmSpell.zb[index2].x;
+                  int num5 = num3 + znapalmSpell.zb[index2].y;
                   for (int index3 = -2; index3 <= 2; ++index3)
                   {
                     for (int index4 = -2; index4 <= 2; ++index4)
                     {
-                      if (spell.map.SpellCheckPosition(num4 + index3, num5 + index4, spell.toCollideCheck, Inert.mask_movement_NoEffector))
+                      if (znapalmSpell.map.SpellCheckPosition(num4 + index3, num5 + index4, znapalmSpell.toCollideCheck, Inert.mask_movement_NoEffector))
                       {
                         zero.x += index3;
                         zero.y += index4;
@@ -102,99 +101,99 @@ label_49:
                     }
                   }
                   zero.Normalize();
-                  MyLocation.Reflect(spell.velocity, ref zero, out spell.velocity);
-                  spell.velocity = spell.velocity * spell.elasticity;
-                  spell.map.ServerBitBlt((int) spell.explosionCutout, x2, y2);
-                  spell.MoveSurroundings(spell.EXORADIUS + 5);
-                  if (spell.game.isClient && (Object) spell.transform != (Object) null)
+                  MyLocation.Reflect(znapalmSpell.velocity, ref zero, out znapalmSpell.velocity);
+                  znapalmSpell.velocity = znapalmSpell.velocity * znapalmSpell.elasticity;
+                  znapalmSpell.map.ServerBitBlt((int) znapalmSpell.explosionCutout, x2, y2, true, true);
+                  znapalmSpell.MoveSurroundings(znapalmSpell.EXORADIUS + 5);
+                  if (znapalmSpell.game.isClient && (Object) znapalmSpell.transform != (Object) null)
                   {
-                    spell.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
-                    spell.gameObject.GetComponent<ParticleSystem>().Play();
+                    znapalmSpell.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
+                    znapalmSpell.gameObject.GetComponent<ParticleSystem>().Play();
                   }
-                  spell.EXORADIUS += 12;
-                  if (spell.ApplyExplosionForce(spell.position))
+                  znapalmSpell.EXORADIUS += 12;
+                  if (znapalmSpell.ApplyExplosionForce(znapalmSpell.position, 0, true, (ISpellBridge) null, (ZCreature) null))
                   {
-                    spell.velocity.y = (FixedInt) 0;
-                    spell.velocity.x = (FixedInt) 0;
-                    spell.position = new MyLocation(spell.validX, spell.validY);
-                    spell.moving = (IEnumerator<float>) null;
-                    spell.isMoving = false;
-                    spell.OnDeath(true);
+                    znapalmSpell.velocity.y = (FixedInt) 0;
+                    znapalmSpell.velocity.x = (FixedInt) 0;
+                    znapalmSpell.position = new MyLocation(znapalmSpell.validX, znapalmSpell.validY);
+                    znapalmSpell.moving = (IEnumerator<float>) null;
+                    znapalmSpell.isMoving = false;
+                    znapalmSpell.OnDeath(true);
                     yield break;
                   }
                   else
                   {
-                    spell.EXORADIUS -= 12;
-                    spell.Undie();
+                    znapalmSpell.EXORADIUS -= 12;
+                    znapalmSpell.Undie();
                     goto label_46;
                   }
                 }
-                else if (spell.ShouldSpellFall())
+                else if (znapalmSpell.ShouldSpellFall(false))
                 {
-                  spell.velocity.y = (FixedInt) -1;
-                  spell.velocity.x = (FixedInt) 0;
+                  znapalmSpell.velocity.y = (FixedInt) -1;
+                  znapalmSpell.velocity.x = (FixedInt) 0;
                 }
                 else
                 {
-                  spell.velocity.y = (FixedInt) 0;
-                  spell.velocity.x = (FixedInt) 0;
-                  spell.position = new MyLocation(spell.validX, spell.validY);
-                  spell.moving = (IEnumerator<float>) null;
-                  spell.isMoving = false;
-                  col.Enable(spell.position);
-                  spell.explisiveForce = (FixedInt) 5;
-                  spell.game.forceRysncPause = true;
+                  znapalmSpell.velocity.y = (FixedInt) 0;
+                  znapalmSpell.velocity.x = (FixedInt) 0;
+                  znapalmSpell.position = new MyLocation(znapalmSpell.validX, znapalmSpell.validY);
+                  znapalmSpell.moving = (IEnumerator<float>) null;
+                  znapalmSpell.isMoving = false;
+                  col.Enable(znapalmSpell.position);
+                  znapalmSpell.explisiveForce = (FixedInt) 5;
+                  znapalmSpell.game.forceRysncPause = true;
                   yield break;
                 }
               }
               else
               {
-                spell.velocity.y = (FixedInt) 0;
-                spell.velocity.x = (FixedInt) 0;
-                spell.position = new MyLocation(spell.validX, spell.validY);
-                spell.moving = (IEnumerator<float>) null;
-                spell.isMoving = false;
-                spell.map.ServerBitBlt(0, x2, y2);
-                spell.ApplyExplosionForce(spell.position);
-                spell.OnDeath(true);
+                znapalmSpell.velocity.y = (FixedInt) 0;
+                znapalmSpell.velocity.x = (FixedInt) 0;
+                znapalmSpell.position = new MyLocation(znapalmSpell.validX, znapalmSpell.validY);
+                znapalmSpell.moving = (IEnumerator<float>) null;
+                znapalmSpell.isMoving = false;
+                znapalmSpell.map.ServerBitBlt(0, x2, y2, true, true);
+                znapalmSpell.ApplyExplosionForce(znapalmSpell.position, 0, true, (ISpellBridge) null, (ZCreature) null);
+                znapalmSpell.OnDeath(true);
                 yield break;
               }
             }
           }
-          spell.validX = spell.pX;
-          spell.validY = spell.pY;
-          spell.pX = spell.pX + fixedInt3;
-          spell.pY = spell.pY + fixedInt4;
+          znapalmSpell.validX = znapalmSpell.pX;
+          znapalmSpell.validY = znapalmSpell.pY;
+          znapalmSpell.pX = znapalmSpell.pX + fixedInt3;
+          znapalmSpell.pY = znapalmSpell.pY + fixedInt4;
         }
       }
-      spell.position = spell.position + spell.velocity;
-      if (spell.position.y < spell.radius)
+      znapalmSpell.position = znapalmSpell.position + znapalmSpell.velocity;
+      if (znapalmSpell.position.y < znapalmSpell.radius)
       {
-        spell.moving = (IEnumerator<float>) null;
-        spell.velocity = MyLocation.zero;
-        spell.isMoving = false;
-        spell.DestroyDelay();
+        znapalmSpell.moving = (IEnumerator<float>) null;
+        znapalmSpell.velocity = MyLocation.zero;
+        znapalmSpell.isMoving = false;
+        znapalmSpell.DestroyDelay();
         break;
       }
-      if (spell.addVelocity)
+      if (znapalmSpell.addVelocity)
       {
-        spell.addVelocity = false;
-        spell.velocity = spell.velocity + spell.addedVelocity;
-        spell.velocity.x = Mathd.Clamp(spell.velocity.x, (FixedInt) -50, (FixedInt) 50);
-        spell.velocity.y = Mathd.Clamp(spell.velocity.y, (FixedInt) -50, (FixedInt) 50);
-        spell.addedVelocity.x = (FixedInt) 0;
-        spell.addedVelocity.y = (FixedInt) 0;
+        znapalmSpell.addVelocity = false;
+        znapalmSpell.velocity = znapalmSpell.velocity + znapalmSpell.addedVelocity;
+        znapalmSpell.velocity.x = Mathd.Clamp(znapalmSpell.velocity.x, (FixedInt) -50, (FixedInt) 50);
+        znapalmSpell.velocity.y = Mathd.Clamp(znapalmSpell.velocity.y, (FixedInt) -50, (FixedInt) 50);
+        znapalmSpell.addedVelocity.x = (FixedInt) 0;
+        znapalmSpell.addedVelocity.y = (FixedInt) 0;
       }
-      else if (spell.affectedByGravity && spell.velocity.y > -ZMap.MaxSpeed)
-        spell.velocity.y += spell.map.Gravity;
-      else if (!spell.affectedByGravity && spell.velocity.y > -10 && spell.maxDuration > 150)
-        spell.affectedByGravity = true;
-      spell.Wind();
+      else if (znapalmSpell.affectedByGravity && znapalmSpell.velocity.y > -ZMap.MaxSpeed)
+        znapalmSpell.velocity.y += znapalmSpell.map.Gravity;
+      else if (!znapalmSpell.affectedByGravity && znapalmSpell.velocity.y > -10 && znapalmSpell.maxDuration > 150)
+        znapalmSpell.affectedByGravity = true;
+      znapalmSpell.Wind();
 label_46:
-      ++spell.curDuration;
-      if (spell.curDuration >= spell.maxDuration)
+      ++znapalmSpell.curDuration;
+      if (znapalmSpell.curDuration >= znapalmSpell.maxDuration)
       {
-        spell.DestroyDelay();
+        znapalmSpell.DestroyDelay();
         break;
       }
       yield return 0.0f;

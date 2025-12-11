@@ -1,7 +1,6 @@
 
 using System;
 
-#nullable disable
 namespace Junk
 {
   public class MapConfig
@@ -15,7 +14,13 @@ namespace Junk
     private int decoGapRight;
     public GameFacts gameFacts;
 
-    public bool altMap => this.gameFacts != null && this.gameFacts.settings.altGeneration;
+    public bool altMap
+    {
+      get
+      {
+        return this.gameFacts != null && this.gameFacts.settings.altGeneration;
+      }
+    }
 
     public MapConfig()
     {
@@ -28,13 +33,25 @@ namespace Junk
       this.decoGapRight = 128;
     }
 
-    public int getWidth() => this.width;
+    public int getWidth()
+    {
+      return this.width;
+    }
 
-    public int getHeight() => this.height;
+    public int getHeight()
+    {
+      return this.height;
+    }
 
-    public void setWidth(int width) => this.width = width;
+    public void setWidth(int width)
+    {
+      this.width = width;
+    }
 
-    public void setHeight(int height) => this.height = height;
+    public void setHeight(int height)
+    {
+      this.height = height;
+    }
 
     public MapConfig setSize(int width, int height)
     {
@@ -52,7 +69,10 @@ namespace Junk
       return new IsaacCipher(new int[2]{ this.mapSeed, -1 });
     }
 
-    public int getSeed() => this.mapSeed;
+    public int getSeed()
+    {
+      return this.mapSeed;
+    }
 
     public MapConfig setSeed(int mapSeed)
     {
@@ -60,9 +80,15 @@ namespace Junk
       return this;
     }
 
-    public int getMapStart() => this.borderLeft;
+    public int getMapStart()
+    {
+      return this.borderLeft;
+    }
 
-    public int getMapEnd() => this.width - this.borderRight;
+    public int getMapEnd()
+    {
+      return this.width - this.borderRight;
+    }
 
     public int getGroundPos(int pos, int len)
     {
@@ -87,9 +113,15 @@ namespace Junk
       return this;
     }
 
-    public int getDecoStart() => this.decoGapLeft;
+    public int getDecoStart()
+    {
+      return this.decoGapLeft;
+    }
 
-    public int getDecoEnd() => this.width - this.decoGapRight;
+    public int getDecoEnd()
+    {
+      return this.width - this.decoGapRight;
+    }
 
     public MapConfig setDecoGapLeft(int decoGapLeft)
     {

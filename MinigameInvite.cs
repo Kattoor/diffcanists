@@ -1,5 +1,4 @@
 
-#nullable disable
 public class MinigameInvite
 {
   public string from;

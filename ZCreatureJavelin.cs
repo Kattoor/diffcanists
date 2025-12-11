@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-#nullable disable
 public class ZCreatureJavelin : ZCreature
 {
   public ZSpell spell;
@@ -23,14 +22,14 @@ public class ZCreatureJavelin : ZCreature
     ISpellBridge spellRef = null,
     bool isLoop = false)
   {
-    if (dt == DamageType.Heal || this.health == 0 || this.isDead || ZComponent.IsNull((ZComponent) this))
+    if (dt == DamageType.Heal || this.health == 0 || (this.isDead || ZComponent.IsNull((ZComponent) this)))
       return 0;
     this.isDead = true;
     this.isNull = true;
     this.health = 0;
     if ((ZComponent) this.auraOfDecay == (object) null)
       return 0;
-    this.collider.Disable();
+    this.collider.Disable(true);
     this.RemoveEffector();
     ZComponent.Destroy<GameObject>(this.gameObject);
     this.game.forceRysncPause = true;
@@ -55,7 +54,10 @@ public class ZCreatureJavelin : ZCreature
   {
   }
 
-  public override bool ShouldFall(bool gliding = true, bool ignoreFlight = false) => false;
+  public override bool ShouldFall(bool gliding = true, bool ignoreFlight = false)
+  {
+    return false;
+  }
 
   public override IEnumerator<float> Move(bool fromSerialization = false)
   {

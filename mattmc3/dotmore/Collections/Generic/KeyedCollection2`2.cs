@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-#nullable disable
 namespace mattmc3.dotmore.Collections.Generic
 {
   public class KeyedCollection2<TKey, TItem> : KeyedCollection<TKey, TItem>
@@ -13,7 +12,9 @@ namespace mattmc3.dotmore.Collections.Generic
 
     public KeyedCollection2(Func<TItem, TKey> getKeyForItemFunction)
     {
-      this._getKeyForItemFunction = getKeyForItemFunction != null ? getKeyForItemFunction : throw new ArgumentNullException("Delegate passed cannot be null");
+      if (getKeyForItemFunction == null)
+        throw new ArgumentNullException("Delegate passed cannot be null");
+      this._getKeyForItemFunction = getKeyForItemFunction;
     }
 
     public KeyedCollection2(
@@ -21,12 +22,20 @@ namespace mattmc3.dotmore.Collections.Generic
       IEqualityComparer<TKey> comparer)
       : base(comparer)
     {
-      this._getKeyForItemFunction = getKeyForItemDelegate != null ? getKeyForItemDelegate : throw new ArgumentNullException("Delegate passed cannot be null");
+      if (getKeyForItemDelegate == null)
+        throw new ArgumentNullException("Delegate passed cannot be null");
+      this._getKeyForItemFunction = getKeyForItemDelegate;
     }
 
-    protected override TKey GetKeyForItem(TItem item) => this._getKeyForItemFunction(item);
+    protected override TKey GetKeyForItem(TItem item)
+    {
+      return this._getKeyForItemFunction(item);
+    }
 
-    public void SortByKeys() => this.SortByKeys((IComparer<TKey>) System.Collections.Generic.Comparer<TKey>.Default);
+    public void SortByKeys()
+    {
+      this.SortByKeys((IComparer<TKey>) Comparer<TKey>.Default);
+    }
 
     public void SortByKeys(IComparer<TKey> keyComparer)
     {
@@ -38,7 +47,10 @@ namespace mattmc3.dotmore.Collections.Generic
       this.Sort((IComparer<TItem>) new Comparer2<TItem>((Comparison<TItem>) ((x, y) => keyComparison(this.GetKeyForItem(x), this.GetKeyForItem(y)))));
     }
 
-    public void Sort() => this.Sort((IComparer<TItem>) System.Collections.Generic.Comparer<TItem>.Default);
+    public void Sort()
+    {
+      this.Sort((IComparer<TItem>) Comparer<TItem>.Default);
+    }
 
     public void Sort(Comparison<TItem> comparison)
     {

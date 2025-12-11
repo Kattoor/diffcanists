@@ -6,21 +6,20 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-#nullable disable
 public class pfabName : MonoBehaviour, IPointerClickHandler, IEventSystemHandler, IPointerDownHandler
 {
-  public TMP_Text txtName;
-  public TMP_Text txtRating;
-  public Image ready;
-  public Image ratingType;
-  public TMP_Text txtExperience;
-  private Account account;
   public static Color[] colorStatus = new Color[3]
   {
     (Color) new Color32((byte) 73, (byte) 73, (byte) 73, byte.MaxValue),
     (Color) new Color32((byte) 0, byte.MaxValue, (byte) 0, byte.MaxValue),
     (Color) new Color32((byte) 115, (byte) 100, byte.MaxValue, byte.MaxValue)
   };
+  public TMP_Text txtName;
+  public TMP_Text txtRating;
+  public Image ready;
+  public Image ratingType;
+  public TMP_Text txtExperience;
+  private Account account;
   private bool inActive;
   private float clickTime;
 
@@ -49,7 +48,7 @@ public class pfabName : MonoBehaviour, IPointerClickHandler, IEventSystemHandler
   public void RefreshActivity()
   {
     this.inActive = this.account.IsInactive();
-    this.txtName.text = (this.inActive ? "<sprite name=\"AFK\">" : "") + ChatBox.GetAccountIcons(this.account, true, true) + this.account.name;
+    this.txtName.text = (!this.inActive || !((UnityEngine.Object) UnratedMenu.instance != (UnityEngine.Object) null) ? "" : "<sprite name=\"AFK\">") + ChatBox.GetAccountIcons(this.account, true, true, false) + this.account.name;
   }
 
   private IEnumerator CheckActivity()
@@ -85,7 +84,10 @@ public class pfabName : MonoBehaviour, IPointerClickHandler, IEventSystemHandler
     this.StartCoroutine(this.CheckActivity());
   }
 
-  public void ContextMenu() => MyContextMenu.Show(this.name);
+  public void ContextMenu()
+  {
+    MyContextMenu.Show(this.name, (string) null);
+  }
 
   public void OnPointerDown(PointerEventData eventData)
   {
@@ -116,22 +118,31 @@ public class pfabName : MonoBehaviour, IPointerClickHandler, IEventSystemHandler
       HUD.instance.InitPrivateChat(this.name);
   }
 
-  private void RightClick() => this.ContextMenu();
+  private void RightClick()
+  {
+    this.ContextMenu();
+  }
 
-  public void ClickRatingIcon() => PrestigeLobbyUI.NextGameType();
+  public void ClickRatingIcon()
+  {
+    PrestigeLobbyUI.NextGameType();
+  }
 
   public void HoverRatingIcon()
   {
     if (this.account != null)
-      pfabName.HoverRatingIcon(this.account);
+      pfabName.HoverRatingIcon(this.account, (string) null);
     else
-      MyToolTip.Show(RatedFacts.GetGameTypeAsStringLong((int) Client.gameType) + " Rating");
+      MyToolTip.Show(RatedFacts.GetGameTypeAsStringLong((int) Client.gameType) + " Rating", -1f);
   }
 
   public static void HoverRatingIcon(Account account, string extra = null)
   {
-    MyToolTip.Show(account.name + "\n<sprite name=\"LTS\"> <#FF0050>" + (object) account.Rating + "</color>\n<sprite name=\"HTS\"> <#00FF1D>" + (object) account.Rating1 + "</color>\n<sprite name=\"PMO\"> <#00B2FF>" + (object) account.Rating2 + "</color>\n" + (extra != null ? (object) extra : (object) ""));
+    MyToolTip.Show(account.name + "\n<sprite name=\"LTS\"> <#FF0050>" + (object) account.Rating + "</color>\n<sprite name=\"HTS\"> <#00FF1D>" + (object) account.Rating1 + "</color>\n<sprite name=\"PMO\"> <#00B2FF>" + (object) account.Rating2 + "</color>\n" + (extra != null ? (object) extra : (object) ""), -1f);
   }
 
-  public void HideTooltip() => MyToolTip.Close();
+  public void HideTooltip()
+  {
+    MyToolTip.Close();
+  }
 }

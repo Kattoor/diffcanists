@@ -1,11 +1,10 @@
 
 using UnityEngine;
 
-#nullable disable
 public class FollowPosition : IFollowTarget
 {
-  private Vector3 s;
   public float time = -1f;
+  private Vector3 s;
 
   public FollowPosition(Vector2 p)
   {
@@ -13,7 +12,13 @@ public class FollowPosition : IFollowTarget
     this.time = Time.realtimeSinceStartup + (Client.game.isReplay ? 1f : 3f);
   }
 
-  public Vector3 GetTarget() => this.s;
+  public Vector3 GetTarget()
+  {
+    return this.s;
+  }
 
-  public bool Check() => (double) this.time >= (double) Time.realtimeSinceStartup;
+  public bool Check()
+  {
+    return (double) this.time >= (double) Time.realtimeSinceStartup;
+  }
 }

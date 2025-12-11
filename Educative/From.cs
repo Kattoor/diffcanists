@@ -1,5 +1,4 @@
 
-#nullable disable
 namespace Educative
 {
   public enum From

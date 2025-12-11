@@ -12,38 +12,48 @@ using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 
-#nullable disable
 namespace Mirror.Websocket
 {
   public class Server
   {
-    private const int MaxMessageSize = 262144;
-    private TcpListener listener;
     private readonly IWebSocketServerFactory webSocketServerFactory = (IWebSocketServerFactory) new WebSocketServerFactory();
-    private CancellationTokenSource cancellation;
     private Dictionary<int, WebSocket> clients = new Dictionary<int, WebSocket>();
     public bool NoDelay = true;
+    private const int MaxMessageSize = 262144;
+    private TcpListener listener;
+    private CancellationTokenSource cancellation;
     private static int counter;
     public bool _secure;
     public Server.SslConfiguration _sslConfig;
 
-    public event Action<int> Connected;
+    public event System.Action<int> Connected;
 
-    public event Action<int, ArraySegment<byte>> ReceivedData;
+    public event System.Action<int, ArraySegment<byte>> ReceivedData;
 
-    public event Action<int> Disconnected;
+    public event System.Action<int> Disconnected;
 
-    public event Action<int, Exception> ReceivedError;
+    public event System.Action<int, Exception> ReceivedError;
 
     public static int NextConnectionId()
     {
       int num = Interlocked.Increment(ref Server.counter);
-      return num != int.MaxValue ? num : throw new Exception("connection id limit reached: " + (object) num);
+      if (num == int.MaxValue)
+        throw new Exception("connection id limit reached: " + (object) num);
+      return num;
     }
 
-    public bool Active => this.listener != null;
+    public bool Active
+    {
+      get
+      {
+        return this.listener != null;
+      }
+    }
 
-    public WebSocket GetClient(int connectionId) => this.clients[connectionId];
+    public WebSocket GetClient(int connectionId)
+    {
+      return this.clients[connectionId];
+    }
 
     public async void Listen(int port)
     {
@@ -62,7 +72,7 @@ namespace Mirror.Websocket
       }
       catch (Exception ex)
       {
-        Action<int, Exception> receivedError = this.ReceivedError;
+        System.Action<int, Exception> receivedError = this.ReceivedError;
         if (receivedError == null)
           return;
         receivedError(0, ex);
@@ -89,7 +99,7 @@ namespace Mirror.Websocket
             KeepAliveInterval = TimeSpan.FromSeconds(30.0),
             SubProtocol = "binary"
           };
-          WebSocket webSocket = await server.webSocketServerFactory.AcceptWebSocketAsync(context, options);
+          WebSocket webSocket = await server.webSocketServerFactory.AcceptWebSocketAsync(context, options, new CancellationToken());
           await server.ReceiveLoopAsync(webSocket, token);
         }
         else
@@ -100,7 +110,7 @@ namespace Mirror.Websocket
       }
       catch (Exception ex)
       {
-        Action<int, Exception> receivedError = server.ReceivedError;
+        System.Action<int, Exception> receivedError = server.ReceivedError;
         if (receivedError == null)
           return;
         receivedError(0, ex);
@@ -114,7 +124,7 @@ namespace Mirror.Websocket
         }
         catch (Exception ex)
         {
-          Action<int, Exception> receivedError = server.ReceivedError;
+          System.Action<int, Exception> receivedError = server.ReceivedError;
           if (receivedError != null)
             receivedError(0, ex);
         }
@@ -137,7 +147,7 @@ namespace Mirror.Websocket
       byte[] buffer = new byte[262144];
       try
       {
-        Action<int> connected = this.Connected;
+        System.Action<int> connected = this.Connected;
         if (connected != null)
           connected(connectionId);
         WebSocketReceiveResult async;
@@ -151,13 +161,13 @@ namespace Mirror.Websocket
             {
               try
               {
-                Action<int, ArraySegment<byte>> receivedData = this.ReceivedData;
+                System.Action<int, ArraySegment<byte>> receivedData = this.ReceivedData;
                 if (receivedData != null)
                   receivedData(connectionId, arraySegment);
               }
               catch (Exception ex)
               {
-                Action<int, Exception> receivedError = this.ReceivedError;
+                System.Action<int, Exception> receivedError = this.ReceivedError;
                 if (receivedError != null)
                   receivedError(connectionId, ex);
               }
@@ -174,7 +184,7 @@ label_7:;
       }
       catch (Exception ex)
       {
-        Action<int, Exception> receivedError = this.ReceivedError;
+        System.Action<int, Exception> receivedError = this.ReceivedError;
         if (receivedError == null)
           return;
         receivedError(connectionId, ex);
@@ -182,7 +192,7 @@ label_7:;
       finally
       {
         this.clients.Remove(connectionId);
-        Action<int> disconnected = this.Disconnected;
+        System.Action<int> disconnected = this.Disconnected;
         if (disconnected != null)
           disconnected(connectionId);
       }
@@ -201,7 +211,7 @@ label_7:;
         if (count >= 262144)
         {
           await webSocket.CloseAsync(WebSocketCloseStatus.MessageTooBig, string.Format("Maximum message size: {0} bytes.", (object) 262144), CancellationToken.None);
-          Action<int, Exception> receivedError = this.ReceivedError;
+          System.Action<int, Exception> receivedError = this.ReceivedError;
           if (receivedError != null)
             receivedError(connectionId, (Exception) new WebSocketException(WebSocketError.HeaderError));
           return new ArraySegment<byte>();
@@ -241,7 +251,7 @@ label_7:;
         {
           if (this.clients.ContainsKey(connectionId))
           {
-            Action<int, Exception> receivedError = this.ReceivedError;
+            System.Action<int, Exception> receivedError = this.ReceivedError;
             if (receivedError != null)
               receivedError(connectionId, ex);
           }
@@ -250,7 +260,7 @@ label_7:;
       }
       else
       {
-        Action<int, Exception> receivedError = this.ReceivedError;
+        System.Action<int, Exception> receivedError = this.ReceivedError;
         if (receivedError == null)
           return;
         receivedError(connectionId, (Exception) new SocketException(10057));

@@ -2,7 +2,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-#nullable disable
 public class PrestigeSpellIcon : MonoBehaviour
 {
   public UIOnHover button;
@@ -24,5 +23,8 @@ public class PrestigeSpellIcon : MonoBehaviour
     SpellLobbyChange.Instance.textError.text = ButtonSpell.Hover(SpellLobbyChange.Instance.settingsPlayer, this.index) + ButtonSpell.AddWandStuff(this.index);
   }
 
-  public void OnExit() => SpellLobbyChange.Instance?.HideMouseOver();
+  public void OnExit()
+  {
+    SpellLobbyChange.Instance?.HideMouseOver();
+  }
 }

@@ -1,7 +1,6 @@
 
 using System;
 
-#nullable disable
 public static class StaticPolygons
 {
   public static CachedPolygon[] polygons = new CachedPolygon[21]
@@ -126797,25 +126796,26 @@ public static class StaticPolygons
   [Serializable]
   public enum CachedPolygonEnums
   {
-    Arcane_Tower,
-    Fortress,
-    Ice_Castle,
-    Den_of_Darkness,
-    Forest_Seed,
-    Castle_of_Light,
-    Sanctuary,
-    Clock_Tower,
-    Snow_Globe,
-    Floating_Castle,
-    None,
-    Celestial_Fortress,
-    Watchtower,
-    Tree_House,
-    Sand_Castle,
-    Sand_Castle2,
-    Sand_Castle3,
-    Sand_Castle4,
-    Sand_Castle5,
-    Catacombs,
+    Rectangle = -1, // 0xFFFFFFFF
+    Arcane_Tower = 0,
+    Fortress = 1,
+    Ice_Castle = 2,
+    Den_of_Darkness = 3,
+    Forest_Seed = 4,
+    Castle_of_Light = 5,
+    Sanctuary = 6,
+    Clock_Tower = 7,
+    Snow_Globe = 8,
+    Floating_Castle = 9,
+    None = 10, // 0x0000000A
+    Celestial_Fortress = 11, // 0x0000000B
+    Watchtower = 12, // 0x0000000C
+    Tree_House = 13, // 0x0000000D
+    Sand_Castle = 14, // 0x0000000E
+    Sand_Castle2 = 15, // 0x0000000F
+    Sand_Castle3 = 16, // 0x00000010
+    Sand_Castle4 = 17, // 0x00000011
+    Sand_Castle5 = 18, // 0x00000012
+    Catacombs = 19, // 0x00000013
   }
 }

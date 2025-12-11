@@ -1,7 +1,6 @@
 
 using Newtonsoft.Json;
 
-#nullable disable
 public interface IJsonGames
 {
   NewGamesPlayed games { get; }

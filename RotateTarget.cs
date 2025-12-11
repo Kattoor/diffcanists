@@ -1,7 +1,6 @@
 
 using UnityEngine;
 
-#nullable disable
 public class RotateTarget : MonoBehaviour
 {
   private Vector3 tRotation = Vector3.zero;

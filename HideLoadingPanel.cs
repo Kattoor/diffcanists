@@ -3,12 +3,14 @@ using Hazel;
 using System.IO;
 using UnityEngine;
 
-#nullable disable
 public class HideLoadingPanel : MonoBehaviour
 {
   private float time;
 
-  private void OnEnable() => this.time = 0.0f;
+  private void OnEnable()
+  {
+    this.time = 0.0f;
+  }
 
   private void Update()
   {
@@ -21,7 +23,7 @@ public class HideLoadingPanel : MonoBehaviour
     else
     {
       float num = Mathf.Clamp(Time.deltaTime, 0.0f, 0.0166f);
-      if ((double) num < 0.20000000298023224)
+      if ((double) num < 0.200000002980232)
         this.time += num;
       if ((double) this.time <= 20.0 || Client.game.receivedInitialMsg)
         return;
@@ -35,7 +37,7 @@ public class HideLoadingPanel : MonoBehaviour
             myBinaryWriter.Write((byte) 64);
             myBinaryWriter.Write("Took to long to respond");
           }
-          Client.connection.SendBytes(memoryStream.ToArray());
+          Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
         }
       }
       else

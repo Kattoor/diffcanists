@@ -4,7 +4,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-#nullable disable
 public class ClientCreature : MonoBehaviour
 {
   public AudioClip clipDeath;

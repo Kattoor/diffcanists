@@ -13,11 +13,34 @@ using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-#nullable disable
 public class CharacterCreation : Catalogue
 {
-  public Camera _cameraPreview;
   public SpellEnum curCreature = SpellEnum.None;
+  [NonSerialized]
+  public List<OutfitButton> outfitButtons = new List<OutfitButton>();
+  private System.Collections.Generic.Stack<SettingsPlayer> stackUndo = new System.Collections.Generic.Stack<SettingsPlayer>();
+  private System.Collections.Generic.Stack<SettingsPlayer> stackRedo = new System.Collections.Generic.Stack<SettingsPlayer>();
+  private ZPerson person = new ZPerson();
+  private HashSet<Outfit> recoloring = new HashSet<Outfit>();
+  private bool changeAllColors = true;
+  private List<List<int>> sortedGroups = new List<List<int>>();
+  private List<int> filteredGroup = new List<int>();
+  internal SettingsPlayer settingsPlayer = new SettingsPlayer();
+  private KeySequence controls = new KeySequence(new KeyCode[10]
+  {
+    KeyCode.UpArrow,
+    KeyCode.UpArrow,
+    KeyCode.DownArrow,
+    KeyCode.DownArrow,
+    KeyCode.LeftArrow,
+    KeyCode.RightArrow,
+    KeyCode.LeftArrow,
+    KeyCode.RightArrow,
+    KeyCode.B,
+    KeyCode.A
+  });
+  private int lastBody = -1;
+  public Camera _cameraPreview;
   private const int amount = 75;
   public Inert inert;
   public ClientResources clientResources;
@@ -37,8 +60,6 @@ public class CharacterCreation : Catalogue
   public GameObject pfabOutfit;
   public RectTransform container_outfits;
   public GameObject container_creator_controls;
-  [NonSerialized]
-  public List<OutfitButton> outfitButtons = new List<OutfitButton>();
   public Outfit viewing;
   internal ColorType colorType;
   public UIOnHover[] buttonsOutfit;
@@ -81,42 +102,26 @@ public class CharacterCreation : Catalogue
   public UIOnHover buttonRedo;
   public TMP_Text txtUndo;
   public TMP_Text txtRedo;
-  private Stack<SettingsPlayer> stackUndo = new Stack<SettingsPlayer>();
   private SettingsPlayer stackCurrent;
-  private Stack<SettingsPlayer> stackRedo = new Stack<SettingsPlayer>();
   private int _curOffset;
   private OutfitDataList curGroup;
   private UIOnHover activeButtonOutfit;
   private UIOnHover activeButtonPreset;
-  private ZPerson person = new ZPerson();
   private ZCreature creature;
-  private HashSet<Outfit> recoloring = new HashSet<Outfit>();
-  private bool changeAllColors = true;
-  private List<List<int>> sortedGroups = new List<List<int>>();
-  private List<int> filteredGroup = new List<int>();
-  internal SettingsPlayer settingsPlayer = new SettingsPlayer();
   private Action<SettingsPlayer> onEnd;
-  private KeySequence controls = new KeySequence(new KeyCode[10]
-  {
-    KeyCode.UpArrow,
-    KeyCode.UpArrow,
-    KeyCode.DownArrow,
-    KeyCode.DownArrow,
-    KeyCode.LeftArrow,
-    KeyCode.RightArrow,
-    KeyCode.LeftArrow,
-    KeyCode.RightArrow,
-    KeyCode.B,
-    KeyCode.A
-  });
-  private int lastBody = -1;
   private const float defHeight = 105f;
   private float click_counter;
   private int curPage;
 
   public static CharacterCreation Instance { get; private set; }
 
-  private List<int> curSorted => this.filteredGroup;
+  private List<int> curSorted
+  {
+    get
+    {
+      return this.filteredGroup;
+    }
+  }
 
   private void Awake()
   {
@@ -126,7 +131,7 @@ public class CharacterCreation : Catalogue
     this.CreatedSortedGroups();
     this.container_creator_controls.SetActive(Global.GetPrefBool("prefassetcreator", false));
     if (Global.OS.Is(OperatingSystem.Standalone) && OneTimePopups.Set(OneTimePopups.Tip.ClickPreviewExportPNG))
-      MyPopup.Show("You can click the preview image to export it as a PNG", new Vector2(163f, -342f));
+      MyPopup.Show("You can click the preview image to export it as a PNG", new Vector2(163f, -342f), (Sprite) null);
     CharacterCreation.Instance = this;
     this.buttonShare.SetActive(false);
     this.txtCoins.text = Client.MyAccount.tournamentCoins.ToString();
@@ -175,10 +180,13 @@ public class CharacterCreation : Catalogue
     {
       this.previewColor.color = c;
       this.previewBG.color = c;
-    }));
+    }), (Action) null);
   }
 
-  public void resetanim() => this.creature?.animator.Play(AnimateState.Stop);
+  public void resetanim()
+  {
+    this.creature?.animator.Play(AnimateState.Stop, 0.0f, true);
+  }
 
   public void ExportClanOutfits()
   {
@@ -256,13 +264,13 @@ public class CharacterCreation : Catalogue
         break;
     }
     bool flag2 = false;
-    for (int index3 = texture2D1.width - 1; index3 >= 0; --index3)
+    for (int index1 = texture2D1.width - 1; index1 >= 0; --index1)
     {
-      for (int index4 = 0; index4 < texture2D1.height; ++index4)
+      for (int index2 = 0; index2 < texture2D1.height; ++index2)
       {
-        if (pixels32_2[index3 + index4 * texture2D1.width].a != (byte) 0)
+        if (pixels32_2[index1 + index2 * texture2D1.width].a != (byte) 0)
         {
-          rect1.width = (float) index3 - rect1.x;
+          rect1.width = (float) index1 - rect1.x;
           flag2 = true;
           break;
         }
@@ -271,13 +279,13 @@ public class CharacterCreation : Catalogue
         break;
     }
     bool flag3 = false;
-    for (int index5 = 0; index5 < texture2D1.height; ++index5)
+    for (int index1 = 0; index1 < texture2D1.height; ++index1)
     {
-      for (int index6 = texture2D1.width - 1; index6 >= 0; --index6)
+      for (int index2 = texture2D1.width - 1; index2 >= 0; --index2)
       {
-        if (pixels32_2[index6 + index5 * texture2D1.width].a != (byte) 0)
+        if (pixels32_2[index2 + index1 * texture2D1.width].a != (byte) 0)
         {
-          rect1.y = (float) index5;
+          rect1.y = (float) index1;
           flag3 = true;
           break;
         }
@@ -286,13 +294,13 @@ public class CharacterCreation : Catalogue
         break;
     }
     bool flag4 = false;
-    for (int index7 = texture2D1.height - 1; index7 >= 0; --index7)
+    for (int index1 = texture2D1.height - 1; index1 >= 0; --index1)
     {
-      for (int index8 = texture2D1.width - 1; index8 >= 0; --index8)
+      for (int index2 = texture2D1.width - 1; index2 >= 0; --index2)
       {
-        if (pixels32_2[index8 + index7 * texture2D1.width].a != (byte) 0)
+        if (pixels32_2[index2 + index1 * texture2D1.width].a != (byte) 0)
         {
-          rect1.height = (float) index7 - rect1.y;
+          rect1.height = (float) index1 - rect1.y;
           flag4 = true;
           break;
         }
@@ -303,13 +311,13 @@ public class CharacterCreation : Catalogue
     ++rect1.width;
     ++rect1.height;
     Color32[] colors = new Color32[(int) ((double) rect1.width * (double) rect1.height)];
-    int index9 = 0;
+    int index3 = 0;
     for (int y = (int) rect1.y; y < (int) ((double) rect1.y + (double) rect1.height); ++y)
     {
       for (int x = (int) rect1.x; x < (int) ((double) rect1.x + (double) rect1.width); ++x)
       {
-        colors[index9] = pixels32_2[x + y * texture2D1.width];
-        ++index9;
+        colors[index3] = pixels32_2[x + y * texture2D1.width];
+        ++index3;
       }
     }
     Texture2D texture2D2 = new Texture2D((int) rect1.width, (int) rect1.height);
@@ -360,7 +368,7 @@ public class CharacterCreation : Catalogue
       Surface src = new Surface(pixels32, width2, height2);
       int x = centerX + (int) (((double) me.x - (double) parent.x + 0.5) * 2.0);
       int y = centerY + (int) (((double) me.y - (double) parent.y + 0.5) * 2.0);
-      RotateImage.RenderOverlay(dst, src, x, y, 0.0f, 0, true, false);
+      RotateImage.RenderOverlay(dst, src, x, y, 0.0f, 0, true, false, 1f);
       Global.DestroySprite(s1);
       UnityEngine.Object.Destroy((UnityEngine.Object) s1);
     }
@@ -369,13 +377,13 @@ public class CharacterCreation : Catalogue
       Surface dst = new Surface(t);
       Color32[] c = color32Array;
       rect = s.sprite.rect;
-      int width3 = (int) rect.width;
+      int width2 = (int) rect.width;
       rect = s.sprite.rect;
-      int height3 = (int) rect.height;
-      Surface src = new Surface(c, width3, height3);
+      int height2 = (int) rect.height;
+      Surface src = new Surface(c, width2, height2);
       int x = centerX + (int) (((double) me.x - (double) parent.x + 0.5) * 2.0);
       int y = centerY + (int) (((double) me.y - (double) parent.y + 0.5) * 2.0);
-      RotateImage.RenderOverlay(dst, src, x, y, 0.0f, 0, true, false);
+      RotateImage.RenderOverlay(dst, src, x, y, 0.0f, 0, true, false, 1f);
     }
   }
 
@@ -383,7 +391,7 @@ public class CharacterCreation : Catalogue
   {
     if (!s.gameObject.activeSelf || !s.enabled)
       return;
-    RotateImage.RenderOverlay(new Surface(t), new Surface(tex), centerX + (int) (((double) s.transform.localPosition.x + 0.5) * 2.0), centerY + (int) (((double) s.transform.localPosition.y + 0.5) * 2.0), 0.0f, 0, true, false);
+    RotateImage.RenderOverlay(new Surface(t), new Surface(tex), centerX + (int) (((double) s.transform.localPosition.x + 0.5) * 2.0), centerY + (int) (((double) s.transform.localPosition.y + 0.5) * 2.0), 0.0f, 0, true, false, 1f);
   }
 
   public string ImageToBase64(Texture2D image)
@@ -404,7 +412,7 @@ public class CharacterCreation : Catalogue
     Spell spell = Inert.GetSpell(minion);
     this.curCreature = minion;
     UnityEngine.Object.Destroy((UnityEngine.Object) this.playerObj);
-    this.playerObj = ZCreatureCreate.CreateCreature((ZPerson) null, (!((UnityEngine.Object) spell != (UnityEngine.Object) null) || !((UnityEngine.Object) spell.toSummon != (UnityEngine.Object) null) || !((UnityEngine.Object) spell.toSummon.GetComponent<Creature>() != (UnityEngine.Object) null) ? this.pfab_PlayerCharacter : spell.toSummon).GetComponent<Creature>(), (Vector2) Vector3.zero, Quaternion.identity, (Transform) null).gameObject;
+    this.playerObj = ZCreatureCreate.CreateCreature((ZPerson) null, (!((UnityEngine.Object) spell != (UnityEngine.Object) null) || !((UnityEngine.Object) spell.toSummon != (UnityEngine.Object) null) || !((UnityEngine.Object) spell.toSummon.GetComponent<Creature>() != (UnityEngine.Object) null) ? this.pfab_PlayerCharacter : spell.toSummon).GetComponent<Creature>(), (Vector2) Vector3.zero, Quaternion.identity, (Transform) null, true).gameObject;
     Creature component = this.playerObj.GetComponent<Creature>();
     this.creature = component.serverObj;
     this.configPlayer = this.playerObj.GetComponent<ConfigurePlayer>() ?? this.playerObj.AddComponent<ConfigurePlayer>();
@@ -432,7 +440,7 @@ public class CharacterCreation : Catalogue
   {
     if (this.onEnd == null)
       AudioManager.PlayMusicCharacterCreation();
-    this.playerObj = ZCreatureCreate.CreateCreature((ZPerson) null, this.pfab_PlayerCharacter.GetComponent<Creature>(), (Vector2) Vector3.zero, Quaternion.identity, (Transform) null).gameObject;
+    this.playerObj = ZCreatureCreate.CreateCreature((ZPerson) null, this.pfab_PlayerCharacter.GetComponent<Creature>(), (Vector2) Vector3.zero, Quaternion.identity, (Transform) null, true).gameObject;
     this.configPlayer = this.playerObj.GetComponent<ConfigurePlayer>();
     this.configPlayer._sp = this.settingsPlayer;
     Creature component1 = this.playerObj.GetComponent<Creature>();
@@ -461,7 +469,7 @@ public class CharacterCreation : Catalogue
       component2.gameObject.SetActive(true);
       this.outfitButtons.Add(component2);
     }
-    this.settingsPlayer.VerifyOutfit(Client.cosmetics);
+    this.settingsPlayer.VerifyOutfit(Client.cosmetics, (Account) null);
     this.outfitHoverObj.SetAsLastSibling();
     this.SelectBody();
     this.LoadAll();
@@ -469,8 +477,8 @@ public class CharacterCreation : Catalogue
     Client.game.isClient = true;
     component1.GetComponent<AnimatePlayer>().Play(AnimateState.Walk, float.MaxValue, true);
     this.playerObj.transform.position = Vector3.zero;
-    for (int t = 0; t < this.colorButtons.Length; ++t)
-      this.colorButtons[t].imgColor.color = (Color) this.settingsPlayer.coloring.Get(this.changeAllColors ? Outfit.None : this.viewing, (ColorType) t);
+    for (int index = 0; index < this.colorButtons.Length; ++index)
+      this.colorButtons[index].imgColor.color = (Color) this.settingsPlayer.coloring.Get(this.changeAllColors ? Outfit.None : this.viewing, (ColorType) index);
     this.colorButtons[0].Activate(0);
     this.picker.onValueChangedPUBLIC.AddListener(new UnityAction<Color>(this.OnPickColor));
     this.ClickPresetIndex(PlayerPrefs.GetInt("prefselectedpreset", 0));
@@ -490,7 +498,10 @@ public class CharacterCreation : Catalogue
     this.previewBG.color = (Color) Prefs.previewColor;
   }
 
-  public void ToggleToolTips(bool v) => Global.SetPrefBool("cctooltip", v);
+  public void ToggleToolTips(bool v)
+  {
+    Global.SetPrefBool("cctooltip", v);
+  }
 
   internal void TestClan()
   {
@@ -499,10 +510,10 @@ public class CharacterCreation : Catalogue
     myContextMenu.AddInput((Action<string>) (s =>
     {
       Debug.Log((object) (Client.MyAccount.clan + " to " + s));
-      Client.GetAccount(Client.Name).clan = s;
+      Client.GetAccount(Client.Name, false).clan = s;
       Client.MyAccount.clan = s;
       this.EquipAll();
-    }));
+    }), (string) null, false, true);
   }
 
   internal void EquipAll()
@@ -518,21 +529,24 @@ public class CharacterCreation : Catalogue
     else
     {
       this.configPlayer.EquipAll(Client.Name, this.settingsPlayer);
-      ClientResources.GetArchMageStaff(this.settingsPlayer, this.creature, this.person, Client.MyAccount);
+      ClientResources.GetArchMageStaff(this.settingsPlayer, this.creature, this.person, Client.MyAccount, true);
       if (this.creature.animator.currentState == AnimateState.Walk && (this.lastBody == SettingsPlayer.body_skate && (int) this.settingsPlayer.indexBody != SettingsPlayer.body_skate || this.lastBody != SettingsPlayer.body_skate && (int) this.settingsPlayer.indexBody == SettingsPlayer.body_skate))
       {
-        this.creature.animator.Play(AnimateState.Stop);
-        this.creature.animator.Play(AnimateState.Walk, float.MaxValue);
+        this.creature.animator.Play(AnimateState.Stop, 0.0f, true);
+        this.creature.animator.Play(AnimateState.Walk, float.MaxValue, true);
       }
       this.lastBody = (int) this.settingsPlayer.indexBody;
     }
   }
 
-  public void ClickRefresh() => this.LoadAll();
+  public void ClickRefresh()
+  {
+    this.LoadAll();
+  }
 
   public void ClickShare()
   {
-    Client.AskToShare("", ContentType.Outfit, (object) this.settingsPlayer);
+    Client.AskToShare("", ContentType.Outfit, (object) this.settingsPlayer, false);
     UnityEngine.Object.Destroy((UnityEngine.Object) this.gameObject);
   }
 
@@ -546,7 +560,7 @@ public class CharacterCreation : Catalogue
       UnityEngine.Object.Destroy((UnityEngine.Object) this.gameObject);
       if (Client.game == null)
         return;
-      Client.game.CleanUp();
+      Client.game.CleanUp(false);
       Client.game = (ZGame) null;
     }
     else
@@ -587,7 +601,7 @@ public class CharacterCreation : Catalogue
     this.settingsPlayer.coloring.Set(Outfit.None, ColorType.Green, RandomExtensions.RandomColor(r));
     this.settingsPlayer.coloring.Set(Outfit.None, ColorType.Blue, RandomExtensions.RandomColor(r));
     this.settingsPlayer.coloring.Set(Outfit.None, ColorType.Gray, RandomExtensions.RandomColor(r));
-    this.settingsPlayer.VerifyOutfit(Client.cosmetics);
+    this.settingsPlayer.VerifyOutfit(Client.cosmetics, (Account) null);
     this.UpdateColors();
     this.EquipAll();
     this.Changed();
@@ -597,8 +611,8 @@ public class CharacterCreation : Catalogue
   public void UpdateColors()
   {
     this.picker.CurrentColorNoNotify = (Color) this.settingsPlayer.coloring.Get(this.changeAllColors ? Outfit.None : this.viewing, this.colorType);
-    for (int t = 0; t < this.colorButtons.Length; ++t)
-      this.colorButtons[t].imgColor.color = (Color) this.settingsPlayer.coloring.Get(this.changeAllColors ? Outfit.None : this.viewing, (ColorType) t);
+    for (int index = 0; index < this.colorButtons.Length; ++index)
+      this.colorButtons[index].imgColor.color = (Color) this.settingsPlayer.coloring.Get(this.changeAllColors ? Outfit.None : this.viewing, (ColorType) index);
     if (!this.panelBasic.activeInHierarchy)
       return;
     this.boxPrimary.FindClosest();
@@ -635,21 +649,27 @@ public class CharacterCreation : Catalogue
     this.Changed();
   }
 
-  public void Hover(string s) => MyToolTip.Show(s);
+  public void Hover(string s)
+  {
+    MyToolTip.Show(s, -1f);
+  }
 
   public void HoverInfo()
   {
-    MyToolTip.Show("<b>Asset Creator Info</b>\r\nImport - Select an *.png file which will be used in the currently selected body part slot\r\nExport PKG - Exports a *.outfitPKG file that can be shared\r\nSave Preview - Creates an image from the character preview\r\n\r\n<b>Controls</b>\r\nArrow Keys - Adjust the currently selected custom outfit piece by adjusting its pivot point\r\nHold Ctrl for incremental movement with the arrow keys\r\nF8 - Hide this menu\r\n\r\nClick the preview image to toggle the animation and save the preview (non-asset creators can also do this)\r\n");
+    MyToolTip.Show("<b>Asset Creator Info</b>\r\nImport - Select an *.png file which will be used in the currently selected body part slot\r\nExport PKG - Exports a *.outfitPKG file that can be shared\r\nSave Preview - Creates an image from the character preview\r\n\r\n<b>Controls</b>\r\nArrow Keys - Adjust the currently selected custom outfit piece by adjusting its pivot point\r\nHold Ctrl for incremental movement with the arrow keys\r\nF8 - Hide this menu\r\n\r\nClick the preview image to toggle the animation and save the preview (non-asset creators can also do this)\r\n", -1f);
   }
 
-  public void LeaveToolTip() => MyToolTip.Close();
+  public void LeaveToolTip()
+  {
+    MyToolTip.Close();
+  }
 
   public void CanvasContextMenu()
   {
     MyContextMenu myContextMenu = MyContextMenu.Show();
     myContextMenu.AddItem("Toggle Walk Animation", new Action(this.ClickToggleWalk), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
     myContextMenu.AddItem("Save Image", new Action(this.ClickPreview), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
-    myContextMenu.Rebuild();
+    myContextMenu.Rebuild(false);
   }
 
   public void MinionPopup()
@@ -660,7 +680,7 @@ public class CharacterCreation : Catalogue
     arrayContextmenu.AddImage(ClientResources.Instance.GetSpellIcon("Banish"), "Player", (Action) (() => this.ReplaceCharacter(SpellEnum.None)));
     foreach (KeyValuePair<string, Spell> spell in Inert.Instance.spells)
     {
-      if ((UnityEngine.Object) spell.Value.toSummon != (UnityEngine.Object) null && spell.Value.type == CastType.Placement && spell.Value.amount > 0 && (UnityEngine.Object) spell.Value.toSummon.GetComponent<Creature>() != (UnityEngine.Object) null)
+      if ((UnityEngine.Object) spell.Value.toSummon != (UnityEngine.Object) null && spell.Value.type == CastType.Placement && (spell.Value.amount > 0 && (UnityEngine.Object) spell.Value.toSummon.GetComponent<Creature>() != (UnityEngine.Object) null))
       {
         if (num >= 10)
         {
@@ -672,7 +692,7 @@ public class CharacterCreation : Catalogue
         ++num;
       }
     }
-    myContextMenu.Rebuild();
+    myContextMenu.Rebuild(false);
   }
 
   public void ExtraContextMenu()
@@ -714,7 +734,7 @@ public class CharacterCreation : Catalogue
     myContextMenu.AddItem("View Left Feet", new Action(this.SelectLeftFoot), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
     myContextMenu.AddItem("View Right Feet", new Action(this.SelectRightFoot), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
     myContextMenu.AddItem("View Mouths", new Action(this.SelectMouth), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
-    myContextMenu.Rebuild();
+    myContextMenu.Rebuild(false);
   }
 
   private void VectorPopupPivot()
@@ -723,15 +743,15 @@ public class CharacterCreation : Catalogue
     MyContextMenu myContextMenu = MyContextMenu.Show();
     myContextMenu.AddSeperator("Pivot");
     myContextMenu.AddVectorField((Action<Vector2>) (v => this.settingsPlayer.UpdatePivot(this.viewing, v, this.configPlayer.Get(this.viewing))), this.settingsPlayer.metaData[(int) this.viewing].pivot);
-    myContextMenu.Rebuild();
+    myContextMenu.Rebuild(false);
   }
 
   private void FloatPopup(float f, string n, Action<string> a)
   {
     MyContextMenu myContextMenu = MyContextMenu.Show();
     myContextMenu.AddSeperator(n + " current: " + f.ToString("0.##"));
-    myContextMenu.AddInput(a);
-    myContextMenu.Rebuild();
+    myContextMenu.AddInput(a, (string) null, false, true);
+    myContextMenu.Rebuild(false);
   }
 
   public void click3()
@@ -772,12 +792,12 @@ public class CharacterCreation : Catalogue
         if (string.IsNullOrEmpty(n))
           return;
         Client.AskToUploadClanOutfit(n, this.viewing, this.settingsPlayer.textures[(int) this.viewing].texture, this.settingsPlayer.metaData[(int) this.viewing].pivot, this.viewing == Outfit.Head ? (this.settingsPlayer.indexMouth == (byte) 24 ? (byte) 1 : (byte) 0) : (byte) 0);
-      }));
-      myContextMenu.Rebuild();
+      }), (string) null, false, true);
+      myContextMenu.Rebuild(false);
     }
     else
     {
-      if (!this.container_creator_controls.activeSelf || this.settingsPlayer.textures == null || !((UnityEngine.Object) this.settingsPlayer.textures[(int) this.viewing] != (UnityEngine.Object) null) || !Input.anyKey)
+      if (!this.container_creator_controls.activeSelf || this.settingsPlayer.textures == null || (!((UnityEngine.Object) this.settingsPlayer.textures[(int) this.viewing] != (UnityEngine.Object) null) || !Input.anyKey))
         return;
       SpriteRenderer sr = this.configPlayer.Get(this.viewing);
       Texture2D texture = this.settingsPlayer.textures[(int) this.viewing].texture;
@@ -826,9 +846,9 @@ public class CharacterCreation : Catalogue
     if (num <= 0 || Client.MyAccount.cosmetics.array[(int) CharacterCreation.GetViewing(this.viewing)][i])
       return;
     if (Client.MyAccount.tournamentCoins >= num)
-      MyMessageBox.Create("Buy this outfit piece for <sprite name=\"tcoin\"> <#FF0000>" + (object) num + "</color> tournament coins?", (Action) (() => Prestige.Ask((byte) 10, (int) CharacterCreation.GetViewing(this.viewing), i)), icon: this.curGroup[i].sprite);
+      MyMessageBox.Create("Buy this outfit piece for <sprite name=\"tcoin\"> <#FF0000>" + (object) num + "</color> tournament coins?", (Action) (() => Prestige.Ask((byte) 10, (int) CharacterCreation.GetViewing(this.viewing), i)), "Ok", "Cancel", (Action) null, (Action) null, this.curGroup[i].sprite, (string) null, (Action) null);
     else
-      MyToolTip.Show("You need <sprite name=\"tcoin\"> " + (object) (num - Client.MyAccount.tournamentCoins) + " more tournament coins to buy this outfit - Better sign-up for the next one!");
+      MyToolTip.Show("You need <sprite name=\"tcoin\"> " + (object) (num - Client.MyAccount.tournamentCoins) + " more tournament coins to buy this outfit - Better sign-up for the next one!", -1f);
   }
 
   public void SelectIndex(int i)
@@ -953,7 +973,7 @@ public class CharacterCreation : Catalogue
 
   public void ClickTogggleColor(int i)
   {
-    if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift) || Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl) || Global.OS == OperatingSystem.Android)
+    if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift) || (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl)) || Global.OS == OperatingSystem.Android)
     {
       this.ClickAddTogggleColor(i);
     }
@@ -997,15 +1017,33 @@ public class CharacterCreation : Catalogue
       this.recoloring.Add((Outfit) i);
   }
 
-  public void ClickLeft() => this.Populate(this._curOffset / 75 - 1);
+  public void ClickLeft()
+  {
+    this.Populate(this._curOffset / 75 - 1);
+  }
 
-  public void ClickRight() => this.Populate(this._curOffset / 75 + 1);
+  public void ClickRight()
+  {
+    this.Populate(this._curOffset / 75 + 1);
+  }
 
-  public bool HasLeft() => this._curOffset > 0;
+  public bool HasLeft()
+  {
+    return this._curOffset > 0;
+  }
 
-  public int Offset => this._curOffset;
+  public int Offset
+  {
+    get
+    {
+      return this._curOffset;
+    }
+  }
 
-  public bool HasRight() => this.curSorted.Count > this._curOffset + 75;
+  public bool HasRight()
+  {
+    return this.curSorted.Count > this._curOffset + 75;
+  }
 
   public void FindEquipped()
   {
@@ -1102,13 +1140,13 @@ public class CharacterCreation : Catalogue
     for (; index1 < count - this._curOffset && index1 < 75; ++index1)
     {
       bool disabled = false;
-      int num2 = this.curSorted[index1 + this._curOffset];
-      if (num1 < 6 && !Inert.Instance.GetOutfit(viewing)[num2].IsUnlocked(Client.MyAccount))
+      int index3 = this.curSorted[index1 + this._curOffset];
+      if (num1 < 6 && !Inert.Instance.GetOutfit(viewing)[index3].IsUnlocked(Client.MyAccount))
       {
-        int num3 = SettingsPlayer.ClientHasAchievement(viewing, num2);
-        if (num3 <= 0)
+        int num2 = SettingsPlayer.ClientHasAchievement(viewing, index3);
+        if (num2 <= 0)
         {
-          if (num3 >= 0)
+          if (num2 >= 0)
           {
             if (!charPreview)
               disabled = true;
@@ -1117,7 +1155,7 @@ public class CharacterCreation : Catalogue
             continue;
         }
       }
-      this.outfitButtons[index2].SetSprite(this.curGroup[num2].sprite, viewing, num2, disabled);
+      this.outfitButtons[index2].SetSprite(this.curGroup[index3].sprite, viewing, index3, disabled);
       this.outfitButtons[index2].gameObject.SetActive(true);
       ++index2;
     }
@@ -1363,7 +1401,10 @@ public class CharacterCreation : Catalogue
     Inert.SaveSettingsPlayer();
   }
 
-  public void ClickSavedOutfits(bool v) => ChangeOutfitMenu.Create(v, sp: this.settingsPlayer);
+  public void ClickSavedOutfits(bool v)
+  {
+    ChangeOutfitMenu.Create(v, true, this.settingsPlayer, (Action<SettingsPlayer>) null);
+  }
 
   private void OnSelectCustomOutfit(string s, Outfit o)
   {
@@ -1393,9 +1434,9 @@ public class CharacterCreation : Catalogue
   {
     switch (s)
     {
-      case null:
-        break;
       case "":
+        break;
+      case null:
         break;
       default:
         this.OnSelectCustomOutfit(s, o);
@@ -1403,14 +1444,17 @@ public class CharacterCreation : Catalogue
     }
   }
 
-  public void ClickCustomOutfit() => this.PickOutfit(this.viewing);
+  public void ClickCustomOutfit()
+  {
+    this.PickOutfit(this.viewing);
+  }
 
   public void ClickToggleWalk()
   {
     if (this.creature.animator.currentState == AnimateState.Stop)
-      this.creature.animator.Play(AnimateState.Walk, float.MaxValue);
+      this.creature.animator.Play(AnimateState.Walk, float.MaxValue, true);
     else
-      this.creature.animator.Play(AnimateState.Stop);
+      this.creature.animator.Play(AnimateState.Stop, 0.0f, true);
   }
 
   public void ClickPreview()
@@ -1427,9 +1471,9 @@ public class CharacterCreation : Catalogue
       {
         if (string.IsNullOrEmpty(s))
           return;
-        this.SavePNG2(s);
-      }));
-      myContextMenu.Rebuild();
+        this.SavePNG2(s, false);
+      }), (string) null, false, true);
+      myContextMenu.Rebuild(false);
     }
   }
 
@@ -1440,7 +1484,7 @@ public class CharacterCreation : Catalogue
       if (string.IsNullOrEmpty(s))
         return;
       this.settingsPlayer.Export(s);
-    }));
+    }), (string) null, false, true);
   }
 
   private void CheckForEffect(
@@ -1472,13 +1516,13 @@ public class CharacterCreation : Catalogue
       return (SettingsPlayer.CustomAnim) null;
     int width = orig.width;
     int height = orig.height;
-    SettingsPlayer.CustomAnim anim = new SettingsPlayer.CustomAnim();
+    SettingsPlayer.CustomAnim customAnim = new SettingsPlayer.CustomAnim();
     for (int index1 = 0; index1 < num1; ++index1)
     {
       for (int index2 = 0; index2 < num2; ++index2)
-        anim.sprites.Add(Global.AddSprite(Sprite.Create(texture2D, new Rect((float) (index1 * width), (float) ((num2 - index2 - 1) * height), (float) width, (float) height), metaData.pivot, 2f)));
+        customAnim.sprites.Add(Global.AddSprite(Sprite.Create(texture2D, new Rect((float) (index1 * width), (float) ((num2 - index2 - 1) * height), (float) width, (float) height), metaData.pivot, 2f)));
     }
-    return anim;
+    return customAnim;
   }
 
   private void OnSelectCustomImage(string url, Outfit o)
@@ -1492,23 +1536,23 @@ public class CharacterCreation : Catalogue
   {
     Texture2D texture2D = new Texture2D(2, 2);
     texture2D.LoadImage(File.ReadAllBytes(url));
-    int o1 = (int) o;
+    int index = (int) o;
     SettingsPlayer.MetaData meta = SettingsPlayer.MetaData.Deserialize(url + ".meta").meta;
     this.settingsPlayer.MakeSureIntitialized();
-    this.settingsPlayer.customPieces[o1] = url;
-    this.settingsPlayer.metaData[o1] = meta;
+    this.settingsPlayer.customPieces[index] = url;
+    this.settingsPlayer.metaData[index] = meta;
     if ((UnityEngine.Object) texture2D == (UnityEngine.Object) null)
     {
-      if ((UnityEngine.Object) this.settingsPlayer.textures[o1] != (UnityEngine.Object) null)
+      if ((UnityEngine.Object) this.settingsPlayer.textures[index] != (UnityEngine.Object) null)
       {
-        Global.DestroySprite(this.settingsPlayer.textures[o1]);
-        this.settingsPlayer.textures[o1] = (Sprite) null;
+        Global.DestroySprite(this.settingsPlayer.textures[index]);
+        this.settingsPlayer.textures[index] = (Sprite) null;
       }
     }
     else
     {
-      this.settingsPlayer.textures[o1] = Global.AddSprite(Sprite.Create(texture2D, new Rect(0.0f, 0.0f, (float) texture2D.width, (float) texture2D.height), this.settingsPlayer.metaData[o1].pivot, 2f));
-      this.settingsPlayer.Reset((Outfit) o1);
+      this.settingsPlayer.textures[index] = Global.AddSprite(Sprite.Create(texture2D, new Rect(0.0f, 0.0f, (float) texture2D.width, (float) texture2D.height), this.settingsPlayer.metaData[index].pivot, 2f));
+      this.settingsPlayer.Reset((Outfit) index);
     }
     this.CheckForEffect(url, o, texture2D, meta);
   }
@@ -1524,18 +1568,18 @@ public class CharacterCreation : Catalogue
     {
       this.settingsPlayer.custom = (byte) 1;
       this.settingsPlayer.MakeSureIntitialized();
-      for (int o = 0; o < 11; ++o)
+      for (int index = 0; index < 11; ++index)
       {
-        if (string.IsNullOrEmpty(this.settingsPlayer.customPieces[o]) || !File.Exists(this.settingsPlayer.customPieces[o]))
+        if (string.IsNullOrEmpty(this.settingsPlayer.customPieces[index]) || !File.Exists(this.settingsPlayer.customPieces[index]))
         {
-          if ((UnityEngine.Object) this.settingsPlayer.textures[o] != (UnityEngine.Object) null)
+          if ((UnityEngine.Object) this.settingsPlayer.textures[index] != (UnityEngine.Object) null)
           {
-            Global.DestroySprite(this.settingsPlayer.textures[o]);
-            this.settingsPlayer.textures[o] = (Sprite) null;
+            Global.DestroySprite(this.settingsPlayer.textures[index]);
+            this.settingsPlayer.textures[index] = (Sprite) null;
           }
         }
         else
-          this.LoadImage(this.settingsPlayer.customPieces[o], (Outfit) o);
+          this.LoadImage(this.settingsPlayer.customPieces[index], (Outfit) index);
       }
       this.EquipAll();
       this.Changed();

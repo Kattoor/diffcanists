@@ -3,7 +3,6 @@ using Educative;
 using System;
 using UnityEngine;
 
-#nullable disable
 public class UITournamentBracket : MonoBehaviour
 {
   [NonSerialized]
@@ -13,14 +12,26 @@ public class UITournamentBracket : MonoBehaviour
 
   public static UITournamentBracket Instance { get; private set; }
 
-  public TournamentBracket.Round _activeRound => this.tc.rounds[this.activeRound];
+  public TournamentBracket.Round _activeRound
+  {
+    get
+    {
+      return this.tc.rounds[this.activeRound];
+    }
+  }
 
   public TournamentBracket.Bracket _activeBracket
   {
-    get => this.tc.rounds[this.activeRound].bracket[this.activeBracket];
+    get
+    {
+      return this.tc.rounds[this.activeRound].bracket[this.activeBracket];
+    }
   }
 
-  private void Awake() => UITournamentBracket.Instance = this;
+  private void Awake()
+  {
+    UITournamentBracket.Instance = this;
+  }
 
   private void OnDestroy()
   {
@@ -29,7 +40,10 @@ public class UITournamentBracket : MonoBehaviour
     UITournamentBracket.Instance = (UITournamentBracket) null;
   }
 
-  public void Start() => this.RefreshUI();
+  public void Start()
+  {
+    this.RefreshUI();
+  }
 
   public void RefreshUI()
   {

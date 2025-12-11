@@ -6,23 +6,30 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 
-#nullable disable
 namespace Telepathy
 {
   public class Server : Common
   {
+    private ConcurrentDictionary<int, Server.ClientToken> clients = new ConcurrentDictionary<int, Server.ClientToken>();
     public TcpListener listener;
     private Thread listenerThread;
-    private ConcurrentDictionary<int, Server.ClientToken> clients = new ConcurrentDictionary<int, Server.ClientToken>();
     private static int counter;
 
     public static int NextConnectionId()
     {
       int num = Interlocked.Increment(ref Server.counter);
-      return num != int.MaxValue ? num : throw new Exception("connection id limit reached: " + (object) num);
+      if (num == int.MaxValue)
+        throw new Exception("connection id limit reached: " + (object) num);
+      return num;
     }
 
-    public bool Active => this.listenerThread != null && this.listenerThread.IsAlive;
+    public bool Active
+    {
+      get
+      {
+        return this.listenerThread != null && this.listenerThread.IsAlive;
+      }
+    }
 
     private void Listen(int port)
     {
@@ -159,11 +166,14 @@ namespace Telepathy
 
     private class ClientToken
     {
-      public TcpClient client;
       public SafeQueue<byte[]> sendQueue = new SafeQueue<byte[]>();
       public ManualResetEvent sendPending = new ManualResetEvent(false);
+      public TcpClient client;
 
-      public ClientToken(TcpClient client) => this.client = client;
+      public ClientToken(TcpClient client)
+      {
+        this.client = client;
+      }
     }
   }
 }

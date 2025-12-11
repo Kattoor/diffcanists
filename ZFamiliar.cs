@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-#nullable disable
 public class ZFamiliar : ZComponent
 {
   public Familiar baseFamiliar;

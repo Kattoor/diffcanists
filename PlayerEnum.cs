@@ -1,5 +1,4 @@
 
-#nullable disable
 public enum PlayerEnum
 {
   Dont_Mind = -1, // 0xFFFFFFFF

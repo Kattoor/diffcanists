@@ -1,5 +1,4 @@
 
-#nullable disable
 public class FileAssociation
 {
   public string Extension { get; set; }

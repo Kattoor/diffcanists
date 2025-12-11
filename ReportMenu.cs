@@ -6,7 +6,6 @@ using System.IO;
 using TMPro;
 using UnityEngine;
 
-#nullable disable
 public class ReportMenu : MonoBehaviour
 {
   public TextMeshProUGUI txtCase;
@@ -18,7 +17,10 @@ public class ReportMenu : MonoBehaviour
 
   public static ReportMenu instance { get; private set; }
 
-  private void Awake() => ReportMenu.instance = this;
+  private void Awake()
+  {
+    ReportMenu.instance = this;
+  }
 
   private void OnDestroy()
   {
@@ -57,12 +59,15 @@ public class ReportMenu : MonoBehaviour
       this.dropNames.value = optionDataList2.FindIndex((Predicate<TMP_Dropdown.OptionData>) (a => string.Equals(a.text, name, StringComparison.OrdinalIgnoreCase)));
   }
 
-  public void Close() => UnityEngine.Object.Destroy((UnityEngine.Object) this.gameObject);
+  public void Close()
+  {
+    UnityEngine.Object.Destroy((UnityEngine.Object) this.gameObject);
+  }
 
   public void Confirm()
   {
     UnityEngine.Object.Destroy((UnityEngine.Object) this.gameObject);
-    if (this.dropNames.value < 0 || this.dropNames.value >= this.dropNames.options.Count || this.dropOffense.value < 0 || this.dropOffense.value >= this.dropOffense.options.Count || Client.connection == null || Client.connection.State != ConnectionState.Connected)
+    if (this.dropNames.value < 0 || this.dropNames.value >= this.dropNames.options.Count || (this.dropOffense.value < 0 || this.dropOffense.value >= this.dropOffense.options.Count) || (Client.connection == null || Client.connection.State != ConnectionState.Connected))
       return;
     PlayerPrefs.SetInt("reportNumber", this.caseNumber + 1);
     using (MemoryStream memoryStream = new MemoryStream())
@@ -76,7 +81,7 @@ public class ReportMenu : MonoBehaviour
       }
       if (Client.MyAccount.accountType.has(AccountType.Perm_Muted))
         return;
-      Client.connection.SendBytes(memoryStream.ToArray());
+      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
     }
   }
 }

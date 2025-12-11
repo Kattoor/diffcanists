@@ -1,8 +1,10 @@
 
-#nullable disable
 public class CreatureThorn : Creature
 {
   public Spell spell;
 
-  public override ZCreature Get() => (ZCreature) new ZCreatureThorn();
+  public override ZCreature Get()
+  {
+    return (ZCreature) new ZCreatureThorn();
+  }
 }

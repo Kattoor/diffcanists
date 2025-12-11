@@ -1,16 +1,27 @@
 
 using UnityEngine;
 
-#nullable disable
 public class Familiar : MonoBehaviour
 {
   internal ZFamiliar serverObj;
   public BookOf bookOf;
   public bool isAltBook;
 
-  public ZCreature creature => this.serverObj.creature;
+  public ZCreature creature
+  {
+    get
+    {
+      return this.serverObj.creature;
+    }
+  }
 
-  public MyLocation position => this.serverObj.position;
+  public MyLocation position
+  {
+    get
+    {
+      return this.serverObj.position;
+    }
+  }
 
   public void ColorFamiliar()
   {

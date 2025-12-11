@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 
-#nullable disable
 public class AllRankingsContainer
 {
   public List<JsonGamesLow> low = new List<JsonGamesLow>();

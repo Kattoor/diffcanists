@@ -5,9 +5,10 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-#nullable disable
 public class AchievementsMenu : Catalogue
 {
+  public List<GameObject> outfitImages = new List<GameObject>();
+  public int _viewing = -1;
   public RectTransform container;
   public AchievementButton pfabItem;
   public Image img;
@@ -20,9 +21,7 @@ public class AchievementsMenu : Catalogue
   public GameObject statsPanel;
   public TMP_Text txtAmount;
   public Image outfitImage;
-  public List<GameObject> outfitImages = new List<GameObject>();
   public bool isStatic;
-  public int _viewing = -1;
   private AchievementButton activeButton;
 
   public static AchievementsMenu Instance { get; private set; }
@@ -124,7 +123,10 @@ public class AchievementsMenu : Catalogue
     this.txtAmount.text = num2.ToString() + "/" + (object) num1;
   }
 
-  public void ClickMainMenu() => UnityEngine.Object.Destroy((UnityEngine.Object) this.gameObject);
+  public void ClickMainMenu()
+  {
+    UnityEngine.Object.Destroy((UnityEngine.Object) this.gameObject);
+  }
 
   private void OnDestroy()
   {

@@ -7,13 +7,8 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-#nullable disable
 [RequireComponent(typeof (Image))]
-public class UIHoldButton : 
-  MonoBehaviour,
-  IPointerDownHandler,
-  IEventSystemHandler,
-  IPointerUpHandler
+public class UIHoldButton : MonoBehaviour, IPointerDownHandler, IEventSystemHandler, IPointerUpHandler
 {
   internal Color normalColor;
   public Color colorDown;

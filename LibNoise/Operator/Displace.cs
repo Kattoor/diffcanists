@@ -1,5 +1,4 @@
 
-#nullable disable
 namespace LibNoise.Operator
 {
   public class Displace : ModuleBase
@@ -20,20 +19,38 @@ namespace LibNoise.Operator
 
     public ModuleBase X
     {
-      get => this.Modules[1];
-      set => this.Modules[1] = value;
+      get
+      {
+        return this.Modules[1];
+      }
+      set
+      {
+        this.Modules[1] = value;
+      }
     }
 
     public ModuleBase Y
     {
-      get => this.Modules[2];
-      set => this.Modules[2] = value;
+      get
+      {
+        return this.Modules[2];
+      }
+      set
+      {
+        this.Modules[2] = value;
+      }
     }
 
     public ModuleBase Z
     {
-      get => this.Modules[3];
-      set => this.Modules[3] = value;
+      get
+      {
+        return this.Modules[3];
+      }
+      set
+      {
+        this.Modules[3] = value;
+      }
     }
 
     public override double GetValue(double x, double y, double z)

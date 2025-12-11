@@ -7,7 +7,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-#nullable disable
 public class UnratedTab : Catalogue
 {
   public GameObject[] Advanced_Options;
@@ -60,7 +59,10 @@ public class UnratedTab : Catalogue
     ((RectTransform) unratedTab.transform).anchoredPosition = new Vector2(0.0f, 0.0f);
   }
 
-  private void Awake() => UnratedTab.instance = this;
+  private void Awake()
+  {
+    UnratedTab.instance = this;
+  }
 
   internal void _Start()
   {
@@ -96,7 +98,7 @@ public class UnratedTab : Catalogue
 
   public void HoverSimiliarRating()
   {
-    MyToolTip.Show(Mathf.Max(1000, (int) Client.GetAccount(this._gameFacts.players[0]).similarRating).ToString() + "-" + (object) ((int) Client.GetAccount(this._gameFacts.players[0]).similarRating + 500));
+    MyToolTip.Show(Mathf.Max(1000, (int) Client.GetAccount(this._gameFacts.players[0], false).similarRating).ToString() + "-" + (object) ((int) Client.GetAccount(this._gameFacts.players[0], false).similarRating + 500), -1f);
   }
 
   public void ToggleAll(UIOnHover[] group)
@@ -124,7 +126,10 @@ public class UnratedTab : Catalogue
     return false;
   }
 
-  public void ClickToggleAdvanced() => this.ToggleAdvanced(!this.advanced);
+  public void ClickToggleAdvanced()
+  {
+    this.ToggleAdvanced(!this.advanced);
+  }
 
   public void ToggleAdvanced(bool v)
   {
@@ -245,7 +250,7 @@ public class UnratedTab : Catalogue
     byte num = this._gameFacts.elementalLevel;
     string str1 = "Elementals\n" + num.ToString();
     txtElementalLevel.text = str1;
-    this.txtCountdown.text = "Countdown: " + (this._gameFacts.countdownTime == (short) 0 ? "<#FF0000>X" : (this._gameFacts.countdownTime < (short) 0 ? "<sprite=23> " + Global.IntToTime((int) this._gameFacts.countdownTime) : Global.IntToTime((int) this._gameFacts.countdownTime)));
+    this.txtCountdown.text = "Countdown: " + (this._gameFacts.countdownTime == (short) 0 ? "<#FF0000>X" : (this._gameFacts.countdownTime < (short) 0 ? "<sprite=23> " + Global.IntToTime((int) this._gameFacts.countdownTime, 10) : Global.IntToTime((int) this._gameFacts.countdownTime, 10)));
     TMP_Text txtCountdownDelay = this.txtCountdownDelay;
     string str2;
     if (this._gameFacts.countdownTime != (short) 0)
@@ -269,9 +274,9 @@ public class UnratedTab : Catalogue
     this.groupPlayers[2].AlwaysOn = this._gameFacts.restrictions != null && this._gameFacts.restrictions.AnyRestricted();
     this.buttonArmageddonTurn.AlwaysOn = this._gameFacts.armageddonTurn != (byte) 10;
     this.groupTurnTime[0].AlwaysOn = true;
-    this.groupTurnTime[1].AlwaysOn = this._gameFacts.countdownTime != (short) 0;
-    this.groupTurnTime[2].Interactable(this._gameFacts.countdownTime != (short) 0);
-    this.groupTurnTime[2].AlwaysOn = this._gameFacts.countdownTime != (short) 0;
+    this.groupTurnTime[1].AlwaysOn = (uint) this._gameFacts.countdownTime > 0U;
+    this.groupTurnTime[2].Interactable((uint) this._gameFacts.countdownTime > 0U);
+    this.groupTurnTime[2].AlwaysOn = (uint) this._gameFacts.countdownTime > 0U;
     this.zombieMonkey.sprite = this._gameFacts.GetStyle().HasStyle(GameStyle.Zombie_Monkey) ? this.spZombieMonkey : this.spMonkey;
     if (this._gameFacts.settings.autoInclude != null && this._gameFacts.settings.autoInclude.Count > 0)
     {
@@ -316,12 +321,18 @@ public class UnratedTab : Catalogue
       this.panelCustomArmageddon.SetActive(false);
   }
 
-  public void ToolTip(string s) => MyToolTip.Show(s);
+  public void ToolTip(string s)
+  {
+    MyToolTip.Show(s, -1f);
+  }
 
   public void HoverCountdown()
   {
-    MyToolTip.Show("Countdown: " + Mathf.Abs((int) this._gameFacts.countdownTime).ToString() + (this._gameFacts.countdownTime > (short) 0 ? " seconds<br>If time runs out you will get 5 second turns from then on." : " seconds<br><#FF0000>If time runs out you lose</color><br>Turn time is still used."));
+    MyToolTip.Show("Countdown: " + Mathf.Abs((int) this._gameFacts.countdownTime).ToString() + (this._gameFacts.countdownTime > (short) 0 ? " seconds<br>If time runs out you will get 5 second turns from then on." : " seconds<br><#FF0000>If time runs out you lose</color><br>Turn time is still used."), -1f);
   }
 
-  public void HideToolTip() => MyToolTip.Close();
+  public void HideToolTip()
+  {
+    MyToolTip.Close();
+  }
 }

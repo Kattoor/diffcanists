@@ -1,7 +1,6 @@
 
 using UnityEngine;
 
-#nullable disable
 public class FamiliarRock : Familiar
 {
   public float maxDistance = 4f;
@@ -47,7 +46,7 @@ public class FamiliarRock : Familiar
         if ((double) num > 3.0 && this.lastState == AnimateState.Walk && this.creature.animator.currentState == AnimateState.Stop)
         {
           if ((Object) this.anim != (Object) null)
-            this.anim.Play(AnimateState.Walk, 0.05f);
+            this.anim.Play(AnimateState.Walk, 0.05f, true);
           flag = false;
         }
       }
@@ -55,19 +54,19 @@ public class FamiliarRock : Familiar
         return;
       if (this.creature.animator.currentState == AnimateState.Walk)
       {
-        this.anim.Play(AnimateState.Walk, 0.05f);
+        this.anim.Play(AnimateState.Walk, 0.05f, true);
         this.lastState = AnimateState.Walk;
       }
       else if (this.creature.animator.currentState == AnimateState.Jump)
       {
-        this.anim.Play(AnimateState.Jump);
+        this.anim.Play(AnimateState.Jump, 0.0f, true);
         this.lastState = AnimateState.Jump;
       }
       else
       {
         if (this.creature.animator.currentState != AnimateState.Stop)
           return;
-        this.anim.Play(AnimateState.Stop);
+        this.anim.Play(AnimateState.Stop, 0.0f, true);
       }
     }
   }

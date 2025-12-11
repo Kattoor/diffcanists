@@ -7,7 +7,6 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-#nullable disable
 public class ElementalSelection : MonoBehaviour
 {
   public GameObject pfab;
@@ -16,7 +15,10 @@ public class ElementalSelection : MonoBehaviour
 
   public static ElementalSelection Instance { get; private set; }
 
-  private void Awake() => ElementalSelection.Instance = this;
+  private void Awake()
+  {
+    ElementalSelection.Instance = this;
+  }
 
   private void OnDestroy()
   {
@@ -95,7 +97,7 @@ public class ElementalSelection : MonoBehaviour
         }
 label_19:
         gameObject.GetComponent<Image>().sprite = !sp.UsingAltBook(b) ? ClientResources.Instance.spellBookIcons[(int) (b + 1)] : ClientResources.Instance.altSpellBookIcons[(int) (b + 1)];
-        if ((excluded == null || excluded.Length == 0) && Restrictions.IsElementalRestricted(sp, z))
+        if ((excluded == null || excluded.Length == 0) && Restrictions.IsElementalRestricted(sp, z, (Restrictions) null))
           gameObject.transform.GetChild(0).gameObject.SetActive(true);
         gameObject.SetActive(true);
         ++num2;

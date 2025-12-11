@@ -1,7 +1,6 @@
 
 using UnityEngine;
 
-#nullable disable
 public class LerpUpDown : MonoBehaviour
 {
   private float cur = 0.5f;

@@ -2,7 +2,6 @@
 using System.IO;
 using System.Net.Sockets;
 
-#nullable disable
 public static class NetworkStreamExtensions
 {
   public static int ReadSafely(this NetworkStream stream, byte[] buffer, int offset, int size)

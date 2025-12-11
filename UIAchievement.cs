@@ -3,7 +3,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-#nullable disable
 public class UIAchievement : MonoBehaviour
 {
   public RectTransform rect;
@@ -24,7 +23,7 @@ public class UIAchievement : MonoBehaviour
     UIAchievement uiAchievement = Object.Instantiate<UIAchievement>(Controller.Instance.uIAchievement, Controller.Instance.transform);
     uiAchievement.rect.anchoredPosition = new Vector2(168f, 0.0f);
     uiAchievement.Init(achievement);
-    ChatBox.Instance?.NewChatMsg("", "Achievement: " + Achievements.list[(int) achievement].name + " - " + Achievements.list[(int) achievement].description, (Color) ColorScheme.GetColor(Global.ColorNotification), "", ChatOrigination.System);
+    ChatBox.Instance?.NewChatMsg("", "Achievement: " + Achievements.list[(int) achievement].name + " - " + Achievements.list[(int) achievement].description, (Color) ColorScheme.GetColor(Global.ColorNotification), "", ChatOrigination.System, ContentType.STRING, (object) null);
   }
 
   public void Init(Achievement e)
@@ -34,9 +33,15 @@ public class UIAchievement : MonoBehaviour
     this.text.text = Achievements.list[this._achievement].name;
   }
 
-  public void OnEnter() => MyToolTip.Show(Achievements.list[this._achievement].description);
+  public void OnEnter()
+  {
+    MyToolTip.Show(Achievements.list[this._achievement].description, -1f);
+  }
 
-  public void OnExit() => MyToolTip.Close();
+  public void OnExit()
+  {
+    MyToolTip.Close();
+  }
 
   private void Awake()
   {

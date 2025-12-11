@@ -2,13 +2,15 @@
 using SpriteGlow;
 using UnityEngine;
 
-#nullable disable
 [RequireComponent(typeof (SpriteGlowEffect))]
 public class GlowColorRandomizer : MonoBehaviour
 {
   private SpriteGlowEffect spriteGlow;
 
-  private void Awake() => this.spriteGlow = this.GetComponent<SpriteGlowEffect>();
+  private void Awake()
+  {
+    this.spriteGlow = this.GetComponent<SpriteGlowEffect>();
+  }
 
   private void OnEnable()
   {
@@ -17,5 +19,8 @@ public class GlowColorRandomizer : MonoBehaviour
     this.spriteGlow.GlowBrightness = Random.Range(2f, 4f);
   }
 
-  private void OnDisable() => this.spriteGlow.enabled = false;
+  private void OnDisable()
+  {
+    this.spriteGlow.enabled = false;
+  }
 }

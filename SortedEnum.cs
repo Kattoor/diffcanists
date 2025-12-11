@@ -1,5 +1,4 @@
 
-#nullable disable
 public static class SortedEnum
 {
   public static PlayerEnum[] playerEnums = new PlayerEnum[6]

@@ -6,7 +6,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-#nullable disable
 namespace InGameCodeEditor
 {
   public class CodeEditor : MonoBehaviour
@@ -24,6 +23,11 @@ namespace InGameCodeEditor
     private static StringBuilder lineBuilder = new StringBuilder();
     private static MethodInfo scrollBarUpdateFix = (MethodInfo) null;
     private InputStringLexer lexer = new InputStringLexer();
+    [Header("Options")]
+    [SerializeField]
+    private bool lineNumbers = true;
+    [SerializeField]
+    private int lineNumbersSize = 20;
     private RectTransform inputTextTransform;
     private RectTransform lineHighlightTransform;
     private int lineCount;
@@ -56,18 +60,16 @@ namespace InGameCodeEditor
     private CodeEditorTheme editorTheme;
     [SerializeField]
     private CodeLanguageTheme languageTheme;
-    [Header("Options")]
-    [SerializeField]
-    private bool lineNumbers = true;
-    [SerializeField]
-    private int lineNumbersSize = 20;
     [Header("TMP Compatibility")]
     [SerializeField]
     private bool applyLineOffsetFix;
 
     public CodeEditorTheme EditorTheme
     {
-      get => this.editorTheme;
+      get
+      {
+        return this.editorTheme;
+      }
       set
       {
         this.editorTheme = value;
@@ -77,7 +79,10 @@ namespace InGameCodeEditor
 
     public CodeLanguageTheme LanguageTheme
     {
-      get => this.languageTheme;
+      get
+      {
+        return this.languageTheme;
+      }
       set
       {
         this.languageTheme = value;
@@ -85,19 +90,52 @@ namespace InGameCodeEditor
       }
     }
 
-    public TMP_InputField InputField => this.inputField;
+    public TMP_InputField InputField
+    {
+      get
+      {
+        return this.inputField;
+      }
+    }
 
-    public int LineCount => this.lineCount;
+    public int LineCount
+    {
+      get
+      {
+        return this.lineCount;
+      }
+    }
 
-    public int CurrentLine => this.currentLine;
+    public int CurrentLine
+    {
+      get
+      {
+        return this.currentLine;
+      }
+    }
 
-    public int CurrentColumn => this.currentColumn;
+    public int CurrentColumn
+    {
+      get
+      {
+        return this.currentColumn;
+      }
+    }
 
-    public int CurrentIndent => this.currentIndent;
+    public int CurrentIndent
+    {
+      get
+      {
+        return this.currentIndent;
+      }
+    }
 
     public string Text
     {
-      get => this.inputField.text;
+      get
+      {
+        return this.inputField.text;
+      }
       set
       {
         if (!string.IsNullOrEmpty(value))
@@ -126,11 +164,20 @@ namespace InGameCodeEditor
       }
     }
 
-    public string HighlightedText => this.inputHighlightText.text;
+    public string HighlightedText
+    {
+      get
+      {
+        return this.inputHighlightText.text;
+      }
+    }
 
     public bool LineNumbers
     {
-      get => this.lineNumbers;
+      get
+      {
+        return this.lineNumbers;
+      }
       set
       {
         this.lineNumbers = value;
@@ -154,7 +201,10 @@ namespace InGameCodeEditor
 
     public int LineNumbersSize
     {
-      get => this.lineNumbersSize;
+      get
+      {
+        return this.lineNumbersSize;
+      }
       set
       {
         this.lineNumbersSize = value;
@@ -191,7 +241,7 @@ namespace InGameCodeEditor
       if ((Object) this.languageTheme != (Object) null && this.languageTheme.autoIndent.autoIndentMode != AutoIndent.IndentMode.None)
       {
         if (Input.GetKeyDown(KeyCode.Return))
-          this.AutoIndentCaret();
+          this.AutoIndentCaret(false);
         else if (Input.anyKeyDown && Input.inputString.Contains(this.languageTheme.autoIndent.IndentDecreaseString))
           this.AutoIndentCaret(true);
       }
@@ -205,7 +255,7 @@ namespace InGameCodeEditor
       if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.V))
         this.delayedRefresh = true;
       if (Input.anyKey)
-        this.Refresh();
+        this.Refresh(false, true);
       bool flag = false;
       foreach (KeyCode focusKey in CodeEditor.focusKeys)
       {
@@ -240,9 +290,15 @@ namespace InGameCodeEditor
         this.UnlockLineHighlight();
     }
 
-    public void LockLineHighlight() => this.lineHighlightLocked = true;
+    public void LockLineHighlight()
+    {
+      this.lineHighlightLocked = true;
+    }
 
-    public void UnlockLineHighlight() => this.lineHighlightLocked = false;
+    public void UnlockLineHighlight()
+    {
+      this.lineHighlightLocked = false;
+    }
 
     private void DisplayedContentChanged(string newText, bool forceUpdate, bool updateLineOnly)
     {
@@ -405,11 +461,11 @@ namespace InGameCodeEditor
         --this.inputField.stringPosition;
       }
       this.inputText.text = this.inputField.text;
-      this.inputText.SetText(this.inputField.text);
+      this.inputText.SetText(this.inputField.text, true);
       this.inputText.Rebuild(CanvasUpdate.Prelayout);
       this.inputField.ForceLabelUpdate();
       this.inputField.Rebuild(CanvasUpdate.Prelayout);
-      this.Refresh(true);
+      this.Refresh(true, true);
       this.delayedRefresh = true;
     }
 
@@ -458,7 +514,7 @@ namespace InGameCodeEditor
 
     private bool AllReferencesAssigned()
     {
-      return !((Object) this.inputField == (Object) null) && !((Object) this.inputText == (Object) null) && !((Object) this.inputHighlightText == (Object) null) && !((Object) this.lineText == (Object) null) && !((Object) this.background == (Object) null) && !((Object) this.lineHighlight == (Object) null) && !((Object) this.lineNumberBackground == (Object) null) && !((Object) this.scrollbar == (Object) null);
+      return !((Object) this.inputField == (Object) null) && !((Object) this.inputText == (Object) null) && (!((Object) this.inputHighlightText == (Object) null) && !((Object) this.lineText == (Object) null)) && (!((Object) this.background == (Object) null) && !((Object) this.lineHighlight == (Object) null) && (!((Object) this.lineNumberBackground == (Object) null) && !((Object) this.scrollbar == (Object) null)));
     }
   }
 }

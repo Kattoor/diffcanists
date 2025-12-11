@@ -1,5 +1,4 @@
 
-#nullable disable
 namespace UnityEngine.UI.Extensions
 {
   public class ShineEffect : MaskableGraphic
@@ -11,7 +10,10 @@ namespace UnityEngine.UI.Extensions
 
     public float Yoffset
     {
-      get => this.yoffset;
+      get
+      {
+        return this.yoffset;
+      }
       set
       {
         this.SetVerticesDirty();
@@ -21,7 +23,10 @@ namespace UnityEngine.UI.Extensions
 
     public float Width
     {
-      get => this.width;
+      get
+      {
+        return this.width;
+      }
       set
       {
         this.SetAllDirty();
@@ -59,9 +64,9 @@ namespace UnityEngine.UI.Extensions
 
     public void Triangulate(VertexHelper vh)
     {
-      int message = vh.currentVertCount - 2;
-      Debug.Log((object) message);
-      for (int idx0 = 0; idx0 <= message / 2 + 1; idx0 += 2)
+      int num = vh.currentVertCount - 2;
+      Debug.Log((object) num);
+      for (int idx0 = 0; idx0 <= num / 2 + 1; idx0 += 2)
       {
         vh.AddTriangle(idx0, idx0 + 1, idx0 + 2);
         vh.AddTriangle(idx0 + 2, idx0 + 3, idx0 + 1);

@@ -4,28 +4,30 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 
-#nullable disable
 namespace Hazel.Udp
 {
   public abstract class UdpConnection : NetworkConnection
   {
     private int keepAliveInterval = 10000;
-    private Timer keepAliveTimer;
     private object keepAliveTimerLock = new object();
-    private bool keepAliveTimerDisposed;
     private volatile int resendTimeout = 200;
-    private volatile ushort lastIDAllocated;
     private Dictionary<ushort, UdpConnection.Packet> reliableDataPacketsSent = new Dictionary<ushort, UdpConnection.Packet>();
     private HashSet<ushort> reliableDataPacketsMissing = new HashSet<ushort>();
+    private volatile int resendsBeforeDisconnect = 3;
+    private Timer keepAliveTimer;
+    private bool keepAliveTimerDisposed;
+    private volatile ushort lastIDAllocated;
     private volatile ushort reliableReceiveLast;
     private volatile bool hasReceivedSomething;
     private long totalRoundTime;
     private long totalReliableMessages;
-    private volatile int resendsBeforeDisconnect = 3;
 
     public int KeepAliveInterval
     {
-      get => this.keepAliveInterval;
+      get
+      {
+        return this.keepAliveInterval;
+      }
       set
       {
         this.keepAliveInterval = value;
@@ -57,8 +59,14 @@ namespace Hazel.Udp
 
     public int ResendTimeout
     {
-      get => this.resendTimeout;
-      set => this.resendTimeout = value;
+      get
+      {
+        return this.resendTimeout;
+      }
+      set
+      {
+        this.resendTimeout = value;
+      }
     }
 
     public double AveragePing
@@ -72,8 +80,14 @@ namespace Hazel.Udp
 
     public int ResendsBeforeDisconnect
     {
-      get => this.resendsBeforeDisconnect;
-      set => this.resendsBeforeDisconnect = value;
+      get
+      {
+        return this.resendsBeforeDisconnect;
+      }
+      set
+      {
+        this.resendsBeforeDisconnect = value;
+      }
     }
 
     private void WriteReliableSendHeader(byte[] bytes, Action ackCallback)
@@ -98,7 +112,7 @@ namespace Hazel.Udp
               p.Timer.Change(p.LastTimeout *= 2, -1);
               if (++p.Retransmissions > this.ResendsBeforeDisconnect)
               {
-                this.HandleDisconnect();
+                this.HandleDisconnect((HazelException) null);
                 p.Acknowledged = true;
                 p.Recycle();
                 return;
@@ -171,7 +185,10 @@ namespace Hazel.Udp
       });
     }
 
-    protected UdpConnection() => this.InitializeKeepAliveTimer();
+    protected UdpConnection()
+    {
+      this.InitializeKeepAliveTimer();
+    }
 
     protected abstract void WriteBytesToConnection(byte[] bytes);
 
@@ -179,14 +196,14 @@ namespace Hazel.Udp
     {
       if (this.State != ConnectionState.Connected)
         throw new InvalidOperationException("Could not send data as this Connection is not connected. Did you disconnect?");
-      this.HandleSend(bytes, (byte) 0);
+      this.HandleSend(bytes, (byte) 0, (Action) null);
     }
 
     public override void SendBytes(byte[] bytes, SendOption sendOption = SendOption.None)
     {
       if (this.State != ConnectionState.Connected)
         throw new InvalidOperationException("Could not send data as this Connection is not connected. Did you disconnect?");
-      this.HandleSend(bytes, (byte) sendOption);
+      this.HandleSend(bytes, (byte) sendOption, (Action) null);
     }
 
     public override void SendBytesAndClose(byte[] bytes, SendOption sendOption = SendOption.FragmentedReliable)
@@ -196,19 +213,19 @@ namespace Hazel.Udp
 
     protected void HandleSend(byte[] data, byte sendOption, Action ackCallback = null)
     {
-      byte[] numArray;
+      byte[] bytes;
       if (sendOption == (byte) 1 || sendOption == (byte) 8)
       {
-        numArray = new byte[data.Length + 3];
-        this.WriteReliableSendHeader(numArray, ackCallback);
+        bytes = new byte[data.Length + 3];
+        this.WriteReliableSendHeader(bytes, ackCallback);
       }
       else
-        numArray = new byte[data.Length + 1];
-      numArray[0] = sendOption;
-      Buffer.BlockCopy((Array) data, 0, (Array) numArray, numArray.Length - data.Length, data.Length);
+        bytes = new byte[data.Length + 1];
+      bytes[0] = sendOption;
+      Buffer.BlockCopy((Array) data, 0, (Array) bytes, bytes.Length - data.Length, data.Length);
       this.ResetKeepAliveTimer();
-      this.WriteBytesToConnection(numArray);
-      this.Statistics.LogSend(data.Length, numArray.Length);
+      this.WriteBytesToConnection(bytes);
+      this.Statistics.LogSend(data.Length, bytes.Length);
     }
 
     protected byte[] HandleReceive(byte[] buffer, int bytesReceived)
@@ -226,34 +243,37 @@ namespace Hazel.Udp
           this.HandleReliableReceive(buffer);
           return (byte[]) null;
         case 9:
-          this.HandleDisconnect();
+          this.HandleDisconnect((HazelException) null);
           return (byte[]) null;
         case 10:
           this.HandleAcknowledgement(buffer);
           return (byte[]) null;
       }
-      byte[] dst = new byte[bytesReceived - srcOffset];
-      Buffer.BlockCopy((Array) buffer, srcOffset, (Array) dst, 0, dst.Length);
-      this.Statistics.LogReceive(dst.Length, bytesReceived);
-      return dst;
+      byte[] numArray = new byte[bytesReceived - srcOffset];
+      Buffer.BlockCopy((Array) buffer, srcOffset, (Array) numArray, 0, numArray.Length);
+      this.Statistics.LogReceive(numArray.Length, bytesReceived);
+      return numArray;
     }
 
     protected void SendHello(byte[] bytes, Action acknowledgeCallback)
     {
-      byte[] numArray;
+      byte[] data;
       if (bytes == null)
       {
-        numArray = new byte[1];
+        data = new byte[1];
       }
       else
       {
-        numArray = new byte[bytes.Length + 1];
-        Buffer.BlockCopy((Array) bytes, 0, (Array) numArray, 1, bytes.Length);
+        data = new byte[bytes.Length + 1];
+        Buffer.BlockCopy((Array) bytes, 0, (Array) data, 1, bytes.Length);
       }
-      this.HandleSend(numArray, (byte) 8, acknowledgeCallback);
+      this.HandleSend(data, (byte) 8, acknowledgeCallback);
     }
 
-    protected void SendDisconnect() => this.HandleSend(new byte[0], (byte) 9);
+    protected void SendDisconnect()
+    {
+      this.HandleSend(new byte[0], (byte) 9, (Action) null);
+    }
 
     protected override void Dispose(bool disposing)
     {
@@ -265,13 +285,13 @@ namespace Hazel.Udp
     private class Packet : IRecyclable, IDisposable
     {
       private static readonly ObjectPool<UdpConnection.Packet> objectPool = new ObjectPool<UdpConnection.Packet>((Func<UdpConnection.Packet>) (() => new UdpConnection.Packet()));
+      public Stopwatch Stopwatch = new Stopwatch();
       public byte[] Data;
       public Timer Timer;
       public volatile int LastTimeout;
       public Action AckCallback;
       public volatile bool Acknowledged;
       public volatile int Retransmissions;
-      public Stopwatch Stopwatch = new Stopwatch();
 
       internal static UdpConnection.Packet GetObject()
       {

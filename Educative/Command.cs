@@ -1,7 +1,6 @@
 
 using UnityEngine;
 
-#nullable disable
 namespace Educative
 {
   public class Command : IJason

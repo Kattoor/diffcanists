@@ -1,7 +1,6 @@
 
 using UnityEngine;
 
-#nullable disable
 public class AnimateExplosioin : MonoBehaviour
 {
   public float timeToFinish = 1f;

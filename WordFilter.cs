@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 
-#nullable disable
 public static class WordFilter
 {
   internal static string BadWords = "\\bass\\b|nigger|\\bbitch\\b|\\bchild fucker\\b|\\bchild-fucker\\b|\\bchinc\\b|\\bchincs\\b|\\bchink\\b|\\bchinky\\b|\\bcoon\\b|\\bcoonnass\\b|\\bcoons\\b|\\bdog-fucker\\b|\\bdyke\\b|\\bdykes\\b|\\bf4g\\b|\\bf4gg0t\\b|\\bfag\\b|\\bfagbag\\b|\\bfagfucker\\b|\\bfagg\\b|\\bfagg0t\\b|\\bfagged\\b|\\bfagging\\b|\\bfaggit\\b|\\bfaggitt\\b|\\bfaggot\\b|\\bfaggotcock\\b|\\bfaggots\\b|\\bfaggs\\b|\\bfagot\\b|\\bfagots\\b|\\bfags\\b|\\bfagtard\\b|\\bfaig\\b|\\bfaigt\\b|\\bfaqqet\\b|\\bfrigga\\b|\\bfuck\\b|\\bfuckingshitmotherfucker\\b|\\bfucknigger\\b|\\bgayass\\b|\\bgaytard\\b|\\bh0m0\\b|\\bh0mo\\b|\\bkill yourself\\b|\\bkkk\\b|\\bku klux klan\\b|\\bKu Klux Klan\\b|\\bky\\b|\\bmcfagget\\b|\\bmolest\\b|\\bn1gg@\\b|\\bn1gga\\b|\\bn1gger\\b|\\bnegro\\b|\\bnig nog\\b|\\bnigaboo\\b|\\bnigg\\b|\\bnigg3r\\b|\\bnigg4h\\b|\\bnigga\\b|\\bniggaa\\b|\\bniggah\\b|\\bniggas\\b|\\bniggaz\\b|\\bnigger\\b|\\bniggerfaggot\\b|\\bniggers\\b|\\bniggger\\b|\\bnigggger\\b|\\bniggle\\b|\\bniglet\\b|\\bnig-nog\\b|\\bnigro\\b|\\bnigros\\b|\\bpaki\\b|\\bporch monkey\\b|\\bporchmonkey\\b|\\bqueer\\b|\\bqueerbait\\b|\\bqueerhole\\b|\\bqueero\\b|\\bqueers\\b|\\braghead\\b|\\brape\\b|\\braped\\b|\\braper\\b|\\brapey\\b|\\braping\\b|\\brapist\\b|\\breetard\\b|\\bretard\\b|\\bretarded\\b|\\breturd\\b|\\britard\\b|\\bRP1\\b|\\brtard\\b|\\br-tard\\b|\\bsand nigger\\b|\\bsandnigger\\b|\\bsex\\b|\\bslanteye\\b|\\bspic\\b|\\bspick\\b|\\bspik\\b|\\bspiks\\b|\\btowelhead\\b|\\bwhitey\\b|\\bwigger\\b|nigger|niger|cunt|n1ger|n1gger|nlger|nlgger|nigr|n1gr|nlgr|nigg|n1gg|nlgg";
@@ -165,14 +164,20 @@ public static class WordFilter
     return WordFilter.realWordFilter.Replace(inputWords, "");
   }
 
-  public static bool HasWeb(string inputWords) => WordFilter.webFilter.IsMatch(inputWords);
+  public static bool HasWeb(string inputWords)
+  {
+    return WordFilter.webFilter.IsMatch(inputWords);
+  }
 
   public static string FilterForbiddenWords(string inputWords)
   {
     return WordFilter.forbiddenFilter.Replace(inputWords, ";)");
   }
 
-  public static bool HasBadWords(string inputWords) => WordFilter.wordFilter.IsMatch(inputWords);
+  public static bool HasBadWords(string inputWords)
+  {
+    return WordFilter.wordFilter.IsMatch(inputWords);
+  }
 
   public static bool HasRealBadWords(string inputWords)
   {
@@ -210,8 +215,8 @@ public static class WordFilter
     MatchCollection matchCollection = WordFilter.linkFilter.Matches(inputWords);
     if (matchCollection.Count <= 0)
       return;
-    for (int i = matchCollection.Count - 1; i >= 0; --i)
-      inputWords = inputWords.Remove(matchCollection[i].Index, matchCollection[i].Length).Insert(matchCollection[i].Index, WordFilter.linkreplacement[matchCollection[i].Value]);
+    for (int index = matchCollection.Count - 1; index >= 0; --index)
+      inputWords = inputWords.Remove(matchCollection[index].Index, matchCollection[index].Length).Insert(matchCollection[index].Index, WordFilter.linkreplacement[matchCollection[index].Value]);
   }
 
   public static void RefreshLinks()

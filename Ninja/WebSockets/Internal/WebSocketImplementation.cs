@@ -8,11 +8,11 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-#nullable disable
 namespace Ninja.WebSockets.Internal
 {
   internal class WebSocketImplementation : WebSocket
   {
+    private WebSocketMessageType _continuationFrameMessageType = WebSocketMessageType.Binary;
     private readonly Guid _guid;
     private readonly Func<MemoryStream> _recycledStreamFactory;
     private readonly Stream _stream;
@@ -22,7 +22,6 @@ namespace Ninja.WebSockets.Internal
     private CancellationTokenSource _internalReadCts;
     private WebSocketState _state;
     private bool _isContinuationFrame;
-    private WebSocketMessageType _continuationFrameMessageType = WebSocketMessageType.Binary;
     private readonly bool _usePerMessageDeflate;
     private bool _tryGetBufferFailureLogged;
     private const int MAX_PING_PONG_PAYLOAD_LEN = 125;
@@ -69,13 +68,37 @@ namespace Ninja.WebSockets.Internal
       }
     }
 
-    public override WebSocketCloseStatus? CloseStatus => this._closeStatus;
+    public override WebSocketCloseStatus? CloseStatus
+    {
+      get
+      {
+        return this._closeStatus;
+      }
+    }
 
-    public override string CloseStatusDescription => this._closeStatusDescription;
+    public override string CloseStatusDescription
+    {
+      get
+      {
+        return this._closeStatusDescription;
+      }
+    }
 
-    public override WebSocketState State => this._state;
+    public override WebSocketState State
+    {
+      get
+      {
+        return this._state;
+      }
+    }
 
-    public override string SubProtocol => this._subProtocol;
+    public override string SubProtocol
+    {
+      get
+      {
+        return this._subProtocol;
+      }
+    }
 
     public TimeSpan KeepAliveInterval { get; private set; }
 
@@ -83,77 +106,77 @@ namespace Ninja.WebSockets.Internal
       ArraySegment<byte> buffer,
       CancellationToken cancellationToken)
     {
-      WebSocketImplementation sender = this;
+      WebSocketImplementation socketImplementation = this;
       object obj;
       int num;
       try
       {
         while (true)
         {
-          using (CancellationTokenSource linkedCts = CancellationTokenSource.CreateLinkedTokenSource(sender._internalReadCts.Token, cancellationToken))
+          using (CancellationTokenSource linkedCts = CancellationTokenSource.CreateLinkedTokenSource(socketImplementation._internalReadCts.Token, cancellationToken))
           {
             WebSocketFrame frame = (WebSocketFrame) null;
             try
             {
-              frame = await WebSocketFrameReader.ReadAsync(sender._stream, buffer, linkedCts.Token);
-              Events.Log.ReceivedFrame(sender._guid, frame.OpCode, frame.IsFinBitSet, frame.Count);
+              frame = await WebSocketFrameReader.ReadAsync(socketImplementation._stream, buffer, linkedCts.Token);
+              Events.Log.ReceivedFrame(socketImplementation._guid, frame.OpCode, frame.IsFinBitSet, frame.Count);
             }
             catch (InternalBufferOverflowException ex1)
             {
-              await sender.CloseOutputAutoTimeoutAsync(WebSocketCloseStatus.MessageTooBig, "Frame too large to fit in buffer. Use message fragmentation", (Exception) ex1);
+              await socketImplementation.CloseOutputAutoTimeoutAsync(WebSocketCloseStatus.MessageTooBig, "Frame too large to fit in buffer. Use message fragmentation", (Exception) ex1);
               throw;
             }
-            catch (ArgumentOutOfRangeException ex2)
+            catch (ArgumentOutOfRangeException ex1)
             {
-              await sender.CloseOutputAutoTimeoutAsync(WebSocketCloseStatus.ProtocolError, "Payload length out of range", (Exception) ex2);
+              await socketImplementation.CloseOutputAutoTimeoutAsync(WebSocketCloseStatus.ProtocolError, "Payload length out of range", (Exception) ex1);
               throw;
             }
-            catch (EndOfStreamException ex3)
+            catch (EndOfStreamException ex1)
             {
-              await sender.CloseOutputAutoTimeoutAsync(WebSocketCloseStatus.InvalidPayloadData, "Unexpected end of stream encountered", (Exception) ex3);
+              await socketImplementation.CloseOutputAutoTimeoutAsync(WebSocketCloseStatus.InvalidPayloadData, "Unexpected end of stream encountered", (Exception) ex1);
               throw;
             }
-            catch (OperationCanceledException ex4)
+            catch (OperationCanceledException ex1)
             {
-              await sender.CloseOutputAutoTimeoutAsync(WebSocketCloseStatus.EndpointUnavailable, "Operation cancelled", (Exception) ex4);
+              await socketImplementation.CloseOutputAutoTimeoutAsync(WebSocketCloseStatus.EndpointUnavailable, "Operation cancelled", (Exception) ex1);
               throw;
             }
-            catch (Exception ex5)
+            catch (Exception ex1)
             {
-              await sender.CloseOutputAutoTimeoutAsync(WebSocketCloseStatus.InternalServerError, "Error reading WebSocket frame", ex5);
+              await socketImplementation.CloseOutputAutoTimeoutAsync(WebSocketCloseStatus.InternalServerError, "Error reading WebSocket frame", ex1);
               throw;
             }
             Exception ex;
             switch (frame.OpCode)
             {
               case WebSocketOpCode.ContinuationFrame:
-                return new WebSocketReceiveResult(frame.Count, sender._continuationFrameMessageType, frame.IsFinBitSet);
+                return new WebSocketReceiveResult(frame.Count, socketImplementation._continuationFrameMessageType, frame.IsFinBitSet);
               case WebSocketOpCode.TextFrame:
                 if (!frame.IsFinBitSet)
-                  sender._continuationFrameMessageType = WebSocketMessageType.Text;
+                  socketImplementation._continuationFrameMessageType = WebSocketMessageType.Text;
                 return new WebSocketReceiveResult(frame.Count, WebSocketMessageType.Text, frame.IsFinBitSet);
               case WebSocketOpCode.BinaryFrame:
                 if (!frame.IsFinBitSet)
-                  sender._continuationFrameMessageType = WebSocketMessageType.Binary;
+                  socketImplementation._continuationFrameMessageType = WebSocketMessageType.Binary;
                 return new WebSocketReceiveResult(frame.Count, WebSocketMessageType.Binary, frame.IsFinBitSet);
               case WebSocketOpCode.ConnectionClose:
-                return await sender.RespondToCloseFrame(frame, buffer, linkedCts.Token);
+                return await socketImplementation.RespondToCloseFrame(frame, buffer, linkedCts.Token);
               case WebSocketOpCode.Ping:
                 ArraySegment<byte> payload1 = new ArraySegment<byte>(buffer.Array, buffer.Offset, frame.Count);
-                await sender.SendPongAsync(payload1, linkedCts.Token);
+                await socketImplementation.SendPongAsync(payload1, linkedCts.Token);
                 break;
               case WebSocketOpCode.Pong:
                 ArraySegment<byte> payload2 = new ArraySegment<byte>(buffer.Array, frame.Count, buffer.Offset);
-                EventHandler<PongEventArgs> pong = sender.Pong;
+                EventHandler<PongEventArgs> pong = socketImplementation.Pong;
                 if (pong != null)
                 {
-                  pong((object) sender, new PongEventArgs(payload2));
+                  pong((object) socketImplementation, new PongEventArgs(payload2));
                   break;
                 }
                 break;
               default:
                 ex = (Exception) new NotSupportedException(string.Format("Unknown WebSocket opcode {0}", (object) frame.OpCode));
-                await sender.CloseOutputAutoTimeoutAsync(WebSocketCloseStatus.ProtocolError, ex.Message, ex);
+                await socketImplementation.CloseOutputAutoTimeoutAsync(WebSocketCloseStatus.ProtocolError, ex.Message, ex);
                 throw ex;
             }
             ex = (Exception) null;
@@ -169,15 +192,15 @@ namespace Ninja.WebSockets.Internal
       if (num == 1)
       {
         Exception ex = (Exception) obj;
-        if (sender._state == WebSocketState.Open)
-          await sender.CloseOutputAutoTimeoutAsync(WebSocketCloseStatus.InternalServerError, "Unexpected error reading from WebSocket", ex);
+        if (socketImplementation._state == WebSocketState.Open)
+          await socketImplementation.CloseOutputAutoTimeoutAsync(WebSocketCloseStatus.InternalServerError, "Unexpected error reading from WebSocket", ex);
         if (!(obj is Exception source))
           throw obj;
         ExceptionDispatchInfo.Capture(source).Throw();
       }
       obj = (object) null;
-      WebSocketReceiveResult async;
-      return async;
+      WebSocketReceiveResult socketReceiveResult;
+      return socketReceiveResult;
     }
 
     public override async Task SendAsync(
@@ -211,7 +234,9 @@ namespace Ninja.WebSockets.Internal
       }
     }
 
-    public async Task SendPingAsync(ArraySegment<byte> payload, CancellationToken cancellationToken)
+    public async Task SendPingAsync(
+      ArraySegment<byte> payload,
+      CancellationToken cancellationToken)
     {
       if (payload.Count > 125)
         throw new InvalidOperationException(string.Format("Cannot send Ping: Max ping message size {0} exceeded: {1}", (object) 125, (object) payload.Count));
@@ -317,10 +342,10 @@ namespace Ninja.WebSockets.Internal
       if (statusDescription == null)
         return new ArraySegment<byte>(bytes1);
       byte[] bytes2 = Encoding.UTF8.GetBytes(statusDescription);
-      byte[] numArray = new byte[bytes1.Length + bytes2.Length];
-      System.Buffer.BlockCopy((Array) bytes1, 0, (Array) numArray, 0, bytes1.Length);
-      System.Buffer.BlockCopy((Array) bytes2, 0, (Array) numArray, bytes1.Length, bytes2.Length);
-      return new ArraySegment<byte>(numArray);
+      byte[] array = new byte[bytes1.Length + bytes2.Length];
+      System.Buffer.BlockCopy((Array) bytes1, 0, (Array) array, 0, bytes1.Length);
+      System.Buffer.BlockCopy((Array) bytes2, 0, (Array) array, bytes1.Length, bytes2.Length);
+      return new ArraySegment<byte>(array);
     }
 
     private async Task SendPongAsync(
@@ -388,7 +413,19 @@ namespace Ninja.WebSockets.Internal
       {
         if (!this._tryGetBufferFailureLogged)
         {
-          Events.Log.TryGetBufferNotSupported(this._guid, stream?.GetType()?.ToString());
+          Events log = Events.Log;
+          Guid guid = this._guid;
+          string streamType;
+          if (stream == null)
+          {
+            streamType = (string) null;
+          }
+          else
+          {
+            Type type = stream.GetType();
+            streamType = (object) type != null ? type.ToString() : (string) null;
+          }
+          log.TryGetBufferNotSupported(guid, streamType);
           this._tryGetBufferFailureLogged = true;
         }
         byte[] array = stream.ToArray();
@@ -441,9 +478,9 @@ namespace Ninja.WebSockets.Internal
       {
         Events.Log.CloseOutputAutoTimeoutCancelled(socketImplementation._guid, (int) timeSpan.TotalSeconds, closeStatus, statusDescription, ex.ToString());
       }
-      catch (Exception ex2)
+      catch (Exception ex1)
       {
-        Events.Log.CloseOutputAutoTimeoutError(socketImplementation._guid, ex2.ToString(), closeStatus, statusDescription, ex.ToString());
+        Events.Log.CloseOutputAutoTimeoutError(socketImplementation._guid, ex1.ToString(), closeStatus, statusDescription, ex.ToString());
       }
     }
   }

@@ -8,7 +8,6 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-#nullable disable
 public class PopupRestrictions : MonoBehaviour
 {
   private List<Image> pool = new List<Image>();
@@ -70,16 +69,22 @@ public class PopupRestrictions : MonoBehaviour
     for (int index = 0; index < this.pool.Count; ++index)
       this.SpellEnabled(index, this.restrictions.availableSpells[index], false);
     for (int index = 0; index < this.ele.Count; ++index)
-      this.ElementalEnabled(index, (this.restrictions.elementals & 1 << index) != 0, false);
+      this.ElementalEnabled(index, (uint) (this.restrictions.elementals & 1 << index) > 0U, false);
     for (int index = 0; index < this.alt_pool.Count; ++index)
       this.SpellEnabled(index, this.restrictions.altSpells[index], true);
     for (int index = 0; index < this.alt_ele.Count; ++index)
-      this.ElementalEnabled(index, (this.restrictions.alternateEle & 1 << index) != 0, true);
+      this.ElementalEnabled(index, (uint) (this.restrictions.alternateEle & 1 << index) > 0U, true);
   }
 
-  private void Edited() => this.butApply.SetActive(true);
+  private void Edited()
+  {
+    this.butApply.SetActive(true);
+  }
 
-  private void Awake() => PopupRestrictions.Instance = this;
+  private void Awake()
+  {
+    PopupRestrictions.Instance = this;
+  }
 
   private void OnDestroy()
   {
@@ -98,15 +103,15 @@ public class PopupRestrictions : MonoBehaviour
       if (Server._restrictions == null)
         Server._restrictions = new Restrictions();
       Server._restrictions.Copy(this.restrictions);
-      Client.connection.SendBytes(ClientResources.SerializeRestricitons());
+      Client.connection.SendBytes(ClientResources.SerializeRestricitons(), SendOption.None);
       ChatBox.SystemMessage("Restrictions Sent");
     }), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
     myContextMenu.AddItem("Random Restrictions", (Action) (() => this.SendRandomRestrictions(false, false)), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
     myContextMenu.AddItem("Casino Restrictions", (Action) (() => this.SendRandomRestrictions(false, true)), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
-    myContextMenu.AddSeperator();
+    myContextMenu.AddSeperator("--------------------------");
     myContextMenu.AddItem("Retrieve Random", (Action) (() => this.SendRandomRestrictions(true, false)), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
     myContextMenu.AddItem("Retrieve Casino", (Action) (() => this.SendRandomRestrictions(true, true)), (Color) ColorScheme.GetColor(MyContextMenu.ColorGreen));
-    myContextMenu.Rebuild();
+    myContextMenu.Rebuild(false);
   }
 
   public void SendRandomRestrictions(bool retrieve, bool casino)
@@ -125,7 +130,7 @@ public class PopupRestrictions : MonoBehaviour
         w.Write(casino);
         this.restrictions.Serialize(w);
       }
-      Client.connection.SendBytes(memoryStream.ToArray());
+      Client.connection.SendBytes(memoryStream.ToArray(), SendOption.None);
       if (retrieve)
         ChatBox.SystemMessage("Retrieving..." + (casino ? "Casino" : "Random") + " restrictions");
       else
@@ -133,7 +138,10 @@ public class PopupRestrictions : MonoBehaviour
     }
   }
 
-  public void Close() => UnityEngine.Object.Destroy((UnityEngine.Object) this.gameObject);
+  public void Close()
+  {
+    UnityEngine.Object.Destroy((UnityEngine.Object) this.gameObject);
+  }
 
   public void ClickApply()
   {
@@ -227,17 +235,17 @@ public class PopupRestrictions : MonoBehaviour
 
   public void CreateHeaders()
   {
-    int x1 = 5;
-    int y1 = 0;
-    int num = (int) (RandomExtensions.LastBook() + 1);
-    for (int index = 0; index < num; ++index)
+    int num1 = 5;
+    int num2 = 0;
+    int num3 = (int) (RandomExtensions.LastBook() + 1);
+    for (int index = 0; index < num3; ++index)
     {
       Image image = UnityEngine.Object.Instantiate<Image>(this.pfabBook, (Transform) this.containerBook);
-      ((RectTransform) image.transform).anchoredPosition = new Vector2((float) x1, (float) y1);
+      ((RectTransform) image.transform).anchoredPosition = new Vector2((float) num1, (float) num2);
       image.sprite = ClientResources.Instance.spellBookIcons[index + 1];
       UIOnHover component = image.GetComponent<UIOnHover>();
       int e = index;
-      component.onEnter.AddListener((UnityAction) (() => this.Hover("Book of " + ((BookOf) e).ToStringX())));
+      component.onEnter.AddListener((UnityAction) (() => this.Hover("Book of " + ((BookOf) e).ToStringX(false))));
       component.onClick.AddListener((UnityAction) (() =>
       {
         if (!this.editing)
@@ -245,15 +253,15 @@ public class PopupRestrictions : MonoBehaviour
         this.restrictions.ToggleBook(e, false);
         this.Edited();
       }));
-      x1 += 42;
+      num1 += 42;
       image.gameObject.SetActive(true);
     }
-    int x2 = 5;
-    int y2 = 0;
-    for (int index = 0; index < num; ++index)
+    int num4 = 5;
+    int num5 = 0;
+    for (int index = 0; index < num3; ++index)
     {
       Image image = UnityEngine.Object.Instantiate<Image>(this.pfabBook, (Transform) this.containerAltBook);
-      ((RectTransform) image.transform).anchoredPosition = new Vector2((float) x2, (float) y2);
+      ((RectTransform) image.transform).anchoredPosition = new Vector2((float) num4, (float) num5);
       image.sprite = ClientResources.Instance.altSpellBookIcons[index + 1];
       UIOnHover component = image.GetComponent<UIOnHover>();
       int e = index;
@@ -268,24 +276,24 @@ public class PopupRestrictions : MonoBehaviour
           this.Edited();
         }));
       }
-      x2 += 42;
+      num4 += 42;
       image.gameObject.SetActive(true);
     }
   }
 
   public void CreateElementals()
   {
-    int x1 = 5;
-    int y1 = 0;
-    int num = (int) (RandomExtensions.LastBook() + 1);
-    for (int index = 0; index < num; ++index)
+    int num1 = 5;
+    int num2 = 0;
+    int num3 = (int) (RandomExtensions.LastBook() + 1);
+    for (int index = 0; index < num3; ++index)
     {
       Image image = UnityEngine.Object.Instantiate<Image>(this.pfabBook, (Transform) this.containerElementals);
-      ((RectTransform) image.transform).anchoredPosition = new Vector2((float) x1, (float) y1);
+      ((RectTransform) image.transform).anchoredPosition = new Vector2((float) num1, (float) num2);
       image.sprite = ClientResources.Instance.spellBookIcons[index + 1];
       UIOnHover component = image.GetComponent<UIOnHover>();
       int e = index;
-      component.onEnter.AddListener((UnityAction) (() => this.Hover(((BookOf) e).ToStringX() + " Elemental")));
+      component.onEnter.AddListener((UnityAction) (() => this.Hover(((BookOf) e).ToStringX(false) + " Elemental")));
       component.onClick.AddListener((UnityAction) (() =>
       {
         if (!this.editing)
@@ -293,18 +301,18 @@ public class PopupRestrictions : MonoBehaviour
         this.restrictions.ToggleElemental(e, false);
         this.Edited();
       }));
-      x1 += 42;
+      num1 += 42;
       image.gameObject.SetActive(true);
       this.ele.Add(image);
       this.ele_buttons.Add(component);
-      this.ElementalEnabled(e, (this.restrictions.elementals & 1 << e) != 0, false);
+      this.ElementalEnabled(e, (uint) (this.restrictions.elementals & 1 << e) > 0U, false);
     }
-    int x2 = 5;
-    int y2 = 0;
-    for (int index = 0; index < num; ++index)
+    int num4 = 5;
+    int num5 = 0;
+    for (int index = 0; index < num3; ++index)
     {
       Image image = UnityEngine.Object.Instantiate<Image>(this.pfabBook, (Transform) this.containerAltElementals);
-      ((RectTransform) image.transform).anchoredPosition = new Vector2((float) x2, (float) y2);
+      ((RectTransform) image.transform).anchoredPosition = new Vector2((float) num4, (float) num5);
       image.sprite = ClientResources.Instance.altSpellBookIcons[index + 1];
       UIOnHover component = image.GetComponent<UIOnHover>();
       int e = index;
@@ -319,11 +327,11 @@ public class PopupRestrictions : MonoBehaviour
           this.Edited();
         }));
       }
-      x2 += 42;
+      num4 += 42;
       image.gameObject.SetActive(true);
       this.alt_ele.Add(image);
       this.alt_ele_buttons.Add(component);
-      this.ElementalEnabled(e, (this.restrictions.alternateEle & 1 << e) != 0, true);
+      this.ElementalEnabled(e, (uint) (this.restrictions.alternateEle & 1 << e) > 0U, true);
     }
   }
 
@@ -331,13 +339,13 @@ public class PopupRestrictions : MonoBehaviour
   {
     int num1 = 0;
     int num2 = (int) (RandomExtensions.LastBook() + 1) * 12;
-    int x1 = 5;
-    int y1 = -5;
+    int num3 = 5;
+    int num4 = -5;
     for (int index = 0; index < num2; ++index)
     {
       Image g = UnityEngine.Object.Instantiate<Image>(this.pfabImage, (Transform) this.container);
       UIOnHover component = g.GetComponent<UIOnHover>();
-      g.rectTransform.anchoredPosition = new Vector2((float) x1, (float) y1);
+      g.rectTransform.anchoredPosition = new Vector2((float) num3, (float) num4);
       g.sprite = ClientResources.Instance._spellicons[index];
       int e = index;
       component.onClick.AddListener((UnityAction) (() =>
@@ -355,20 +363,20 @@ public class PopupRestrictions : MonoBehaviour
       ++num1;
       if (index % 12 == 11)
       {
-        x1 += 42;
-        y1 = -5;
+        num3 += 42;
+        num4 = -5;
       }
       else
-        y1 -= 42;
+        num4 -= 42;
     }
-    int num3 = 0;
-    int x2 = 5;
-    int y2 = -5;
+    int num5 = 0;
+    int num6 = 5;
+    int num7 = -5;
     for (int index = 0; index < num2; ++index)
     {
       Image g = UnityEngine.Object.Instantiate<Image>(this.pfabImage, (Transform) this.containerAlt);
       UIOnHover component = g.GetComponent<UIOnHover>();
-      g.rectTransform.anchoredPosition = new Vector2((float) x2, (float) y2);
+      g.rectTransform.anchoredPosition = new Vector2((float) num6, (float) num7);
       g.sprite = !((UnityEngine.Object) Inert.Instance.altSpells[index] == (UnityEngine.Object) null) ? ClientResources.Instance.GetSpellIcon(Inert.Instance.altSpells[index].name) : ClientResources.Instance.clear;
       int e = index;
       if ((UnityEngine.Object) g.sprite != (UnityEngine.Object) ClientResources.Instance.clear)
@@ -386,14 +394,14 @@ public class PopupRestrictions : MonoBehaviour
       this.alt_pool.Add(g);
       this.alt_buttons.Add(component);
       this.SpellEnabled(index, this.restrictions.altSpells[index], true);
-      ++num3;
+      ++num5;
       if (index % 12 == 11)
       {
-        x2 += 42;
-        y2 = -5;
+        num6 += 42;
+        num7 = -5;
       }
       else
-        y2 -= 42;
+        num7 -= 42;
     }
   }
 
@@ -425,7 +433,13 @@ public class PopupRestrictions : MonoBehaviour
     }
   }
 
-  public void Hover(string s) => MyToolTip.Show(s);
+  public void Hover(string s)
+  {
+    MyToolTip.Show(s, -1f);
+  }
 
-  public void HoverLeave() => MyToolTip.Close();
+  public void HoverLeave()
+  {
+    MyToolTip.Close();
+  }
 }

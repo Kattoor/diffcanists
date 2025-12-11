@@ -2,7 +2,6 @@
 using System;
 using UnityEngine;
 
-#nullable disable
 namespace Junk
 {
   public class IsaacCipher
@@ -15,9 +14,18 @@ namespace Junk
     private int bb;
     private int cc;
 
-    public static int LogicalShift(int i, int shift) => i >>> shift;
+    public static int LogicalShift(int i, int shift)
+    {
+      return (int) ((uint) i >> shift);
+    }
 
-    public int seed => this._seed;
+    public int seed
+    {
+      get
+      {
+        return this._seed;
+      }
+    }
 
     private static void mix(int[] s)
     {
@@ -103,16 +111,16 @@ namespace Junk
         for (int index2 = 0; index2 < 8; ++index2)
           s[index2] += this.output[index1 + index2];
         IsaacCipher.mix(s);
-        for (int index3 = 0; index3 < 8; ++index3)
-          this.internalArray[index1 + index3] = s[index3];
+        for (int index2 = 0; index2 < 8; ++index2)
+          this.internalArray[index1 + index2] = s[index2];
       }
-      for (int index4 = 0; index4 < 256; index4 += 8)
+      for (int index1 = 0; index1 < 256; index1 += 8)
       {
-        for (int index5 = 0; index5 < 8; ++index5)
-          s[index5] += this.internalArray[index4 + index5];
+        for (int index2 = 0; index2 < 8; ++index2)
+          s[index2] += this.internalArray[index1 + index2];
         IsaacCipher.mix(s);
-        for (int index6 = 0; index6 < 8; ++index6)
-          this.internalArray[index4 + index6] = s[index6];
+        for (int index2 = 0; index2 < 8; ++index2)
+          this.internalArray[index1 + index2] = s[index2];
       }
       this.nextRound();
     }

@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-#nullable disable
 public class StoreObject : MonoBehaviour
 {
+  public ExplosionCutout SnowTexture = ExplosionCutout.None;
   public bool recolor;
   public bool recolorUndead;
   [Header("Animated")]
@@ -37,13 +37,12 @@ public class StoreObject : MonoBehaviour
   [Header("Spell Sprite")]
   public Sprite spellSprite;
   public Sprite altSpellSprite;
-  public ExplosionCutout SnowTexture = ExplosionCutout.None;
 
   public static SpellEnum RealEnum(SpellEnum s)
   {
     if (s == SpellEnum.Little_Devil)
       return SpellEnum.Summon_Imps;
-    return s == SpellEnum.Pack_Mentality ? SpellEnum.Summon_Boar : s;
+    return s == SpellEnum.Herd_Mentality ? SpellEnum.Summon_Boar : s;
   }
 
   public static bool OnSummon(Creature c)

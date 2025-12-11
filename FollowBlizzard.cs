@@ -1,7 +1,6 @@
 
 using UnityEngine;
 
-#nullable disable
 public class FollowBlizzard : MonoBehaviour
 {
   private ZEffector e;

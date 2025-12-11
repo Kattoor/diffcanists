@@ -1,7 +1,6 @@
 
 using System;
 
-#nullable disable
 public class AccountStatistics
 {
   public class PastGames
@@ -23,7 +22,10 @@ public class AccountStatistics
         w.Write(this.players[index]);
     }
 
-    public string GetDate() => DateTime.FromBinary(this.date).ToShortDateString();
+    public string GetDate()
+    {
+      return DateTime.FromBinary(this.date).ToShortDateString();
+    }
 
     public static AccountStatistics.PastGames Deserialize(myBinaryReader r)
     {

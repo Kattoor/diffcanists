@@ -2,11 +2,9 @@
 using System;
 using System.Collections.Generic;
 
-#nullable disable
 [Serializable]
 public class SpellsOnly
 {
-  public const byte _version = 2;
   public byte[] spells = new byte[16]
   {
     (byte) 0,
@@ -26,12 +24,22 @@ public class SpellsOnly
     (byte) 14,
     (byte) 15
   };
+  public const byte _version = 2;
   public byte fullBook;
   public int altBooks;
 
-  public BookOf Elemental => (BookOf) ((int) this.fullBook - 1);
+  public BookOf Elemental
+  {
+    get
+    {
+      return (BookOf) ((int) this.fullBook - 1);
+    }
+  }
 
-  public bool UsingAltBook(BookOf b) => (this.altBooks & 1 << (int) (b & (BookOf) 31) & 1056) != 0;
+  public bool UsingAltBook(BookOf b)
+  {
+    return (uint) (this.altBooks & 1 << (int) (b & (BookOf) 31) & 1056) > 0U;
+  }
 
   public void ToggleAlt(BookOf b, bool v)
   {
@@ -43,13 +51,19 @@ public class SpellsOnly
 
   public bool SeasonsIsHoliday
   {
-    get => this.UsingAltBook(BookOf.Seasons);
-    set => this.ToggleAlt(BookOf.Seasons, value);
+    get
+    {
+      return this.UsingAltBook(BookOf.Seasons);
+    }
+    set
+    {
+      this.ToggleAlt(BookOf.Seasons, value);
+    }
   }
 
   public bool IsAlt(int spellIndex)
   {
-    return spellIndex < (int) byte.MaxValue && spellIndex >= 0 && this.UsingAltBook((BookOf) (spellIndex / 12)) && Inert.Instance.altSpells.Length > spellIndex && (UnityEngine.Object) Inert.Instance.altSpells[spellIndex] != (UnityEngine.Object) null;
+    return spellIndex < (int) byte.MaxValue && spellIndex >= 0 && (this.UsingAltBook((BookOf) (spellIndex / 12)) && Inert.Instance.altSpells.Length > spellIndex) && (UnityEngine.Object) Inert.Instance.altSpells[spellIndex] != (UnityEngine.Object) null;
   }
 
   public static SpellsOnly Deserialize(myBinaryReader r)

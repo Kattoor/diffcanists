@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-#nullable disable
 public class ZSpellLeaf : ZSpell
 {
   internal static int[] colorIndex = new int[28]
@@ -47,7 +46,7 @@ public class ZSpellLeaf : ZSpell
     {
       if (!this.map.CheckPositionOnlyEntities((int) this.position.x, (int) this.position.y, (ZCreature) null, 256))
         return;
-      this.map.ServerBitBltHue(left ? 56 : 57, (int) this.position.x, (int) this.position.y - 8, (float) this.Bounces / (float) byte.MaxValue, false);
+      this.map.ServerBitBltHue(left ? 56 : 57, (int) this.position.x, (int) this.position.y - 8, (float) this.Bounces / (float) byte.MaxValue, false, true);
       ZSpell.RemoveItemsOnBitBlt(this.game, (int) this.position.x, (int) this.position.y, Inert.Instance.leafTexture.width / 2 - 1);
     }
   }
@@ -75,8 +74,14 @@ public class ZSpellLeaf : ZSpell
 
   private bool left
   {
-    get => this.goToTarget;
-    set => this.goToTarget = value;
+    get
+    {
+      return this.goToTarget;
+    }
+    set
+    {
+      this.goToTarget = value;
+    }
   }
 
   public void ApplyExplosionForce(
@@ -122,7 +127,7 @@ public class ZSpellLeaf : ZSpell
     this.velocity = new MyLocation(0, 5);
     if (this.isMoving)
       return;
-    this.moving = this.game.ongoing.RunSpell(this.SpellMove(false, true));
+    this.moving = this.game.ongoing.RunSpell(this.SpellMove(false, true), true);
   }
 
   public override bool ShouldSpellFall(bool onlyMap = false)
@@ -160,24 +165,24 @@ public class ZSpellLeaf : ZSpell
     }
     else
     {
-      for (int index3 = 0; index3 < this.radius * 2; ++index3)
+      for (int index1 = 0; index1 < this.radius * 2; ++index1)
       {
-        int index4 = (index3 + num) % this.zb.Count;
-        ZMap map3 = this.map;
+        int index2 = (index1 + num) % this.zb.Count;
+        ZMap map1 = this.map;
         MyLocation position = this.position;
-        int x3 = position.x.ToInt() + this.zb[index4].x;
+        int x1 = position.x.ToInt() + this.zb[index2].x;
         position = this.position;
-        int y3 = position.y.ToInt() - 3 + this.zb[index4].y;
+        int y1 = position.y.ToInt() - 3 + this.zb[index2].y;
         int movementNoEffector = Inert.mask_movement_NoEffector;
-        if (map3.LeafCheckPosition(x3, y3, (ZCreature) null, movementNoEffector))
+        if (map1.LeafCheckPosition(x1, y1, (ZCreature) null, movementNoEffector))
         {
-          ZMap map4 = this.map;
+          ZMap map2 = this.map;
           position = this.position;
-          int x4 = position.x.ToInt() + this.zb[index4].x;
+          int x2 = position.x.ToInt() + this.zb[index2].x;
           position = this.position;
-          int y4 = position.y.ToInt() - 3 + this.zb[index4].y;
+          int y2 = position.y.ToInt() - 3 + this.zb[index2].y;
           ZCreature toCollideCheck = this.toCollideCheck;
-          if (map4.LeafCheckPosition(x4, y4, toCollideCheck, 512))
+          if (map2.LeafCheckPosition(x2, y2, toCollideCheck, 512))
             continue;
         }
         return false;
@@ -194,7 +199,7 @@ public class ZSpellLeaf : ZSpell
     List<ZMyCollider> list = this.world.OverlapCircleAll((Point) this.position, this.radius + 5, this.collider, 512);
     for (int index = 0; index < list.Count; ++index)
     {
-      if ((ZComponent) list[index] != (object) null && (ZComponent) list[index].spell != (object) null && !list[index].spell.isMoving && list[index].spell.spellEnum == SpellEnum.Autumn_Leaves && (ZComponent) list[index].effector != (object) null && (ZComponent) list[index].effector.whoSummoned != (object) null && (list[index].effector.TurnCreated > this.effector.TurnCreated || list[index].effector.whoSummoned.team != this.parent.team))
+      if ((ZComponent) list[index] != (object) null && (ZComponent) list[index].spell != (object) null && (!list[index].spell.isMoving && list[index].spell.spellEnum == SpellEnum.Autumn_Leaves) && ((ZComponent) list[index].effector != (object) null && (ZComponent) list[index].effector.whoSummoned != (object) null && (list[index].effector.TurnCreated > this.effector.TurnCreated || list[index].effector.whoSummoned.team != this.parent.team)))
         list[index].spell.Fall();
     }
     this.world.listPool.ReturnList(list);
@@ -206,7 +211,7 @@ public class ZSpellLeaf : ZSpell
     List<ZMyCollider> list = this.world.OverlapCircleAll((Point) this.position, this.radius + 5, this.collider, 512);
     for (int index = 0; index < list.Count; ++index)
     {
-      if ((ZComponent) list[index] != (object) null && (ZComponent) list[index].spell != (object) null && !list[index].spell.isMoving && list[index].spell.spellEnum == SpellEnum.Autumn_Leaves)
+      if ((ZComponent) list[index] != (object) null && (ZComponent) list[index].spell != (object) null && (!list[index].spell.isMoving && list[index].spell.spellEnum == SpellEnum.Autumn_Leaves))
       {
         list[index].spell.Fall();
         ++num;
@@ -263,7 +268,7 @@ label_4:
       FixedInt y = zspellLeaf.velocity.y;
       FixedInt fixedInt3 = zspellLeaf.velocity.x;
       FixedInt fixedInt4 = zspellLeaf.velocity.y;
-      if (x > 1 || x < -1 || y > 1 || y < -1)
+      if (x > 1 || x < -1 || (y > 1 || y < -1))
       {
         if (FixedInt.Abs(x) > FixedInt.Abs(y))
           zspellLeaf.steps = (int) FixedInt.Abs(x) + 1;
@@ -331,10 +336,10 @@ label_4:
               }
               else if (zspellLeaf.effector.active)
               {
-                ZCreature zcreature = zspellLeaf.map.PhysicsCollideCreature(zspellLeaf.toCollideCheck, num2 + zspellLeaf.zb[index2].x, num3 + zspellLeaf.zb[index2].y);
+                ZCreature zcreature = zspellLeaf.map.PhysicsCollideCreature(zspellLeaf.toCollideCheck, num2 + zspellLeaf.zb[index2].x, num3 + zspellLeaf.zb[index2].y, 0);
                 if ((ZComponent) zcreature != (object) null && typeof (ZCreatureThorn) != zcreature.GetType() && zcreature.type != CreatureType.Tree)
                 {
-                  if (zspellLeaf.Bounces != 0 || !((ZComponent) zspellLeaf.parent != (object) null) || zcreature.team != zspellLeaf.parent.team || zcreature.type == CreatureType.Jar)
+                  if (zspellLeaf.Bounces != 0 || !((ZComponent) zspellLeaf.parent != (object) null) || (zcreature.team != zspellLeaf.parent.team || zcreature.type == CreatureType.Jar))
                   {
                     zspellLeaf.velocity.y = (FixedInt) 0;
                     zspellLeaf.velocity.x = (FixedInt) 0;
@@ -344,7 +349,7 @@ label_4:
                     zspellLeaf.isMoving = false;
                     zspellLeaf.isNull = true;
                     zspellLeaf.isDead = true;
-                    zcreature.ApplyDamage(zspellLeaf.spellEnum, zspellLeaf.damageType, zspellLeaf.damage, zspellLeaf.parent, zspellLeaf.game.turn, (ISpellBridge) zspellLeaf);
+                    zcreature.ApplyDamage(zspellLeaf.spellEnum, zspellLeaf.damageType, zspellLeaf.damage, zspellLeaf.parent, zspellLeaf.game.turn, (ISpellBridge) zspellLeaf, false);
                     if ((Object) zspellLeaf.explosion != (Object) null)
                       zspellLeaf.OnExplosion();
                     ZComponent.Destroy<GameObject>(zspellLeaf.gameObject);
@@ -445,7 +450,7 @@ label_54:
         if (num >= 2)
           zspellLeaf.affectedByGravity = false;
       }
-      else if (!zspellLeaf.affectedByGravity && zspellLeaf.velocity.y > -3 && zspellLeaf.maxDuration > 150 && zspellLeaf.curDuration > 10)
+      else if (!zspellLeaf.affectedByGravity && zspellLeaf.velocity.y > -3 && (zspellLeaf.maxDuration > 150 && zspellLeaf.curDuration > 10))
       {
         zspellLeaf.velocity.y += zspellLeaf.map.Gravity;
       }

@@ -737,7 +737,7 @@ public class RatedMenu : MonoBehaviour
       sp.CopySpells(this._ratedFacts.spellOverrides);
     else
       sp.CopySpells(Client.settingsPlayer, false);
-    SpellLobbyChange.Create(sp, new Action<SettingsPlayer>(this.OnPickSpellOverrides), false, Validation.Default, false, (Action) null, false);
+    SpellLobbyChange.Create(sp, new Action<SettingsPlayer>(this.OnPickSpellOverrides), false, Validation.Default, false, (Action) null, false, (Restrictions) null);
   }
 
   public void ClickAddAlternative()

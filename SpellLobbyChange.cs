@@ -52,6 +52,7 @@ public class SpellLobbyChange : MonoBehaviour
   internal Action<SettingsPlayer> onEnd;
   private Action onCancel;
   internal Validation validating;
+  internal Restrictions _restrictions;
   public Image imgHoliday;
   public Image[] imgNormalBook;
   public Image[] imgAltBooks;
@@ -71,7 +72,8 @@ public class SpellLobbyChange : MonoBehaviour
     Validation validate = Validation.Default,
     bool transparent = false,
     Action onCancel = null,
-    bool onEndQuick = false)
+    bool onEndQuick = false,
+    Restrictions restrictions = null)
   {
     Client.viewSpellLocks = (ViewSpellLocks) PlayerPrefs.GetInt("prefviewinglocked", 1);
     Client.sharingWith = "";
@@ -86,6 +88,7 @@ public class SpellLobbyChange : MonoBehaviour
     {
       SpellLobbyChange.Instance = Controller.Instance.CreateAndApply<SpellLobbyChange>(Controller.Instance.spellLobbyChange, Controller.Instance.transform);
       SpellLobbyChange.Instance.validating = validate;
+      SpellLobbyChange.Instance._restrictions = restrictions;
       if (transparent)
       {
         foreach (Image componentsInChild in SpellLobbyChange.Instance.transform.GetComponentsInChildren<Image>())
@@ -481,9 +484,9 @@ public class SpellLobbyChange : MonoBehaviour
     int num;
     if (this.settingsPlayer.fullBook > (byte) 0)
     {
-      if (!Restrictions.IsElementalRestricted(this.settingsPlayer._spells, (int) this.settingsPlayer.fullBook - 1, (Restrictions) null))
+      if (!Restrictions.IsElementalRestricted(this.settingsPlayer._spells, (int) this.settingsPlayer.fullBook - 1, this._restrictions))
       {
-        if (Client.viewSpellLocks.ViewRestricted())
+        if (this._restrictions == null && Client.viewSpellLocks.ViewRestricted())
         {
           Restrictions restrictions = Server._restrictions;
           num = restrictions != null ? (restrictions.CheckElemental(this.settingsPlayer._spells, (int) this.settingsPlayer.fullBook - 1) ? 1 : 0) : 0;

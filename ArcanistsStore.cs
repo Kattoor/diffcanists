@@ -49,7 +49,7 @@ public class ArcanistsStore
     Icon,
   }
 
-  [Flags]
+  [System.Flags]
   [Serializable]
   public enum Tag
   {

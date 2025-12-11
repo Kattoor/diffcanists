@@ -38,9 +38,9 @@ public class ButtonSpell : MonoBehaviour
       return;
     if (Prestige.IsUnlocked(Client.MyAccount, this.myRealIndex) || !Client.viewSpellLocks.ViewLocked())
     {
-      if (!Restrictions.IsSpellRestricted(SpellLobbyChange.Instance.settingsPlayer._spells, this.myRealIndex, (Restrictions) null))
+      if (!Restrictions.IsSpellRestricted(SpellLobbyChange.Instance.settingsPlayer._spells, this.myRealIndex, SpellLobbyChange.Instance._restrictions))
       {
-        if (Client.viewSpellLocks.ViewRestricted())
+        if (SpellLobbyChange.Instance._restrictions == null && Client.viewSpellLocks.ViewRestricted())
         {
           Restrictions restrictions = Server._restrictions;
           if ((restrictions != null ? (restrictions.CheckRestricted(SpellLobbyChange.Instance.settingsPlayer._spells, this.myRealIndex) ? 1 : 0) : 0) != 0)
@@ -125,7 +125,7 @@ label_13:
       }
       else if (SpellLobbyChange.Instance.onEndQuick)
       {
-        if (Player.Instance.person.lastSpellSwap >= Player.Instance.person.localTurn)
+        if (!Player.Instance.person.CanSwapSpells())
           MyToolTip.Show("Can only Add 1 spell per turn", -1f, false);
         else if (SpellLobbyChange.Instance.CanAddSpell((byte) this.index))
         {

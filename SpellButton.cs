@@ -57,7 +57,7 @@ public class SpellButton : MonoBehaviour
   public void OnClick()
   {
     if (string.IsNullOrEmpty(this.nameOfSpell))
-      SpellLobbyChange.Create(Player.Instance.person.settingsPlayer, (Action<SettingsPlayer>) (s => Player.Instance.SendSpellSwap(s.spells[0])), false, Validation.Default, true, (Action) null, true);
+      SpellLobbyChange.Create(Player.Instance.person.settingsPlayer, (Action<SettingsPlayer>) (s => Player.Instance.SendSpellSwap(s.spells[0])), false, Validation.Default, true, (Action) null, true, Client.game.gameFacts.restrictions);
     else
       ClickSpell.Instance.OnClickIndex(this.index);
   }

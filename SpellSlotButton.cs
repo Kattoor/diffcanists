@@ -24,9 +24,9 @@ public class SpellSlotButton : MonoBehaviour
     {
       GameObject gameObject = this.restricted.gameObject;
       int num;
-      if (!Restrictions.IsSpellRestricted(SpellLobbyChange.Instance.settingsPlayer._spells, index, (Restrictions) null))
+      if (!Restrictions.IsSpellRestricted(SpellLobbyChange.Instance.settingsPlayer._spells, index, SpellLobbyChange.Instance._restrictions))
       {
-        if (Client.viewSpellLocks.ViewRestricted())
+        if (SpellLobbyChange.Instance._restrictions == null && Client.viewSpellLocks.ViewRestricted())
         {
           Restrictions restrictions = Server._restrictions;
           num = restrictions != null ? (restrictions.CheckRestricted(SpellLobbyChange.Instance.settingsPlayer._spells, index) ? 1 : 0) : 0;

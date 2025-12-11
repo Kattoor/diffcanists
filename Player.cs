@@ -852,6 +852,7 @@ label_1:
         creature = (ZCreature) null,
         slot = -1
       });
+    this.Show_All();
   }
 
   public void Hide_All()

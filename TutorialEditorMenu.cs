@@ -490,7 +490,7 @@ public class TutorialEditorMenu : MonoBehaviour
           sp.CopySpells(set, true);
           x.Value = JToken.FromObject((object) sp);
           TutorialEditorMenu.Instance.Edited();
-        }), true, Validation.Default, false, (Action) null, false)));
+        }), true, Validation.Default, false, (Action) null, false, (Restrictions) null)));
         ++i;
         return;
       }
@@ -733,7 +733,7 @@ public class TutorialEditorMenu : MonoBehaviour
             stringBuilder.Append("} ");
             stringBuilder.Append("\n sum.elemental = BookOf.").Append((object) (BookOf) set.fullBook);
             Global.systemCopyBuffer = stringBuilder.ToString();
-          }), true, Validation.Default, false, (Action) null, false)));
+          }), true, Validation.Default, false, (Action) null, false, (Restrictions) null)));
           this.CreateButton(ref i, "Outfit (Clipboard)", (UnityAction) (() => ChangeOutfitMenu.Create(false, true, (SettingsPlayer) null, (Action<SettingsPlayer>) (set =>
           {
             StringBuilder stringBuilder = new StringBuilder("sum.outfit = {");

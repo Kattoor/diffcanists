@@ -875,9 +875,9 @@ public class HUD : UIBehaviour
       if ((UnityEngine.Object) SpellLobbyChange.Instance != (UnityEngine.Object) null)
         SpellLobbyChange.Instance.ClickCancel();
       else if ((UnityEngine.Object) Player.Instance != (UnityEngine.Object) null && Player.Instance.person != null && Player.Instance.person.settingsPlayer != null)
-        SpellLobbyChange.Create(Player.Instance.person.settingsPlayer, (Action<SettingsPlayer>) (set => {}), false, Validation.None, true, (Action) null, false);
+        SpellLobbyChange.Create(Player.Instance.person.settingsPlayer, (Action<SettingsPlayer>) (set => {}), false, Validation.None, true, (Action) null, false, (Restrictions) null);
       else
-        SpellLobbyChange.Create(Client.settingsPlayer, (Action<SettingsPlayer>) (set => Client.AskToChangeSpells(set)), false, Validation.Default, true, (Action) null, false);
+        SpellLobbyChange.Create(Client.settingsPlayer, (Action<SettingsPlayer>) (set => Client.AskToChangeSpells(set)), false, Validation.Default, true, (Action) null, false, (Restrictions) null);
     }
   }
 
@@ -1282,9 +1282,9 @@ public class HUD : UIBehaviour
     }
   }
 
-  public static void OnInitSpell(ZCreature creature, SpellSlot slot, bool fromReplay = false)
+  public static void OnInitSpell(ZCreature creature, SpellSlot slot, bool fromReplay = false, bool swap = false)
   {
-    if (slot.spell.spellEnum == SpellEnum.Glide && !fromReplay)
+    if (slot.spell.spellEnum == SpellEnum.Glide && !fromReplay && !swap)
       ZSpell.FireGlide(slot.spell, creature);
     else if (ZCreatureCreate.IsGate(slot))
       creature.parent.AddGate(slot);
@@ -1378,7 +1378,7 @@ public class HUD : UIBehaviour
     BookOf bookOf = zcreature.spells.Count > 9 ? zcreature.spells[9].spell.bookOf : BookOf.Nothing;
     for (int index1 = 0; index1 < zcreature.spells.Count; ++index1)
     {
-      HUD.OnInitSpell(zcreature, zcreature.spells[index1], fromReplay);
+      HUD.OnInitSpell(zcreature, zcreature.spells[index1], fromReplay, false);
       if (zcreature.spells[index1].spell.bookOf == bookOf)
         ++num3;
       if (game.AllowExpansion && zcreature.spells[index1].spell.IsMinionSpell())
@@ -1437,7 +1437,7 @@ public class HUD : UIBehaviour
       }
       Spell spell1 = Inert.GetSpell(SpellEnum.Summon_Titan);
       zcreature.spells.Add(new SpellSlot(spell1));
-      HUD.OnInitSpell(zcreature, zcreature.spells[zcreature.spells.Count - 1], fromReplay);
+      HUD.OnInitSpell(zcreature, zcreature.spells[zcreature.spells.Count - 1], fromReplay, false);
       ZFamiliar.CreateMinionMaster(x);
     }
     else if (num2 >= 9)
@@ -1448,7 +1448,7 @@ public class HUD : UIBehaviour
         if (spellsEnum.Value.spellType == SpellType.Bomb && !zcreature.HasSpell(spellsEnum.Value.spellEnum))
         {
           zcreature.spells.Add(new SpellSlot(spellsEnum.Value));
-          HUD.OnInitSpell(zcreature, zcreature.spells[zcreature.spells.Count - 1], fromReplay);
+          HUD.OnInitSpell(zcreature, zcreature.spells[zcreature.spells.Count - 1], fromReplay, false);
         }
       }
       ZFamiliar.CreateBombMaster(x);
@@ -1462,7 +1462,7 @@ public class HUD : UIBehaviour
         if ((UnityEngine.Object) spell != (UnityEngine.Object) null && spell.level <= 3 && !zcreature.HasSpell(s))
         {
           zcreature.spells.Insert(0, new SpellSlot(spell));
-          HUD.OnInitSpell(zcreature, zcreature.spells[0], fromReplay);
+          HUD.OnInitSpell(zcreature, zcreature.spells[0], fromReplay, false);
         }
       }
     }
@@ -1483,7 +1483,7 @@ public class HUD : UIBehaviour
         if (index1 != 0 && spellIndex2 >= 0)
           zcreature.spells.RemoveAt(spellIndex2);
         zcreature.spells.Insert(index2, new SpellSlot(spell));
-        HUD.OnInitSpell(zcreature, zcreature.spells[index2], fromReplay);
+        HUD.OnInitSpell(zcreature, zcreature.spells[index2], fromReplay, false);
         ++index2;
         if (spell.level == 3 && game.isClient)
           HUD.instance.uiPlayerCharacters[(int) zcreature.parent.id].AddLevel3(spell);

@@ -105,7 +105,7 @@ public class Restrictions
     if (i < 0 || i >= 256)
       return true;
     if (def != null)
-      return !spells.IsAlt(i) ? def.availableSpells[i] : def.altSpells[i];
+      return !spells.IsAlt(i) ? !def.availableSpells[i] : !def.altSpells[i];
     if ((UnityEngine.Object) UnratedMenu.instance != (UnityEngine.Object) null && Client._gameFacts.settings.restrictions != null)
       return !spells.IsAlt(i) ? !Client._gameFacts.settings.restrictions.availableSpells[i] : !Client._gameFacts.settings.restrictions.altSpells[i];
     if (!Client.viewSpellLocks.ViewRestricted() && !((UnityEngine.Object) RatedMenu.instance != (UnityEngine.Object) null) || Server._restrictions == null)

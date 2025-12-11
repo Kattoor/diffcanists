@@ -34,7 +34,7 @@ public class SpellImageList : MonoBehaviour
 
   public void ClickQuickChange()
   {
-    SpellLobbyChange.Create((SettingsPlayer) null, (Action<SettingsPlayer>) null, false, Validation.Default, false, (Action) null, false);
+    SpellLobbyChange.Create((SettingsPlayer) null, (Action<SettingsPlayer>) null, false, Validation.Default, false, (Action) null, false, (Restrictions) null);
   }
 
   public void ClickPrestige()

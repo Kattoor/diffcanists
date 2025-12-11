@@ -2494,11 +2494,12 @@ public class Server : MonoBehaviour
         gg.ReSetStyle(GameStyle.Elementals);
       }
     }
+    bool dynamic = gg.GetStyle().HasStyle(GameStyle.Dynamic);
     for (byte index = 0; (int) index < max; ++index)
     {
       if (gg.settings.restrictions.availableSpells[(int) index])
       {
-        if (Inert.Instance._spells[(int) index].level == 1)
+        if (Inert.Instance._spells[(int) index].level == 1 | dynamic)
           level1.Add(index);
         else if (Inert.Instance._spells[(int) index].level == 2)
           level2.Add(index);
@@ -2508,12 +2509,12 @@ public class Server : MonoBehaviour
     }
     for (int index1 = 0; index1 < gg.connections.Count; ++index1)
     {
-      Server.RandomRestrictedSpells(gg.connections[index1].player.settingsPlayer, gg.settings.restrictions, level1, level2, level3, availElemental, max, elementals);
+      Server.RandomRestrictedSpells(gg.connections[index1].player.settingsPlayer, gg.settings.restrictions, level1, level2, level3, availElemental, max, elementals, dynamic);
       if (gg.GetMultiTeamMode())
       {
         int num2 = gg.GetNumberPlayersPerTeam() - 1;
         for (int index2 = 0; index2 < num2; ++index2)
-          Server.RandomRestrictedSpells(gg.connections[index1].player.multiSettingsPlayer[index2], gg.settings.restrictions, level1, level2, level3, availElemental, max, elementals);
+          Server.RandomRestrictedSpells(gg.connections[index1].player.multiSettingsPlayer[index2], gg.settings.restrictions, level1, level2, level3, availElemental, max, elementals, dynamic);
       }
     }
   }
@@ -2809,7 +2810,8 @@ public class Server : MonoBehaviour
     List<byte> level3,
     List<(int ele, bool alt)> availElemental,
     int max,
-    bool elementals)
+    bool elementals,
+    bool dynamic)
   {
     System.Random randomNumberGenerator = Server.randomNumberGenerator;
     int index1 = availElemental.Count == 0 ? 0 : randomNumberGenerator.Next(0, availElemental.Count);
@@ -2823,10 +2825,27 @@ public class Server : MonoBehaviour
     if (restrictions.availableSpells[4])
       source.Add((byte) 4);
     int num4 = 0;
+    int index2 = 0;
+    if (dynamic)
+    {
+      while (source.Count < 10 && source.Count < level1.Count && num4 < 30)
+      {
+        ++num4;
+        byte num5 = level1[randomNumberGenerator.Next(0, level1.Count)];
+        if (!source.Contains(num5) && ((int) num5 < num2 || (int) num5 >= num3))
+          source.Add(num5);
+      }
+      List<byte> list = source.ToList<byte>();
+      list.Sort();
+      for (; index2 < 16 && index2 < list.Count; ++index2)
+        settings.spells[index2] = list[index2];
+      for (; index2 < 16; ++index2)
+        settings.spells[index2] = byte.MaxValue;
+    }
     if (level1.Count < 8)
     {
-      for (int index2 = 0; index2 < level1.Count; ++index2)
-        source.Add(level1[index2]);
+      for (int index3 = 0; index3 < level1.Count; ++index3)
+        source.Add(level1[index3]);
     }
     else
     {
@@ -2840,8 +2859,8 @@ public class Server : MonoBehaviour
     }
     if (level2.Count < 8)
     {
-      for (int index2 = 0; index2 < level2.Count; ++index2)
-        source.Add(level2[index2]);
+      for (int index3 = 0; index3 < level2.Count; ++index3)
+        source.Add(level2[index3]);
     }
     else
     {
@@ -2856,8 +2875,8 @@ public class Server : MonoBehaviour
     }
     if (level3.Count < 3)
     {
-      for (int index2 = 0; index2 < level3.Count; ++index2)
-        source.Add(level3[index2]);
+      for (int index3 = 0; index3 < level3.Count; ++index3)
+        source.Add(level3[index3]);
     }
     else
     {
@@ -2872,20 +2891,19 @@ public class Server : MonoBehaviour
     }
     if (source.Count < 16 && level1.Count + level2.Count + level3.Count > source.Count)
     {
-      for (int index2 = 0; index2 < level1.Count && source.Count < 16; ++index2)
-        source.Add(level1[index2]);
-      for (int index2 = 0; index2 < level2.Count && source.Count < 16; ++index2)
-        source.Add(level2[index2]);
-      for (int index2 = 0; index2 < level3.Count && source.Count < 16; ++index2)
-        source.Add(level3[index2]);
+      for (int index3 = 0; index3 < level1.Count && source.Count < 16; ++index3)
+        source.Add(level1[index3]);
+      for (int index3 = 0; index3 < level2.Count && source.Count < 16; ++index3)
+        source.Add(level2[index3]);
+      for (int index3 = 0; index3 < level3.Count && source.Count < 16; ++index3)
+        source.Add(level3[index3]);
     }
-    List<byte> list = source.ToList<byte>();
-    list.Sort();
-    int index3;
-    for (index3 = 0; index3 < 16 && index3 < list.Count; ++index3)
-      settings.spells[index3] = list[index3];
-    for (; index3 < 16; ++index3)
-      settings.spells[index3] = byte.MaxValue;
+    List<byte> list1 = source.ToList<byte>();
+    list1.Sort();
+    for (; index2 < 16 && index2 < list1.Count; ++index2)
+      settings.spells[index2] = list1[index2];
+    for (; index2 < 16; ++index2)
+      settings.spells[index2] = byte.MaxValue;
   }
 
   public static void RandomSpells(SettingsPlayer settings, GameStyle styles)

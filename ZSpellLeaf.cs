@@ -415,8 +415,7 @@ label_54:
         zspellLeaf.velocity = zspellLeaf.velocity + zspellLeaf.addedVelocity;
         zspellLeaf.velocity.x = Mathd.Clamp(zspellLeaf.velocity.x, (FixedInt) -50, (FixedInt) 50);
         zspellLeaf.velocity.y = Mathd.Clamp(zspellLeaf.velocity.y, (FixedInt) -50, (FixedInt) 50);
-        zspellLeaf.addedVelocity.x = (FixedInt) 0;
-        zspellLeaf.addedVelocity.y = (FixedInt) 0;
+        zspellLeaf.ResetAddedVelocity();
       }
       else if (zspellLeaf.affectedByGravity && zspellLeaf.velocity.y > -ZMap.MaxSpeed)
       {

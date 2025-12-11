@@ -26,7 +26,7 @@ public class LinkHover : MonoBehaviour, IPointerEnterHandler, IEventSystemHandle
   {
     int intersectingLink = TMP_TextUtilities.FindIntersectingLink(this.pTextMeshPro, Input.mousePosition, (Camera) null);
     if (intersectingLink != -1 && this.linkIndex != intersectingLink)
-      MyToolTip.Show(this.pTextMeshPro.textInfo.linkInfo[intersectingLink].GetLinkID(), -1f);
+      MyToolTip.Show(this.pTextMeshPro.textInfo.linkInfo[intersectingLink].GetLinkID(), -1f, false);
     else if (intersectingLink == -1)
       MyToolTip.Close();
     this.linkIndex = intersectingLink;

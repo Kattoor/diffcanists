@@ -141,6 +141,8 @@ public static class ZCreatureCreate
     z.collider.creature = z;
     z.isPawn = flag;
     z.game.helper.creatureID.Add(z.id, z);
+    if (z.invulnerable > 0)
+      Object.Instantiate<GameObject>(Inert.GetSpell(SpellEnum.Invulnerability_Shield).toSummon, z.transform.position, Quaternion.identity, z.transform).GetComponent<ParticleInvulnerablity>().c = z.clientObj;
     return z;
   }
 

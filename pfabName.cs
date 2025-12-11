@@ -20,6 +20,7 @@ public class pfabName : MonoBehaviour, IPointerClickHandler, IEventSystemHandler
   public Image ratingType;
   public TMP_Text txtExperience;
   private Account account;
+  public bool showAFK;
   private bool inActive;
   private float clickTime;
 
@@ -48,7 +49,7 @@ public class pfabName : MonoBehaviour, IPointerClickHandler, IEventSystemHandler
   public void RefreshActivity()
   {
     this.inActive = this.account.IsInactive();
-    this.txtName.text = (!this.inActive || !((UnityEngine.Object) UnratedMenu.instance != (UnityEngine.Object) null) ? "" : "<sprite name=\"AFK\">") + ChatBox.GetAccountIcons(this.account, true, true, false) + this.account.name;
+    this.txtName.text = (!this.inActive || !this.showAFK ? "" : "<sprite name=\"AFK\">") + ChatBox.GetAccountIcons(this.account, true, true, false) + this.account.name;
   }
 
   private IEnumerator CheckActivity()
@@ -81,6 +82,8 @@ public class pfabName : MonoBehaviour, IPointerClickHandler, IEventSystemHandler
     if (ready)
       this.ready.gameObject.SetActive(true);
     this.RefreshActivity();
+    if (!this.showAFK)
+      return;
     this.StartCoroutine(this.CheckActivity());
   }
 
@@ -133,12 +136,12 @@ public class pfabName : MonoBehaviour, IPointerClickHandler, IEventSystemHandler
     if (this.account != null)
       pfabName.HoverRatingIcon(this.account, (string) null);
     else
-      MyToolTip.Show(RatedFacts.GetGameTypeAsStringLong((int) Client.gameType) + " Rating", -1f);
+      MyToolTip.Show(RatedFacts.GetGameTypeAsStringLong((int) Client.gameType) + " Rating", -1f, false);
   }
 
   public static void HoverRatingIcon(Account account, string extra = null)
   {
-    MyToolTip.Show(account.name + "\n<sprite name=\"LTS\"> <#FF0050>" + (object) account.Rating + "</color>\n<sprite name=\"HTS\"> <#00FF1D>" + (object) account.Rating1 + "</color>\n<sprite name=\"PMO\"> <#00B2FF>" + (object) account.Rating2 + "</color>\n" + (extra != null ? (object) extra : (object) ""), -1f);
+    MyToolTip.Show(account.name + "\n<sprite name=\"LTS\"> <#FF0050>" + (object) account.Rating + "</color>\n<sprite name=\"HTS\"> <#00FF1D>" + (object) account.Rating1 + "</color>\n<sprite name=\"PMO\"> <#00B2FF>" + (object) account.Rating2 + "</color>\n" + (extra != null ? (object) extra : (object) ""), -1f, false);
   }
 
   public void HideTooltip()

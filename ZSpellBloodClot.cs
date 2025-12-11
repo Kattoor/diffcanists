@@ -130,8 +130,7 @@ label_47:
         zspellBloodClot.velocity = zspellBloodClot.velocity + zspellBloodClot.addedVelocity;
         zspellBloodClot.velocity.x = Mathd.Clamp(zspellBloodClot.velocity.x, (FixedInt) -50, (FixedInt) 50);
         zspellBloodClot.velocity.y = Mathd.Clamp(zspellBloodClot.velocity.y, (FixedInt) -50, (FixedInt) 50);
-        zspellBloodClot.addedVelocity.x = (FixedInt) 0;
-        zspellBloodClot.addedVelocity.y = (FixedInt) 0;
+        zspellBloodClot.ResetAddedVelocity();
       }
       else if (zspellBloodClot.affectedByGravity && zspellBloodClot.velocity.y > -ZMap.MaxSpeed)
         zspellBloodClot.velocity.y += zspellBloodClot.map.Gravity;

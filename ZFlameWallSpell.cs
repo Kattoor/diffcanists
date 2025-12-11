@@ -152,8 +152,7 @@ public class ZFlameWallSpell : ZSpell
         zflameWallSpell.velocity = zflameWallSpell.velocity + zflameWallSpell.addedVelocity;
         zflameWallSpell.velocity.x = Mathd.Clamp(zflameWallSpell.velocity.x, (FixedInt) -50, (FixedInt) 50);
         zflameWallSpell.velocity.y = Mathd.Clamp(zflameWallSpell.velocity.y, (FixedInt) -50, (FixedInt) 50);
-        zflameWallSpell.addedVelocity.x = (FixedInt) 0;
-        zflameWallSpell.addedVelocity.y = (FixedInt) 0;
+        zflameWallSpell.ResetAddedVelocity();
       }
       if (zflameWallSpell.affectedByGravity && zflameWallSpell.velocity.y > -ZMap.MaxSpeed)
         zflameWallSpell.velocity.y += zflameWallSpell.map.Gravity;

@@ -601,8 +601,19 @@ public class ZTower : ZComponent
           this.creature.turnFriendlyDmg = this.game.turn;
         if (dt == DamageType.SuperStun)
           this.creature.superStunned = true;
-        if (this.creature.superStunned || damage > 0 && (this.game.serverState.busy == ServerState.Busy.No || this.game.serverState.busy == ServerState.Busy.Moving || this.game.serverState.busy == ServerState.Busy.Moving_NoCountdown))
-          this.creature.OnStunned();
+        if (!this.creature.superStunned)
+        {
+          if (damage > 0)
+          {
+            ZPerson parent = this.creature.parent;
+            if ((parent != null ? (!parent.yourTurn ? 1 : 0) : 0) == 0 && this.game.serverState.busy != ServerState.Busy.No && (this.game.serverState.busy != ServerState.Busy.Moving && this.game.serverState.busy != ServerState.Busy.Moving_NoCountdown) && this.game.serverState.busy != ServerState.Busy.Between_Turns)
+              goto label_140;
+          }
+          else
+            goto label_140;
+        }
+        this.creature.OnStunned();
+label_140:
         if (this.Health <= 0)
         {
           if ((ZComponent) enemy != (object) null)
@@ -708,6 +719,8 @@ public class ZTower : ZComponent
 
   public IEnumerator<float> Fall()
   {
+    if (this.creature.addVelocity)
+      this.creature.ResetAddedVelocity();
     if (this.type == TowerType.Cosmos && !this.creature.entangledOrGravity)
     {
       this.creature.moving = (IEnumerator<float>) null;

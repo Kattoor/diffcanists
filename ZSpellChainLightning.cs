@@ -137,8 +137,7 @@ label_48:
         zspellChainLightning.velocity = zspellChainLightning.velocity + zspellChainLightning.addedVelocity;
         zspellChainLightning.velocity.x = Mathd.Clamp(zspellChainLightning.velocity.x, (FixedInt) -50, (FixedInt) 50);
         zspellChainLightning.velocity.y = Mathd.Clamp(zspellChainLightning.velocity.y, (FixedInt) -50, (FixedInt) 50);
-        zspellChainLightning.addedVelocity.x = (FixedInt) 0;
-        zspellChainLightning.addedVelocity.y = (FixedInt) 0;
+        zspellChainLightning.ResetAddedVelocity();
       }
       else if (zspellChainLightning.affectedByGravity && zspellChainLightning.velocity.y > -ZMap.MaxSpeed)
         zspellChainLightning.velocity.y += zspellChainLightning.map.Gravity;

@@ -167,8 +167,7 @@ label_2:
         zspellSnowball.velocity = zspellSnowball.velocity + zspellSnowball.addedVelocity;
         zspellSnowball.velocity.x = Mathd.Clamp(zspellSnowball.velocity.x, (FixedInt) -50, (FixedInt) 50);
         zspellSnowball.velocity.y = Mathd.Clamp(zspellSnowball.velocity.y, (FixedInt) -50, (FixedInt) 50);
-        zspellSnowball.addedVelocity.x = (FixedInt) 0;
-        zspellSnowball.addedVelocity.y = (FixedInt) 0;
+        zspellSnowball.ResetAddedVelocity();
       }
       else if ((zspellSnowball.affectedByGravity || zspellSnowball.curDuration > 150) && zspellSnowball.velocity.y > -ZMap.MaxSpeed)
         zspellSnowball.velocity.y += zspellSnowball.map.Gravity;

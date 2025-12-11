@@ -40,7 +40,7 @@ public class ZFamiliar : ZComponent
     int num = reader.ReadInt32();
     if ((ZComponent) cre == (object) null)
       return (ZFamiliar) null;
-    Familiar component = ((IEnumerable<GameObject>) Inert.Instance.familiars).First<GameObject>((Func<GameObject, bool>) (q => string.Equals(n, q.name))).GetComponent<Familiar>();
+    Familiar component = ((IEnumerable<GameObject>) Inert.Instance.familiars).Concat<GameObject>((IEnumerable<GameObject>) Inert.Instance.altFamiliars).First<GameObject>((Func<GameObject, bool>) (q => (UnityEngine.Object) q != (UnityEngine.Object) null && string.Equals(n, q.name))).GetComponent<Familiar>();
     ZFamiliar zfamiliar = ZFamiliar.Create(cre, component);
     if ((ZComponent) zfamiliar.effector != (object) null)
     {

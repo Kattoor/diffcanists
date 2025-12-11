@@ -25,7 +25,7 @@ public class ZEntity : ZComponent
   [NonSerialized]
   public MyLocation velocity;
   [NonSerialized]
-  public MyLocation addedVelocity;
+  public MyLocation _addedVelocity;
   [NonSerialized]
   public bool addVelocity;
   [NonSerialized]
@@ -99,6 +99,18 @@ public class ZEntity : ZComponent
     this._position.y += x;
   }
 
+  public MyLocation addedVelocity
+  {
+    get
+    {
+      return this._addedVelocity;
+    }
+    set
+    {
+      this._addedVelocity = value;
+    }
+  }
+
   public int GetX()
   {
     return (int) this._position.x;
@@ -114,13 +126,19 @@ public class ZEntity : ZComponent
     this.position = p;
   }
 
+  public void ResetAddedVelocity()
+  {
+    this._addedVelocity.x = (FixedInt) 0;
+    this._addedVelocity.y = (FixedInt) 0;
+    this.addVelocity = false;
+  }
+
   public void KillMovement()
   {
     this.isMoving = false;
     this.velocity.y = (FixedInt) 0;
     this.velocity.x = (FixedInt) 0;
-    this.addedVelocity.x = (FixedInt) 0;
-    this.addedVelocity.y = (FixedInt) 0;
+    this.ResetAddedVelocity();
     this.validX = this.position.x;
     this.validY = this.position.y;
     this.pX = this.validX;
@@ -135,8 +153,7 @@ public class ZEntity : ZComponent
     this.isMoving = false;
     this.velocity.y = (FixedInt) 0;
     this.velocity.x = (FixedInt) 0;
-    this.addedVelocity.x = (FixedInt) 0;
-    this.addedVelocity.y = (FixedInt) 0;
+    this.ResetAddedVelocity();
     this.moving = (IEnumerator<float>) null;
   }
 

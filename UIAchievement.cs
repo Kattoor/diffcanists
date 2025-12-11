@@ -35,7 +35,7 @@ public class UIAchievement : MonoBehaviour
 
   public void OnEnter()
   {
-    MyToolTip.Show(Achievements.list[this._achievement].description, -1f);
+    MyToolTip.Show(Achievements.list[this._achievement].description, -1f, false);
   }
 
   public void OnExit()

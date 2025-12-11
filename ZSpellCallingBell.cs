@@ -130,8 +130,7 @@ label_47:
         zspellCallingBell.velocity = zspellCallingBell.velocity + zspellCallingBell.addedVelocity;
         zspellCallingBell.velocity.x = Mathd.Clamp(zspellCallingBell.velocity.x, (FixedInt) -50, (FixedInt) 50);
         zspellCallingBell.velocity.y = Mathd.Clamp(zspellCallingBell.velocity.y, (FixedInt) -50, (FixedInt) 50);
-        zspellCallingBell.addedVelocity.x = (FixedInt) 0;
-        zspellCallingBell.addedVelocity.y = (FixedInt) 0;
+        zspellCallingBell.ResetAddedVelocity();
       }
       else if (zspellCallingBell.affectedByGravity && zspellCallingBell.velocity.y > -ZMap.MaxSpeed)
         zspellCallingBell.velocity.y += zspellCallingBell.map.Gravity;

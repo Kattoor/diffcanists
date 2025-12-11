@@ -500,6 +500,8 @@ public class ZGame
 
   public bool IsGameOver()
   {
+    if (this.isTutorial && ((UnityEngine.Object) Player.Instance == (UnityEngine.Object) null || Player.Instance.person.controlled.Count == 0 || Player.Instance.person.controlled[0].isDead))
+      return true;
     if (this.isTeam)
     {
       int num1 = 0;
@@ -4033,7 +4035,7 @@ label_46:
                                   this.SendResyncMsg(p, "spell could not be fired", true, (Action) null);
                                   return;
                                 }
-                                if (spell.spellEnum == SpellEnum.Sands_of_Time)
+                                if (spell.spellEnum == SpellEnum.Sands_of_Time && !creature.inWater)
                                 {
                                   using (MemoryStream memoryStream = new MemoryStream())
                                   {
@@ -5713,7 +5715,10 @@ label_158:
           for (int index = 0; index < player.familiarLevels.Length; ++index)
           {
             for (int lvl = 0; lvl <= player.familiarLevels[index]; ++lvl)
-              game.GiveFamiliarSpells(player, player.first(), (BookOf) index, lvl);
+            {
+              if ((ZComponent) player.first() != (object) null)
+                game.GiveFamiliarSpells(player, player.first(), (BookOf) index, lvl);
+            }
           }
         }
         game.isReplay = false;

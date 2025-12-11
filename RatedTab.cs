@@ -567,7 +567,7 @@ public class RatedTab : MonoBehaviour
 
   public void Tooltip(string s)
   {
-    MyToolTip.Show(s, -1f);
+    MyToolTip.Show(s, -1f, false);
   }
 
   public void HideTooltip()
@@ -588,7 +588,7 @@ public class RatedTab : MonoBehaviour
   {
     if (Server._preGameFacts == null || Server._preGameFacts[this._ratedFacts.gameType] == null)
     {
-      MyToolTip.Show("No preset settings exist for this ladder", -1f);
+      MyToolTip.Show("No preset settings exist for this ladder", -1f, false);
     }
     else
     {

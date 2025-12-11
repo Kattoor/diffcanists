@@ -90,8 +90,7 @@ label_54:
         zspellConductorRod.velocity = zspellConductorRod.velocity + zspellConductorRod.addedVelocity;
         zspellConductorRod.velocity.x = Mathd.Clamp(zspellConductorRod.velocity.x, (FixedInt) -50, (FixedInt) 50);
         zspellConductorRod.velocity.y = Mathd.Clamp(zspellConductorRod.velocity.y, (FixedInt) -50, (FixedInt) 50);
-        zspellConductorRod.addedVelocity.x = (FixedInt) 0;
-        zspellConductorRod.addedVelocity.y = (FixedInt) 0;
+        zspellConductorRod.ResetAddedVelocity();
       }
       else if (zspellConductorRod.affectedByGravity && zspellConductorRod.velocity.y > -ZMap.MaxSpeed)
         zspellConductorRod.velocity.y += zspellConductorRod.map.Gravity;

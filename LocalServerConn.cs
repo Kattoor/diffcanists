@@ -24,6 +24,7 @@ public class LocalServerConn : Catalogue
   public static bool PasswordChange = false;
   public static bool UseEncryption = true;
   public static AuthenticationMethod authenticationMethod = AuthenticationMethod.Arcanists;
+  private static DateTime? _steamRefresh = new DateTime?();
   private string ipstring = "";
   private bool showOrb = true;
   private List<PfabServerButton> serverButtons = new List<PfabServerButton>();
@@ -335,6 +336,14 @@ public class LocalServerConn : Catalogue
     Application.Quit();
   }
 
+  public void TryRefreshSteam()
+  {
+    if (LocalServerConn._steamRefresh.HasValue && (DateTime.Now - LocalServerConn._steamRefresh.Value).TotalMinutes <= 1.0)
+      return;
+    LocalServerConn._steamRefresh = new DateTime?(DateTime.Now);
+    SteamManager.Instance.Refresh(true);
+  }
+
   public void Error(string s)
   {
     if (s == null)
@@ -448,6 +457,17 @@ public class LocalServerConn : Catalogue
       else
         Client.ConnectToLocalServer();
     }
+  }
+
+  public void ForceConnect()
+  {
+    this.lastPress = 0.0f;
+    if (LocalServerConn.PasswordChange)
+      this.ClickChangePassword();
+    else if (this.local)
+      this.ConnectToLocalServer();
+    else
+      this.ConnectToMasterServer();
   }
 
   public void ConnectToMasterServer()

@@ -873,7 +873,7 @@ public class Achievements
     },
     new Achievements.Container()
     {
-      name = "Must Ask the Question",
+      name = "Must Axe the Question",
       description = "Kill two Arcanists with the same cast of Enchanted Axes",
       points = (ushort) 300,
       ratedOnly = false

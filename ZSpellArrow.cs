@@ -133,8 +133,7 @@ label_44:
         zspellArrow.velocity = zspellArrow.velocity + zspellArrow.addedVelocity;
         zspellArrow.velocity.x = Mathd.Clamp(zspellArrow.velocity.x, (FixedInt) -50, (FixedInt) 50);
         zspellArrow.velocity.y = Mathd.Clamp(zspellArrow.velocity.y, (FixedInt) -50, (FixedInt) 50);
-        zspellArrow.addedVelocity.x = (FixedInt) 0;
-        zspellArrow.addedVelocity.y = (FixedInt) 0;
+        zspellArrow.ResetAddedVelocity();
       }
       else if (zspellArrow.affectedByGravity && zspellArrow.velocity.y > -ZMap.MaxSpeed)
         zspellArrow.velocity.y += zspellArrow.map.Gravity;

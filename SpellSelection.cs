@@ -85,7 +85,7 @@ public class SpellSelection : Catalogue
 
   public void ToolTip(string s)
   {
-    MyToolTip.Show(s, -1f);
+    MyToolTip.Show(s, -1f, false);
   }
 
   public void HideToolTip()

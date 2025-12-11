@@ -1607,7 +1607,7 @@ public class Server : MonoBehaviour
                             return;
                           gg1.SetTournamentMode(!gg1.GetTournamentMode());
                           gg1.tournamentWasSetByTO = gg1.GetTournamentMode() && c.player.account.accountType.IsModPlusTO();
-                          if (gg1.GetTournamentMode())
+                          if (gg1.GetTournamentMode() && Server._tournySettings != null)
                           {
                             gg1.settings.Copy(Server._tournySettings);
                             break;

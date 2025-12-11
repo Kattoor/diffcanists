@@ -186,6 +186,9 @@ public class HUD : UIBehaviour
   private int zzturn;
   private Coroutine corCastSpell;
   private float lastMapPing;
+  private Vector3 mPos;
+  private MyToolTip shownTooltip;
+  private ZMyCollider hovering;
   private bool dummiesLoaded;
   public static bool talking;
   private Coroutine showHideEverything;
@@ -498,20 +501,20 @@ public class HUD : UIBehaviour
   public void HoverSeasons()
   {
     if ((UnityEngine.Object) this.seasonIcon.sprite == (UnityEngine.Object) ClientResources.Instance.seasonIcons[0])
-      MyToolTip.Show("The Four Seasons has been cast - the seasons will begin looping on their next turn", -1f);
+      MyToolTip.Show("The Four Seasons has been cast - the seasons will begin looping on their next turn", -1f, false);
     else if ((UnityEngine.Object) this.seasonIcon.sprite == (UnityEngine.Object) ClientResources.Instance.seasonIcons[1])
-      MyToolTip.Show("Summer", -1f);
+      MyToolTip.Show("Summer", -1f, false);
     else if ((UnityEngine.Object) this.seasonIcon.sprite == (UnityEngine.Object) ClientResources.Instance.seasonIcons[2])
-      MyToolTip.Show("Autumn", -1f);
+      MyToolTip.Show("Autumn", -1f, false);
     else if ((UnityEngine.Object) this.seasonIcon.sprite == (UnityEngine.Object) ClientResources.Instance.seasonIcons[3])
     {
-      MyToolTip.Show("Winter", -1f);
+      MyToolTip.Show("Winter", -1f, false);
     }
     else
     {
       if (!((UnityEngine.Object) this.seasonIcon.sprite == (UnityEngine.Object) ClientResources.Instance.seasonIcons[4]))
         return;
-      MyToolTip.Show("Spring", -1f);
+      MyToolTip.Show("Spring", -1f, false);
     }
   }
 
@@ -526,9 +529,9 @@ public class HUD : UIBehaviour
     string str1 = fixedInt > (FixedInt) 0.8f ? "Heavy" : (fixedInt > (FixedInt) 0.6f ? "Strong" : (fixedInt > (FixedInt) 0.4f ? "Moderate" : (fixedInt > (FixedInt) 0.2f ? "Light" : "Calm")));
     string str2 = this.compassRose[index];
     if (fixedInt == 0)
-      MyToolTip.Show("No Wind", -1f);
+      MyToolTip.Show("No Wind", -1f, false);
     else
-      MyToolTip.Show(str1 + " " + str2 + " Wind", -1f);
+      MyToolTip.Show(str1 + " " + str2 + " Wind", -1f, false);
   }
 
   public static void SetupMiniCamera()
@@ -604,10 +607,35 @@ public class HUD : UIBehaviour
     this.textSpellCasted.text = "";
   }
 
+  private void Tooltip()
+  {
+    if (!((UnityEngine.Object) Player.Instance == (UnityEngine.Object) null) && (!((UnityEngine.Object) Player.Instance.selectedSpell == (UnityEngine.Object) null) || Player.IsPointerOverGameObject(0) || HUD.instance.PressingOnScreenControl) || !(this.mPos != Input.mousePosition))
+      return;
+    this.mPos = Input.mousePosition;
+    Vector3 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+    foreach (ZMyCollider zmyCollider in Client.game.world.OverlapPointAll((int) worldPoint.x, (int) worldPoint.y, Inert.mask_entity_movement | Inert.mask_Phantom))
+    {
+      if ((ZComponent) zmyCollider.creature != (object) null && zmyCollider.creature is ZCreatureTree && zmyCollider.creature.health < 1000)
+      {
+        if ((ZComponent) this.hovering == (object) zmyCollider)
+          return;
+        this.hovering = zmyCollider;
+        this.shownTooltip = MyToolTip.Show(zmyCollider.creature.health.ToString() + "<#" + ColorUtility.ToHtmlStringRGB(zmyCollider.creature.parent.clientColor) + "> health", -1f, true);
+        return;
+      }
+    }
+    this.hovering = (ZMyCollider) null;
+    if (!((UnityEngine.Object) this.shownTooltip != (UnityEngine.Object) null))
+      return;
+    this.shownTooltip._Close();
+    this.shownTooltip = (MyToolTip) null;
+  }
+
   private void Update()
   {
     if (this.game == null)
       return;
+    this.Tooltip();
     if ((double) this.pickup_music > 0.0)
     {
       this.pickup_music -= Time.deltaTime;
@@ -1103,7 +1131,7 @@ public class HUD : UIBehaviour
       UIOnHover component = this.armIcon.GetComponent<UIOnHover>();
       component.onEnter.RemoveAllListeners();
       component.onExit.RemoveAllListeners();
-      component.onEnter.AddListener((UnityAction) (() => MyToolTip.Show(s, -1f)));
+      component.onEnter.AddListener((UnityAction) (() => MyToolTip.Show(s, -1f, false)));
       component.onExit.AddListener((UnityAction) (() => MyToolTip.Close()));
       this.UpdateArmageddonIcon(this.game.players.Count > 0 ? Mathf.Max(0, this.game.players[0].localTurn) : 0);
     }
@@ -1119,7 +1147,7 @@ public class HUD : UIBehaviour
         UIOnHover component = this.armIcon.GetComponent<UIOnHover>();
         component.onEnter.RemoveAllListeners();
         component.onExit.RemoveAllListeners();
-        component.onEnter.AddListener((UnityAction) (() => MyToolTip.Show(this.armIcon.sprite.name, -1f)));
+        component.onEnter.AddListener((UnityAction) (() => MyToolTip.Show(this.armIcon.sprite.name, -1f, false)));
         component.onExit.AddListener((UnityAction) (() => MyToolTip.Close()));
         this.UpdateArmageddonIcon(this.game.players.Count > 0 ? Mathf.Max(0, this.game.players[0].localTurn) : 0);
       }
@@ -1895,7 +1923,7 @@ public class HUD : UIBehaviour
 
   public void Hover(string msg)
   {
-    MyToolTip.Show(msg, -1f);
+    MyToolTip.Show(msg, -1f, false);
   }
 
   public void HoverArmageddon()
@@ -1913,12 +1941,12 @@ public class HUD : UIBehaviour
       StringBuilder stringBuilder = new StringBuilder(this.game.isCountdown ? string.Format("{0} / 200 Turns<br>", (object) (num + 1)) : string.Format("{0} / 60 Turns<br>", (object) (num + 1)));
       foreach (ZPerson player in this.game.players)
         stringBuilder.Append("<").Append(InputFieldPlus.RGBtoHEX((Color32) player.clientColor)).Append(">").Append(player.name).Append("</color> - ").Append(Global.IntToTime((int) ((double) player.countdown + 0.5), 12)).Append("<br>");
-      MyToolTip.Show(stringBuilder.ToString(), -1f);
+      MyToolTip.Show(stringBuilder.ToString(), -1f, false);
     }
     else if (this.game.isSandbox || this.game.isTutorial)
-      MyToolTip.Show(string.Format("Turn {0}", (object) (num + 1)), -1f);
+      MyToolTip.Show(string.Format("Turn {0}", (object) (num + 1)), -1f, false);
     else
-      MyToolTip.Show(string.Format("{0} / 60 Turns", (object) (num + 1)), -1f);
+      MyToolTip.Show(string.Format("{0} / 60 Turns", (object) (num + 1)), -1f, false);
   }
 
   public void ToggleSummonOnYourTeam()
@@ -2149,7 +2177,7 @@ public class HUD : UIBehaviour
 
   public void HoverPlayersPanel()
   {
-    MyToolTip.Show("Click to resize - Right-Click for additional options", -1f);
+    MyToolTip.Show("Click to resize - Right-Click for additional options", -1f, false);
     if (this._lockScale)
       return;
     this.game?.ScalePlayersPanel(true, 0.5f);

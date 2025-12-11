@@ -164,8 +164,7 @@ label_31:
         zspellSand.velocity = zspellSand.velocity + zspellSand.addedVelocity;
         zspellSand.velocity.x = Mathd.Clamp(zspellSand.velocity.x, (FixedInt) -50, (FixedInt) 50);
         zspellSand.velocity.y = Mathd.Clamp(zspellSand.velocity.y, (FixedInt) -50, (FixedInt) 50);
-        zspellSand.addedVelocity.x = (FixedInt) 0;
-        zspellSand.addedVelocity.y = (FixedInt) 0;
+        zspellSand.ResetAddedVelocity();
       }
       else if (zspellSand.affectedByGravity && zspellSand.velocity.y > -ZMap.MaxSpeed)
         zspellSand.velocity.y += zspellSand.map.Gravity;
@@ -240,6 +239,7 @@ label_31:
         fixedInt3 = velocity.x / num1;
         fixedInt4 = velocity.y / num1;
       }
+      int num2 = 5;
       while (num1 > 0)
       {
         if (curDuration == 2)
@@ -247,7 +247,10 @@ label_31:
         --num1;
         int x4 = (int) (fixedInt3 + x1);
         int y4 = (int) (fixedInt4 + y1);
-        if ((curDuration <= collisionFrame || num1 != 0 ? (!map.CheckPositionOnlyMap(x4, y4) ? 1 : 0) : (!map.SpellCheckPosition(x4, y4, toCollideCheck, Inert.mask_spell_movement) ? 1 : 0)) != 0)
+        --num2;
+        if (num2 < 0)
+          num2 = 5;
+        if ((curDuration <= collisionFrame || num1 != 0 && num2 != 0 ? (!map.CheckPositionOnlyMap(x4, y4) ? 1 : 0) : (!map.SpellCheckPosition(x4, y4, toCollideCheck, Inert.mask_spell_movement) ? 1 : 0)) != 0)
         {
           ZCreature zcreature = map.PhysicsCollideCreature(toCollideCheck, x4, y4, 0);
           if ((ZComponent) zcreature != (object) null && typeof (ZCreatureThorn) != zcreature.GetType())
@@ -260,41 +263,41 @@ label_31:
           }
           else
           {
-            int num2 = (int) x2;
+            int num3 = (int) x2;
             int yInt = (int) y2 + 1;
-            int num3 = 1000;
-            int num4 = 0;
-            while (num3 > 0 && yInt > 0)
+            int num4 = 1000;
+            int num5 = 0;
+            while (num4 > 0 && yInt > 0)
             {
-              if (map.SpellCheckPosition(num2, yInt - 1, toCollideCheck, Inert.mask_spell_movement))
+              if (map.SpellCheckPosition(num3, yInt - 1, toCollideCheck, Inert.mask_spell_movement))
               {
                 --yInt;
-                ++num4;
+                ++num5;
               }
-              else if (map.SpellCheckPosition(num2 - 1, yInt - 1, toCollideCheck, Inert.mask_spell_movement))
+              else if (map.SpellCheckPosition(num3 - 1, yInt - 1, toCollideCheck, Inert.mask_spell_movement))
               {
                 --yInt;
-                --num2;
-                num4 = 0;
+                --num3;
+                num5 = 0;
               }
-              else if (map.SpellCheckPosition(num2 + 1, yInt - 1, toCollideCheck, Inert.mask_spell_movement))
+              else if (map.SpellCheckPosition(num3 + 1, yInt - 1, toCollideCheck, Inert.mask_spell_movement))
               {
                 --yInt;
-                ++num2;
-                num4 = 0;
+                ++num3;
+                num5 = 0;
               }
               else
                 break;
-              --num3;
-              if (num3 < 990)
+              --num4;
+              if (num4 < 990)
               {
-                position = new MyLocation(num2, yInt);
+                position = new MyLocation(num3, yInt);
                 velocity.x = (FixedInt) 0;
                 velocity.y = (FixedInt) -10;
-                goto label_23;
+                goto label_26;
               }
             }
-            position = new MyLocation(num2, yInt);
+            position = new MyLocation(num3, yInt);
             ZSpellSand.Blit(map, position, Color32.Lerp(SpellSand.color1, SpellSand.color2, Random.Range(0.0f, 1f)), parent);
             yield break;
           }
@@ -308,7 +311,7 @@ label_31:
         }
       }
       position += velocity;
-label_23:
+label_26:
       if (game.isClient)
         SandPool.Instance?.Add((Vector3) position.ToSinglePrecision());
       if (position.y < 1)

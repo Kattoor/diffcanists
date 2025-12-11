@@ -127,8 +127,7 @@ label_45:
         zspellCustomGravity.velocity = zspellCustomGravity.velocity + zspellCustomGravity.addedVelocity;
         zspellCustomGravity.velocity.x = Mathd.Clamp(zspellCustomGravity.velocity.x, (FixedInt) -50, (FixedInt) 50);
         zspellCustomGravity.velocity.y = Mathd.Clamp(zspellCustomGravity.velocity.y, (FixedInt) -50, (FixedInt) 50);
-        zspellCustomGravity.addedVelocity.x = (FixedInt) 0;
-        zspellCustomGravity.addedVelocity.y = (FixedInt) 0;
+        zspellCustomGravity.ResetAddedVelocity();
       }
       else if (zspellCustomGravity.affectedByGravity && zspellCustomGravity.velocity.y > -ZMap.MaxSpeed)
         zspellCustomGravity.velocity.y += zspellCustomGravity.CustomGravity;

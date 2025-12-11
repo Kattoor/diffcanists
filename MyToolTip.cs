@@ -9,6 +9,7 @@ public class MyToolTip : MonoBehaviour
 {
   public GameObject item;
   public RectTransform container;
+  private bool forceStayOpen;
   private bool shown;
   private bool calculateOnce;
 
@@ -51,17 +52,18 @@ public class MyToolTip : MonoBehaviour
     return component;
   }
 
-  public static void Show(string s, float time = -1f)
+  public static MyToolTip Show(string s, float time = -1f, bool forceStayOpen = false)
   {
     if ((UnityEngine.Object) MyToolTip.instance != (UnityEngine.Object) null)
       MyToolTip.instance._Close();
     MyToolTip andApply = Controller.Instance.CreateAndApply<MyToolTip>(Controller.Instance.MenuToolTip, Controller.Instance.transform);
+    andApply.forceStayOpen = forceStayOpen;
     andApply.Position(false);
     andApply.AddItem(s, (Action) null, Color.white);
     andApply.Rebuild();
-    if ((double) time <= 0.0)
-      return;
-    UnityEngine.Object.Destroy((UnityEngine.Object) andApply.gameObject, time);
+    if ((double) time > 0.0)
+      UnityEngine.Object.Destroy((UnityEngine.Object) andApply.gameObject, time);
+    return andApply;
   }
 
   public static void Show(string s, HorizontalAlignmentOptions align, float time = -1f)
@@ -126,7 +128,7 @@ public class MyToolTip : MonoBehaviour
 
   public void Update()
   {
-    if (!EventSystem.current.IsPointerOverGameObject())
+    if (!EventSystem.current.IsPointerOverGameObject() && !this.forceStayOpen)
     {
       this._Close();
     }
@@ -140,17 +142,17 @@ public class MyToolTip : MonoBehaviour
       this.CalculateBounds(((RectTransform) this.container.GetChild(1)).sizeDelta.x + 1f);
       this.shown = true;
       TextMeshProUGUI component1 = this.container.GetChild(1).GetComponent<TextMeshProUGUI>();
-      Color color = component1.color;
-      color.a = 1f;
-      component1.color = color;
+      Color color1 = component1.color;
+      color1.a = 1f;
+      component1.color = color1;
       Image component2 = this.container.GetComponent<Image>();
-      color = component2.color;
-      color.a = 1f;
-      component2.color = color;
+      Color color2 = component2.color;
+      color2.a = 1f;
+      component2.color = color2;
       Image component3 = this.container.GetChild(0).GetComponent<Image>();
-      color = component3.color;
-      color.a = 1f;
-      component3.color = color;
+      Color color3 = component3.color;
+      color3.a = 1f;
+      component3.color = color3;
     }
   }
 

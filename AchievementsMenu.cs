@@ -114,7 +114,7 @@ public class AchievementsMenu : Catalogue
             ++num2;
           achievementButton.image.sprite = ClientResources.Instance._achievementIcons[index];
           if (!Client.cosmetics.achievements[index])
-            achievementButton.image.color = (Color) new Color32(byte.MaxValue, (byte) 0, (byte) 200, byte.MaxValue);
+            achievementButton.image.color = (Color) new Color32((byte) 100, (byte) 100, (byte) 100, (byte) 128);
           achievementButton.gameObject.SetActive(true);
           ++num1;
         }

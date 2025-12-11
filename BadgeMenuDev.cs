@@ -123,7 +123,7 @@ public class BadgeMenuDev : MonoBehaviour
         u.AlwaysOn = spells ? !flag : flag;
         this.DisplayUpdated();
       }));
-      u.onEnter.AddListener((UnityAction) (() => MyToolTip.Show(ClientResources.Instance.badges[(int) y].name, -1f)));
+      u.onEnter.AddListener((UnityAction) (() => MyToolTip.Show(ClientResources.Instance.badges[(int) y].name, -1f, false)));
       u.onExit.AddListener((UnityAction) (() => MyToolTip.Close()));
       u.AlwaysOn = spells ? !this.cosmetics[(int) y] : this.cosmetics[(int) y];
     }

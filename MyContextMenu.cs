@@ -117,7 +117,7 @@ public class MyContextMenu : MonoBehaviour
       this.onCancel = (Action) null;
       this.Close();
     }));
-    component.onEnter.AddListener((UnityAction) (() => MyToolTip.Show(tooltip, -1f)));
+    component.onEnter.AddListener((UnityAction) (() => MyToolTip.Show(tooltip, -1f, false)));
     component.onExit.AddListener((UnityAction) (() => MyToolTip.Close()));
     gameObject.SetActive(true);
   }
@@ -148,7 +148,7 @@ public class MyContextMenu : MonoBehaviour
     }
     if (!string.IsNullOrEmpty(tooltip))
     {
-      component.onEnter.AddListener((UnityAction) (() => MyToolTip.Show(tooltip, -1f)));
+      component.onEnter.AddListener((UnityAction) (() => MyToolTip.Show(tooltip, -1f, false)));
       component.onExit.AddListener((UnityAction) (() => MyToolTip.Close()));
     }
     gameObject.SetActive(true);
@@ -540,7 +540,7 @@ public class MyContextMenu : MonoBehaviour
               if (string.Equals(player, acc.name))
               {
                 GameObject gameObject = this.AddItem("Spectate " + s + " game", (Action) (() => Client.AskToSpectate(x.Key)), (Color) ColorScheme.GetColor(MyContextMenu.ColorCyan));
-                gameObject.GetComponent<UIOnHover>().onEnter.AddListener((UnityAction) (() => MyToolTip.Show(x.Value.ToString((ZGame) null, false), -1f)));
+                gameObject.GetComponent<UIOnHover>().onEnter.AddListener((UnityAction) (() => MyToolTip.Show(x.Value.ToString((ZGame) null, false), -1f, false)));
                 gameObject.GetComponent<UIOnHover>().onExit.AddListener((UnityAction) (() => MyToolTip.Close()));
                 this.AddSeperator("--------------------------");
                 flag = true;
@@ -555,7 +555,7 @@ public class MyContextMenu : MonoBehaviour
               if (string.Equals(player, acc.name))
               {
                 GameObject gameObject = this.AddItem("Join " + s + " game", (Action) (() => Client.AskTojoinGame(x.Key)), (Color) ColorScheme.GetColor(MyContextMenu.ColorCyan));
-                gameObject.GetComponent<UIOnHover>().onEnter.AddListener((UnityAction) (() => MyToolTip.Show(x.Value.ToString((ZGame) null, false), -1f)));
+                gameObject.GetComponent<UIOnHover>().onEnter.AddListener((UnityAction) (() => MyToolTip.Show(x.Value.ToString((ZGame) null, false), -1f, false)));
                 gameObject.GetComponent<UIOnHover>().onExit.AddListener((UnityAction) (() => MyToolTip.Close()));
                 this.AddSeperator("--------------------------");
                 flag = true;

@@ -98,7 +98,7 @@ public class UnratedTab : Catalogue
 
   public void HoverSimiliarRating()
   {
-    MyToolTip.Show(Mathf.Max(1000, (int) Client.GetAccount(this._gameFacts.players[0], false).similarRating).ToString() + "-" + (object) ((int) Client.GetAccount(this._gameFacts.players[0], false).similarRating + 500), -1f);
+    MyToolTip.Show(Mathf.Max(1000, (int) Client.GetAccount(this._gameFacts.players[0], false).similarRating).ToString() + "-" + (object) ((int) Client.GetAccount(this._gameFacts.players[0], false).similarRating + 500), -1f, false);
   }
 
   public void ToggleAll(UIOnHover[] group)
@@ -323,12 +323,12 @@ public class UnratedTab : Catalogue
 
   public void ToolTip(string s)
   {
-    MyToolTip.Show(s, -1f);
+    MyToolTip.Show(s, -1f, false);
   }
 
   public void HoverCountdown()
   {
-    MyToolTip.Show("Countdown: " + Mathf.Abs((int) this._gameFacts.countdownTime).ToString() + (this._gameFacts.countdownTime > (short) 0 ? " seconds<br>If time runs out you will get 5 second turns from then on." : " seconds<br><#FF0000>If time runs out you lose</color><br>Turn time is still used."), -1f);
+    MyToolTip.Show("Countdown: " + Mathf.Abs((int) this._gameFacts.countdownTime).ToString() + (this._gameFacts.countdownTime > (short) 0 ? " seconds<br>If time runs out you will get 5 second turns from then on." : " seconds<br><#FF0000>If time runs out you lose</color><br>Turn time is still used."), -1f, false);
   }
 
   public void HideToolTip()

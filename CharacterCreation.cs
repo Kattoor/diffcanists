@@ -651,12 +651,12 @@ public class CharacterCreation : Catalogue
 
   public void Hover(string s)
   {
-    MyToolTip.Show(s, -1f);
+    MyToolTip.Show(s, -1f, false);
   }
 
   public void HoverInfo()
   {
-    MyToolTip.Show("<b>Asset Creator Info</b>\r\nImport - Select an *.png file which will be used in the currently selected body part slot\r\nExport PKG - Exports a *.outfitPKG file that can be shared\r\nSave Preview - Creates an image from the character preview\r\n\r\n<b>Controls</b>\r\nArrow Keys - Adjust the currently selected custom outfit piece by adjusting its pivot point\r\nHold Ctrl for incremental movement with the arrow keys\r\nF8 - Hide this menu\r\n\r\nClick the preview image to toggle the animation and save the preview (non-asset creators can also do this)\r\n", -1f);
+    MyToolTip.Show("<b>Asset Creator Info</b>\r\nImport - Select an *.png file which will be used in the currently selected body part slot\r\nExport PKG - Exports a *.outfitPKG file that can be shared\r\nSave Preview - Creates an image from the character preview\r\n\r\n<b>Controls</b>\r\nArrow Keys - Adjust the currently selected custom outfit piece by adjusting its pivot point\r\nHold Ctrl for incremental movement with the arrow keys\r\nF8 - Hide this menu\r\n\r\nClick the preview image to toggle the animation and save the preview (non-asset creators can also do this)\r\n", -1f, false);
   }
 
   public void LeaveToolTip()
@@ -848,7 +848,7 @@ public class CharacterCreation : Catalogue
     if (Client.MyAccount.tournamentCoins >= num)
       MyMessageBox.Create("Buy this outfit piece for <sprite name=\"tcoin\"> <#FF0000>" + (object) num + "</color> tournament coins?", (Action) (() => Prestige.Ask((byte) 10, (int) CharacterCreation.GetViewing(this.viewing), i)), "Ok", "Cancel", (Action) null, (Action) null, this.curGroup[i].sprite, (string) null, (Action) null);
     else
-      MyToolTip.Show("You need <sprite name=\"tcoin\"> " + (object) (num - Client.MyAccount.tournamentCoins) + " more tournament coins to buy this outfit - Better sign-up for the next one!", -1f);
+      MyToolTip.Show("You need <sprite name=\"tcoin\"> " + (object) (num - Client.MyAccount.tournamentCoins) + " more tournament coins to buy this outfit - Better sign-up for the next one!", -1f, false);
   }
 
   public void SelectIndex(int i)

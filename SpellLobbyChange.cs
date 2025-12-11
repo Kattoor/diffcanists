@@ -538,7 +538,7 @@ public class SpellLobbyChange : MonoBehaviour
 
   public void Hover(string s)
   {
-    MyToolTip.Show(s, -1f);
+    MyToolTip.Show(s, -1f, false);
   }
 
   public void HoverLeave()
@@ -737,7 +737,7 @@ public class SpellLobbyChange : MonoBehaviour
       if (i == 0)
         MyMessageBox.Create("Buy the Book of " + this.openBook.ToStringX(false) + " with 5 wands?", (Action) (() => Prestige.AskUnlock(this.openBook)), "Ok", "Cancel", (Action) null, (Action) null, (Sprite) null, (string) null, (Action) null);
       else
-        MyToolTip.Show(Prestige.BookErrorCode(i), 5f);
+        MyToolTip.Show(Prestige.BookErrorCode(i), 5f, false);
     }
     else
     {

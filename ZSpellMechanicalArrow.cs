@@ -97,8 +97,7 @@ label_46:
         zspellMechanicalArrow.velocity = zspellMechanicalArrow.velocity + zspellMechanicalArrow.addedVelocity;
         zspellMechanicalArrow.velocity.x = Mathd.Clamp(zspellMechanicalArrow.velocity.x, (FixedInt) -50, (FixedInt) 50);
         zspellMechanicalArrow.velocity.y = Mathd.Clamp(zspellMechanicalArrow.velocity.y, (FixedInt) -50, (FixedInt) 50);
-        zspellMechanicalArrow.addedVelocity.x = (FixedInt) 0;
-        zspellMechanicalArrow.addedVelocity.y = (FixedInt) 0;
+        zspellMechanicalArrow.ResetAddedVelocity();
       }
       if (zspellMechanicalArrow.goToTarget)
       {

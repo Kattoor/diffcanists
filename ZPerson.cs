@@ -364,6 +364,13 @@ public class ZPerson
       this.spellsCast[e] = new SpellsCast() { count = 1 };
   }
 
+  public void DecreaseCastCount(SpellEnum e)
+  {
+    if (!this.spellsCast.TryGetValue(e, out this._spellCast))
+      return;
+    --this._spellCast.count;
+  }
+
   public void IncreaseSpellDamage(SpellEnum e, int dmg)
   {
     if (this.spellsCast.TryGetValue(e, out this._spellCast))

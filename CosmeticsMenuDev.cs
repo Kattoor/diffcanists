@@ -246,7 +246,7 @@ public class CosmeticsMenuDev : MonoBehaviour
         u.AlwaysOn = spells ? !flag : flag;
         this.DisplayUpdated();
       }));
-      u.onEnter.AddListener((UnityAction) (() => MyToolTip.Show(sprites != null ? sprites[(int) y].name : sprites2[(int) y].name, -1f)));
+      u.onEnter.AddListener((UnityAction) (() => MyToolTip.Show(sprites != null ? sprites[(int) y].name : sprites2[(int) y].name, -1f, false)));
       u.onExit.AddListener((UnityAction) (() => MyToolTip.Close()));
       u.AlwaysOn = spells ? !this.cosmetics.array[this.arrayIndex][(int) y] : this.cosmetics.array[this.arrayIndex][(int) y];
     }

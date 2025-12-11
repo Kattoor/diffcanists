@@ -5,11 +5,19 @@ public class Coords
 {
   public int x;
   public int y;
+  public ZCreature hit;
 
   public Coords(int x, int y)
   {
     this.x = x;
     this.y = y;
+  }
+
+  public Coords(int x, int y, ZCreature z)
+  {
+    this.x = x;
+    this.y = y;
+    this.hit = z;
   }
 
   public override string ToString()

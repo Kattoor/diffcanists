@@ -181,8 +181,7 @@ label_49:
         znapalmSpell.velocity = znapalmSpell.velocity + znapalmSpell.addedVelocity;
         znapalmSpell.velocity.x = Mathd.Clamp(znapalmSpell.velocity.x, (FixedInt) -50, (FixedInt) 50);
         znapalmSpell.velocity.y = Mathd.Clamp(znapalmSpell.velocity.y, (FixedInt) -50, (FixedInt) 50);
-        znapalmSpell.addedVelocity.x = (FixedInt) 0;
-        znapalmSpell.addedVelocity.y = (FixedInt) 0;
+        znapalmSpell.ResetAddedVelocity();
       }
       else if (znapalmSpell.affectedByGravity && znapalmSpell.velocity.y > -ZMap.MaxSpeed)
         znapalmSpell.velocity.y += znapalmSpell.map.Gravity;

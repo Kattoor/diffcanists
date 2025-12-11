@@ -255,7 +255,7 @@ public class ClickSpell : MonoBehaviour
         return "Cancel Flight";
       if (s.spellEnum == SpellEnum.Thunder_Shock && c.isPawn)
         return "Cyclops Shock Attack";
-      if (s.spellEnum == SpellEnum.Blood_Lust && c.type == CreatureType.Gargoyle)
+      if (s.spellEnum == SpellEnum.Blood_Lust && c.isPawn)
         return "Gargoyle Swipe";
       if (s.spellEnum == SpellEnum.Hatch && c.health < 25)
         return "Dragon Hatchling";

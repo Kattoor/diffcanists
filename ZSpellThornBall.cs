@@ -153,8 +153,7 @@ label_42:
         zspellThornBall.velocity = zspellThornBall.velocity + zspellThornBall.addedVelocity;
         zspellThornBall.velocity.x = Mathd.Clamp(zspellThornBall.velocity.x, (FixedInt) -50, (FixedInt) 50);
         zspellThornBall.velocity.y = Mathd.Clamp(zspellThornBall.velocity.y, (FixedInt) -50, (FixedInt) 50);
-        zspellThornBall.addedVelocity.x = (FixedInt) 0;
-        zspellThornBall.addedVelocity.y = (FixedInt) 0;
+        zspellThornBall.ResetAddedVelocity();
       }
       else if (zspellThornBall.affectedByGravity && zspellThornBall.velocity.y > -ZMap.MaxSpeed)
         zspellThornBall.velocity.y += zspellThornBall.map.Gravity;

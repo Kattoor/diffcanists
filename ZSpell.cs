@@ -89,6 +89,7 @@ public class ZSpell : ZEntity, ISpellBridge
   internal MyLocation addedDeathVector = MyLocation.zero;
   internal int lastLivingHit = -100;
   private int[] _circleSizes = new int[3]{ 16, 8, 4 };
+  public SpellEnum spellEnum;
   internal string name;
   internal Spell clientObj;
   internal ZEffector effector;
@@ -119,14 +120,6 @@ public class ZSpell : ZEntity, ISpellBridge
   internal int curDestroyTerrainBounces;
   private bool death;
   private int waitFrames;
-
-  public SpellEnum spellEnum
-  {
-    get
-    {
-      return this.baseSpell.spellEnum;
-    }
-  }
 
   public SpellLogic spellLogic
   {
@@ -1157,12 +1150,11 @@ label_61:
       }
       if (spell.addVelocity)
       {
-        spell.addVelocity = false;
         spell.velocity = spell.velocity + spell.addedVelocity;
         spell.velocity.x = Mathd.Clamp(spell.velocity.x, (FixedInt) -50, (FixedInt) 50);
         spell.velocity.y = Mathd.Clamp(spell.velocity.y, (FixedInt) -50, (FixedInt) 50);
-        spell.addedVelocity.x = (FixedInt) 0;
-        spell.addedVelocity.y = (FixedInt) 0;
+        spell.ResetAddedVelocity();
+        spell.addVelocity = false;
       }
       if (spell.goToTarget)
       {
@@ -1379,6 +1371,7 @@ label_58:
   public void Copy(Spell c, ZGame game)
   {
     this.baseSpell = c;
+    this.spellEnum = c.spellEnum;
     this.damage = c.damage;
     this.damageType = c.damageType;
     this.explisiveForce = (FixedInt) c.explisiveForce;
@@ -2361,7 +2354,15 @@ label_58:
   {
     for (int i = 0; i < wait && !whoSummoned.stunned; ++i)
       yield return 0.0f;
-    if (!ZComponent.IsNull((ZComponent) cre) && !whoSummoned.stunned && (!whoSummoned.isDead && !cre.inWater))
+    if (ZComponent.IsNull((ZComponent) cre) || whoSummoned.stunned || (whoSummoned.isDead || cre.inWater))
+    {
+      if (!ZComponent.IsNull((ZComponent) cre) && whoSummoned.stunned)
+      {
+        yield return 0.0f;
+        whoSummoned.stunned = false;
+      }
+    }
+    else
     {
       FixedInt fixedInt1 = (FixedInt) (whoSummoned.team == 24 ? 26 : 20);
       bool smallAngle = true;
@@ -3189,7 +3190,7 @@ label_7:
       c.SetPosition(new MyLocation(c.position.x, c.position.y - 5));
       pos.y -= 5;
     }
-    else if (theSpell.spellEnum == SpellEnum.Catacombs_of_the_Dead)
+    else if (theSpell.spellEnum == SpellEnum.Catacombs_of_the_Dead && c.GetSpellIndex(SpellEnum.Passage_Ways) == -1)
       c.AddLevel5Spell(new SpellSlot(Inert.GetSpell(SpellEnum.Passage_Ways)), BookOf.Underdark);
     ZTower t = ZTower.Create(c.game, component, (Vector3) (c.position.ToSinglePrecision() - myLocation.ToSinglePrecision()), Quaternion.identity, c.game.GetMapTransform());
     t.firstCast = c.parent.GetSpellCast(theSpell.spellEnum) < 2;
@@ -3301,12 +3302,14 @@ label_7:
     }
     else
     {
-      if (t.type != TowerType.Arcane || c.familiarLevelArcane < 3 || OnDeserialization)
+      if (t.type != TowerType.Arcane || c.familiarLevelArcane < 3 || (t.Health != 25 || OnDeserialization))
         return;
       if (c.familiarLevelArcane == 5)
         t.Health += 50;
       else
         t.Health += 25;
+      if (t.Health > t.MaxHealth)
+        t.Health = t.MaxHealth;
       c.UpdateHealthTxt();
     }
   }
@@ -4777,7 +4780,7 @@ label_27:
     ZCreature c,
     MyLocation target)
   {
-    ZCreature x = c.map.PhysicsCollideCreature((ZCreature) null, (int) target.x, (int) target.y, 0);
+    ZCreature x = c.map.PhysicsCollideCreature((ZCreature) null, (int) target.x, (int) target.y, Inert.mask_Phantom);
     bool flag = (ZComponent) x != (object) null && x.type != CreatureType.Tree && x.race != CreatureRace.Effector;
     if (!((ZComponent) x == (object) c) && flag)
     {
@@ -4868,6 +4871,7 @@ label_27:
       ZEffector zeffector = ZEffector.Create(c.game, theSpell.toSummon.GetComponent<Effector>(), (Vector3) pos.ToSinglePrecision(), Quaternion.identity, c.game.GetMapTransform());
       zeffector.game = game;
       zeffector.whoSummoned = c;
+      zeffector.VisualUpdate();
       zeffector.collider.world = zeffector.world;
       zeffector.collider.Move(pos);
       game.globalEffectors.Add(zeffector);
@@ -5591,7 +5595,7 @@ label_27:
 
   public static void FireSuddenDeath(Spell theSpell, ZCreature c, MyLocation target)
   {
-    ZCreature zcreature = c.map.PhysicsCollideCreature((ZCreature) null, (int) target.x, (int) target.y, 0);
+    ZCreature zcreature = c.map.PhysicsCollideCreature((ZCreature) null, (int) target.x, (int) target.y, Inert.mask_Phantom);
     if (!((ZComponent) zcreature != (object) null) || !zcreature.isPawn || (zcreature.type == CreatureType.Tree || zcreature.race == CreatureRace.Effector))
       return;
     if ((ZComponent) zcreature.curse_of_haute != (object) null && zcreature.curse_of_haute.parent.team == c.parent.team)
@@ -6863,12 +6867,12 @@ label_27:
     for (i = 0; i < 30; ++i)
       yield return 0.0f;
     ZSpell kablam = ZSpell.BaseFireKablam(Inert.Instance.spells["Thunder Shock"], c, pos, Quaternion.identity);
+    kablam.spellEnum = SpellEnum.Conductor_Rod;
     Spell lightningStrike = Inert.Instance.LightningStrike;
     int startX = (int) pos.x;
     int y = (int) pos.y;
     ZGame game = c.game;
     kablam.damage += (ZComponent.IsNull((ZComponent) c.parent.first()) ? c : c.parent.first()).EffectorCount(EffectorType.Electrostatic_Charge) > 0 ? 1 : 0;
-    kablam.damage += 20;
     for (i = 0; i < amount; ++i)
     {
       int num = startX + c.game.RandomInt(minX, maxX);
@@ -6884,7 +6888,9 @@ label_27:
       if (coords != null)
       {
         c.map.ServerBitBlt((int) kablam.explosionCutout, coords.x, coords.y, true, true);
-        if (!kablam.isDead)
+        if ((ZComponent) coords.hit != (object) null && coords.hit.flying)
+          coords.hit.ApplyDamage(SpellEnum.Conductor_Rod, DamageType.Lightning, 20, c, c.game.turn, (ISpellBridge) null, false);
+        else
           ZSpell.BaseFire(Inert.Instance.LightningStrike, c, coords.ToMyLocation(), Quaternion.identity, Inert.Velocity((FixedInt) c.game.RandomInt(0, 360), 8), true, true, true);
         if (c.game.isClient && !c.game.resyncing)
         {
@@ -7406,6 +7412,7 @@ label_37:
         ZEffector zeffector = array[i];
         zeffector.game = c.game;
         zeffector.whoSummoned = c;
+        zeffector.VisualUpdate();
         zeffector.collider.world = zeffector.world;
         c.game.globalEffectors.Add(zeffector);
         zeffector.collider.Move(loc[i]);
@@ -8575,11 +8582,10 @@ label_37:
     zeffector.whoSummoned = this.parent;
     this.parent.effectors.Add(zeffector);
     Spell spell = Inert.GetSpell(SpellEnum.Summon_Queen_Bee);
-    MyLocation myLocation = this.position + new MyLocation(-8, 85);
-    ZGame game = this.game;
-    ZCreature parent = this.parent;
-    MyLocation target = myLocation;
-    ZSpell.FireSummon(spell, game, parent, target, -1, false, (ZPerson) null);
+    MyLocation target = this.position + new MyLocation(-8, 85);
+    if (target.y >= this.game.map.Height - spell.radius)
+      target.y = (FixedInt) (this.game.map.Height - spell.radius);
+    ZSpell.FireSummon(spell, this.game, this.parent, target, -1, false, (ZPerson) null);
   }
 
   public void OnExplosionRocket()
@@ -8775,7 +8781,7 @@ label_37:
         }
         return false;
       case SpellEnum.Sudden_Death:
-        ZCreature zcreature9 = c.map.PhysicsCollideCreature((ZCreature) null, x, y, 0);
+        ZCreature zcreature9 = c.map.PhysicsCollideCreature((ZCreature) null, x, y, Inert.mask_Phantom);
         return (ZComponent) zcreature9 != (object) null && zcreature9.isPawn && zcreature9.type != CreatureType.Tree && zcreature9.race != CreatureRace.Effector;
       case SpellEnum.Deaths_Doorway:
         return (ZComponent) ZSpell.FindTombstone(c, new MyLocation(x, y)) != (object) null;
@@ -10010,6 +10016,7 @@ label_37:
       case SpellEnum.Stalk:
         if (c.game.isClient && !c.game.resyncing && (UnityEngine.Object) c.transform != (UnityEngine.Object) null)
           ZComponent.Instantiate<GameObject>(theSpell.explosion, c.transform.position, Quaternion.identity);
+        MyLocation position5 = c.position;
         c.MoveToPosition = new MyLocation(c.position.x, (FixedInt) -1000);
         c.inWater = true;
         ZEffector zeffector2 = new ZEffector()
@@ -10023,9 +10030,9 @@ label_37:
         };
         c.effectors.Add(zeffector2);
         c.controllable = false;
-        if (!((UnityEngine.Object) Player.Instance != (UnityEngine.Object) null) || !((ZComponent) Player.Instance.selected == (object) c))
-          break;
-        Player.Instance.NextControlled(false, true);
+        if ((UnityEngine.Object) Player.Instance != (UnityEngine.Object) null && (ZComponent) Player.Instance.selected == (object) c)
+          Player.Instance.NextControlled(false, true);
+        c.game.CreatureMoveSurroundings(position5, c.radius + 5, (ZMyCollider) null, false);
         break;
       case SpellEnum.Rising_Lava:
         ZSpell.FireRisingLava(theSpell, c.game);
@@ -10046,6 +10053,8 @@ label_37:
       case SpellEnum.Sandbag:
         if ((ZComponent) c.tower != (object) null)
         {
+          if ((UnityEngine.Object) c.tower.baseTower.FromSpell != (UnityEngine.Object) null)
+            c.parent.DecreaseCastCount(c.tower.baseTower.FromSpell.spellEnum);
           int health = c.tower.Health;
           if (c.tower.type == TowerType.Sand)
           {

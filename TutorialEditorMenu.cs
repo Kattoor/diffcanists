@@ -983,7 +983,7 @@ public class TutorialEditorMenu : MonoBehaviour
 
   public void Hover(string s)
   {
-    MyToolTip.Show(s, -1f);
+    MyToolTip.Show(s, -1f, false);
   }
 
   public void HoverLeave()

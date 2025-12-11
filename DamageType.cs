@@ -42,4 +42,5 @@ public enum DamageType
   SunderLight,
   Sand,
   StingUndead,
+  Light_Removed,
 }

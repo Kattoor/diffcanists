@@ -968,7 +968,6 @@ public class ZCreature : ZEntity
   {
     if (ZComponent.IsNull((ZComponent) this.tower))
       return;
-    this.RemoveSpell(SpellEnum.Passage_Ways);
     this.game.forceRysncPause = true;
     this.tower.dead = true;
     this.tower.isNull = true;
@@ -999,8 +998,7 @@ public class ZCreature : ZEntity
     this.moving = (IEnumerator<float>) null;
     this.velocity.x = FixedInt.ZeroF;
     this.velocity.y = FixedInt.ZeroF;
-    this.addedVelocity.x = FixedInt.ZeroF;
-    this.addedVelocity.y = FixedInt.ZeroF;
+    this.ResetAddedVelocity();
     if (!this.inWater)
       this.game.CreatureMoveSurroundings(this.position, 100, (ZMyCollider) null, false);
     if (this.health <= 0)
@@ -1153,6 +1151,8 @@ public class ZCreature : ZEntity
         }
         else
         {
+          if (effector.type == EffectorType.Sacrifical_Altar_Aura && (ZComponent) effector.whoSummoned != (object) this && !ZComponent.IsNull((ZComponent) effector.whoSummoned))
+            effector.whoSummoned.ApplyDamage(SpellEnum.None, DamageType.None, 100000, (ZCreature) null, 10000, (ISpellBridge) null, false);
           effector.collider?.Disable(true);
           effector.active = false;
           if ((ZComponent) effector.partner != (object) null)
@@ -1263,7 +1263,7 @@ public class ZCreature : ZEntity
       this.parent.controlled.Clear();
       if (this.game.isClient && (UnityEngine.Object) Player.Instance != (UnityEngine.Object) null && this.parent == Player.Instance.person)
         HUD.instance?.OnDeath();
-      if (this.game.isSandbox && (UnityEngine.Object) Player.Instance != (UnityEngine.Object) null && this.parent == Player.Instance.person)
+      if (this.game.isSandbox && !this.game.isTutorial && ((UnityEngine.Object) Player.Instance != (UnityEngine.Object) null && this.parent == Player.Instance.person))
         this.game.DelayNextTurnClient();
       else if (!this.isPawn)
       {
@@ -1303,7 +1303,7 @@ public class ZCreature : ZEntity
               }
             }
           }
-          if (this.game.IsGameOver() && this.game.winOnDeath)
+          if (this.game.IsGameOver() && this.game.winOnDeath || this.game.isTutorial && ((UnityEngine.Object) Player.Instance == (UnityEngine.Object) null || Player.Instance.person.controlled.Count == 0 || Player.Instance.person.controlled[0].isDead))
           {
             if (this.killer != null && this.game.isRated && (!this.game.isClient && this.killedBy == SpellEnum.Blast_From_The_Past))
               Achievements.Set(Achievement.Paper_Bag, this.killer.account, this.game);
@@ -2139,7 +2139,7 @@ label_16:
 
   public bool SoulJarSave(DamageType dt)
   {
-    if (this.isPawn || this.inWater || (!this.familiar.Has(FamiliarType.Underdark) || ZComponent.IsNull((ZComponent) this.parent.GetFamiliar(BookOf.Underdark))) || (dt == DamageType.Light || dt == DamageType.Heal || dt == DamageType.SunderLight))
+    if (this.isPawn || this.inWater || (!this.familiar.Has(FamiliarType.Underdark) || ZComponent.IsNull((ZComponent) this.parent.GetFamiliar(BookOf.Underdark))) || (dt == DamageType.Light || dt == DamageType.Heal || (dt == DamageType.SunderLight || dt == DamageType.Light_Removed)))
       return false;
     ZSpellSoulJar soulJar = this.parent.GetFamiliar(BookOf.Underdark)?.soulJar;
     if (ZComponent.IsNull((ZComponent) soulJar) || soulJar.isDead)
@@ -2389,7 +2389,7 @@ label_51:
         else if ((dt == DamageType.Light || dt == DamageType.Heal || dt == DamageType.SunderLight) && this.race == CreatureRace.Undead)
         {
           damage <<= 1;
-          dt = DamageType.None;
+          dt = DamageType.Light_Removed;
         }
         else
         {
@@ -2867,7 +2867,7 @@ label_4:
 
   public bool CheckToTunUndead(DamageType dt, ZCreature enemy)
   {
-    if (dt == DamageType.Light || dt == DamageType.SunderLight || (this.isDead || !this.isPawn) || !dt.IsDeath() && dt != DamageType.Death_Bomb && !((ZComponent) this.curse_of_haute != (object) null) || (this.race == CreatureRace.Undead || this.race == CreatureRace.Arcane || (this.race == CreatureRace.Soulbound || this.type == CreatureType.Golem) || !((ZComponent) enemy != (object) null)))
+    if (dt == DamageType.Light || dt == DamageType.SunderLight || (dt == DamageType.Light_Removed || this.isDead) || !this.isPawn || (!dt.IsDeath() && dt != DamageType.Death_Bomb && !((ZComponent) this.curse_of_haute != (object) null) || (this.race == CreatureRace.Undead || this.race == CreatureRace.Arcane || (this.race == CreatureRace.Soulbound || this.type == CreatureType.Golem))) || !((ZComponent) enemy != (object) null))
       return false;
     int? minionCount = enemy.parent?.GetMinionCount();
     int num = 4 + this.parent.GetMaxMinions();
@@ -4410,20 +4410,25 @@ label_22:
   {
     if (this.inWater || this.flying || this.isDead)
       return;
-    int num1 = ((FixedInt.Create(360) - (Inert.AngleOfVelocity(MyLocation.down) - FixedInt.Create(90))) * FixedInt.ThreeSixtyBy1 * this.zb.Count - this.radius).ToInt();
-    if (num1 < 0)
-      num1 += this.zb.Count;
+    int num = ((FixedInt.Create(360) - (Inert.AngleOfVelocity(MyLocation.down) - FixedInt.Create(90))) * FixedInt.ThreeSixtyBy1 * this.zb.Count - this.radius).ToInt();
+    if (num < 0)
+      num += this.zb.Count;
+    MyLocation p = this.position;
+    int x = (int) this.position.x;
+    int yInt = (int) this.position.y - 1;
     for (int index1 = this.position.y.ToInt(); index1 >= this.radius; --index1)
     {
+      --yInt;
       for (int index2 = 0; index2 < this.radius * 2; ++index2)
       {
-        int index3 = (index2 + num1) % this.zb.Count;
-        int x = (int) this.position.x;
-        int num2 = (int) this.position.y - 1;
-        if (!this.map.CheckPosition(x + this.zb[index3].x, num2 + this.zb[index3].y, this, Inert.mask_movement_NoEffector))
+        int index3 = (index2 + num) % this.zb.Count;
+        if (!this.map.CheckPosition(x + this.zb[index3].x, yInt + this.zb[index3].y, this, Inert.mask_movement_NoEffector))
+        {
+          this.SetPosition(p);
           return;
+        }
       }
-      this.SetPosition(new MyLocation(this.position.x, this.position.y - 1));
+      p = new MyLocation(x, yInt);
     }
     if (this.waterWalking || this.familiarLevelFrost > 0)
       return;
@@ -4670,8 +4675,7 @@ label_9:
                     zcreature.isMoving = false;
                     zcreature.velocity.x = (FixedInt) 0;
                     zcreature.velocity.y = (FixedInt) 0;
-                    zcreature.addedVelocity.x = (FixedInt) 0;
-                    zcreature.addedVelocity.y = (FixedInt) 0;
+                    zcreature.ResetAddedVelocity();
                     if (zcreature.removeFlight)
                     {
                       zcreature.RemoveFlight(false, true);
@@ -4714,8 +4718,7 @@ label_9:
                 {
                   zcreature.velocity.y = (FixedInt) 0;
                   zcreature.velocity.x = (FixedInt) 0;
-                  zcreature.addedVelocity.x = (FixedInt) 0;
-                  zcreature.addedVelocity.y = (FixedInt) 0;
+                  zcreature.ResetAddedVelocity();
                   if ((ZComponent) zcreature.mount == (object) null && (Mathd.Abs(zcreature.validX - zcreature.position.x) > 104857L || Mathd.Abs(zcreature.validY - zcreature.position.y) > 104857L))
                     zcreature.SetPosition(new MyLocation(zcreature.validX, zcreature.validY));
                   zcreature.moving = (IEnumerator<float>) null;
@@ -4775,8 +4778,7 @@ label_9:
             zcreature.velocity = zcreature.velocity + zcreature.addedVelocity;
             zcreature.velocity.x = Mathd.Clamp(zcreature.velocity.x, (FixedInt) -50, (FixedInt) 50);
             zcreature.velocity.y = Mathd.Clamp(zcreature.velocity.y, (FixedInt) -50, (FixedInt) 50);
-            zcreature.addedVelocity.x = (FixedInt) 0;
-            zcreature.addedVelocity.y = (FixedInt) 0;
+            zcreature.ResetAddedVelocity();
           }
           if (zcreature.position.x < 0 || zcreature.velocity.x > 0 && zcreature.position.x < 0 || (zcreature.position.x >= zcreature.map.Width || zcreature.velocity.x < 0 && zcreature.position.x >= zcreature.map.Width) || zcreature.position.y >= zcreature.map.Height)
           {
@@ -4915,8 +4917,7 @@ label_9:
           zcreature.isMoving = false;
           zcreature.velocity.x = (FixedInt) 0;
           zcreature.velocity.y = (FixedInt) 0;
-          zcreature.addedVelocity.x = (FixedInt) 0;
-          zcreature.addedVelocity.y = (FixedInt) 0;
+          zcreature.ResetAddedVelocity();
           break;
         }
         while (num1 > 0)
@@ -4991,8 +4992,7 @@ label_9:
           zcreature.velocity = zcreature.velocity + zcreature.addedVelocity;
           zcreature.velocity.x = Mathd.Clamp(zcreature.velocity.x, (FixedInt) -50, (FixedInt) 50);
           zcreature.velocity.y = Mathd.Clamp(zcreature.velocity.y, (FixedInt) -50, (FixedInt) 50);
-          zcreature.addedVelocity.x = (FixedInt) 0;
-          zcreature.addedVelocity.y = (FixedInt) 0;
+          zcreature.ResetAddedVelocity();
         }
         if (zcreature.velocity.y > -ZMap.MaxSpeed)
           zcreature.velocity.y += zcreature.map.Gravity;
@@ -5007,11 +5007,7 @@ label_9:
     while (true)
     {
       if (zcreature.addVelocity)
-      {
-        zcreature.addVelocity = false;
-        zcreature.addedVelocity.x.RawValue = 0L;
-        zcreature.addedVelocity.y.RawValue = 0L;
-      }
+        zcreature.ResetAddedVelocity();
       yield return 0.0f;
     }
   }
@@ -5039,8 +5035,7 @@ label_9:
     else
     {
       zcreature1.inWater = false;
-      zcreature1.addedVelocity.x = (FixedInt) 0;
-      zcreature1.addedVelocity.y = (FixedInt) 0;
+      zcreature1.ResetAddedVelocity();
       zcreature1.loopCount = 0;
       if (zcreature1.game.serverState.busy == ServerState.Busy.No)
         zcreature1.game.serverState.busy = ServerState.Busy.Moving;
@@ -5074,8 +5069,7 @@ label_11:
         zcreature1.isMoving = false;
         zcreature1.velocity.x = (FixedInt) 0;
         zcreature1.velocity.y = (FixedInt) 0;
-        zcreature1.addedVelocity.x = (FixedInt) 0;
-        zcreature1.addedVelocity.y = (FixedInt) 0;
+        zcreature1.ResetAddedVelocity();
         yield break;
       }
     }
@@ -5085,8 +5079,7 @@ label_21:
       zcreature1.isMoving = false;
       zcreature1.velocity.x = (FixedInt) 0;
       zcreature1.velocity.y = (FixedInt) 0;
-      zcreature1.addedVelocity.x = (FixedInt) 0;
-      zcreature1.addedVelocity.y = (FixedInt) 0;
+      zcreature1.ResetAddedVelocity();
       zcreature1.moving = (IEnumerator<float>) null;
     }
     else
@@ -5145,8 +5138,7 @@ label_21:
           zcreature1.isMoving = false;
           zcreature1.velocity.x = (FixedInt) 0;
           zcreature1.velocity.y = (FixedInt) 0;
-          zcreature1.addedVelocity.x = (FixedInt) 0;
-          zcreature1.addedVelocity.y = (FixedInt) 0;
+          zcreature1.ResetAddedVelocity();
           yield break;
         }
         else
@@ -5199,8 +5191,7 @@ label_21:
                   zcreature1.isMoving = false;
                   zcreature1.velocity.x = (FixedInt) 0;
                   zcreature1.velocity.y = (FixedInt) 0;
-                  zcreature1.addedVelocity.x = (FixedInt) 0;
-                  zcreature1.addedVelocity.y = (FixedInt) 0;
+                  zcreature1.ResetAddedVelocity();
                   yield break;
                 }
                 else
@@ -5284,8 +5275,7 @@ label_21:
                       {
                         zcreature1.velocity.y = (FixedInt) 0;
                         zcreature1.velocity.x = (FixedInt) 0;
-                        zcreature1.addedVelocity.x = (FixedInt) 0;
-                        zcreature1.addedVelocity.y = (FixedInt) 0;
+                        zcreature1.ResetAddedVelocity();
                         zcreature1.moving = (IEnumerator<float>) null;
                         zcreature1.isMoving = false;
                         zcreature1.CreatureMoveSurroundings();
@@ -5353,8 +5343,7 @@ label_21:
                     FixedInt pastVelocityX = zcreature1.velocity.x;
                     zcreature1.velocity.y = (FixedInt) 0;
                     zcreature1.velocity.x = (FixedInt) 0;
-                    zcreature1.addedVelocity.x = (FixedInt) 0;
-                    zcreature1.addedVelocity.y = (FixedInt) 0;
+                    zcreature1.ResetAddedVelocity();
                     MyLocation position = zcreature1.position;
                     zcreature1.MoveToPosition = new MyLocation(zcreature1.validX, zcreature1.validY);
                     zcreature1.game.CreatureMoveSurroundings(position, zcreature1.radius, zcreature1.collider, false);
@@ -5439,8 +5428,7 @@ label_21:
             zcreature1.isMoving = false;
             zcreature1.velocity.x = (FixedInt) 0;
             zcreature1.velocity.y = (FixedInt) 0;
-            zcreature1.addedVelocity.x = (FixedInt) 0;
-            zcreature1.addedVelocity.y = (FixedInt) 0;
+            zcreature1.ResetAddedVelocity();
             yield break;
           }
           else if (zcreature1.position.y < zcreature1.radius)
@@ -5458,8 +5446,7 @@ label_21:
               zcreature1.velocity = zcreature1.velocity + zcreature1.addedVelocity;
               zcreature1.velocity.x = Mathd.Clamp(zcreature1.velocity.x, (FixedInt) -50, (FixedInt) 50);
               zcreature1.velocity.y = Mathd.Clamp(zcreature1.velocity.y, (FixedInt) -50, (FixedInt) 50);
-              zcreature1.addedVelocity.x = (FixedInt) 0;
-              zcreature1.addedVelocity.y = (FixedInt) 0;
+              zcreature1.ResetAddedVelocity();
             }
             if ((zcreature1.affectedByGravity || zcreature1.entangledOrGravity) && zcreature1.velocity.y > -ZMap.MaxSpeed)
             {
@@ -5506,8 +5493,7 @@ label_21:
     {
       this.velocity.x = (FixedInt) 0;
       this.velocity.y = (FixedInt) 0;
-      this.addedVelocity.x = (FixedInt) 0;
-      this.addedVelocity.y = (FixedInt) 0;
+      this.ResetAddedVelocity();
       this.isMoving = false;
       this.moving = (IEnumerator<float>) null;
       this.MoveToPosition = new MyLocation(this.position.x, (FixedInt) (this.type == CreatureType.Kraken ? 0 : this.radius));
@@ -5537,8 +5523,7 @@ label_21:
       {
         this.velocity.x = (FixedInt) 0;
         this.velocity.y = (FixedInt) 0;
-        this.addedVelocity.x = (FixedInt) 0;
-        this.addedVelocity.y = (FixedInt) 0;
+        this.ResetAddedVelocity();
         this.isMoving = false;
         this.moving = (IEnumerator<float>) null;
         if ((this.race == CreatureRace.Frost_Walker || this.frostWalking || this.familiar.Has(FamiliarType.Frost) && this.familiarLevelFrost > 0) && (this.game.waterType == WaterStyle.Water && x > 0 && (x < this.map.Width && this.health > Mathf.Clamp(6 - this.familiarLevelFrost, 1, 5))))
@@ -5759,8 +5744,7 @@ label_21:
       else
         ++this.fallLoop;
       this.velocity = MyLocation.down;
-      this.addedVelocity.x = (FixedInt) 0;
-      this.addedVelocity.y = (FixedInt) 0;
+      this.ResetAddedVelocity();
       if (this.isMoving)
         return;
       this.moving = this.game.ongoing.RunCoroutine(this.Move(false), true);

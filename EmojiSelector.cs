@@ -222,7 +222,7 @@ public class EmojiSelector : MonoBehaviour
 
   public void OnHover(TMP_Text t)
   {
-    MyToolTip.Show(t.name, -1f);
+    MyToolTip.Show(t.name, -1f, false);
   }
 
   public void OnLeave()

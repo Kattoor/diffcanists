@@ -177,8 +177,7 @@ label_69:
         zspellWaterDrop.velocity = zspellWaterDrop.velocity + zspellWaterDrop.addedVelocity;
         zspellWaterDrop.velocity.x = Mathd.Clamp(zspellWaterDrop.velocity.x, (FixedInt) -50, (FixedInt) 50);
         zspellWaterDrop.velocity.y = Mathd.Clamp(zspellWaterDrop.velocity.y, (FixedInt) -50, (FixedInt) 50);
-        zspellWaterDrop.addedVelocity.x = (FixedInt) 0;
-        zspellWaterDrop.addedVelocity.y = (FixedInt) 0;
+        zspellWaterDrop.ResetAddedVelocity();
       }
       else if (zspellWaterDrop.affectedByGravity && zspellWaterDrop.velocity.y > -ZMap.MaxSpeed)
         zspellWaterDrop.velocity.y += zspellWaterDrop.map.Gravity;

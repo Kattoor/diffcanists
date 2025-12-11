@@ -174,6 +174,8 @@ public class ZEffector : ZComponent
         return SpellEnum.Monolith;
       case EffectorType.Pyramid:
         return SpellEnum.Pyramid;
+      case EffectorType.Sacrifical_Altar_Aura:
+        return SpellEnum.Sacrificial_Altar;
       default:
         return SpellEnum.None;
     }
@@ -223,6 +225,13 @@ public class ZEffector : ZComponent
       writer.Write(this.collider.creature.id);
       writer.Write(ZGame.GetID(this.whoSummoned));
       writer.Write(this.collider.creature.team);
+    }
+    else if (this.type == EffectorType.Sacrifical_Altar_Aura)
+    {
+      writer.Write(this.whoSummoned.health);
+      writer.Write(this.whoSummoned.id);
+      writer.Write(ZGame.GetID(this.whoSummoned));
+      writer.Write(this.whoSummoned.team);
     }
     if (flag2)
     {
@@ -318,6 +327,41 @@ public class ZEffector : ZComponent
       z = auraOfDecay;
       if (auraOfDecay.type == EffectorType.Butterfly_Jar && (UnityEngine.Object) creature1.transform != (UnityEngine.Object) null)
         creature1.transform.GetChild(0).GetComponent<SpriteRenderer>().color = creature.parent.clientColor;
+      if (num7 != 0 && creature != null)
+        creature.SetNull();
+    }
+    else if (type == EffectorType.Sacrifical_Altar_Aura)
+    {
+      int num4 = reader.ReadInt32();
+      int num5 = reader.ReadInt32();
+      int id = reader.ReadInt32();
+      int num6 = reader.ReadInt32();
+      creature = game.helper.GetCreature(id);
+      int num7 = (ZComponent) creature == (object) null ? 1 : 0;
+      if ((ZComponent) creature == (object) null)
+      {
+        ZCreature zcreature = new ZCreature();
+        zcreature.game = game;
+        zcreature.parent = game.players[0];
+        zcreature.team = 0;
+        creature = zcreature;
+      }
+      ZCreature creature1 = ZCreatureCreate.CreateCreature(creature.parent, Inert.GetSpell(ZEffector.FromType(type)).toSummon.GetComponent<Creature>(), pos.ToSinglePrecision(), Quaternion.identity, game.GetMapTransform(), true);
+      creature1.game = game;
+      creature1.id = num5;
+      game.helper.creatureID.Add(creature1.id, creature1);
+      creature1.position = pos;
+      creature1.team = num6;
+      creature1.health = num4;
+      ZEffector auraOfDecay = creature1.auraOfDecay;
+      auraOfDecay.game = creature1.game;
+      auraOfDecay.active = false;
+      auraOfDecay.whoSummoned = creature1;
+      auraOfDecay.collider.Initialize(pos, creature.game.world);
+      auraOfDecay.collider.effector = auraOfDecay;
+      creature1.parent = creature.parent;
+      creature1.collider.Initialize(pos, creature.game.world);
+      z = auraOfDecay;
       if (num7 != 0 && creature != null)
         creature.SetNull();
     }
@@ -2897,7 +2941,7 @@ label_59:
         AudioManager.Play(this.spell.explosionClip);
         break;
       case EffectorType.Blackhole:
-        if ((ZComponent) c == (object) null || c.type == CreatureType.Tree || (c.UnaffectedByNaturesWraith || Mathd.Abs(c.addedVelocity.x) > 3) || Mathd.Abs(c.addedVelocity.y) > 3)
+        if ((ZComponent) c == (object) null || c.type == CreatureType.Tree || c.UnaffectedByNaturesWraith || (Mathd.Abs(c.addedVelocity.x) > 3 || Mathd.Abs(c.addedVelocity.y) > 3) && (ZComponent) c.tower == (object) null)
           break;
         if ((ZComponent) c.tower != (object) null)
           c.DestroyTower(false, true);
@@ -3151,7 +3195,7 @@ label_59:
     }
     if (c.shield > 0)
     {
-      num += c.shield / 50;
+      num += (c.shield + 49) / 50;
       if (!countOnly)
       {
         c.shield = 0;
@@ -3303,6 +3347,15 @@ label_59:
       this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, this.rotation.ToFloat());
     switch (this.type)
     {
+      case EffectorType.Glyph:
+        if (!((ZComponent) this.whoSummoned != (object) null))
+          break;
+        SpriteRenderer component1 = this.transform.GetChild(1).GetComponent<SpriteRenderer>();
+        Color clientColor = this.whoSummoned.parent.clientColor;
+        clientColor.a = component1.color.a;
+        component1.color = clientColor;
+        this.transform.GetChild(0).GetComponent<SpriteRenderer>().color = clientColor * 1.5f;
+        break;
       case EffectorType.Fire_Shield:
         if (!this.active)
         {
@@ -3334,8 +3387,17 @@ label_59:
         this.transform.GetChild(0).gameObject.SetActive(this.active);
         this.transform.GetChild(1).gameObject.SetActive(this.active);
         this.transform.GetChild(2).gameObject.SetActive(this.active);
-        this.transform.GetChild(3).GetComponent<RotateAroundCenter>().enabled = this.active;
-        break;
+        RotateAroundCenter component2 = this.transform.GetChild(3).GetComponent<RotateAroundCenter>();
+        component2.enabled = this.active;
+        if (!((ZComponent) this.whoSummoned != (object) null))
+          break;
+        this.transform.GetChild(1).GetComponent<SpriteRenderer>().color = this.whoSummoned.parent.clientColor;
+        using (List<Transform>.Enumerator enumerator = component2._transforms.GetEnumerator())
+        {
+          while (enumerator.MoveNext())
+            enumerator.Current.GetComponent<SpriteRenderer>().color = this.whoSummoned.parent.clientColor;
+          break;
+        }
       case EffectorType.Storm_Shield:
       case EffectorType.Electrostatic_Charge:
         this.transform.GetChild(0).gameObject.SetActive(true);
@@ -3366,9 +3428,9 @@ label_59:
           radius = 355;
         this.game.map.CallOfTheVoid((int) this.position.x, (int) this.position.y, radius);
         this.gameObject.GetComponent<ParticleSystem>().shape.radius = (float) (radius - 44);
-        ParticleSystem component = this.transform.GetChild(0).GetComponent<ParticleSystem>();
-        component.shape.radius = (float) radius;
-        component.emission.rateOverTime = (ParticleSystem.MinMaxCurve) (float) radius;
+        ParticleSystem component3 = this.transform.GetChild(0).GetComponent<ParticleSystem>();
+        component3.shape.radius = (float) radius;
+        component3.emission.rateOverTime = (ParticleSystem.MinMaxCurve) (float) radius;
         break;
       case EffectorType.Morning_Sun:
         if (this.active)

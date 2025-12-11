@@ -139,7 +139,7 @@ public class MyPollResults : MonoBehaviour
     t.color = new Color(0.6f, 0.6f, 0.6f);
     if (!t.isTextTruncated)
       return;
-    MyToolTip.Show(t.text, -1f);
+    MyToolTip.Show(t.text, -1f, false);
   }
 
   public void HideToolTip(TMP_Text t)

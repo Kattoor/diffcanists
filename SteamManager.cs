@@ -2,6 +2,7 @@
 using AOT;
 using Steamworks;
 using System;
+using System.Collections;
 using System.Text;
 using UnityEngine;
 
@@ -15,6 +16,7 @@ public class SteamManager : MonoBehaviour
   public GetTicketForWebApiResponse_t? ticket;
   protected Callback<GetTicketForWebApiResponse_t> _receivedTicket;
   protected Callback<MicroTxnAuthorizationResponse_t> _microTxn;
+  internal bool reconnect;
   protected bool m_bInitialized;
   protected SteamAPIWarningMessageHook_t m_SteamAPIWarningMessageHook;
 
@@ -89,6 +91,7 @@ public class SteamManager : MonoBehaviour
       if (!this.m_bInitialized)
       {
         Debug.LogError((object) "[Steamworks.NET] SteamAPI_Init() failed. Refer to Valve's documentation or the comment above this line for more information.", (UnityEngine.Object) this);
+        this.StartCoroutine(this.TryAgain());
       }
       else
       {
@@ -101,6 +104,34 @@ public class SteamManager : MonoBehaviour
         SteamManager.startedFromSteam = true;
       }
     }
+  }
+
+  private IEnumerator TryAgain()
+  {
+    while (true)
+    {
+      this.m_bInitialized = SteamAPI.Init();
+      if (!this.m_bInitialized)
+        yield return (object) new WaitForSeconds(10f);
+      else
+        break;
+    }
+    this.Refresh(false);
+  }
+
+  public void Refresh(bool reconnect)
+  {
+    this.reconnect = reconnect;
+    if (!SteamManager.s_EverInitialized)
+    {
+      this.m_bInitialized = SteamAPI.Init();
+      SteamManager.s_EverInitialized = true;
+    }
+    this._receivedTicket = Callback<GetTicketForWebApiResponse_t>.Create(new Callback<GetTicketForWebApiResponse_t>.DispatchDelegate(this.RecievedTicket));
+    this._microTxn = Callback<MicroTxnAuthorizationResponse_t>.Create(new Callback<MicroTxnAuthorizationResponse_t>.DispatchDelegate(this.MicroTxnResponse));
+    this._receivedTicket.Register(new Callback<GetTicketForWebApiResponse_t>.DispatchDelegate(this.RecievedTicket));
+    this._microTxn.Register(new Callback<MicroTxnAuthorizationResponse_t>.DispatchDelegate(this.MicroTxnResponse));
+    SteamUser.GetAuthTicketForWebApi("arc");
   }
 
   public static string ByteArrayToString(byte[] ba)
@@ -123,6 +154,9 @@ public class SteamManager : MonoBehaviour
       return;
     LocalServerConn.Instance.steamButtonSignin.Interactable(true);
     LocalServerConn.Instance.steamSignin.SetActive(true);
+    if (!this.reconnect)
+      return;
+    LocalServerConn.Instance.ForceConnect();
   }
 
   protected virtual void OnEnable()

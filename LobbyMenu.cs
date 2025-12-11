@@ -402,7 +402,7 @@ public class LobbyMenu : Catalogue
 
   public void ShowToolTip(string s)
   {
-    MyToolTip.Show(s, -1f);
+    MyToolTip.Show(s, -1f, false);
   }
 
   public void HideToolTip()

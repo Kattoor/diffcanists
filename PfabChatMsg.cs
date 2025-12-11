@@ -168,7 +168,7 @@ public class PfabChatMsg : MonoBehaviour, IPointerClickHandler, IEventSystemHand
     }
     if (!this._msg.isTextTruncated && !((UnityEngine.Object) ColorSchemeUI.Instance != (UnityEngine.Object) null))
       return;
-    MyToolTip.Show(this._msg.text, -1f);
+    MyToolTip.Show(this._msg.text, -1f, false);
   }
 
   public void OnPointerExit(PointerEventData eventData)

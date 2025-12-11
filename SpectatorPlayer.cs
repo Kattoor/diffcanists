@@ -60,12 +60,12 @@ public class SpectatorPlayer : MonoBehaviour
     if (Client.MyAccount.tomatoes <= 0 && !Client.game.isSandbox)
     {
       this.UnselectSpell();
-      MyToolTip.Show("You can buy more tomatoes at the shop.", -1f);
+      MyToolTip.Show("You can buy more tomatoes at the shop.", -1f, false);
     }
     else if (i == 1 && Client.MyAccount.tomatoes <= 1 && !Client.game.isSandbox)
     {
       this.UnselectSpell();
-      MyToolTip.Show("You can buy more tomatoes at the shop. This spell costs 2 tomatoes to cast.", -1f);
+      MyToolTip.Show("You can buy more tomatoes at the shop. This spell costs 2 tomatoes to cast.", -1f, false);
     }
     else if (i == 1)
     {

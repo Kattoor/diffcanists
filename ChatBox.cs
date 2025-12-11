@@ -271,7 +271,7 @@ public class ChatBox : UIBehaviour
       this.txtDiscordQuickLinks.text = stringBuilder.ToString();
     }
     this.txtDiscordQuickLinks.transform.parent.gameObject.SetActive(true);
-    MyToolTip.Show("Chat Prefixes\n\n<" + InputFieldPlus.RGBtoHEX(ColorScheme.GetColor(Global.ColorTeamText)) + ">Team Chat: '/' (If in a team game...ex: /summon swarm)\n</color><" + InputFieldPlus.RGBtoHEX(ColorScheme.GetColor(Global.ColorSentPrivate)) + ">Private Chat: '/name:' (Easier to Right-click their name but...ex: /bob:hi bob)\n</color><" + InputFieldPlus.RGBtoHEX(ColorScheme.GetColor(Global.ColorMiniGameText)) + ">Mini-Game Chat: ';' (If in a mini-game...ex: ;Checkmate!)\n</color><" + InputFieldPlus.RGBtoHEX(ColorScheme.GetColor(Global.ColorClanText)) + ">Clan Chat: '.' (If in a clan...ex: .hello)</color>\n\nEmoji: ':' (ex: :shark:)\nHold alt while picking an Emoji\nfrom the emoji selector to\nAdd it to your favorites", -1f);
+    MyToolTip.Show("Chat Prefixes\n\n<" + InputFieldPlus.RGBtoHEX(ColorScheme.GetColor(Global.ColorTeamText)) + ">Team Chat: '/' (If in a team game...ex: /summon swarm)\n</color><" + InputFieldPlus.RGBtoHEX(ColorScheme.GetColor(Global.ColorSentPrivate)) + ">Private Chat: '/name:' (Easier to Right-click their name but...ex: /bob:hi bob)\n</color><" + InputFieldPlus.RGBtoHEX(ColorScheme.GetColor(Global.ColorMiniGameText)) + ">Mini-Game Chat: ';' (If in a mini-game...ex: ;Checkmate!)\n</color><" + InputFieldPlus.RGBtoHEX(ColorScheme.GetColor(Global.ColorClanText)) + ">Clan Chat: '.' (If in a clan...ex: .hello)</color>\n\nEmoji: ':' (ex: :shark:)\nHold alt while picking an Emoji\nfrom the emoji selector to\nAdd it to your favorites", -1f, false);
   }
 
   public void ClickLineCount()
@@ -292,7 +292,7 @@ public class ChatBox : UIBehaviour
 
   public void ShowToolTip(string s)
   {
-    MyToolTip.Show(s, -1f);
+    MyToolTip.Show(s, -1f, false);
   }
 
   public void HoverLeave()

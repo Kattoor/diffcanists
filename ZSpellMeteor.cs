@@ -112,8 +112,7 @@ label_43:
         zspellMeteor.velocity = zspellMeteor.velocity + zspellMeteor.addedVelocity;
         zspellMeteor.velocity.x = Mathd.Clamp(zspellMeteor.velocity.x, (FixedInt) -50, (FixedInt) 50);
         zspellMeteor.velocity.y = Mathd.Clamp(zspellMeteor.velocity.y, (FixedInt) -50, (FixedInt) 50);
-        zspellMeteor.addedVelocity.x = (FixedInt) 0;
-        zspellMeteor.addedVelocity.y = (FixedInt) 0;
+        zspellMeteor.ResetAddedVelocity();
       }
       else if (zspellMeteor.affectedByGravity && zspellMeteor.velocity.y > -ZMap.MaxSpeed)
         zspellMeteor.velocity.y += zspellMeteor.map.Gravity;

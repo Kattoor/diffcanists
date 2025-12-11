@@ -170,8 +170,7 @@ label_59:
         zspellMegaBoulder.velocity = zspellMegaBoulder.velocity + zspellMegaBoulder.addedVelocity;
         zspellMegaBoulder.velocity.x = Mathd.Clamp(zspellMegaBoulder.velocity.x, (FixedInt) -50, (FixedInt) 50);
         zspellMegaBoulder.velocity.y = Mathd.Clamp(zspellMegaBoulder.velocity.y, (FixedInt) -50, (FixedInt) 50);
-        zspellMegaBoulder.addedVelocity.x = (FixedInt) 0;
-        zspellMegaBoulder.addedVelocity.y = (FixedInt) 0;
+        zspellMegaBoulder.ResetAddedVelocity();
       }
       else if (zspellMegaBoulder.affectedByGravity && zspellMegaBoulder.velocity.y > -ZMap.MaxSpeed)
         zspellMegaBoulder.velocity.y += zspellMegaBoulder.map.Gravity;

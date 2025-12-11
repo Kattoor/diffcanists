@@ -2611,7 +2611,7 @@ public static class Descriptions
     },
     {
       "Catacombs of the Dead",
-      "Tower: 75 hitpoints\n{0}\nWhile in this tower you gain the ability to teleport minions next to you."
+      "Tower: 75 hitpoints\n{0}\nThe first time you cast this tower you'll gain 4 uses of the spell Passage Ways."
     },
     {
       "Conjure Reaper",
@@ -2623,7 +2623,7 @@ public static class Descriptions
     },
     {
       "Sudden Death",
-      "Targeted: x damage\n{0}\nExplodes the targeted minion in a shower of gore, dealing more damage the more health it has."
+      "Targeted: x death damage\n{0}\nExplodes the targeted minion in a shower of gore, dealing more damage the more health it has."
     },
     {
       "Curse of Haute",

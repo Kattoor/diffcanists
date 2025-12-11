@@ -2459,7 +2459,7 @@ public class ZMap
             creatureAtPoint.ApplyExplosionForce(spell.radius, new MyLocation(x, y), spell.explisiveForce, spell.EXORADIUS, spell.forceOverDistance, false);
             creatureAtPoint.StartMoving(false);
           }
-          return new Coords(x, y);
+          return new Coords(x, y, creatureAtPoint);
         }
       }
     }
@@ -3092,7 +3092,7 @@ public class ZMap
                 }
               }
             }
-            return new Coords(num17, index);
+            return new Coords(num17, index, creatureAtPoint);
           }
           num14 -= num12;
           if (num14 < 0)
@@ -3138,7 +3138,7 @@ public class ZMap
                 }
               }
             }
-            return new Coords(num15, index);
+            return new Coords(num15, index, creatureAtPoint);
           }
           num14 -= num12;
           if (num14 < 0)

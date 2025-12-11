@@ -53,7 +53,7 @@ public class ContextMenuSpells : MonoBehaviour
           return;
         MyContextMenu.CloseInstance();
       }));
-      component.onEnter.AddListener((UnityAction) (() => MyToolTip.Show(x.Key, -1f)));
+      component.onEnter.AddListener((UnityAction) (() => MyToolTip.Show(x.Key, -1f, false)));
       component.onExit.AddListener((UnityAction) (() => MyToolTip.Close()));
       image.gameObject.SetActive(true);
       if (sw.ElapsedMilliseconds > 16L)

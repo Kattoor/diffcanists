@@ -127,8 +127,7 @@ label_44:
         zspellEnduringSpirits.velocity = zspellEnduringSpirits.velocity + zspellEnduringSpirits.addedVelocity;
         zspellEnduringSpirits.velocity.x = Mathd.Clamp(zspellEnduringSpirits.velocity.x, (FixedInt) -50, (FixedInt) 50);
         zspellEnduringSpirits.velocity.y = Mathd.Clamp(zspellEnduringSpirits.velocity.y, (FixedInt) -50, (FixedInt) 50);
-        zspellEnduringSpirits.addedVelocity.x = (FixedInt) 0;
-        zspellEnduringSpirits.addedVelocity.y = (FixedInt) 0;
+        zspellEnduringSpirits.ResetAddedVelocity();
       }
       else if (zspellEnduringSpirits.affectedByGravity && zspellEnduringSpirits.velocity.y > -ZMap.MaxSpeed)
         zspellEnduringSpirits.velocity.y += zspellEnduringSpirits.map.Gravity;

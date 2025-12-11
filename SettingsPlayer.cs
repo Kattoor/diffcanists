@@ -692,8 +692,31 @@ public class SettingsPlayer
   {
     this.fullBook = b.fullBook;
     this.altBooks = b.altBooks;
-    for (int index = 0; index < 16; ++index)
-      this.spells[index] = byte.MaxValue;
+    int num1 = b.spells[9] != byte.MaxValue ? (int) b.spells[9] / 12 : -1;
+    if (num1 == -1)
+    {
+      for (int index = 0; index < 16; ++index)
+        this.spells[index] = byte.MaxValue;
+    }
+    else
+    {
+      int num2 = 0;
+      for (int index = 0; index < 16; ++index)
+      {
+        if ((int) this.spells[index] / 12 == num1)
+          ++num2;
+      }
+      if (num2 == 12)
+      {
+        for (int index = 0; index < 16; ++index)
+          this.spells[index] = (int) this.spells[index] / 12 == num1 ? this.spells[index] : byte.MaxValue;
+      }
+      else
+      {
+        for (int index = 0; index < 16; ++index)
+          this.spells[index] = byte.MaxValue;
+      }
+    }
   }
 
   public void CopySpells(SettingsPlayer b, bool force = false)
@@ -1006,7 +1029,7 @@ public class SettingsPlayer
       return 1;
     Badge badge = SettingsPlayer.CheckBadge(type, index);
     if (badge != Badge.None && !myAccount.badges[(int) badge])
-      return 1;
+      return 0;
     int num1 = SettingsPlayer.CheckPrestige(type, index);
     if (num1 > 0)
       return (int) myAccount.prestige < num1 ? 0 : 1;

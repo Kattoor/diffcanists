@@ -167,8 +167,7 @@ label_50:
         zspellClockworkBomb.velocity = zspellClockworkBomb.velocity + zspellClockworkBomb.addedVelocity;
         zspellClockworkBomb.velocity.x = Mathd.Clamp(zspellClockworkBomb.velocity.x, (FixedInt) -50, (FixedInt) 50);
         zspellClockworkBomb.velocity.y = Mathd.Clamp(zspellClockworkBomb.velocity.y, (FixedInt) -50, (FixedInt) 50);
-        zspellClockworkBomb.addedVelocity.x = (FixedInt) 0;
-        zspellClockworkBomb.addedVelocity.y = (FixedInt) 0;
+        zspellClockworkBomb.ResetAddedVelocity();
       }
       else if (zspellClockworkBomb.velocity.y > -ZMap.MaxSpeed)
         zspellClockworkBomb.velocity.y += zspellClockworkBomb.map.Gravity;

@@ -69,86 +69,86 @@ public class pfabLobbyGame : MonoBehaviour, IPointerClickHandler, IEventSystemHa
   public void HoverAll()
   {
     if (this.gameFacts != null)
-      MyToolTip.Show(this.gameFacts.ToString((ZGame) null, false), -1f);
+      MyToolTip.Show(this.gameFacts.ToString((ZGame) null, false), -1f, false);
     else
-      MyToolTip.Show(this.ratedFacts.ToString(true, (pfabLobbyGame) null), -1f);
+      MyToolTip.Show(this.ratedFacts.ToString(true, (pfabLobbyGame) null), -1f, false);
   }
 
   public void HoverDescription()
   {
     if (this.gameFacts == null)
       return;
-    MyToolTip.Show(this.gameFacts.settings.FilteredDescription(), -1f);
+    MyToolTip.Show(this.gameFacts.settings.FilteredDescription(), -1f, false);
   }
 
   public void HoverInvite()
   {
     if (this.gameFacts == null)
       return;
-    MyToolTip.Show(this.gameFacts.GetInviteMode().ToString().Replace('_', ' '), -1f);
+    MyToolTip.Show(this.gameFacts.GetInviteMode().ToString().Replace('_', ' '), -1f, false);
   }
 
   public void HoverJoin()
   {
     if (this.gameFacts == null)
       return;
-    MyToolTip.Show("Is the door open?", -1f);
+    MyToolTip.Show("Is the door open?", -1f, false);
   }
 
   public void HoverSpectators()
   {
     if (this.gameFacts == null)
       return;
-    MyToolTip.Show("Allow Spectators: " + this.gameFacts.GetSpectatorMode().ToString().Replace('_', ' '), -1f);
+    MyToolTip.Show("Allow Spectators: " + this.gameFacts.GetSpectatorMode().ToString().Replace('_', ' '), -1f, false);
   }
 
   public void HoverRated()
   {
     if (this.gameFacts == null)
       return;
-    MyToolTip.Show("Rated: " + this.gameFacts.GetRatedMode().ToString().Replace('_', ' '), -1f);
+    MyToolTip.Show("Rated: " + this.gameFacts.GetRatedMode().ToString().Replace('_', ' '), -1f, false);
   }
 
   public void HoverTime()
   {
     if (this.gameFacts == null)
       return;
-    MyToolTip.Show("Turn time: " + (object) this.gameFacts.customTime + " seconds", -1f);
+    MyToolTip.Show("Turn time: " + (object) this.gameFacts.customTime + " seconds", -1f, false);
   }
 
   public void HoverLadderType()
   {
     if (this.gameFacts == null)
       return;
-    MyToolTip.Show("Ladder: " + RatedFacts.GetGameTypeAsStringLong((int) this.gameFacts.gameType), -1f);
+    MyToolTip.Show("Ladder: " + RatedFacts.GetGameTypeAsStringLong((int) this.gameFacts.gameType), -1f, false);
   }
 
   public void HoverMap()
   {
     if (this.gameFacts == null)
       return;
-    MyToolTip.Show("Map: " + GameFacts.MapName(this.gameFacts.GetMapMode()), -1f);
+    MyToolTip.Show("Map: " + GameFacts.MapName(this.gameFacts.GetMapMode()), -1f, false);
   }
 
   public void HoverTeam()
   {
     if (this.gameFacts == null)
       return;
-    MyToolTip.Show(this.gameFacts.GetTeamMode() ? "Teams of " + (object) this.gameFacts.GetNumberPlayersPerTeam() : "FFA", -1f);
+    MyToolTip.Show(this.gameFacts.GetTeamMode() ? "Teams of " + (object) this.gameFacts.GetNumberPlayersPerTeam() : "FFA", -1f, false);
   }
 
   public void HoverMod()
   {
     if (this.gameFacts == null)
       return;
-    MyToolTip.Show("Allow Arcane Monster: " + (this.gameFacts.GetAllowArcanePowers() ? "Players with this symbol <sprite=\"AccountIconsAll\" index=240> by their name can use an enhanced version of full arcane" : "No"), -1f);
+    MyToolTip.Show("Allow Arcane Monster: " + (this.gameFacts.GetAllowArcanePowers() ? "Players with this symbol <sprite=\"AccountIconsAll\" index=240> by their name can use an enhanced version of full arcane" : "No"), -1f, false);
   }
 
   public void HoverRandomSpells()
   {
     if (this.gameFacts == null)
       return;
-    MyToolTip.Show((this.gameFacts.GetStyle() & GameStyle.Random_Spells) == ~GameStyle.Dont_Mind ? "Standard - You choose your own spells" : "Random Spells", -1f);
+    MyToolTip.Show((this.gameFacts.GetStyle() & GameStyle.Random_Spells) == ~GameStyle.Dont_Mind ? "Standard - You choose your own spells" : "Random Spells", -1f, false);
   }
 
   public void HoverForcedSpells()
@@ -156,21 +156,21 @@ public class pfabLobbyGame : MonoBehaviour, IPointerClickHandler, IEventSystemHa
     if (this.gameFacts == null)
       return;
     GameStyle gameStyle = this.gameFacts.GetStyle() & GameStyle.Original_Spells_Only;
-    MyToolTip.Show(gameStyle == ~GameStyle.Dont_Mind ? "Standard - All spells are useable" : gameStyle.ToString().Replace('_', ' '), -1f);
+    MyToolTip.Show(gameStyle == ~GameStyle.Dont_Mind ? "Standard - All spells are useable" : gameStyle.ToString().Replace('_', ' '), -1f, false);
   }
 
   public void HoverElemental()
   {
     if (this.gameFacts == null)
       return;
-    MyToolTip.Show((this.gameFacts.GetStyle() & GameStyle.Elementals) == ~GameStyle.Dont_Mind ? "Standard - Elementals are not active" : "Elementals - You start with a full book along side your 16 chosen spells", -1f);
+    MyToolTip.Show((this.gameFacts.GetStyle() & GameStyle.Elementals) == ~GameStyle.Dont_Mind ? "Standard - Elementals are not active" : "Elementals - You start with a full book along side your 16 chosen spells", -1f, false);
   }
 
   public void HoverZeroShield()
   {
     if (this.gameFacts == null)
       return;
-    MyToolTip.Show("<b>Zero Shield</b> - Players CANNOT cast offensive spells the first turn ", -1f);
+    MyToolTip.Show("<b>Zero Shield</b> - Players CANNOT cast offensive spells the first turn ", -1f, false);
   }
 
   public void HoverArmageddon()
@@ -179,37 +179,37 @@ public class pfabLobbyGame : MonoBehaviour, IPointerClickHandler, IEventSystemHa
       return;
     List<SpellEnum> customArmageddon = this.gameFacts.settings.customArmageddon;
     if ((customArmageddon != null ? (__nonvirtual (customArmageddon.Count) > 0 ? 1 : 0) : 0) != 0)
-      MyToolTip.Show("<b>Armageddon:</b>\n" + HUD.GetCustomArmageddonName(this.gameFacts), -1f);
+      MyToolTip.Show("<b>Armageddon:</b>\n" + HUD.GetCustomArmageddonName(this.gameFacts), -1f, false);
     else
-      MyToolTip.Show("<b>Armageddon</b> - " + (this.gameFacts.GetArmageddon() == ~MapEnum.Dont_Mind ? GameFacts.ArmageddonName(this.gameFacts.GetMapMode(), this.gameFacts.GetStyle()) : GameFacts.ArmageddonName(this.gameFacts.GetArmageddon(), this.gameFacts.GetStyle())), -1f);
+      MyToolTip.Show("<b>Armageddon</b> - " + (this.gameFacts.GetArmageddon() == ~MapEnum.Dont_Mind ? GameFacts.ArmageddonName(this.gameFacts.GetMapMode(), this.gameFacts.GetStyle()) : GameFacts.ArmageddonName(this.gameFacts.GetArmageddon(), this.gameFacts.GetStyle())), -1f, false);
   }
 
   public void HoverFTT()
   {
     if (this.gameFacts == null)
       return;
-    MyToolTip.Show("<b>First turn teleport</b> - Players start in the water and get a free teleport on the first turn ", -1f);
+    MyToolTip.Show("<b>First turn teleport</b> - Players start in the water and get a free teleport on the first turn ", -1f, false);
   }
 
   public void HoverBid()
   {
     if (this.gameFacts == null)
       return;
-    MyToolTip.Show("<b>First Turn Bid</b> - Players anonymously bid lifepoints to see who goes first", -1f);
+    MyToolTip.Show("<b>First Turn Bid</b> - Players anonymously bid lifepoints to see who goes first", -1f, false);
   }
 
   public void HoverHealth()
   {
     if (this.gameFacts == null)
       return;
-    MyToolTip.Show("<b>Starting Health</b> - " + (object) this.gameFacts.startHealth, -1f);
+    MyToolTip.Show("<b>Starting Health</b> - " + (object) this.gameFacts.startHealth, -1f, false);
   }
 
   public void HoverCountdown()
   {
     if (this.gameFacts == null)
       return;
-    MyToolTip.Show("<b>Countdown</b> - " + Global.IntToTime((int) this.gameFacts.countdownTime, 10) + " +" + (object) this.gameFacts.countdownDelay + "s delay" + (this.gameFacts.countdownTime < (short) 0 ? (object) "<br>You lose if time runs out" : (object) "<br>You get 5 second turns if time runs out"), -1f);
+    MyToolTip.Show("<b>Countdown</b> - " + Global.IntToTime((int) this.gameFacts.countdownTime, 10) + " +" + (object) this.gameFacts.countdownDelay + "s delay" + (this.gameFacts.countdownTime < (short) 0 ? (object) "<br>You lose if time runs out" : (object) "<br>You get 5 second turns if time runs out"), -1f, false);
   }
 
   public void LeaveHover()
@@ -491,18 +491,18 @@ public class pfabLobbyGame : MonoBehaviour, IPointerClickHandler, IEventSystemHa
     else if (eventData.button == PointerEventData.InputButton.Middle)
     {
       if (this.gameFacts != null)
-        MyToolTip.Show(this.gameFacts.ToString((ZGame) null, false), -1f);
+        MyToolTip.Show(this.gameFacts.ToString((ZGame) null, false), -1f, false);
       else
-        MyToolTip.Show(this.ratedFacts.ToString(true, (pfabLobbyGame) null), -1f);
+        MyToolTip.Show(this.ratedFacts.ToString(true, (pfabLobbyGame) null), -1f, false);
     }
     else
     {
       if (eventData.button != PointerEventData.InputButton.Left)
         return;
       if (this.gameFacts != null)
-        MyToolTip.Show(this.gameFacts.ToString((ZGame) null, false), -1f);
+        MyToolTip.Show(this.gameFacts.ToString((ZGame) null, false), -1f, false);
       else
-        MyToolTip.Show(this.ratedFacts.ToString(true, (pfabLobbyGame) null), -1f);
+        MyToolTip.Show(this.ratedFacts.ToString(true, (pfabLobbyGame) null), -1f, false);
     }
   }
 

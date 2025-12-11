@@ -34,7 +34,7 @@ public class ButtonArrayContextmenu : MonoBehaviour
     uiOnHover.onClick.AddListener((UnityAction) (() => MyContextMenu.CloseInstance()));
     if (!string.IsNullOrEmpty(tooltip))
     {
-      uiOnHover.onEnter.AddListener((UnityAction) (() => MyToolTip.Show(tooltip, -1f)));
+      uiOnHover.onEnter.AddListener((UnityAction) (() => MyToolTip.Show(tooltip, -1f, false)));
       uiOnHover.onExit.AddListener((UnityAction) (() => MyToolTip.Close()));
     }
     uiOnHover.gameObject.SetActive(true);
@@ -48,7 +48,7 @@ public class ButtonArrayContextmenu : MonoBehaviour
     uiOnHover.transform.GetChild(0).GetComponent<Image>().sprite = s;
     if (!string.IsNullOrEmpty(tooltip))
     {
-      uiOnHover.onEnter.AddListener((UnityAction) (() => MyToolTip.Show(tooltip, -1f)));
+      uiOnHover.onEnter.AddListener((UnityAction) (() => MyToolTip.Show(tooltip, -1f, false)));
       uiOnHover.onExit.AddListener((UnityAction) (() => MyToolTip.Close()));
     }
     uiOnHover.onClick.AddListener((UnityAction) (() =>

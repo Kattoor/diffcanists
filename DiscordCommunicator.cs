@@ -102,7 +102,7 @@ public class DiscordCommunicator
   {
     if (this.connection == null || this.connection.State != ConnectionState.Connected)
       return;
-    StringBuilder stringBuilder = new StringBuilder("[#").Append(g.gameFacts.id).Append("] ").Append("[").Append(g.gameFacts.GetTimeInSeconds()).Append(" ").Append(GameFacts.MapShortName(g.gameFacts.GetMapMode())).Append("]");
+    StringBuilder stringBuilder = new StringBuilder("[#").Append(g.gameFacts.id).Append("] [").Append(RatedFacts.GetGameTypeAsString((int) g.gameFacts.gameType)).Append("] [").Append(g.gameFacts.GetTimeInSeconds()).Append(" ").Append(GameFacts.MapShortName(g.gameFacts.GetMapMode())).Append("]");
     if (tournament)
     {
       for (int index = 0; index < g.players.Count; ++index)

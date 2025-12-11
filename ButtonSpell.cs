@@ -91,7 +91,7 @@ label_13:
       if (i == 0)
         Prestige.AskUnlock(this.myRealIndex);
       else
-        MyToolTip.Show(Prestige.SpellErrorCode(i), 3f);
+        MyToolTip.Show(Prestige.SpellErrorCode(i), 3f, false);
     }
     else if ((Object) SpellSelection.Instance != (Object) null)
     {

@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 public class Inert : MonoBehaviour
 {
-  public static string Version = "v8.0a";
+  public static string Version = "v8.1";
   public static int _Version = 62;
   public static int mask_Jar = 262144;
   public static int mask_ButterflyJar = 2097152;
@@ -717,6 +717,14 @@ public class Inert : MonoBehaviour
           if (!creature.HasSpell(SpellEnum.Summon_Elves))
           {
             SpellSlot spellSlot = new SpellSlot(Inert.Instance.spells["Summon Elves"]);
+            creature.spells.Insert(index1, spellSlot);
+          }
+        }
+        else if (creature.spells[index1].spell.spellEnum == SpellEnum.Plague_Hive)
+        {
+          if (!creature.HasSpell(SpellEnum.Tombstone_Curse))
+          {
+            SpellSlot spellSlot = new SpellSlot(Inert.GetSpell(SpellEnum.Tombstone_Curse));
             creature.spells.Insert(index1, spellSlot);
           }
         }

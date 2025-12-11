@@ -148,8 +148,7 @@ label_53:
         zpebbleSpell.velocity = zpebbleSpell.velocity + zpebbleSpell.addedVelocity;
         zpebbleSpell.velocity.x = Mathd.Clamp(zpebbleSpell.velocity.x, (FixedInt) -50, (FixedInt) 50);
         zpebbleSpell.velocity.y = Mathd.Clamp(zpebbleSpell.velocity.y, (FixedInt) -50, (FixedInt) 50);
-        zpebbleSpell.addedVelocity.x = (FixedInt) 0;
-        zpebbleSpell.addedVelocity.y = (FixedInt) 0;
+        zpebbleSpell.ResetAddedVelocity();
       }
       else if (zpebbleSpell.affectedByGravity && zpebbleSpell.velocity.y > -ZMap.MaxSpeed)
         zpebbleSpell.velocity.y += zpebbleSpell.map.Gravity;

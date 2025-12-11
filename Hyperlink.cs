@@ -19,7 +19,7 @@ public class Hyperlink : MonoBehaviour, IPointerClickHandler, IEventSystemHandle
     if (path.StartsWith("Copy: "))
     {
       Global.systemCopyBuffer = path.Substring("Copy: ".Length);
-      MyToolTip.Show("Copied to Clipboard!", -1f);
+      MyToolTip.Show("Copied to Clipboard!", -1f, false);
     }
     else
     {
@@ -74,7 +74,7 @@ public class Hyperlink : MonoBehaviour, IPointerClickHandler, IEventSystemHandle
     if (intersectingLink != -1 && this.linkIndex != intersectingLink)
     {
       this.SetLinkToColor(intersectingLink, (Color32) Color.white);
-      MyToolTip.Show(this.pTextMeshPro.textInfo.linkInfo[intersectingLink].GetLinkID(), -1f);
+      MyToolTip.Show(this.pTextMeshPro.textInfo.linkInfo[intersectingLink].GetLinkID(), -1f, false);
       this.showdTooltip = true;
     }
     else if (intersectingLink == -1 && this.showdTooltip)

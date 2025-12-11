@@ -140,8 +140,7 @@ label_44:
         zspellEntangle.velocity = zspellEntangle.velocity + zspellEntangle.addedVelocity;
         zspellEntangle.velocity.x = Mathd.Clamp(zspellEntangle.velocity.x, (FixedInt) -50, (FixedInt) 50);
         zspellEntangle.velocity.y = Mathd.Clamp(zspellEntangle.velocity.y, (FixedInt) -50, (FixedInt) 50);
-        zspellEntangle.addedVelocity.x = (FixedInt) 0;
-        zspellEntangle.addedVelocity.y = (FixedInt) 0;
+        zspellEntangle.ResetAddedVelocity();
       }
       else if (zspellEntangle.affectedByGravity && zspellEntangle.velocity.y > -ZMap.MaxSpeed)
         zspellEntangle.velocity.y += zspellEntangle.map.Gravity;

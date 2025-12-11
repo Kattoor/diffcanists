@@ -244,7 +244,7 @@ public class OptionsMenu : Catalogue
 
   public void Tooltip(string s)
   {
-    MyToolTip.Show(s, -1f);
+    MyToolTip.Show(s, -1f, false);
   }
 
   public void HideTooltip()

@@ -210,8 +210,7 @@ label_60:
         zspellJavelin.velocity = zspellJavelin.velocity + zspellJavelin.addedVelocity;
         zspellJavelin.velocity.x = Mathd.Clamp(zspellJavelin.velocity.x, (FixedInt) -50, (FixedInt) 50);
         zspellJavelin.velocity.y = Mathd.Clamp(zspellJavelin.velocity.y, (FixedInt) -50, (FixedInt) 50);
-        zspellJavelin.addedVelocity.x = (FixedInt) 0;
-        zspellJavelin.addedVelocity.y = (FixedInt) 0;
+        zspellJavelin.ResetAddedVelocity();
       }
       else if (zspellJavelin.affectedByGravity && zspellJavelin.velocity.y > -ZMap.MaxSpeed)
         zspellJavelin.velocity.y += zspellJavelin.map.Gravity;

@@ -734,7 +734,7 @@ namespace Educative
               Spell spell = Inert.GetSpell(ccastSpell.spellEnum);
               if ((UnityEngine.Object) spell != (UnityEngine.Object) null)
               {
-                ZSpell.FireWhich(spell, creature4, creature4.position, FixedInt.Create(ccastSpell.angle), FixedInt.Create(ccastSpell.power), ccastSpell.point_target.ToMyLocation(), NullMyLocation.Get(), 0, false, (SpellSlot) null, false);
+                ZSpell.FireWhich(spell, creature4, creature4.position, FixedInt.Create(ccastSpell.angle), FixedInt.Create(ccastSpell.power), ccastSpell.point_target.ToMyLocation(), NullMyLocation.Get(), 0, false, (SpellSlot) null, false, (ZPerson) null);
                 if ((ZComponent) creature4 == (object) Player.Instance?.person?.first())
                   Player.Instance.UnselectSpell();
               }

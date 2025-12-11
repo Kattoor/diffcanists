@@ -2464,7 +2464,7 @@ label_46:
               zcreatureList.Add(zcreature3);
           }
         }
-        if (zcreatureList.Count > 0 && !this.isReplay)
+        if (zcreatureList.Count > 0)
         {
           zcreatureList.Sort((Comparison<ZCreature>) ((b, a) => a.maxHealth - a.health - (b.maxHealth - b.health)));
           int damage = 20;
@@ -4422,7 +4422,7 @@ label_46:
                             if (!creature.isPawn)
                               person8.IncreaseCastCount(spell.spellEnum);
                             ++this.everIncreasingVariable;
-                            ZSpell.FireWhich(spell, creature, position, rot_z2, power, target, secTarget, (int) realSpellSlot, extended, spellSlot, false);
+                            ZSpell.FireWhich(spell, creature, position, rot_z2, power, target, secTarget, (int) realSpellSlot, extended, spellSlot, false, p);
                             if (this.isTutorial && Client._tutorial.onCast != null)
                               Client._tutorial.onCast(new ContainerCreature(creature), new ContainerSpell(spellSlot));
                             if (!spellSlot.isPresent)

@@ -4334,7 +4334,7 @@ label_7:
               if (ZSpell.ServerCanFire(spell, num1, num2, 0, 0, c, fixedInt1, power, new MyLocation(num1, num2)))
               {
                 spellSlot?.Fired(c);
-                ZSpell.FireWhich(spell, c, c.position, fixedInt1, power, new MyLocation(num1, num2), NullMyLocation.Get(), 0, false, (SpellSlot) null, false);
+                ZSpell.FireWhich(spell, c, c.position, fixedInt1, power, new MyLocation(num1, num2), NullMyLocation.Get(), 0, false, (SpellSlot) null, false, (ZPerson) null);
                 return;
               }
             }
@@ -4367,7 +4367,7 @@ label_7:
                 if (ZSpell.ServerCanFire(spell, x2, y2, num1, num2, c, fixedInt1, power, new MyLocation(x2, y2)))
                 {
                   spellSlot?.Fired(c);
-                  ZSpell.FireWhich(spell, c, c.position, fixedInt1, power, new MyLocation(x2, y2), new MyLocation(num1, num2), 0, false, (SpellSlot) null, false);
+                  ZSpell.FireWhich(spell, c, c.position, fixedInt1, power, new MyLocation(x2, y2), new MyLocation(num1, num2), 0, false, (SpellSlot) null, false, (ZPerson) null);
                   return;
                 }
               }
@@ -4382,7 +4382,7 @@ label_7:
                 if (ZSpell.ServerCanFire(spell, num1, num2, 0, 0, c, rot_z, power, new MyLocation(num1, num2)))
                 {
                   spellSlot?.Fired(c);
-                  ZSpell.FireWhich(spell, c, c.position, rot_z, power, new MyLocation(num1, num2), NullMyLocation.Get(), 0, false, (SpellSlot) null, false);
+                  ZSpell.FireWhich(spell, c, c.position, rot_z, power, new MyLocation(num1, num2), NullMyLocation.Get(), 0, false, (SpellSlot) null, false, (ZPerson) null);
                   return;
                 }
               }
@@ -4397,7 +4397,7 @@ label_7:
                 if (ZSpell.ServerCanFire(spell, num1, num2, 0, 0, c, rot_z, power, new MyLocation(num1, num2)))
                 {
                   spellSlot?.Fired(c);
-                  ZSpell.FireWhich(spell, c, c.position, rot_z, power, new MyLocation(num1, num2), NullMyLocation.Get(), 0, false, (SpellSlot) null, false);
+                  ZSpell.FireWhich(spell, c, c.position, rot_z, power, new MyLocation(num1, num2), NullMyLocation.Get(), 0, false, (SpellSlot) null, false, (ZPerson) null);
                   return;
                 }
               }
@@ -4411,7 +4411,7 @@ label_7:
                 if (ZSpell.ServerCanFire(spell, num1, num2, 0, 0, c, fixedInt1, power, new MyLocation(num1, num2)))
                 {
                   spellSlot?.Fired(c);
-                  ZSpell.FireWhich(spell, c, c.position, fixedInt1, power, new MyLocation(num1, num2), NullMyLocation.Get(), 0, false, (SpellSlot) null, false);
+                  ZSpell.FireWhich(spell, c, c.position, fixedInt1, power, new MyLocation(num1, num2), NullMyLocation.Get(), 0, false, (SpellSlot) null, false, (ZPerson) null);
                   return;
                 }
               }
@@ -4429,7 +4429,7 @@ label_7:
               if (ZSpell.ServerCanFire(spell, num1, num2, 0, 0, c, fixedInt1, power, new MyLocation(num1, num2)))
               {
                 spellSlot?.Fired(c);
-                ZSpell.FireWhich(spell, c, c.position, fixedInt1, power, new MyLocation(num1, num2), NullMyLocation.Get(), 0, false, (SpellSlot) null, false);
+                ZSpell.FireWhich(spell, c, c.position, fixedInt1, power, new MyLocation(num1, num2), NullMyLocation.Get(), 0, false, (SpellSlot) null, false, (ZPerson) null);
                 return;
               }
             }
@@ -4448,7 +4448,7 @@ label_7:
                 if (ZSpell.ServerCanFire(spell, num1, num2, 0, 0, c, fixedInt1, power, new MyLocation(num1, num2)))
                 {
                   spellSlot?.Fired(c);
-                  ZSpell.FireWhich(spell, c, c.position, fixedInt1, power, new MyLocation(num1, num2), NullMyLocation.Get(), 0, false, (SpellSlot) null, false);
+                  ZSpell.FireWhich(spell, c, c.position, fixedInt1, power, new MyLocation(num1, num2), NullMyLocation.Get(), 0, false, (SpellSlot) null, false, (ZPerson) null);
                   return;
                 }
               }
@@ -4467,15 +4467,15 @@ label_7:
       return;
 label_39:
       spellSlot?.Fired(c);
-      ZSpell.FireWhich(spell, c, c.position, fixedInt1, power, new MyLocation(x1, y1), NullMyLocation.Get(), 0, false, (SpellSlot) null, false);
+      ZSpell.FireWhich(spell, c, c.position, fixedInt1, power, new MyLocation(x1, y1), NullMyLocation.Get(), 0, false, (SpellSlot) null, false, (ZPerson) null);
       return;
 label_87:
       spellSlot?.Fired(c);
-      ZSpell.FireWhich(spell, c, c.position, fixedInt1, power, new MyLocation(fixedInt1, (FixedInt) 0), NullMyLocation.Get(), 0, false, (SpellSlot) null, false);
+      ZSpell.FireWhich(spell, c, c.position, fixedInt1, power, new MyLocation(fixedInt1, (FixedInt) 0), NullMyLocation.Get(), 0, false, (SpellSlot) null, false, (ZPerson) null);
       return;
 label_99:
       spellSlot?.Fired(c);
-      ZSpell.FireWhich(spell, c, c.position, fixedInt1, power, zcreature.GetPositionAI, NullMyLocation.Get(), 0, false, (SpellSlot) null, false);
+      ZSpell.FireWhich(spell, c, c.position, fixedInt1, power, zcreature.GetPositionAI, NullMyLocation.Get(), 0, false, (SpellSlot) null, false, (ZPerson) null);
       if (spell.EndsTurn)
         return;
       c.game.ongoing.RunSpell(ZSpell.LazyDo((Action) (() =>
@@ -8870,7 +8870,7 @@ label_37:
           return false;
         Spell spell1 = Inert.GetSpell(c.parent.minionBookTitans[index].spell);
         Creature component = spell1.toSummon?.GetComponent<Creature>();
-        int yInt5 = !spell1.affectedByGravity || spell1.maxDistance <= 150 ? 0 : spell1.maxDistance - 150;
+        int yInt5 = 0;
         return MyLocation.Distance(new MyLocation(x, y), c.position + new MyLocation(0, yInt5)) + component.radius < ZSpell.GetSpellMaxDistance(spell1, c) && c.map.CheckCircle(x, y, component.radius, (ZCreature) null, Inert.mask_movement_NoEffector);
       }
       MyLocation position6 = c.position;
@@ -8964,7 +8964,8 @@ label_37:
     int spellSlot = 0,
     bool extended = false,
     SpellSlot slot = null,
-    bool fromArmageddon = false)
+    bool fromArmageddon = false,
+    ZPerson person = null)
   {
     c.animator?.Play(AnimateState.Attack, 0.0f, true);
     if (c.game.isClient && !c.game.resyncing && (!theSpell.spellEnum.IsFlight() || !c.flying))
@@ -10044,8 +10045,10 @@ label_37:
       case SpellEnum.Pack_Leader:
         if (theSpell.spellEnum == SpellEnum.Herd_Mentality && c.familiarLevelDruidism > 0)
         {
+          if (person == null)
+            person = c.parent;
           c.game.serverState.busy = ServerState.Busy.Moving;
-          c.parent.yourTurn = true;
+          person.yourTurn = true;
         }
         ZCreature zcreature6 = ZSpell.FireSummon(theSpell, c.game, c, target, -1, false, (ZPerson) null);
         if (!((ZComponent) zcreature6 != (object) null) || zcreature6.isDead)
@@ -10114,8 +10117,6 @@ label_37:
       case SpellEnum.Sandbag:
         if ((ZComponent) c.tower != (object) null)
         {
-          if ((UnityEngine.Object) c.tower.baseTower.FromSpell != (UnityEngine.Object) null)
-            c.parent.DecreaseCastCount(c.tower.baseTower.FromSpell.spellEnum);
           int health = c.tower.Health;
           if (c.tower.type == TowerType.Sand)
           {
@@ -10308,7 +10309,7 @@ label_37:
     switch (this.spellEnum)
     {
       case SpellEnum.Death_Bomb:
-        ZSpell.FireWhich(Inert.Instance.spells["Aura of Decay"], this.parent, this.position, (FixedInt) 0, (FixedInt) 0, this.position, NullMyLocation.Get(), 0, false, (SpellSlot) null, false);
+        ZSpell.FireWhich(Inert.Instance.spells["Aura of Decay"], this.parent, this.position, (FixedInt) 0, (FixedInt) 0, this.position, NullMyLocation.Get(), 0, false, (SpellSlot) null, false, (ZPerson) null);
         break;
       case SpellEnum.Tombstone_Curse:
         ZSpell.FireSpectralTombstone(this.baseSpell, this.parent, this.position + this.velocity.normalized * -18);
@@ -10513,7 +10514,7 @@ label_37:
         if (ZComponent.IsNull((ZComponent) this.parent))
           break;
         ZEffector.CheckSanctuary(this.game, this.position, (int) sbyte.MaxValue, true);
-        ZSpell.FireWhich(Inert.Instance.spells["Arcane Flash"], this.parent, this.position, (FixedInt) 0, (FixedInt) 0, this.position, NullMyLocation.Get(), 0, false, (SpellSlot) null, false);
+        ZSpell.FireWhich(Inert.Instance.spells["Arcane Flash"], this.parent, this.position, (FixedInt) 0, (FixedInt) 0, this.position, NullMyLocation.Get(), 0, false, (SpellSlot) null, false, (ZPerson) null);
         this.game.RandomInt(200, this.map.Height - 200);
         break;
       case SpellEnum.Arcane_Meteor_Shard:

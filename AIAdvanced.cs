@@ -38,7 +38,7 @@ public class AIAdvanced : IAI
             }
             else if ((double) aiAdvanced.creature.transformscale < 0.0)
               aiAdvanced.creature.SetScale(1f);
-            ZSpell.FireWhich(spell.spell, aiAdvanced.creature, aiAdvanced.creature.position, rot_z, (FixedInt) 1, enemy.GetPositionAI, NullMyLocation.Get(), 0, false, (SpellSlot) null, false);
+            ZSpell.FireWhich(spell.spell, aiAdvanced.creature, aiAdvanced.creature.position, rot_z, (FixedInt) 1, enemy.GetPositionAI, NullMyLocation.Get(), 0, false, (SpellSlot) null, false, (ZPerson) null);
             break;
           }
           if (Random.Range(0, 2) < 1)

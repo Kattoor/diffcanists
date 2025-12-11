@@ -653,7 +653,7 @@ namespace Educative
       if (secTarget == (Point) null)
         secTarget = new Point(-1000.0, -1000.0);
       this.creature.game.serverState.busy = ServerState.Busy.Moving;
-      ZSpell.FireWhich(spell, this.creature, this.creature.position, FixedInt.Create(angle), FixedInt.Create(power), new MyLocation((int) target.x, (int) target.y), new MyLocation((int) secTarget.x, (int) secTarget.y), 0, false, (SpellSlot) null, false);
+      ZSpell.FireWhich(spell, this.creature, this.creature.position, FixedInt.Create(angle), FixedInt.Create(power), new MyLocation((int) target.x, (int) target.y), new MyLocation((int) secTarget.x, (int) secTarget.y), 0, false, (SpellSlot) null, false, (ZPerson) null);
       if (!((ZComponent) this.creature == (object) Player.Instance?.person?.first()))
         return;
       Player.Instance.UnselectSpell();
@@ -721,7 +721,7 @@ namespace Educative
       this.creature.game.serverState.busy = ServerState.Busy.Moving;
       if (secTarget == (Point) null)
         secTarget = new Point(-1000.0, -1000.0);
-      ZSpell.FireWhich(spell, this.creature, this.creature.position, fixedInt, power, new MyLocation((int) target.x, (int) target.y), new MyLocation((int) secTarget.x, (int) secTarget.y), 0, false, (SpellSlot) null, false);
+      ZSpell.FireWhich(spell, this.creature, this.creature.position, fixedInt, power, new MyLocation((int) target.x, (int) target.y), new MyLocation((int) secTarget.x, (int) secTarget.y), 0, false, (SpellSlot) null, false, (ZPerson) null);
     }
 
     public Table getEffectors(Script script)

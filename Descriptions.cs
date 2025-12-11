@@ -93,7 +93,7 @@ public static class Descriptions
     },
     {
       "Stone",
-      "Pet Rock\n(drains 20 health per cast)\nProvides you and your minions with damage resistance. This damage resistance will only be applied to towers on their initial cast <sprite name=\"Resistance\"> (Subsequent casts of the same tower will not have it).\nSpells Gained: Stepping Stone (reduced cooldown per familiar level), Summon Mountain Goat (level 3)."
+      "Pet Rock\n(drains 20 health per cast)\nProvides you and your minions with damage resistance. This damage resistance will only be applied to towers on their initial cast and not in Elementals <sprite name=\"Resistance\"> (Subsequent casts of the same tower will not have it).\nSpells Gained: Stepping Stone (reduced cooldown per familiar level), Summon Mountain Goat (level 3)."
     },
     {
       "Storm",

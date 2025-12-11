@@ -2954,7 +2954,7 @@ public static class Client
       Spell spell = Inert.Instance.spells[i];
       if (spell.spellEnum != SpellEnum.Arcane_Gate && spell.spellEnum != SpellEnum.Santas_Magic && (spell.spellEnum != SpellEnum.Recall && spell.spellEnum != SpellEnum.The_ol_swaparoo) && spell.spellEnum != SpellEnum.Blink)
       {
-        ZSpell.FireWhich(spell, c, c.position, angle, Client._power, m, c.position, 0, false, (SpellSlot) null, false);
+        ZSpell.FireWhich(spell, c, c.position, angle, Client._power, m, c.position, 0, false, (SpellSlot) null, false, (ZPerson) null);
         yield return 0.0f;
       }
     }
@@ -3560,7 +3560,7 @@ label_206:
               Vector3 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
               FixedInt rot_z = !angle.HasValue ? Inert.AngleOfVelocity(new MyLocation((int) worldPoint.x, (int) worldPoint.y) - c.position) : angle.Value;
               MyLocation target = !pos.HasValue ? new MyLocation((int) worldPoint.x, (int) worldPoint.y) : pos.Value;
-              ZSpell.FireWhich(s2, c, c.position, rot_z, Client._power, target, new MyLocation(c.position.x, c.position.y + 100), 0, false, (SpellSlot) null, false);
+              ZSpell.FireWhich(s2, c, c.position, rot_z, Client._power, target, new MyLocation(c.position.x, c.position.y + 100), 0, false, (SpellSlot) null, false, (ZPerson) null);
               goto label_206;
             }
             else

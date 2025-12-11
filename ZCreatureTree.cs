@@ -659,7 +659,7 @@ public class ZCreatureTree : ZCreature
     {
       if ((Object) this.texture != (Object) null)
       {
-        if (this.baseTree.isStructure && (spellEnum == SpellEnum.Monolith || spellEnum == SpellEnum.Pyramid))
+        if (this.baseTree.isStructure && (this.spellEnum == SpellEnum.Monolith || this.spellEnum == SpellEnum.Pyramid))
           this.game.ongoing.RunSpell(ZSpell.IEnumeratorStructureToSand(Inert.GetSpell(SpellEnum.Structure_to_Sand), this.parent.first(), this.position, this.cutoutTexture), true);
         else
           this.map.ServerBitBlt((int) this.cutoutTexture, (int) this.position.x, (int) this.position.y, false, true);

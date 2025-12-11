@@ -1315,13 +1315,14 @@ public class ZMap
           ZCreature creature1 = list[index].creature;
           if (!ZComponent.IsNull((ZComponent) creature1))
           {
-            if (creature1.spellEnum == SpellEnum.Sacrificial_Altar && (ZComponent) creature != (object) null && (creature.isPawn && creature.type != CreatureType.Tree) && creature.race != CreatureRace.Effector)
+            if (creature1.spellEnum == SpellEnum.Sacrificial_Altar && (ZComponent) creature != (object) null && (creature.isPawn && creature.type != CreatureType.Tree) && (creature.race != CreatureRace.Effector && creature.health > 0))
             {
               creature1.health += creature.health;
               if (creature1.health > creature1.maxHealth)
                 creature1.health = creature1.maxHealth;
               creature1.parent.first()?.ReplenishUsedSpell(BookOf.Nothing);
               creature.health = 0;
+              creature.OnStunned();
               creature.DieWhenStopped(true);
               this.world.listPool.ReturnList(list);
               return true;

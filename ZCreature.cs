@@ -206,7 +206,7 @@ public class ZCreature : ZEntity
   {
     get
     {
-      return this.parent.localTurn == -1 && this.health > 0 && !this.game.originalSpellsOnly;
+      return this.parent.localTurn == -1 && this.health > 0 && !this.game.originalSpellsOnly && !this.game.isSandbox;
     }
   }
 
@@ -1183,9 +1183,9 @@ public class ZCreature : ZEntity
               continue;
             }
             if (effector.type == EffectorType.Monolith)
-              this.map.ServerBitBlt(75, (int) effector.position.x, (int) effector.position.y, false, true);
+              this.game.ongoing.RunSpell(ZSpell.IEnumeratorStructureToSand(Inert.GetSpell(SpellEnum.Structure_to_Sand), this.parent.first(), effector.position, ExplosionCutout.Monolith), true);
             else if (effector.type == EffectorType.Pyramid)
-              this.map.ServerBitBlt(76, (int) effector.position.x, (int) effector.position.y, false, true);
+              this.game.ongoing.RunSpell(ZSpell.IEnumeratorStructureToSand(Inert.GetSpell(SpellEnum.Structure_to_Sand), this.parent.first(), effector.position, ExplosionCutout.Pyramid), true);
           }
           effector.isNull = true;
           if ((UnityEngine.Object) effector.gameObject != (UnityEngine.Object) null)

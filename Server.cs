@@ -2495,6 +2495,7 @@ public class Server : MonoBehaviour
       }
     }
     bool dynamic = gg.GetStyle().HasStyle(GameStyle.Dynamic);
+    bool flag = gg.GetStyle().HasStyle(GameStyle.Original_Spells_Only);
     for (byte index = 0; (int) index < max; ++index)
     {
       if (gg.settings.restrictions.availableSpells[(int) index])
@@ -2509,12 +2510,18 @@ public class Server : MonoBehaviour
     }
     for (int index1 = 0; index1 < gg.connections.Count; ++index1)
     {
+      if (flag)
+        gg.connections[index1].player.settingsPlayer.altBooks = 0;
       Server.RandomRestrictedSpells(gg.connections[index1].player.settingsPlayer, gg.settings.restrictions, level1, level2, level3, availElemental, max, elementals, dynamic);
       if (gg.GetMultiTeamMode())
       {
         int num2 = gg.GetNumberPlayersPerTeam() - 1;
         for (int index2 = 0; index2 < num2; ++index2)
+        {
+          if (flag)
+            gg.connections[index1].player.multiSettingsPlayer[index2].altBooks = 0;
           Server.RandomRestrictedSpells(gg.connections[index1].player.multiSettingsPlayer[index2], gg.settings.restrictions, level1, level2, level3, availElemental, max, elementals, dynamic);
+        }
       }
     }
   }

@@ -25,7 +25,7 @@ public class AI : IAI
         {
           if (ai.creature.inWater)
           {
-            ZSpell.FireWhich(Inert.GetSpell(SpellEnum.Arcane_Gate), ai.creature, enemy.GetPositionAI + new MyLocation(0, 100), (FixedInt) 0, (FixedInt) 1, enemy.GetPositionAI, NullMyLocation.Get(), 0, false, (SpellSlot) null, false);
+            ZSpell.FireWhich(Inert.GetSpell(SpellEnum.Arcane_Gate), ai.creature, enemy.GetPositionAI + new MyLocation(0, 100), (FixedInt) 0, (FixedInt) 1, enemy.GetPositionAI, NullMyLocation.Get(), 0, false, (SpellSlot) null, false, (ZPerson) null);
             break;
           }
           int num = Random.Range(0, 3);
@@ -61,7 +61,7 @@ public class AI : IAI
             }
             else if ((double) ai.creature.transformscale < 0.0)
               ai.creature.SetScale(1f);
-            ZSpell.FireWhich(spell.spell, ai.creature, ai.creature.position, fixedInt, power, enemy.GetPositionAI, NullMyLocation.Get(), 0, false, (SpellSlot) null, false);
+            ZSpell.FireWhich(spell.spell, ai.creature, ai.creature.position, fixedInt, power, enemy.GetPositionAI, NullMyLocation.Get(), 0, false, (SpellSlot) null, false, (ZPerson) null);
             break;
           }
           ++count;

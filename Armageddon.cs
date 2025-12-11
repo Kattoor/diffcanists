@@ -97,14 +97,14 @@ public static class Armageddon
             {
               p.first().SetScale(x > p.map.Width / 2 ? -1f : 1f);
               if (theSpell.spellEnum == SpellEnum.Curse_of_Disabling || theSpell.spellEnum == SpellEnum.Curse_of_Loneliness)
-                ZSpell.FireWhich(theSpell, p.first(), pos1, (FixedInt) 0, (FixedInt) num, p.first().position, p.first().position, 0, false, (SpellSlot) null, true);
+                ZSpell.FireWhich(theSpell, p.first(), pos1, (FixedInt) 0, (FixedInt) num, p.first().position, p.first().position, 0, false, (SpellSlot) null, true, (ZPerson) null);
               else
-                ZSpell.FireWhich(theSpell, p.first(), pos1, (FixedInt) 0, (FixedInt) num, new MyLocation(x, p.game.RandomInt(0, p.map.Height)), new MyLocation(x, p.game.RandomInt(0, p.map.Height)), 0, false, (SpellSlot) null, true);
+                ZSpell.FireWhich(theSpell, p.first(), pos1, (FixedInt) 0, (FixedInt) num, new MyLocation(x, p.game.RandomInt(0, p.map.Height)), new MyLocation(x, p.game.RandomInt(0, p.map.Height)), 0, false, (SpellSlot) null, true, (ZPerson) null);
             }
             else if (theSpell.type == CastType.Target_Power || theSpell.type == CastType.Power)
             {
               pos1.y = (FixedInt) p.map.Height;
-              ZSpell.FireWhich(theSpell, p.first(), pos1, (FixedInt) num, (FixedInt) 1 / (FixedInt) 2, new MyLocation(x, p.game.RandomInt(0, p.map.Height)), new MyLocation(x, p.game.RandomInt(0, p.map.Height)), 0, false, (SpellSlot) null, true);
+              ZSpell.FireWhich(theSpell, p.first(), pos1, (FixedInt) num, (FixedInt) 1 / (FixedInt) 2, new MyLocation(x, p.game.RandomInt(0, p.map.Height)), new MyLocation(x, p.game.RandomInt(0, p.map.Height)), 0, false, (SpellSlot) null, true, (ZPerson) null);
             }
             else if (theSpell.type == CastType.Flash || theSpell.type == CastType.Naplem)
             {
@@ -114,23 +114,23 @@ public static class Armageddon
                 MyLocation myLocation = p.first().position - pos2;
                 myLocation.Normalize();
                 FixedInt rot_z = FixedInt.Atan2(myLocation.y, myLocation.x) * FixedInt.Rad2Deg;
-                ZSpell.FireWhich(theSpell, p.first(), pos2, rot_z, (FixedInt) 1, new MyLocation(), new MyLocation(), 0, false, (SpellSlot) null, true);
+                ZSpell.FireWhich(theSpell, p.first(), pos2, rot_z, (FixedInt) 1, new MyLocation(), new MyLocation(), 0, false, (SpellSlot) null, true, (ZPerson) null);
               }
               else
-                ZSpell.FireWhich(theSpell, p.first(), new MyLocation(x, p.game.RandomInt(0, p.map.Height)), (FixedInt) num, (FixedInt) 1, new MyLocation(x, p.game.RandomInt(0, p.map.Height)), new MyLocation(x, p.game.RandomInt(0, p.map.Height)), 0, false, (SpellSlot) null, true);
+                ZSpell.FireWhich(theSpell, p.first(), new MyLocation(x, p.game.RandomInt(0, p.map.Height)), (FixedInt) num, (FixedInt) 1, new MyLocation(x, p.game.RandomInt(0, p.map.Height)), new MyLocation(x, p.game.RandomInt(0, p.map.Height)), 0, false, (SpellSlot) null, true, (ZPerson) null);
             }
             else if (theSpell.type == CastType.Double_Naplem)
-              ZSpell.FireWhich(theSpell, p.first(), new MyLocation(x, p.game.RandomInt(0, p.map.Height)), (FixedInt) num, (FixedInt) 1, new MyLocation(x > p.map.Width / 2 ? p.game.RandomInt(90, 180) : p.game.RandomInt(-90, 90), p.game.RandomInt(0, p.map.Height)), new MyLocation(x, p.game.RandomInt(0, p.map.Height)), 0, false, (SpellSlot) null, true);
+              ZSpell.FireWhich(theSpell, p.first(), new MyLocation(x, p.game.RandomInt(0, p.map.Height)), (FixedInt) num, (FixedInt) 1, new MyLocation(x > p.map.Width / 2 ? p.game.RandomInt(90, 180) : p.game.RandomInt(-90, 90), p.game.RandomInt(0, p.map.Height)), new MyLocation(x, p.game.RandomInt(0, p.map.Height)), 0, false, (SpellSlot) null, true, (ZPerson) null);
             else if (theSpell.type == CastType.Target_Placement)
             {
               if (theSpell.spellEnum == SpellEnum.Duplication || theSpell.spellEnum == SpellEnum.Passage_Ways)
               {
                 ZCreature randomTarget = Armageddon.GetRandomTarget(p);
                 if (!((ZComponent) randomTarget == (object) null))
-                  ZSpell.FireWhich(theSpell, p.first(), pos1, (FixedInt) p.game.RandomInt(0, 360), (FixedInt) num, new MyLocation(x, p.game.RandomInt(0, p.map.Height)), randomTarget.position, 0, false, (SpellSlot) null, true);
+                  ZSpell.FireWhich(theSpell, p.first(), pos1, (FixedInt) p.game.RandomInt(0, 360), (FixedInt) num, new MyLocation(x, p.game.RandomInt(0, p.map.Height)), randomTarget.position, 0, false, (SpellSlot) null, true, (ZPerson) null);
               }
               else
-                ZSpell.FireWhich(theSpell, p.first(), pos1, (FixedInt) p.game.RandomInt(0, 360), (FixedInt) num, new MyLocation(x, p.game.RandomInt(0, p.map.Height)), new MyLocation(x, p.game.RandomInt(0, p.map.Height)), 0, false, (SpellSlot) null, true);
+                ZSpell.FireWhich(theSpell, p.first(), pos1, (FixedInt) p.game.RandomInt(0, 360), (FixedInt) num, new MyLocation(x, p.game.RandomInt(0, p.map.Height)), new MyLocation(x, p.game.RandomInt(0, p.map.Height)), 0, false, (SpellSlot) null, true, (ZPerson) null);
             }
             else if (theSpell.type == CastType.Placement)
             {
@@ -145,15 +145,15 @@ public static class Armageddon
                 }
                 if (theSpell.spellEnum == SpellEnum.Summon_Titan)
                   num = p.game.RandomInt(0, p.minionBookTitans.Count);
-                ZSpell.FireWhich(theSpell, p.first(), new MyLocation(x, p.game.RandomInt(0, p.map.Height)), (FixedInt) num, (FixedInt) 1, new MyLocation(x, p.game.RandomInt(0, p.map.Height)), new MyLocation(x, p.game.RandomInt(0, p.map.Height)), 0, false, (SpellSlot) null, true);
+                ZSpell.FireWhich(theSpell, p.first(), new MyLocation(x, p.game.RandomInt(0, p.map.Height)), (FixedInt) num, (FixedInt) 1, new MyLocation(x, p.game.RandomInt(0, p.map.Height)), new MyLocation(x, p.game.RandomInt(0, p.map.Height)), 0, false, (SpellSlot) null, true, (ZPerson) null);
               }
             }
             else if (theSpell.type == CastType.Blit)
-              ZSpell.FireWhich(theSpell, p.first(), pos1, (FixedInt) 0, (FixedInt) num, new MyLocation(x, p.game.RandomInt(0, p.map.Height)), new MyLocation(x, p.game.RandomInt(0, p.map.Height)), 0, false, (SpellSlot) null, true);
+              ZSpell.FireWhich(theSpell, p.first(), pos1, (FixedInt) 0, (FixedInt) num, new MyLocation(x, p.game.RandomInt(0, p.map.Height)), new MyLocation(x, p.game.RandomInt(0, p.map.Height)), 0, false, (SpellSlot) null, true, (ZPerson) null);
             else if (theSpell.type == CastType.Flight)
-              ZSpell.FireWhich(theSpell, p.first(), pos1, (FixedInt) 0, (FixedInt) num, new MyLocation(0, 0), new MyLocation(0, 0), 0, false, (SpellSlot) null, true);
+              ZSpell.FireWhich(theSpell, p.first(), pos1, (FixedInt) 0, (FixedInt) num, new MyLocation(0, 0), new MyLocation(0, 0), 0, false, (SpellSlot) null, true, (ZPerson) null);
             else if (theSpell.type == CastType.Tower && (ZComponent) p.first().tower == (object) null)
-              ZSpell.FireWhich(theSpell, p.first(), pos1, (FixedInt) 0, (FixedInt) num, new MyLocation(0, 0), new MyLocation(0, 0), 0, false, (SpellSlot) null, true);
+              ZSpell.FireWhich(theSpell, p.first(), pos1, (FixedInt) 0, (FixedInt) num, new MyLocation(0, 0), new MyLocation(0, 0), 0, false, (SpellSlot) null, true, (ZPerson) null);
           }
         }
       }

@@ -22,7 +22,7 @@ public class ZCreatureImp : ZCreature
   public override void OnDeath(bool playDeathClip = true)
   {
     if (!this.isDead && this.parent != null && ((ZComponent) this.parent.first() != (object) null && this.parent.first().FullArcane) && (!this.parent.game.originalSpellsOnly && (this.spellEnum == SpellEnum.Summon_Imps || this.spellEnum == SpellEnum.Little_Devil)))
-      ZSpell.FireWhich(Inert.Instance.arcaneMist, this.parent.first(), this.position, (FixedInt) 0, (FixedInt) 0, this.position, NullMyLocation.Get(), 0, false, (SpellSlot) null, false);
+      ZSpell.FireWhich(Inert.Instance.arcaneMist, this.parent.first(), this.position, (FixedInt) 0, (FixedInt) 0, this.position, NullMyLocation.Get(), 0, false, (SpellSlot) null, false, (ZPerson) null);
     base.OnDeath(true);
   }
 }

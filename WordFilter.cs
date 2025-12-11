@@ -39,7 +39,7 @@ public static class WordFilter
     "*************************",
     "**************************"
   };
-  public static string ForbiddenWords = "<size|<align|<cspace|<font|<indent|<line|<link|<margin|<mark|<mspace|<noparse|<page|<pos|<space|<style|<voffset|<width|<color";
+  public static string ForbiddenWords = "<size|<align|<cspace|<font|<indent|<line|<link|<margin|<mark|<mspace|<noparse|<page|<pos|<space|<style|<voffset|<width|<color|<rotate|<br|<scale|<gradient|<alpha";
   private static Regex wordFilter = new Regex(WordFilter.BadWords, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
   private static Regex realWordFilter = new Regex(WordFilter.RealBadWords, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
   private static Regex forbiddenFilter = new Regex(WordFilter.ForbiddenWords, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);

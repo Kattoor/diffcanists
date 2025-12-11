@@ -808,7 +808,7 @@ label_1:
     this.rot_z = (FixedInt) i;
     if (!((UnityEngine.Object) spell != (UnityEngine.Object) null))
       return;
-    this.ShowSummoningRange(this.selectedSpell, component.radius, spell.maxDistance, spell.affectedByGravity);
+    this.ShowSummoningRange(this.selectedSpell, component.radius, ZSpell.GetSpellMaxDistance(spell, this.selected), false);
   }
 
   public void ConfirmRitual(int i)

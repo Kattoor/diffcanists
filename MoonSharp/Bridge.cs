@@ -18,483 +18,483 @@ namespace MoonSharp
 
     public static void Initialize()
     {
-      UserData.RegisterType((IUserDataDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243());
-      UserData.RegisterType((IUserDataDescriptor) new Bridge.TYPE_3fadb670da064ef58036e9a5f23b9b13());
-      UserData.RegisterType((IUserDataDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297());
-      UserData.RegisterType((IUserDataDescriptor) new Bridge.TYPE_77ad4911c6394031bfb361a119d0d378());
-      UserData.RegisterType((IUserDataDescriptor) new Bridge.TYPE_3735edbd689c425d8b67b14b28c26ad9());
-      UserData.RegisterType((IUserDataDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632());
-      UserData.RegisterType((IUserDataDescriptor) new Bridge.TYPE_6c8367819323494cae0f919b727ab62a());
-      UserData.RegisterType((IUserDataDescriptor) new Bridge.TYPE_9172052d3c884097bd786517b4efd577());
-      UserData.RegisterType((IUserDataDescriptor) new Bridge.TYPE_f21b318e026945008dc7b94ca497dcf7());
-      UserData.RegisterType((IUserDataDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176());
-      UserData.RegisterType((IUserDataDescriptor) new Bridge.TYPE_a2a6983aa4c4430ea21f2895da5f0c8d());
-      UserData.RegisterType((IUserDataDescriptor) new Bridge.TYPE_1a16ed1ca86b4e9cbfadc19af1733415());
-      UserData.RegisterType((IUserDataDescriptor) new Bridge.TYPE_0def1c4b6d6c474590cae7ce0c6b09e3());
-      UserData.RegisterType((IUserDataDescriptor) new Bridge.TYPE_95914849b5aa4edaa7fe64de41e6f6b1());
-      UserData.RegisterType((IUserDataDescriptor) new Bridge.TYPE_618224c4e7a54910995fc48f16312449());
+      UserData.RegisterType((IUserDataDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933());
+      UserData.RegisterType((IUserDataDescriptor) new Bridge.TYPE_48019385a7e545d99071733c043c80c3());
+      UserData.RegisterType((IUserDataDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e());
+      UserData.RegisterType((IUserDataDescriptor) new Bridge.TYPE_00a4c3e293ff44edad8f7a62daf2cac2());
+      UserData.RegisterType((IUserDataDescriptor) new Bridge.TYPE_c61f5bcb75c04be9bec7cf02cf182af2());
+      UserData.RegisterType((IUserDataDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282());
+      UserData.RegisterType((IUserDataDescriptor) new Bridge.TYPE_a4bdb6cb8f81422ba0a39ca2377d2a45());
+      UserData.RegisterType((IUserDataDescriptor) new Bridge.TYPE_922a523ca23442e897e9a6abaf5ddd7a());
+      UserData.RegisterType((IUserDataDescriptor) new Bridge.TYPE_dc30ddda57fc4efcaf62e0dbf73bb6ad());
+      UserData.RegisterType((IUserDataDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6());
+      UserData.RegisterType((IUserDataDescriptor) new Bridge.TYPE_af9c7b103ddd4d81bc31553df9aa367e());
+      UserData.RegisterType((IUserDataDescriptor) new Bridge.TYPE_bf829182a9cf485cbabae631e7ae1bb4());
+      UserData.RegisterType((IUserDataDescriptor) new Bridge.TYPE_080d490a1b32483e90d0cfed6d331c3c());
+      UserData.RegisterType((IUserDataDescriptor) new Bridge.TYPE_50086df340e24791ae600f782d2189d3());
+      UserData.RegisterType((IUserDataDescriptor) new Bridge.TYPE_d31ed4f9de904dafb4dbf9ec05553fae());
     }
 
-    private sealed class TYPE_84e0d0dde40d492a811d77207ed74243 : HardwiredUserDataDescriptor
+    private sealed class TYPE_4e389b4fe8004259b47448ae005ba933 : HardwiredUserDataDescriptor
     {
-      internal TYPE_84e0d0dde40d492a811d77207ed74243()
+      internal TYPE_4e389b4fe8004259b47448ae005ba933()
         : base(typeof (ContainerGame))
       {
         this.AddMember("getUser", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("getUser", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_4e08cd46ab1842cd9f7e62cce05aa5b5()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_954bdc21c7ed41538f06579ed07b7337()
         }));
         this.AddMember("getPlayers", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("getPlayers", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_2b94b6ac2643435cbc0062e78647cbf3()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_ee3277a8350c4c4a8ea11ca998016791()
         }));
         this.AddMember("getPlayerCount", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("getPlayerCount", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_a2b3b4f17af84200904a646b24f1123f()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_cc47232077e9421985bf198b01b9f371()
         }));
         this.AddMember("getCreatures", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("getCreatures", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_ea4ac218864d4c13adff08e769d397bf()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_7ff98d5f634043e48c19674771ce47a4()
         }));
         this.AddMember("findCreatures", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("findCreatures", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_5afe0d437ef74af7a4936d2e8d4df238()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_f3952ede4d844e838854d2a9837c870f()
         }));
         this.AddMember("findEffectors", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("findEffectors", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_91fe530b50e246bbb05e2f14cd21cfe3()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_502e4a8415764c5fac59ed81d000a401()
         }));
         this.AddMember("LineCast", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("LineCast", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_2448ddaf458b45fea3f3ef5181b4bd4a()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_5ac5415f472942a0ab3ea8fa4bb3016a()
         }));
         this.AddMember("LineCastOnlyCreatures", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("LineCastOnlyCreatures", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_37d6f2440d544fa28b055a08e9e76819()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_7a1cc5c80835467992e590d3046908b4()
         }));
         this.AddMember("LineCastOnlyTerrain", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("LineCastOnlyTerrain", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_614b154b568a4d69af0f05e2f41e605e()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_da3f1600469049cf8cf7c37f19dca2bd()
         }));
         this.AddMember("ShowInfo", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("ShowInfo", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_b14ec8f69dd74d2f9268cfa2db13ae7d()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_e33b2c648307438f966613eb3ce01b51()
         }));
         this.AddMember("hideInfo", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("hideInfo", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_da79e893c5024983b2f1322288254c0b()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_d678de568cc746f78f956314fdb671c2()
         }));
         this.AddMember("Talk", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("Talk", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_04719247b7a646209e124c50ea0c3c9c()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_17bfae7573f4456f9d6b6b73e3ac3ae5()
         }));
         this.AddMember("get_turn", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_turn", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_1fcc307134df4acf8cda850e59a95001()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_4feccb4a046a4503910930acd72320f4()
         }));
         this.AddMember("set_turn", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_turn", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_2b67e4b239a54aed8e23caa7c9dcaed6()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_d8972b37ffad4a538722f4e6bade88f1()
         }));
         this.AddMember("get_timeLimit", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_timeLimit", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_1dd396c0c78c4d558be4b56042dc060c()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_99b8e970e3e640a8a0f26353f7db5a33()
         }));
         this.AddMember("set_timeLimit", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_timeLimit", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_9cabc0cd03d64385b529b08d1f391fd2()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_9c62235fcb3948bcb70434dff3e77a9f()
         }));
         this.AddMember("get_totalTimeElapsed", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_totalTimeElapsed", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_469b84ef735f43e2ac475bbd0535cbf6()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_4bf1d120df9a40969881903c31d3b0c9()
         }));
         this.AddMember("get_turnTime", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_turnTime", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_92239f3576df451b812664f5d5af6227()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_638ed63b7d23466f8085f6d621d4be36()
         }));
         this.AddMember("get_frame", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_frame", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_ab47f58cf8794391a650403d97b85798()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_d91bfbda9196443b801d6eb1ad0c69ab()
         }));
         this.AddMember("random", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("random", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_7e22be292cbe44f5a1599cb26dac8112()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_4fdf6e5a1b2d41a58ce7970317cc2fa5()
         }));
         this.AddMember("get_winOnDeath", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_winOnDeath", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_33f33c69e4394ddf800fa5f47e986a74()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_c419425ed9f94a9ebb117dae0ba0b3e7()
         }));
         this.AddMember("set_winOnDeath", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_winOnDeath", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_c6beb0ddda714e89890120f5855a60fb()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_814000228a0e451e9794f8a7048ffde3()
         }));
         this.AddMember("get_allowMovement", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_allowMovement", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_1e5a1b68176b4e4682b7fcab848cbaf2()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_dc251b87312c4f29b873038149a71878()
         }));
         this.AddMember("set_allowMovement", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_allowMovement", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_93f8b966fb2d4d088c07b2ba7c1914a1()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_76844f9627a148bbabe70a2cb35d5cab()
         }));
         this.AddMember("get_allowMinionMovement", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_allowMinionMovement", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_f633ddadde7a4fb5b275d4136ee7d58b()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_11d31700976e42e29979b636cc361851()
         }));
         this.AddMember("set_allowMinionMovement", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_allowMinionMovement", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_572ca7502db54a338bc7f0731338d46d()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_fbf18bf9c5de490185d5cff07e537be4()
         }));
         this.AddMember("get_allowInput", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_allowInput", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_b348d7dad840452c87e210307df4a188()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_6b37c2570cba4ea5bbb80a2e0d77502c()
         }));
         this.AddMember("set_allowInput", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_allowInput", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_e05ff4476a854b17932beff93805d289()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_7c6e48b0eef247c2ace0c013d076a63c()
         }));
         this.AddMember("get_allowCallbacks", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_allowCallbacks", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_2acf003e50fd48e69bb8504c5a2ee7d3()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_8fd49f34e20443a38829de76ad2f05cd()
         }));
         this.AddMember("set_allowCallbacks", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_allowCallbacks", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_76dc3d289961493faba147e607478eaa()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_fd2f5601ea1b4564806d911dad73d20b()
         }));
         this.AddMember("get_allowSkipTurn", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_allowSkipTurn", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_5a9f30cd6c664f6fb62204d0631a7f1e()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_8fdd8a6de00f49559353d19437042171()
         }));
         this.AddMember("set_allowSkipTurn", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_allowSkipTurn", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_63fc7b21a2c7482a8a45773010e29f61()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_3a6e6c5fd9d64148b6f5e44653c9ff4a()
         }));
         this.AddMember("get_terrainDestruction", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_terrainDestruction", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_564f19fbb2184c9b8d38b2942aafb20e()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_1aa6d35f271b4bc7b808d99a16faaa95()
         }));
         this.AddMember("set_terrainDestruction", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_terrainDestruction", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_23877a2abade4edd880d739edf42921f()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_32e31803aa4a40679f09210f0631906d()
         }));
         this.AddMember("get_takeDamage", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_takeDamage", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_85df6cf68e8e40d399c2d07038441e5a()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_2a3b67385ddb4e59bce08b40b03214d4()
         }));
         this.AddMember("set_takeDamage", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_takeDamage", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_b3eb32178d1645e399d03bf7750e0e3d()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_8b28deb23ab4481c9bac0a0be5af6443()
         }));
         this.AddMember("get_armageddon", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_armageddon", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_958527a99d3947f2b532ef08bf9138c7()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_288def38addd49908b000c17d5d85841()
         }));
         this.AddMember("set_armageddon", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_armageddon", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_7460359d69174bfcbd28ab614021ad74()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_a180b92206e349cdbfd2e23f122f9de9()
         }));
         this.AddMember("get_armageddonTurn", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_armageddonTurn", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_770a05cbce244e78ac12655f4bf098dc()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_38b5043b9d984530af9b5a887cb923c8()
         }));
         this.AddMember("set_armageddonTurn", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_armageddonTurn", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_6db8c7cb34f64b12a3fddb19f95e6970()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_8436c3a3c1934348bba28b908f4bdf1b()
         }));
         this.AddMember("get_waiting", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_waiting", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_d271affc50504b6fa2868b95b3e060db()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_2060fb8c5f194e43a525edffc6a3de12()
         }));
         this.AddMember("get_paused", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_paused", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_9d0eefa190114c35869f2aad682612f1()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_f0319173a0054951920bf151180390b6()
         }));
         this.AddMember("set_paused", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_paused", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_bffef336f2ac459db25316673b942964()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_fda69ae539534f4b8d6450cab22aa021()
         }));
         this.AddMember("get_busy", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_busy", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_7ee246d2b7454dbcae81407878469c40()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_0be590dd00bb46f6a711cedd8aebc10e()
         }));
         this.AddMember("get_ongoing", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_ongoing", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_edd7f27cc6ee446eadc38bcef3b75441()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_339b4b43db3b46eba56c38055143d315()
         }));
         this.AddMember("get_gravity", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_gravity", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_306a5ebd542f492687c4e5cf01860a5f()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_63534c8479a44737a1327ba28313021c()
         }));
         this.AddMember("set_gravity", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_gravity", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_25234495d46c4d2983f478d9734e7295()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_396143fe74dc4794a248f12d737eb5a1()
         }));
         this.AddMember("get_wind", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_wind", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_392eb329c00b47b18a1ac2b836616a04()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_6e14bbf84a72481fa62d5332191b3d87()
         }));
         this.AddMember("set_wind", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_wind", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_b24e7a495ba1452a8557f46a83217311()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_826a1a545cc24abdbedbdd9d43d405ff()
         }));
         this.AddMember("get_windDir", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_windDir", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_8355430805c0485cba89ce5e826bad4e()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_7cddcd8f8c014fd6a0fe90475978146b()
         }));
         this.AddMember("set_windDir", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_windDir", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_373dadef8e5048f0b9ba5f4a1bf9865f()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_f8c4d3f95c054a7eb1df8fd16b451ee5()
         }));
         this.AddMember("get_windPower", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_windPower", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_7672811731654e399bea0553bc8e4af5()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_f4181b068b1b412fb9e0912f3ce0af79()
         }));
         this.AddMember("set_windPower", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_windPower", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_f4eba77fc6d74e66822a607742b953fb()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_397189f3ff0541b2bf827366584adc2b()
         }));
         this.AddMember("get_width", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_width", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_89d8f61563124446b132f20cc4619bd2()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_c2bfc8517f8647cab9e1b8641f874026()
         }));
         this.AddMember("get_height", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_height", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_8d057cda041f4566af39dfc5f2f017a3()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_8dede4933a8348b590e3205f8538d35c()
         }));
         this.AddMember("get_mousePosition", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_mousePosition", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_50ac57e24ec947cc97b955255e9eeb72()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_85f61fae09c144faaad240a693ddbe52()
         }));
         this.AddMember("get_mouseOverUI", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_mouseOverUI", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_06cdb73d07e9454d9e4b0e99c19ef88b()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_3755d4ee13014d0aa96a654af2794a60()
         }));
         this.AddMember("worldToCanvas", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("worldToCanvas", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_06884788f89d4596a5aec3ddcd3fabde()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_52dccd1eceae416da9f78a91ac827859()
         }));
         this.AddMember("canvasToWorld", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("canvasToWorld", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_8bf62109e55f46868afb54b90348031f()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_83b4460031634d9c90229cbae0d94591()
         }));
         this.AddMember("get_cameraPosition", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_cameraPosition", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_af5ee9b389cb429fbf62155945193eaf()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_5a36c74454304581b1db6fd6505265f6()
         }));
         this.AddMember("set_cameraPosition", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_cameraPosition", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_38822e95e273465d840e1e07b88182ad()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_ecf6d7bba0444689b3acf3fdd6b24313()
         }));
         this.AddMember("get_cameraZoom", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_cameraZoom", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_ea78c0cf03b7452ca47c99fb617de0c1()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_88b1a649f1f54a7391c240320fe8bf95()
         }));
         this.AddMember("set_cameraZoom", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_cameraZoom", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_7feb724ebc474c31982c9d1391f598cc()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_b5840e54869c41e79509a2fbf35691d3()
         }));
         this.AddMember("getMapPixel", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("getMapPixel", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_a999764929d24cff8d1c829970f4280b()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_46972b9d514941858883d334569f8aa0()
         }));
         this.AddMember("setMapPixel", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("setMapPixel", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_b8ed248d939540d095695090464bd104()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_e5fa82b4425f4c1da16c4b377f685133()
         }));
         this.AddMember("Dispose", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("Dispose", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_f3751ab4bf404a4bbc9d2f6c6f48420a()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_6c94295583b344bca7708d4ab7e9dbef()
         }));
         this.AddMember("drawImage", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("drawImage", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_0c26d16fe695490abff02cf77d3d91ed()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_c732c6e0e82f4dc6b78d7e64d47165b4()
         }));
         this.AddMember("drawRectangle", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("drawRectangle", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_6155edfd056a41c3836901783cc85915()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_cb5851e2c1de4758b6bb1a413f8e9b2d()
         }));
         this.AddMember("drawEllipseOutline", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("drawEllipseOutline", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_80b6cdd65109401c80abb33e013725c8()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_5d94dd6dcfd4405c83844fdf10124ac2()
         }));
         this.AddMember("drawEllipse", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("drawEllipse", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_1dfff1ca85f24cf2a55a539430c64b44()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_8f8c37a641614f14a990b72ec579b264()
         }));
         this.AddMember("blit", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("blit", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_7a93966a6e4d40b7a32f5d300d32635e()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_f8da1e59cd64434fab9c434a618a9aa0()
         }));
         this.AddMember("blitRotate", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("blitRotate", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_b9c98233970e4280b981f27ca0f86e6a()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_c8895c7ec1144bf4a582d1ba94b59286()
         }));
         this.AddMember("applyDraw", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("applyDraw", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_4abcc6026f5a417ebb5aeb048ca6f7d3()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_bf96c8b236ca4c11b090ed2e00f8e099()
         }));
         this.AddMember("get_allowBounce", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_allowBounce", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_27e2ae6e41ac4e4ebd0666128fb6ef14()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_ce2615eaab764ece980c1e7918864ea5()
         }));
         this.AddMember("set_allowBounce", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_allowBounce", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_9cf97f37f4184a4086482e53a96afe2a()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_072facda4ff640edb9ddbd26ee61264e()
         }));
         this.AddMember("get_isUsingTouchControls", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_isUsingTouchControls", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_66ade50bae674d2d811eb17130df4b66()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_985d87f421fa46e9bbf1a258be1b418a()
         }));
         this.AddMember("clientRefreshSpells", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("clientRefreshSpells", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_57f3df2736884639b18f41a8a8f44973()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_8e3611519bac43c49f4ba628ee433f5b()
         }));
         this.AddMember("startCoroutine", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("startCoroutine", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_cd2d25459f574476a91bc08561fd766c()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_280950fd692f4527a1b3d7635df62cb8()
         }));
         this.AddMember("devCommand", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("devCommand", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_b85c84428fc34316b7c47cadf0944529()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_c8629233e8c94df8b6950707811109b9()
         }));
         this.AddMember("win", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("win", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_422aab0cec0b4ac3a22fa0d4f5606143()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_15d017a7b00941659adcc79d7f5f8de2()
         }));
         this.AddMember("lose", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("lose", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_98a70dccfd9f414d8b292909915b0f4c()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_7f318288396146dbb1c67a947c1933af()
         }));
         this.AddMember("nextTurn", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("nextTurn", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_8d2edf46b9494545ae6561accd2ad7e4()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_8360da7e213c4ce6998d59ea48633c03()
         }));
         this.AddMember("resetMap", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("resetMap", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_bc22200034a54775b9d6bb77c445b85f()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_b36e86d3109140868268c5f598b53877()
         }));
         this.AddMember("clearMap", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("clearMap", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_0d8a544868144bd3ab5a7973e40eabdc()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_a7ce8727121b45b3abfcd2bfa97b6723()
         }));
         this.AddMember("getSpell", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("getSpell", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_9e4bc53cddf54f018fbd3e762e7def5b()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_73be14ff391b422dbc6122c4f1bfbafe()
         }));
         this.AddMember("getSpellEnum", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("getSpellEnum", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_525d612e9bb84298b64012bc8160063e()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_b0d4beafc4e24815aacde5022a49e042()
         }));
         this.AddMember("getSpellName", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("getSpellName", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_b4a791eadd534e47aa882bd31b5ab5a5()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_4123af41c1244dcda6e00d7331dd0c37()
         }));
         this.AddMember("getMapID", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("getMapID", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_8c7858bf466b4ad59ebcd90d9fc7e45f()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_650c6484f6154494ba0b23583f14b191()
         }));
         this.AddMember("getMapRealName", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("getMapRealName", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_b6b921d8231f40d6a7cc692249219d4b()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_7cdab76a06b441ef82850eb0edaf30b2()
         }));
         this.AddMember("getMapShortName", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("getMapShortName", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_64353c6559f14fb9addd5467cb88c488()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_4a7956c6dce94c839fee1218fc885fa2()
         }));
         this.AddMember("getArmageddonName", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("getArmageddonName", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_d5947b6eab424c7197f871720eeaeb59()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_4dae990e38194cb59760fbe7a67223b5()
         }));
         this.AddMember("panCamera", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("panCamera", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_2d837450d30245daa5850cb72f9f4abe()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_93738d69633145e6b91beba8be49567f()
         }));
         this.AddMember("cameraFollow", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("cameraFollow", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_4323073adc0f470b8870ee65f7e24fd6()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_dc234c61adfe4f86a6ba8f9c4cbee627()
         }));
         this.AddMember("getInputString", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("getInputString", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_527b57b162994b93be0b046738bd2f9f()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_8e9f26c0f5364aaaa3cae6c087904597()
         }));
         this.AddMember("get_screenWidth", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_screenWidth", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_b1f65e4217cb4c9fa4ef18fb476acff8()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_eb016aa45d084be0a4bf265757d5ecb1()
         }));
         this.AddMember("get_screenHeight", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_screenHeight", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_4d0ce82d3db1422793078065a8772cd6()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_a8dad25210d34a36b9fb94a4c9989f9d()
         }));
         this.AddMember("createCreature", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("createCreature", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_1d36ec7c7b964bfe923d02a80bbe4a8a()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_74bc463a23f244a288ee7604f7ee2dc4()
         }));
         this.AddMember("clearIndicators", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("clearIndicators", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_518b9529477e47faa683123e1f8e0632()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_772923f0614a45f9839b279a56a3e0ff()
         }));
         this.AddMember("createIndicator", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("createIndicator", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[2]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_fbdafdf0c2b340d3a3437bc89dd17ead(),
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_61884a20fe2142eab123024e63e58036()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_2d97b5039ff2489685ea81cb404f535b(),
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_7996de09f56c4bfbaf39ba3212be32e6()
         }));
         this.AddMember("getKeyBinds", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("getKeyBinds", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_8e55606e13a844b4bc2d50adda14ad9e()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_76bfe2a2651c4792b1440850a6013305()
         }));
         this.AddMember("Equals", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("Equals", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_705344dfc0d54125ba07bc27dabc622d()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_aa0803ed89984a5d896ea0f1f63260ab()
         }));
         this.AddMember("GetHashCode", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("GetHashCode", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_e5c283e5ba4a43f98426bd3c54ca8faa()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_2c416382f8224dd58662b80eed3191d1()
         }));
         this.AddMember("GetType", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("GetType", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_e0a3e55b5cdf45548e0020aa63a7c773()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_ef80a931f7824a6781f443f16331c920()
         }));
         this.AddMember("ToString", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("ToString", typeof (ContainerGame), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.MTHD_e9509bcdbdfc4a3f84a338730768aa76()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.MTHD_f65a18d9b2b745eeac5717c7c7e55696()
         }));
-        this.AddMember("turn", (IMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.PROP_38ec9298b6784d6fb7a18a73dca40a1d());
-        this.AddMember("timeLimit", (IMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.PROP_0a2942716cf3440ba93b42a113569bce());
-        this.AddMember("totalTimeElapsed", (IMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.PROP_139480da97244493a30c35baeb991134());
-        this.AddMember("turnTime", (IMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.PROP_ffb52947e4bf4a8fb40008d5b4334994());
-        this.AddMember("frame", (IMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.PROP_1eccee4b2e524b1da7db92c58ac19b2d());
-        this.AddMember("winOnDeath", (IMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.PROP_4d4e2cc08e4e4ef5ad76eea4d02d0314());
-        this.AddMember("allowMovement", (IMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.PROP_57bb3566e0e44eddafc21b6add38431e());
-        this.AddMember("allowMinionMovement", (IMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.PROP_8a451d596eac4e4c93f5154f7437c316());
-        this.AddMember("allowInput", (IMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.PROP_87d37f2d2377414bac455f3880995913());
-        this.AddMember("allowCallbacks", (IMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.PROP_a3f6644e4f784ddcaf55c346a414b32f());
-        this.AddMember("allowSkipTurn", (IMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.PROP_8d333aa76cda4699a11b95067e612faf());
-        this.AddMember("terrainDestruction", (IMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.PROP_71b1011dcee949cf8cfc7ba3f626ba70());
-        this.AddMember("takeDamage", (IMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.PROP_44d46f2fef6348b29451e748f63239ce());
-        this.AddMember("armageddon", (IMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.PROP_f58e6789830146f98f5b7006cea31eef());
-        this.AddMember("armageddonTurn", (IMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.PROP_06b729976964410d86c20b5d4dd23fb6());
-        this.AddMember("waiting", (IMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.PROP_5b2c75b5467740f385c65d2c3244b4e6());
-        this.AddMember("paused", (IMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.PROP_b7fe60c2f7d04976aeb8fb1d9487e92b());
-        this.AddMember("busy", (IMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.PROP_a7527d93a00f4effa4da11fc1cccc1ef());
-        this.AddMember("ongoing", (IMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.PROP_f54a499d9f9b4082877994d76f5338c5());
-        this.AddMember("gravity", (IMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.PROP_ee88893eb3a44e87b9d57ecba022861a());
-        this.AddMember("wind", (IMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.PROP_03bc8a0f46144b52981b2e40f3e00a62());
-        this.AddMember("windDir", (IMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.PROP_b59afaf5972240918f0b22fb532aca63());
-        this.AddMember("windPower", (IMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.PROP_1f71c5c3322d44fe95c40963a10ce3e0());
-        this.AddMember("width", (IMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.PROP_c78a04f93e9f499a8fcb1db8f4f5fbbf());
-        this.AddMember("height", (IMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.PROP_b381e0a7b6ee414ea3431ce117421a87());
-        this.AddMember("mousePosition", (IMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.PROP_d25c5b05191748a99a0ccae5a05a7e8a());
-        this.AddMember("mouseOverUI", (IMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.PROP_681fa740b9a8438e9a62e77e4da6374a());
-        this.AddMember("cameraPosition", (IMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.PROP_80de89d50d4e4296880673039d7d6477());
-        this.AddMember("cameraZoom", (IMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.PROP_d6098ba9e0cb4ff988aad3bede650f3a());
-        this.AddMember("allowBounce", (IMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.PROP_ac7b6581182a41a99e0b8d26b0b27c5e());
-        this.AddMember("isUsingTouchControls", (IMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.PROP_5165882cab2547d3b99ad51de12810c3());
-        this.AddMember("screenWidth", (IMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.PROP_98b18a683aca4acc8fefac5565c5e00f());
-        this.AddMember("screenHeight", (IMemberDescriptor) new Bridge.TYPE_84e0d0dde40d492a811d77207ed74243.PROP_e17f554b700d41028f85f9f1f0758592());
+        this.AddMember("turn", (IMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.PROP_6814a38e082442a59e1d51af8f6273d2());
+        this.AddMember("timeLimit", (IMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.PROP_0385e3c87e094d6b8c415f35cfddabff());
+        this.AddMember("totalTimeElapsed", (IMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.PROP_932c2a1f29674fc3935a71bc9b3c9b69());
+        this.AddMember("turnTime", (IMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.PROP_ddf73e61ca984f299aa515159a01e521());
+        this.AddMember("frame", (IMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.PROP_7386b0bc28604694bbcb8eb707666450());
+        this.AddMember("winOnDeath", (IMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.PROP_27b690ffc4bc432d8500c320df35ee02());
+        this.AddMember("allowMovement", (IMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.PROP_c7649aca59c34299b12fc9c93659f0d4());
+        this.AddMember("allowMinionMovement", (IMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.PROP_e1749ea7cf7a4e04b7ba51a29681bfc2());
+        this.AddMember("allowInput", (IMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.PROP_df330463ca2e4c368d6e0c8a49347629());
+        this.AddMember("allowCallbacks", (IMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.PROP_8f7266e724b840a8be04951cda6e8f2d());
+        this.AddMember("allowSkipTurn", (IMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.PROP_aaac8a445f664020bfb2f5c1cbbab017());
+        this.AddMember("terrainDestruction", (IMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.PROP_1c4bd6a31c8f454787bee9310eda0c73());
+        this.AddMember("takeDamage", (IMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.PROP_9d685a85c9d7477fb3d90450b16f0084());
+        this.AddMember("armageddon", (IMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.PROP_b24162e4338e40f89d1e0d94729c5d31());
+        this.AddMember("armageddonTurn", (IMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.PROP_b11ebf5e6ac9425aae59ef16716b6899());
+        this.AddMember("waiting", (IMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.PROP_1c0e12192e684de29f16d733db38dcdd());
+        this.AddMember("paused", (IMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.PROP_c0f33a8b6d3143e392782f424907d709());
+        this.AddMember("busy", (IMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.PROP_6beda7b14826482c9b39288520516a70());
+        this.AddMember("ongoing", (IMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.PROP_259ffffd85974a96897323571e92a1e9());
+        this.AddMember("gravity", (IMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.PROP_891b6eb337c44063ad95e82e6410f37f());
+        this.AddMember("wind", (IMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.PROP_c9d8c725136a472b8c583a8a3db8a1c4());
+        this.AddMember("windDir", (IMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.PROP_c446f4c7227a4894bed52e080ee6ca20());
+        this.AddMember("windPower", (IMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.PROP_8ed19bd4655c44cd8a03df84f48ece36());
+        this.AddMember("width", (IMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.PROP_ac145e4261c742989a45350af30eb954());
+        this.AddMember("height", (IMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.PROP_fdc5c27547d54cadae03c17904c9acf2());
+        this.AddMember("mousePosition", (IMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.PROP_cf3b6fbd73b44744ae97be13c6e3b563());
+        this.AddMember("mouseOverUI", (IMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.PROP_eddb9afff5924a73b1456d8c640eab2c());
+        this.AddMember("cameraPosition", (IMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.PROP_0e9541b581404b958784530ddb780af6());
+        this.AddMember("cameraZoom", (IMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.PROP_79f584c2f4ad406abf2bd38b9a66bdc2());
+        this.AddMember("allowBounce", (IMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.PROP_72d23af6da2049f5a9a9886b3746391f());
+        this.AddMember("isUsingTouchControls", (IMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.PROP_9f10b0ab8729415898f5068b5422552f());
+        this.AddMember("screenWidth", (IMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.PROP_80d85afe78454b4f999a7839366edfd4());
+        this.AddMember("screenHeight", (IMemberDescriptor) new Bridge.TYPE_4e389b4fe8004259b47448ae005ba933.PROP_6bc55183221d432cad4e06f84c0955f3());
       }
 
-      private sealed class MTHD_4e08cd46ab1842cd9f7e62cce05aa5b5 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_954bdc21c7ed41538f06579ed07b7337 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_4e08cd46ab1842cd9f7e62cce05aa5b5()
+        internal MTHD_954bdc21c7ed41538f06579ed07b7337()
         {
           this.Initialize("getUser", false, new ParameterDescriptor[0], false);
         }
@@ -505,9 +505,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_2b94b6ac2643435cbc0062e78647cbf3 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_ee3277a8350c4c4a8ea11ca998016791 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_2b94b6ac2643435cbc0062e78647cbf3()
+        internal MTHD_ee3277a8350c4c4a8ea11ca998016791()
         {
           this.Initialize("getPlayers", false, new ParameterDescriptor[1]
           {
@@ -521,9 +521,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_a2b3b4f17af84200904a646b24f1123f : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_cc47232077e9421985bf198b01b9f371 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_a2b3b4f17af84200904a646b24f1123f()
+        internal MTHD_cc47232077e9421985bf198b01b9f371()
         {
           this.Initialize("getPlayerCount", false, new ParameterDescriptor[0], false);
         }
@@ -534,9 +534,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_ea4ac218864d4c13adff08e769d397bf : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_7ff98d5f634043e48c19674771ce47a4 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_ea4ac218864d4c13adff08e769d397bf()
+        internal MTHD_7ff98d5f634043e48c19674771ce47a4()
         {
           this.Initialize("getCreatures", false, new ParameterDescriptor[1]
           {
@@ -550,9 +550,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_5afe0d437ef74af7a4936d2e8d4df238 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_f3952ede4d844e838854d2a9837c870f : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_5afe0d437ef74af7a4936d2e8d4df238()
+        internal MTHD_f3952ede4d844e838854d2a9837c870f()
         {
           this.Initialize("findCreatures", false, new ParameterDescriptor[3]
           {
@@ -568,9 +568,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_91fe530b50e246bbb05e2f14cd21cfe3 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_502e4a8415764c5fac59ed81d000a401 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_91fe530b50e246bbb05e2f14cd21cfe3()
+        internal MTHD_502e4a8415764c5fac59ed81d000a401()
         {
           this.Initialize("findEffectors", false, new ParameterDescriptor[3]
           {
@@ -586,9 +586,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_2448ddaf458b45fea3f3ef5181b4bd4a : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_5ac5415f472942a0ab3ea8fa4bb3016a : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_2448ddaf458b45fea3f3ef5181b4bd4a()
+        internal MTHD_5ac5415f472942a0ab3ea8fa4bb3016a()
         {
           this.Initialize("LineCast", false, new ParameterDescriptor[6]
           {
@@ -613,9 +613,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_37d6f2440d544fa28b055a08e9e76819 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_7a1cc5c80835467992e590d3046908b4 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_37d6f2440d544fa28b055a08e9e76819()
+        internal MTHD_7a1cc5c80835467992e590d3046908b4()
         {
           this.Initialize("LineCastOnlyCreatures", false, new ParameterDescriptor[5]
           {
@@ -637,9 +637,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_614b154b568a4d69af0f05e2f41e605e : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_da3f1600469049cf8cf7c37f19dca2bd : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_614b154b568a4d69af0f05e2f41e605e()
+        internal MTHD_da3f1600469049cf8cf7c37f19dca2bd()
         {
           this.Initialize("LineCastOnlyTerrain", false, new ParameterDescriptor[2]
           {
@@ -654,9 +654,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_b14ec8f69dd74d2f9268cfa2db13ae7d : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_e33b2c648307438f966613eb3ce01b51 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_b14ec8f69dd74d2f9268cfa2db13ae7d()
+        internal MTHD_e33b2c648307438f966613eb3ce01b51()
         {
           this.Initialize("ShowInfo", false, new ParameterDescriptor[4]
           {
@@ -689,9 +689,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_da79e893c5024983b2f1322288254c0b : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_d678de568cc746f78f956314fdb671c2 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_da79e893c5024983b2f1322288254c0b()
+        internal MTHD_d678de568cc746f78f956314fdb671c2()
         {
           this.Initialize("hideInfo", false, new ParameterDescriptor[0], false);
         }
@@ -703,9 +703,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_04719247b7a646209e124c50ea0c3c9c : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_17bfae7573f4456f9d6b6b73e3ac3ae5 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_04719247b7a646209e124c50ea0c3c9c()
+        internal MTHD_17bfae7573f4456f9d6b6b73e3ac3ae5()
         {
           this.Initialize("Talk", false, new ParameterDescriptor[3]
           {
@@ -727,9 +727,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_1fcc307134df4acf8cda850e59a95001 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_4feccb4a046a4503910930acd72320f4 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_1fcc307134df4acf8cda850e59a95001()
+        internal MTHD_4feccb4a046a4503910930acd72320f4()
         {
           this.Initialize("get_turn", false, new ParameterDescriptor[0], false);
         }
@@ -740,9 +740,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_2b67e4b239a54aed8e23caa7c9dcaed6 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_d8972b37ffad4a538722f4e6bade88f1 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_2b67e4b239a54aed8e23caa7c9dcaed6()
+        internal MTHD_d8972b37ffad4a538722f4e6bade88f1()
         {
           this.Initialize("set_turn", false, new ParameterDescriptor[1]
           {
@@ -757,9 +757,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_1dd396c0c78c4d558be4b56042dc060c : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_99b8e970e3e640a8a0f26353f7db5a33 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_1dd396c0c78c4d558be4b56042dc060c()
+        internal MTHD_99b8e970e3e640a8a0f26353f7db5a33()
         {
           this.Initialize("get_timeLimit", false, new ParameterDescriptor[0], false);
         }
@@ -770,9 +770,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_9cabc0cd03d64385b529b08d1f391fd2 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_9c62235fcb3948bcb70434dff3e77a9f : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_9cabc0cd03d64385b529b08d1f391fd2()
+        internal MTHD_9c62235fcb3948bcb70434dff3e77a9f()
         {
           this.Initialize("set_timeLimit", false, new ParameterDescriptor[1]
           {
@@ -787,9 +787,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_469b84ef735f43e2ac475bbd0535cbf6 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_4bf1d120df9a40969881903c31d3b0c9 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_469b84ef735f43e2ac475bbd0535cbf6()
+        internal MTHD_4bf1d120df9a40969881903c31d3b0c9()
         {
           this.Initialize("get_totalTimeElapsed", false, new ParameterDescriptor[0], false);
         }
@@ -800,9 +800,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_92239f3576df451b812664f5d5af6227 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_638ed63b7d23466f8085f6d621d4be36 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_92239f3576df451b812664f5d5af6227()
+        internal MTHD_638ed63b7d23466f8085f6d621d4be36()
         {
           this.Initialize("get_turnTime", false, new ParameterDescriptor[0], false);
         }
@@ -813,9 +813,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_ab47f58cf8794391a650403d97b85798 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_d91bfbda9196443b801d6eb1ad0c69ab : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_ab47f58cf8794391a650403d97b85798()
+        internal MTHD_d91bfbda9196443b801d6eb1ad0c69ab()
         {
           this.Initialize("get_frame", false, new ParameterDescriptor[0], false);
         }
@@ -826,9 +826,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_7e22be292cbe44f5a1599cb26dac8112 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_4fdf6e5a1b2d41a58ce7970317cc2fa5 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_7e22be292cbe44f5a1599cb26dac8112()
+        internal MTHD_4fdf6e5a1b2d41a58ce7970317cc2fa5()
         {
           this.Initialize("random", false, new ParameterDescriptor[2]
           {
@@ -843,9 +843,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_33f33c69e4394ddf800fa5f47e986a74 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_c419425ed9f94a9ebb117dae0ba0b3e7 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_33f33c69e4394ddf800fa5f47e986a74()
+        internal MTHD_c419425ed9f94a9ebb117dae0ba0b3e7()
         {
           this.Initialize("get_winOnDeath", false, new ParameterDescriptor[0], false);
         }
@@ -856,9 +856,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_c6beb0ddda714e89890120f5855a60fb : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_814000228a0e451e9794f8a7048ffde3 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_c6beb0ddda714e89890120f5855a60fb()
+        internal MTHD_814000228a0e451e9794f8a7048ffde3()
         {
           this.Initialize("set_winOnDeath", false, new ParameterDescriptor[1]
           {
@@ -873,9 +873,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_1e5a1b68176b4e4682b7fcab848cbaf2 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_dc251b87312c4f29b873038149a71878 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_1e5a1b68176b4e4682b7fcab848cbaf2()
+        internal MTHD_dc251b87312c4f29b873038149a71878()
         {
           this.Initialize("get_allowMovement", false, new ParameterDescriptor[0], false);
         }
@@ -886,9 +886,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_93f8b966fb2d4d088c07b2ba7c1914a1 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_76844f9627a148bbabe70a2cb35d5cab : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_93f8b966fb2d4d088c07b2ba7c1914a1()
+        internal MTHD_76844f9627a148bbabe70a2cb35d5cab()
         {
           this.Initialize("set_allowMovement", false, new ParameterDescriptor[1]
           {
@@ -903,9 +903,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_f633ddadde7a4fb5b275d4136ee7d58b : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_11d31700976e42e29979b636cc361851 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_f633ddadde7a4fb5b275d4136ee7d58b()
+        internal MTHD_11d31700976e42e29979b636cc361851()
         {
           this.Initialize("get_allowMinionMovement", false, new ParameterDescriptor[0], false);
         }
@@ -916,9 +916,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_572ca7502db54a338bc7f0731338d46d : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_fbf18bf9c5de490185d5cff07e537be4 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_572ca7502db54a338bc7f0731338d46d()
+        internal MTHD_fbf18bf9c5de490185d5cff07e537be4()
         {
           this.Initialize("set_allowMinionMovement", false, new ParameterDescriptor[1]
           {
@@ -933,9 +933,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_b348d7dad840452c87e210307df4a188 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_6b37c2570cba4ea5bbb80a2e0d77502c : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_b348d7dad840452c87e210307df4a188()
+        internal MTHD_6b37c2570cba4ea5bbb80a2e0d77502c()
         {
           this.Initialize("get_allowInput", false, new ParameterDescriptor[0], false);
         }
@@ -946,9 +946,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_e05ff4476a854b17932beff93805d289 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_7c6e48b0eef247c2ace0c013d076a63c : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_e05ff4476a854b17932beff93805d289()
+        internal MTHD_7c6e48b0eef247c2ace0c013d076a63c()
         {
           this.Initialize("set_allowInput", false, new ParameterDescriptor[1]
           {
@@ -963,9 +963,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_2acf003e50fd48e69bb8504c5a2ee7d3 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_8fd49f34e20443a38829de76ad2f05cd : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_2acf003e50fd48e69bb8504c5a2ee7d3()
+        internal MTHD_8fd49f34e20443a38829de76ad2f05cd()
         {
           this.Initialize("get_allowCallbacks", false, new ParameterDescriptor[0], false);
         }
@@ -976,9 +976,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_76dc3d289961493faba147e607478eaa : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_fd2f5601ea1b4564806d911dad73d20b : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_76dc3d289961493faba147e607478eaa()
+        internal MTHD_fd2f5601ea1b4564806d911dad73d20b()
         {
           this.Initialize("set_allowCallbacks", false, new ParameterDescriptor[1]
           {
@@ -993,9 +993,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_5a9f30cd6c664f6fb62204d0631a7f1e : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_8fdd8a6de00f49559353d19437042171 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_5a9f30cd6c664f6fb62204d0631a7f1e()
+        internal MTHD_8fdd8a6de00f49559353d19437042171()
         {
           this.Initialize("get_allowSkipTurn", false, new ParameterDescriptor[0], false);
         }
@@ -1006,9 +1006,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_63fc7b21a2c7482a8a45773010e29f61 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_3a6e6c5fd9d64148b6f5e44653c9ff4a : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_63fc7b21a2c7482a8a45773010e29f61()
+        internal MTHD_3a6e6c5fd9d64148b6f5e44653c9ff4a()
         {
           this.Initialize("set_allowSkipTurn", false, new ParameterDescriptor[1]
           {
@@ -1023,9 +1023,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_564f19fbb2184c9b8d38b2942aafb20e : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_1aa6d35f271b4bc7b808d99a16faaa95 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_564f19fbb2184c9b8d38b2942aafb20e()
+        internal MTHD_1aa6d35f271b4bc7b808d99a16faaa95()
         {
           this.Initialize("get_terrainDestruction", false, new ParameterDescriptor[0], false);
         }
@@ -1036,9 +1036,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_23877a2abade4edd880d739edf42921f : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_32e31803aa4a40679f09210f0631906d : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_23877a2abade4edd880d739edf42921f()
+        internal MTHD_32e31803aa4a40679f09210f0631906d()
         {
           this.Initialize("set_terrainDestruction", false, new ParameterDescriptor[1]
           {
@@ -1053,9 +1053,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_85df6cf68e8e40d399c2d07038441e5a : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_2a3b67385ddb4e59bce08b40b03214d4 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_85df6cf68e8e40d399c2d07038441e5a()
+        internal MTHD_2a3b67385ddb4e59bce08b40b03214d4()
         {
           this.Initialize("get_takeDamage", false, new ParameterDescriptor[0], false);
         }
@@ -1066,9 +1066,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_b3eb32178d1645e399d03bf7750e0e3d : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_8b28deb23ab4481c9bac0a0be5af6443 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_b3eb32178d1645e399d03bf7750e0e3d()
+        internal MTHD_8b28deb23ab4481c9bac0a0be5af6443()
         {
           this.Initialize("set_takeDamage", false, new ParameterDescriptor[1]
           {
@@ -1083,9 +1083,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_958527a99d3947f2b532ef08bf9138c7 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_288def38addd49908b000c17d5d85841 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_958527a99d3947f2b532ef08bf9138c7()
+        internal MTHD_288def38addd49908b000c17d5d85841()
         {
           this.Initialize("get_armageddon", false, new ParameterDescriptor[0], false);
         }
@@ -1096,9 +1096,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_7460359d69174bfcbd28ab614021ad74 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_a180b92206e349cdbfd2e23f122f9de9 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_7460359d69174bfcbd28ab614021ad74()
+        internal MTHD_a180b92206e349cdbfd2e23f122f9de9()
         {
           this.Initialize("set_armageddon", false, new ParameterDescriptor[1]
           {
@@ -1113,9 +1113,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_770a05cbce244e78ac12655f4bf098dc : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_38b5043b9d984530af9b5a887cb923c8 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_770a05cbce244e78ac12655f4bf098dc()
+        internal MTHD_38b5043b9d984530af9b5a887cb923c8()
         {
           this.Initialize("get_armageddonTurn", false, new ParameterDescriptor[0], false);
         }
@@ -1126,9 +1126,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_6db8c7cb34f64b12a3fddb19f95e6970 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_8436c3a3c1934348bba28b908f4bdf1b : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_6db8c7cb34f64b12a3fddb19f95e6970()
+        internal MTHD_8436c3a3c1934348bba28b908f4bdf1b()
         {
           this.Initialize("set_armageddonTurn", false, new ParameterDescriptor[1]
           {
@@ -1143,9 +1143,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_d271affc50504b6fa2868b95b3e060db : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_2060fb8c5f194e43a525edffc6a3de12 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_d271affc50504b6fa2868b95b3e060db()
+        internal MTHD_2060fb8c5f194e43a525edffc6a3de12()
         {
           this.Initialize("get_waiting", false, new ParameterDescriptor[0], false);
         }
@@ -1156,9 +1156,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_9d0eefa190114c35869f2aad682612f1 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_f0319173a0054951920bf151180390b6 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_9d0eefa190114c35869f2aad682612f1()
+        internal MTHD_f0319173a0054951920bf151180390b6()
         {
           this.Initialize("get_paused", false, new ParameterDescriptor[0], false);
         }
@@ -1169,9 +1169,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_bffef336f2ac459db25316673b942964 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_fda69ae539534f4b8d6450cab22aa021 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_bffef336f2ac459db25316673b942964()
+        internal MTHD_fda69ae539534f4b8d6450cab22aa021()
         {
           this.Initialize("set_paused", false, new ParameterDescriptor[1]
           {
@@ -1186,9 +1186,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_7ee246d2b7454dbcae81407878469c40 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_0be590dd00bb46f6a711cedd8aebc10e : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_7ee246d2b7454dbcae81407878469c40()
+        internal MTHD_0be590dd00bb46f6a711cedd8aebc10e()
         {
           this.Initialize("get_busy", false, new ParameterDescriptor[0], false);
         }
@@ -1199,9 +1199,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_edd7f27cc6ee446eadc38bcef3b75441 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_339b4b43db3b46eba56c38055143d315 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_edd7f27cc6ee446eadc38bcef3b75441()
+        internal MTHD_339b4b43db3b46eba56c38055143d315()
         {
           this.Initialize("get_ongoing", false, new ParameterDescriptor[0], false);
         }
@@ -1212,9 +1212,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_306a5ebd542f492687c4e5cf01860a5f : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_63534c8479a44737a1327ba28313021c : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_306a5ebd542f492687c4e5cf01860a5f()
+        internal MTHD_63534c8479a44737a1327ba28313021c()
         {
           this.Initialize("get_gravity", false, new ParameterDescriptor[0], false);
         }
@@ -1225,9 +1225,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_25234495d46c4d2983f478d9734e7295 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_396143fe74dc4794a248f12d737eb5a1 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_25234495d46c4d2983f478d9734e7295()
+        internal MTHD_396143fe74dc4794a248f12d737eb5a1()
         {
           this.Initialize("set_gravity", false, new ParameterDescriptor[1]
           {
@@ -1242,9 +1242,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_392eb329c00b47b18a1ac2b836616a04 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_6e14bbf84a72481fa62d5332191b3d87 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_392eb329c00b47b18a1ac2b836616a04()
+        internal MTHD_6e14bbf84a72481fa62d5332191b3d87()
         {
           this.Initialize("get_wind", false, new ParameterDescriptor[0], false);
         }
@@ -1255,9 +1255,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_b24e7a495ba1452a8557f46a83217311 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_826a1a545cc24abdbedbdd9d43d405ff : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_b24e7a495ba1452a8557f46a83217311()
+        internal MTHD_826a1a545cc24abdbedbdd9d43d405ff()
         {
           this.Initialize("set_wind", false, new ParameterDescriptor[1]
           {
@@ -1272,9 +1272,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_8355430805c0485cba89ce5e826bad4e : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_7cddcd8f8c014fd6a0fe90475978146b : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_8355430805c0485cba89ce5e826bad4e()
+        internal MTHD_7cddcd8f8c014fd6a0fe90475978146b()
         {
           this.Initialize("get_windDir", false, new ParameterDescriptor[0], false);
         }
@@ -1285,9 +1285,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_373dadef8e5048f0b9ba5f4a1bf9865f : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_f8c4d3f95c054a7eb1df8fd16b451ee5 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_373dadef8e5048f0b9ba5f4a1bf9865f()
+        internal MTHD_f8c4d3f95c054a7eb1df8fd16b451ee5()
         {
           this.Initialize("set_windDir", false, new ParameterDescriptor[1]
           {
@@ -1302,9 +1302,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_7672811731654e399bea0553bc8e4af5 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_f4181b068b1b412fb9e0912f3ce0af79 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_7672811731654e399bea0553bc8e4af5()
+        internal MTHD_f4181b068b1b412fb9e0912f3ce0af79()
         {
           this.Initialize("get_windPower", false, new ParameterDescriptor[0], false);
         }
@@ -1315,9 +1315,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_f4eba77fc6d74e66822a607742b953fb : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_397189f3ff0541b2bf827366584adc2b : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_f4eba77fc6d74e66822a607742b953fb()
+        internal MTHD_397189f3ff0541b2bf827366584adc2b()
         {
           this.Initialize("set_windPower", false, new ParameterDescriptor[1]
           {
@@ -1332,9 +1332,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_89d8f61563124446b132f20cc4619bd2 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_c2bfc8517f8647cab9e1b8641f874026 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_89d8f61563124446b132f20cc4619bd2()
+        internal MTHD_c2bfc8517f8647cab9e1b8641f874026()
         {
           this.Initialize("get_width", false, new ParameterDescriptor[0], false);
         }
@@ -1345,9 +1345,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_8d057cda041f4566af39dfc5f2f017a3 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_8dede4933a8348b590e3205f8538d35c : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_8d057cda041f4566af39dfc5f2f017a3()
+        internal MTHD_8dede4933a8348b590e3205f8538d35c()
         {
           this.Initialize("get_height", false, new ParameterDescriptor[0], false);
         }
@@ -1358,9 +1358,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_50ac57e24ec947cc97b955255e9eeb72 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_85f61fae09c144faaad240a693ddbe52 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_50ac57e24ec947cc97b955255e9eeb72()
+        internal MTHD_85f61fae09c144faaad240a693ddbe52()
         {
           this.Initialize("get_mousePosition", false, new ParameterDescriptor[0], false);
         }
@@ -1371,9 +1371,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_06cdb73d07e9454d9e4b0e99c19ef88b : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_3755d4ee13014d0aa96a654af2794a60 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_06cdb73d07e9454d9e4b0e99c19ef88b()
+        internal MTHD_3755d4ee13014d0aa96a654af2794a60()
         {
           this.Initialize("get_mouseOverUI", false, new ParameterDescriptor[0], false);
         }
@@ -1384,9 +1384,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_06884788f89d4596a5aec3ddcd3fabde : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_52dccd1eceae416da9f78a91ac827859 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_06884788f89d4596a5aec3ddcd3fabde()
+        internal MTHD_52dccd1eceae416da9f78a91ac827859()
         {
           this.Initialize("worldToCanvas", false, new ParameterDescriptor[1]
           {
@@ -1400,9 +1400,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_8bf62109e55f46868afb54b90348031f : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_83b4460031634d9c90229cbae0d94591 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_8bf62109e55f46868afb54b90348031f()
+        internal MTHD_83b4460031634d9c90229cbae0d94591()
         {
           this.Initialize("canvasToWorld", false, new ParameterDescriptor[1]
           {
@@ -1416,9 +1416,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_af5ee9b389cb429fbf62155945193eaf : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_5a36c74454304581b1db6fd6505265f6 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_af5ee9b389cb429fbf62155945193eaf()
+        internal MTHD_5a36c74454304581b1db6fd6505265f6()
         {
           this.Initialize("get_cameraPosition", false, new ParameterDescriptor[0], false);
         }
@@ -1429,9 +1429,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_38822e95e273465d840e1e07b88182ad : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_ecf6d7bba0444689b3acf3fdd6b24313 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_38822e95e273465d840e1e07b88182ad()
+        internal MTHD_ecf6d7bba0444689b3acf3fdd6b24313()
         {
           this.Initialize("set_cameraPosition", false, new ParameterDescriptor[1]
           {
@@ -1446,9 +1446,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_ea78c0cf03b7452ca47c99fb617de0c1 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_88b1a649f1f54a7391c240320fe8bf95 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_ea78c0cf03b7452ca47c99fb617de0c1()
+        internal MTHD_88b1a649f1f54a7391c240320fe8bf95()
         {
           this.Initialize("get_cameraZoom", false, new ParameterDescriptor[0], false);
         }
@@ -1459,9 +1459,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_7feb724ebc474c31982c9d1391f598cc : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_b5840e54869c41e79509a2fbf35691d3 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_7feb724ebc474c31982c9d1391f598cc()
+        internal MTHD_b5840e54869c41e79509a2fbf35691d3()
         {
           this.Initialize("set_cameraZoom", false, new ParameterDescriptor[1]
           {
@@ -1476,9 +1476,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_a999764929d24cff8d1c829970f4280b : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_46972b9d514941858883d334569f8aa0 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_a999764929d24cff8d1c829970f4280b()
+        internal MTHD_46972b9d514941858883d334569f8aa0()
         {
           this.Initialize("getMapPixel", false, new ParameterDescriptor[2]
           {
@@ -1493,9 +1493,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_b8ed248d939540d095695090464bd104 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_e5fa82b4425f4c1da16c4b377f685133 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_b8ed248d939540d095695090464bd104()
+        internal MTHD_e5fa82b4425f4c1da16c4b377f685133()
         {
           this.Initialize("setMapPixel", false, new ParameterDescriptor[3]
           {
@@ -1512,9 +1512,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_f3751ab4bf404a4bbc9d2f6c6f48420a : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_6c94295583b344bca7708d4ab7e9dbef : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_f3751ab4bf404a4bbc9d2f6c6f48420a()
+        internal MTHD_6c94295583b344bca7708d4ab7e9dbef()
         {
           this.Initialize("Dispose", true, new ParameterDescriptor[0], false);
         }
@@ -1526,9 +1526,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_0c26d16fe695490abff02cf77d3d91ed : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_c732c6e0e82f4dc6b78d7e64d47165b4 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_0c26d16fe695490abff02cf77d3d91ed()
+        internal MTHD_c732c6e0e82f4dc6b78d7e64d47165b4()
         {
           this.Initialize("drawImage", false, new ParameterDescriptor[4]
           {
@@ -1551,9 +1551,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_6155edfd056a41c3836901783cc85915 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_cb5851e2c1de4758b6bb1a413f8e9b2d : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_6155edfd056a41c3836901783cc85915()
+        internal MTHD_cb5851e2c1de4758b6bb1a413f8e9b2d()
         {
           this.Initialize("drawRectangle", false, new ParameterDescriptor[5]
           {
@@ -1572,9 +1572,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_80b6cdd65109401c80abb33e013725c8 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_5d94dd6dcfd4405c83844fdf10124ac2 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_80b6cdd65109401c80abb33e013725c8()
+        internal MTHD_5d94dd6dcfd4405c83844fdf10124ac2()
         {
           this.Initialize("drawEllipseOutline", false, new ParameterDescriptor[6]
           {
@@ -1594,9 +1594,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_1dfff1ca85f24cf2a55a539430c64b44 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_8f8c37a641614f14a990b72ec579b264 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_1dfff1ca85f24cf2a55a539430c64b44()
+        internal MTHD_8f8c37a641614f14a990b72ec579b264()
         {
           this.Initialize("drawEllipse", false, new ParameterDescriptor[5]
           {
@@ -1615,9 +1615,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_7a93966a6e4d40b7a32f5d300d32635e : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_f8da1e59cd64434fab9c434a618a9aa0 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_7a93966a6e4d40b7a32f5d300d32635e()
+        internal MTHD_f8da1e59cd64434fab9c434a618a9aa0()
         {
           this.Initialize("blit", false, new ParameterDescriptor[4]
           {
@@ -1645,9 +1645,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_b9c98233970e4280b981f27ca0f86e6a : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_c8895c7ec1144bf4a582d1ba94b59286 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_b9c98233970e4280b981f27ca0f86e6a()
+        internal MTHD_c8895c7ec1144bf4a582d1ba94b59286()
         {
           this.Initialize("blitRotate", false, new ParameterDescriptor[5]
           {
@@ -1681,9 +1681,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_4abcc6026f5a417ebb5aeb048ca6f7d3 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_bf96c8b236ca4c11b090ed2e00f8e099 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_4abcc6026f5a417ebb5aeb048ca6f7d3()
+        internal MTHD_bf96c8b236ca4c11b090ed2e00f8e099()
         {
           this.Initialize("applyDraw", false, new ParameterDescriptor[0], false);
         }
@@ -1695,9 +1695,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_27e2ae6e41ac4e4ebd0666128fb6ef14 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_ce2615eaab764ece980c1e7918864ea5 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_27e2ae6e41ac4e4ebd0666128fb6ef14()
+        internal MTHD_ce2615eaab764ece980c1e7918864ea5()
         {
           this.Initialize("get_allowBounce", false, new ParameterDescriptor[0], false);
         }
@@ -1708,9 +1708,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_9cf97f37f4184a4086482e53a96afe2a : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_072facda4ff640edb9ddbd26ee61264e : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_9cf97f37f4184a4086482e53a96afe2a()
+        internal MTHD_072facda4ff640edb9ddbd26ee61264e()
         {
           this.Initialize("set_allowBounce", false, new ParameterDescriptor[1]
           {
@@ -1725,9 +1725,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_66ade50bae674d2d811eb17130df4b66 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_985d87f421fa46e9bbf1a258be1b418a : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_66ade50bae674d2d811eb17130df4b66()
+        internal MTHD_985d87f421fa46e9bbf1a258be1b418a()
         {
           this.Initialize("get_isUsingTouchControls", false, new ParameterDescriptor[0], false);
         }
@@ -1738,9 +1738,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_57f3df2736884639b18f41a8a8f44973 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_8e3611519bac43c49f4ba628ee433f5b : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_57f3df2736884639b18f41a8a8f44973()
+        internal MTHD_8e3611519bac43c49f4ba628ee433f5b()
         {
           this.Initialize("clientRefreshSpells", false, new ParameterDescriptor[0], false);
         }
@@ -1752,9 +1752,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_cd2d25459f574476a91bc08561fd766c : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_280950fd692f4527a1b3d7635df62cb8 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_cd2d25459f574476a91bc08561fd766c()
+        internal MTHD_280950fd692f4527a1b3d7635df62cb8()
         {
           this.Initialize("startCoroutine", false, new ParameterDescriptor[4]
           {
@@ -1782,9 +1782,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_b85c84428fc34316b7c47cadf0944529 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_c8629233e8c94df8b6950707811109b9 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_b85c84428fc34316b7c47cadf0944529()
+        internal MTHD_c8629233e8c94df8b6950707811109b9()
         {
           this.Initialize("devCommand", false, new ParameterDescriptor[2]
           {
@@ -1805,9 +1805,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_422aab0cec0b4ac3a22fa0d4f5606143 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_15d017a7b00941659adcc79d7f5f8de2 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_422aab0cec0b4ac3a22fa0d4f5606143()
+        internal MTHD_15d017a7b00941659adcc79d7f5f8de2()
         {
           this.Initialize("win", false, new ParameterDescriptor[0], false);
         }
@@ -1819,9 +1819,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_98a70dccfd9f414d8b292909915b0f4c : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_7f318288396146dbb1c67a947c1933af : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_98a70dccfd9f414d8b292909915b0f4c()
+        internal MTHD_7f318288396146dbb1c67a947c1933af()
         {
           this.Initialize("lose", false, new ParameterDescriptor[0], false);
         }
@@ -1833,9 +1833,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_8d2edf46b9494545ae6561accd2ad7e4 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_8360da7e213c4ce6998d59ea48633c03 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_8d2edf46b9494545ae6561accd2ad7e4()
+        internal MTHD_8360da7e213c4ce6998d59ea48633c03()
         {
           this.Initialize("nextTurn", false, new ParameterDescriptor[0], false);
         }
@@ -1847,9 +1847,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_bc22200034a54775b9d6bb77c445b85f : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_b36e86d3109140868268c5f598b53877 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_bc22200034a54775b9d6bb77c445b85f()
+        internal MTHD_b36e86d3109140868268c5f598b53877()
         {
           this.Initialize("resetMap", false, new ParameterDescriptor[0], false);
         }
@@ -1861,9 +1861,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_0d8a544868144bd3ab5a7973e40eabdc : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_a7ce8727121b45b3abfcd2bfa97b6723 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_0d8a544868144bd3ab5a7973e40eabdc()
+        internal MTHD_a7ce8727121b45b3abfcd2bfa97b6723()
         {
           this.Initialize("clearMap", false, new ParameterDescriptor[2]
           {
@@ -1889,9 +1889,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_9e4bc53cddf54f018fbd3e762e7def5b : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_73be14ff391b422dbc6122c4f1bfbafe : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_9e4bc53cddf54f018fbd3e762e7def5b()
+        internal MTHD_73be14ff391b422dbc6122c4f1bfbafe()
         {
           this.Initialize("getSpell", true, new ParameterDescriptor[1]
           {
@@ -1905,9 +1905,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_525d612e9bb84298b64012bc8160063e : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_b0d4beafc4e24815aacde5022a49e042 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_525d612e9bb84298b64012bc8160063e()
+        internal MTHD_b0d4beafc4e24815aacde5022a49e042()
         {
           this.Initialize("getSpellEnum", true, new ParameterDescriptor[1]
           {
@@ -1921,9 +1921,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_b4a791eadd534e47aa882bd31b5ab5a5 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_4123af41c1244dcda6e00d7331dd0c37 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_b4a791eadd534e47aa882bd31b5ab5a5()
+        internal MTHD_4123af41c1244dcda6e00d7331dd0c37()
         {
           this.Initialize("getSpellName", true, new ParameterDescriptor[1]
           {
@@ -1937,9 +1937,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_8c7858bf466b4ad59ebcd90d9fc7e45f : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_650c6484f6154494ba0b23583f14b191 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_8c7858bf466b4ad59ebcd90d9fc7e45f()
+        internal MTHD_650c6484f6154494ba0b23583f14b191()
         {
           this.Initialize("getMapID", false, new ParameterDescriptor[0], false);
         }
@@ -1950,9 +1950,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_b6b921d8231f40d6a7cc692249219d4b : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_7cdab76a06b441ef82850eb0edaf30b2 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_b6b921d8231f40d6a7cc692249219d4b()
+        internal MTHD_7cdab76a06b441ef82850eb0edaf30b2()
         {
           this.Initialize("getMapRealName", true, new ParameterDescriptor[1]
           {
@@ -1966,9 +1966,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_64353c6559f14fb9addd5467cb88c488 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_4a7956c6dce94c839fee1218fc885fa2 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_64353c6559f14fb9addd5467cb88c488()
+        internal MTHD_4a7956c6dce94c839fee1218fc885fa2()
         {
           this.Initialize("getMapShortName", true, new ParameterDescriptor[1]
           {
@@ -1982,9 +1982,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_d5947b6eab424c7197f871720eeaeb59 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_4dae990e38194cb59760fbe7a67223b5 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_d5947b6eab424c7197f871720eeaeb59()
+        internal MTHD_4dae990e38194cb59760fbe7a67223b5()
         {
           this.Initialize("getArmageddonName", false, new ParameterDescriptor[1]
           {
@@ -1998,9 +1998,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_2d837450d30245daa5850cb72f9f4abe : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_93738d69633145e6b91beba8be49567f : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_2d837450d30245daa5850cb72f9f4abe()
+        internal MTHD_93738d69633145e6b91beba8be49567f()
         {
           this.Initialize("panCamera", false, new ParameterDescriptor[2]
           {
@@ -2021,9 +2021,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_4323073adc0f470b8870ee65f7e24fd6 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_dc234c61adfe4f86a6ba8f9c4cbee627 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_4323073adc0f470b8870ee65f7e24fd6()
+        internal MTHD_dc234c61adfe4f86a6ba8f9c4cbee627()
         {
           this.Initialize("cameraFollow", false, new ParameterDescriptor[2]
           {
@@ -2044,9 +2044,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_527b57b162994b93be0b046738bd2f9f : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_8e9f26c0f5364aaaa3cae6c087904597 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_527b57b162994b93be0b046738bd2f9f()
+        internal MTHD_8e9f26c0f5364aaaa3cae6c087904597()
         {
           this.Initialize("getInputString", false, new ParameterDescriptor[0], false);
         }
@@ -2057,9 +2057,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_b1f65e4217cb4c9fa4ef18fb476acff8 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_eb016aa45d084be0a4bf265757d5ecb1 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_b1f65e4217cb4c9fa4ef18fb476acff8()
+        internal MTHD_eb016aa45d084be0a4bf265757d5ecb1()
         {
           this.Initialize("get_screenWidth", false, new ParameterDescriptor[0], false);
         }
@@ -2070,9 +2070,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_4d0ce82d3db1422793078065a8772cd6 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_a8dad25210d34a36b9fb94a4c9989f9d : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_4d0ce82d3db1422793078065a8772cd6()
+        internal MTHD_a8dad25210d34a36b9fb94a4c9989f9d()
         {
           this.Initialize("get_screenHeight", false, new ParameterDescriptor[0], false);
         }
@@ -2083,9 +2083,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_1d36ec7c7b964bfe923d02a80bbe4a8a : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_74bc463a23f244a288ee7604f7ee2dc4 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_1d36ec7c7b964bfe923d02a80bbe4a8a()
+        internal MTHD_74bc463a23f244a288ee7604f7ee2dc4()
         {
           this.Initialize("createCreature", false, new ParameterDescriptor[2]
           {
@@ -2100,9 +2100,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_518b9529477e47faa683123e1f8e0632 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_772923f0614a45f9839b279a56a3e0ff : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_518b9529477e47faa683123e1f8e0632()
+        internal MTHD_772923f0614a45f9839b279a56a3e0ff()
         {
           this.Initialize("clearIndicators", false, new ParameterDescriptor[0], false);
         }
@@ -2114,9 +2114,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_fbdafdf0c2b340d3a3437bc89dd17ead : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_2d97b5039ff2489685ea81cb404f535b : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_fbdafdf0c2b340d3a3437bc89dd17ead()
+        internal MTHD_2d97b5039ff2489685ea81cb404f535b()
         {
           this.Initialize("createIndicator", false, new ParameterDescriptor[6]
           {
@@ -2139,9 +2139,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_61884a20fe2142eab123024e63e58036 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_7996de09f56c4bfbaf39ba3212be32e6 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_61884a20fe2142eab123024e63e58036()
+        internal MTHD_7996de09f56c4bfbaf39ba3212be32e6()
         {
           this.Initialize("createIndicator", false, new ParameterDescriptor[6]
           {
@@ -2166,9 +2166,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_8e55606e13a844b4bc2d50adda14ad9e : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_76bfe2a2651c4792b1440850a6013305 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_8e55606e13a844b4bc2d50adda14ad9e()
+        internal MTHD_76bfe2a2651c4792b1440850a6013305()
         {
           this.Initialize("getKeyBinds", false, new ParameterDescriptor[1]
           {
@@ -2182,9 +2182,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_705344dfc0d54125ba07bc27dabc622d : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_aa0803ed89984a5d896ea0f1f63260ab : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_705344dfc0d54125ba07bc27dabc622d()
+        internal MTHD_aa0803ed89984a5d896ea0f1f63260ab()
         {
           this.Initialize("Equals", false, new ParameterDescriptor[1]
           {
@@ -2198,9 +2198,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_e5c283e5ba4a43f98426bd3c54ca8faa : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_2c416382f8224dd58662b80eed3191d1 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_e5c283e5ba4a43f98426bd3c54ca8faa()
+        internal MTHD_2c416382f8224dd58662b80eed3191d1()
         {
           this.Initialize("GetHashCode", false, new ParameterDescriptor[0], false);
         }
@@ -2211,9 +2211,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_e0a3e55b5cdf45548e0020aa63a7c773 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_ef80a931f7824a6781f443f16331c920 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_e0a3e55b5cdf45548e0020aa63a7c773()
+        internal MTHD_ef80a931f7824a6781f443f16331c920()
         {
           this.Initialize("GetType", false, new ParameterDescriptor[0], false);
         }
@@ -2224,9 +2224,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_e9509bcdbdfc4a3f84a338730768aa76 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_f65a18d9b2b745eeac5717c7c7e55696 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_e9509bcdbdfc4a3f84a338730768aa76()
+        internal MTHD_f65a18d9b2b745eeac5717c7c7e55696()
         {
           this.Initialize("ToString", false, new ParameterDescriptor[0], false);
         }
@@ -2237,9 +2237,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_38ec9298b6784d6fb7a18a73dca40a1d : HardwiredMemberDescriptor
+      private sealed class PROP_6814a38e082442a59e1d51af8f6273d2 : HardwiredMemberDescriptor
       {
-        internal PROP_38ec9298b6784d6fb7a18a73dca40a1d()
+        internal PROP_6814a38e082442a59e1d51af8f6273d2()
           : base(typeof (int), "turn", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -2255,9 +2255,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_0a2942716cf3440ba93b42a113569bce : HardwiredMemberDescriptor
+      private sealed class PROP_0385e3c87e094d6b8c415f35cfddabff : HardwiredMemberDescriptor
       {
-        internal PROP_0a2942716cf3440ba93b42a113569bce()
+        internal PROP_0385e3c87e094d6b8c415f35cfddabff()
           : base(typeof (int), "timeLimit", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -2273,9 +2273,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_139480da97244493a30c35baeb991134 : HardwiredMemberDescriptor
+      private sealed class PROP_932c2a1f29674fc3935a71bc9b3c9b69 : HardwiredMemberDescriptor
       {
-        internal PROP_139480da97244493a30c35baeb991134()
+        internal PROP_932c2a1f29674fc3935a71bc9b3c9b69()
           : base(typeof (double), "totalTimeElapsed", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -2286,9 +2286,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_ffb52947e4bf4a8fb40008d5b4334994 : HardwiredMemberDescriptor
+      private sealed class PROP_ddf73e61ca984f299aa515159a01e521 : HardwiredMemberDescriptor
       {
-        internal PROP_ffb52947e4bf4a8fb40008d5b4334994()
+        internal PROP_ddf73e61ca984f299aa515159a01e521()
           : base(typeof (double), "turnTime", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -2299,9 +2299,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_1eccee4b2e524b1da7db92c58ac19b2d : HardwiredMemberDescriptor
+      private sealed class PROP_7386b0bc28604694bbcb8eb707666450 : HardwiredMemberDescriptor
       {
-        internal PROP_1eccee4b2e524b1da7db92c58ac19b2d()
+        internal PROP_7386b0bc28604694bbcb8eb707666450()
           : base(typeof (int), "frame", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -2312,9 +2312,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_4d4e2cc08e4e4ef5ad76eea4d02d0314 : HardwiredMemberDescriptor
+      private sealed class PROP_27b690ffc4bc432d8500c320df35ee02 : HardwiredMemberDescriptor
       {
-        internal PROP_4d4e2cc08e4e4ef5ad76eea4d02d0314()
+        internal PROP_27b690ffc4bc432d8500c320df35ee02()
           : base(typeof (bool), "winOnDeath", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -2330,9 +2330,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_57bb3566e0e44eddafc21b6add38431e : HardwiredMemberDescriptor
+      private sealed class PROP_c7649aca59c34299b12fc9c93659f0d4 : HardwiredMemberDescriptor
       {
-        internal PROP_57bb3566e0e44eddafc21b6add38431e()
+        internal PROP_c7649aca59c34299b12fc9c93659f0d4()
           : base(typeof (bool), "allowMovement", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -2348,9 +2348,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_8a451d596eac4e4c93f5154f7437c316 : HardwiredMemberDescriptor
+      private sealed class PROP_e1749ea7cf7a4e04b7ba51a29681bfc2 : HardwiredMemberDescriptor
       {
-        internal PROP_8a451d596eac4e4c93f5154f7437c316()
+        internal PROP_e1749ea7cf7a4e04b7ba51a29681bfc2()
           : base(typeof (bool), "allowMinionMovement", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -2366,9 +2366,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_87d37f2d2377414bac455f3880995913 : HardwiredMemberDescriptor
+      private sealed class PROP_df330463ca2e4c368d6e0c8a49347629 : HardwiredMemberDescriptor
       {
-        internal PROP_87d37f2d2377414bac455f3880995913()
+        internal PROP_df330463ca2e4c368d6e0c8a49347629()
           : base(typeof (bool), "allowInput", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -2384,9 +2384,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_a3f6644e4f784ddcaf55c346a414b32f : HardwiredMemberDescriptor
+      private sealed class PROP_8f7266e724b840a8be04951cda6e8f2d : HardwiredMemberDescriptor
       {
-        internal PROP_a3f6644e4f784ddcaf55c346a414b32f()
+        internal PROP_8f7266e724b840a8be04951cda6e8f2d()
           : base(typeof (bool), "allowCallbacks", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -2402,9 +2402,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_8d333aa76cda4699a11b95067e612faf : HardwiredMemberDescriptor
+      private sealed class PROP_aaac8a445f664020bfb2f5c1cbbab017 : HardwiredMemberDescriptor
       {
-        internal PROP_8d333aa76cda4699a11b95067e612faf()
+        internal PROP_aaac8a445f664020bfb2f5c1cbbab017()
           : base(typeof (bool), "allowSkipTurn", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -2420,9 +2420,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_71b1011dcee949cf8cfc7ba3f626ba70 : HardwiredMemberDescriptor
+      private sealed class PROP_1c4bd6a31c8f454787bee9310eda0c73 : HardwiredMemberDescriptor
       {
-        internal PROP_71b1011dcee949cf8cfc7ba3f626ba70()
+        internal PROP_1c4bd6a31c8f454787bee9310eda0c73()
           : base(typeof (bool), "terrainDestruction", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -2438,9 +2438,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_44d46f2fef6348b29451e748f63239ce : HardwiredMemberDescriptor
+      private sealed class PROP_9d685a85c9d7477fb3d90450b16f0084 : HardwiredMemberDescriptor
       {
-        internal PROP_44d46f2fef6348b29451e748f63239ce()
+        internal PROP_9d685a85c9d7477fb3d90450b16f0084()
           : base(typeof (bool), "takeDamage", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -2456,9 +2456,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_f58e6789830146f98f5b7006cea31eef : HardwiredMemberDescriptor
+      private sealed class PROP_b24162e4338e40f89d1e0d94729c5d31 : HardwiredMemberDescriptor
       {
-        internal PROP_f58e6789830146f98f5b7006cea31eef()
+        internal PROP_b24162e4338e40f89d1e0d94729c5d31()
           : base(typeof (MapEnum), "armageddon", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -2474,9 +2474,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_06b729976964410d86c20b5d4dd23fb6 : HardwiredMemberDescriptor
+      private sealed class PROP_b11ebf5e6ac9425aae59ef16716b6899 : HardwiredMemberDescriptor
       {
-        internal PROP_06b729976964410d86c20b5d4dd23fb6()
+        internal PROP_b11ebf5e6ac9425aae59ef16716b6899()
           : base(typeof (int), "armageddonTurn", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -2492,9 +2492,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_5b2c75b5467740f385c65d2c3244b4e6 : HardwiredMemberDescriptor
+      private sealed class PROP_1c0e12192e684de29f16d733db38dcdd : HardwiredMemberDescriptor
       {
-        internal PROP_5b2c75b5467740f385c65d2c3244b4e6()
+        internal PROP_1c0e12192e684de29f16d733db38dcdd()
           : base(typeof (bool), "waiting", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -2505,9 +2505,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_b7fe60c2f7d04976aeb8fb1d9487e92b : HardwiredMemberDescriptor
+      private sealed class PROP_c0f33a8b6d3143e392782f424907d709 : HardwiredMemberDescriptor
       {
-        internal PROP_b7fe60c2f7d04976aeb8fb1d9487e92b()
+        internal PROP_c0f33a8b6d3143e392782f424907d709()
           : base(typeof (bool), "paused", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -2523,9 +2523,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_a7527d93a00f4effa4da11fc1cccc1ef : HardwiredMemberDescriptor
+      private sealed class PROP_6beda7b14826482c9b39288520516a70 : HardwiredMemberDescriptor
       {
-        internal PROP_a7527d93a00f4effa4da11fc1cccc1ef()
+        internal PROP_6beda7b14826482c9b39288520516a70()
           : base(typeof (bool), "busy", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -2536,9 +2536,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_f54a499d9f9b4082877994d76f5338c5 : HardwiredMemberDescriptor
+      private sealed class PROP_259ffffd85974a96897323571e92a1e9 : HardwiredMemberDescriptor
       {
-        internal PROP_f54a499d9f9b4082877994d76f5338c5()
+        internal PROP_259ffffd85974a96897323571e92a1e9()
           : base(typeof (bool), "ongoing", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -2549,9 +2549,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_ee88893eb3a44e87b9d57ecba022861a : HardwiredMemberDescriptor
+      private sealed class PROP_891b6eb337c44063ad95e82e6410f37f : HardwiredMemberDescriptor
       {
-        internal PROP_ee88893eb3a44e87b9d57ecba022861a()
+        internal PROP_891b6eb337c44063ad95e82e6410f37f()
           : base(typeof (double), "gravity", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -2567,9 +2567,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_03bc8a0f46144b52981b2e40f3e00a62 : HardwiredMemberDescriptor
+      private sealed class PROP_c9d8c725136a472b8c583a8a3db8a1c4 : HardwiredMemberDescriptor
       {
-        internal PROP_03bc8a0f46144b52981b2e40f3e00a62()
+        internal PROP_c9d8c725136a472b8c583a8a3db8a1c4()
           : base(typeof (bool), "wind", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -2585,9 +2585,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_b59afaf5972240918f0b22fb532aca63 : HardwiredMemberDescriptor
+      private sealed class PROP_c446f4c7227a4894bed52e080ee6ca20 : HardwiredMemberDescriptor
       {
-        internal PROP_b59afaf5972240918f0b22fb532aca63()
+        internal PROP_c446f4c7227a4894bed52e080ee6ca20()
           : base(typeof (double), "windDir", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -2603,9 +2603,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_1f71c5c3322d44fe95c40963a10ce3e0 : HardwiredMemberDescriptor
+      private sealed class PROP_8ed19bd4655c44cd8a03df84f48ece36 : HardwiredMemberDescriptor
       {
-        internal PROP_1f71c5c3322d44fe95c40963a10ce3e0()
+        internal PROP_8ed19bd4655c44cd8a03df84f48ece36()
           : base(typeof (double), "windPower", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -2621,9 +2621,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_c78a04f93e9f499a8fcb1db8f4f5fbbf : HardwiredMemberDescriptor
+      private sealed class PROP_ac145e4261c742989a45350af30eb954 : HardwiredMemberDescriptor
       {
-        internal PROP_c78a04f93e9f499a8fcb1db8f4f5fbbf()
+        internal PROP_ac145e4261c742989a45350af30eb954()
           : base(typeof (int), "width", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -2634,9 +2634,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_b381e0a7b6ee414ea3431ce117421a87 : HardwiredMemberDescriptor
+      private sealed class PROP_fdc5c27547d54cadae03c17904c9acf2 : HardwiredMemberDescriptor
       {
-        internal PROP_b381e0a7b6ee414ea3431ce117421a87()
+        internal PROP_fdc5c27547d54cadae03c17904c9acf2()
           : base(typeof (int), "height", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -2647,9 +2647,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_d25c5b05191748a99a0ccae5a05a7e8a : HardwiredMemberDescriptor
+      private sealed class PROP_cf3b6fbd73b44744ae97be13c6e3b563 : HardwiredMemberDescriptor
       {
-        internal PROP_d25c5b05191748a99a0ccae5a05a7e8a()
+        internal PROP_cf3b6fbd73b44744ae97be13c6e3b563()
           : base(typeof (Educative.Point), "mousePosition", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -2660,9 +2660,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_681fa740b9a8438e9a62e77e4da6374a : HardwiredMemberDescriptor
+      private sealed class PROP_eddb9afff5924a73b1456d8c640eab2c : HardwiredMemberDescriptor
       {
-        internal PROP_681fa740b9a8438e9a62e77e4da6374a()
+        internal PROP_eddb9afff5924a73b1456d8c640eab2c()
           : base(typeof (bool), "mouseOverUI", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -2673,9 +2673,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_80de89d50d4e4296880673039d7d6477 : HardwiredMemberDescriptor
+      private sealed class PROP_0e9541b581404b958784530ddb780af6 : HardwiredMemberDescriptor
       {
-        internal PROP_80de89d50d4e4296880673039d7d6477()
+        internal PROP_0e9541b581404b958784530ddb780af6()
           : base(typeof (Educative.Point), "cameraPosition", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -2691,9 +2691,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_d6098ba9e0cb4ff988aad3bede650f3a : HardwiredMemberDescriptor
+      private sealed class PROP_79f584c2f4ad406abf2bd38b9a66bdc2 : HardwiredMemberDescriptor
       {
-        internal PROP_d6098ba9e0cb4ff988aad3bede650f3a()
+        internal PROP_79f584c2f4ad406abf2bd38b9a66bdc2()
           : base(typeof (double), "cameraZoom", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -2709,9 +2709,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_ac7b6581182a41a99e0b8d26b0b27c5e : HardwiredMemberDescriptor
+      private sealed class PROP_72d23af6da2049f5a9a9886b3746391f : HardwiredMemberDescriptor
       {
-        internal PROP_ac7b6581182a41a99e0b8d26b0b27c5e()
+        internal PROP_72d23af6da2049f5a9a9886b3746391f()
           : base(typeof (bool), "allowBounce", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -2727,9 +2727,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_5165882cab2547d3b99ad51de12810c3 : HardwiredMemberDescriptor
+      private sealed class PROP_9f10b0ab8729415898f5068b5422552f : HardwiredMemberDescriptor
       {
-        internal PROP_5165882cab2547d3b99ad51de12810c3()
+        internal PROP_9f10b0ab8729415898f5068b5422552f()
           : base(typeof (bool), "isUsingTouchControls", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -2740,9 +2740,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_98b18a683aca4acc8fefac5565c5e00f : HardwiredMemberDescriptor
+      private sealed class PROP_80d85afe78454b4f999a7839366edfd4 : HardwiredMemberDescriptor
       {
-        internal PROP_98b18a683aca4acc8fefac5565c5e00f()
+        internal PROP_80d85afe78454b4f999a7839366edfd4()
           : base(typeof (double), "screenWidth", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -2753,9 +2753,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_e17f554b700d41028f85f9f1f0758592 : HardwiredMemberDescriptor
+      private sealed class PROP_6bc55183221d432cad4e06f84c0955f3 : HardwiredMemberDescriptor
       {
-        internal PROP_e17f554b700d41028f85f9f1f0758592()
+        internal PROP_6bc55183221d432cad4e06f84c0955f3()
           : base(typeof (double), "screenHeight", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -2767,68 +2767,68 @@ namespace MoonSharp
       }
     }
 
-    private sealed class TYPE_3fadb670da064ef58036e9a5f23b9b13 : HardwiredUserDataDescriptor
+    private sealed class TYPE_48019385a7e545d99071733c043c80c3 : HardwiredUserDataDescriptor
     {
-      internal TYPE_3fadb670da064ef58036e9a5f23b9b13()
+      internal TYPE_48019385a7e545d99071733c043c80c3()
         : base(typeof (ContainerPlayer))
       {
         this.AddMember("get_localTurn", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_localTurn", typeof (ContainerPlayer), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_3fadb670da064ef58036e9a5f23b9b13.MTHD_4c8c537ce02e4cc5937e9967cccf0150()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_48019385a7e545d99071733c043c80c3.MTHD_4c31bd6ae6c74f7fbd97515f9afba1de()
         }));
         this.AddMember("set_localTurn", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_localTurn", typeof (ContainerPlayer), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_3fadb670da064ef58036e9a5f23b9b13.MTHD_c4992f820fa7426e8a4809a7b50110a5()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_48019385a7e545d99071733c043c80c3.MTHD_198ce0ad26a440a3b20c60a695ab3662()
         }));
         this.AddMember("get_name", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_name", typeof (ContainerPlayer), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_3fadb670da064ef58036e9a5f23b9b13.MTHD_055370ae7af34ab0a6340a6b1c456ea6()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_48019385a7e545d99071733c043c80c3.MTHD_e28bde300e8c47689d5cf012f4637c6a()
         }));
         this.AddMember("get_team", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_team", typeof (ContainerPlayer), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_3fadb670da064ef58036e9a5f23b9b13.MTHD_3f25c4293f0146d49be04f58529d39b2()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_48019385a7e545d99071733c043c80c3.MTHD_01003bd77c4147e7ac01b616182d4ebe()
         }));
         this.AddMember("get_yourTurn", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_yourTurn", typeof (ContainerPlayer), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_3fadb670da064ef58036e9a5f23b9b13.MTHD_6f095ca096e14b288ed3b6f9e29ede0f()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_48019385a7e545d99071733c043c80c3.MTHD_dc39fc306bd84b00ab09770526b8ae45()
         }));
         this.AddMember("getCreatures", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("getCreatures", typeof (ContainerPlayer), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_3fadb670da064ef58036e9a5f23b9b13.MTHD_453b77b5d83942b683860d649bd97597()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_48019385a7e545d99071733c043c80c3.MTHD_562586d2e3bc4258b801884bf1c096d5()
         }));
         this.AddMember("getCreature", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("getCreature", typeof (ContainerPlayer), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_3fadb670da064ef58036e9a5f23b9b13.MTHD_25d5fd8aa95d42ccbc1a2119a0c72ad3()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_48019385a7e545d99071733c043c80c3.MTHD_ccab2c427d574c969825d0bc6e8db795()
         }));
         this.AddMember("getMinionCount", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("getMinionCount", typeof (ContainerPlayer), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_3fadb670da064ef58036e9a5f23b9b13.MTHD_2d6bd7cbb2ac458da0e004dce4c4ad82()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_48019385a7e545d99071733c043c80c3.MTHD_0e26a6be8d6a46238c59eff51716a9dc()
         }));
         this.AddMember("GetHashCode", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("GetHashCode", typeof (ContainerPlayer), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_3fadb670da064ef58036e9a5f23b9b13.MTHD_7fb1141c72f1472988017451d02c4e68()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_48019385a7e545d99071733c043c80c3.MTHD_e744ec6bd0d441dda6e94caa63bc9749()
         }));
         this.AddMember("Equals", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("Equals", typeof (ContainerPlayer), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_3fadb670da064ef58036e9a5f23b9b13.MTHD_6d7593302f594a189d031ad1316c4a68()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_48019385a7e545d99071733c043c80c3.MTHD_2d5a606e0d3b456eb3b8f629774fceb2()
         }));
         this.AddMember("GetType", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("GetType", typeof (ContainerPlayer), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_3fadb670da064ef58036e9a5f23b9b13.MTHD_24edbd70bb054e0492669d432d6ec14d()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_48019385a7e545d99071733c043c80c3.MTHD_f6d8d7d82a4048aa870f31ba8abfb5c6()
         }));
         this.AddMember("ToString", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("ToString", typeof (ContainerPlayer), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_3fadb670da064ef58036e9a5f23b9b13.MTHD_a6c83e47577a419b95fddb9b1d34cba0()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_48019385a7e545d99071733c043c80c3.MTHD_490900ddcd684479a884b7415f1d8fec()
         }));
-        this.AddMember("localTurn", (IMemberDescriptor) new Bridge.TYPE_3fadb670da064ef58036e9a5f23b9b13.PROP_e861ad02c2ca43048cf8253da17b2d16());
-        this.AddMember("name", (IMemberDescriptor) new Bridge.TYPE_3fadb670da064ef58036e9a5f23b9b13.PROP_103e8f5960964b3287da01f0c56be946());
-        this.AddMember("team", (IMemberDescriptor) new Bridge.TYPE_3fadb670da064ef58036e9a5f23b9b13.PROP_986ab7ed82514f558461b475a7e74f1d());
-        this.AddMember("yourTurn", (IMemberDescriptor) new Bridge.TYPE_3fadb670da064ef58036e9a5f23b9b13.PROP_402e24cf38dc4c77b5e6f670c9bc735c());
+        this.AddMember("localTurn", (IMemberDescriptor) new Bridge.TYPE_48019385a7e545d99071733c043c80c3.PROP_26e8b927ca3441959f4d58db92b876f3());
+        this.AddMember("name", (IMemberDescriptor) new Bridge.TYPE_48019385a7e545d99071733c043c80c3.PROP_4f6fcc120bdb431586d3006d42343ace());
+        this.AddMember("team", (IMemberDescriptor) new Bridge.TYPE_48019385a7e545d99071733c043c80c3.PROP_004ad5caef82403c9d20b16f2ef40b10());
+        this.AddMember("yourTurn", (IMemberDescriptor) new Bridge.TYPE_48019385a7e545d99071733c043c80c3.PROP_54d539a39c8e4c3abf4fab238472683f());
       }
 
-      private sealed class MTHD_4c8c537ce02e4cc5937e9967cccf0150 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_4c31bd6ae6c74f7fbd97515f9afba1de : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_4c8c537ce02e4cc5937e9967cccf0150()
+        internal MTHD_4c31bd6ae6c74f7fbd97515f9afba1de()
         {
           this.Initialize("get_localTurn", false, new ParameterDescriptor[0], false);
         }
@@ -2839,9 +2839,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_c4992f820fa7426e8a4809a7b50110a5 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_198ce0ad26a440a3b20c60a695ab3662 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_c4992f820fa7426e8a4809a7b50110a5()
+        internal MTHD_198ce0ad26a440a3b20c60a695ab3662()
         {
           this.Initialize("set_localTurn", false, new ParameterDescriptor[1]
           {
@@ -2856,9 +2856,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_055370ae7af34ab0a6340a6b1c456ea6 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_e28bde300e8c47689d5cf012f4637c6a : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_055370ae7af34ab0a6340a6b1c456ea6()
+        internal MTHD_e28bde300e8c47689d5cf012f4637c6a()
         {
           this.Initialize("get_name", false, new ParameterDescriptor[0], false);
         }
@@ -2869,9 +2869,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_3f25c4293f0146d49be04f58529d39b2 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_01003bd77c4147e7ac01b616182d4ebe : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_3f25c4293f0146d49be04f58529d39b2()
+        internal MTHD_01003bd77c4147e7ac01b616182d4ebe()
         {
           this.Initialize("get_team", false, new ParameterDescriptor[0], false);
         }
@@ -2882,9 +2882,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_6f095ca096e14b288ed3b6f9e29ede0f : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_dc39fc306bd84b00ab09770526b8ae45 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_6f095ca096e14b288ed3b6f9e29ede0f()
+        internal MTHD_dc39fc306bd84b00ab09770526b8ae45()
         {
           this.Initialize("get_yourTurn", false, new ParameterDescriptor[0], false);
         }
@@ -2895,9 +2895,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_453b77b5d83942b683860d649bd97597 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_562586d2e3bc4258b801884bf1c096d5 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_453b77b5d83942b683860d649bd97597()
+        internal MTHD_562586d2e3bc4258b801884bf1c096d5()
         {
           this.Initialize("getCreatures", false, new ParameterDescriptor[1]
           {
@@ -2911,9 +2911,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_25d5fd8aa95d42ccbc1a2119a0c72ad3 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_ccab2c427d574c969825d0bc6e8db795 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_25d5fd8aa95d42ccbc1a2119a0c72ad3()
+        internal MTHD_ccab2c427d574c969825d0bc6e8db795()
         {
           this.Initialize("getCreature", false, new ParameterDescriptor[1]
           {
@@ -2927,9 +2927,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_2d6bd7cbb2ac458da0e004dce4c4ad82 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_0e26a6be8d6a46238c59eff51716a9dc : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_2d6bd7cbb2ac458da0e004dce4c4ad82()
+        internal MTHD_0e26a6be8d6a46238c59eff51716a9dc()
         {
           this.Initialize("getMinionCount", false, new ParameterDescriptor[0], false);
         }
@@ -2940,9 +2940,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_7fb1141c72f1472988017451d02c4e68 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_e744ec6bd0d441dda6e94caa63bc9749 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_7fb1141c72f1472988017451d02c4e68()
+        internal MTHD_e744ec6bd0d441dda6e94caa63bc9749()
         {
           this.Initialize("GetHashCode", false, new ParameterDescriptor[0], false);
         }
@@ -2953,9 +2953,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_6d7593302f594a189d031ad1316c4a68 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_2d5a606e0d3b456eb3b8f629774fceb2 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_6d7593302f594a189d031ad1316c4a68()
+        internal MTHD_2d5a606e0d3b456eb3b8f629774fceb2()
         {
           this.Initialize("Equals", false, new ParameterDescriptor[1]
           {
@@ -2969,9 +2969,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_24edbd70bb054e0492669d432d6ec14d : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_f6d8d7d82a4048aa870f31ba8abfb5c6 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_24edbd70bb054e0492669d432d6ec14d()
+        internal MTHD_f6d8d7d82a4048aa870f31ba8abfb5c6()
         {
           this.Initialize("GetType", false, new ParameterDescriptor[0], false);
         }
@@ -2982,9 +2982,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_a6c83e47577a419b95fddb9b1d34cba0 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_490900ddcd684479a884b7415f1d8fec : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_a6c83e47577a419b95fddb9b1d34cba0()
+        internal MTHD_490900ddcd684479a884b7415f1d8fec()
         {
           this.Initialize("ToString", false, new ParameterDescriptor[0], false);
         }
@@ -2995,9 +2995,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_e861ad02c2ca43048cf8253da17b2d16 : HardwiredMemberDescriptor
+      private sealed class PROP_26e8b927ca3441959f4d58db92b876f3 : HardwiredMemberDescriptor
       {
-        internal PROP_e861ad02c2ca43048cf8253da17b2d16()
+        internal PROP_26e8b927ca3441959f4d58db92b876f3()
           : base(typeof (int), "localTurn", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -3013,9 +3013,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_103e8f5960964b3287da01f0c56be946 : HardwiredMemberDescriptor
+      private sealed class PROP_4f6fcc120bdb431586d3006d42343ace : HardwiredMemberDescriptor
       {
-        internal PROP_103e8f5960964b3287da01f0c56be946()
+        internal PROP_4f6fcc120bdb431586d3006d42343ace()
           : base(typeof (string), "name", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -3026,9 +3026,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_986ab7ed82514f558461b475a7e74f1d : HardwiredMemberDescriptor
+      private sealed class PROP_004ad5caef82403c9d20b16f2ef40b10 : HardwiredMemberDescriptor
       {
-        internal PROP_986ab7ed82514f558461b475a7e74f1d()
+        internal PROP_004ad5caef82403c9d20b16f2ef40b10()
           : base(typeof (int), "team", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -3039,9 +3039,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_402e24cf38dc4c77b5e6f670c9bc735c : HardwiredMemberDescriptor
+      private sealed class PROP_54d539a39c8e4c3abf4fab238472683f : HardwiredMemberDescriptor
       {
-        internal PROP_402e24cf38dc4c77b5e6f670c9bc735c()
+        internal PROP_54d539a39c8e4c3abf4fab238472683f()
           : base(typeof (bool), "yourTurn", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -3053,402 +3053,402 @@ namespace MoonSharp
       }
     }
 
-    private sealed class TYPE_90481244fc434cba85aac675eebeb297 : HardwiredUserDataDescriptor
+    private sealed class TYPE_f0e953cab8214677b25ce888a8b4b41e : HardwiredUserDataDescriptor
     {
-      internal TYPE_90481244fc434cba85aac675eebeb297()
+      internal TYPE_f0e953cab8214677b25ce888a8b4b41e()
         : base(typeof (ContainerCreature))
       {
         this.AddMember("get_team", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_team", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_b8c59e6d595647f4b489a9ef98b9870d()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_1c6070ca28ec442fbef0b3f78878a768()
         }));
         this.AddMember("get_name", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_name", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_5e87d72fd3e1431199925141e5e10c8b()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_ef5594c54b284f35a5f5507371ce238f()
         }));
         this.AddMember("get_spellEnum", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_spellEnum", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_92df1a6456444d6ab4b13d4e73d3a680()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_41593c507fa0482f93b960a2c0ce22f6()
         }));
         this.AddMember("get_health", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_health", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_32154d1e1c4a41b38a03c355db995bdd()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_1a992559a171489db71cf23823e521b0()
         }));
         this.AddMember("set_health", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_health", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_29483670bb084ab3bcf8948d7d1be8d1()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_b76ae68479b54937892ff664146d4b47()
         }));
         this.AddMember("get_maxHealth", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_maxHealth", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_495766c9e490450f9f68ec673becd130()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_d2bec4a684e641b3a95898a8d20056e7()
         }));
         this.AddMember("set_maxHealth", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_maxHealth", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_fd21c2844b9a4492ac72c61807f696b5()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_6f0f104ac083493394278fbccdd74bcd()
         }));
         this.AddMember("get_healthAndTower", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_healthAndTower", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_03edba8f1c1742b281af50df691d270c()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_4bc3e9961401430a944b73ea654457a5()
         }));
         this.AddMember("get_shield", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_shield", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_361fb2375d9e48498926f279f1d4a27b()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_b30124320c5b4c89b87257c93756c933()
         }));
         this.AddMember("set_shield", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_shield", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_416e2127bd9e44f48efe9ce42a50d595()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_c7dd3a43529a46629bb5fbe6fa94287b()
         }));
         this.AddMember("get_x", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_x", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_845d55b6fdae40b9856be2e1d7d7d60f()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_65aeec31595a4e68aed31a60771aabce()
         }));
         this.AddMember("set_x", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_x", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_f1bb7f3758fa418888415f86580b08a3()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_2556e0c026cf4128aed69bc1a85450f9()
         }));
         this.AddMember("get_y", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_y", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_8723243072b440a1b948667265668042()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_4a6894adab2740a79f095f7eb0143a57()
         }));
         this.AddMember("set_y", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_y", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_26acccbd39104a1f9dacf5e4d3c2b6cd()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_2a8284ae240942aaa5f3a092e415385f()
         }));
         this.AddMember("get_position", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_position", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_83b9510874a64293bf8dc8ce95923b1c()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_02085698df284d2b8b1df233d482ca56()
         }));
         this.AddMember("set_position", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_position", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_2b34a276b55843bb8279175291dcb7f8()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_2c582fcd4a774f579f52151e5429854a()
         }));
         this.AddMember("get_parent", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_parent", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_591b0530df0b43d8adaad5001ff318cb()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_4a992505d536477d950830f73117cd6d()
         }));
         this.AddMember("set_parent", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_parent", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_b77fcf8e94464119a2cb86f476258cee()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_41d45dab7acf42b5954d5c25f765a548()
         }));
         this.AddMember("get_weight", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_weight", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_96b0fb831177491f8bb499030cce6366()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_01cd53819dc24edf927e02e9eed23e51()
         }));
         this.AddMember("set_weight", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_weight", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_979a894486774fe68fec22ccc4e779c7()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_88fa88af145b4b24932c6b9e6382b082()
         }));
         this.AddMember("get_radius", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_radius", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_ce735f078c08403d944c78aa97939de3()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_274e16f83a59467cbd1b678e74124872()
         }));
         this.AddMember("set_radius", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_radius", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_32a3e41b5b01455ba92a46e96d68615f()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_160f92c35dd94e71afd6abc8e7fca941()
         }));
         this.AddMember("get_inTower", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_inTower", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_be29b369a39844948a6263a50527b4b4()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_d128e078dc0f4a5d90cf1eb99d3e226f()
         }));
         this.AddMember("get_isMoving", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_isMoving", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_cf4b3610e19d4cafacf33c74aa7123dd()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_87d83b722f364c92a6cc03f13812a9e3()
         }));
         this.AddMember("get_stunned", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_stunned", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_f734f3b4cc194d66adfeced1e75cfcd9()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_860c21858af14fb0aa3b0f4967aa1f03()
         }));
         this.AddMember("set_stunned", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_stunned", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_3b5ab5a3b7d44b76941b8f4df8d87190()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_37eb5c85875f4310bd7958804bea19e7()
         }));
         this.AddMember("get_superStunned", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_superStunned", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_a5778b9739dd4f09a8266b3e7cca5549()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_ea8835c2897146aa835e58340b788815()
         }));
         this.AddMember("set_superStunned", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_superStunned", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_99dda9f5ac8f4c0fab789e1605324209()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_1f83cd4bf0dc46269ab4bbb2d1098866()
         }));
         this.AddMember("get_waterWalking", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_waterWalking", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_421ce806a13f4ac79d414094e0e1e317()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_87098adb18d540bfb6e0c98f2619227b()
         }));
         this.AddMember("set_waterWalking", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_waterWalking", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_52dbafd9394443d598f9b2b2884f3782()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_240f67fabb61401baca7ec52fbcf9672()
         }));
         this.AddMember("get_frostWalking", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_frostWalking", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_66df6c74025c497e8540cf15f6aea0ed()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_05d3cea86bdc423bac61c6bd07d0b018()
         }));
         this.AddMember("set_frostWalking", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_frostWalking", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_8393650d72f549b4a6ddabc2dedbb936()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_38e4a72ee2b74cc8b5889e9ffe7985b3()
         }));
         this.AddMember("get_inWater", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_inWater", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_39aaaf5038c9417e934022581cb9ca13()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_4c1ccc2bba9d4d36baa469c3e0994784()
         }));
         this.AddMember("get_diesInWater", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_diesInWater", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_a2c8f3a712c9420eb2f37eb1132d2b73()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_60ffeb4c524c4c8cbc67fece75984f59()
         }));
         this.AddMember("set_diesInWater", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_diesInWater", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_215bba9e0ef4436bb3e33529d852a796()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_bec3d956b6174058b4cb2ba11ebbca0f()
         }));
         this.AddMember("get_type", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_type", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_58cf9497c7284d7394c01d7c89c8d0c2()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_2f6293996dc549c1b1cec86e7d051b8e()
         }));
         this.AddMember("set_type", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_type", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_e0bbe7ee37b444eeab3f6f3bd6c216a0()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_d33fef1870f44b18857bde05b7485e19()
         }));
         this.AddMember("get_race", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_race", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_412b4d6870fc4165b8b0eb176342e28b()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_7a8fcabbf1384a9b8b562eee0b7e8be5()
         }));
         this.AddMember("set_race", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_race", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_6cba31b604ae4fddbe1aae943e852915()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_a3cdcc14c0354f7097caa8e8ae349565()
         }));
         this.AddMember("get_yourTurn", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_yourTurn", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_1c4d447cb1774954b513ba24b7ccfd94()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_e0f40b0140e3461e97cbd44cac17f11d()
         }));
         this.AddMember("get_isRider", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_isRider", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_2fd243e8d87d4d4595bc002ca61da41b()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_945f994f27f94243a1773d47edd2235a()
         }));
         this.AddMember("get_isMounted", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_isMounted", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_851a709a2c314b7c98431446124bb692()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_1fd7bed1f4f54d2a96dcf204b16288d7()
         }));
         this.AddMember("get_isDead", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_isDead", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_b0b71be096454bd2897480f02478e419()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_d0348e6c357b4379bf9c1ad4cb17153e()
         }));
         this.AddMember("get_isPawn", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_isPawn", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_49a64619d00a48a7a45614607347026b()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_13bfafb92a4c44eeaf9d9607b91247cf()
         }));
         this.AddMember("get_isFlying", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_isFlying", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_354410660ce74145ba12999189ef14ed()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_5a0c7a1a75e944ce8974d0f59e6cb3d1()
         }));
         this.AddMember("set_isFlying", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_isFlying", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_0dd70be2e0144b609b48f1ed8b6ff539()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_5d6b7f6f9552400ba01e297917670c1f()
         }));
         this.AddMember("get_isMountable", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_isMountable", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_1756b50aa75040209b3948b4aa030285()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_9b960b42b47f4dc79ac6dc77abb48800()
         }));
         this.AddMember("get_canMount", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_canMount", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_12246cda6c24464dba3e54d022b7060c()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_38f60fe0940d465d81b173ca1a8a0cb8()
         }));
         this.AddMember("get_arcaneMonster", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_arcaneMonster", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_2864a2d60dab4422bba5988f81a47fed()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_ff365a5d643643d49a986671b894ce43()
         }));
         this.AddMember("set_arcaneMonster", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_arcaneMonster", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_c6084be7444744b689e51f50729e0744()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_1920d122db934f67865dd4d75b30d36a()
         }));
         this.AddMember("get_takeDamage", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_takeDamage", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_965f2e8da669411d8084f99e55e00738()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_60f152c9af5a4dc09baf178e579f49d2()
         }));
         this.AddMember("set_takeDamage", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_takeDamage", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_a8de29acfdac4c88ab362b3c6233c631()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_cdc5910e89d34e98a32e9bf6e0a11f49()
         }));
         this.AddMember("getRider", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("getRider", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_be0b9c8cc9a2476eaaa4ab31889ff230()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_ded0937bd3d44b7681148d55b83d27ee()
         }));
         this.AddMember("getMount", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("getMount", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_953a52fdfa4f456394aac4ca2382faf6()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_20090fac2306459c8224fdcfb8e348d8()
         }));
         this.AddMember("getTower", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("getTower", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_74ce62c4d57945b4b17fb22fc99874c4()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_5ed38fa88acc4b06aed8d0a16d5d42ec()
         }));
         this.AddMember("LongJump", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("LongJump", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_e1618397d0ff4acdbcb383f1dd9ab0c9()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_19735a04a66e4b0b868c7f670a03d303()
         }));
         this.AddMember("HighJump", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("HighJump", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_23a3cf2f373f4e8f8db124b6b26ed874()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_3d0e5c68f42140b6baeedbd501692265()
         }));
         this.AddMember("Walk", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("Walk", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_da177f8ad171406d8df8a801c7585484()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_447f9ee677a64edaa9e6543ad9064784()
         }));
         this.AddMember("setDirection", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("setDirection", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_8f0f46445f5541a99afb5da9899b4b52()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_179b3585160040b6a6b7529f3c429501()
         }));
         this.AddMember("getDirection", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("getDirection", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_1c2768496dc34e97aae4d8e8bcb8bfbf()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_d8b718aa3a1e422bb5fe54d2faa3a787()
         }));
         this.AddMember("getFamiliarLevel", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("getFamiliarLevel", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_34281f8e0f09472793a2099508cd89da()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_25a98100202042089bde78ff98b71d8a()
         }));
         this.AddMember("getActivateableFamiliarLevel", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("getActivateableFamiliarLevel", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_169ad86070e14fd79e0ac8b1dda3ff03()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_b7a71d81fa704dceab347599ecac4b02()
         }));
         this.AddMember("getActivateableFamiliarBookID", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("getActivateableFamiliarBookID", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_474a745a171644f0ae9b519e91021445()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_241ead31dee14c0e87fea3e3909334f6()
         }));
         this.AddMember("increaseFamiliarLevel", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("increaseFamiliarLevel", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_0ab1627ba9334bdb8143c59d0cbda8a3()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_a65b0b5f2b3a4bf59a8f89d92ae58835()
         }));
         this.AddMember("inside", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("inside", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[2]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_6097f6ddd62640fb8e4aa0d5a3e74a6d(),
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_dae733a5479c4294b169296488697d20()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_9aad2d485c5d4096b8c81c757ec8b872(),
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_ce153682c77e4a31b97ac90a0111c8cc()
         }));
         this.AddMember("overlap", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("overlap", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[2]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_63d1b3b472814a8e8aa3a806be8082c1(),
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_95ba03b479cd41fba5bbd2a523834446()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_a114672594b9462e8a86056756889951(),
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_9401573d27384a45a01d86fc15908a91()
         }));
         this.AddMember("die", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("die", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_6a48aff29e1a4ea68a57ec3de73ae36f()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_dfeeb58a0fbf4b5ea8108c0ae04c1507()
         }));
         this.AddMember("addSpell", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("addSpell", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_52039203eee749fda64f1bb022de4b9b()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_a1d40b472f5044fe938352fb9fb8337d()
         }));
         this.AddMember("removeSpell", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("removeSpell", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[2]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_117dc5dd410645e6aacf29b6864370e9(),
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_bc587d82d37a4e55b67730a0c0cda23f()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_15f8d6c730eb42f98fbc855a44ea2b74(),
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_f1c63470d65644c8bac4b55fb25a9c16()
         }));
         this.AddMember("getSpells", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("getSpells", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_106d57cc6a3646e0b94e2015e205ae00()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_0397b0b0840145ce97c09f3fb784e608()
         }));
         this.AddMember("getSpell", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("getSpell", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_4e1edb6c9a504d00bf7571e73b8d339f()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_1c9dc9c4aee8435488c41afe075c3275()
         }));
         this.AddMember("getSpellCount", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("getSpellCount", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_819175bd4c3143eeb98333d96ed896f3()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_b9cd39f55f084b688a29beb63b32d253()
         }));
         this.AddMember("castedCount", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("castedCount", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_df143b3739474cb9aad98b176e6cc37d()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_66767f3cdb214efa969a788ad1bbf997()
         }));
         this.AddMember("castedCountThisTurn", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("castedCountThisTurn", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_6ad2a00276ae4641b92e48821e5275de()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_31d59955bc4a4f0a83c6ede75f1e0283()
         }));
         this.AddMember("castedDamage", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("castedDamage", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_99c593809c7b41519a10429bcd9a39a8()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_c12cab2ca5cf4b469904906dba370195()
         }));
         this.AddMember("getMinionCount", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("getMinionCount", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_6393ae389505418ba31453c1a7b41950()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_473cc3e2ee0742fdb97d63b007febe1c()
         }));
         this.AddMember("castSpell", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("castSpell", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_f4db3cadc046482089d1e8c62fb25b4f()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_4ed01eddc001430997a6b4c20eecb0e8()
         }));
         this.AddMember("angleToFire", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("angleToFire", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_0019629af62749dfb9fc5a4ce06b13ad()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_6c9ad50670d447b99a0f50f6404ccceb()
         }));
         this.AddMember("powerToFire", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("powerToFire", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_7f738b5bea514f4891d7029083f8bc95()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_534c7d85adec43aa90917ee6315fd512()
         }));
         this.AddMember("fireAt", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("fireAt", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[2]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_beb3d8a71ba74291a9d8ab1d6c869d12(),
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_b0cc88e1357f4fb0bbff866470588f9f()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_190ca1f3d73d463095e1e71ddafe7e6a(),
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_f0407f5fb8864051a341967567686197()
         }));
         this.AddMember("getEffectors", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("getEffectors", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[2]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_49dca7164e4048688848bdd73355fe52(),
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_f31aee106a4f499a9fd8b85aae88a223()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_e9a1cbdd20834cf1b6d03a7cad458290(),
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_dd94f1b93f7240a6a7b1a41eb13a9283()
         }));
         this.AddMember("Equals", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("Equals", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_5c8896ae693748159656fe539c286982()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_6cc72a5fc32f458ab362199b36d4162a()
         }));
         this.AddMember("GetHashCode", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("GetHashCode", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_12212107f93443c3938966df8dcd10f3()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_9903cf63776142c0bf6cc5ebf96778e8()
         }));
         this.AddMember("op_Equality", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("op_Equality", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_7a13f03c7212431f80a960116cc19d62()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_d82f7e6c7bfb45679bb807a1eca548df()
         }));
         this.AddMember("op_Inequality", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("op_Inequality", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_a8c760174d3e4268a26bc4c9a0a8ba6e()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_b9f306359b7d427c9ff9e9f42d93c4a8()
         }));
         this.AddMember("GetType", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("GetType", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_bff128b0e5d244d0b7b8dffa51a1d066()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_cde954fd11d74dee81db537585dc546a()
         }));
         this.AddMember("ToString", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("ToString", typeof (ContainerCreature), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.MTHD_43c532f6cdbb4f9cb39499a599c23868()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.MTHD_0ebabf5fc27f43c49690cb43b678235f()
         }));
-        this.AddMember("team", (IMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.PROP_31b2daf0501749c1aeabeaf23aabc46f());
-        this.AddMember("name", (IMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.PROP_1caf38061a3c4bb5912c4d7a7e28daf3());
-        this.AddMember("spellEnum", (IMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.PROP_d756a18627a2445ca36b0018ac2c8bf2());
-        this.AddMember("health", (IMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.PROP_f557fe1ddcd140b8b55d5ea81d8fa2ea());
-        this.AddMember("maxHealth", (IMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.PROP_80e85f8b9a624a6ebadf7a9b09e19281());
-        this.AddMember("healthAndTower", (IMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.PROP_b4a1040f63514be293ae71bd152c08fe());
-        this.AddMember("shield", (IMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.PROP_7776d508d6bc4819b825816fcdf97e1e());
-        this.AddMember("x", (IMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.PROP_b9f830e0c42c46f097b29b98c6e36db6());
-        this.AddMember("y", (IMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.PROP_ad92b2819e534fc5ac48e2602844cac2());
-        this.AddMember("position", (IMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.PROP_f9c193e3814540439ca3271a4b9f0e3d());
-        this.AddMember("parent", (IMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.PROP_e58b10074d324060962b9b720664e5d4());
-        this.AddMember("weight", (IMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.PROP_4fc68c6e5d854e03a21731f8200ee8dd());
-        this.AddMember("radius", (IMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.PROP_fd9bfb1a82424608954d3cb0e153b53f());
-        this.AddMember("inTower", (IMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.PROP_31ed3d8f2da44336b51457fa6dff55a1());
-        this.AddMember("isMoving", (IMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.PROP_e0376727dc5d485ea373f00327792b8a());
-        this.AddMember("stunned", (IMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.PROP_6dd3cadf12e54912a22116fac99cf8ed());
-        this.AddMember("superStunned", (IMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.PROP_4e0961f7e8c94cbaa06111e538e8efd7());
-        this.AddMember("waterWalking", (IMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.PROP_d5a320b83cbd40f5aaccd4a5502844ea());
-        this.AddMember("frostWalking", (IMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.PROP_fc6c70d14e5f405c8c670b60aafd1124());
-        this.AddMember("inWater", (IMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.PROP_9c5a4fc969144918883a8806ba1485d2());
-        this.AddMember("diesInWater", (IMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.PROP_5e7b1fa456524fab9c03801bfa3159d3());
-        this.AddMember("type", (IMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.PROP_f4821f9b1b5b4e03a7a75c125ac928a0());
-        this.AddMember("race", (IMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.PROP_4511879b6e1c4f4bbb7ed26aad50d257());
-        this.AddMember("yourTurn", (IMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.PROP_c3cb2469dd1d4c01a72d9718462df6cb());
-        this.AddMember("isRider", (IMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.PROP_25b8ef5180b04d189a648afbf3a37719());
-        this.AddMember("isMounted", (IMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.PROP_4aabf369af0e40098b1a2fe2c65feade());
-        this.AddMember("isDead", (IMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.PROP_fd9ea0d5c3e94032967fad8bb71a3022());
-        this.AddMember("isPawn", (IMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.PROP_7fff6b0ece1543d6809e0f354f83f46c());
-        this.AddMember("isFlying", (IMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.PROP_d6ee58ec14d24096b728eef99ad72535());
-        this.AddMember("isMountable", (IMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.PROP_10f73484d4e54e51b1ff8c742d86b1d1());
-        this.AddMember("canMount", (IMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.PROP_7a61fb96bfa348c898eb98356c1177a5());
-        this.AddMember("arcaneMonster", (IMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.PROP_5a7d7151669d4267b0ae4d930b0d86fe());
-        this.AddMember("takeDamage", (IMemberDescriptor) new Bridge.TYPE_90481244fc434cba85aac675eebeb297.PROP_afc7efacfc694ffbbf9cd7deff98bbc0());
+        this.AddMember("team", (IMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.PROP_60fd57cbdd4245baaf1f8ff2224aee14());
+        this.AddMember("name", (IMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.PROP_318683fa67124401bebf2675a50cccc6());
+        this.AddMember("spellEnum", (IMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.PROP_dcd278edcbc444fbbb7e10ce53cacbb8());
+        this.AddMember("health", (IMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.PROP_8a4dfa80268540c9a58c24ac22e0cdfa());
+        this.AddMember("maxHealth", (IMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.PROP_ce57ef89c94f4c7585ec545b1e41da2f());
+        this.AddMember("healthAndTower", (IMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.PROP_4836d231e2c346a4b5ccafca4c99e585());
+        this.AddMember("shield", (IMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.PROP_9bfa61aa4b3a423d9d2e1c791d5d2276());
+        this.AddMember("x", (IMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.PROP_f247ec4fabe946218f9639f0280dd43b());
+        this.AddMember("y", (IMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.PROP_2f849e3ab7f94b02aaf52da58dc11c5e());
+        this.AddMember("position", (IMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.PROP_de07af68b0fb42ec9683f5f0f523c3e5());
+        this.AddMember("parent", (IMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.PROP_4511ff1402c34fc18498ea7190bdf418());
+        this.AddMember("weight", (IMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.PROP_7987348f48274250b5aac24c4722a46c());
+        this.AddMember("radius", (IMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.PROP_80901c4362bc498ebd0ded9b06a6ab68());
+        this.AddMember("inTower", (IMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.PROP_1b72d3547a8e4add899afc643fa664ed());
+        this.AddMember("isMoving", (IMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.PROP_1d6eb347e84d47a8b2aadac982c50a1f());
+        this.AddMember("stunned", (IMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.PROP_64a32caffad941079f3a36b8ce3943b4());
+        this.AddMember("superStunned", (IMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.PROP_c9ea70558fb248649a4bed6313fbd056());
+        this.AddMember("waterWalking", (IMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.PROP_af97d31569b84a6885eac7e443e9bc7f());
+        this.AddMember("frostWalking", (IMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.PROP_43115b234ce742cebfd85e926783a28a());
+        this.AddMember("inWater", (IMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.PROP_869fb993376643cca004826621cd065d());
+        this.AddMember("diesInWater", (IMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.PROP_e3a6e76571264df8b601f72a74efafb6());
+        this.AddMember("type", (IMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.PROP_5c6500d1884e4c2f86030492187230ba());
+        this.AddMember("race", (IMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.PROP_3f9cf275462b493b839f64b8762e8e84());
+        this.AddMember("yourTurn", (IMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.PROP_4049c2ce2cc641d594650ec2f655d903());
+        this.AddMember("isRider", (IMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.PROP_1a38cbc3d19249beb7c10793c38531e5());
+        this.AddMember("isMounted", (IMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.PROP_93d453a483544b448e32b369b7c84b32());
+        this.AddMember("isDead", (IMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.PROP_b64372ff6bf84112a3dde9400f697fb5());
+        this.AddMember("isPawn", (IMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.PROP_816d4ef959664e73b0086db6464cb3be());
+        this.AddMember("isFlying", (IMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.PROP_7a54dc3260c44fec9c0110f917a6009e());
+        this.AddMember("isMountable", (IMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.PROP_a1d10ecd0ef64f9897340059a8ff0616());
+        this.AddMember("canMount", (IMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.PROP_4d8025cfe1c748f0bcd569f64d35b4c5());
+        this.AddMember("arcaneMonster", (IMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.PROP_1a0e742672594b22b680decd8cbb9173());
+        this.AddMember("takeDamage", (IMemberDescriptor) new Bridge.TYPE_f0e953cab8214677b25ce888a8b4b41e.PROP_74f6813c4df64c6a873fb5ebbdafcc2f());
       }
 
-      private sealed class MTHD_b8c59e6d595647f4b489a9ef98b9870d : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_1c6070ca28ec442fbef0b3f78878a768 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_b8c59e6d595647f4b489a9ef98b9870d()
+        internal MTHD_1c6070ca28ec442fbef0b3f78878a768()
         {
           this.Initialize("get_team", false, new ParameterDescriptor[0], false);
         }
@@ -3459,9 +3459,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_5e87d72fd3e1431199925141e5e10c8b : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_ef5594c54b284f35a5f5507371ce238f : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_5e87d72fd3e1431199925141e5e10c8b()
+        internal MTHD_ef5594c54b284f35a5f5507371ce238f()
         {
           this.Initialize("get_name", false, new ParameterDescriptor[0], false);
         }
@@ -3472,9 +3472,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_92df1a6456444d6ab4b13d4e73d3a680 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_41593c507fa0482f93b960a2c0ce22f6 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_92df1a6456444d6ab4b13d4e73d3a680()
+        internal MTHD_41593c507fa0482f93b960a2c0ce22f6()
         {
           this.Initialize("get_spellEnum", false, new ParameterDescriptor[0], false);
         }
@@ -3485,9 +3485,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_32154d1e1c4a41b38a03c355db995bdd : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_1a992559a171489db71cf23823e521b0 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_32154d1e1c4a41b38a03c355db995bdd()
+        internal MTHD_1a992559a171489db71cf23823e521b0()
         {
           this.Initialize("get_health", false, new ParameterDescriptor[0], false);
         }
@@ -3498,9 +3498,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_29483670bb084ab3bcf8948d7d1be8d1 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_b76ae68479b54937892ff664146d4b47 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_29483670bb084ab3bcf8948d7d1be8d1()
+        internal MTHD_b76ae68479b54937892ff664146d4b47()
         {
           this.Initialize("set_health", false, new ParameterDescriptor[1]
           {
@@ -3515,9 +3515,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_495766c9e490450f9f68ec673becd130 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_d2bec4a684e641b3a95898a8d20056e7 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_495766c9e490450f9f68ec673becd130()
+        internal MTHD_d2bec4a684e641b3a95898a8d20056e7()
         {
           this.Initialize("get_maxHealth", false, new ParameterDescriptor[0], false);
         }
@@ -3528,9 +3528,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_fd21c2844b9a4492ac72c61807f696b5 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_6f0f104ac083493394278fbccdd74bcd : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_fd21c2844b9a4492ac72c61807f696b5()
+        internal MTHD_6f0f104ac083493394278fbccdd74bcd()
         {
           this.Initialize("set_maxHealth", false, new ParameterDescriptor[1]
           {
@@ -3545,9 +3545,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_03edba8f1c1742b281af50df691d270c : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_4bc3e9961401430a944b73ea654457a5 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_03edba8f1c1742b281af50df691d270c()
+        internal MTHD_4bc3e9961401430a944b73ea654457a5()
         {
           this.Initialize("get_healthAndTower", false, new ParameterDescriptor[0], false);
         }
@@ -3558,9 +3558,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_361fb2375d9e48498926f279f1d4a27b : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_b30124320c5b4c89b87257c93756c933 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_361fb2375d9e48498926f279f1d4a27b()
+        internal MTHD_b30124320c5b4c89b87257c93756c933()
         {
           this.Initialize("get_shield", false, new ParameterDescriptor[0], false);
         }
@@ -3571,9 +3571,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_416e2127bd9e44f48efe9ce42a50d595 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_c7dd3a43529a46629bb5fbe6fa94287b : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_416e2127bd9e44f48efe9ce42a50d595()
+        internal MTHD_c7dd3a43529a46629bb5fbe6fa94287b()
         {
           this.Initialize("set_shield", false, new ParameterDescriptor[1]
           {
@@ -3588,9 +3588,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_845d55b6fdae40b9856be2e1d7d7d60f : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_65aeec31595a4e68aed31a60771aabce : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_845d55b6fdae40b9856be2e1d7d7d60f()
+        internal MTHD_65aeec31595a4e68aed31a60771aabce()
         {
           this.Initialize("get_x", false, new ParameterDescriptor[0], false);
         }
@@ -3601,9 +3601,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_f1bb7f3758fa418888415f86580b08a3 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_2556e0c026cf4128aed69bc1a85450f9 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_f1bb7f3758fa418888415f86580b08a3()
+        internal MTHD_2556e0c026cf4128aed69bc1a85450f9()
         {
           this.Initialize("set_x", false, new ParameterDescriptor[1]
           {
@@ -3618,9 +3618,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_8723243072b440a1b948667265668042 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_4a6894adab2740a79f095f7eb0143a57 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_8723243072b440a1b948667265668042()
+        internal MTHD_4a6894adab2740a79f095f7eb0143a57()
         {
           this.Initialize("get_y", false, new ParameterDescriptor[0], false);
         }
@@ -3631,9 +3631,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_26acccbd39104a1f9dacf5e4d3c2b6cd : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_2a8284ae240942aaa5f3a092e415385f : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_26acccbd39104a1f9dacf5e4d3c2b6cd()
+        internal MTHD_2a8284ae240942aaa5f3a092e415385f()
         {
           this.Initialize("set_y", false, new ParameterDescriptor[1]
           {
@@ -3648,9 +3648,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_83b9510874a64293bf8dc8ce95923b1c : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_02085698df284d2b8b1df233d482ca56 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_83b9510874a64293bf8dc8ce95923b1c()
+        internal MTHD_02085698df284d2b8b1df233d482ca56()
         {
           this.Initialize("get_position", false, new ParameterDescriptor[0], false);
         }
@@ -3661,9 +3661,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_2b34a276b55843bb8279175291dcb7f8 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_2c582fcd4a774f579f52151e5429854a : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_2b34a276b55843bb8279175291dcb7f8()
+        internal MTHD_2c582fcd4a774f579f52151e5429854a()
         {
           this.Initialize("set_position", false, new ParameterDescriptor[1]
           {
@@ -3678,9 +3678,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_591b0530df0b43d8adaad5001ff318cb : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_4a992505d536477d950830f73117cd6d : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_591b0530df0b43d8adaad5001ff318cb()
+        internal MTHD_4a992505d536477d950830f73117cd6d()
         {
           this.Initialize("get_parent", false, new ParameterDescriptor[0], false);
         }
@@ -3691,9 +3691,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_b77fcf8e94464119a2cb86f476258cee : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_41d45dab7acf42b5954d5c25f765a548 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_b77fcf8e94464119a2cb86f476258cee()
+        internal MTHD_41d45dab7acf42b5954d5c25f765a548()
         {
           this.Initialize("set_parent", false, new ParameterDescriptor[1]
           {
@@ -3708,9 +3708,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_96b0fb831177491f8bb499030cce6366 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_01cd53819dc24edf927e02e9eed23e51 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_96b0fb831177491f8bb499030cce6366()
+        internal MTHD_01cd53819dc24edf927e02e9eed23e51()
         {
           this.Initialize("get_weight", false, new ParameterDescriptor[0], false);
         }
@@ -3721,9 +3721,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_979a894486774fe68fec22ccc4e779c7 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_88fa88af145b4b24932c6b9e6382b082 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_979a894486774fe68fec22ccc4e779c7()
+        internal MTHD_88fa88af145b4b24932c6b9e6382b082()
         {
           this.Initialize("set_weight", false, new ParameterDescriptor[1]
           {
@@ -3738,9 +3738,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_ce735f078c08403d944c78aa97939de3 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_274e16f83a59467cbd1b678e74124872 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_ce735f078c08403d944c78aa97939de3()
+        internal MTHD_274e16f83a59467cbd1b678e74124872()
         {
           this.Initialize("get_radius", false, new ParameterDescriptor[0], false);
         }
@@ -3751,9 +3751,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_32a3e41b5b01455ba92a46e96d68615f : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_160f92c35dd94e71afd6abc8e7fca941 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_32a3e41b5b01455ba92a46e96d68615f()
+        internal MTHD_160f92c35dd94e71afd6abc8e7fca941()
         {
           this.Initialize("set_radius", false, new ParameterDescriptor[1]
           {
@@ -3768,9 +3768,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_be29b369a39844948a6263a50527b4b4 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_d128e078dc0f4a5d90cf1eb99d3e226f : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_be29b369a39844948a6263a50527b4b4()
+        internal MTHD_d128e078dc0f4a5d90cf1eb99d3e226f()
         {
           this.Initialize("get_inTower", false, new ParameterDescriptor[0], false);
         }
@@ -3781,9 +3781,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_cf4b3610e19d4cafacf33c74aa7123dd : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_87d83b722f364c92a6cc03f13812a9e3 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_cf4b3610e19d4cafacf33c74aa7123dd()
+        internal MTHD_87d83b722f364c92a6cc03f13812a9e3()
         {
           this.Initialize("get_isMoving", false, new ParameterDescriptor[0], false);
         }
@@ -3794,9 +3794,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_f734f3b4cc194d66adfeced1e75cfcd9 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_860c21858af14fb0aa3b0f4967aa1f03 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_f734f3b4cc194d66adfeced1e75cfcd9()
+        internal MTHD_860c21858af14fb0aa3b0f4967aa1f03()
         {
           this.Initialize("get_stunned", false, new ParameterDescriptor[0], false);
         }
@@ -3807,9 +3807,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_3b5ab5a3b7d44b76941b8f4df8d87190 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_37eb5c85875f4310bd7958804bea19e7 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_3b5ab5a3b7d44b76941b8f4df8d87190()
+        internal MTHD_37eb5c85875f4310bd7958804bea19e7()
         {
           this.Initialize("set_stunned", false, new ParameterDescriptor[1]
           {
@@ -3824,9 +3824,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_a5778b9739dd4f09a8266b3e7cca5549 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_ea8835c2897146aa835e58340b788815 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_a5778b9739dd4f09a8266b3e7cca5549()
+        internal MTHD_ea8835c2897146aa835e58340b788815()
         {
           this.Initialize("get_superStunned", false, new ParameterDescriptor[0], false);
         }
@@ -3837,9 +3837,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_99dda9f5ac8f4c0fab789e1605324209 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_1f83cd4bf0dc46269ab4bbb2d1098866 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_99dda9f5ac8f4c0fab789e1605324209()
+        internal MTHD_1f83cd4bf0dc46269ab4bbb2d1098866()
         {
           this.Initialize("set_superStunned", false, new ParameterDescriptor[1]
           {
@@ -3854,9 +3854,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_421ce806a13f4ac79d414094e0e1e317 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_87098adb18d540bfb6e0c98f2619227b : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_421ce806a13f4ac79d414094e0e1e317()
+        internal MTHD_87098adb18d540bfb6e0c98f2619227b()
         {
           this.Initialize("get_waterWalking", false, new ParameterDescriptor[0], false);
         }
@@ -3867,9 +3867,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_52dbafd9394443d598f9b2b2884f3782 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_240f67fabb61401baca7ec52fbcf9672 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_52dbafd9394443d598f9b2b2884f3782()
+        internal MTHD_240f67fabb61401baca7ec52fbcf9672()
         {
           this.Initialize("set_waterWalking", false, new ParameterDescriptor[1]
           {
@@ -3884,9 +3884,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_66df6c74025c497e8540cf15f6aea0ed : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_05d3cea86bdc423bac61c6bd07d0b018 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_66df6c74025c497e8540cf15f6aea0ed()
+        internal MTHD_05d3cea86bdc423bac61c6bd07d0b018()
         {
           this.Initialize("get_frostWalking", false, new ParameterDescriptor[0], false);
         }
@@ -3897,9 +3897,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_8393650d72f549b4a6ddabc2dedbb936 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_38e4a72ee2b74cc8b5889e9ffe7985b3 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_8393650d72f549b4a6ddabc2dedbb936()
+        internal MTHD_38e4a72ee2b74cc8b5889e9ffe7985b3()
         {
           this.Initialize("set_frostWalking", false, new ParameterDescriptor[1]
           {
@@ -3914,9 +3914,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_39aaaf5038c9417e934022581cb9ca13 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_4c1ccc2bba9d4d36baa469c3e0994784 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_39aaaf5038c9417e934022581cb9ca13()
+        internal MTHD_4c1ccc2bba9d4d36baa469c3e0994784()
         {
           this.Initialize("get_inWater", false, new ParameterDescriptor[0], false);
         }
@@ -3927,9 +3927,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_a2c8f3a712c9420eb2f37eb1132d2b73 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_60ffeb4c524c4c8cbc67fece75984f59 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_a2c8f3a712c9420eb2f37eb1132d2b73()
+        internal MTHD_60ffeb4c524c4c8cbc67fece75984f59()
         {
           this.Initialize("get_diesInWater", false, new ParameterDescriptor[0], false);
         }
@@ -3940,9 +3940,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_215bba9e0ef4436bb3e33529d852a796 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_bec3d956b6174058b4cb2ba11ebbca0f : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_215bba9e0ef4436bb3e33529d852a796()
+        internal MTHD_bec3d956b6174058b4cb2ba11ebbca0f()
         {
           this.Initialize("set_diesInWater", false, new ParameterDescriptor[1]
           {
@@ -3957,9 +3957,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_58cf9497c7284d7394c01d7c89c8d0c2 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_2f6293996dc549c1b1cec86e7d051b8e : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_58cf9497c7284d7394c01d7c89c8d0c2()
+        internal MTHD_2f6293996dc549c1b1cec86e7d051b8e()
         {
           this.Initialize("get_type", false, new ParameterDescriptor[0], false);
         }
@@ -3970,9 +3970,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_e0bbe7ee37b444eeab3f6f3bd6c216a0 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_d33fef1870f44b18857bde05b7485e19 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_e0bbe7ee37b444eeab3f6f3bd6c216a0()
+        internal MTHD_d33fef1870f44b18857bde05b7485e19()
         {
           this.Initialize("set_type", false, new ParameterDescriptor[1]
           {
@@ -3987,9 +3987,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_412b4d6870fc4165b8b0eb176342e28b : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_7a8fcabbf1384a9b8b562eee0b7e8be5 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_412b4d6870fc4165b8b0eb176342e28b()
+        internal MTHD_7a8fcabbf1384a9b8b562eee0b7e8be5()
         {
           this.Initialize("get_race", false, new ParameterDescriptor[0], false);
         }
@@ -4000,9 +4000,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_6cba31b604ae4fddbe1aae943e852915 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_a3cdcc14c0354f7097caa8e8ae349565 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_6cba31b604ae4fddbe1aae943e852915()
+        internal MTHD_a3cdcc14c0354f7097caa8e8ae349565()
         {
           this.Initialize("set_race", false, new ParameterDescriptor[1]
           {
@@ -4017,9 +4017,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_1c4d447cb1774954b513ba24b7ccfd94 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_e0f40b0140e3461e97cbd44cac17f11d : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_1c4d447cb1774954b513ba24b7ccfd94()
+        internal MTHD_e0f40b0140e3461e97cbd44cac17f11d()
         {
           this.Initialize("get_yourTurn", false, new ParameterDescriptor[0], false);
         }
@@ -4030,9 +4030,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_2fd243e8d87d4d4595bc002ca61da41b : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_945f994f27f94243a1773d47edd2235a : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_2fd243e8d87d4d4595bc002ca61da41b()
+        internal MTHD_945f994f27f94243a1773d47edd2235a()
         {
           this.Initialize("get_isRider", false, new ParameterDescriptor[0], false);
         }
@@ -4043,9 +4043,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_851a709a2c314b7c98431446124bb692 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_1fd7bed1f4f54d2a96dcf204b16288d7 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_851a709a2c314b7c98431446124bb692()
+        internal MTHD_1fd7bed1f4f54d2a96dcf204b16288d7()
         {
           this.Initialize("get_isMounted", false, new ParameterDescriptor[0], false);
         }
@@ -4056,9 +4056,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_b0b71be096454bd2897480f02478e419 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_d0348e6c357b4379bf9c1ad4cb17153e : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_b0b71be096454bd2897480f02478e419()
+        internal MTHD_d0348e6c357b4379bf9c1ad4cb17153e()
         {
           this.Initialize("get_isDead", false, new ParameterDescriptor[0], false);
         }
@@ -4069,9 +4069,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_49a64619d00a48a7a45614607347026b : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_13bfafb92a4c44eeaf9d9607b91247cf : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_49a64619d00a48a7a45614607347026b()
+        internal MTHD_13bfafb92a4c44eeaf9d9607b91247cf()
         {
           this.Initialize("get_isPawn", false, new ParameterDescriptor[0], false);
         }
@@ -4082,9 +4082,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_354410660ce74145ba12999189ef14ed : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_5a0c7a1a75e944ce8974d0f59e6cb3d1 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_354410660ce74145ba12999189ef14ed()
+        internal MTHD_5a0c7a1a75e944ce8974d0f59e6cb3d1()
         {
           this.Initialize("get_isFlying", false, new ParameterDescriptor[0], false);
         }
@@ -4095,9 +4095,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_0dd70be2e0144b609b48f1ed8b6ff539 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_5d6b7f6f9552400ba01e297917670c1f : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_0dd70be2e0144b609b48f1ed8b6ff539()
+        internal MTHD_5d6b7f6f9552400ba01e297917670c1f()
         {
           this.Initialize("set_isFlying", false, new ParameterDescriptor[1]
           {
@@ -4112,9 +4112,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_1756b50aa75040209b3948b4aa030285 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_9b960b42b47f4dc79ac6dc77abb48800 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_1756b50aa75040209b3948b4aa030285()
+        internal MTHD_9b960b42b47f4dc79ac6dc77abb48800()
         {
           this.Initialize("get_isMountable", false, new ParameterDescriptor[0], false);
         }
@@ -4125,9 +4125,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_12246cda6c24464dba3e54d022b7060c : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_38f60fe0940d465d81b173ca1a8a0cb8 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_12246cda6c24464dba3e54d022b7060c()
+        internal MTHD_38f60fe0940d465d81b173ca1a8a0cb8()
         {
           this.Initialize("get_canMount", false, new ParameterDescriptor[0], false);
         }
@@ -4138,9 +4138,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_2864a2d60dab4422bba5988f81a47fed : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_ff365a5d643643d49a986671b894ce43 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_2864a2d60dab4422bba5988f81a47fed()
+        internal MTHD_ff365a5d643643d49a986671b894ce43()
         {
           this.Initialize("get_arcaneMonster", false, new ParameterDescriptor[0], false);
         }
@@ -4151,9 +4151,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_c6084be7444744b689e51f50729e0744 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_1920d122db934f67865dd4d75b30d36a : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_c6084be7444744b689e51f50729e0744()
+        internal MTHD_1920d122db934f67865dd4d75b30d36a()
         {
           this.Initialize("set_arcaneMonster", false, new ParameterDescriptor[1]
           {
@@ -4168,9 +4168,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_965f2e8da669411d8084f99e55e00738 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_60f152c9af5a4dc09baf178e579f49d2 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_965f2e8da669411d8084f99e55e00738()
+        internal MTHD_60f152c9af5a4dc09baf178e579f49d2()
         {
           this.Initialize("get_takeDamage", false, new ParameterDescriptor[0], false);
         }
@@ -4181,9 +4181,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_a8de29acfdac4c88ab362b3c6233c631 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_cdc5910e89d34e98a32e9bf6e0a11f49 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_a8de29acfdac4c88ab362b3c6233c631()
+        internal MTHD_cdc5910e89d34e98a32e9bf6e0a11f49()
         {
           this.Initialize("set_takeDamage", false, new ParameterDescriptor[1]
           {
@@ -4198,9 +4198,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_be0b9c8cc9a2476eaaa4ab31889ff230 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_ded0937bd3d44b7681148d55b83d27ee : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_be0b9c8cc9a2476eaaa4ab31889ff230()
+        internal MTHD_ded0937bd3d44b7681148d55b83d27ee()
         {
           this.Initialize("getRider", false, new ParameterDescriptor[0], false);
         }
@@ -4211,9 +4211,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_953a52fdfa4f456394aac4ca2382faf6 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_20090fac2306459c8224fdcfb8e348d8 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_953a52fdfa4f456394aac4ca2382faf6()
+        internal MTHD_20090fac2306459c8224fdcfb8e348d8()
         {
           this.Initialize("getMount", false, new ParameterDescriptor[0], false);
         }
@@ -4224,9 +4224,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_74ce62c4d57945b4b17fb22fc99874c4 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_5ed38fa88acc4b06aed8d0a16d5d42ec : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_74ce62c4d57945b4b17fb22fc99874c4()
+        internal MTHD_5ed38fa88acc4b06aed8d0a16d5d42ec()
         {
           this.Initialize("getTower", false, new ParameterDescriptor[0], false);
         }
@@ -4237,9 +4237,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_e1618397d0ff4acdbcb383f1dd9ab0c9 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_19735a04a66e4b0b868c7f670a03d303 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_e1618397d0ff4acdbcb383f1dd9ab0c9()
+        internal MTHD_19735a04a66e4b0b868c7f670a03d303()
         {
           this.Initialize("LongJump", false, new ParameterDescriptor[1]
           {
@@ -4254,9 +4254,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_23a3cf2f373f4e8f8db124b6b26ed874 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_3d0e5c68f42140b6baeedbd501692265 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_23a3cf2f373f4e8f8db124b6b26ed874()
+        internal MTHD_3d0e5c68f42140b6baeedbd501692265()
         {
           this.Initialize("HighJump", false, new ParameterDescriptor[1]
           {
@@ -4271,9 +4271,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_da177f8ad171406d8df8a801c7585484 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_447f9ee677a64edaa9e6543ad9064784 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_da177f8ad171406d8df8a801c7585484()
+        internal MTHD_447f9ee677a64edaa9e6543ad9064784()
         {
           this.Initialize("Walk", false, new ParameterDescriptor[1]
           {
@@ -4288,9 +4288,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_8f0f46445f5541a99afb5da9899b4b52 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_179b3585160040b6a6b7529f3c429501 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_8f0f46445f5541a99afb5da9899b4b52()
+        internal MTHD_179b3585160040b6a6b7529f3c429501()
         {
           this.Initialize("setDirection", false, new ParameterDescriptor[1]
           {
@@ -4305,9 +4305,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_1c2768496dc34e97aae4d8e8bcb8bfbf : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_d8b718aa3a1e422bb5fe54d2faa3a787 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_1c2768496dc34e97aae4d8e8bcb8bfbf()
+        internal MTHD_d8b718aa3a1e422bb5fe54d2faa3a787()
         {
           this.Initialize("getDirection", false, new ParameterDescriptor[0], false);
         }
@@ -4318,9 +4318,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_34281f8e0f09472793a2099508cd89da : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_25a98100202042089bde78ff98b71d8a : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_34281f8e0f09472793a2099508cd89da()
+        internal MTHD_25a98100202042089bde78ff98b71d8a()
         {
           this.Initialize("getFamiliarLevel", false, new ParameterDescriptor[1]
           {
@@ -4334,9 +4334,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_169ad86070e14fd79e0ac8b1dda3ff03 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_b7a71d81fa704dceab347599ecac4b02 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_169ad86070e14fd79e0ac8b1dda3ff03()
+        internal MTHD_b7a71d81fa704dceab347599ecac4b02()
         {
           this.Initialize("getActivateableFamiliarLevel", false, new ParameterDescriptor[0], false);
         }
@@ -4347,9 +4347,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_474a745a171644f0ae9b519e91021445 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_241ead31dee14c0e87fea3e3909334f6 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_474a745a171644f0ae9b519e91021445()
+        internal MTHD_241ead31dee14c0e87fea3e3909334f6()
         {
           this.Initialize("getActivateableFamiliarBookID", false, new ParameterDescriptor[0], false);
         }
@@ -4360,9 +4360,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_0ab1627ba9334bdb8143c59d0cbda8a3 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_a65b0b5f2b3a4bf59a8f89d92ae58835 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_0ab1627ba9334bdb8143c59d0cbda8a3()
+        internal MTHD_a65b0b5f2b3a4bf59a8f89d92ae58835()
         {
           this.Initialize("increaseFamiliarLevel", false, new ParameterDescriptor[3]
           {
@@ -4394,9 +4394,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_6097f6ddd62640fb8e4aa0d5a3e74a6d : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_9aad2d485c5d4096b8c81c757ec8b872 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_6097f6ddd62640fb8e4aa0d5a3e74a6d()
+        internal MTHD_9aad2d485c5d4096b8c81c757ec8b872()
         {
           this.Initialize("inside", false, new ParameterDescriptor[1]
           {
@@ -4410,9 +4410,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_dae733a5479c4294b169296488697d20 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_ce153682c77e4a31b97ac90a0111c8cc : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_dae733a5479c4294b169296488697d20()
+        internal MTHD_ce153682c77e4a31b97ac90a0111c8cc()
         {
           this.Initialize("inside", false, new ParameterDescriptor[2]
           {
@@ -4427,9 +4427,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_63d1b3b472814a8e8aa3a806be8082c1 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_a114672594b9462e8a86056756889951 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_63d1b3b472814a8e8aa3a806be8082c1()
+        internal MTHD_a114672594b9462e8a86056756889951()
         {
           this.Initialize("overlap", false, new ParameterDescriptor[1]
           {
@@ -4443,9 +4443,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_95ba03b479cd41fba5bbd2a523834446 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_9401573d27384a45a01d86fc15908a91 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_95ba03b479cd41fba5bbd2a523834446()
+        internal MTHD_9401573d27384a45a01d86fc15908a91()
         {
           this.Initialize("overlap", false, new ParameterDescriptor[2]
           {
@@ -4460,9 +4460,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_6a48aff29e1a4ea68a57ec3de73ae36f : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_dfeeb58a0fbf4b5ea8108c0ae04c1507 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_6a48aff29e1a4ea68a57ec3de73ae36f()
+        internal MTHD_dfeeb58a0fbf4b5ea8108c0ae04c1507()
         {
           this.Initialize("die", false, new ParameterDescriptor[1]
           {
@@ -4482,9 +4482,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_52039203eee749fda64f1bb022de4b9b : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_a1d40b472f5044fe938352fb9fb8337d : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_52039203eee749fda64f1bb022de4b9b()
+        internal MTHD_a1d40b472f5044fe938352fb9fb8337d()
         {
           this.Initialize("addSpell", false, new ParameterDescriptor[1]
           {
@@ -4498,9 +4498,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_117dc5dd410645e6aacf29b6864370e9 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_15f8d6c730eb42f98fbc855a44ea2b74 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_117dc5dd410645e6aacf29b6864370e9()
+        internal MTHD_15f8d6c730eb42f98fbc855a44ea2b74()
         {
           this.Initialize("removeSpell", false, new ParameterDescriptor[1]
           {
@@ -4515,9 +4515,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_bc587d82d37a4e55b67730a0c0cda23f : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_f1c63470d65644c8bac4b55fb25a9c16 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_bc587d82d37a4e55b67730a0c0cda23f()
+        internal MTHD_f1c63470d65644c8bac4b55fb25a9c16()
         {
           this.Initialize("removeSpell", false, new ParameterDescriptor[1]
           {
@@ -4532,9 +4532,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_106d57cc6a3646e0b94e2015e205ae00 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_0397b0b0840145ce97c09f3fb784e608 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_106d57cc6a3646e0b94e2015e205ae00()
+        internal MTHD_0397b0b0840145ce97c09f3fb784e608()
         {
           this.Initialize("getSpells", false, new ParameterDescriptor[1]
           {
@@ -4548,9 +4548,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_4e1edb6c9a504d00bf7571e73b8d339f : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_1c9dc9c4aee8435488c41afe075c3275 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_4e1edb6c9a504d00bf7571e73b8d339f()
+        internal MTHD_1c9dc9c4aee8435488c41afe075c3275()
         {
           this.Initialize("getSpell", false, new ParameterDescriptor[1]
           {
@@ -4564,9 +4564,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_819175bd4c3143eeb98333d96ed896f3 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_b9cd39f55f084b688a29beb63b32d253 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_819175bd4c3143eeb98333d96ed896f3()
+        internal MTHD_b9cd39f55f084b688a29beb63b32d253()
         {
           this.Initialize("getSpellCount", false, new ParameterDescriptor[0], false);
         }
@@ -4577,9 +4577,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_df143b3739474cb9aad98b176e6cc37d : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_66767f3cdb214efa969a788ad1bbf997 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_df143b3739474cb9aad98b176e6cc37d()
+        internal MTHD_66767f3cdb214efa969a788ad1bbf997()
         {
           this.Initialize("castedCount", false, new ParameterDescriptor[1]
           {
@@ -4593,9 +4593,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_6ad2a00276ae4641b92e48821e5275de : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_31d59955bc4a4f0a83c6ede75f1e0283 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_6ad2a00276ae4641b92e48821e5275de()
+        internal MTHD_31d59955bc4a4f0a83c6ede75f1e0283()
         {
           this.Initialize("castedCountThisTurn", false, new ParameterDescriptor[0], false);
         }
@@ -4606,9 +4606,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_99c593809c7b41519a10429bcd9a39a8 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_c12cab2ca5cf4b469904906dba370195 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_99c593809c7b41519a10429bcd9a39a8()
+        internal MTHD_c12cab2ca5cf4b469904906dba370195()
         {
           this.Initialize("castedDamage", false, new ParameterDescriptor[1]
           {
@@ -4622,9 +4622,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_6393ae389505418ba31453c1a7b41950 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_473cc3e2ee0742fdb97d63b007febe1c : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_6393ae389505418ba31453c1a7b41950()
+        internal MTHD_473cc3e2ee0742fdb97d63b007febe1c()
         {
           this.Initialize("getMinionCount", false, new ParameterDescriptor[0], false);
         }
@@ -4635,9 +4635,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_f4db3cadc046482089d1e8c62fb25b4f : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_4ed01eddc001430997a6b4c20eecb0e8 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_f4db3cadc046482089d1e8c62fb25b4f()
+        internal MTHD_4ed01eddc001430997a6b4c20eecb0e8()
         {
           this.Initialize("castSpell", false, new ParameterDescriptor[5]
           {
@@ -4671,9 +4671,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_0019629af62749dfb9fc5a4ce06b13ad : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_6c9ad50670d447b99a0f50f6404ccceb : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_0019629af62749dfb9fc5a4ce06b13ad()
+        internal MTHD_6c9ad50670d447b99a0f50f6404ccceb()
         {
           this.Initialize("angleToFire", false, new ParameterDescriptor[3]
           {
@@ -4689,9 +4689,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_7f738b5bea514f4891d7029083f8bc95 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_534c7d85adec43aa90917ee6315fd512 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_7f738b5bea514f4891d7029083f8bc95()
+        internal MTHD_534c7d85adec43aa90917ee6315fd512()
         {
           this.Initialize("powerToFire", false, new ParameterDescriptor[3]
           {
@@ -4707,9 +4707,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_beb3d8a71ba74291a9d8ab1d6c869d12 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_190ca1f3d73d463095e1e71ddafe7e6a : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_beb3d8a71ba74291a9d8ab1d6c869d12()
+        internal MTHD_190ca1f3d73d463095e1e71ddafe7e6a()
         {
           this.Initialize("fireAt", false, new ParameterDescriptor[3]
           {
@@ -4731,9 +4731,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_b0cc88e1357f4fb0bbff866470588f9f : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_f0407f5fb8864051a341967567686197 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_b0cc88e1357f4fb0bbff866470588f9f()
+        internal MTHD_f0407f5fb8864051a341967567686197()
         {
           this.Initialize("fireAt", false, new ParameterDescriptor[4]
           {
@@ -4761,9 +4761,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_49dca7164e4048688848bdd73355fe52 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_e9a1cbdd20834cf1b6d03a7cad458290 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_49dca7164e4048688848bdd73355fe52()
+        internal MTHD_e9a1cbdd20834cf1b6d03a7cad458290()
         {
           this.Initialize("getEffectors", false, new ParameterDescriptor[1]
           {
@@ -4777,9 +4777,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_f31aee106a4f499a9fd8b85aae88a223 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_dd94f1b93f7240a6a7b1a41eb13a9283 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_f31aee106a4f499a9fd8b85aae88a223()
+        internal MTHD_dd94f1b93f7240a6a7b1a41eb13a9283()
         {
           this.Initialize("getEffectors", false, new ParameterDescriptor[2]
           {
@@ -4794,9 +4794,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_5c8896ae693748159656fe539c286982 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_6cc72a5fc32f458ab362199b36d4162a : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_5c8896ae693748159656fe539c286982()
+        internal MTHD_6cc72a5fc32f458ab362199b36d4162a()
         {
           this.Initialize("Equals", false, new ParameterDescriptor[1]
           {
@@ -4810,9 +4810,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_12212107f93443c3938966df8dcd10f3 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_9903cf63776142c0bf6cc5ebf96778e8 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_12212107f93443c3938966df8dcd10f3()
+        internal MTHD_9903cf63776142c0bf6cc5ebf96778e8()
         {
           this.Initialize("GetHashCode", false, new ParameterDescriptor[0], false);
         }
@@ -4823,9 +4823,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_7a13f03c7212431f80a960116cc19d62 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_d82f7e6c7bfb45679bb807a1eca548df : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_7a13f03c7212431f80a960116cc19d62()
+        internal MTHD_d82f7e6c7bfb45679bb807a1eca548df()
         {
           this.Initialize("op_Equality", true, new ParameterDescriptor[2]
           {
@@ -4840,9 +4840,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_a8c760174d3e4268a26bc4c9a0a8ba6e : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_b9f306359b7d427c9ff9e9f42d93c4a8 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_a8c760174d3e4268a26bc4c9a0a8ba6e()
+        internal MTHD_b9f306359b7d427c9ff9e9f42d93c4a8()
         {
           this.Initialize("op_Inequality", true, new ParameterDescriptor[2]
           {
@@ -4857,9 +4857,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_bff128b0e5d244d0b7b8dffa51a1d066 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_cde954fd11d74dee81db537585dc546a : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_bff128b0e5d244d0b7b8dffa51a1d066()
+        internal MTHD_cde954fd11d74dee81db537585dc546a()
         {
           this.Initialize("GetType", false, new ParameterDescriptor[0], false);
         }
@@ -4870,9 +4870,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_43c532f6cdbb4f9cb39499a599c23868 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_0ebabf5fc27f43c49690cb43b678235f : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_43c532f6cdbb4f9cb39499a599c23868()
+        internal MTHD_0ebabf5fc27f43c49690cb43b678235f()
         {
           this.Initialize("ToString", false, new ParameterDescriptor[0], false);
         }
@@ -4883,9 +4883,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_31b2daf0501749c1aeabeaf23aabc46f : HardwiredMemberDescriptor
+      private sealed class PROP_60fd57cbdd4245baaf1f8ff2224aee14 : HardwiredMemberDescriptor
       {
-        internal PROP_31b2daf0501749c1aeabeaf23aabc46f()
+        internal PROP_60fd57cbdd4245baaf1f8ff2224aee14()
           : base(typeof (int), "team", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -4896,9 +4896,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_1caf38061a3c4bb5912c4d7a7e28daf3 : HardwiredMemberDescriptor
+      private sealed class PROP_318683fa67124401bebf2675a50cccc6 : HardwiredMemberDescriptor
       {
-        internal PROP_1caf38061a3c4bb5912c4d7a7e28daf3()
+        internal PROP_318683fa67124401bebf2675a50cccc6()
           : base(typeof (string), "name", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -4909,9 +4909,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_d756a18627a2445ca36b0018ac2c8bf2 : HardwiredMemberDescriptor
+      private sealed class PROP_dcd278edcbc444fbbb7e10ce53cacbb8 : HardwiredMemberDescriptor
       {
-        internal PROP_d756a18627a2445ca36b0018ac2c8bf2()
+        internal PROP_dcd278edcbc444fbbb7e10ce53cacbb8()
           : base(typeof (SpellEnum), "spellEnum", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -4922,9 +4922,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_f557fe1ddcd140b8b55d5ea81d8fa2ea : HardwiredMemberDescriptor
+      private sealed class PROP_8a4dfa80268540c9a58c24ac22e0cdfa : HardwiredMemberDescriptor
       {
-        internal PROP_f557fe1ddcd140b8b55d5ea81d8fa2ea()
+        internal PROP_8a4dfa80268540c9a58c24ac22e0cdfa()
           : base(typeof (int), "health", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -4940,9 +4940,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_80e85f8b9a624a6ebadf7a9b09e19281 : HardwiredMemberDescriptor
+      private sealed class PROP_ce57ef89c94f4c7585ec545b1e41da2f : HardwiredMemberDescriptor
       {
-        internal PROP_80e85f8b9a624a6ebadf7a9b09e19281()
+        internal PROP_ce57ef89c94f4c7585ec545b1e41da2f()
           : base(typeof (int), "maxHealth", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -4958,9 +4958,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_b4a1040f63514be293ae71bd152c08fe : HardwiredMemberDescriptor
+      private sealed class PROP_4836d231e2c346a4b5ccafca4c99e585 : HardwiredMemberDescriptor
       {
-        internal PROP_b4a1040f63514be293ae71bd152c08fe()
+        internal PROP_4836d231e2c346a4b5ccafca4c99e585()
           : base(typeof (int), "healthAndTower", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -4971,9 +4971,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_7776d508d6bc4819b825816fcdf97e1e : HardwiredMemberDescriptor
+      private sealed class PROP_9bfa61aa4b3a423d9d2e1c791d5d2276 : HardwiredMemberDescriptor
       {
-        internal PROP_7776d508d6bc4819b825816fcdf97e1e()
+        internal PROP_9bfa61aa4b3a423d9d2e1c791d5d2276()
           : base(typeof (int), "shield", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -4989,9 +4989,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_b9f830e0c42c46f097b29b98c6e36db6 : HardwiredMemberDescriptor
+      private sealed class PROP_f247ec4fabe946218f9639f0280dd43b : HardwiredMemberDescriptor
       {
-        internal PROP_b9f830e0c42c46f097b29b98c6e36db6()
+        internal PROP_f247ec4fabe946218f9639f0280dd43b()
           : base(typeof (int), "x", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -5007,9 +5007,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_ad92b2819e534fc5ac48e2602844cac2 : HardwiredMemberDescriptor
+      private sealed class PROP_2f849e3ab7f94b02aaf52da58dc11c5e : HardwiredMemberDescriptor
       {
-        internal PROP_ad92b2819e534fc5ac48e2602844cac2()
+        internal PROP_2f849e3ab7f94b02aaf52da58dc11c5e()
           : base(typeof (int), "y", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -5025,9 +5025,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_f9c193e3814540439ca3271a4b9f0e3d : HardwiredMemberDescriptor
+      private sealed class PROP_de07af68b0fb42ec9683f5f0f523c3e5 : HardwiredMemberDescriptor
       {
-        internal PROP_f9c193e3814540439ca3271a4b9f0e3d()
+        internal PROP_de07af68b0fb42ec9683f5f0f523c3e5()
           : base(typeof (Educative.Point), "position", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -5043,9 +5043,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_e58b10074d324060962b9b720664e5d4 : HardwiredMemberDescriptor
+      private sealed class PROP_4511ff1402c34fc18498ea7190bdf418 : HardwiredMemberDescriptor
       {
-        internal PROP_e58b10074d324060962b9b720664e5d4()
+        internal PROP_4511ff1402c34fc18498ea7190bdf418()
           : base(typeof (ContainerPlayer), "parent", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -5061,9 +5061,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_4fc68c6e5d854e03a21731f8200ee8dd : HardwiredMemberDescriptor
+      private sealed class PROP_7987348f48274250b5aac24c4722a46c : HardwiredMemberDescriptor
       {
-        internal PROP_4fc68c6e5d854e03a21731f8200ee8dd()
+        internal PROP_7987348f48274250b5aac24c4722a46c()
           : base(typeof (int), "weight", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -5079,9 +5079,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_fd9bfb1a82424608954d3cb0e153b53f : HardwiredMemberDescriptor
+      private sealed class PROP_80901c4362bc498ebd0ded9b06a6ab68 : HardwiredMemberDescriptor
       {
-        internal PROP_fd9bfb1a82424608954d3cb0e153b53f()
+        internal PROP_80901c4362bc498ebd0ded9b06a6ab68()
           : base(typeof (int), "radius", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -5097,9 +5097,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_31ed3d8f2da44336b51457fa6dff55a1 : HardwiredMemberDescriptor
+      private sealed class PROP_1b72d3547a8e4add899afc643fa664ed : HardwiredMemberDescriptor
       {
-        internal PROP_31ed3d8f2da44336b51457fa6dff55a1()
+        internal PROP_1b72d3547a8e4add899afc643fa664ed()
           : base(typeof (bool), "inTower", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -5110,9 +5110,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_e0376727dc5d485ea373f00327792b8a : HardwiredMemberDescriptor
+      private sealed class PROP_1d6eb347e84d47a8b2aadac982c50a1f : HardwiredMemberDescriptor
       {
-        internal PROP_e0376727dc5d485ea373f00327792b8a()
+        internal PROP_1d6eb347e84d47a8b2aadac982c50a1f()
           : base(typeof (bool), "isMoving", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -5123,9 +5123,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_6dd3cadf12e54912a22116fac99cf8ed : HardwiredMemberDescriptor
+      private sealed class PROP_64a32caffad941079f3a36b8ce3943b4 : HardwiredMemberDescriptor
       {
-        internal PROP_6dd3cadf12e54912a22116fac99cf8ed()
+        internal PROP_64a32caffad941079f3a36b8ce3943b4()
           : base(typeof (bool), "stunned", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -5141,9 +5141,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_4e0961f7e8c94cbaa06111e538e8efd7 : HardwiredMemberDescriptor
+      private sealed class PROP_c9ea70558fb248649a4bed6313fbd056 : HardwiredMemberDescriptor
       {
-        internal PROP_4e0961f7e8c94cbaa06111e538e8efd7()
+        internal PROP_c9ea70558fb248649a4bed6313fbd056()
           : base(typeof (bool), "superStunned", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -5159,9 +5159,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_d5a320b83cbd40f5aaccd4a5502844ea : HardwiredMemberDescriptor
+      private sealed class PROP_af97d31569b84a6885eac7e443e9bc7f : HardwiredMemberDescriptor
       {
-        internal PROP_d5a320b83cbd40f5aaccd4a5502844ea()
+        internal PROP_af97d31569b84a6885eac7e443e9bc7f()
           : base(typeof (bool), "waterWalking", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -5177,9 +5177,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_fc6c70d14e5f405c8c670b60aafd1124 : HardwiredMemberDescriptor
+      private sealed class PROP_43115b234ce742cebfd85e926783a28a : HardwiredMemberDescriptor
       {
-        internal PROP_fc6c70d14e5f405c8c670b60aafd1124()
+        internal PROP_43115b234ce742cebfd85e926783a28a()
           : base(typeof (bool), "frostWalking", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -5195,9 +5195,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_9c5a4fc969144918883a8806ba1485d2 : HardwiredMemberDescriptor
+      private sealed class PROP_869fb993376643cca004826621cd065d : HardwiredMemberDescriptor
       {
-        internal PROP_9c5a4fc969144918883a8806ba1485d2()
+        internal PROP_869fb993376643cca004826621cd065d()
           : base(typeof (bool), "inWater", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -5208,9 +5208,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_5e7b1fa456524fab9c03801bfa3159d3 : HardwiredMemberDescriptor
+      private sealed class PROP_e3a6e76571264df8b601f72a74efafb6 : HardwiredMemberDescriptor
       {
-        internal PROP_5e7b1fa456524fab9c03801bfa3159d3()
+        internal PROP_e3a6e76571264df8b601f72a74efafb6()
           : base(typeof (bool), "diesInWater", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -5226,9 +5226,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_f4821f9b1b5b4e03a7a75c125ac928a0 : HardwiredMemberDescriptor
+      private sealed class PROP_5c6500d1884e4c2f86030492187230ba : HardwiredMemberDescriptor
       {
-        internal PROP_f4821f9b1b5b4e03a7a75c125ac928a0()
+        internal PROP_5c6500d1884e4c2f86030492187230ba()
           : base(typeof (CreatureType), "type", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -5244,9 +5244,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_4511879b6e1c4f4bbb7ed26aad50d257 : HardwiredMemberDescriptor
+      private sealed class PROP_3f9cf275462b493b839f64b8762e8e84 : HardwiredMemberDescriptor
       {
-        internal PROP_4511879b6e1c4f4bbb7ed26aad50d257()
+        internal PROP_3f9cf275462b493b839f64b8762e8e84()
           : base(typeof (CreatureRace), "race", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -5262,9 +5262,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_c3cb2469dd1d4c01a72d9718462df6cb : HardwiredMemberDescriptor
+      private sealed class PROP_4049c2ce2cc641d594650ec2f655d903 : HardwiredMemberDescriptor
       {
-        internal PROP_c3cb2469dd1d4c01a72d9718462df6cb()
+        internal PROP_4049c2ce2cc641d594650ec2f655d903()
           : base(typeof (bool), "yourTurn", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -5275,9 +5275,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_25b8ef5180b04d189a648afbf3a37719 : HardwiredMemberDescriptor
+      private sealed class PROP_1a38cbc3d19249beb7c10793c38531e5 : HardwiredMemberDescriptor
       {
-        internal PROP_25b8ef5180b04d189a648afbf3a37719()
+        internal PROP_1a38cbc3d19249beb7c10793c38531e5()
           : base(typeof (bool), "isRider", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -5288,9 +5288,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_4aabf369af0e40098b1a2fe2c65feade : HardwiredMemberDescriptor
+      private sealed class PROP_93d453a483544b448e32b369b7c84b32 : HardwiredMemberDescriptor
       {
-        internal PROP_4aabf369af0e40098b1a2fe2c65feade()
+        internal PROP_93d453a483544b448e32b369b7c84b32()
           : base(typeof (bool), "isMounted", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -5301,9 +5301,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_fd9ea0d5c3e94032967fad8bb71a3022 : HardwiredMemberDescriptor
+      private sealed class PROP_b64372ff6bf84112a3dde9400f697fb5 : HardwiredMemberDescriptor
       {
-        internal PROP_fd9ea0d5c3e94032967fad8bb71a3022()
+        internal PROP_b64372ff6bf84112a3dde9400f697fb5()
           : base(typeof (bool), "isDead", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -5314,9 +5314,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_7fff6b0ece1543d6809e0f354f83f46c : HardwiredMemberDescriptor
+      private sealed class PROP_816d4ef959664e73b0086db6464cb3be : HardwiredMemberDescriptor
       {
-        internal PROP_7fff6b0ece1543d6809e0f354f83f46c()
+        internal PROP_816d4ef959664e73b0086db6464cb3be()
           : base(typeof (bool), "isPawn", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -5327,9 +5327,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_d6ee58ec14d24096b728eef99ad72535 : HardwiredMemberDescriptor
+      private sealed class PROP_7a54dc3260c44fec9c0110f917a6009e : HardwiredMemberDescriptor
       {
-        internal PROP_d6ee58ec14d24096b728eef99ad72535()
+        internal PROP_7a54dc3260c44fec9c0110f917a6009e()
           : base(typeof (bool), "isFlying", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -5345,9 +5345,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_10f73484d4e54e51b1ff8c742d86b1d1 : HardwiredMemberDescriptor
+      private sealed class PROP_a1d10ecd0ef64f9897340059a8ff0616 : HardwiredMemberDescriptor
       {
-        internal PROP_10f73484d4e54e51b1ff8c742d86b1d1()
+        internal PROP_a1d10ecd0ef64f9897340059a8ff0616()
           : base(typeof (bool), "isMountable", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -5358,9 +5358,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_7a61fb96bfa348c898eb98356c1177a5 : HardwiredMemberDescriptor
+      private sealed class PROP_4d8025cfe1c748f0bcd569f64d35b4c5 : HardwiredMemberDescriptor
       {
-        internal PROP_7a61fb96bfa348c898eb98356c1177a5()
+        internal PROP_4d8025cfe1c748f0bcd569f64d35b4c5()
           : base(typeof (bool), "canMount", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -5371,9 +5371,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_5a7d7151669d4267b0ae4d930b0d86fe : HardwiredMemberDescriptor
+      private sealed class PROP_1a0e742672594b22b680decd8cbb9173 : HardwiredMemberDescriptor
       {
-        internal PROP_5a7d7151669d4267b0ae4d930b0d86fe()
+        internal PROP_1a0e742672594b22b680decd8cbb9173()
           : base(typeof (bool), "arcaneMonster", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -5389,9 +5389,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_afc7efacfc694ffbbf9cd7deff98bbc0 : HardwiredMemberDescriptor
+      private sealed class PROP_74f6813c4df64c6a873fb5ebbdafcc2f : HardwiredMemberDescriptor
       {
-        internal PROP_afc7efacfc694ffbbf9cd7deff98bbc0()
+        internal PROP_74f6813c4df64c6a873fb5ebbdafcc2f()
           : base(typeof (bool), "takeDamage", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -5408,104 +5408,104 @@ namespace MoonSharp
       }
     }
 
-    private sealed class TYPE_77ad4911c6394031bfb361a119d0d378 : HardwiredUserDataDescriptor
+    private sealed class TYPE_00a4c3e293ff44edad8f7a62daf2cac2 : HardwiredUserDataDescriptor
     {
-      internal TYPE_77ad4911c6394031bfb361a119d0d378()
+      internal TYPE_00a4c3e293ff44edad8f7a62daf2cac2()
         : base(typeof (ContainerEffector))
       {
         this.AddMember("get_isDead", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_isDead", typeof (ContainerEffector), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_77ad4911c6394031bfb361a119d0d378.MTHD_16bfa408dd01463a8d742774f1cded4d()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_00a4c3e293ff44edad8f7a62daf2cac2.MTHD_2c637965f0044e4d97b6f762136b263b()
         }));
         this.AddMember("get_x", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_x", typeof (ContainerEffector), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_77ad4911c6394031bfb361a119d0d378.MTHD_f74c1a202538436585f1c088c423c186()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_00a4c3e293ff44edad8f7a62daf2cac2.MTHD_1246a997d96f460280b8b1cdb5fa7d8a()
         }));
         this.AddMember("set_x", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_x", typeof (ContainerEffector), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_77ad4911c6394031bfb361a119d0d378.MTHD_f5f55ccd43bf486e860d2fc4a928a467()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_00a4c3e293ff44edad8f7a62daf2cac2.MTHD_a3b82497f1f34e0c921d074c4a32f20f()
         }));
         this.AddMember("get_y", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_y", typeof (ContainerEffector), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_77ad4911c6394031bfb361a119d0d378.MTHD_405f0819e2a14a04b1ae9dfc2c4c20fa()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_00a4c3e293ff44edad8f7a62daf2cac2.MTHD_ce1f120fc2c24ef4b3bb00a1a11342c9()
         }));
         this.AddMember("set_y", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_y", typeof (ContainerEffector), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_77ad4911c6394031bfb361a119d0d378.MTHD_e841ce8d32f14c4ebff953c1863cefb5()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_00a4c3e293ff44edad8f7a62daf2cac2.MTHD_c029e87b30ca4a4bbce60418b9aad257()
         }));
         this.AddMember("get_position", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_position", typeof (ContainerEffector), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_77ad4911c6394031bfb361a119d0d378.MTHD_992fbc3d37b14a55aa7a65b8456c1bfd()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_00a4c3e293ff44edad8f7a62daf2cac2.MTHD_5eefb6c8cce64d38bb974003d79a8bfa()
         }));
         this.AddMember("set_position", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_position", typeof (ContainerEffector), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_77ad4911c6394031bfb361a119d0d378.MTHD_6b7d7798e2b74ccea82044255ae72446()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_00a4c3e293ff44edad8f7a62daf2cac2.MTHD_b68bfca6d1084f60ab72f3a6b835b388()
         }));
         this.AddMember("get_turnsAlive", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_turnsAlive", typeof (ContainerEffector), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_77ad4911c6394031bfb361a119d0d378.MTHD_664b9eab9b0c4745b1487b81949a67c8()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_00a4c3e293ff44edad8f7a62daf2cac2.MTHD_b3cc14d306f14b0a96a5e78dd2a63555()
         }));
         this.AddMember("set_turnsAlive", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_turnsAlive", typeof (ContainerEffector), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_77ad4911c6394031bfb361a119d0d378.MTHD_3e8bb5fd67864dee860f6dd8d38ff3cf()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_00a4c3e293ff44edad8f7a62daf2cac2.MTHD_5d33b192110a49ffaff6fa055345938b()
         }));
         this.AddMember("get_maxTurnsAlive", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_maxTurnsAlive", typeof (ContainerEffector), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_77ad4911c6394031bfb361a119d0d378.MTHD_9eb076d2fb974c0fa1c3010b384254c2()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_00a4c3e293ff44edad8f7a62daf2cac2.MTHD_5fbae8710131452dad0c29b3baff22b7()
         }));
         this.AddMember("set_maxTurnsAlive", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_maxTurnsAlive", typeof (ContainerEffector), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_77ad4911c6394031bfb361a119d0d378.MTHD_a04e585b0ce74d02a636a061cdd3eba0()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_00a4c3e293ff44edad8f7a62daf2cac2.MTHD_42743ffe50cb495299e4b68b01f94f8d()
         }));
         this.AddMember("get_active", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_active", typeof (ContainerEffector), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_77ad4911c6394031bfb361a119d0d378.MTHD_2c167650f3824eadbeab1af0f34c9e71()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_00a4c3e293ff44edad8f7a62daf2cac2.MTHD_d300b317397746dc94fb926cfe99a9b4()
         }));
         this.AddMember("set_active", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_active", typeof (ContainerEffector), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_77ad4911c6394031bfb361a119d0d378.MTHD_3aa07925fbed487081ac56234c0718a3()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_00a4c3e293ff44edad8f7a62daf2cac2.MTHD_72b4658218af4219a0ad370e221d2adf()
         }));
         this.AddMember("get_type", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_type", typeof (ContainerEffector), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_77ad4911c6394031bfb361a119d0d378.MTHD_f033bb47ae90489fb148d5afb1f80ef0()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_00a4c3e293ff44edad8f7a62daf2cac2.MTHD_b10bd40590654531b1a35d99ab076a6d()
         }));
         this.AddMember("destroy", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("destroy", typeof (ContainerEffector), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_77ad4911c6394031bfb361a119d0d378.MTHD_0ff963430d5a4f3d8ae9a5138c363796()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_00a4c3e293ff44edad8f7a62daf2cac2.MTHD_7f4654c385e94c088a477adf5e39230e()
         }));
         this.AddMember("turnPassed", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("turnPassed", typeof (ContainerEffector), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_77ad4911c6394031bfb361a119d0d378.MTHD_735f76a8e3134779ba641a196cfafe9e()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_00a4c3e293ff44edad8f7a62daf2cac2.MTHD_d893ce90dbc04a1b817cf985534b46c2()
         }));
         this.AddMember("GetHashCode", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("GetHashCode", typeof (ContainerEffector), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_77ad4911c6394031bfb361a119d0d378.MTHD_2a4477cc4f3e446395ede7cb0f14f3cc()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_00a4c3e293ff44edad8f7a62daf2cac2.MTHD_a298140c78b849e6a105be2d15fadb06()
         }));
         this.AddMember("Equals", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("Equals", typeof (ContainerEffector), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_77ad4911c6394031bfb361a119d0d378.MTHD_1dec757752ff4032a5b5783322d9f69c()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_00a4c3e293ff44edad8f7a62daf2cac2.MTHD_9e1fb2f40e4c4e148cc528555b1a141f()
         }));
         this.AddMember("GetType", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("GetType", typeof (ContainerEffector), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_77ad4911c6394031bfb361a119d0d378.MTHD_651e51aaa5ad457eb82ae97a9a1216b7()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_00a4c3e293ff44edad8f7a62daf2cac2.MTHD_5c88e838bae44f2b8eec10abdfdd9576()
         }));
         this.AddMember("ToString", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("ToString", typeof (ContainerEffector), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_77ad4911c6394031bfb361a119d0d378.MTHD_3f47ec6302ce4efeb3cf061036c1e345()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_00a4c3e293ff44edad8f7a62daf2cac2.MTHD_f2ff91a9b98d496ba2dd2e37e7f01ab6()
         }));
-        this.AddMember("isDead", (IMemberDescriptor) new Bridge.TYPE_77ad4911c6394031bfb361a119d0d378.PROP_b0dc65c07b9446a1b0b502814cdddc76());
-        this.AddMember("x", (IMemberDescriptor) new Bridge.TYPE_77ad4911c6394031bfb361a119d0d378.PROP_6c140ce689304726a2d905fd5e3bb372());
-        this.AddMember("y", (IMemberDescriptor) new Bridge.TYPE_77ad4911c6394031bfb361a119d0d378.PROP_3eac4406b0af4964a8cf39b5dabacb00());
-        this.AddMember("position", (IMemberDescriptor) new Bridge.TYPE_77ad4911c6394031bfb361a119d0d378.PROP_262360b0ac8d477ca743616b7e91e7eb());
-        this.AddMember("turnsAlive", (IMemberDescriptor) new Bridge.TYPE_77ad4911c6394031bfb361a119d0d378.PROP_92b4dcd471fb4123a3012d71593a5fa6());
-        this.AddMember("maxTurnsAlive", (IMemberDescriptor) new Bridge.TYPE_77ad4911c6394031bfb361a119d0d378.PROP_705c6c052656413a9d48a4cb1e50b6b5());
-        this.AddMember("active", (IMemberDescriptor) new Bridge.TYPE_77ad4911c6394031bfb361a119d0d378.PROP_25749c7941a54dd2b16027085ec9fdde());
-        this.AddMember("type", (IMemberDescriptor) new Bridge.TYPE_77ad4911c6394031bfb361a119d0d378.PROP_d39a66f9d5504aa793e8a671d69ffc0f());
+        this.AddMember("isDead", (IMemberDescriptor) new Bridge.TYPE_00a4c3e293ff44edad8f7a62daf2cac2.PROP_6a453511a6294208949df42340283f33());
+        this.AddMember("x", (IMemberDescriptor) new Bridge.TYPE_00a4c3e293ff44edad8f7a62daf2cac2.PROP_d93c8ef7481549fe8273937297394dde());
+        this.AddMember("y", (IMemberDescriptor) new Bridge.TYPE_00a4c3e293ff44edad8f7a62daf2cac2.PROP_41272137d19d48638c4d256badb9420a());
+        this.AddMember("position", (IMemberDescriptor) new Bridge.TYPE_00a4c3e293ff44edad8f7a62daf2cac2.PROP_09fb381faf244cfc99fa96822c3d0754());
+        this.AddMember("turnsAlive", (IMemberDescriptor) new Bridge.TYPE_00a4c3e293ff44edad8f7a62daf2cac2.PROP_9c923f0c3bf844949bfc2b1acdfdc34f());
+        this.AddMember("maxTurnsAlive", (IMemberDescriptor) new Bridge.TYPE_00a4c3e293ff44edad8f7a62daf2cac2.PROP_f165e5a6e13840009138f576ca9b896c());
+        this.AddMember("active", (IMemberDescriptor) new Bridge.TYPE_00a4c3e293ff44edad8f7a62daf2cac2.PROP_b691da9213344f9b8c8f42e8253584da());
+        this.AddMember("type", (IMemberDescriptor) new Bridge.TYPE_00a4c3e293ff44edad8f7a62daf2cac2.PROP_cb3d9b2703314cec9039e3390c51d38e());
       }
 
-      private sealed class MTHD_16bfa408dd01463a8d742774f1cded4d : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_2c637965f0044e4d97b6f762136b263b : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_16bfa408dd01463a8d742774f1cded4d()
+        internal MTHD_2c637965f0044e4d97b6f762136b263b()
         {
           this.Initialize("get_isDead", false, new ParameterDescriptor[0], false);
         }
@@ -5516,9 +5516,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_f74c1a202538436585f1c088c423c186 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_1246a997d96f460280b8b1cdb5fa7d8a : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_f74c1a202538436585f1c088c423c186()
+        internal MTHD_1246a997d96f460280b8b1cdb5fa7d8a()
         {
           this.Initialize("get_x", false, new ParameterDescriptor[0], false);
         }
@@ -5529,9 +5529,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_f5f55ccd43bf486e860d2fc4a928a467 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_a3b82497f1f34e0c921d074c4a32f20f : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_f5f55ccd43bf486e860d2fc4a928a467()
+        internal MTHD_a3b82497f1f34e0c921d074c4a32f20f()
         {
           this.Initialize("set_x", false, new ParameterDescriptor[1]
           {
@@ -5546,9 +5546,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_405f0819e2a14a04b1ae9dfc2c4c20fa : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_ce1f120fc2c24ef4b3bb00a1a11342c9 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_405f0819e2a14a04b1ae9dfc2c4c20fa()
+        internal MTHD_ce1f120fc2c24ef4b3bb00a1a11342c9()
         {
           this.Initialize("get_y", false, new ParameterDescriptor[0], false);
         }
@@ -5559,9 +5559,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_e841ce8d32f14c4ebff953c1863cefb5 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_c029e87b30ca4a4bbce60418b9aad257 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_e841ce8d32f14c4ebff953c1863cefb5()
+        internal MTHD_c029e87b30ca4a4bbce60418b9aad257()
         {
           this.Initialize("set_y", false, new ParameterDescriptor[1]
           {
@@ -5576,9 +5576,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_992fbc3d37b14a55aa7a65b8456c1bfd : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_5eefb6c8cce64d38bb974003d79a8bfa : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_992fbc3d37b14a55aa7a65b8456c1bfd()
+        internal MTHD_5eefb6c8cce64d38bb974003d79a8bfa()
         {
           this.Initialize("get_position", false, new ParameterDescriptor[0], false);
         }
@@ -5589,9 +5589,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_6b7d7798e2b74ccea82044255ae72446 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_b68bfca6d1084f60ab72f3a6b835b388 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_6b7d7798e2b74ccea82044255ae72446()
+        internal MTHD_b68bfca6d1084f60ab72f3a6b835b388()
         {
           this.Initialize("set_position", false, new ParameterDescriptor[1]
           {
@@ -5606,9 +5606,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_664b9eab9b0c4745b1487b81949a67c8 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_b3cc14d306f14b0a96a5e78dd2a63555 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_664b9eab9b0c4745b1487b81949a67c8()
+        internal MTHD_b3cc14d306f14b0a96a5e78dd2a63555()
         {
           this.Initialize("get_turnsAlive", false, new ParameterDescriptor[0], false);
         }
@@ -5619,9 +5619,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_3e8bb5fd67864dee860f6dd8d38ff3cf : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_5d33b192110a49ffaff6fa055345938b : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_3e8bb5fd67864dee860f6dd8d38ff3cf()
+        internal MTHD_5d33b192110a49ffaff6fa055345938b()
         {
           this.Initialize("set_turnsAlive", false, new ParameterDescriptor[1]
           {
@@ -5636,9 +5636,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_9eb076d2fb974c0fa1c3010b384254c2 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_5fbae8710131452dad0c29b3baff22b7 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_9eb076d2fb974c0fa1c3010b384254c2()
+        internal MTHD_5fbae8710131452dad0c29b3baff22b7()
         {
           this.Initialize("get_maxTurnsAlive", false, new ParameterDescriptor[0], false);
         }
@@ -5649,9 +5649,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_a04e585b0ce74d02a636a061cdd3eba0 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_42743ffe50cb495299e4b68b01f94f8d : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_a04e585b0ce74d02a636a061cdd3eba0()
+        internal MTHD_42743ffe50cb495299e4b68b01f94f8d()
         {
           this.Initialize("set_maxTurnsAlive", false, new ParameterDescriptor[1]
           {
@@ -5666,9 +5666,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_2c167650f3824eadbeab1af0f34c9e71 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_d300b317397746dc94fb926cfe99a9b4 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_2c167650f3824eadbeab1af0f34c9e71()
+        internal MTHD_d300b317397746dc94fb926cfe99a9b4()
         {
           this.Initialize("get_active", false, new ParameterDescriptor[0], false);
         }
@@ -5679,9 +5679,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_3aa07925fbed487081ac56234c0718a3 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_72b4658218af4219a0ad370e221d2adf : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_3aa07925fbed487081ac56234c0718a3()
+        internal MTHD_72b4658218af4219a0ad370e221d2adf()
         {
           this.Initialize("set_active", false, new ParameterDescriptor[1]
           {
@@ -5696,9 +5696,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_f033bb47ae90489fb148d5afb1f80ef0 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_b10bd40590654531b1a35d99ab076a6d : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_f033bb47ae90489fb148d5afb1f80ef0()
+        internal MTHD_b10bd40590654531b1a35d99ab076a6d()
         {
           this.Initialize("get_type", false, new ParameterDescriptor[0], false);
         }
@@ -5709,9 +5709,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_0ff963430d5a4f3d8ae9a5138c363796 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_7f4654c385e94c088a477adf5e39230e : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_0ff963430d5a4f3d8ae9a5138c363796()
+        internal MTHD_7f4654c385e94c088a477adf5e39230e()
         {
           this.Initialize("destroy", false, new ParameterDescriptor[0], false);
         }
@@ -5723,9 +5723,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_735f76a8e3134779ba641a196cfafe9e : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_d893ce90dbc04a1b817cf985534b46c2 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_735f76a8e3134779ba641a196cfafe9e()
+        internal MTHD_d893ce90dbc04a1b817cf985534b46c2()
         {
           this.Initialize("turnPassed", false, new ParameterDescriptor[0], false);
         }
@@ -5737,9 +5737,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_2a4477cc4f3e446395ede7cb0f14f3cc : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_a298140c78b849e6a105be2d15fadb06 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_2a4477cc4f3e446395ede7cb0f14f3cc()
+        internal MTHD_a298140c78b849e6a105be2d15fadb06()
         {
           this.Initialize("GetHashCode", false, new ParameterDescriptor[0], false);
         }
@@ -5750,9 +5750,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_1dec757752ff4032a5b5783322d9f69c : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_9e1fb2f40e4c4e148cc528555b1a141f : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_1dec757752ff4032a5b5783322d9f69c()
+        internal MTHD_9e1fb2f40e4c4e148cc528555b1a141f()
         {
           this.Initialize("Equals", false, new ParameterDescriptor[1]
           {
@@ -5766,9 +5766,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_651e51aaa5ad457eb82ae97a9a1216b7 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_5c88e838bae44f2b8eec10abdfdd9576 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_651e51aaa5ad457eb82ae97a9a1216b7()
+        internal MTHD_5c88e838bae44f2b8eec10abdfdd9576()
         {
           this.Initialize("GetType", false, new ParameterDescriptor[0], false);
         }
@@ -5779,9 +5779,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_3f47ec6302ce4efeb3cf061036c1e345 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_f2ff91a9b98d496ba2dd2e37e7f01ab6 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_3f47ec6302ce4efeb3cf061036c1e345()
+        internal MTHD_f2ff91a9b98d496ba2dd2e37e7f01ab6()
         {
           this.Initialize("ToString", false, new ParameterDescriptor[0], false);
         }
@@ -5792,9 +5792,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_b0dc65c07b9446a1b0b502814cdddc76 : HardwiredMemberDescriptor
+      private sealed class PROP_6a453511a6294208949df42340283f33 : HardwiredMemberDescriptor
       {
-        internal PROP_b0dc65c07b9446a1b0b502814cdddc76()
+        internal PROP_6a453511a6294208949df42340283f33()
           : base(typeof (bool), "isDead", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -5805,9 +5805,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_6c140ce689304726a2d905fd5e3bb372 : HardwiredMemberDescriptor
+      private sealed class PROP_d93c8ef7481549fe8273937297394dde : HardwiredMemberDescriptor
       {
-        internal PROP_6c140ce689304726a2d905fd5e3bb372()
+        internal PROP_d93c8ef7481549fe8273937297394dde()
           : base(typeof (int), "x", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -5823,9 +5823,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_3eac4406b0af4964a8cf39b5dabacb00 : HardwiredMemberDescriptor
+      private sealed class PROP_41272137d19d48638c4d256badb9420a : HardwiredMemberDescriptor
       {
-        internal PROP_3eac4406b0af4964a8cf39b5dabacb00()
+        internal PROP_41272137d19d48638c4d256badb9420a()
           : base(typeof (int), "y", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -5841,9 +5841,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_262360b0ac8d477ca743616b7e91e7eb : HardwiredMemberDescriptor
+      private sealed class PROP_09fb381faf244cfc99fa96822c3d0754 : HardwiredMemberDescriptor
       {
-        internal PROP_262360b0ac8d477ca743616b7e91e7eb()
+        internal PROP_09fb381faf244cfc99fa96822c3d0754()
           : base(typeof (Educative.Point), "position", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -5859,9 +5859,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_92b4dcd471fb4123a3012d71593a5fa6 : HardwiredMemberDescriptor
+      private sealed class PROP_9c923f0c3bf844949bfc2b1acdfdc34f : HardwiredMemberDescriptor
       {
-        internal PROP_92b4dcd471fb4123a3012d71593a5fa6()
+        internal PROP_9c923f0c3bf844949bfc2b1acdfdc34f()
           : base(typeof (int), "turnsAlive", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -5877,9 +5877,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_705c6c052656413a9d48a4cb1e50b6b5 : HardwiredMemberDescriptor
+      private sealed class PROP_f165e5a6e13840009138f576ca9b896c : HardwiredMemberDescriptor
       {
-        internal PROP_705c6c052656413a9d48a4cb1e50b6b5()
+        internal PROP_f165e5a6e13840009138f576ca9b896c()
           : base(typeof (int), "maxTurnsAlive", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -5895,9 +5895,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_25749c7941a54dd2b16027085ec9fdde : HardwiredMemberDescriptor
+      private sealed class PROP_b691da9213344f9b8c8f42e8253584da : HardwiredMemberDescriptor
       {
-        internal PROP_25749c7941a54dd2b16027085ec9fdde()
+        internal PROP_b691da9213344f9b8c8f42e8253584da()
           : base(typeof (bool), "active", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -5913,9 +5913,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_d39a66f9d5504aa793e8a671d69ffc0f : HardwiredMemberDescriptor
+      private sealed class PROP_cb3d9b2703314cec9039e3390c51d38e : HardwiredMemberDescriptor
       {
-        internal PROP_d39a66f9d5504aa793e8a671d69ffc0f()
+        internal PROP_cb3d9b2703314cec9039e3390c51d38e()
           : base(typeof (EffectorType), "type", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -5927,113 +5927,113 @@ namespace MoonSharp
       }
     }
 
-    private sealed class TYPE_3735edbd689c425d8b67b14b28c26ad9 : HardwiredUserDataDescriptor
+    private sealed class TYPE_c61f5bcb75c04be9bec7cf02cf182af2 : HardwiredUserDataDescriptor
     {
-      internal TYPE_3735edbd689c425d8b67b14b28c26ad9()
+      internal TYPE_c61f5bcb75c04be9bec7cf02cf182af2()
         : base(typeof (ContainerIndicator))
       {
         this.AddMember("get_isDead", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_isDead", typeof (ContainerIndicator), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_3735edbd689c425d8b67b14b28c26ad9.MTHD_a42a48f74a064473a0f54b452f5c7a57()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_c61f5bcb75c04be9bec7cf02cf182af2.MTHD_9dcd03f1b23740dd9433a8b3b39db62e()
         }));
         this.AddMember("get_x", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_x", typeof (ContainerIndicator), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_3735edbd689c425d8b67b14b28c26ad9.MTHD_ff58afdbde7f410f9ee967f14d15a924()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_c61f5bcb75c04be9bec7cf02cf182af2.MTHD_9299860936b54abe8b95cb1ac45fb3e7()
         }));
         this.AddMember("set_x", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_x", typeof (ContainerIndicator), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_3735edbd689c425d8b67b14b28c26ad9.MTHD_05dc63e779d0406b95316b9514221621()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_c61f5bcb75c04be9bec7cf02cf182af2.MTHD_b2e668ef8f0444ef8080a749892d7b58()
         }));
         this.AddMember("get_y", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_y", typeof (ContainerIndicator), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_3735edbd689c425d8b67b14b28c26ad9.MTHD_411041d2a67048469dbd31b23b9a57a3()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_c61f5bcb75c04be9bec7cf02cf182af2.MTHD_5e5039befcd948b2858ec247279aaa48()
         }));
         this.AddMember("set_y", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_y", typeof (ContainerIndicator), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_3735edbd689c425d8b67b14b28c26ad9.MTHD_7a20de686b284efc84fc4a7a06446f6e()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_c61f5bcb75c04be9bec7cf02cf182af2.MTHD_6b5cef20c05a4cd0be5cba5e7751222c()
         }));
         this.AddMember("get_radius", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_radius", typeof (ContainerIndicator), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_3735edbd689c425d8b67b14b28c26ad9.MTHD_8d15f8607a4449978745548238012d89()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_c61f5bcb75c04be9bec7cf02cf182af2.MTHD_5ad153f4ba0f438faec66862e93ec2b7()
         }));
         this.AddMember("set_radius", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_radius", typeof (ContainerIndicator), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_3735edbd689c425d8b67b14b28c26ad9.MTHD_d2a8bead86f5414dbe2347f19eac9819()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_c61f5bcb75c04be9bec7cf02cf182af2.MTHD_789d3ab26ee04afc94d5ddb0b442e143()
         }));
         this.AddMember("get_position", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_position", typeof (ContainerIndicator), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_3735edbd689c425d8b67b14b28c26ad9.MTHD_38e5ecf7667d4bca9a16911ec6c2af5e()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_c61f5bcb75c04be9bec7cf02cf182af2.MTHD_0ad199977f72430583df2fd040c207d5()
         }));
         this.AddMember("set_position", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_position", typeof (ContainerIndicator), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_3735edbd689c425d8b67b14b28c26ad9.MTHD_218ca805a96848ab8bb0e882ee2a1ef7()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_c61f5bcb75c04be9bec7cf02cf182af2.MTHD_0026a0fdf9284be9ac4f2f1cf017801e()
         }));
         this.AddMember("get_angle", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_angle", typeof (ContainerIndicator), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_3735edbd689c425d8b67b14b28c26ad9.MTHD_af25fc8a65314815a424925f23654cab()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_c61f5bcb75c04be9bec7cf02cf182af2.MTHD_7a3aca82448341f9b0209f10a7fce833()
         }));
         this.AddMember("set_angle", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_angle", typeof (ContainerIndicator), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_3735edbd689c425d8b67b14b28c26ad9.MTHD_d3f3347bc802460bae00d55cd7cef6a4()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_c61f5bcb75c04be9bec7cf02cf182af2.MTHD_465516a3c9624ffebf054935b3126fe0()
         }));
         this.AddMember("get_color", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_color", typeof (ContainerIndicator), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_3735edbd689c425d8b67b14b28c26ad9.MTHD_5fe5d15a261c4fc1834fc434b76a65c4()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_c61f5bcb75c04be9bec7cf02cf182af2.MTHD_ca50758136f84ead9cb58acfa2f8b6b3()
         }));
         this.AddMember("set_color", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_color", typeof (ContainerIndicator), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_3735edbd689c425d8b67b14b28c26ad9.MTHD_7882dd3f400742e3b4ee9cce59a5bfe7()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_c61f5bcb75c04be9bec7cf02cf182af2.MTHD_71dafd13fa7945639b802c9504465b2f()
         }));
         this.AddMember("get_color2", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_color2", typeof (ContainerIndicator), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_3735edbd689c425d8b67b14b28c26ad9.MTHD_ab049eea0b8f40c4a0877ccba0a64414()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_c61f5bcb75c04be9bec7cf02cf182af2.MTHD_9b539260100a42f684ce93083ffd0b88()
         }));
         this.AddMember("set_color2", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_color2", typeof (ContainerIndicator), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_3735edbd689c425d8b67b14b28c26ad9.MTHD_47ece9a35b85477293c803cc903bf754()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_c61f5bcb75c04be9bec7cf02cf182af2.MTHD_1819af048d134dc3a27ca9350359a645()
         }));
         this.AddMember("get_kind", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_kind", typeof (ContainerIndicator), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_3735edbd689c425d8b67b14b28c26ad9.MTHD_27c3e2d92c4545fbb0726824efe416b4()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_c61f5bcb75c04be9bec7cf02cf182af2.MTHD_de6b50f77ac346df98696a649bca2356()
         }));
         this.AddMember("setIcon", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("setIcon", typeof (ContainerIndicator), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_3735edbd689c425d8b67b14b28c26ad9.MTHD_6fa9bcfe58da42faae0894597bfaae3c()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_c61f5bcb75c04be9bec7cf02cf182af2.MTHD_d41e8d610014493db0e8e6192fc9d54e()
         }));
         this.AddMember("Destroy", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("Destroy", typeof (ContainerIndicator), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_3735edbd689c425d8b67b14b28c26ad9.MTHD_7251461882944a67b4e9ea9fccb05ffb()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_c61f5bcb75c04be9bec7cf02cf182af2.MTHD_24dfad8b8abc49cfb258c8c12dbd048c()
         }));
         this.AddMember("Equals", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("Equals", typeof (ContainerIndicator), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_3735edbd689c425d8b67b14b28c26ad9.MTHD_e2255dc8147a4015b04d05b075ac8f44()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_c61f5bcb75c04be9bec7cf02cf182af2.MTHD_8fca774a2a5142c3869ea4a5af8f2885()
         }));
         this.AddMember("GetHashCode", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("GetHashCode", typeof (ContainerIndicator), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_3735edbd689c425d8b67b14b28c26ad9.MTHD_d024799cab01439f86d7b52f76925f13()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_c61f5bcb75c04be9bec7cf02cf182af2.MTHD_29f0c9d8f4324143b238cdf5014df2f2()
         }));
         this.AddMember("GetType", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("GetType", typeof (ContainerIndicator), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_3735edbd689c425d8b67b14b28c26ad9.MTHD_bcd8ed09552441dab7b5f846f0781977()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_c61f5bcb75c04be9bec7cf02cf182af2.MTHD_c749bdba6a324488b8080d41653eb9f1()
         }));
         this.AddMember("ToString", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("ToString", typeof (ContainerIndicator), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_3735edbd689c425d8b67b14b28c26ad9.MTHD_cb17808af3ce41a79af6f41552fdbdf8()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_c61f5bcb75c04be9bec7cf02cf182af2.MTHD_3f224640f2be4ff1a5b3bea49cdb10e5()
         }));
-        this.AddMember("isDead", (IMemberDescriptor) new Bridge.TYPE_3735edbd689c425d8b67b14b28c26ad9.PROP_edcdf1e635af4d4d9dcef039ff2925b7());
-        this.AddMember("x", (IMemberDescriptor) new Bridge.TYPE_3735edbd689c425d8b67b14b28c26ad9.PROP_179be0084912465f9d5ccf2aee4b8d0f());
-        this.AddMember("y", (IMemberDescriptor) new Bridge.TYPE_3735edbd689c425d8b67b14b28c26ad9.PROP_4bdbc01ab6eb425c8e5320d10b5cadd2());
-        this.AddMember("radius", (IMemberDescriptor) new Bridge.TYPE_3735edbd689c425d8b67b14b28c26ad9.PROP_c1fa1c5d41c642c4bca709f5ba8bb82b());
-        this.AddMember("position", (IMemberDescriptor) new Bridge.TYPE_3735edbd689c425d8b67b14b28c26ad9.PROP_f6d9fc159f654e8bb204662402035c64());
-        this.AddMember("angle", (IMemberDescriptor) new Bridge.TYPE_3735edbd689c425d8b67b14b28c26ad9.PROP_99002a24b668423f834df9cefb5031eb());
-        this.AddMember("color", (IMemberDescriptor) new Bridge.TYPE_3735edbd689c425d8b67b14b28c26ad9.PROP_6f2ccbf93afc48728c436e0c953937d1());
-        this.AddMember("color2", (IMemberDescriptor) new Bridge.TYPE_3735edbd689c425d8b67b14b28c26ad9.PROP_b2f048dc57e044c7bd1440d5c0f0dd8c());
-        this.AddMember("kind", (IMemberDescriptor) new Bridge.TYPE_3735edbd689c425d8b67b14b28c26ad9.PROP_74fd922f03b64b4e9c77160cca46c635());
+        this.AddMember("isDead", (IMemberDescriptor) new Bridge.TYPE_c61f5bcb75c04be9bec7cf02cf182af2.PROP_34a93d781e994d37b7391b2c73ef6be7());
+        this.AddMember("x", (IMemberDescriptor) new Bridge.TYPE_c61f5bcb75c04be9bec7cf02cf182af2.PROP_efd633eb27b649199bd3abd309371389());
+        this.AddMember("y", (IMemberDescriptor) new Bridge.TYPE_c61f5bcb75c04be9bec7cf02cf182af2.PROP_742a5f21594f461b90aed76d5567993a());
+        this.AddMember("radius", (IMemberDescriptor) new Bridge.TYPE_c61f5bcb75c04be9bec7cf02cf182af2.PROP_6277d3aa63834d73b2bb9cf0bba1d617());
+        this.AddMember("position", (IMemberDescriptor) new Bridge.TYPE_c61f5bcb75c04be9bec7cf02cf182af2.PROP_b5f0fcfcb6904f83976e848ad677092b());
+        this.AddMember("angle", (IMemberDescriptor) new Bridge.TYPE_c61f5bcb75c04be9bec7cf02cf182af2.PROP_0bd0ba50993f4ed195adf4a004d90e8f());
+        this.AddMember("color", (IMemberDescriptor) new Bridge.TYPE_c61f5bcb75c04be9bec7cf02cf182af2.PROP_4270e867e97c4c35bcbf3a0c0e043438());
+        this.AddMember("color2", (IMemberDescriptor) new Bridge.TYPE_c61f5bcb75c04be9bec7cf02cf182af2.PROP_9d6a1c258c014817b98954490ed1168b());
+        this.AddMember("kind", (IMemberDescriptor) new Bridge.TYPE_c61f5bcb75c04be9bec7cf02cf182af2.PROP_0a183daeec4c4b26b8e53eafc8de60c5());
       }
 
-      private sealed class MTHD_a42a48f74a064473a0f54b452f5c7a57 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_9dcd03f1b23740dd9433a8b3b39db62e : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_a42a48f74a064473a0f54b452f5c7a57()
+        internal MTHD_9dcd03f1b23740dd9433a8b3b39db62e()
         {
           this.Initialize("get_isDead", false, new ParameterDescriptor[0], false);
         }
@@ -6044,9 +6044,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_ff58afdbde7f410f9ee967f14d15a924 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_9299860936b54abe8b95cb1ac45fb3e7 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_ff58afdbde7f410f9ee967f14d15a924()
+        internal MTHD_9299860936b54abe8b95cb1ac45fb3e7()
         {
           this.Initialize("get_x", false, new ParameterDescriptor[0], false);
         }
@@ -6057,9 +6057,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_05dc63e779d0406b95316b9514221621 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_b2e668ef8f0444ef8080a749892d7b58 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_05dc63e779d0406b95316b9514221621()
+        internal MTHD_b2e668ef8f0444ef8080a749892d7b58()
         {
           this.Initialize("set_x", false, new ParameterDescriptor[1]
           {
@@ -6074,9 +6074,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_411041d2a67048469dbd31b23b9a57a3 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_5e5039befcd948b2858ec247279aaa48 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_411041d2a67048469dbd31b23b9a57a3()
+        internal MTHD_5e5039befcd948b2858ec247279aaa48()
         {
           this.Initialize("get_y", false, new ParameterDescriptor[0], false);
         }
@@ -6087,9 +6087,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_7a20de686b284efc84fc4a7a06446f6e : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_6b5cef20c05a4cd0be5cba5e7751222c : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_7a20de686b284efc84fc4a7a06446f6e()
+        internal MTHD_6b5cef20c05a4cd0be5cba5e7751222c()
         {
           this.Initialize("set_y", false, new ParameterDescriptor[1]
           {
@@ -6104,9 +6104,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_8d15f8607a4449978745548238012d89 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_5ad153f4ba0f438faec66862e93ec2b7 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_8d15f8607a4449978745548238012d89()
+        internal MTHD_5ad153f4ba0f438faec66862e93ec2b7()
         {
           this.Initialize("get_radius", false, new ParameterDescriptor[0], false);
         }
@@ -6117,9 +6117,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_d2a8bead86f5414dbe2347f19eac9819 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_789d3ab26ee04afc94d5ddb0b442e143 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_d2a8bead86f5414dbe2347f19eac9819()
+        internal MTHD_789d3ab26ee04afc94d5ddb0b442e143()
         {
           this.Initialize("set_radius", false, new ParameterDescriptor[1]
           {
@@ -6134,9 +6134,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_38e5ecf7667d4bca9a16911ec6c2af5e : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_0ad199977f72430583df2fd040c207d5 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_38e5ecf7667d4bca9a16911ec6c2af5e()
+        internal MTHD_0ad199977f72430583df2fd040c207d5()
         {
           this.Initialize("get_position", false, new ParameterDescriptor[0], false);
         }
@@ -6147,9 +6147,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_218ca805a96848ab8bb0e882ee2a1ef7 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_0026a0fdf9284be9ac4f2f1cf017801e : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_218ca805a96848ab8bb0e882ee2a1ef7()
+        internal MTHD_0026a0fdf9284be9ac4f2f1cf017801e()
         {
           this.Initialize("set_position", false, new ParameterDescriptor[1]
           {
@@ -6164,9 +6164,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_af25fc8a65314815a424925f23654cab : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_7a3aca82448341f9b0209f10a7fce833 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_af25fc8a65314815a424925f23654cab()
+        internal MTHD_7a3aca82448341f9b0209f10a7fce833()
         {
           this.Initialize("get_angle", false, new ParameterDescriptor[0], false);
         }
@@ -6177,9 +6177,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_d3f3347bc802460bae00d55cd7cef6a4 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_465516a3c9624ffebf054935b3126fe0 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_d3f3347bc802460bae00d55cd7cef6a4()
+        internal MTHD_465516a3c9624ffebf054935b3126fe0()
         {
           this.Initialize("set_angle", false, new ParameterDescriptor[1]
           {
@@ -6194,9 +6194,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_5fe5d15a261c4fc1834fc434b76a65c4 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_ca50758136f84ead9cb58acfa2f8b6b3 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_5fe5d15a261c4fc1834fc434b76a65c4()
+        internal MTHD_ca50758136f84ead9cb58acfa2f8b6b3()
         {
           this.Initialize("get_color", false, new ParameterDescriptor[0], false);
         }
@@ -6207,9 +6207,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_7882dd3f400742e3b4ee9cce59a5bfe7 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_71dafd13fa7945639b802c9504465b2f : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_7882dd3f400742e3b4ee9cce59a5bfe7()
+        internal MTHD_71dafd13fa7945639b802c9504465b2f()
         {
           this.Initialize("set_color", false, new ParameterDescriptor[1]
           {
@@ -6224,9 +6224,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_ab049eea0b8f40c4a0877ccba0a64414 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_9b539260100a42f684ce93083ffd0b88 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_ab049eea0b8f40c4a0877ccba0a64414()
+        internal MTHD_9b539260100a42f684ce93083ffd0b88()
         {
           this.Initialize("get_color2", false, new ParameterDescriptor[0], false);
         }
@@ -6237,9 +6237,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_47ece9a35b85477293c803cc903bf754 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_1819af048d134dc3a27ca9350359a645 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_47ece9a35b85477293c803cc903bf754()
+        internal MTHD_1819af048d134dc3a27ca9350359a645()
         {
           this.Initialize("set_color2", false, new ParameterDescriptor[1]
           {
@@ -6254,9 +6254,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_27c3e2d92c4545fbb0726824efe416b4 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_de6b50f77ac346df98696a649bca2356 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_27c3e2d92c4545fbb0726824efe416b4()
+        internal MTHD_de6b50f77ac346df98696a649bca2356()
         {
           this.Initialize("get_kind", false, new ParameterDescriptor[0], false);
         }
@@ -6267,9 +6267,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_6fa9bcfe58da42faae0894597bfaae3c : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_d41e8d610014493db0e8e6192fc9d54e : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_6fa9bcfe58da42faae0894597bfaae3c()
+        internal MTHD_d41e8d610014493db0e8e6192fc9d54e()
         {
           this.Initialize("setIcon", false, new ParameterDescriptor[1]
           {
@@ -6284,9 +6284,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_7251461882944a67b4e9ea9fccb05ffb : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_24dfad8b8abc49cfb258c8c12dbd048c : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_7251461882944a67b4e9ea9fccb05ffb()
+        internal MTHD_24dfad8b8abc49cfb258c8c12dbd048c()
         {
           this.Initialize("Destroy", false, new ParameterDescriptor[0], false);
         }
@@ -6298,9 +6298,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_e2255dc8147a4015b04d05b075ac8f44 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_8fca774a2a5142c3869ea4a5af8f2885 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_e2255dc8147a4015b04d05b075ac8f44()
+        internal MTHD_8fca774a2a5142c3869ea4a5af8f2885()
         {
           this.Initialize("Equals", false, new ParameterDescriptor[1]
           {
@@ -6314,9 +6314,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_d024799cab01439f86d7b52f76925f13 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_29f0c9d8f4324143b238cdf5014df2f2 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_d024799cab01439f86d7b52f76925f13()
+        internal MTHD_29f0c9d8f4324143b238cdf5014df2f2()
         {
           this.Initialize("GetHashCode", false, new ParameterDescriptor[0], false);
         }
@@ -6327,9 +6327,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_bcd8ed09552441dab7b5f846f0781977 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_c749bdba6a324488b8080d41653eb9f1 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_bcd8ed09552441dab7b5f846f0781977()
+        internal MTHD_c749bdba6a324488b8080d41653eb9f1()
         {
           this.Initialize("GetType", false, new ParameterDescriptor[0], false);
         }
@@ -6340,9 +6340,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_cb17808af3ce41a79af6f41552fdbdf8 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_3f224640f2be4ff1a5b3bea49cdb10e5 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_cb17808af3ce41a79af6f41552fdbdf8()
+        internal MTHD_3f224640f2be4ff1a5b3bea49cdb10e5()
         {
           this.Initialize("ToString", false, new ParameterDescriptor[0], false);
         }
@@ -6353,9 +6353,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_edcdf1e635af4d4d9dcef039ff2925b7 : HardwiredMemberDescriptor
+      private sealed class PROP_34a93d781e994d37b7391b2c73ef6be7 : HardwiredMemberDescriptor
       {
-        internal PROP_edcdf1e635af4d4d9dcef039ff2925b7()
+        internal PROP_34a93d781e994d37b7391b2c73ef6be7()
           : base(typeof (bool), "isDead", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -6366,9 +6366,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_179be0084912465f9d5ccf2aee4b8d0f : HardwiredMemberDescriptor
+      private sealed class PROP_efd633eb27b649199bd3abd309371389 : HardwiredMemberDescriptor
       {
-        internal PROP_179be0084912465f9d5ccf2aee4b8d0f()
+        internal PROP_efd633eb27b649199bd3abd309371389()
           : base(typeof (int), "x", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -6384,9 +6384,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_4bdbc01ab6eb425c8e5320d10b5cadd2 : HardwiredMemberDescriptor
+      private sealed class PROP_742a5f21594f461b90aed76d5567993a : HardwiredMemberDescriptor
       {
-        internal PROP_4bdbc01ab6eb425c8e5320d10b5cadd2()
+        internal PROP_742a5f21594f461b90aed76d5567993a()
           : base(typeof (int), "y", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -6402,9 +6402,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_c1fa1c5d41c642c4bca709f5ba8bb82b : HardwiredMemberDescriptor
+      private sealed class PROP_6277d3aa63834d73b2bb9cf0bba1d617 : HardwiredMemberDescriptor
       {
-        internal PROP_c1fa1c5d41c642c4bca709f5ba8bb82b()
+        internal PROP_6277d3aa63834d73b2bb9cf0bba1d617()
           : base(typeof (double), "radius", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -6420,9 +6420,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_f6d9fc159f654e8bb204662402035c64 : HardwiredMemberDescriptor
+      private sealed class PROP_b5f0fcfcb6904f83976e848ad677092b : HardwiredMemberDescriptor
       {
-        internal PROP_f6d9fc159f654e8bb204662402035c64()
+        internal PROP_b5f0fcfcb6904f83976e848ad677092b()
           : base(typeof (Educative.Point), "position", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -6438,9 +6438,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_99002a24b668423f834df9cefb5031eb : HardwiredMemberDescriptor
+      private sealed class PROP_0bd0ba50993f4ed195adf4a004d90e8f : HardwiredMemberDescriptor
       {
-        internal PROP_99002a24b668423f834df9cefb5031eb()
+        internal PROP_0bd0ba50993f4ed195adf4a004d90e8f()
           : base(typeof (double), "angle", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -6456,9 +6456,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_6f2ccbf93afc48728c436e0c953937d1 : HardwiredMemberDescriptor
+      private sealed class PROP_4270e867e97c4c35bcbf3a0c0e043438 : HardwiredMemberDescriptor
       {
-        internal PROP_6f2ccbf93afc48728c436e0c953937d1()
+        internal PROP_4270e867e97c4c35bcbf3a0c0e043438()
           : base(typeof (string), "color", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -6474,9 +6474,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_b2f048dc57e044c7bd1440d5c0f0dd8c : HardwiredMemberDescriptor
+      private sealed class PROP_9d6a1c258c014817b98954490ed1168b : HardwiredMemberDescriptor
       {
-        internal PROP_b2f048dc57e044c7bd1440d5c0f0dd8c()
+        internal PROP_9d6a1c258c014817b98954490ed1168b()
           : base(typeof (LuaColor), "color2", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -6492,9 +6492,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_74fd922f03b64b4e9c77160cca46c635 : HardwiredMemberDescriptor
+      private sealed class PROP_0a183daeec4c4b26b8e53eafc8de60c5 : HardwiredMemberDescriptor
       {
-        internal PROP_74fd922f03b64b4e9c77160cca46c635()
+        internal PROP_0a183daeec4c4b26b8e53eafc8de60c5()
           : base(typeof (IndicatorKind), "kind", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -6506,145 +6506,145 @@ namespace MoonSharp
       }
     }
 
-    private sealed class TYPE_4642a60d7b544bb4bc7838968e30a632 : HardwiredUserDataDescriptor
+    private sealed class TYPE_91dd4fc9060249b8826c501154639282 : HardwiredUserDataDescriptor
     {
-      internal TYPE_4642a60d7b544bb4bc7838968e30a632()
+      internal TYPE_91dd4fc9060249b8826c501154639282()
         : base(typeof (ContainerSpell))
       {
         this.AddMember("get_uses", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_uses", typeof (ContainerSpell), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.MTHD_4d8fa9c327ef4216a0352767653e7859()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.MTHD_371c68ddfabb406090bc5fcc60305552()
         }));
         this.AddMember("set_uses", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_uses", typeof (ContainerSpell), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.MTHD_63d1ca032d134def8c657c9fb5699672()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.MTHD_03418581188c4cffb4983f1d97bbcab7()
         }));
         this.AddMember("get_maxUses", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_maxUses", typeof (ContainerSpell), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.MTHD_4be36a66cd5e4d5db90712dbe82f3fb5()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.MTHD_0f291d535f004e1f93f1bb5cc57341f3()
         }));
         this.AddMember("set_maxUses", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_maxUses", typeof (ContainerSpell), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.MTHD_a85643bc1f2847cb866ec9ac8207dee3()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.MTHD_6f3093550e5a4755b7dedd0e1bee7f0d()
         }));
         this.AddMember("get_rechargeTime", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_rechargeTime", typeof (ContainerSpell), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.MTHD_920ff79286204fc28f27729d8da0df94()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.MTHD_1d83b53eb672402aa34c8374ce250987()
         }));
         this.AddMember("set_rechargeTime", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_rechargeTime", typeof (ContainerSpell), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.MTHD_6dea878cc1c44d8fa8c425a5c0372125()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.MTHD_56074234265040999303dfec80527ebf()
         }));
         this.AddMember("get_lastTurnFired", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_lastTurnFired", typeof (ContainerSpell), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.MTHD_41362b9cb8b44563a549317b2c5eb33a()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.MTHD_c80963dcd6564288ad3f4551f0de263a()
         }));
         this.AddMember("set_lastTurnFired", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_lastTurnFired", typeof (ContainerSpell), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.MTHD_f7ab88f7cc154d32aba765129a4befcb()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.MTHD_66b22056b98644ca95f295c1237cfa82()
         }));
         this.AddMember("get_isPresent", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_isPresent", typeof (ContainerSpell), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.MTHD_7eee839029ca43afab85a5858cc7db4a()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.MTHD_f2932027b816472b8f21a8ba6bb92546()
         }));
         this.AddMember("set_isPresent", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_isPresent", typeof (ContainerSpell), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.MTHD_e252601116fe42ec8e5478dddd1124df()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.MTHD_d8ed90fe73644aea97f05e30475f12ca()
         }));
         this.AddMember("get_locked", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_locked", typeof (ContainerSpell), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.MTHD_127a4b938b25449ba83fc8713d46fdfd()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.MTHD_dc3b843228584a558c8078e0c4fa5860()
         }));
         this.AddMember("set_locked", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_locked", typeof (ContainerSpell), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.MTHD_2cd00304c80147e39bb19b615ae3a9c9()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.MTHD_9c94c84b22984530825f15a921bf4419()
         }));
         this.AddMember("get_turnsTillFirstUse", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_turnsTillFirstUse", typeof (ContainerSpell), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.MTHD_d4e8f40763684c2b929a1214107d033f()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.MTHD_9eb48ed99b1b42fc959c570f1b05b34f()
         }));
         this.AddMember("set_turnsTillFirstUse", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_turnsTillFirstUse", typeof (ContainerSpell), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.MTHD_cd9d8212008b4bea931b7c02259f85f0()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.MTHD_38c1b5d3b6ca40e09123a8f469a8141c()
         }));
         this.AddMember("get_spellEnum", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_spellEnum", typeof (ContainerSpell), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.MTHD_168f3555ef804a4c99936d31e8d9a5fb()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.MTHD_60d33c2a24a444a58a2f66fb3364eeb8()
         }));
         this.AddMember("get_castType", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_castType", typeof (ContainerSpell), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.MTHD_4dabd3f1c1374a1283f44ac74ebe39a1()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.MTHD_79b5002d568c4249bd03270ac417245c()
         }));
         this.AddMember("get_damageType", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_damageType", typeof (ContainerSpell), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.MTHD_4f12d2e8866a490c8595b2fa2cce6726()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.MTHD_9339ef158ab344a5b08a53ba61c0fa4a()
         }));
         this.AddMember("get_book", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_book", typeof (ContainerSpell), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.MTHD_af17c0e3289a473b84538b4a5c19e229()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.MTHD_961ced7824f946858850bcef53c9bed7()
         }));
         this.AddMember("get_damage", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_damage", typeof (ContainerSpell), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.MTHD_d6086867e3cf42f78a8e73ee97e4cb5a()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.MTHD_0d82cdf31d98423ab583319cdfa49286()
         }));
         this.AddMember("get_explosionRadius", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_explosionRadius", typeof (ContainerSpell), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.MTHD_aa72797aecf34c759910a25653f6adc0()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.MTHD_d6d7379192d84e1bb8d1e080325b3e9a()
         }));
         this.AddMember("get_description", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_description", typeof (ContainerSpell), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.MTHD_515411593c0b4c4885bc9f2c2f2ffba6()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.MTHD_51751d3e05e1416c9348626d7b5a8fcc()
         }));
         this.AddMember("get_descriptionOnly", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_descriptionOnly", typeof (ContainerSpell), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.MTHD_15fd7ecf354a45b98be5f9335a47c1c1()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.MTHD_85d662c19e2d44538b5dac5820be1ee1()
         }));
         this.AddMember("get_descriptionExtra", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_descriptionExtra", typeof (ContainerSpell), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.MTHD_75001a211fa945af9a98e5c11e877f48()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.MTHD_52b193fcbfc042bc9a18d90e2e18a392()
         }));
         this.AddMember("get_name", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_name", typeof (ContainerSpell), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.MTHD_3dc09038f96e43babef32d8b1bdbe6e3()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.MTHD_f66359024a124d5395e220ff70f24ea8()
         }));
         this.AddMember("Equals", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("Equals", typeof (ContainerSpell), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.MTHD_0bf94c7fbe35400db6bdbd8b4de72cfd()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.MTHD_9d00db7056204fdbabff0765e52dd38b()
         }));
         this.AddMember("GetHashCode", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("GetHashCode", typeof (ContainerSpell), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.MTHD_3a578f7b4a8e47459b6c1df2dc565153()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.MTHD_9e9ec1b3ec6b4c83851804f3703a6d26()
         }));
         this.AddMember("GetType", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("GetType", typeof (ContainerSpell), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.MTHD_2fd15920acdc4643ade8ec4776868ff2()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.MTHD_617c5c35add642e3beb31890e13916e0()
         }));
         this.AddMember("ToString", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("ToString", typeof (ContainerSpell), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.MTHD_3244215ae2704f6bb723aac2f4faa73a()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.MTHD_310e0498a12c4e7f8159c55047316a68()
         }));
-        this.AddMember("uses", (IMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.PROP_d4ef42225b5b4248ba78e7ff5839e56f());
-        this.AddMember("maxUses", (IMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.PROP_43812ec4a97a45659233403b827990a5());
-        this.AddMember("rechargeTime", (IMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.PROP_8fb8776d84214bdc9abfc5086922f513());
-        this.AddMember("lastTurnFired", (IMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.PROP_2aede75a7d1c465fbbd83396a3c96b6b());
-        this.AddMember("isPresent", (IMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.PROP_fe48fe26abb24d819e56b5ed800e7804());
-        this.AddMember("locked", (IMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.PROP_c4d640284d2b4597a93d585dfbeb96c9());
-        this.AddMember("turnsTillFirstUse", (IMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.PROP_3d4a73e661fd41baaa3fc15c35a0139b());
-        this.AddMember("spellEnum", (IMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.PROP_830b43a3ea7b487083ef37a477869760());
-        this.AddMember("castType", (IMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.PROP_6ca7627582594cc4a816f464c36fff77());
-        this.AddMember("damageType", (IMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.PROP_8835ceb69bd048cfac2a5c05df38d04f());
-        this.AddMember("book", (IMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.PROP_7d0c74d2b15d48be92240ddc055f9cb3());
-        this.AddMember("damage", (IMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.PROP_50133cdb1dcb45c28968b2690253b56f());
-        this.AddMember("explosionRadius", (IMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.PROP_dba5511d02e141b5ab431d37df2ec30f());
-        this.AddMember("description", (IMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.PROP_cee30f5bbf3d4e00bb88ac3fe1c3b8de());
-        this.AddMember("descriptionOnly", (IMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.PROP_a80338266c06400a9799c69a63019b02());
-        this.AddMember("descriptionExtra", (IMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.PROP_7d578c88cc80474496d24b3c9dc17d09());
-        this.AddMember("name", (IMemberDescriptor) new Bridge.TYPE_4642a60d7b544bb4bc7838968e30a632.PROP_72c0f9d997264eb8bd60676cb466b306());
+        this.AddMember("uses", (IMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.PROP_5dbcf8e6af50448fb0a40a7a8d298bf9());
+        this.AddMember("maxUses", (IMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.PROP_0c1560cd61e640109d4571c81b21d7c7());
+        this.AddMember("rechargeTime", (IMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.PROP_5209fdca27214b3aa3666fc2b3c85045());
+        this.AddMember("lastTurnFired", (IMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.PROP_0380c6ffb1dc410f9a8f5a8d735c0caf());
+        this.AddMember("isPresent", (IMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.PROP_e68cf91639a44f47bff386aee68f77cd());
+        this.AddMember("locked", (IMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.PROP_1c1ad5fccec84252a38cc92dc048816d());
+        this.AddMember("turnsTillFirstUse", (IMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.PROP_ec7b472f91a6417087d05d32ace640a9());
+        this.AddMember("spellEnum", (IMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.PROP_8dc4b5fb315040c5911b4f7c3b68c6d1());
+        this.AddMember("castType", (IMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.PROP_fb49b88053d64e3080e545d131c7b639());
+        this.AddMember("damageType", (IMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.PROP_b8b7bd45f37d49b1b4de99f1362e4877());
+        this.AddMember("book", (IMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.PROP_1ad399e1d6e44abbbe0deecb19846407());
+        this.AddMember("damage", (IMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.PROP_a097245a3c3447e2921c0f7516ad0566());
+        this.AddMember("explosionRadius", (IMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.PROP_bd35c23d742f46568e8c11ea9579dc10());
+        this.AddMember("description", (IMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.PROP_b8463fe72da5497db0bdeda2824c6be7());
+        this.AddMember("descriptionOnly", (IMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.PROP_6124ce922b1a49788dec11e1cc3b80eb());
+        this.AddMember("descriptionExtra", (IMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.PROP_5171fa1fcbd040bf97ff0195fb4bca28());
+        this.AddMember("name", (IMemberDescriptor) new Bridge.TYPE_91dd4fc9060249b8826c501154639282.PROP_6f4458f1baf341558449ecff99b4d16c());
       }
 
-      private sealed class MTHD_4d8fa9c327ef4216a0352767653e7859 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_371c68ddfabb406090bc5fcc60305552 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_4d8fa9c327ef4216a0352767653e7859()
+        internal MTHD_371c68ddfabb406090bc5fcc60305552()
         {
           this.Initialize("get_uses", false, new ParameterDescriptor[0], false);
         }
@@ -6655,9 +6655,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_63d1ca032d134def8c657c9fb5699672 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_03418581188c4cffb4983f1d97bbcab7 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_63d1ca032d134def8c657c9fb5699672()
+        internal MTHD_03418581188c4cffb4983f1d97bbcab7()
         {
           this.Initialize("set_uses", false, new ParameterDescriptor[1]
           {
@@ -6672,9 +6672,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_4be36a66cd5e4d5db90712dbe82f3fb5 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_0f291d535f004e1f93f1bb5cc57341f3 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_4be36a66cd5e4d5db90712dbe82f3fb5()
+        internal MTHD_0f291d535f004e1f93f1bb5cc57341f3()
         {
           this.Initialize("get_maxUses", false, new ParameterDescriptor[0], false);
         }
@@ -6685,9 +6685,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_a85643bc1f2847cb866ec9ac8207dee3 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_6f3093550e5a4755b7dedd0e1bee7f0d : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_a85643bc1f2847cb866ec9ac8207dee3()
+        internal MTHD_6f3093550e5a4755b7dedd0e1bee7f0d()
         {
           this.Initialize("set_maxUses", false, new ParameterDescriptor[1]
           {
@@ -6702,9 +6702,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_920ff79286204fc28f27729d8da0df94 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_1d83b53eb672402aa34c8374ce250987 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_920ff79286204fc28f27729d8da0df94()
+        internal MTHD_1d83b53eb672402aa34c8374ce250987()
         {
           this.Initialize("get_rechargeTime", false, new ParameterDescriptor[0], false);
         }
@@ -6715,9 +6715,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_6dea878cc1c44d8fa8c425a5c0372125 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_56074234265040999303dfec80527ebf : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_6dea878cc1c44d8fa8c425a5c0372125()
+        internal MTHD_56074234265040999303dfec80527ebf()
         {
           this.Initialize("set_rechargeTime", false, new ParameterDescriptor[1]
           {
@@ -6732,9 +6732,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_41362b9cb8b44563a549317b2c5eb33a : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_c80963dcd6564288ad3f4551f0de263a : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_41362b9cb8b44563a549317b2c5eb33a()
+        internal MTHD_c80963dcd6564288ad3f4551f0de263a()
         {
           this.Initialize("get_lastTurnFired", false, new ParameterDescriptor[0], false);
         }
@@ -6745,9 +6745,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_f7ab88f7cc154d32aba765129a4befcb : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_66b22056b98644ca95f295c1237cfa82 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_f7ab88f7cc154d32aba765129a4befcb()
+        internal MTHD_66b22056b98644ca95f295c1237cfa82()
         {
           this.Initialize("set_lastTurnFired", false, new ParameterDescriptor[1]
           {
@@ -6762,9 +6762,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_7eee839029ca43afab85a5858cc7db4a : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_f2932027b816472b8f21a8ba6bb92546 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_7eee839029ca43afab85a5858cc7db4a()
+        internal MTHD_f2932027b816472b8f21a8ba6bb92546()
         {
           this.Initialize("get_isPresent", false, new ParameterDescriptor[0], false);
         }
@@ -6775,9 +6775,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_e252601116fe42ec8e5478dddd1124df : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_d8ed90fe73644aea97f05e30475f12ca : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_e252601116fe42ec8e5478dddd1124df()
+        internal MTHD_d8ed90fe73644aea97f05e30475f12ca()
         {
           this.Initialize("set_isPresent", false, new ParameterDescriptor[1]
           {
@@ -6792,9 +6792,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_127a4b938b25449ba83fc8713d46fdfd : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_dc3b843228584a558c8078e0c4fa5860 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_127a4b938b25449ba83fc8713d46fdfd()
+        internal MTHD_dc3b843228584a558c8078e0c4fa5860()
         {
           this.Initialize("get_locked", false, new ParameterDescriptor[0], false);
         }
@@ -6805,9 +6805,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_2cd00304c80147e39bb19b615ae3a9c9 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_9c94c84b22984530825f15a921bf4419 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_2cd00304c80147e39bb19b615ae3a9c9()
+        internal MTHD_9c94c84b22984530825f15a921bf4419()
         {
           this.Initialize("set_locked", false, new ParameterDescriptor[1]
           {
@@ -6822,9 +6822,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_d4e8f40763684c2b929a1214107d033f : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_9eb48ed99b1b42fc959c570f1b05b34f : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_d4e8f40763684c2b929a1214107d033f()
+        internal MTHD_9eb48ed99b1b42fc959c570f1b05b34f()
         {
           this.Initialize("get_turnsTillFirstUse", false, new ParameterDescriptor[0], false);
         }
@@ -6835,9 +6835,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_cd9d8212008b4bea931b7c02259f85f0 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_38c1b5d3b6ca40e09123a8f469a8141c : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_cd9d8212008b4bea931b7c02259f85f0()
+        internal MTHD_38c1b5d3b6ca40e09123a8f469a8141c()
         {
           this.Initialize("set_turnsTillFirstUse", false, new ParameterDescriptor[1]
           {
@@ -6852,9 +6852,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_168f3555ef804a4c99936d31e8d9a5fb : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_60d33c2a24a444a58a2f66fb3364eeb8 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_168f3555ef804a4c99936d31e8d9a5fb()
+        internal MTHD_60d33c2a24a444a58a2f66fb3364eeb8()
         {
           this.Initialize("get_spellEnum", false, new ParameterDescriptor[0], false);
         }
@@ -6865,9 +6865,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_4dabd3f1c1374a1283f44ac74ebe39a1 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_79b5002d568c4249bd03270ac417245c : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_4dabd3f1c1374a1283f44ac74ebe39a1()
+        internal MTHD_79b5002d568c4249bd03270ac417245c()
         {
           this.Initialize("get_castType", false, new ParameterDescriptor[0], false);
         }
@@ -6878,9 +6878,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_4f12d2e8866a490c8595b2fa2cce6726 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_9339ef158ab344a5b08a53ba61c0fa4a : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_4f12d2e8866a490c8595b2fa2cce6726()
+        internal MTHD_9339ef158ab344a5b08a53ba61c0fa4a()
         {
           this.Initialize("get_damageType", false, new ParameterDescriptor[0], false);
         }
@@ -6891,9 +6891,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_af17c0e3289a473b84538b4a5c19e229 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_961ced7824f946858850bcef53c9bed7 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_af17c0e3289a473b84538b4a5c19e229()
+        internal MTHD_961ced7824f946858850bcef53c9bed7()
         {
           this.Initialize("get_book", false, new ParameterDescriptor[0], false);
         }
@@ -6904,9 +6904,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_d6086867e3cf42f78a8e73ee97e4cb5a : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_0d82cdf31d98423ab583319cdfa49286 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_d6086867e3cf42f78a8e73ee97e4cb5a()
+        internal MTHD_0d82cdf31d98423ab583319cdfa49286()
         {
           this.Initialize("get_damage", false, new ParameterDescriptor[0], false);
         }
@@ -6917,9 +6917,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_aa72797aecf34c759910a25653f6adc0 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_d6d7379192d84e1bb8d1e080325b3e9a : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_aa72797aecf34c759910a25653f6adc0()
+        internal MTHD_d6d7379192d84e1bb8d1e080325b3e9a()
         {
           this.Initialize("get_explosionRadius", false, new ParameterDescriptor[0], false);
         }
@@ -6930,9 +6930,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_515411593c0b4c4885bc9f2c2f2ffba6 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_51751d3e05e1416c9348626d7b5a8fcc : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_515411593c0b4c4885bc9f2c2f2ffba6()
+        internal MTHD_51751d3e05e1416c9348626d7b5a8fcc()
         {
           this.Initialize("get_description", false, new ParameterDescriptor[0], false);
         }
@@ -6943,9 +6943,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_15fd7ecf354a45b98be5f9335a47c1c1 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_85d662c19e2d44538b5dac5820be1ee1 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_15fd7ecf354a45b98be5f9335a47c1c1()
+        internal MTHD_85d662c19e2d44538b5dac5820be1ee1()
         {
           this.Initialize("get_descriptionOnly", false, new ParameterDescriptor[0], false);
         }
@@ -6956,9 +6956,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_75001a211fa945af9a98e5c11e877f48 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_52b193fcbfc042bc9a18d90e2e18a392 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_75001a211fa945af9a98e5c11e877f48()
+        internal MTHD_52b193fcbfc042bc9a18d90e2e18a392()
         {
           this.Initialize("get_descriptionExtra", false, new ParameterDescriptor[0], false);
         }
@@ -6969,9 +6969,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_3dc09038f96e43babef32d8b1bdbe6e3 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_f66359024a124d5395e220ff70f24ea8 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_3dc09038f96e43babef32d8b1bdbe6e3()
+        internal MTHD_f66359024a124d5395e220ff70f24ea8()
         {
           this.Initialize("get_name", false, new ParameterDescriptor[0], false);
         }
@@ -6982,9 +6982,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_0bf94c7fbe35400db6bdbd8b4de72cfd : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_9d00db7056204fdbabff0765e52dd38b : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_0bf94c7fbe35400db6bdbd8b4de72cfd()
+        internal MTHD_9d00db7056204fdbabff0765e52dd38b()
         {
           this.Initialize("Equals", false, new ParameterDescriptor[1]
           {
@@ -6998,9 +6998,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_3a578f7b4a8e47459b6c1df2dc565153 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_9e9ec1b3ec6b4c83851804f3703a6d26 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_3a578f7b4a8e47459b6c1df2dc565153()
+        internal MTHD_9e9ec1b3ec6b4c83851804f3703a6d26()
         {
           this.Initialize("GetHashCode", false, new ParameterDescriptor[0], false);
         }
@@ -7011,9 +7011,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_2fd15920acdc4643ade8ec4776868ff2 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_617c5c35add642e3beb31890e13916e0 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_2fd15920acdc4643ade8ec4776868ff2()
+        internal MTHD_617c5c35add642e3beb31890e13916e0()
         {
           this.Initialize("GetType", false, new ParameterDescriptor[0], false);
         }
@@ -7024,9 +7024,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_3244215ae2704f6bb723aac2f4faa73a : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_310e0498a12c4e7f8159c55047316a68 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_3244215ae2704f6bb723aac2f4faa73a()
+        internal MTHD_310e0498a12c4e7f8159c55047316a68()
         {
           this.Initialize("ToString", false, new ParameterDescriptor[0], false);
         }
@@ -7037,9 +7037,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_d4ef42225b5b4248ba78e7ff5839e56f : HardwiredMemberDescriptor
+      private sealed class PROP_5dbcf8e6af50448fb0a40a7a8d298bf9 : HardwiredMemberDescriptor
       {
-        internal PROP_d4ef42225b5b4248ba78e7ff5839e56f()
+        internal PROP_5dbcf8e6af50448fb0a40a7a8d298bf9()
           : base(typeof (int), "uses", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -7055,9 +7055,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_43812ec4a97a45659233403b827990a5 : HardwiredMemberDescriptor
+      private sealed class PROP_0c1560cd61e640109d4571c81b21d7c7 : HardwiredMemberDescriptor
       {
-        internal PROP_43812ec4a97a45659233403b827990a5()
+        internal PROP_0c1560cd61e640109d4571c81b21d7c7()
           : base(typeof (int), "maxUses", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -7073,9 +7073,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_8fb8776d84214bdc9abfc5086922f513 : HardwiredMemberDescriptor
+      private sealed class PROP_5209fdca27214b3aa3666fc2b3c85045 : HardwiredMemberDescriptor
       {
-        internal PROP_8fb8776d84214bdc9abfc5086922f513()
+        internal PROP_5209fdca27214b3aa3666fc2b3c85045()
           : base(typeof (int), "rechargeTime", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -7091,9 +7091,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_2aede75a7d1c465fbbd83396a3c96b6b : HardwiredMemberDescriptor
+      private sealed class PROP_0380c6ffb1dc410f9a8f5a8d735c0caf : HardwiredMemberDescriptor
       {
-        internal PROP_2aede75a7d1c465fbbd83396a3c96b6b()
+        internal PROP_0380c6ffb1dc410f9a8f5a8d735c0caf()
           : base(typeof (int), "lastTurnFired", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -7109,9 +7109,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_fe48fe26abb24d819e56b5ed800e7804 : HardwiredMemberDescriptor
+      private sealed class PROP_e68cf91639a44f47bff386aee68f77cd : HardwiredMemberDescriptor
       {
-        internal PROP_fe48fe26abb24d819e56b5ed800e7804()
+        internal PROP_e68cf91639a44f47bff386aee68f77cd()
           : base(typeof (bool), "isPresent", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -7127,9 +7127,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_c4d640284d2b4597a93d585dfbeb96c9 : HardwiredMemberDescriptor
+      private sealed class PROP_1c1ad5fccec84252a38cc92dc048816d : HardwiredMemberDescriptor
       {
-        internal PROP_c4d640284d2b4597a93d585dfbeb96c9()
+        internal PROP_1c1ad5fccec84252a38cc92dc048816d()
           : base(typeof (bool), "locked", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -7145,9 +7145,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_3d4a73e661fd41baaa3fc15c35a0139b : HardwiredMemberDescriptor
+      private sealed class PROP_ec7b472f91a6417087d05d32ace640a9 : HardwiredMemberDescriptor
       {
-        internal PROP_3d4a73e661fd41baaa3fc15c35a0139b()
+        internal PROP_ec7b472f91a6417087d05d32ace640a9()
           : base(typeof (int), "turnsTillFirstUse", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -7163,9 +7163,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_830b43a3ea7b487083ef37a477869760 : HardwiredMemberDescriptor
+      private sealed class PROP_8dc4b5fb315040c5911b4f7c3b68c6d1 : HardwiredMemberDescriptor
       {
-        internal PROP_830b43a3ea7b487083ef37a477869760()
+        internal PROP_8dc4b5fb315040c5911b4f7c3b68c6d1()
           : base(typeof (SpellEnum), "spellEnum", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -7176,9 +7176,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_6ca7627582594cc4a816f464c36fff77 : HardwiredMemberDescriptor
+      private sealed class PROP_fb49b88053d64e3080e545d131c7b639 : HardwiredMemberDescriptor
       {
-        internal PROP_6ca7627582594cc4a816f464c36fff77()
+        internal PROP_fb49b88053d64e3080e545d131c7b639()
           : base(typeof (CastType), "castType", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -7189,9 +7189,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_8835ceb69bd048cfac2a5c05df38d04f : HardwiredMemberDescriptor
+      private sealed class PROP_b8b7bd45f37d49b1b4de99f1362e4877 : HardwiredMemberDescriptor
       {
-        internal PROP_8835ceb69bd048cfac2a5c05df38d04f()
+        internal PROP_b8b7bd45f37d49b1b4de99f1362e4877()
           : base(typeof (DamageType), "damageType", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -7202,9 +7202,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_7d0c74d2b15d48be92240ddc055f9cb3 : HardwiredMemberDescriptor
+      private sealed class PROP_1ad399e1d6e44abbbe0deecb19846407 : HardwiredMemberDescriptor
       {
-        internal PROP_7d0c74d2b15d48be92240ddc055f9cb3()
+        internal PROP_1ad399e1d6e44abbbe0deecb19846407()
           : base(typeof (BookOf), "book", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -7215,9 +7215,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_50133cdb1dcb45c28968b2690253b56f : HardwiredMemberDescriptor
+      private sealed class PROP_a097245a3c3447e2921c0f7516ad0566 : HardwiredMemberDescriptor
       {
-        internal PROP_50133cdb1dcb45c28968b2690253b56f()
+        internal PROP_a097245a3c3447e2921c0f7516ad0566()
           : base(typeof (int), "damage", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -7228,9 +7228,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_dba5511d02e141b5ab431d37df2ec30f : HardwiredMemberDescriptor
+      private sealed class PROP_bd35c23d742f46568e8c11ea9579dc10 : HardwiredMemberDescriptor
       {
-        internal PROP_dba5511d02e141b5ab431d37df2ec30f()
+        internal PROP_bd35c23d742f46568e8c11ea9579dc10()
           : base(typeof (int), "explosionRadius", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -7241,9 +7241,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_cee30f5bbf3d4e00bb88ac3fe1c3b8de : HardwiredMemberDescriptor
+      private sealed class PROP_b8463fe72da5497db0bdeda2824c6be7 : HardwiredMemberDescriptor
       {
-        internal PROP_cee30f5bbf3d4e00bb88ac3fe1c3b8de()
+        internal PROP_b8463fe72da5497db0bdeda2824c6be7()
           : base(typeof (string), "description", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -7254,9 +7254,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_a80338266c06400a9799c69a63019b02 : HardwiredMemberDescriptor
+      private sealed class PROP_6124ce922b1a49788dec11e1cc3b80eb : HardwiredMemberDescriptor
       {
-        internal PROP_a80338266c06400a9799c69a63019b02()
+        internal PROP_6124ce922b1a49788dec11e1cc3b80eb()
           : base(typeof (string), "descriptionOnly", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -7267,9 +7267,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_7d578c88cc80474496d24b3c9dc17d09 : HardwiredMemberDescriptor
+      private sealed class PROP_5171fa1fcbd040bf97ff0195fb4bca28 : HardwiredMemberDescriptor
       {
-        internal PROP_7d578c88cc80474496d24b3c9dc17d09()
+        internal PROP_5171fa1fcbd040bf97ff0195fb4bca28()
           : base(typeof (string), "descriptionExtra", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -7280,9 +7280,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_72c0f9d997264eb8bd60676cb466b306 : HardwiredMemberDescriptor
+      private sealed class PROP_6f4458f1baf341558449ecff99b4d16c : HardwiredMemberDescriptor
       {
-        internal PROP_72c0f9d997264eb8bd60676cb466b306()
+        internal PROP_6f4458f1baf341558449ecff99b4d16c()
           : base(typeof (string), "name", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -7294,90 +7294,90 @@ namespace MoonSharp
       }
     }
 
-    private sealed class TYPE_6c8367819323494cae0f919b727ab62a : HardwiredUserDataDescriptor
+    private sealed class TYPE_a4bdb6cb8f81422ba0a39ca2377d2a45 : HardwiredUserDataDescriptor
     {
-      internal TYPE_6c8367819323494cae0f919b727ab62a()
+      internal TYPE_a4bdb6cb8f81422ba0a39ca2377d2a45()
         : base(typeof (ContainerTower))
       {
         this.AddMember("get_health", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_health", typeof (ContainerTower), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_6c8367819323494cae0f919b727ab62a.MTHD_fdfa4bf64bf4465a9d7e475540c32b67()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_a4bdb6cb8f81422ba0a39ca2377d2a45.MTHD_34dc59e02d2c46b2a8fc7361f6aa2e69()
         }));
         this.AddMember("set_health", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_health", typeof (ContainerTower), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_6c8367819323494cae0f919b727ab62a.MTHD_cbd54f6afb664c9a95cb149a864fb503()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_a4bdb6cb8f81422ba0a39ca2377d2a45.MTHD_63e3cd2d59054e8ba5ba60a10505b356()
         }));
         this.AddMember("get_maxHealth", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_maxHealth", typeof (ContainerTower), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_6c8367819323494cae0f919b727ab62a.MTHD_e550c61a6e8c4ef0afdc69b105310424()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_a4bdb6cb8f81422ba0a39ca2377d2a45.MTHD_a9af5f9efe02441bb47a45f16d570f0e()
         }));
         this.AddMember("set_maxHealth", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_maxHealth", typeof (ContainerTower), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_6c8367819323494cae0f919b727ab62a.MTHD_2b985ae1a74547fc82948f8f6f737f21()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_a4bdb6cb8f81422ba0a39ca2377d2a45.MTHD_ee2b70a777ae4c80b63a9aedb60310eb()
         }));
         this.AddMember("get_x", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_x", typeof (ContainerTower), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_6c8367819323494cae0f919b727ab62a.MTHD_7b716d219fe84a22a4127f472ef84d80()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_a4bdb6cb8f81422ba0a39ca2377d2a45.MTHD_34868822006e410ca65fd68d9c4c438c()
         }));
         this.AddMember("set_x", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_x", typeof (ContainerTower), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_6c8367819323494cae0f919b727ab62a.MTHD_fa1a7c3ea0c644568795f3d57fde5b2e()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_a4bdb6cb8f81422ba0a39ca2377d2a45.MTHD_2c7d78fbc3df4af18c92723b806f16ff()
         }));
         this.AddMember("get_y", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_y", typeof (ContainerTower), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_6c8367819323494cae0f919b727ab62a.MTHD_f42f98f6a07a45d4bafc5842def2c762()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_a4bdb6cb8f81422ba0a39ca2377d2a45.MTHD_e7cdbeaf01664d7d81f77b1670362687()
         }));
         this.AddMember("set_y", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_y", typeof (ContainerTower), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_6c8367819323494cae0f919b727ab62a.MTHD_c313e715c7e8451aa83aed5ff5153bb6()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_a4bdb6cb8f81422ba0a39ca2377d2a45.MTHD_7528d63be75c4064967495b944399167()
         }));
         this.AddMember("get_position", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_position", typeof (ContainerTower), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_6c8367819323494cae0f919b727ab62a.MTHD_f177b58476cb49a79173a9d1298e02b3()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_a4bdb6cb8f81422ba0a39ca2377d2a45.MTHD_0d2bf095cc0d443a99b96fd4b52967ca()
         }));
         this.AddMember("set_position", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_position", typeof (ContainerTower), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_6c8367819323494cae0f919b727ab62a.MTHD_e879393660c745808bb42e83ac4abdc6()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_a4bdb6cb8f81422ba0a39ca2377d2a45.MTHD_fdd600228155415b9c9db846fb55cb49()
         }));
         this.AddMember("get_isDead", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_isDead", typeof (ContainerTower), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_6c8367819323494cae0f919b727ab62a.MTHD_c1abd1e8d0a34307993f3bc448d556a4()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_a4bdb6cb8f81422ba0a39ca2377d2a45.MTHD_afe81b6acd56416d91a22eaa8ae2e426()
         }));
         this.AddMember("getType", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("getType", typeof (ContainerTower), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_6c8367819323494cae0f919b727ab62a.MTHD_f90d859dcfbf424496a5d20d1fad824a()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_a4bdb6cb8f81422ba0a39ca2377d2a45.MTHD_de77b8d00a774233bb48206ccdcfcc19()
         }));
         this.AddMember("kill", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("kill", typeof (ContainerTower), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_6c8367819323494cae0f919b727ab62a.MTHD_3b59094ebc7545bda939fc93bfb16d2d()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_a4bdb6cb8f81422ba0a39ca2377d2a45.MTHD_8a053c772a3d495b84df952528e0a1eb()
         }));
         this.AddMember("GetHashCode", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("GetHashCode", typeof (ContainerTower), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_6c8367819323494cae0f919b727ab62a.MTHD_a5b22371296943a381ee7263b55fd7cb()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_a4bdb6cb8f81422ba0a39ca2377d2a45.MTHD_65b02ca653db48d78d41af87d6a2053b()
         }));
         this.AddMember("Equals", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("Equals", typeof (ContainerTower), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_6c8367819323494cae0f919b727ab62a.MTHD_7bb127d73a284072b8cf9099bda65bc9()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_a4bdb6cb8f81422ba0a39ca2377d2a45.MTHD_16ef66f78da04d51b97b84917827c2a2()
         }));
         this.AddMember("GetType", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("GetType", typeof (ContainerTower), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_6c8367819323494cae0f919b727ab62a.MTHD_36ed0ade50db4eb0aafd983815679efd()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_a4bdb6cb8f81422ba0a39ca2377d2a45.MTHD_0a3724c2fd0c4edabfdadd55184164ad()
         }));
         this.AddMember("ToString", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("ToString", typeof (ContainerTower), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_6c8367819323494cae0f919b727ab62a.MTHD_1cbcfede22244d7ebb229854dcb43540()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_a4bdb6cb8f81422ba0a39ca2377d2a45.MTHD_bf39e016fff94d68ab70f68d22e41e37()
         }));
-        this.AddMember("health", (IMemberDescriptor) new Bridge.TYPE_6c8367819323494cae0f919b727ab62a.PROP_0a9a911776e74a71817043760747cad2());
-        this.AddMember("maxHealth", (IMemberDescriptor) new Bridge.TYPE_6c8367819323494cae0f919b727ab62a.PROP_29a47859d24f4e21b6dc93c4f7d482ff());
-        this.AddMember("x", (IMemberDescriptor) new Bridge.TYPE_6c8367819323494cae0f919b727ab62a.PROP_04f237cc61ad4bc097f27b80728b8550());
-        this.AddMember("y", (IMemberDescriptor) new Bridge.TYPE_6c8367819323494cae0f919b727ab62a.PROP_3ae548e566a54cb4a543957abf61b37b());
-        this.AddMember("position", (IMemberDescriptor) new Bridge.TYPE_6c8367819323494cae0f919b727ab62a.PROP_98bb16a6a44145e0a8b6c02872da5c0b());
-        this.AddMember("isDead", (IMemberDescriptor) new Bridge.TYPE_6c8367819323494cae0f919b727ab62a.PROP_367f664cf698489d800fd97bb307d86d());
+        this.AddMember("health", (IMemberDescriptor) new Bridge.TYPE_a4bdb6cb8f81422ba0a39ca2377d2a45.PROP_a6bbbf7c296d4736a93cf218922a9150());
+        this.AddMember("maxHealth", (IMemberDescriptor) new Bridge.TYPE_a4bdb6cb8f81422ba0a39ca2377d2a45.PROP_ef63ecd20a7f4af8bf14b7511b6c1065());
+        this.AddMember("x", (IMemberDescriptor) new Bridge.TYPE_a4bdb6cb8f81422ba0a39ca2377d2a45.PROP_8326e54da0634c54a3c4885d763a2688());
+        this.AddMember("y", (IMemberDescriptor) new Bridge.TYPE_a4bdb6cb8f81422ba0a39ca2377d2a45.PROP_135ad799291f46e692eedb0e38f0cf90());
+        this.AddMember("position", (IMemberDescriptor) new Bridge.TYPE_a4bdb6cb8f81422ba0a39ca2377d2a45.PROP_fd417c85faaf4a7187fe001721b581f8());
+        this.AddMember("isDead", (IMemberDescriptor) new Bridge.TYPE_a4bdb6cb8f81422ba0a39ca2377d2a45.PROP_b828fecedbd8401588cee9cb728bd897());
       }
 
-      private sealed class MTHD_fdfa4bf64bf4465a9d7e475540c32b67 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_34dc59e02d2c46b2a8fc7361f6aa2e69 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_fdfa4bf64bf4465a9d7e475540c32b67()
+        internal MTHD_34dc59e02d2c46b2a8fc7361f6aa2e69()
         {
           this.Initialize("get_health", false, new ParameterDescriptor[0], false);
         }
@@ -7388,9 +7388,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_cbd54f6afb664c9a95cb149a864fb503 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_63e3cd2d59054e8ba5ba60a10505b356 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_cbd54f6afb664c9a95cb149a864fb503()
+        internal MTHD_63e3cd2d59054e8ba5ba60a10505b356()
         {
           this.Initialize("set_health", false, new ParameterDescriptor[1]
           {
@@ -7405,9 +7405,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_e550c61a6e8c4ef0afdc69b105310424 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_a9af5f9efe02441bb47a45f16d570f0e : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_e550c61a6e8c4ef0afdc69b105310424()
+        internal MTHD_a9af5f9efe02441bb47a45f16d570f0e()
         {
           this.Initialize("get_maxHealth", false, new ParameterDescriptor[0], false);
         }
@@ -7418,9 +7418,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_2b985ae1a74547fc82948f8f6f737f21 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_ee2b70a777ae4c80b63a9aedb60310eb : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_2b985ae1a74547fc82948f8f6f737f21()
+        internal MTHD_ee2b70a777ae4c80b63a9aedb60310eb()
         {
           this.Initialize("set_maxHealth", false, new ParameterDescriptor[1]
           {
@@ -7435,9 +7435,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_7b716d219fe84a22a4127f472ef84d80 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_34868822006e410ca65fd68d9c4c438c : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_7b716d219fe84a22a4127f472ef84d80()
+        internal MTHD_34868822006e410ca65fd68d9c4c438c()
         {
           this.Initialize("get_x", false, new ParameterDescriptor[0], false);
         }
@@ -7448,9 +7448,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_fa1a7c3ea0c644568795f3d57fde5b2e : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_2c7d78fbc3df4af18c92723b806f16ff : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_fa1a7c3ea0c644568795f3d57fde5b2e()
+        internal MTHD_2c7d78fbc3df4af18c92723b806f16ff()
         {
           this.Initialize("set_x", false, new ParameterDescriptor[1]
           {
@@ -7465,9 +7465,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_f42f98f6a07a45d4bafc5842def2c762 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_e7cdbeaf01664d7d81f77b1670362687 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_f42f98f6a07a45d4bafc5842def2c762()
+        internal MTHD_e7cdbeaf01664d7d81f77b1670362687()
         {
           this.Initialize("get_y", false, new ParameterDescriptor[0], false);
         }
@@ -7478,9 +7478,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_c313e715c7e8451aa83aed5ff5153bb6 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_7528d63be75c4064967495b944399167 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_c313e715c7e8451aa83aed5ff5153bb6()
+        internal MTHD_7528d63be75c4064967495b944399167()
         {
           this.Initialize("set_y", false, new ParameterDescriptor[1]
           {
@@ -7495,9 +7495,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_f177b58476cb49a79173a9d1298e02b3 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_0d2bf095cc0d443a99b96fd4b52967ca : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_f177b58476cb49a79173a9d1298e02b3()
+        internal MTHD_0d2bf095cc0d443a99b96fd4b52967ca()
         {
           this.Initialize("get_position", false, new ParameterDescriptor[0], false);
         }
@@ -7508,9 +7508,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_e879393660c745808bb42e83ac4abdc6 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_fdd600228155415b9c9db846fb55cb49 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_e879393660c745808bb42e83ac4abdc6()
+        internal MTHD_fdd600228155415b9c9db846fb55cb49()
         {
           this.Initialize("set_position", false, new ParameterDescriptor[1]
           {
@@ -7525,9 +7525,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_c1abd1e8d0a34307993f3bc448d556a4 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_afe81b6acd56416d91a22eaa8ae2e426 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_c1abd1e8d0a34307993f3bc448d556a4()
+        internal MTHD_afe81b6acd56416d91a22eaa8ae2e426()
         {
           this.Initialize("get_isDead", false, new ParameterDescriptor[0], false);
         }
@@ -7538,9 +7538,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_f90d859dcfbf424496a5d20d1fad824a : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_de77b8d00a774233bb48206ccdcfcc19 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_f90d859dcfbf424496a5d20d1fad824a()
+        internal MTHD_de77b8d00a774233bb48206ccdcfcc19()
         {
           this.Initialize("getType", false, new ParameterDescriptor[0], false);
         }
@@ -7551,9 +7551,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_3b59094ebc7545bda939fc93bfb16d2d : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_8a053c772a3d495b84df952528e0a1eb : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_3b59094ebc7545bda939fc93bfb16d2d()
+        internal MTHD_8a053c772a3d495b84df952528e0a1eb()
         {
           this.Initialize("kill", false, new ParameterDescriptor[0], false);
         }
@@ -7565,9 +7565,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_a5b22371296943a381ee7263b55fd7cb : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_65b02ca653db48d78d41af87d6a2053b : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_a5b22371296943a381ee7263b55fd7cb()
+        internal MTHD_65b02ca653db48d78d41af87d6a2053b()
         {
           this.Initialize("GetHashCode", false, new ParameterDescriptor[0], false);
         }
@@ -7578,9 +7578,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_7bb127d73a284072b8cf9099bda65bc9 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_16ef66f78da04d51b97b84917827c2a2 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_7bb127d73a284072b8cf9099bda65bc9()
+        internal MTHD_16ef66f78da04d51b97b84917827c2a2()
         {
           this.Initialize("Equals", false, new ParameterDescriptor[1]
           {
@@ -7594,9 +7594,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_36ed0ade50db4eb0aafd983815679efd : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_0a3724c2fd0c4edabfdadd55184164ad : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_36ed0ade50db4eb0aafd983815679efd()
+        internal MTHD_0a3724c2fd0c4edabfdadd55184164ad()
         {
           this.Initialize("GetType", false, new ParameterDescriptor[0], false);
         }
@@ -7607,9 +7607,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_1cbcfede22244d7ebb229854dcb43540 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_bf39e016fff94d68ab70f68d22e41e37 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_1cbcfede22244d7ebb229854dcb43540()
+        internal MTHD_bf39e016fff94d68ab70f68d22e41e37()
         {
           this.Initialize("ToString", false, new ParameterDescriptor[0], false);
         }
@@ -7620,9 +7620,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_0a9a911776e74a71817043760747cad2 : HardwiredMemberDescriptor
+      private sealed class PROP_a6bbbf7c296d4736a93cf218922a9150 : HardwiredMemberDescriptor
       {
-        internal PROP_0a9a911776e74a71817043760747cad2()
+        internal PROP_a6bbbf7c296d4736a93cf218922a9150()
           : base(typeof (int), "health", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -7638,9 +7638,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_29a47859d24f4e21b6dc93c4f7d482ff : HardwiredMemberDescriptor
+      private sealed class PROP_ef63ecd20a7f4af8bf14b7511b6c1065 : HardwiredMemberDescriptor
       {
-        internal PROP_29a47859d24f4e21b6dc93c4f7d482ff()
+        internal PROP_ef63ecd20a7f4af8bf14b7511b6c1065()
           : base(typeof (int), "maxHealth", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -7656,9 +7656,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_04f237cc61ad4bc097f27b80728b8550 : HardwiredMemberDescriptor
+      private sealed class PROP_8326e54da0634c54a3c4885d763a2688 : HardwiredMemberDescriptor
       {
-        internal PROP_04f237cc61ad4bc097f27b80728b8550()
+        internal PROP_8326e54da0634c54a3c4885d763a2688()
           : base(typeof (int), "x", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -7674,9 +7674,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_3ae548e566a54cb4a543957abf61b37b : HardwiredMemberDescriptor
+      private sealed class PROP_135ad799291f46e692eedb0e38f0cf90 : HardwiredMemberDescriptor
       {
-        internal PROP_3ae548e566a54cb4a543957abf61b37b()
+        internal PROP_135ad799291f46e692eedb0e38f0cf90()
           : base(typeof (int), "y", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -7692,9 +7692,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_98bb16a6a44145e0a8b6c02872da5c0b : HardwiredMemberDescriptor
+      private sealed class PROP_fd417c85faaf4a7187fe001721b581f8 : HardwiredMemberDescriptor
       {
-        internal PROP_98bb16a6a44145e0a8b6c02872da5c0b()
+        internal PROP_fd417c85faaf4a7187fe001721b581f8()
           : base(typeof (Educative.Point), "position", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -7710,9 +7710,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_367f664cf698489d800fd97bb307d86d : HardwiredMemberDescriptor
+      private sealed class PROP_b828fecedbd8401588cee9cb728bd897 : HardwiredMemberDescriptor
       {
-        internal PROP_367f664cf698489d800fd97bb307d86d()
+        internal PROP_b828fecedbd8401588cee9cb728bd897()
           : base(typeof (bool), "isDead", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -7724,89 +7724,89 @@ namespace MoonSharp
       }
     }
 
-    private sealed class TYPE_9172052d3c884097bd786517b4efd577 : HardwiredUserDataDescriptor
+    private sealed class TYPE_922a523ca23442e897e9a6abaf5ddd7a : HardwiredUserDataDescriptor
     {
-      internal TYPE_9172052d3c884097bd786517b4efd577()
+      internal TYPE_922a523ca23442e897e9a6abaf5ddd7a()
         : base(typeof (Educative.Point))
       {
         this.AddMember("__new", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("__new", typeof (Educative.Point), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[2]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_9172052d3c884097bd786517b4efd577.MTHD_cd4df40bf3584e93909dc28a0c04bde4(),
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_9172052d3c884097bd786517b4efd577.MTHD_7fb02b0f1d6048b2bbdb33eace606fbd()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_922a523ca23442e897e9a6abaf5ddd7a.MTHD_d780be777bdd4d819b9d48fa9e91f1dc(),
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_922a523ca23442e897e9a6abaf5ddd7a.MTHD_08a1a993e6f74faf91177c1986179b31()
         }));
         this.AddMember("distance", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("distance", typeof (Educative.Point), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[2]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_9172052d3c884097bd786517b4efd577.MTHD_351b85c9901f407a9ee33c427a337bb9(),
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_9172052d3c884097bd786517b4efd577.MTHD_16839eb6c0f6440da7fc9eb3afcf5f98()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_922a523ca23442e897e9a6abaf5ddd7a.MTHD_78497f9fcae145239ea21096b339a3ab(),
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_922a523ca23442e897e9a6abaf5ddd7a.MTHD_4b4e4c52ba2b4bb5802ae4a82701192d()
         }));
         this.AddMember("construct", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("construct", typeof (Educative.Point), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_9172052d3c884097bd786517b4efd577.MTHD_04f2d1a105084d768efccd41fe20244f()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_922a523ca23442e897e9a6abaf5ddd7a.MTHD_4d2f6d5181fc479893574d065a5086ea()
         }));
         this.AddMember("copy", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("copy", typeof (Educative.Point), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_9172052d3c884097bd786517b4efd577.MTHD_f93f24b5f3d246e990c084552dd0eeed()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_922a523ca23442e897e9a6abaf5ddd7a.MTHD_4f2ae13644b64041b9be2d2aa7325594()
         }));
         this.AddMember("normalized", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("normalized", typeof (Educative.Point), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_9172052d3c884097bd786517b4efd577.MTHD_1addb45b2f564a71900e20c48965d6e5()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_922a523ca23442e897e9a6abaf5ddd7a.MTHD_d6bd550bea5748b69c8851cfaab593af()
         }));
         this.AddMember("normalize", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("normalize", typeof (Educative.Point), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_9172052d3c884097bd786517b4efd577.MTHD_319b9bbeec8647e9a89e625e8fa49f31()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_922a523ca23442e897e9a6abaf5ddd7a.MTHD_86a14d14960d42d8a450d8555aa2d2a8()
         }));
         this.AddMember("Equals", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("Equals", typeof (Educative.Point), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_9172052d3c884097bd786517b4efd577.MTHD_7138b73bce0c481f97ca74a9fd5cda74()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_922a523ca23442e897e9a6abaf5ddd7a.MTHD_e9deb7ab9f7e4701be63329c810d4d57()
         }));
         this.AddMember("GetHashCode", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("GetHashCode", typeof (Educative.Point), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_9172052d3c884097bd786517b4efd577.MTHD_e128896e1d3541aea7457aa32a99a92b()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_922a523ca23442e897e9a6abaf5ddd7a.MTHD_0c1636277d3a4ef4b0a7934ee7294b6b()
         }));
         this.AddMember("op_Equality", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("op_Equality", typeof (Educative.Point), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_9172052d3c884097bd786517b4efd577.MTHD_fbcbc639ce9247cebb3097189195069a()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_922a523ca23442e897e9a6abaf5ddd7a.MTHD_7dd22d7645704a30a5612c598df8553a()
         }));
         this.AddMember("op_Subtraction", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("op_Subtraction", typeof (Educative.Point), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[2]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_9172052d3c884097bd786517b4efd577.MTHD_7cc8d1b80fe24268af4199837df1eb8c(),
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_9172052d3c884097bd786517b4efd577.MTHD_7ad5f581d74f4ead85bb7d54f6067c81()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_922a523ca23442e897e9a6abaf5ddd7a.MTHD_df521261aeea4002b9a757d0d9a6923a(),
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_922a523ca23442e897e9a6abaf5ddd7a.MTHD_d2f4b30293da43c8b699db876d43b0f6()
         }));
         this.AddMember("op_Addition", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("op_Addition", typeof (Educative.Point), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[2]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_9172052d3c884097bd786517b4efd577.MTHD_8ee37d2c8ed84d02b692749959944706(),
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_9172052d3c884097bd786517b4efd577.MTHD_b41246301b4a4e9d97fa14e6b33f0dcf()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_922a523ca23442e897e9a6abaf5ddd7a.MTHD_6d72845e2a974da4874b117f31334b31(),
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_922a523ca23442e897e9a6abaf5ddd7a.MTHD_9f7cdb1fdc2b48c6b91820794a3548d3()
         }));
         this.AddMember("op_Multiply", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("op_Multiply", typeof (Educative.Point), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[2]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_9172052d3c884097bd786517b4efd577.MTHD_40cc47460437443b84928f3e1f6fd3fd(),
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_9172052d3c884097bd786517b4efd577.MTHD_9bde743d818a47a2acd75935ca03bd43()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_922a523ca23442e897e9a6abaf5ddd7a.MTHD_6cf715ea722b469b8c78b2189d79de46(),
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_922a523ca23442e897e9a6abaf5ddd7a.MTHD_e84e655262fd4e8d811d77d7ea3c2bee()
         }));
         this.AddMember("op_Division", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("op_Division", typeof (Educative.Point), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[2]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_9172052d3c884097bd786517b4efd577.MTHD_bcd228f2b1d4477f87a16080d4c52e42(),
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_9172052d3c884097bd786517b4efd577.MTHD_cc976285f40640e09d24b4829137dfad()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_922a523ca23442e897e9a6abaf5ddd7a.MTHD_61c8fc661fa54c8685c52126f3c130ae(),
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_922a523ca23442e897e9a6abaf5ddd7a.MTHD_3ec4e03f120445a796839fc04247cb13()
         }));
         this.AddMember("op_Modulus", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("op_Modulus", typeof (Educative.Point), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[2]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_9172052d3c884097bd786517b4efd577.MTHD_940c2544fbd440c2b6c64cd7fac6dfbf(),
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_9172052d3c884097bd786517b4efd577.MTHD_24455a68332f40b4bb92924f4fb90116()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_922a523ca23442e897e9a6abaf5ddd7a.MTHD_a95d112fe9db440ca8d2fdf9eef67d0e(),
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_922a523ca23442e897e9a6abaf5ddd7a.MTHD_4d2fd0162aff497fb5e79cbea6a5e650()
         }));
         this.AddMember("op_Inequality", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("op_Inequality", typeof (Educative.Point), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_9172052d3c884097bd786517b4efd577.MTHD_0ab0e66c5ada4066884250c5873bec02()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_922a523ca23442e897e9a6abaf5ddd7a.MTHD_a918262d20e748929789c3d1d3a58b22()
         }));
         this.AddMember("GetType", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("GetType", typeof (Educative.Point), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_9172052d3c884097bd786517b4efd577.MTHD_5c914551b6ed47cfa74e3d7b7ad130fe()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_922a523ca23442e897e9a6abaf5ddd7a.MTHD_127cb43dea8d41879f88d6f4f842e324()
         }));
-        this.AddMember("x", (IMemberDescriptor) new Bridge.TYPE_9172052d3c884097bd786517b4efd577.FLDV_70928c975ff4432fab63e86e65fa06f7());
-        this.AddMember("y", (IMemberDescriptor) new Bridge.TYPE_9172052d3c884097bd786517b4efd577.FLDV_46e634cd920d4601b861689b46e00ead());
+        this.AddMember("x", (IMemberDescriptor) new Bridge.TYPE_922a523ca23442e897e9a6abaf5ddd7a.FLDV_9210e52cbfe2426daefd1aa20788dcde());
+        this.AddMember("y", (IMemberDescriptor) new Bridge.TYPE_922a523ca23442e897e9a6abaf5ddd7a.FLDV_1e7f3502c4eb4c92a07d04b553b14680());
       }
 
-      private sealed class MTHD_cd4df40bf3584e93909dc28a0c04bde4 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_d780be777bdd4d819b9d48fa9e91f1dc : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_cd4df40bf3584e93909dc28a0c04bde4()
+        internal MTHD_d780be777bdd4d819b9d48fa9e91f1dc()
         {
           this.Initialize(".ctor", true, new ParameterDescriptor[2]
           {
@@ -7823,9 +7823,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_7fb02b0f1d6048b2bbdb33eace606fbd : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_08a1a993e6f74faf91177c1986179b31 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_7fb02b0f1d6048b2bbdb33eace606fbd()
+        internal MTHD_08a1a993e6f74faf91177c1986179b31()
         {
           this.Initialize(".ctor", true, new ParameterDescriptor[1]
           {
@@ -7839,9 +7839,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_351b85c9901f407a9ee33c427a337bb9 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_78497f9fcae145239ea21096b339a3ab : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_351b85c9901f407a9ee33c427a337bb9()
+        internal MTHD_78497f9fcae145239ea21096b339a3ab()
         {
           this.Initialize("distance", true, new ParameterDescriptor[2]
           {
@@ -7856,9 +7856,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_16839eb6c0f6440da7fc9eb3afcf5f98 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_4b4e4c52ba2b4bb5802ae4a82701192d : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_16839eb6c0f6440da7fc9eb3afcf5f98()
+        internal MTHD_4b4e4c52ba2b4bb5802ae4a82701192d()
         {
           this.Initialize("distance", false, new ParameterDescriptor[1]
           {
@@ -7872,9 +7872,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_04f2d1a105084d768efccd41fe20244f : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_4d2f6d5181fc479893574d065a5086ea : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_04f2d1a105084d768efccd41fe20244f()
+        internal MTHD_4d2f6d5181fc479893574d065a5086ea()
         {
           this.Initialize("construct", true, new ParameterDescriptor[2]
           {
@@ -7889,9 +7889,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_f93f24b5f3d246e990c084552dd0eeed : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_4f2ae13644b64041b9be2d2aa7325594 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_f93f24b5f3d246e990c084552dd0eeed()
+        internal MTHD_4f2ae13644b64041b9be2d2aa7325594()
         {
           this.Initialize("copy", false, new ParameterDescriptor[0], false);
         }
@@ -7902,9 +7902,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_1addb45b2f564a71900e20c48965d6e5 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_d6bd550bea5748b69c8851cfaab593af : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_1addb45b2f564a71900e20c48965d6e5()
+        internal MTHD_d6bd550bea5748b69c8851cfaab593af()
         {
           this.Initialize("normalized", false, new ParameterDescriptor[0], false);
         }
@@ -7915,9 +7915,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_319b9bbeec8647e9a89e625e8fa49f31 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_86a14d14960d42d8a450d8555aa2d2a8 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_319b9bbeec8647e9a89e625e8fa49f31()
+        internal MTHD_86a14d14960d42d8a450d8555aa2d2a8()
         {
           this.Initialize("normalize", false, new ParameterDescriptor[0], false);
         }
@@ -7929,9 +7929,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_7138b73bce0c481f97ca74a9fd5cda74 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_e9deb7ab9f7e4701be63329c810d4d57 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_7138b73bce0c481f97ca74a9fd5cda74()
+        internal MTHD_e9deb7ab9f7e4701be63329c810d4d57()
         {
           this.Initialize("Equals", false, new ParameterDescriptor[1]
           {
@@ -7945,9 +7945,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_e128896e1d3541aea7457aa32a99a92b : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_0c1636277d3a4ef4b0a7934ee7294b6b : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_e128896e1d3541aea7457aa32a99a92b()
+        internal MTHD_0c1636277d3a4ef4b0a7934ee7294b6b()
         {
           this.Initialize("GetHashCode", false, new ParameterDescriptor[0], false);
         }
@@ -7958,9 +7958,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_fbcbc639ce9247cebb3097189195069a : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_7dd22d7645704a30a5612c598df8553a : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_fbcbc639ce9247cebb3097189195069a()
+        internal MTHD_7dd22d7645704a30a5612c598df8553a()
         {
           this.Initialize("op_Equality", true, new ParameterDescriptor[2]
           {
@@ -7975,9 +7975,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_7cc8d1b80fe24268af4199837df1eb8c : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_df521261aeea4002b9a757d0d9a6923a : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_7cc8d1b80fe24268af4199837df1eb8c()
+        internal MTHD_df521261aeea4002b9a757d0d9a6923a()
         {
           this.Initialize("op_Subtraction", true, new ParameterDescriptor[2]
           {
@@ -7992,9 +7992,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_7ad5f581d74f4ead85bb7d54f6067c81 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_d2f4b30293da43c8b699db876d43b0f6 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_7ad5f581d74f4ead85bb7d54f6067c81()
+        internal MTHD_d2f4b30293da43c8b699db876d43b0f6()
         {
           this.Initialize("op_Subtraction", true, new ParameterDescriptor[2]
           {
@@ -8009,9 +8009,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_8ee37d2c8ed84d02b692749959944706 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_6d72845e2a974da4874b117f31334b31 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_8ee37d2c8ed84d02b692749959944706()
+        internal MTHD_6d72845e2a974da4874b117f31334b31()
         {
           this.Initialize("op_Addition", true, new ParameterDescriptor[2]
           {
@@ -8026,9 +8026,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_b41246301b4a4e9d97fa14e6b33f0dcf : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_9f7cdb1fdc2b48c6b91820794a3548d3 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_b41246301b4a4e9d97fa14e6b33f0dcf()
+        internal MTHD_9f7cdb1fdc2b48c6b91820794a3548d3()
         {
           this.Initialize("op_Addition", true, new ParameterDescriptor[2]
           {
@@ -8043,9 +8043,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_40cc47460437443b84928f3e1f6fd3fd : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_6cf715ea722b469b8c78b2189d79de46 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_40cc47460437443b84928f3e1f6fd3fd()
+        internal MTHD_6cf715ea722b469b8c78b2189d79de46()
         {
           this.Initialize("op_Multiply", true, new ParameterDescriptor[2]
           {
@@ -8060,9 +8060,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_9bde743d818a47a2acd75935ca03bd43 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_e84e655262fd4e8d811d77d7ea3c2bee : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_9bde743d818a47a2acd75935ca03bd43()
+        internal MTHD_e84e655262fd4e8d811d77d7ea3c2bee()
         {
           this.Initialize("op_Multiply", true, new ParameterDescriptor[2]
           {
@@ -8077,9 +8077,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_bcd228f2b1d4477f87a16080d4c52e42 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_61c8fc661fa54c8685c52126f3c130ae : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_bcd228f2b1d4477f87a16080d4c52e42()
+        internal MTHD_61c8fc661fa54c8685c52126f3c130ae()
         {
           this.Initialize("op_Division", true, new ParameterDescriptor[2]
           {
@@ -8094,9 +8094,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_cc976285f40640e09d24b4829137dfad : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_3ec4e03f120445a796839fc04247cb13 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_cc976285f40640e09d24b4829137dfad()
+        internal MTHD_3ec4e03f120445a796839fc04247cb13()
         {
           this.Initialize("op_Division", true, new ParameterDescriptor[2]
           {
@@ -8111,9 +8111,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_940c2544fbd440c2b6c64cd7fac6dfbf : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_a95d112fe9db440ca8d2fdf9eef67d0e : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_940c2544fbd440c2b6c64cd7fac6dfbf()
+        internal MTHD_a95d112fe9db440ca8d2fdf9eef67d0e()
         {
           this.Initialize("op_Modulus", true, new ParameterDescriptor[2]
           {
@@ -8128,9 +8128,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_24455a68332f40b4bb92924f4fb90116 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_4d2fd0162aff497fb5e79cbea6a5e650 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_24455a68332f40b4bb92924f4fb90116()
+        internal MTHD_4d2fd0162aff497fb5e79cbea6a5e650()
         {
           this.Initialize("op_Modulus", true, new ParameterDescriptor[2]
           {
@@ -8145,9 +8145,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_0ab0e66c5ada4066884250c5873bec02 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_a918262d20e748929789c3d1d3a58b22 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_0ab0e66c5ada4066884250c5873bec02()
+        internal MTHD_a918262d20e748929789c3d1d3a58b22()
         {
           this.Initialize("op_Inequality", true, new ParameterDescriptor[2]
           {
@@ -8162,9 +8162,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_5c914551b6ed47cfa74e3d7b7ad130fe : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_127cb43dea8d41879f88d6f4f842e324 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_5c914551b6ed47cfa74e3d7b7ad130fe()
+        internal MTHD_127cb43dea8d41879f88d6f4f842e324()
         {
           this.Initialize("GetType", false, new ParameterDescriptor[0], false);
         }
@@ -8175,9 +8175,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class FLDV_70928c975ff4432fab63e86e65fa06f7 : HardwiredMemberDescriptor
+      private sealed class FLDV_9210e52cbfe2426daefd1aa20788dcde : HardwiredMemberDescriptor
       {
-        internal FLDV_70928c975ff4432fab63e86e65fa06f7()
+        internal FLDV_9210e52cbfe2426daefd1aa20788dcde()
           : base(typeof (double), "x", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -8193,9 +8193,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class FLDV_46e634cd920d4601b861689b46e00ead : HardwiredMemberDescriptor
+      private sealed class FLDV_1e7f3502c4eb4c92a07d04b553b14680 : HardwiredMemberDescriptor
       {
-        internal FLDV_46e634cd920d4601b861689b46e00ead()
+        internal FLDV_1e7f3502c4eb4c92a07d04b553b14680()
           : base(typeof (double), "y", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -8212,53 +8212,53 @@ namespace MoonSharp
       }
     }
 
-    private sealed class TYPE_f21b318e026945008dc7b94ca497dcf7 : HardwiredUserDataDescriptor
+    private sealed class TYPE_dc30ddda57fc4efcaf62e0dbf73bb6ad : HardwiredUserDataDescriptor
     {
-      internal TYPE_f21b318e026945008dc7b94ca497dcf7()
+      internal TYPE_dc30ddda57fc4efcaf62e0dbf73bb6ad()
         : base(typeof (Summon))
       {
         this.AddMember("__new", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("__new", typeof (Summon), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_f21b318e026945008dc7b94ca497dcf7.MTHD_9da26659e1b24d5b852a538f3bd8baa7()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_dc30ddda57fc4efcaf62e0dbf73bb6ad.MTHD_c3df0b7bda7c449197264bdc2703b744()
         }));
         this.AddMember("construct", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("construct", typeof (Summon), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_f21b318e026945008dc7b94ca497dcf7.MTHD_e8eb483b73f046ab8c5a89dccf8abb0a()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_dc30ddda57fc4efcaf62e0dbf73bb6ad.MTHD_b1d1afccd74b46e6a45ae47f5b8d296b()
         }));
         this.AddMember("Equals", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("Equals", typeof (Summon), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_f21b318e026945008dc7b94ca497dcf7.MTHD_cfcb34a4f27c41dcb70c4a39f90fba9f()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_dc30ddda57fc4efcaf62e0dbf73bb6ad.MTHD_ecc0f6cb349c4f0b90441a232a8a4c12()
         }));
         this.AddMember("GetHashCode", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("GetHashCode", typeof (Summon), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_f21b318e026945008dc7b94ca497dcf7.MTHD_529018aa8cae4b9b955abab1e7053a76()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_dc30ddda57fc4efcaf62e0dbf73bb6ad.MTHD_24996a8f7acf477bae3f96e8b5e8787f()
         }));
         this.AddMember("GetType", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("GetType", typeof (Summon), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_f21b318e026945008dc7b94ca497dcf7.MTHD_d517316ad0574c0786302621c8dc374b()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_dc30ddda57fc4efcaf62e0dbf73bb6ad.MTHD_fb258a9129c84021888a9ffbd00a6d41()
         }));
         this.AddMember("ToString", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("ToString", typeof (Summon), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_f21b318e026945008dc7b94ca497dcf7.MTHD_d1b43080193e497e948c08df25a61074()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_dc30ddda57fc4efcaf62e0dbf73bb6ad.MTHD_e7288f043c954b5094be18d25ef75c0b()
         }));
-        this.AddMember("spell", (IMemberDescriptor) new Bridge.TYPE_f21b318e026945008dc7b94ca497dcf7.FLDV_c8278e048fda41718db9c0ed0fd06829());
-        this.AddMember("position", (IMemberDescriptor) new Bridge.TYPE_f21b318e026945008dc7b94ca497dcf7.FLDV_8688c80505a94120917d43b8fec13598());
-        this.AddMember("team", (IMemberDescriptor) new Bridge.TYPE_f21b318e026945008dc7b94ca497dcf7.FLDV_3fa8f30a9730471091e5705d94a71a76());
-        this.AddMember("onPlayersPanel", (IMemberDescriptor) new Bridge.TYPE_f21b318e026945008dc7b94ca497dcf7.FLDV_0dcef86c5f7b413bb37aafc3c517dd4f());
-        this.AddMember("useAI", (IMemberDescriptor) new Bridge.TYPE_f21b318e026945008dc7b94ca497dcf7.FLDV_2396ed5d814645ab80a637413747b7df());
-        this.AddMember("no_AI_still_use_turn", (IMemberDescriptor) new Bridge.TYPE_f21b318e026945008dc7b94ca497dcf7.FLDV_966f487d4a0841afa85d232073b5886a());
-        this.AddMember("name", (IMemberDescriptor) new Bridge.TYPE_f21b318e026945008dc7b94ca497dcf7.FLDV_2045f9d11e8c4331b0a096911ec9ecf0());
-        this.AddMember("playSound", (IMemberDescriptor) new Bridge.TYPE_f21b318e026945008dc7b94ca497dcf7.FLDV_24b22a555fa54c34b7dbb076742ca6df());
-        this.AddMember("prestige", (IMemberDescriptor) new Bridge.TYPE_f21b318e026945008dc7b94ca497dcf7.FLDV_ed9ab64ce04d4307b974540e71381b31());
-        this.AddMember("colors", (IMemberDescriptor) new Bridge.TYPE_f21b318e026945008dc7b94ca497dcf7.FLDV_fa2ce3ae1b0e4ea580052b727a09e691());
-        this.AddMember("spells", (IMemberDescriptor) new Bridge.TYPE_f21b318e026945008dc7b94ca497dcf7.FLDV_da89b86507324345aafd4b4ec4525fa3());
-        this.AddMember("outfit", (IMemberDescriptor) new Bridge.TYPE_f21b318e026945008dc7b94ca497dcf7.FLDV_64db48f718784298969fdc276e223b29());
-        this.AddMember("elemental", (IMemberDescriptor) new Bridge.TYPE_f21b318e026945008dc7b94ca497dcf7.FLDV_38e614b2baaf46cea9601763a0ce3456());
+        this.AddMember("spell", (IMemberDescriptor) new Bridge.TYPE_dc30ddda57fc4efcaf62e0dbf73bb6ad.FLDV_a2c488399b94426fa052787db4c8e34a());
+        this.AddMember("position", (IMemberDescriptor) new Bridge.TYPE_dc30ddda57fc4efcaf62e0dbf73bb6ad.FLDV_62b6a821e0f54b6dbdc8d01966983d36());
+        this.AddMember("team", (IMemberDescriptor) new Bridge.TYPE_dc30ddda57fc4efcaf62e0dbf73bb6ad.FLDV_65c750c563ac408197e8184ec2ec5e53());
+        this.AddMember("onPlayersPanel", (IMemberDescriptor) new Bridge.TYPE_dc30ddda57fc4efcaf62e0dbf73bb6ad.FLDV_e2b0f53cd7e24d20976d7f22dfcc0424());
+        this.AddMember("useAI", (IMemberDescriptor) new Bridge.TYPE_dc30ddda57fc4efcaf62e0dbf73bb6ad.FLDV_b712ac588c8c45eba847282a88c292d1());
+        this.AddMember("no_AI_still_use_turn", (IMemberDescriptor) new Bridge.TYPE_dc30ddda57fc4efcaf62e0dbf73bb6ad.FLDV_01a1770a70a94f5d8b6862c309297b9c());
+        this.AddMember("name", (IMemberDescriptor) new Bridge.TYPE_dc30ddda57fc4efcaf62e0dbf73bb6ad.FLDV_7548f133b92a458aa5255eb6e09982cd());
+        this.AddMember("playSound", (IMemberDescriptor) new Bridge.TYPE_dc30ddda57fc4efcaf62e0dbf73bb6ad.FLDV_fa342551e37242d6867a5278d0e0fe68());
+        this.AddMember("prestige", (IMemberDescriptor) new Bridge.TYPE_dc30ddda57fc4efcaf62e0dbf73bb6ad.FLDV_0062220239a54bb1b4861cf48e5d915a());
+        this.AddMember("colors", (IMemberDescriptor) new Bridge.TYPE_dc30ddda57fc4efcaf62e0dbf73bb6ad.FLDV_410c6a9f1f9b42188b5da5d5d93c86f3());
+        this.AddMember("spells", (IMemberDescriptor) new Bridge.TYPE_dc30ddda57fc4efcaf62e0dbf73bb6ad.FLDV_21ff3ac0f54840578e2e98edabdef9fd());
+        this.AddMember("outfit", (IMemberDescriptor) new Bridge.TYPE_dc30ddda57fc4efcaf62e0dbf73bb6ad.FLDV_746cf5e2ad364b7eb8a831193c322b40());
+        this.AddMember("elemental", (IMemberDescriptor) new Bridge.TYPE_dc30ddda57fc4efcaf62e0dbf73bb6ad.FLDV_6a3fad8a4e614e5e9b8f93a7eba85631());
       }
 
-      private sealed class MTHD_9da26659e1b24d5b852a538f3bd8baa7 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_c3df0b7bda7c449197264bdc2703b744 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_9da26659e1b24d5b852a538f3bd8baa7()
+        internal MTHD_c3df0b7bda7c449197264bdc2703b744()
         {
           this.Initialize(".ctor", true, new ParameterDescriptor[0], false);
         }
@@ -8269,9 +8269,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_e8eb483b73f046ab8c5a89dccf8abb0a : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_b1d1afccd74b46e6a45ae47f5b8d296b : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_e8eb483b73f046ab8c5a89dccf8abb0a()
+        internal MTHD_b1d1afccd74b46e6a45ae47f5b8d296b()
         {
           this.Initialize("construct", true, new ParameterDescriptor[11]
           {
@@ -8315,9 +8315,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_cfcb34a4f27c41dcb70c4a39f90fba9f : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_ecc0f6cb349c4f0b90441a232a8a4c12 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_cfcb34a4f27c41dcb70c4a39f90fba9f()
+        internal MTHD_ecc0f6cb349c4f0b90441a232a8a4c12()
         {
           this.Initialize("Equals", false, new ParameterDescriptor[1]
           {
@@ -8331,9 +8331,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_529018aa8cae4b9b955abab1e7053a76 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_24996a8f7acf477bae3f96e8b5e8787f : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_529018aa8cae4b9b955abab1e7053a76()
+        internal MTHD_24996a8f7acf477bae3f96e8b5e8787f()
         {
           this.Initialize("GetHashCode", false, new ParameterDescriptor[0], false);
         }
@@ -8344,9 +8344,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_d517316ad0574c0786302621c8dc374b : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_fb258a9129c84021888a9ffbd00a6d41 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_d517316ad0574c0786302621c8dc374b()
+        internal MTHD_fb258a9129c84021888a9ffbd00a6d41()
         {
           this.Initialize("GetType", false, new ParameterDescriptor[0], false);
         }
@@ -8357,9 +8357,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_d1b43080193e497e948c08df25a61074 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_e7288f043c954b5094be18d25ef75c0b : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_d1b43080193e497e948c08df25a61074()
+        internal MTHD_e7288f043c954b5094be18d25ef75c0b()
         {
           this.Initialize("ToString", false, new ParameterDescriptor[0], false);
         }
@@ -8370,9 +8370,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class FLDV_c8278e048fda41718db9c0ed0fd06829 : HardwiredMemberDescriptor
+      private sealed class FLDV_a2c488399b94426fa052787db4c8e34a : HardwiredMemberDescriptor
       {
-        internal FLDV_c8278e048fda41718db9c0ed0fd06829()
+        internal FLDV_a2c488399b94426fa052787db4c8e34a()
           : base(typeof (object), "spell", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -8388,9 +8388,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class FLDV_8688c80505a94120917d43b8fec13598 : HardwiredMemberDescriptor
+      private sealed class FLDV_62b6a821e0f54b6dbdc8d01966983d36 : HardwiredMemberDescriptor
       {
-        internal FLDV_8688c80505a94120917d43b8fec13598()
+        internal FLDV_62b6a821e0f54b6dbdc8d01966983d36()
           : base(typeof (Educative.Point), "position", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -8406,9 +8406,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class FLDV_3fa8f30a9730471091e5705d94a71a76 : HardwiredMemberDescriptor
+      private sealed class FLDV_65c750c563ac408197e8184ec2ec5e53 : HardwiredMemberDescriptor
       {
-        internal FLDV_3fa8f30a9730471091e5705d94a71a76()
+        internal FLDV_65c750c563ac408197e8184ec2ec5e53()
           : base(typeof (int), "team", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -8424,9 +8424,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class FLDV_0dcef86c5f7b413bb37aafc3c517dd4f : HardwiredMemberDescriptor
+      private sealed class FLDV_e2b0f53cd7e24d20976d7f22dfcc0424 : HardwiredMemberDescriptor
       {
-        internal FLDV_0dcef86c5f7b413bb37aafc3c517dd4f()
+        internal FLDV_e2b0f53cd7e24d20976d7f22dfcc0424()
           : base(typeof (bool), "onPlayersPanel", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -8442,9 +8442,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class FLDV_2396ed5d814645ab80a637413747b7df : HardwiredMemberDescriptor
+      private sealed class FLDV_b712ac588c8c45eba847282a88c292d1 : HardwiredMemberDescriptor
       {
-        internal FLDV_2396ed5d814645ab80a637413747b7df()
+        internal FLDV_b712ac588c8c45eba847282a88c292d1()
           : base(typeof (bool), "useAI", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -8460,9 +8460,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class FLDV_966f487d4a0841afa85d232073b5886a : HardwiredMemberDescriptor
+      private sealed class FLDV_01a1770a70a94f5d8b6862c309297b9c : HardwiredMemberDescriptor
       {
-        internal FLDV_966f487d4a0841afa85d232073b5886a()
+        internal FLDV_01a1770a70a94f5d8b6862c309297b9c()
           : base(typeof (bool), "no_AI_still_use_turn", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -8478,9 +8478,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class FLDV_2045f9d11e8c4331b0a096911ec9ecf0 : HardwiredMemberDescriptor
+      private sealed class FLDV_7548f133b92a458aa5255eb6e09982cd : HardwiredMemberDescriptor
       {
-        internal FLDV_2045f9d11e8c4331b0a096911ec9ecf0()
+        internal FLDV_7548f133b92a458aa5255eb6e09982cd()
           : base(typeof (string), "name", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -8496,9 +8496,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class FLDV_24b22a555fa54c34b7dbb076742ca6df : HardwiredMemberDescriptor
+      private sealed class FLDV_fa342551e37242d6867a5278d0e0fe68 : HardwiredMemberDescriptor
       {
-        internal FLDV_24b22a555fa54c34b7dbb076742ca6df()
+        internal FLDV_fa342551e37242d6867a5278d0e0fe68()
           : base(typeof (bool), "playSound", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -8514,9 +8514,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class FLDV_ed9ab64ce04d4307b974540e71381b31 : HardwiredMemberDescriptor
+      private sealed class FLDV_0062220239a54bb1b4861cf48e5d915a : HardwiredMemberDescriptor
       {
-        internal FLDV_ed9ab64ce04d4307b974540e71381b31()
+        internal FLDV_0062220239a54bb1b4861cf48e5d915a()
           : base(typeof (int), "prestige", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -8532,9 +8532,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class FLDV_fa2ce3ae1b0e4ea580052b727a09e691 : HardwiredMemberDescriptor
+      private sealed class FLDV_410c6a9f1f9b42188b5da5d5d93c86f3 : HardwiredMemberDescriptor
       {
-        internal FLDV_fa2ce3ae1b0e4ea580052b727a09e691()
+        internal FLDV_410c6a9f1f9b42188b5da5d5d93c86f3()
           : base(typeof (Table), "colors", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -8550,9 +8550,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class FLDV_da89b86507324345aafd4b4ec4525fa3 : HardwiredMemberDescriptor
+      private sealed class FLDV_21ff3ac0f54840578e2e98edabdef9fd : HardwiredMemberDescriptor
       {
-        internal FLDV_da89b86507324345aafd4b4ec4525fa3()
+        internal FLDV_21ff3ac0f54840578e2e98edabdef9fd()
           : base(typeof (Table), "spells", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -8568,9 +8568,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class FLDV_64db48f718784298969fdc276e223b29 : HardwiredMemberDescriptor
+      private sealed class FLDV_746cf5e2ad364b7eb8a831193c322b40 : HardwiredMemberDescriptor
       {
-        internal FLDV_64db48f718784298969fdc276e223b29()
+        internal FLDV_746cf5e2ad364b7eb8a831193c322b40()
           : base(typeof (Table), "outfit", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -8586,9 +8586,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class FLDV_38e614b2baaf46cea9601763a0ce3456 : HardwiredMemberDescriptor
+      private sealed class FLDV_6a3fad8a4e614e5e9b8f93a7eba85631 : HardwiredMemberDescriptor
       {
-        internal FLDV_38e614b2baaf46cea9601763a0ce3456()
+        internal FLDV_6a3fad8a4e614e5e9b8f93a7eba85631()
           : base(typeof (BookOf), "elemental", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -8605,284 +8605,284 @@ namespace MoonSharp
       }
     }
 
-    private sealed class TYPE_c1fbc464efa54cd7901fe9149961b176 : HardwiredUserDataDescriptor
+    private sealed class TYPE_51ba4656ae664d54a0d8cb3825b1bed6 : HardwiredUserDataDescriptor
     {
-      internal TYPE_c1fbc464efa54cd7901fe9149961b176()
+      internal TYPE_51ba4656ae664d54a0d8cb3825b1bed6()
         : base(typeof (UIElement))
       {
         this.AddMember("__new", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("__new", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_fb4eb57c1ae9429b935e2e9c783d55ac()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_6324c7bf352f44ae8bb27c090c00fe9f()
         }));
         this.AddMember("get_isDead", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_isDead", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_fe874d3f5bdd4e48b03679d6a0317e63()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_be5ba34019fd4daa9d575c60348aa3f6()
         }));
         this.AddMember("get_visible", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_visible", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_9df98896475d44679310b23694e1ba6b()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_abcbc5f676f141f88d5e6aaa07efc0b0()
         }));
         this.AddMember("set_visible", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_visible", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_53ebce8d2593436f9de9002cad5914e2()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_94f8621379d44bb4ba5fc0dbda501011()
         }));
         this.AddMember("get_graphic", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_graphic", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_a329ca2e29384f378e529b4def92e6d1()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_42d5ee1ea3744913bb1ce0152313aa30()
         }));
         this.AddMember("set_graphic", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_graphic", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_33d0204d4a3b443fbfce9350f1998024()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_a7b34f88130040509ae3caa85bbe2e0e()
         }));
         this.AddMember("get_anchor", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_anchor", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_433f2ecba20a439f9997e9107e970a95()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_b34d64ceae3349f584e89c42d4fbe88c()
         }));
         this.AddMember("set_anchor", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_anchor", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_957a4588e5444f91b572ce746e18cc35()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_728e87697f4646cd903ce10510e882b1()
         }));
         this.AddMember("get_width", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_width", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_fc6941e10ced413aa539207b7cfd44c0()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_d48299de5d064d6ba89692918b70a54b()
         }));
         this.AddMember("set_width", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_width", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_63acc479197948739e89b1d83ad78fbc()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_9d1903a81a414acfbea502bcabc686c7()
         }));
         this.AddMember("get_height", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_height", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_290973b5fcd04e63a1898ffb402f1a44()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_7286fea51fea413b91571825a54c49d8()
         }));
         this.AddMember("set_height", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_height", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_9c60db2a877f453ebf10a59306ea96ab()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_47fc24fa5fbe4cc28875e77b1fdf494a()
         }));
         this.AddMember("get_size", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_size", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_79ac62f9122649b4a8dc20943fe2165d()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_f6940afba32e43a882f2fea9d49f8cc9()
         }));
         this.AddMember("set_size", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_size", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_e8f2a4b79ee740169a72859daacba710()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_f817bcad93974bb6b1a6efadd61526e8()
         }));
         this.AddMember("get_x", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_x", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_b6602f955dae4a89acebdf3102d7fc4d()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_5e3721a6ae3640979e8fd5d7f0948621()
         }));
         this.AddMember("set_x", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_x", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_f140a8bad9314cf68d19786e0130cbf2()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_e799ea52dfe64b50b1fc8d66228c201c()
         }));
         this.AddMember("get_y", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_y", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_77bf5cbadc464a43a9d3b8ac88ca0239()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_635cd44beb8f492c9af055483a41254c()
         }));
         this.AddMember("set_y", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_y", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_fd0a2812280c4983a11b926d829ba74a()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_ef7bcf5cdd92449a86798f776523029f()
         }));
         this.AddMember("get_position", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_position", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_3080bb7aa5754b319b320b987fe1e5c8()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_4775f880a70b408a91f03dd70cfd3068()
         }));
         this.AddMember("set_position", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_position", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_26ca22115b7347ebacafbe7a3c221f43()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_a1c207d2507140b58ed9414e66e0f95a()
         }));
         this.AddMember("get_pivot_x", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_pivot_x", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_c178ac11ddaf4da093cc2af26490c284()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_706adca5c9e44eb7b88f42e290bcaa7f()
         }));
         this.AddMember("set_pivot_x", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_pivot_x", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_47eee8313fe0468ca56aa5cc2590ea66()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_56dcc03362ce40088b40730f9c2670d2()
         }));
         this.AddMember("get_pivot_y", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_pivot_y", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_1c15eaa946b846318bdd3053261253f4()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_1cc8cb6614db4bd49c76cd0c852e2655()
         }));
         this.AddMember("set_pivot_y", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_pivot_y", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_ef761125c94244e7b78c5eaa0bce80ad()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_4922c605bc114d4aac1c421efcfaa46a()
         }));
         this.AddMember("get_pivot", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_pivot", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_8cc291df41074b4894932a45efdf6bec()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_b4cb10421a034c7eb116233f60054199()
         }));
         this.AddMember("set_pivot", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_pivot", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_a3f25675ef5c486f8235449a1e768ddb()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_36452d480e5343ec9680d9acc9fa7709()
         }));
         this.AddMember("get_angle", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_angle", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_dfb229e903b345688a5a9788d4fd2e12()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_109d2291abce4edfbfd8f4a2d65a8bf5()
         }));
         this.AddMember("set_angle", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_angle", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_0017ed12c67342ec8cc8d25bd34e1383()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_53b69b651207425dbbabac1937da41bb()
         }));
         this.AddMember("get_onClick", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_onClick", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_0bdeb87ff2c4490a904284d4a43fce4b()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_b48b3ed51f1c4264b03f947becca49df()
         }));
         this.AddMember("set_onClick", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_onClick", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_188c3ff2afe740cf9d59fb0e892a95ee()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_6c06cf2045bc410ea492f3dfd3c6d4d4()
         }));
         this.AddMember("get_onClick2", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_onClick2", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_b501e833c6ea4a8a961f43f16c6a0b83()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_f812f08cb2024d0f9894d73620e6431d()
         }));
         this.AddMember("set_onClick2", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_onClick2", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_f4660d2005844b2fbb3d7f7a079e61d9()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_79b2c23067ac4d1383e7ca300c94a99f()
         }));
         this.AddMember("get_color", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_color", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_d0a035228a5d40548318c710146bfc2f()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_9b65fc7296f343568e765ea5ba1c4045()
         }));
         this.AddMember("set_color", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_color", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_1130088515c74dbaac5e97f3321d0ca9()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_afad8333a95b4ec393017f5b636bebfd()
         }));
         this.AddMember("get_color2", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_color2", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_3b70b0d685524aaf8c579ca71101a194()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_ea93da9267984a029a97e7a9062cfb1d()
         }));
         this.AddMember("set_color2", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_color2", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_f9af6a839c9a4f9dbdd34acecf389681()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_33df9756ac76461c8aca58f623bc3194()
         }));
         this.AddMember("get_text", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_text", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_5b9313d569624efbb7cc51ef067ddc46()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_9e22e2fafb964dceb4ca9b19914be13f()
         }));
         this.AddMember("set_text", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_text", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_2074a79a38754dd9b083814f285542fe()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_62f568e1fbda4e7e9569be44df673b33()
         }));
         this.AddMember("get_textColor", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_textColor", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_cd84ff5c6c684278b6011e1cd30a4463()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_2a9bb8b42a6e4e4fa58df54372f13153()
         }));
         this.AddMember("set_textColor", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_textColor", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_82b600662d17455f948d070531acbe24()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_65b8a4cacc1e44aa94510323d5f478be()
         }));
         this.AddMember("get_textColor2", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_textColor2", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_25be27ae9dd24f85944b4897c05aed59()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_682f1cbc16a44843812825b62e8c003b()
         }));
         this.AddMember("set_textColor2", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_textColor2", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_b2da7c9cceaa4136ba59e35b8dcb2557()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_afa41daf941646a89a6bf0cf14678c85()
         }));
         this.AddMember("get_highlightColor", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_highlightColor", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_d659db431b31427a864d07c6fd046731()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_72cf9f91995f424e8d041b9e8fd30af2()
         }));
         this.AddMember("set_highlightColor", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_highlightColor", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_c65d5d19d9ef452183e6f755876a8a96()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_bbc5ee6b17254850974a166fc780e1a8()
         }));
         this.AddMember("get_highlightColor2", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_highlightColor2", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_b6c72e039a6c4be79e7016771d4d7aee()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_390ddc98db9f445b934d733f39b4c112()
         }));
         this.AddMember("set_highlightColor2", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_highlightColor2", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_ca024df73e974f178e6c02f5920d4bb6()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_51952aa56e174b0ebcb401ac40d8d3b6()
         }));
         this.AddMember("get_textStyle", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_textStyle", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_110ab26e59ea4486873d3ba751efb8c5()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_59c5497b453645f9b8127cf9844b5685()
         }));
         this.AddMember("set_textStyle", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_textStyle", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_6d8cb9352e9c43e89e9465b9b76e2c86()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_4d9c56bb4e9a4a45bf7cbb2e065bfc8b()
         }));
         this.AddMember("get_textSize", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("get_textSize", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_837be4abb93349b9b711b759441897dc()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_c6aa6d96e35c49de965fb5fa2ab13abd()
         }));
         this.AddMember("set_textSize", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("set_textSize", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_6659e479272f42a2a206cac5cddfc459()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_c404becd5e2148b9829a91185161f57a()
         }));
         this.AddMember("activateInput", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("activateInput", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_43621500d015412eb6bb4f3e0e76f242()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_b49f03a5790e45b1baa07f877a4bd738()
         }));
         this.AddMember("createUI", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("createUI", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_60e319938db840758a98412482312038()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_1531ea7e363545f8b13a8b96b5887b2c()
         }));
         this.AddMember("createInput", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("createInput", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_87766b38f76a46968c48ad96300f8357()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_f17d1328b44046d3b03ade542a733942()
         }));
         this.AddMember("duplicate", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("duplicate", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_a322fb4d791a4532ae022ef2db127bf7()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_65b8e60fb8154cc79f09ff629fc3a66b()
         }));
         this.AddMember("destroyHierarchy", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("destroyHierarchy", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_95ab9651364941d8811233bace8c2ea8()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_39c4fc3df3a143ceb6957ea1f68ca1c4()
         }));
         this.AddMember("destroy", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("destroy", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_f6ad730522d84791b62c17b277e99618()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_8ef7083f286644edbeac87d7d1ee4b6a()
         }));
         this.AddMember("Equals", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("Equals", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_ea533bb8bb264f5082d28f013cef2b41()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_8c4978df982846f395c1b1689b8d220f()
         }));
         this.AddMember("GetHashCode", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("GetHashCode", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_ade0686513e9497bbf4e629994c09236()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_7900f764c4094704984778c8f2e2c962()
         }));
         this.AddMember("GetType", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("GetType", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_552f03ca6a0241fba81b24113b9dfb94()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_fad0e3e1a02249cebd64af4785d5a7e9()
         }));
         this.AddMember("ToString", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("ToString", typeof (UIElement), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.MTHD_8ba64b8b8bc94404aa36710fa36f5298()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.MTHD_05cde49daf094f6fa1202312041f53de()
         }));
-        this.AddMember("isDead", (IMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.PROP_498f3dda19f749308d1ef730b89205a1());
-        this.AddMember("visible", (IMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.PROP_46b05378728e4f909927e43b3024ec47());
-        this.AddMember("graphic", (IMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.PROP_5ad2589e416e49f2b45dadd4e85e6240());
-        this.AddMember("anchor", (IMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.PROP_b041469baed544ddbe99e8e20b4ad7ff());
-        this.AddMember("width", (IMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.PROP_eafba266cf5149479eebf732da32fbd9());
-        this.AddMember("height", (IMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.PROP_2291c083e9624bb88b5b4992577ea35d());
-        this.AddMember("size", (IMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.PROP_92827addc0b34118994dbb3f30caae89());
-        this.AddMember("x", (IMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.PROP_2fd05c880cc94fcf8085fd7c995f99b6());
-        this.AddMember("y", (IMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.PROP_3217853755ca4259a2dd5aaa36cff88f());
-        this.AddMember("position", (IMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.PROP_6c4a4ecf92774cc289c1b514140beac3());
-        this.AddMember("pivot_x", (IMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.PROP_75b25b61d74c499caca2e185c830205b());
-        this.AddMember("pivot_y", (IMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.PROP_3385632dc4804c92b894b81d2057ba15());
-        this.AddMember("pivot", (IMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.PROP_52384f1d032746799fe8048fd5e69325());
-        this.AddMember("angle", (IMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.PROP_c77e1fe9b31d40f78a001c39b5c8e804());
-        this.AddMember("onClick", (IMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.PROP_7339f0df8de9471ba9dd946dcb6a6c70());
-        this.AddMember("onClick2", (IMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.PROP_507f62ebe6534e78a07f1b80e701c4cc());
-        this.AddMember("color", (IMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.PROP_6fa4a24c4ce34db289fb42507e460f3a());
-        this.AddMember("color2", (IMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.PROP_0413743ee4844de488c0e50fc594cda8());
-        this.AddMember("text", (IMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.PROP_9a9acff4a5c0474ab91ac7b0ae109973());
-        this.AddMember("textColor", (IMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.PROP_ff2d5283b26e435d9d9444e6d225a439());
-        this.AddMember("textColor2", (IMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.PROP_27314639386447dc8bf0521071b2720b());
-        this.AddMember("highlightColor", (IMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.PROP_0ab94c3bb6e44b1cabc6db952fa91675());
-        this.AddMember("highlightColor2", (IMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.PROP_e604a449d4eb434a9adc929ff827b3b9());
-        this.AddMember("textStyle", (IMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.PROP_25adeb92aa8b48968433c3914a1dd398());
-        this.AddMember("textSize", (IMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.PROP_3d2714d8956940a69dee573acb64f3a0());
-        this.AddMember("parent", (IMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.FLDV_159a923c7eb14d3daa06d656df5242c8());
-        this.AddMember("clickID", (IMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.FLDV_c8904c9d1c59454ebb19a99c11543c55());
-        this.AddMember("clickDestroy", (IMemberDescriptor) new Bridge.TYPE_c1fbc464efa54cd7901fe9149961b176.FLDV_f7eeda8d6fbd414eb12589c676a22b7a());
+        this.AddMember("isDead", (IMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.PROP_8dd8bd2cecca4dc7a424f44905afd357());
+        this.AddMember("visible", (IMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.PROP_33ba3d696ec1411da29fe0014c7e8492());
+        this.AddMember("graphic", (IMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.PROP_2ddbd11024a34702aa9dfb8c32e86ca4());
+        this.AddMember("anchor", (IMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.PROP_f85c19052b134b6dacb2708bba354815());
+        this.AddMember("width", (IMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.PROP_617be13878694b009938daae24b39b50());
+        this.AddMember("height", (IMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.PROP_3e079642e21042b1a5dab3c00d42753f());
+        this.AddMember("size", (IMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.PROP_f2b0d205859748a4a2a3826d6d678072());
+        this.AddMember("x", (IMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.PROP_317cc7f6c52143049d26ff833120c8f7());
+        this.AddMember("y", (IMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.PROP_35582b88d538461e86064a37b97631ea());
+        this.AddMember("position", (IMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.PROP_aa094db2a0da48c9b073303e37f7dade());
+        this.AddMember("pivot_x", (IMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.PROP_286906ede421454c832511d87030910e());
+        this.AddMember("pivot_y", (IMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.PROP_a8d33072f17f4300b7df778a5e5539b6());
+        this.AddMember("pivot", (IMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.PROP_17797007a47c4155bb595da3641b13a2());
+        this.AddMember("angle", (IMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.PROP_978ac21d14cf4d4c85607ca5e76e220e());
+        this.AddMember("onClick", (IMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.PROP_9983cc590c354b7b9bbb0292393aec71());
+        this.AddMember("onClick2", (IMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.PROP_1080f4bf5bd148c491adbf6bd30e0a08());
+        this.AddMember("color", (IMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.PROP_00e25925f6ba400e9c25cabd2ac53cb3());
+        this.AddMember("color2", (IMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.PROP_645e8cf5c7ca4f3eae5c643eb14d4845());
+        this.AddMember("text", (IMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.PROP_9e1f3a88c34d433fb243803276011bb6());
+        this.AddMember("textColor", (IMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.PROP_cb3561088e104a2f8bf4e986df21767a());
+        this.AddMember("textColor2", (IMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.PROP_baca38857b1640639b323b8c2c7b888e());
+        this.AddMember("highlightColor", (IMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.PROP_bce8e5531160445493ca62693ec4e4b7());
+        this.AddMember("highlightColor2", (IMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.PROP_b7ea4df009224d58af658da4e36e2e95());
+        this.AddMember("textStyle", (IMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.PROP_67e6801fe5954ae0a39479760f141132());
+        this.AddMember("textSize", (IMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.PROP_c663703574bd4ea6ae7b9abe5ea7ce5c());
+        this.AddMember("parent", (IMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.FLDV_f923dd87ce324115a0421745449a1c3e());
+        this.AddMember("clickID", (IMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.FLDV_684cd30941fd42e1b329dba139b15a61());
+        this.AddMember("clickDestroy", (IMemberDescriptor) new Bridge.TYPE_51ba4656ae664d54a0d8cb3825b1bed6.FLDV_ef02760c5a1740f0a53ea9cb23d48dc2());
       }
 
-      private sealed class MTHD_fb4eb57c1ae9429b935e2e9c783d55ac : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_6324c7bf352f44ae8bb27c090c00fe9f : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_fb4eb57c1ae9429b935e2e9c783d55ac()
+        internal MTHD_6324c7bf352f44ae8bb27c090c00fe9f()
         {
           this.Initialize(".ctor", true, new ParameterDescriptor[0], false);
         }
@@ -8893,9 +8893,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_fe874d3f5bdd4e48b03679d6a0317e63 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_be5ba34019fd4daa9d575c60348aa3f6 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_fe874d3f5bdd4e48b03679d6a0317e63()
+        internal MTHD_be5ba34019fd4daa9d575c60348aa3f6()
         {
           this.Initialize("get_isDead", false, new ParameterDescriptor[0], false);
         }
@@ -8906,9 +8906,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_9df98896475d44679310b23694e1ba6b : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_abcbc5f676f141f88d5e6aaa07efc0b0 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_9df98896475d44679310b23694e1ba6b()
+        internal MTHD_abcbc5f676f141f88d5e6aaa07efc0b0()
         {
           this.Initialize("get_visible", false, new ParameterDescriptor[0], false);
         }
@@ -8919,9 +8919,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_53ebce8d2593436f9de9002cad5914e2 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_94f8621379d44bb4ba5fc0dbda501011 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_53ebce8d2593436f9de9002cad5914e2()
+        internal MTHD_94f8621379d44bb4ba5fc0dbda501011()
         {
           this.Initialize("set_visible", false, new ParameterDescriptor[1]
           {
@@ -8936,9 +8936,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_a329ca2e29384f378e529b4def92e6d1 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_42d5ee1ea3744913bb1ce0152313aa30 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_a329ca2e29384f378e529b4def92e6d1()
+        internal MTHD_42d5ee1ea3744913bb1ce0152313aa30()
         {
           this.Initialize("get_graphic", false, new ParameterDescriptor[0], false);
         }
@@ -8949,9 +8949,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_33d0204d4a3b443fbfce9350f1998024 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_a7b34f88130040509ae3caa85bbe2e0e : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_33d0204d4a3b443fbfce9350f1998024()
+        internal MTHD_a7b34f88130040509ae3caa85bbe2e0e()
         {
           this.Initialize("set_graphic", false, new ParameterDescriptor[1]
           {
@@ -8966,9 +8966,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_433f2ecba20a439f9997e9107e970a95 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_b34d64ceae3349f584e89c42d4fbe88c : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_433f2ecba20a439f9997e9107e970a95()
+        internal MTHD_b34d64ceae3349f584e89c42d4fbe88c()
         {
           this.Initialize("get_anchor", false, new ParameterDescriptor[0], false);
         }
@@ -8979,9 +8979,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_957a4588e5444f91b572ce746e18cc35 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_728e87697f4646cd903ce10510e882b1 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_957a4588e5444f91b572ce746e18cc35()
+        internal MTHD_728e87697f4646cd903ce10510e882b1()
         {
           this.Initialize("set_anchor", false, new ParameterDescriptor[1]
           {
@@ -8996,9 +8996,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_fc6941e10ced413aa539207b7cfd44c0 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_d48299de5d064d6ba89692918b70a54b : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_fc6941e10ced413aa539207b7cfd44c0()
+        internal MTHD_d48299de5d064d6ba89692918b70a54b()
         {
           this.Initialize("get_width", false, new ParameterDescriptor[0], false);
         }
@@ -9009,9 +9009,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_63acc479197948739e89b1d83ad78fbc : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_9d1903a81a414acfbea502bcabc686c7 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_63acc479197948739e89b1d83ad78fbc()
+        internal MTHD_9d1903a81a414acfbea502bcabc686c7()
         {
           this.Initialize("set_width", false, new ParameterDescriptor[1]
           {
@@ -9026,9 +9026,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_290973b5fcd04e63a1898ffb402f1a44 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_7286fea51fea413b91571825a54c49d8 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_290973b5fcd04e63a1898ffb402f1a44()
+        internal MTHD_7286fea51fea413b91571825a54c49d8()
         {
           this.Initialize("get_height", false, new ParameterDescriptor[0], false);
         }
@@ -9039,9 +9039,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_9c60db2a877f453ebf10a59306ea96ab : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_47fc24fa5fbe4cc28875e77b1fdf494a : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_9c60db2a877f453ebf10a59306ea96ab()
+        internal MTHD_47fc24fa5fbe4cc28875e77b1fdf494a()
         {
           this.Initialize("set_height", false, new ParameterDescriptor[1]
           {
@@ -9056,9 +9056,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_79ac62f9122649b4a8dc20943fe2165d : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_f6940afba32e43a882f2fea9d49f8cc9 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_79ac62f9122649b4a8dc20943fe2165d()
+        internal MTHD_f6940afba32e43a882f2fea9d49f8cc9()
         {
           this.Initialize("get_size", false, new ParameterDescriptor[0], false);
         }
@@ -9069,9 +9069,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_e8f2a4b79ee740169a72859daacba710 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_f817bcad93974bb6b1a6efadd61526e8 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_e8f2a4b79ee740169a72859daacba710()
+        internal MTHD_f817bcad93974bb6b1a6efadd61526e8()
         {
           this.Initialize("set_size", false, new ParameterDescriptor[1]
           {
@@ -9086,9 +9086,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_b6602f955dae4a89acebdf3102d7fc4d : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_5e3721a6ae3640979e8fd5d7f0948621 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_b6602f955dae4a89acebdf3102d7fc4d()
+        internal MTHD_5e3721a6ae3640979e8fd5d7f0948621()
         {
           this.Initialize("get_x", false, new ParameterDescriptor[0], false);
         }
@@ -9099,9 +9099,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_f140a8bad9314cf68d19786e0130cbf2 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_e799ea52dfe64b50b1fc8d66228c201c : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_f140a8bad9314cf68d19786e0130cbf2()
+        internal MTHD_e799ea52dfe64b50b1fc8d66228c201c()
         {
           this.Initialize("set_x", false, new ParameterDescriptor[1]
           {
@@ -9116,9 +9116,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_77bf5cbadc464a43a9d3b8ac88ca0239 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_635cd44beb8f492c9af055483a41254c : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_77bf5cbadc464a43a9d3b8ac88ca0239()
+        internal MTHD_635cd44beb8f492c9af055483a41254c()
         {
           this.Initialize("get_y", false, new ParameterDescriptor[0], false);
         }
@@ -9129,9 +9129,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_fd0a2812280c4983a11b926d829ba74a : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_ef7bcf5cdd92449a86798f776523029f : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_fd0a2812280c4983a11b926d829ba74a()
+        internal MTHD_ef7bcf5cdd92449a86798f776523029f()
         {
           this.Initialize("set_y", false, new ParameterDescriptor[1]
           {
@@ -9146,9 +9146,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_3080bb7aa5754b319b320b987fe1e5c8 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_4775f880a70b408a91f03dd70cfd3068 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_3080bb7aa5754b319b320b987fe1e5c8()
+        internal MTHD_4775f880a70b408a91f03dd70cfd3068()
         {
           this.Initialize("get_position", false, new ParameterDescriptor[0], false);
         }
@@ -9159,9 +9159,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_26ca22115b7347ebacafbe7a3c221f43 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_a1c207d2507140b58ed9414e66e0f95a : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_26ca22115b7347ebacafbe7a3c221f43()
+        internal MTHD_a1c207d2507140b58ed9414e66e0f95a()
         {
           this.Initialize("set_position", false, new ParameterDescriptor[1]
           {
@@ -9176,9 +9176,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_c178ac11ddaf4da093cc2af26490c284 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_706adca5c9e44eb7b88f42e290bcaa7f : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_c178ac11ddaf4da093cc2af26490c284()
+        internal MTHD_706adca5c9e44eb7b88f42e290bcaa7f()
         {
           this.Initialize("get_pivot_x", false, new ParameterDescriptor[0], false);
         }
@@ -9189,9 +9189,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_47eee8313fe0468ca56aa5cc2590ea66 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_56dcc03362ce40088b40730f9c2670d2 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_47eee8313fe0468ca56aa5cc2590ea66()
+        internal MTHD_56dcc03362ce40088b40730f9c2670d2()
         {
           this.Initialize("set_pivot_x", false, new ParameterDescriptor[1]
           {
@@ -9206,9 +9206,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_1c15eaa946b846318bdd3053261253f4 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_1cc8cb6614db4bd49c76cd0c852e2655 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_1c15eaa946b846318bdd3053261253f4()
+        internal MTHD_1cc8cb6614db4bd49c76cd0c852e2655()
         {
           this.Initialize("get_pivot_y", false, new ParameterDescriptor[0], false);
         }
@@ -9219,9 +9219,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_ef761125c94244e7b78c5eaa0bce80ad : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_4922c605bc114d4aac1c421efcfaa46a : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_ef761125c94244e7b78c5eaa0bce80ad()
+        internal MTHD_4922c605bc114d4aac1c421efcfaa46a()
         {
           this.Initialize("set_pivot_y", false, new ParameterDescriptor[1]
           {
@@ -9236,9 +9236,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_8cc291df41074b4894932a45efdf6bec : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_b4cb10421a034c7eb116233f60054199 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_8cc291df41074b4894932a45efdf6bec()
+        internal MTHD_b4cb10421a034c7eb116233f60054199()
         {
           this.Initialize("get_pivot", false, new ParameterDescriptor[0], false);
         }
@@ -9249,9 +9249,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_a3f25675ef5c486f8235449a1e768ddb : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_36452d480e5343ec9680d9acc9fa7709 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_a3f25675ef5c486f8235449a1e768ddb()
+        internal MTHD_36452d480e5343ec9680d9acc9fa7709()
         {
           this.Initialize("set_pivot", false, new ParameterDescriptor[1]
           {
@@ -9266,9 +9266,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_dfb229e903b345688a5a9788d4fd2e12 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_109d2291abce4edfbfd8f4a2d65a8bf5 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_dfb229e903b345688a5a9788d4fd2e12()
+        internal MTHD_109d2291abce4edfbfd8f4a2d65a8bf5()
         {
           this.Initialize("get_angle", false, new ParameterDescriptor[0], false);
         }
@@ -9279,9 +9279,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_0017ed12c67342ec8cc8d25bd34e1383 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_53b69b651207425dbbabac1937da41bb : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_0017ed12c67342ec8cc8d25bd34e1383()
+        internal MTHD_53b69b651207425dbbabac1937da41bb()
         {
           this.Initialize("set_angle", false, new ParameterDescriptor[1]
           {
@@ -9296,9 +9296,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_0bdeb87ff2c4490a904284d4a43fce4b : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_b48b3ed51f1c4264b03f947becca49df : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_0bdeb87ff2c4490a904284d4a43fce4b()
+        internal MTHD_b48b3ed51f1c4264b03f947becca49df()
         {
           this.Initialize("get_onClick", false, new ParameterDescriptor[0], false);
         }
@@ -9309,9 +9309,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_188c3ff2afe740cf9d59fb0e892a95ee : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_6c06cf2045bc410ea492f3dfd3c6d4d4 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_188c3ff2afe740cf9d59fb0e892a95ee()
+        internal MTHD_6c06cf2045bc410ea492f3dfd3c6d4d4()
         {
           this.Initialize("set_onClick", false, new ParameterDescriptor[1]
           {
@@ -9326,9 +9326,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_b501e833c6ea4a8a961f43f16c6a0b83 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_f812f08cb2024d0f9894d73620e6431d : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_b501e833c6ea4a8a961f43f16c6a0b83()
+        internal MTHD_f812f08cb2024d0f9894d73620e6431d()
         {
           this.Initialize("get_onClick2", false, new ParameterDescriptor[0], false);
         }
@@ -9339,9 +9339,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_f4660d2005844b2fbb3d7f7a079e61d9 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_79b2c23067ac4d1383e7ca300c94a99f : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_f4660d2005844b2fbb3d7f7a079e61d9()
+        internal MTHD_79b2c23067ac4d1383e7ca300c94a99f()
         {
           this.Initialize("set_onClick2", false, new ParameterDescriptor[1]
           {
@@ -9356,9 +9356,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_d0a035228a5d40548318c710146bfc2f : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_9b65fc7296f343568e765ea5ba1c4045 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_d0a035228a5d40548318c710146bfc2f()
+        internal MTHD_9b65fc7296f343568e765ea5ba1c4045()
         {
           this.Initialize("get_color", false, new ParameterDescriptor[0], false);
         }
@@ -9369,9 +9369,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_1130088515c74dbaac5e97f3321d0ca9 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_afad8333a95b4ec393017f5b636bebfd : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_1130088515c74dbaac5e97f3321d0ca9()
+        internal MTHD_afad8333a95b4ec393017f5b636bebfd()
         {
           this.Initialize("set_color", false, new ParameterDescriptor[1]
           {
@@ -9386,9 +9386,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_3b70b0d685524aaf8c579ca71101a194 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_ea93da9267984a029a97e7a9062cfb1d : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_3b70b0d685524aaf8c579ca71101a194()
+        internal MTHD_ea93da9267984a029a97e7a9062cfb1d()
         {
           this.Initialize("get_color2", false, new ParameterDescriptor[0], false);
         }
@@ -9399,9 +9399,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_f9af6a839c9a4f9dbdd34acecf389681 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_33df9756ac76461c8aca58f623bc3194 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_f9af6a839c9a4f9dbdd34acecf389681()
+        internal MTHD_33df9756ac76461c8aca58f623bc3194()
         {
           this.Initialize("set_color2", false, new ParameterDescriptor[1]
           {
@@ -9416,9 +9416,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_5b9313d569624efbb7cc51ef067ddc46 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_9e22e2fafb964dceb4ca9b19914be13f : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_5b9313d569624efbb7cc51ef067ddc46()
+        internal MTHD_9e22e2fafb964dceb4ca9b19914be13f()
         {
           this.Initialize("get_text", false, new ParameterDescriptor[0], false);
         }
@@ -9429,9 +9429,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_2074a79a38754dd9b083814f285542fe : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_62f568e1fbda4e7e9569be44df673b33 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_2074a79a38754dd9b083814f285542fe()
+        internal MTHD_62f568e1fbda4e7e9569be44df673b33()
         {
           this.Initialize("set_text", false, new ParameterDescriptor[1]
           {
@@ -9446,9 +9446,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_cd84ff5c6c684278b6011e1cd30a4463 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_2a9bb8b42a6e4e4fa58df54372f13153 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_cd84ff5c6c684278b6011e1cd30a4463()
+        internal MTHD_2a9bb8b42a6e4e4fa58df54372f13153()
         {
           this.Initialize("get_textColor", false, new ParameterDescriptor[0], false);
         }
@@ -9459,9 +9459,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_82b600662d17455f948d070531acbe24 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_65b8a4cacc1e44aa94510323d5f478be : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_82b600662d17455f948d070531acbe24()
+        internal MTHD_65b8a4cacc1e44aa94510323d5f478be()
         {
           this.Initialize("set_textColor", false, new ParameterDescriptor[1]
           {
@@ -9476,9 +9476,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_25be27ae9dd24f85944b4897c05aed59 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_682f1cbc16a44843812825b62e8c003b : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_25be27ae9dd24f85944b4897c05aed59()
+        internal MTHD_682f1cbc16a44843812825b62e8c003b()
         {
           this.Initialize("get_textColor2", false, new ParameterDescriptor[0], false);
         }
@@ -9489,9 +9489,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_b2da7c9cceaa4136ba59e35b8dcb2557 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_afa41daf941646a89a6bf0cf14678c85 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_b2da7c9cceaa4136ba59e35b8dcb2557()
+        internal MTHD_afa41daf941646a89a6bf0cf14678c85()
         {
           this.Initialize("set_textColor2", false, new ParameterDescriptor[1]
           {
@@ -9506,9 +9506,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_d659db431b31427a864d07c6fd046731 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_72cf9f91995f424e8d041b9e8fd30af2 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_d659db431b31427a864d07c6fd046731()
+        internal MTHD_72cf9f91995f424e8d041b9e8fd30af2()
         {
           this.Initialize("get_highlightColor", false, new ParameterDescriptor[0], false);
         }
@@ -9519,9 +9519,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_c65d5d19d9ef452183e6f755876a8a96 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_bbc5ee6b17254850974a166fc780e1a8 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_c65d5d19d9ef452183e6f755876a8a96()
+        internal MTHD_bbc5ee6b17254850974a166fc780e1a8()
         {
           this.Initialize("set_highlightColor", false, new ParameterDescriptor[1]
           {
@@ -9536,9 +9536,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_b6c72e039a6c4be79e7016771d4d7aee : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_390ddc98db9f445b934d733f39b4c112 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_b6c72e039a6c4be79e7016771d4d7aee()
+        internal MTHD_390ddc98db9f445b934d733f39b4c112()
         {
           this.Initialize("get_highlightColor2", false, new ParameterDescriptor[0], false);
         }
@@ -9549,9 +9549,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_ca024df73e974f178e6c02f5920d4bb6 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_51952aa56e174b0ebcb401ac40d8d3b6 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_ca024df73e974f178e6c02f5920d4bb6()
+        internal MTHD_51952aa56e174b0ebcb401ac40d8d3b6()
         {
           this.Initialize("set_highlightColor2", false, new ParameterDescriptor[1]
           {
@@ -9566,9 +9566,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_110ab26e59ea4486873d3ba751efb8c5 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_59c5497b453645f9b8127cf9844b5685 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_110ab26e59ea4486873d3ba751efb8c5()
+        internal MTHD_59c5497b453645f9b8127cf9844b5685()
         {
           this.Initialize("get_textStyle", false, new ParameterDescriptor[0], false);
         }
@@ -9579,9 +9579,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_6d8cb9352e9c43e89e9465b9b76e2c86 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_4d9c56bb4e9a4a45bf7cbb2e065bfc8b : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_6d8cb9352e9c43e89e9465b9b76e2c86()
+        internal MTHD_4d9c56bb4e9a4a45bf7cbb2e065bfc8b()
         {
           this.Initialize("set_textStyle", false, new ParameterDescriptor[1]
           {
@@ -9596,9 +9596,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_837be4abb93349b9b711b759441897dc : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_c6aa6d96e35c49de965fb5fa2ab13abd : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_837be4abb93349b9b711b759441897dc()
+        internal MTHD_c6aa6d96e35c49de965fb5fa2ab13abd()
         {
           this.Initialize("get_textSize", false, new ParameterDescriptor[0], false);
         }
@@ -9609,9 +9609,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_6659e479272f42a2a206cac5cddfc459 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_c404becd5e2148b9829a91185161f57a : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_6659e479272f42a2a206cac5cddfc459()
+        internal MTHD_c404becd5e2148b9829a91185161f57a()
         {
           this.Initialize("set_textSize", false, new ParameterDescriptor[1]
           {
@@ -9626,9 +9626,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_43621500d015412eb6bb4f3e0e76f242 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_b49f03a5790e45b1baa07f877a4bd738 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_43621500d015412eb6bb4f3e0e76f242()
+        internal MTHD_b49f03a5790e45b1baa07f877a4bd738()
         {
           this.Initialize("activateInput", false, new ParameterDescriptor[0], false);
         }
@@ -9640,9 +9640,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_60e319938db840758a98412482312038 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_1531ea7e363545f8b13a8b96b5887b2c : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_60e319938db840758a98412482312038()
+        internal MTHD_1531ea7e363545f8b13a8b96b5887b2c()
         {
           this.Initialize("createUI", true, new ParameterDescriptor[2]
           {
@@ -9657,9 +9657,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_87766b38f76a46968c48ad96300f8357 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_f17d1328b44046d3b03ade542a733942 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_87766b38f76a46968c48ad96300f8357()
+        internal MTHD_f17d1328b44046d3b03ade542a733942()
         {
           this.Initialize("createInput", true, new ParameterDescriptor[6]
           {
@@ -9686,9 +9686,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_a322fb4d791a4532ae022ef2db127bf7 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_65b8e60fb8154cc79f09ff629fc3a66b : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_a322fb4d791a4532ae022ef2db127bf7()
+        internal MTHD_65b8e60fb8154cc79f09ff629fc3a66b()
         {
           this.Initialize("duplicate", false, new ParameterDescriptor[2]
           {
@@ -9703,9 +9703,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_95ab9651364941d8811233bace8c2ea8 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_39c4fc3df3a143ceb6957ea1f68ca1c4 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_95ab9651364941d8811233bace8c2ea8()
+        internal MTHD_39c4fc3df3a143ceb6957ea1f68ca1c4()
         {
           this.Initialize("destroyHierarchy", false, new ParameterDescriptor[0], false);
         }
@@ -9717,9 +9717,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_f6ad730522d84791b62c17b277e99618 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_8ef7083f286644edbeac87d7d1ee4b6a : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_f6ad730522d84791b62c17b277e99618()
+        internal MTHD_8ef7083f286644edbeac87d7d1ee4b6a()
         {
           this.Initialize("destroy", false, new ParameterDescriptor[0], false);
         }
@@ -9731,9 +9731,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_ea533bb8bb264f5082d28f013cef2b41 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_8c4978df982846f395c1b1689b8d220f : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_ea533bb8bb264f5082d28f013cef2b41()
+        internal MTHD_8c4978df982846f395c1b1689b8d220f()
         {
           this.Initialize("Equals", false, new ParameterDescriptor[1]
           {
@@ -9747,9 +9747,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_ade0686513e9497bbf4e629994c09236 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_7900f764c4094704984778c8f2e2c962 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_ade0686513e9497bbf4e629994c09236()
+        internal MTHD_7900f764c4094704984778c8f2e2c962()
         {
           this.Initialize("GetHashCode", false, new ParameterDescriptor[0], false);
         }
@@ -9760,9 +9760,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_552f03ca6a0241fba81b24113b9dfb94 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_fad0e3e1a02249cebd64af4785d5a7e9 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_552f03ca6a0241fba81b24113b9dfb94()
+        internal MTHD_fad0e3e1a02249cebd64af4785d5a7e9()
         {
           this.Initialize("GetType", false, new ParameterDescriptor[0], false);
         }
@@ -9773,9 +9773,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_8ba64b8b8bc94404aa36710fa36f5298 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_05cde49daf094f6fa1202312041f53de : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_8ba64b8b8bc94404aa36710fa36f5298()
+        internal MTHD_05cde49daf094f6fa1202312041f53de()
         {
           this.Initialize("ToString", false, new ParameterDescriptor[0], false);
         }
@@ -9786,9 +9786,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_498f3dda19f749308d1ef730b89205a1 : HardwiredMemberDescriptor
+      private sealed class PROP_8dd8bd2cecca4dc7a424f44905afd357 : HardwiredMemberDescriptor
       {
-        internal PROP_498f3dda19f749308d1ef730b89205a1()
+        internal PROP_8dd8bd2cecca4dc7a424f44905afd357()
           : base(typeof (bool), "isDead", false, MemberDescriptorAccess.CanRead)
         {
         }
@@ -9799,9 +9799,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_46b05378728e4f909927e43b3024ec47 : HardwiredMemberDescriptor
+      private sealed class PROP_33ba3d696ec1411da29fe0014c7e8492 : HardwiredMemberDescriptor
       {
-        internal PROP_46b05378728e4f909927e43b3024ec47()
+        internal PROP_33ba3d696ec1411da29fe0014c7e8492()
           : base(typeof (bool), "visible", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -9817,9 +9817,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_5ad2589e416e49f2b45dadd4e85e6240 : HardwiredMemberDescriptor
+      private sealed class PROP_2ddbd11024a34702aa9dfb8c32e86ca4 : HardwiredMemberDescriptor
       {
-        internal PROP_5ad2589e416e49f2b45dadd4e85e6240()
+        internal PROP_2ddbd11024a34702aa9dfb8c32e86ca4()
           : base(typeof (object), "graphic", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -9835,9 +9835,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_b041469baed544ddbe99e8e20b4ad7ff : HardwiredMemberDescriptor
+      private sealed class PROP_f85c19052b134b6dacb2708bba354815 : HardwiredMemberDescriptor
       {
-        internal PROP_b041469baed544ddbe99e8e20b4ad7ff()
+        internal PROP_f85c19052b134b6dacb2708bba354815()
           : base(typeof (Anchor), "anchor", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -9853,9 +9853,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_eafba266cf5149479eebf732da32fbd9 : HardwiredMemberDescriptor
+      private sealed class PROP_617be13878694b009938daae24b39b50 : HardwiredMemberDescriptor
       {
-        internal PROP_eafba266cf5149479eebf732da32fbd9()
+        internal PROP_617be13878694b009938daae24b39b50()
           : base(typeof (double), "width", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -9871,9 +9871,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_2291c083e9624bb88b5b4992577ea35d : HardwiredMemberDescriptor
+      private sealed class PROP_3e079642e21042b1a5dab3c00d42753f : HardwiredMemberDescriptor
       {
-        internal PROP_2291c083e9624bb88b5b4992577ea35d()
+        internal PROP_3e079642e21042b1a5dab3c00d42753f()
           : base(typeof (double), "height", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -9889,9 +9889,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_92827addc0b34118994dbb3f30caae89 : HardwiredMemberDescriptor
+      private sealed class PROP_f2b0d205859748a4a2a3826d6d678072 : HardwiredMemberDescriptor
       {
-        internal PROP_92827addc0b34118994dbb3f30caae89()
+        internal PROP_f2b0d205859748a4a2a3826d6d678072()
           : base(typeof (Educative.Point), "size", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -9907,9 +9907,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_2fd05c880cc94fcf8085fd7c995f99b6 : HardwiredMemberDescriptor
+      private sealed class PROP_317cc7f6c52143049d26ff833120c8f7 : HardwiredMemberDescriptor
       {
-        internal PROP_2fd05c880cc94fcf8085fd7c995f99b6()
+        internal PROP_317cc7f6c52143049d26ff833120c8f7()
           : base(typeof (double), "x", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -9925,9 +9925,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_3217853755ca4259a2dd5aaa36cff88f : HardwiredMemberDescriptor
+      private sealed class PROP_35582b88d538461e86064a37b97631ea : HardwiredMemberDescriptor
       {
-        internal PROP_3217853755ca4259a2dd5aaa36cff88f()
+        internal PROP_35582b88d538461e86064a37b97631ea()
           : base(typeof (double), "y", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -9943,9 +9943,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_6c4a4ecf92774cc289c1b514140beac3 : HardwiredMemberDescriptor
+      private sealed class PROP_aa094db2a0da48c9b073303e37f7dade : HardwiredMemberDescriptor
       {
-        internal PROP_6c4a4ecf92774cc289c1b514140beac3()
+        internal PROP_aa094db2a0da48c9b073303e37f7dade()
           : base(typeof (Educative.Point), "position", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -9961,9 +9961,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_75b25b61d74c499caca2e185c830205b : HardwiredMemberDescriptor
+      private sealed class PROP_286906ede421454c832511d87030910e : HardwiredMemberDescriptor
       {
-        internal PROP_75b25b61d74c499caca2e185c830205b()
+        internal PROP_286906ede421454c832511d87030910e()
           : base(typeof (double), "pivot_x", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -9979,9 +9979,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_3385632dc4804c92b894b81d2057ba15 : HardwiredMemberDescriptor
+      private sealed class PROP_a8d33072f17f4300b7df778a5e5539b6 : HardwiredMemberDescriptor
       {
-        internal PROP_3385632dc4804c92b894b81d2057ba15()
+        internal PROP_a8d33072f17f4300b7df778a5e5539b6()
           : base(typeof (double), "pivot_y", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -9997,9 +9997,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_52384f1d032746799fe8048fd5e69325 : HardwiredMemberDescriptor
+      private sealed class PROP_17797007a47c4155bb595da3641b13a2 : HardwiredMemberDescriptor
       {
-        internal PROP_52384f1d032746799fe8048fd5e69325()
+        internal PROP_17797007a47c4155bb595da3641b13a2()
           : base(typeof (Educative.Point), "pivot", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -10015,9 +10015,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_c77e1fe9b31d40f78a001c39b5c8e804 : HardwiredMemberDescriptor
+      private sealed class PROP_978ac21d14cf4d4c85607ca5e76e220e : HardwiredMemberDescriptor
       {
-        internal PROP_c77e1fe9b31d40f78a001c39b5c8e804()
+        internal PROP_978ac21d14cf4d4c85607ca5e76e220e()
           : base(typeof (double), "angle", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -10033,9 +10033,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_7339f0df8de9471ba9dd946dcb6a6c70 : HardwiredMemberDescriptor
+      private sealed class PROP_9983cc590c354b7b9bbb0292393aec71 : HardwiredMemberDescriptor
       {
-        internal PROP_7339f0df8de9471ba9dd946dcb6a6c70()
+        internal PROP_9983cc590c354b7b9bbb0292393aec71()
           : base(typeof (string), "onClick", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -10051,9 +10051,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_507f62ebe6534e78a07f1b80e701c4cc : HardwiredMemberDescriptor
+      private sealed class PROP_1080f4bf5bd148c491adbf6bd30e0a08 : HardwiredMemberDescriptor
       {
-        internal PROP_507f62ebe6534e78a07f1b80e701c4cc()
+        internal PROP_1080f4bf5bd148c491adbf6bd30e0a08()
           : base(typeof (DynValue), "onClick2", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -10069,9 +10069,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_6fa4a24c4ce34db289fb42507e460f3a : HardwiredMemberDescriptor
+      private sealed class PROP_00e25925f6ba400e9c25cabd2ac53cb3 : HardwiredMemberDescriptor
       {
-        internal PROP_6fa4a24c4ce34db289fb42507e460f3a()
+        internal PROP_00e25925f6ba400e9c25cabd2ac53cb3()
           : base(typeof (string), "color", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -10087,9 +10087,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_0413743ee4844de488c0e50fc594cda8 : HardwiredMemberDescriptor
+      private sealed class PROP_645e8cf5c7ca4f3eae5c643eb14d4845 : HardwiredMemberDescriptor
       {
-        internal PROP_0413743ee4844de488c0e50fc594cda8()
+        internal PROP_645e8cf5c7ca4f3eae5c643eb14d4845()
           : base(typeof (LuaColor), "color2", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -10105,9 +10105,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_9a9acff4a5c0474ab91ac7b0ae109973 : HardwiredMemberDescriptor
+      private sealed class PROP_9e1f3a88c34d433fb243803276011bb6 : HardwiredMemberDescriptor
       {
-        internal PROP_9a9acff4a5c0474ab91ac7b0ae109973()
+        internal PROP_9e1f3a88c34d433fb243803276011bb6()
           : base(typeof (string), "text", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -10123,9 +10123,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_ff2d5283b26e435d9d9444e6d225a439 : HardwiredMemberDescriptor
+      private sealed class PROP_cb3561088e104a2f8bf4e986df21767a : HardwiredMemberDescriptor
       {
-        internal PROP_ff2d5283b26e435d9d9444e6d225a439()
+        internal PROP_cb3561088e104a2f8bf4e986df21767a()
           : base(typeof (string), "textColor", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -10141,9 +10141,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_27314639386447dc8bf0521071b2720b : HardwiredMemberDescriptor
+      private sealed class PROP_baca38857b1640639b323b8c2c7b888e : HardwiredMemberDescriptor
       {
-        internal PROP_27314639386447dc8bf0521071b2720b()
+        internal PROP_baca38857b1640639b323b8c2c7b888e()
           : base(typeof (LuaColor), "textColor2", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -10159,9 +10159,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_0ab94c3bb6e44b1cabc6db952fa91675 : HardwiredMemberDescriptor
+      private sealed class PROP_bce8e5531160445493ca62693ec4e4b7 : HardwiredMemberDescriptor
       {
-        internal PROP_0ab94c3bb6e44b1cabc6db952fa91675()
+        internal PROP_bce8e5531160445493ca62693ec4e4b7()
           : base(typeof (string), "highlightColor", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -10177,9 +10177,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_e604a449d4eb434a9adc929ff827b3b9 : HardwiredMemberDescriptor
+      private sealed class PROP_b7ea4df009224d58af658da4e36e2e95 : HardwiredMemberDescriptor
       {
-        internal PROP_e604a449d4eb434a9adc929ff827b3b9()
+        internal PROP_b7ea4df009224d58af658da4e36e2e95()
           : base(typeof (LuaColor), "highlightColor2", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -10195,9 +10195,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_25adeb92aa8b48968433c3914a1dd398 : HardwiredMemberDescriptor
+      private sealed class PROP_67e6801fe5954ae0a39479760f141132 : HardwiredMemberDescriptor
       {
-        internal PROP_25adeb92aa8b48968433c3914a1dd398()
+        internal PROP_67e6801fe5954ae0a39479760f141132()
           : base(typeof (int), "textStyle", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -10213,9 +10213,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class PROP_3d2714d8956940a69dee573acb64f3a0 : HardwiredMemberDescriptor
+      private sealed class PROP_c663703574bd4ea6ae7b9abe5ea7ce5c : HardwiredMemberDescriptor
       {
-        internal PROP_3d2714d8956940a69dee573acb64f3a0()
+        internal PROP_c663703574bd4ea6ae7b9abe5ea7ce5c()
           : base(typeof (double), "textSize", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -10231,9 +10231,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class FLDV_159a923c7eb14d3daa06d656df5242c8 : HardwiredMemberDescriptor
+      private sealed class FLDV_f923dd87ce324115a0421745449a1c3e : HardwiredMemberDescriptor
       {
-        internal FLDV_159a923c7eb14d3daa06d656df5242c8()
+        internal FLDV_f923dd87ce324115a0421745449a1c3e()
           : base(typeof (UIElement), "parent", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -10249,9 +10249,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class FLDV_c8904c9d1c59454ebb19a99c11543c55 : HardwiredMemberDescriptor
+      private sealed class FLDV_684cd30941fd42e1b329dba139b15a61 : HardwiredMemberDescriptor
       {
-        internal FLDV_c8904c9d1c59454ebb19a99c11543c55()
+        internal FLDV_684cd30941fd42e1b329dba139b15a61()
           : base(typeof (object), "clickID", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -10267,9 +10267,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class FLDV_f7eeda8d6fbd414eb12589c676a22b7a : HardwiredMemberDescriptor
+      private sealed class FLDV_ef02760c5a1740f0a53ea9cb23d48dc2 : HardwiredMemberDescriptor
       {
-        internal FLDV_f7eeda8d6fbd414eb12589c676a22b7a()
+        internal FLDV_ef02760c5a1740f0a53ea9cb23d48dc2()
           : base(typeof (bool), "clickDestroy", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -10286,44 +10286,44 @@ namespace MoonSharp
       }
     }
 
-    private sealed class TYPE_a2a6983aa4c4430ea21f2895da5f0c8d : HardwiredUserDataDescriptor
+    private sealed class TYPE_af9c7b103ddd4d81bc31553df9aa367e : HardwiredUserDataDescriptor
     {
-      internal TYPE_a2a6983aa4c4430ea21f2895da5f0c8d()
+      internal TYPE_af9c7b103ddd4d81bc31553df9aa367e()
         : base(typeof (MyPoll.Item))
       {
         this.AddMember("__new", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("__new", typeof (MyPoll.Item), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_a2a6983aa4c4430ea21f2895da5f0c8d.MTHD_24c89eae74a14d0c803e72a25d29dbb7()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_af9c7b103ddd4d81bc31553df9aa367e.MTHD_450e4a11de8a4104b1d95d30b715b0cf()
         }));
         this.AddMember("addAnswer", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("addAnswer", typeof (MyPoll.Item), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_a2a6983aa4c4430ea21f2895da5f0c8d.MTHD_8ed806bc3c97415cb90075fbae00fc67()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_af9c7b103ddd4d81bc31553df9aa367e.MTHD_e09f187a89e04bfe94cad08bb5afb4a0()
         }));
         this.AddMember("Equals", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("Equals", typeof (MyPoll.Item), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_a2a6983aa4c4430ea21f2895da5f0c8d.MTHD_f750238525a54364bbf65d52f4fad93d()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_af9c7b103ddd4d81bc31553df9aa367e.MTHD_b30e270b96404e3c832bda582f727d35()
         }));
         this.AddMember("GetHashCode", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("GetHashCode", typeof (MyPoll.Item), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_a2a6983aa4c4430ea21f2895da5f0c8d.MTHD_960cd4a6f8d840c49cae62a6c7ce5502()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_af9c7b103ddd4d81bc31553df9aa367e.MTHD_79807fa556c543408a3a59781884078c()
         }));
         this.AddMember("GetType", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("GetType", typeof (MyPoll.Item), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_a2a6983aa4c4430ea21f2895da5f0c8d.MTHD_270abd5776d8496580b5cd89164e6443()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_af9c7b103ddd4d81bc31553df9aa367e.MTHD_b825df6a1e3a4f7782361f4ad9b19fa7()
         }));
         this.AddMember("ToString", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("ToString", typeof (MyPoll.Item), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_a2a6983aa4c4430ea21f2895da5f0c8d.MTHD_ccaa1db3ff38473781d34e5d0104d141()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_af9c7b103ddd4d81bc31553df9aa367e.MTHD_dbf21b33dc88475fa8a4b43079ac4e52()
         }));
-        this.AddMember("question", (IMemberDescriptor) new Bridge.TYPE_a2a6983aa4c4430ea21f2895da5f0c8d.FLDV_5d800afca2684b508f0eda85aa08d1aa());
-        this.AddMember("multipleSelection", (IMemberDescriptor) new Bridge.TYPE_a2a6983aa4c4430ea21f2895da5f0c8d.FLDV_8aa8dd9289d246d9b6ff59b272d22ce9());
-        this.AddMember("requiresAnswer", (IMemberDescriptor) new Bridge.TYPE_a2a6983aa4c4430ea21f2895da5f0c8d.FLDV_4223264206364f008441b6e23a82addf());
-        this.AddMember("answers", (IMemberDescriptor) new Bridge.TYPE_a2a6983aa4c4430ea21f2895da5f0c8d.FLDV_cb7e032cc8e248e680b8d3836c5cb2b6());
+        this.AddMember("question", (IMemberDescriptor) new Bridge.TYPE_af9c7b103ddd4d81bc31553df9aa367e.FLDV_f70dc5824bec4c05ace70aee5066dfa7());
+        this.AddMember("multipleSelection", (IMemberDescriptor) new Bridge.TYPE_af9c7b103ddd4d81bc31553df9aa367e.FLDV_99242a6d659e417f89f1b931236a555b());
+        this.AddMember("requiresAnswer", (IMemberDescriptor) new Bridge.TYPE_af9c7b103ddd4d81bc31553df9aa367e.FLDV_5a1cd3e50a9d48fabefa59426ef7d069());
+        this.AddMember("answers", (IMemberDescriptor) new Bridge.TYPE_af9c7b103ddd4d81bc31553df9aa367e.FLDV_54fffa9f011b40bebe2cb11072b88096());
       }
 
-      private sealed class MTHD_24c89eae74a14d0c803e72a25d29dbb7 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_450e4a11de8a4104b1d95d30b715b0cf : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_24c89eae74a14d0c803e72a25d29dbb7()
+        internal MTHD_450e4a11de8a4104b1d95d30b715b0cf()
         {
           this.Initialize(".ctor", true, new ParameterDescriptor[0], false);
         }
@@ -10334,9 +10334,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_8ed806bc3c97415cb90075fbae00fc67 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_e09f187a89e04bfe94cad08bb5afb4a0 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_8ed806bc3c97415cb90075fbae00fc67()
+        internal MTHD_e09f187a89e04bfe94cad08bb5afb4a0()
         {
           this.Initialize("addAnswer", false, new ParameterDescriptor[3]
           {
@@ -10354,9 +10354,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_f750238525a54364bbf65d52f4fad93d : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_b30e270b96404e3c832bda582f727d35 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_f750238525a54364bbf65d52f4fad93d()
+        internal MTHD_b30e270b96404e3c832bda582f727d35()
         {
           this.Initialize("Equals", false, new ParameterDescriptor[1]
           {
@@ -10370,9 +10370,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_960cd4a6f8d840c49cae62a6c7ce5502 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_79807fa556c543408a3a59781884078c : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_960cd4a6f8d840c49cae62a6c7ce5502()
+        internal MTHD_79807fa556c543408a3a59781884078c()
         {
           this.Initialize("GetHashCode", false, new ParameterDescriptor[0], false);
         }
@@ -10383,9 +10383,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_270abd5776d8496580b5cd89164e6443 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_b825df6a1e3a4f7782361f4ad9b19fa7 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_270abd5776d8496580b5cd89164e6443()
+        internal MTHD_b825df6a1e3a4f7782361f4ad9b19fa7()
         {
           this.Initialize("GetType", false, new ParameterDescriptor[0], false);
         }
@@ -10396,9 +10396,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_ccaa1db3ff38473781d34e5d0104d141 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_dbf21b33dc88475fa8a4b43079ac4e52 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_ccaa1db3ff38473781d34e5d0104d141()
+        internal MTHD_dbf21b33dc88475fa8a4b43079ac4e52()
         {
           this.Initialize("ToString", false, new ParameterDescriptor[0], false);
         }
@@ -10409,9 +10409,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class FLDV_5d800afca2684b508f0eda85aa08d1aa : HardwiredMemberDescriptor
+      private sealed class FLDV_f70dc5824bec4c05ace70aee5066dfa7 : HardwiredMemberDescriptor
       {
-        internal FLDV_5d800afca2684b508f0eda85aa08d1aa()
+        internal FLDV_f70dc5824bec4c05ace70aee5066dfa7()
           : base(typeof (string), "question", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -10427,9 +10427,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class FLDV_8aa8dd9289d246d9b6ff59b272d22ce9 : HardwiredMemberDescriptor
+      private sealed class FLDV_99242a6d659e417f89f1b931236a555b : HardwiredMemberDescriptor
       {
-        internal FLDV_8aa8dd9289d246d9b6ff59b272d22ce9()
+        internal FLDV_99242a6d659e417f89f1b931236a555b()
           : base(typeof (bool), "multipleSelection", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -10445,9 +10445,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class FLDV_4223264206364f008441b6e23a82addf : HardwiredMemberDescriptor
+      private sealed class FLDV_5a1cd3e50a9d48fabefa59426ef7d069 : HardwiredMemberDescriptor
       {
-        internal FLDV_4223264206364f008441b6e23a82addf()
+        internal FLDV_5a1cd3e50a9d48fabefa59426ef7d069()
           : base(typeof (bool), "requiresAnswer", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -10463,9 +10463,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class FLDV_cb7e032cc8e248e680b8d3836c5cb2b6 : HardwiredMemberDescriptor
+      private sealed class FLDV_54fffa9f011b40bebe2cb11072b88096 : HardwiredMemberDescriptor
       {
-        internal FLDV_cb7e032cc8e248e680b8d3836c5cb2b6()
+        internal FLDV_54fffa9f011b40bebe2cb11072b88096()
           : base(typeof (List<MyPoll.Answer>), "answers", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -10482,41 +10482,41 @@ namespace MoonSharp
       }
     }
 
-    private sealed class TYPE_1a16ed1ca86b4e9cbfadc19af1733415 : HardwiredUserDataDescriptor
+    private sealed class TYPE_bf829182a9cf485cbabae631e7ae1bb4 : HardwiredUserDataDescriptor
     {
-      internal TYPE_1a16ed1ca86b4e9cbfadc19af1733415()
+      internal TYPE_bf829182a9cf485cbabae631e7ae1bb4()
         : base(typeof (MyPoll.Answer))
       {
         this.AddMember("__new", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("__new", typeof (MyPoll.Answer), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_1a16ed1ca86b4e9cbfadc19af1733415.MTHD_f5a8b0109fbb4f248d2354f58a1bf727()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_bf829182a9cf485cbabae631e7ae1bb4.MTHD_2989c03bd9ec4a89a7e25701b8ae561d()
         }));
         this.AddMember("Equals", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("Equals", typeof (MyPoll.Answer), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_1a16ed1ca86b4e9cbfadc19af1733415.MTHD_f9b5479f3d5b4862b2a1152cb3ce14ec()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_bf829182a9cf485cbabae631e7ae1bb4.MTHD_2d9a7b9cc3a24d5880fd8559f03762ea()
         }));
         this.AddMember("GetHashCode", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("GetHashCode", typeof (MyPoll.Answer), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_1a16ed1ca86b4e9cbfadc19af1733415.MTHD_b5041019a3124eae9820d96ef5c14091()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_bf829182a9cf485cbabae631e7ae1bb4.MTHD_1f43c8c6abee47e199b83d4a890e166c()
         }));
         this.AddMember("GetType", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("GetType", typeof (MyPoll.Answer), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_1a16ed1ca86b4e9cbfadc19af1733415.MTHD_b43f5ab37bf44ac085ccdce12e5fa55f()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_bf829182a9cf485cbabae631e7ae1bb4.MTHD_fbd5fb3e60c34ee6af30ecd6c9528343()
         }));
         this.AddMember("ToString", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("ToString", typeof (MyPoll.Answer), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_1a16ed1ca86b4e9cbfadc19af1733415.MTHD_40679aeb0056446a8c5d520b14d3ab5d()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_bf829182a9cf485cbabae631e7ae1bb4.MTHD_8b5d394d92c04180807b68a3f4b4c2fe()
         }));
-        this.AddMember("text", (IMemberDescriptor) new Bridge.TYPE_1a16ed1ca86b4e9cbfadc19af1733415.FLDV_3319ce25562a47d698270b35d51a0224());
-        this.AddMember("allowUserInput", (IMemberDescriptor) new Bridge.TYPE_1a16ed1ca86b4e9cbfadc19af1733415.FLDV_dc99113fe99448f0bc2afe3280231843());
-        this.AddMember("checkable", (IMemberDescriptor) new Bridge.TYPE_1a16ed1ca86b4e9cbfadc19af1733415.FLDV_4b2604e5873c4eb3a589b0d831e67d0c());
-        this.AddMember("userInput", (IMemberDescriptor) new Bridge.TYPE_1a16ed1ca86b4e9cbfadc19af1733415.FLDV_5b826e0334654e7abea04bb6e51e7bdf());
-        this.AddMember("isChecked", (IMemberDescriptor) new Bridge.TYPE_1a16ed1ca86b4e9cbfadc19af1733415.FLDV_3e79d1bc8611482aaf766eec47fc34ba());
+        this.AddMember("text", (IMemberDescriptor) new Bridge.TYPE_bf829182a9cf485cbabae631e7ae1bb4.FLDV_a529ab24f6d04f778e49dba4b0e88c3b());
+        this.AddMember("allowUserInput", (IMemberDescriptor) new Bridge.TYPE_bf829182a9cf485cbabae631e7ae1bb4.FLDV_25727cdc588c4cfe946b3b52e07b0f4d());
+        this.AddMember("checkable", (IMemberDescriptor) new Bridge.TYPE_bf829182a9cf485cbabae631e7ae1bb4.FLDV_3cf02cd646874a12b099e35c4a9cf01d());
+        this.AddMember("userInput", (IMemberDescriptor) new Bridge.TYPE_bf829182a9cf485cbabae631e7ae1bb4.FLDV_5138726b2dee43b3ab1a376d72d2586a());
+        this.AddMember("isChecked", (IMemberDescriptor) new Bridge.TYPE_bf829182a9cf485cbabae631e7ae1bb4.FLDV_a641ba79e9e64277b41498dc381a8a49());
       }
 
-      private sealed class MTHD_f5a8b0109fbb4f248d2354f58a1bf727 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_2989c03bd9ec4a89a7e25701b8ae561d : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_f5a8b0109fbb4f248d2354f58a1bf727()
+        internal MTHD_2989c03bd9ec4a89a7e25701b8ae561d()
         {
           this.Initialize(".ctor", true, new ParameterDescriptor[0], false);
         }
@@ -10527,9 +10527,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_f9b5479f3d5b4862b2a1152cb3ce14ec : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_2d9a7b9cc3a24d5880fd8559f03762ea : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_f9b5479f3d5b4862b2a1152cb3ce14ec()
+        internal MTHD_2d9a7b9cc3a24d5880fd8559f03762ea()
         {
           this.Initialize("Equals", false, new ParameterDescriptor[1]
           {
@@ -10543,9 +10543,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_b5041019a3124eae9820d96ef5c14091 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_1f43c8c6abee47e199b83d4a890e166c : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_b5041019a3124eae9820d96ef5c14091()
+        internal MTHD_1f43c8c6abee47e199b83d4a890e166c()
         {
           this.Initialize("GetHashCode", false, new ParameterDescriptor[0], false);
         }
@@ -10556,9 +10556,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_b43f5ab37bf44ac085ccdce12e5fa55f : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_fbd5fb3e60c34ee6af30ecd6c9528343 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_b43f5ab37bf44ac085ccdce12e5fa55f()
+        internal MTHD_fbd5fb3e60c34ee6af30ecd6c9528343()
         {
           this.Initialize("GetType", false, new ParameterDescriptor[0], false);
         }
@@ -10569,9 +10569,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_40679aeb0056446a8c5d520b14d3ab5d : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_8b5d394d92c04180807b68a3f4b4c2fe : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_40679aeb0056446a8c5d520b14d3ab5d()
+        internal MTHD_8b5d394d92c04180807b68a3f4b4c2fe()
         {
           this.Initialize("ToString", false, new ParameterDescriptor[0], false);
         }
@@ -10582,9 +10582,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class FLDV_3319ce25562a47d698270b35d51a0224 : HardwiredMemberDescriptor
+      private sealed class FLDV_a529ab24f6d04f778e49dba4b0e88c3b : HardwiredMemberDescriptor
       {
-        internal FLDV_3319ce25562a47d698270b35d51a0224()
+        internal FLDV_a529ab24f6d04f778e49dba4b0e88c3b()
           : base(typeof (string), "text", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -10600,9 +10600,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class FLDV_dc99113fe99448f0bc2afe3280231843 : HardwiredMemberDescriptor
+      private sealed class FLDV_25727cdc588c4cfe946b3b52e07b0f4d : HardwiredMemberDescriptor
       {
-        internal FLDV_dc99113fe99448f0bc2afe3280231843()
+        internal FLDV_25727cdc588c4cfe946b3b52e07b0f4d()
           : base(typeof (bool), "allowUserInput", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -10618,9 +10618,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class FLDV_4b2604e5873c4eb3a589b0d831e67d0c : HardwiredMemberDescriptor
+      private sealed class FLDV_3cf02cd646874a12b099e35c4a9cf01d : HardwiredMemberDescriptor
       {
-        internal FLDV_4b2604e5873c4eb3a589b0d831e67d0c()
+        internal FLDV_3cf02cd646874a12b099e35c4a9cf01d()
           : base(typeof (bool), "checkable", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -10636,9 +10636,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class FLDV_5b826e0334654e7abea04bb6e51e7bdf : HardwiredMemberDescriptor
+      private sealed class FLDV_5138726b2dee43b3ab1a376d72d2586a : HardwiredMemberDescriptor
       {
-        internal FLDV_5b826e0334654e7abea04bb6e51e7bdf()
+        internal FLDV_5138726b2dee43b3ab1a376d72d2586a()
           : base(typeof (string), "userInput", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -10654,9 +10654,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class FLDV_3e79d1bc8611482aaf766eec47fc34ba : HardwiredMemberDescriptor
+      private sealed class FLDV_a641ba79e9e64277b41498dc381a8a49 : HardwiredMemberDescriptor
       {
-        internal FLDV_3e79d1bc8611482aaf766eec47fc34ba()
+        internal FLDV_a641ba79e9e64277b41498dc381a8a49()
           : base(typeof (bool), "isChecked", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -10673,78 +10673,78 @@ namespace MoonSharp
       }
     }
 
-    private sealed class TYPE_0def1c4b6d6c474590cae7ce0c6b09e3 : HardwiredUserDataDescriptor
+    private sealed class TYPE_080d490a1b32483e90d0cfed6d331c3c : HardwiredUserDataDescriptor
     {
-      internal TYPE_0def1c4b6d6c474590cae7ce0c6b09e3()
+      internal TYPE_080d490a1b32483e90d0cfed6d331c3c()
         : base(typeof (MyPoll))
       {
         this.AddMember("__new", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("__new", typeof (MyPoll), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_0def1c4b6d6c474590cae7ce0c6b09e3.MTHD_4c94e5c614a34efdad131c2d3e0f595a()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_080d490a1b32483e90d0cfed6d331c3c.MTHD_f1d03b9c59df45db8c8c9557972beb2a()
         }));
         this.AddMember("GetQuestionsAsString", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("GetQuestionsAsString", typeof (MyPoll), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_0def1c4b6d6c474590cae7ce0c6b09e3.MTHD_78036c8bd48f4c6cb44c9f8c54579ac4()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_080d490a1b32483e90d0cfed6d331c3c.MTHD_d801771b5fd4402f8ced3dd6a14eaddf()
         }));
         this.AddMember("SanitizeResponses", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("SanitizeResponses", typeof (MyPoll), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_0def1c4b6d6c474590cae7ce0c6b09e3.MTHD_23058601e7794a8e93fa217db1ec2388()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_080d490a1b32483e90d0cfed6d331c3c.MTHD_f7b6ed90ba5744ef8fe4f877c4bc9dea()
         }));
         this.AddMember("addItem", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("addItem", typeof (MyPoll), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_0def1c4b6d6c474590cae7ce0c6b09e3.MTHD_057c2a8159544dc591fde55525d88c08()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_080d490a1b32483e90d0cfed6d331c3c.MTHD_415a2abaa4974c309bc1c66a26866c81()
         }));
         this.AddMember("construct", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("construct", typeof (MyPoll), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_0def1c4b6d6c474590cae7ce0c6b09e3.MTHD_3f58bdc1940d44d9ae862dc5c91820a6()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_080d490a1b32483e90d0cfed6d331c3c.MTHD_c468a593d6144e98b00a6dcfe7ab2201()
         }));
         this.AddMember("ToString", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("ToString", typeof (MyPoll), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_0def1c4b6d6c474590cae7ce0c6b09e3.MTHD_35f0b4c14cb9410dbda7c37e4b5f306b()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_080d490a1b32483e90d0cfed6d331c3c.MTHD_a8e36a304a644e28b152840489bbccd3()
         }));
         this.AddMember("fromString", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("fromString", typeof (MyPoll), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_0def1c4b6d6c474590cae7ce0c6b09e3.MTHD_05a2393ed01f4983b81da51c44adbf93()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_080d490a1b32483e90d0cfed6d331c3c.MTHD_0336cb5cab9446cdbe795876a07d0931()
         }));
         this.AddMember("sendToServer", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("sendToServer", typeof (MyPoll), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_0def1c4b6d6c474590cae7ce0c6b09e3.MTHD_5e36a0356b7841498dc65dcbde4229bd()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_080d490a1b32483e90d0cfed6d331c3c.MTHD_b1d840fdd9444f5ca3a594ec349f08ba()
         }));
         this.AddMember("closePoll", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("closePoll", typeof (MyPoll), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_0def1c4b6d6c474590cae7ce0c6b09e3.MTHD_a88b467c9d4044e8925ed736c7968364()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_080d490a1b32483e90d0cfed6d331c3c.MTHD_5c2449c7955a4c629459ea1e889ada52()
         }));
         this.AddMember("test", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("test", typeof (MyPoll), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_0def1c4b6d6c474590cae7ce0c6b09e3.MTHD_abcc67d0d49545599dd07ce166afa3ab()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_080d490a1b32483e90d0cfed6d331c3c.MTHD_4784981ff54c44b5a76f7702ee16b20e()
         }));
         this.AddMember("Equals", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("Equals", typeof (MyPoll), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_0def1c4b6d6c474590cae7ce0c6b09e3.MTHD_f817ad8fe973417cab577c08c645c99c()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_080d490a1b32483e90d0cfed6d331c3c.MTHD_e97545d35d32493f911fe05ba2a0062b()
         }));
         this.AddMember("GetHashCode", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("GetHashCode", typeof (MyPoll), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_0def1c4b6d6c474590cae7ce0c6b09e3.MTHD_ad12591a3f004cf0beb9e17ea25706f2()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_080d490a1b32483e90d0cfed6d331c3c.MTHD_bf8993d3e2754462a51b4c7ae58442b2()
         }));
         this.AddMember("GetType", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("GetType", typeof (MyPoll), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_0def1c4b6d6c474590cae7ce0c6b09e3.MTHD_62d77aa92dd3428db7aff69dbd84253b()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_080d490a1b32483e90d0cfed6d331c3c.MTHD_34986e09a3914af994d686c54bda378f()
         }));
-        this.AddMember("name", (IMemberDescriptor) new Bridge.TYPE_0def1c4b6d6c474590cae7ce0c6b09e3.FLDV_728604e6b1c648f4a6886380ef1edc71());
-        this.AddMember("id", (IMemberDescriptor) new Bridge.TYPE_0def1c4b6d6c474590cae7ce0c6b09e3.FLDV_fbb999d1e8df4a6dbdd255a988883be1());
-        this.AddMember("items", (IMemberDescriptor) new Bridge.TYPE_0def1c4b6d6c474590cae7ce0c6b09e3.FLDV_5cde4901c80940a19f5d1517ba356363());
-        this.AddMember("isPublic", (IMemberDescriptor) new Bridge.TYPE_0def1c4b6d6c474590cae7ce0c6b09e3.FLDV_3a98b7c5417a4feeb055c09f069bcbe8());
-        this.AddMember("MsgRetrieve", (IMemberDescriptor) new Bridge.TYPE_0def1c4b6d6c474590cae7ce0c6b09e3.FLDV_8766eb17c22b4ddb92e540fa38892921());
-        this.AddMember("MsgSubmit", (IMemberDescriptor) new Bridge.TYPE_0def1c4b6d6c474590cae7ce0c6b09e3.FLDV_a0b2f0476f6247e8927b0ded29f36b63());
-        this.AddMember("MsgCreate", (IMemberDescriptor) new Bridge.TYPE_0def1c4b6d6c474590cae7ce0c6b09e3.FLDV_1311dbbd09ea4a20b68bba0fe2968ded());
-        this.AddMember("MsgResults", (IMemberDescriptor) new Bridge.TYPE_0def1c4b6d6c474590cae7ce0c6b09e3.FLDV_a993c61ffdc1462bb34a469e6a10ee52());
-        this.AddMember("Item", (IMemberDescriptor) new Bridge.TYPE_0def1c4b6d6c474590cae7ce0c6b09e3.DVAL_73ae9b73ac304eadad1c1cff78ab0f7a());
-        this.AddMember("Answer", (IMemberDescriptor) new Bridge.TYPE_0def1c4b6d6c474590cae7ce0c6b09e3.DVAL_bc7c6051877c435d911d1ef2b26098ab());
+        this.AddMember("name", (IMemberDescriptor) new Bridge.TYPE_080d490a1b32483e90d0cfed6d331c3c.FLDV_f1097f3e81d049058aa9c37beb4cc547());
+        this.AddMember("id", (IMemberDescriptor) new Bridge.TYPE_080d490a1b32483e90d0cfed6d331c3c.FLDV_4820914b6ee0426a862bab1f48398020());
+        this.AddMember("items", (IMemberDescriptor) new Bridge.TYPE_080d490a1b32483e90d0cfed6d331c3c.FLDV_1d3fa900cf0e4164b044e176f62048a5());
+        this.AddMember("isPublic", (IMemberDescriptor) new Bridge.TYPE_080d490a1b32483e90d0cfed6d331c3c.FLDV_23c6095d905b4667a227e1c783684e13());
+        this.AddMember("MsgRetrieve", (IMemberDescriptor) new Bridge.TYPE_080d490a1b32483e90d0cfed6d331c3c.FLDV_305548ebe62d46dca043f5dfaa197f8f());
+        this.AddMember("MsgSubmit", (IMemberDescriptor) new Bridge.TYPE_080d490a1b32483e90d0cfed6d331c3c.FLDV_f2d70ed435b347d5ad22f792db12a1ac());
+        this.AddMember("MsgCreate", (IMemberDescriptor) new Bridge.TYPE_080d490a1b32483e90d0cfed6d331c3c.FLDV_2bc7fc63145d4d52b625ea2df370b0ba());
+        this.AddMember("MsgResults", (IMemberDescriptor) new Bridge.TYPE_080d490a1b32483e90d0cfed6d331c3c.FLDV_c024ac426be34f0c9698842f640d4f6f());
+        this.AddMember("Item", (IMemberDescriptor) new Bridge.TYPE_080d490a1b32483e90d0cfed6d331c3c.DVAL_7063fcbde6374cc998edfe4288041b62());
+        this.AddMember("Answer", (IMemberDescriptor) new Bridge.TYPE_080d490a1b32483e90d0cfed6d331c3c.DVAL_bb087c8cd7424019b413f8c23375d3fa());
       }
 
-      private sealed class MTHD_4c94e5c614a34efdad131c2d3e0f595a : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_f1d03b9c59df45db8c8c9557972beb2a : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_4c94e5c614a34efdad131c2d3e0f595a()
+        internal MTHD_f1d03b9c59df45db8c8c9557972beb2a()
         {
           this.Initialize(".ctor", true, new ParameterDescriptor[0], false);
         }
@@ -10755,9 +10755,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_78036c8bd48f4c6cb44c9f8c54579ac4 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_d801771b5fd4402f8ced3dd6a14eaddf : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_78036c8bd48f4c6cb44c9f8c54579ac4()
+        internal MTHD_d801771b5fd4402f8ced3dd6a14eaddf()
         {
           this.Initialize("GetQuestionsAsString", false, new ParameterDescriptor[0], false);
         }
@@ -10768,9 +10768,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_23058601e7794a8e93fa217db1ec2388 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_f7b6ed90ba5744ef8fe4f877c4bc9dea : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_23058601e7794a8e93fa217db1ec2388()
+        internal MTHD_f7b6ed90ba5744ef8fe4f877c4bc9dea()
         {
           this.Initialize("SanitizeResponses", false, new ParameterDescriptor[0], false);
         }
@@ -10782,9 +10782,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_057c2a8159544dc591fde55525d88c08 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_415a2abaa4974c309bc1c66a26866c81 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_057c2a8159544dc591fde55525d88c08()
+        internal MTHD_415a2abaa4974c309bc1c66a26866c81()
         {
           this.Initialize("addItem", false, new ParameterDescriptor[3]
           {
@@ -10802,9 +10802,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_3f58bdc1940d44d9ae862dc5c91820a6 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_c468a593d6144e98b00a6dcfe7ab2201 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_3f58bdc1940d44d9ae862dc5c91820a6()
+        internal MTHD_c468a593d6144e98b00a6dcfe7ab2201()
         {
           this.Initialize("construct", true, new ParameterDescriptor[1]
           {
@@ -10818,9 +10818,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_35f0b4c14cb9410dbda7c37e4b5f306b : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_a8e36a304a644e28b152840489bbccd3 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_35f0b4c14cb9410dbda7c37e4b5f306b()
+        internal MTHD_a8e36a304a644e28b152840489bbccd3()
         {
           this.Initialize("ToString", false, new ParameterDescriptor[0], false);
         }
@@ -10831,9 +10831,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_05a2393ed01f4983b81da51c44adbf93 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_0336cb5cab9446cdbe795876a07d0931 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_05a2393ed01f4983b81da51c44adbf93()
+        internal MTHD_0336cb5cab9446cdbe795876a07d0931()
         {
           this.Initialize("fromString", true, new ParameterDescriptor[1]
           {
@@ -10847,9 +10847,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_5e36a0356b7841498dc65dcbde4229bd : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_b1d840fdd9444f5ca3a594ec349f08ba : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_5e36a0356b7841498dc65dcbde4229bd()
+        internal MTHD_b1d840fdd9444f5ca3a594ec349f08ba()
         {
           this.Initialize("sendToServer", false, new ParameterDescriptor[0], false);
         }
@@ -10861,9 +10861,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_a88b467c9d4044e8925ed736c7968364 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_5c2449c7955a4c629459ea1e889ada52 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_a88b467c9d4044e8925ed736c7968364()
+        internal MTHD_5c2449c7955a4c629459ea1e889ada52()
         {
           this.Initialize("closePoll", true, new ParameterDescriptor[0], false);
         }
@@ -10875,9 +10875,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_abcc67d0d49545599dd07ce166afa3ab : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_4784981ff54c44b5a76f7702ee16b20e : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_abcc67d0d49545599dd07ce166afa3ab()
+        internal MTHD_4784981ff54c44b5a76f7702ee16b20e()
         {
           this.Initialize("test", false, new ParameterDescriptor[0], false);
         }
@@ -10889,9 +10889,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_f817ad8fe973417cab577c08c645c99c : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_e97545d35d32493f911fe05ba2a0062b : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_f817ad8fe973417cab577c08c645c99c()
+        internal MTHD_e97545d35d32493f911fe05ba2a0062b()
         {
           this.Initialize("Equals", false, new ParameterDescriptor[1]
           {
@@ -10905,9 +10905,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_ad12591a3f004cf0beb9e17ea25706f2 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_bf8993d3e2754462a51b4c7ae58442b2 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_ad12591a3f004cf0beb9e17ea25706f2()
+        internal MTHD_bf8993d3e2754462a51b4c7ae58442b2()
         {
           this.Initialize("GetHashCode", false, new ParameterDescriptor[0], false);
         }
@@ -10918,9 +10918,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_62d77aa92dd3428db7aff69dbd84253b : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_34986e09a3914af994d686c54bda378f : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_62d77aa92dd3428db7aff69dbd84253b()
+        internal MTHD_34986e09a3914af994d686c54bda378f()
         {
           this.Initialize("GetType", false, new ParameterDescriptor[0], false);
         }
@@ -10931,9 +10931,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class FLDV_728604e6b1c648f4a6886380ef1edc71 : HardwiredMemberDescriptor
+      private sealed class FLDV_f1097f3e81d049058aa9c37beb4cc547 : HardwiredMemberDescriptor
       {
-        internal FLDV_728604e6b1c648f4a6886380ef1edc71()
+        internal FLDV_f1097f3e81d049058aa9c37beb4cc547()
           : base(typeof (string), "name", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -10949,9 +10949,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class FLDV_fbb999d1e8df4a6dbdd255a988883be1 : HardwiredMemberDescriptor
+      private sealed class FLDV_4820914b6ee0426a862bab1f48398020 : HardwiredMemberDescriptor
       {
-        internal FLDV_fbb999d1e8df4a6dbdd255a988883be1()
+        internal FLDV_4820914b6ee0426a862bab1f48398020()
           : base(typeof (int), "id", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -10967,9 +10967,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class FLDV_5cde4901c80940a19f5d1517ba356363 : HardwiredMemberDescriptor
+      private sealed class FLDV_1d3fa900cf0e4164b044e176f62048a5 : HardwiredMemberDescriptor
       {
-        internal FLDV_5cde4901c80940a19f5d1517ba356363()
+        internal FLDV_1d3fa900cf0e4164b044e176f62048a5()
           : base(typeof (List<MyPoll.Item>), "items", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -10985,9 +10985,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class FLDV_3a98b7c5417a4feeb055c09f069bcbe8 : HardwiredMemberDescriptor
+      private sealed class FLDV_23c6095d905b4667a227e1c783684e13 : HardwiredMemberDescriptor
       {
-        internal FLDV_3a98b7c5417a4feeb055c09f069bcbe8()
+        internal FLDV_23c6095d905b4667a227e1c783684e13()
           : base(typeof (bool), "isPublic", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -11003,9 +11003,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class FLDV_8766eb17c22b4ddb92e540fa38892921 : HardwiredMemberDescriptor
+      private sealed class FLDV_305548ebe62d46dca043f5dfaa197f8f : HardwiredMemberDescriptor
       {
-        internal FLDV_8766eb17c22b4ddb92e540fa38892921()
+        internal FLDV_305548ebe62d46dca043f5dfaa197f8f()
           : base(typeof (byte), "MsgRetrieve", true, MemberDescriptorAccess.CanRead)
         {
         }
@@ -11016,9 +11016,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class FLDV_a0b2f0476f6247e8927b0ded29f36b63 : HardwiredMemberDescriptor
+      private sealed class FLDV_f2d70ed435b347d5ad22f792db12a1ac : HardwiredMemberDescriptor
       {
-        internal FLDV_a0b2f0476f6247e8927b0ded29f36b63()
+        internal FLDV_f2d70ed435b347d5ad22f792db12a1ac()
           : base(typeof (byte), "MsgSubmit", true, MemberDescriptorAccess.CanRead)
         {
         }
@@ -11029,9 +11029,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class FLDV_1311dbbd09ea4a20b68bba0fe2968ded : HardwiredMemberDescriptor
+      private sealed class FLDV_2bc7fc63145d4d52b625ea2df370b0ba : HardwiredMemberDescriptor
       {
-        internal FLDV_1311dbbd09ea4a20b68bba0fe2968ded()
+        internal FLDV_2bc7fc63145d4d52b625ea2df370b0ba()
           : base(typeof (byte), "MsgCreate", true, MemberDescriptorAccess.CanRead)
         {
         }
@@ -11042,9 +11042,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class FLDV_a993c61ffdc1462bb34a469e6a10ee52 : HardwiredMemberDescriptor
+      private sealed class FLDV_c024ac426be34f0c9698842f640d4f6f : HardwiredMemberDescriptor
       {
-        internal FLDV_a993c61ffdc1462bb34a469e6a10ee52()
+        internal FLDV_c024ac426be34f0c9698842f640d4f6f()
           : base(typeof (byte), "MsgResults", true, MemberDescriptorAccess.CanRead)
         {
         }
@@ -11055,9 +11055,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class DVAL_73ae9b73ac304eadad1c1cff78ab0f7a : DynValueMemberDescriptor
+      private sealed class DVAL_7063fcbde6374cc998edfe4288041b62 : DynValueMemberDescriptor
       {
-        internal DVAL_73ae9b73ac304eadad1c1cff78ab0f7a()
+        internal DVAL_7063fcbde6374cc998edfe4288041b62()
           : base("Item")
         {
         }
@@ -11071,9 +11071,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class DVAL_bc7c6051877c435d911d1ef2b26098ab : DynValueMemberDescriptor
+      private sealed class DVAL_bb087c8cd7424019b413f8c23375d3fa : DynValueMemberDescriptor
       {
-        internal DVAL_bc7c6051877c435d911d1ef2b26098ab()
+        internal DVAL_bb087c8cd7424019b413f8c23375d3fa()
           : base("Answer")
         {
         }
@@ -11088,55 +11088,55 @@ namespace MoonSharp
       }
     }
 
-    private sealed class TYPE_95914849b5aa4edaa7fe64de41e6f6b1 : HardwiredUserDataDescriptor
+    private sealed class TYPE_50086df340e24791ae600f782d2189d3 : HardwiredUserDataDescriptor
     {
-      internal TYPE_95914849b5aa4edaa7fe64de41e6f6b1()
+      internal TYPE_50086df340e24791ae600f782d2189d3()
         : base(typeof (LuaColor))
       {
         this.AddMember("__new", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("__new", typeof (LuaColor), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_95914849b5aa4edaa7fe64de41e6f6b1.MTHD_a840c598d1444a36817e612a2b2d9230()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_50086df340e24791ae600f782d2189d3.MTHD_35444971ace942d482075dfded106143()
         }));
         this.AddMember("toHex", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("toHex", typeof (LuaColor), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_95914849b5aa4edaa7fe64de41e6f6b1.MTHD_4e12520aca394a4da378e1d79b77339e()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_50086df340e24791ae600f782d2189d3.MTHD_93d5757b96074d9dbfd9e60eb0bb5ac7()
         }));
         this.AddMember("construct", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("construct", typeof (LuaColor), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[2]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_95914849b5aa4edaa7fe64de41e6f6b1.MTHD_bcf4f11fa36046ada95b61ce5b8d40eb(),
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_95914849b5aa4edaa7fe64de41e6f6b1.MTHD_e89d5744959a4c55bdb4fb024fb1b7ce()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_50086df340e24791ae600f782d2189d3.MTHD_6609d56cfc0c4b8ca4680d7e3469fe14(),
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_50086df340e24791ae600f782d2189d3.MTHD_c4c6f066a92e4787af69626bb9cba458()
         }));
         this.AddMember("From", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("From", typeof (LuaColor), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[2]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_95914849b5aa4edaa7fe64de41e6f6b1.MTHD_db0c9a6f788f4927b482615e035fb5cf(),
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_95914849b5aa4edaa7fe64de41e6f6b1.MTHD_5643576de6e74608892b46d8946a331b()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_50086df340e24791ae600f782d2189d3.MTHD_c2d5a722a4254e65afde13b9872e4b87(),
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_50086df340e24791ae600f782d2189d3.MTHD_58605bab5afe458187b45cd62c1155e5()
         }));
         this.AddMember("Equals", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("Equals", typeof (LuaColor), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_95914849b5aa4edaa7fe64de41e6f6b1.MTHD_3d37bc8d382842f0a04bc1b5293c3728()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_50086df340e24791ae600f782d2189d3.MTHD_d4107f4eece04775a5c9a950e5cacd82()
         }));
         this.AddMember("GetHashCode", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("GetHashCode", typeof (LuaColor), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_95914849b5aa4edaa7fe64de41e6f6b1.MTHD_138f8e68feaa4f599ddf6e866a5dd1bc()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_50086df340e24791ae600f782d2189d3.MTHD_3527fe357c8d4bc6acc4087ba383f73d()
         }));
         this.AddMember("GetType", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("GetType", typeof (LuaColor), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_95914849b5aa4edaa7fe64de41e6f6b1.MTHD_5016cfc9ccaf4755abebde7f1a62d871()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_50086df340e24791ae600f782d2189d3.MTHD_e960e797eb574476a6c95c457b882da8()
         }));
         this.AddMember("ToString", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("ToString", typeof (LuaColor), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_95914849b5aa4edaa7fe64de41e6f6b1.MTHD_654e5c137ef649c8a0390bd786df4a97()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_50086df340e24791ae600f782d2189d3.MTHD_ffee8545b8d44c889eb834ad0b0a0434()
         }));
-        this.AddMember("r", (IMemberDescriptor) new Bridge.TYPE_95914849b5aa4edaa7fe64de41e6f6b1.FLDV_b1d667e484d743e2878f80dcab5b3df1());
-        this.AddMember("g", (IMemberDescriptor) new Bridge.TYPE_95914849b5aa4edaa7fe64de41e6f6b1.FLDV_534b6d52a6834dbd8b7ca171c17cf028());
-        this.AddMember("b", (IMemberDescriptor) new Bridge.TYPE_95914849b5aa4edaa7fe64de41e6f6b1.FLDV_a2940a98c73141be8ada5e617daa57ff());
-        this.AddMember("a", (IMemberDescriptor) new Bridge.TYPE_95914849b5aa4edaa7fe64de41e6f6b1.FLDV_3466d037dfb1402f9972697b123ea79d());
-        this.AddMember("white", (IMemberDescriptor) new Bridge.TYPE_95914849b5aa4edaa7fe64de41e6f6b1.FLDV_5f36a05fea65418f9092e64b0f6ca162());
+        this.AddMember("r", (IMemberDescriptor) new Bridge.TYPE_50086df340e24791ae600f782d2189d3.FLDV_c63c23b7dcbb4e868eb3d2a2a69cdbb5());
+        this.AddMember("g", (IMemberDescriptor) new Bridge.TYPE_50086df340e24791ae600f782d2189d3.FLDV_b4dcd6e4b680491f933a67d31c4fd8f0());
+        this.AddMember("b", (IMemberDescriptor) new Bridge.TYPE_50086df340e24791ae600f782d2189d3.FLDV_0cddd3d5421143e897a8110667b502bf());
+        this.AddMember("a", (IMemberDescriptor) new Bridge.TYPE_50086df340e24791ae600f782d2189d3.FLDV_73b2b3f113e74f8dad0116049286f9a1());
+        this.AddMember("white", (IMemberDescriptor) new Bridge.TYPE_50086df340e24791ae600f782d2189d3.FLDV_cdfcf5ec4eab449484512524b7a59734());
       }
 
-      private sealed class MTHD_a840c598d1444a36817e612a2b2d9230 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_35444971ace942d482075dfded106143 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_a840c598d1444a36817e612a2b2d9230()
+        internal MTHD_35444971ace942d482075dfded106143()
         {
           this.Initialize(".ctor", true, new ParameterDescriptor[0], false);
         }
@@ -11147,9 +11147,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_4e12520aca394a4da378e1d79b77339e : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_93d5757b96074d9dbfd9e60eb0bb5ac7 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_4e12520aca394a4da378e1d79b77339e()
+        internal MTHD_93d5757b96074d9dbfd9e60eb0bb5ac7()
         {
           this.Initialize("toHex", false, new ParameterDescriptor[0], false);
         }
@@ -11160,9 +11160,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_bcf4f11fa36046ada95b61ce5b8d40eb : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_6609d56cfc0c4b8ca4680d7e3469fe14 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_bcf4f11fa36046ada95b61ce5b8d40eb()
+        internal MTHD_6609d56cfc0c4b8ca4680d7e3469fe14()
         {
           this.Initialize("construct", true, new ParameterDescriptor[4]
           {
@@ -11179,9 +11179,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_e89d5744959a4c55bdb4fb024fb1b7ce : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_c4c6f066a92e4787af69626bb9cba458 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_e89d5744959a4c55bdb4fb024fb1b7ce()
+        internal MTHD_c4c6f066a92e4787af69626bb9cba458()
         {
           this.Initialize("construct", true, new ParameterDescriptor[1]
           {
@@ -11195,9 +11195,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_db0c9a6f788f4927b482615e035fb5cf : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_c2d5a722a4254e65afde13b9872e4b87 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_db0c9a6f788f4927b482615e035fb5cf()
+        internal MTHD_c2d5a722a4254e65afde13b9872e4b87()
         {
           this.Initialize("From", true, new ParameterDescriptor[1]
           {
@@ -11211,9 +11211,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_5643576de6e74608892b46d8946a331b : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_58605bab5afe458187b45cd62c1155e5 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_5643576de6e74608892b46d8946a331b()
+        internal MTHD_58605bab5afe458187b45cd62c1155e5()
         {
           this.Initialize("From", true, new ParameterDescriptor[1]
           {
@@ -11227,9 +11227,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_3d37bc8d382842f0a04bc1b5293c3728 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_d4107f4eece04775a5c9a950e5cacd82 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_3d37bc8d382842f0a04bc1b5293c3728()
+        internal MTHD_d4107f4eece04775a5c9a950e5cacd82()
         {
           this.Initialize("Equals", false, new ParameterDescriptor[1]
           {
@@ -11243,9 +11243,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_138f8e68feaa4f599ddf6e866a5dd1bc : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_3527fe357c8d4bc6acc4087ba383f73d : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_138f8e68feaa4f599ddf6e866a5dd1bc()
+        internal MTHD_3527fe357c8d4bc6acc4087ba383f73d()
         {
           this.Initialize("GetHashCode", false, new ParameterDescriptor[0], false);
         }
@@ -11256,9 +11256,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_5016cfc9ccaf4755abebde7f1a62d871 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_e960e797eb574476a6c95c457b882da8 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_5016cfc9ccaf4755abebde7f1a62d871()
+        internal MTHD_e960e797eb574476a6c95c457b882da8()
         {
           this.Initialize("GetType", false, new ParameterDescriptor[0], false);
         }
@@ -11269,9 +11269,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_654e5c137ef649c8a0390bd786df4a97 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_ffee8545b8d44c889eb834ad0b0a0434 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_654e5c137ef649c8a0390bd786df4a97()
+        internal MTHD_ffee8545b8d44c889eb834ad0b0a0434()
         {
           this.Initialize("ToString", false, new ParameterDescriptor[0], false);
         }
@@ -11282,9 +11282,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class FLDV_b1d667e484d743e2878f80dcab5b3df1 : HardwiredMemberDescriptor
+      private sealed class FLDV_c63c23b7dcbb4e868eb3d2a2a69cdbb5 : HardwiredMemberDescriptor
       {
-        internal FLDV_b1d667e484d743e2878f80dcab5b3df1()
+        internal FLDV_c63c23b7dcbb4e868eb3d2a2a69cdbb5()
           : base(typeof (byte), "r", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -11300,9 +11300,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class FLDV_534b6d52a6834dbd8b7ca171c17cf028 : HardwiredMemberDescriptor
+      private sealed class FLDV_b4dcd6e4b680491f933a67d31c4fd8f0 : HardwiredMemberDescriptor
       {
-        internal FLDV_534b6d52a6834dbd8b7ca171c17cf028()
+        internal FLDV_b4dcd6e4b680491f933a67d31c4fd8f0()
           : base(typeof (byte), "g", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -11318,9 +11318,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class FLDV_a2940a98c73141be8ada5e617daa57ff : HardwiredMemberDescriptor
+      private sealed class FLDV_0cddd3d5421143e897a8110667b502bf : HardwiredMemberDescriptor
       {
-        internal FLDV_a2940a98c73141be8ada5e617daa57ff()
+        internal FLDV_0cddd3d5421143e897a8110667b502bf()
           : base(typeof (byte), "b", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -11336,9 +11336,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class FLDV_3466d037dfb1402f9972697b123ea79d : HardwiredMemberDescriptor
+      private sealed class FLDV_73b2b3f113e74f8dad0116049286f9a1 : HardwiredMemberDescriptor
       {
-        internal FLDV_3466d037dfb1402f9972697b123ea79d()
+        internal FLDV_73b2b3f113e74f8dad0116049286f9a1()
           : base(typeof (byte), "a", false, MemberDescriptorAccess.CanRead | MemberDescriptorAccess.CanWrite)
         {
         }
@@ -11354,9 +11354,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class FLDV_5f36a05fea65418f9092e64b0f6ca162 : HardwiredMemberDescriptor
+      private sealed class FLDV_cdfcf5ec4eab449484512524b7a59734 : HardwiredMemberDescriptor
       {
-        internal FLDV_5f36a05fea65418f9092e64b0f6ca162()
+        internal FLDV_cdfcf5ec4eab449484512524b7a59734()
           : base(typeof (LuaColor), "white", true, MemberDescriptorAccess.CanRead)
         {
         }
@@ -11368,36 +11368,36 @@ namespace MoonSharp
       }
     }
 
-    private sealed class TYPE_618224c4e7a54910995fc48f16312449 : HardwiredUserDataDescriptor
+    private sealed class TYPE_d31ed4f9de904dafb4dbf9ec05553fae : HardwiredUserDataDescriptor
     {
-      internal TYPE_618224c4e7a54910995fc48f16312449()
+      internal TYPE_d31ed4f9de904dafb4dbf9ec05553fae()
         : base(typeof (TalkOptions))
       {
         this.AddMember("__new", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("__new", typeof (TalkOptions), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_618224c4e7a54910995fc48f16312449.MTHD_782447a94aef4acbb89d8b8d5e1e3c68()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_d31ed4f9de904dafb4dbf9ec05553fae.MTHD_ced28438327246808a58fd77439b0e3d()
         }));
         this.AddMember("Equals", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("Equals", typeof (TalkOptions), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_618224c4e7a54910995fc48f16312449.MTHD_0880967ad01942f99bf5312fcccda907()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_d31ed4f9de904dafb4dbf9ec05553fae.MTHD_5f738e9aac714d93a88a87ba2df5f613()
         }));
         this.AddMember("GetHashCode", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("GetHashCode", typeof (TalkOptions), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_618224c4e7a54910995fc48f16312449.MTHD_5c555f3ad9eb42abb2d3ca77675c7225()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_d31ed4f9de904dafb4dbf9ec05553fae.MTHD_7480e19176e24414abe9e7beadcce595()
         }));
         this.AddMember("GetType", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("GetType", typeof (TalkOptions), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_618224c4e7a54910995fc48f16312449.MTHD_1c1035ef159642849bbb0292cc2b97ef()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_d31ed4f9de904dafb4dbf9ec05553fae.MTHD_55499e85b03148c79e9d1d32b2615380()
         }));
         this.AddMember("ToString", (IMemberDescriptor) new OverloadedMethodMemberDescriptor("ToString", typeof (TalkOptions), (IEnumerable<IOverloadableMemberDescriptor>) new IOverloadableMemberDescriptor[1]
         {
-          (IOverloadableMemberDescriptor) new Bridge.TYPE_618224c4e7a54910995fc48f16312449.MTHD_dc4829168591408693923c1f8d6c914d()
+          (IOverloadableMemberDescriptor) new Bridge.TYPE_d31ed4f9de904dafb4dbf9ec05553fae.MTHD_6b41300b599e407a9cf09773a92a492c()
         }));
       }
 
-      private sealed class MTHD_782447a94aef4acbb89d8b8d5e1e3c68 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_ced28438327246808a58fd77439b0e3d : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_782447a94aef4acbb89d8b8d5e1e3c68()
+        internal MTHD_ced28438327246808a58fd77439b0e3d()
         {
           this.Initialize(".ctor", true, new ParameterDescriptor[0], false);
         }
@@ -11408,9 +11408,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_0880967ad01942f99bf5312fcccda907 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_5f738e9aac714d93a88a87ba2df5f613 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_0880967ad01942f99bf5312fcccda907()
+        internal MTHD_5f738e9aac714d93a88a87ba2df5f613()
         {
           this.Initialize("Equals", false, new ParameterDescriptor[1]
           {
@@ -11424,9 +11424,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_5c555f3ad9eb42abb2d3ca77675c7225 : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_7480e19176e24414abe9e7beadcce595 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_5c555f3ad9eb42abb2d3ca77675c7225()
+        internal MTHD_7480e19176e24414abe9e7beadcce595()
         {
           this.Initialize("GetHashCode", false, new ParameterDescriptor[0], false);
         }
@@ -11437,9 +11437,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_1c1035ef159642849bbb0292cc2b97ef : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_55499e85b03148c79e9d1d32b2615380 : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_1c1035ef159642849bbb0292cc2b97ef()
+        internal MTHD_55499e85b03148c79e9d1d32b2615380()
         {
           this.Initialize("GetType", false, new ParameterDescriptor[0], false);
         }
@@ -11450,9 +11450,9 @@ namespace MoonSharp
         }
       }
 
-      private sealed class MTHD_dc4829168591408693923c1f8d6c914d : HardwiredMethodMemberDescriptor
+      private sealed class MTHD_6b41300b599e407a9cf09773a92a492c : HardwiredMethodMemberDescriptor
       {
-        internal MTHD_dc4829168591408693923c1f8d6c914d()
+        internal MTHD_6b41300b599e407a9cf09773a92a492c()
         {
           this.Initialize("ToString", false, new ParameterDescriptor[0], false);
         }

@@ -2000,7 +2000,7 @@ public static class Client
               break;
             case 155:
               Quickchat.Data d = Quickchat.Data.Deserialize(myBinaryReader);
-              string msg4 = Quickchat.TryGetCommand(d.id, d.options);
+              string msg4 = Quickchat.TryGetCommand(d.id, d.options, false);
               if (msg4 == null)
                 break;
               UnityThreadHelper.Dispatcher.Dispatch2((Action) (() =>

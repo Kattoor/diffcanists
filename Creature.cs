@@ -110,6 +110,17 @@ public class Creature : Entity
   [ContextMenu("Save creatureToPNG to zSaveCharacter.png")]
   public void SavePNG2()
   {
+    this.SavePNG2("zSaveCharacter.png");
+  }
+
+  [ContextMenu("Save creatureToPNG as Preview.png")]
+  public void SavePNG2x()
+  {
+    this.SavePNG2("");
+  }
+
+  public void SavePNG2(string file)
+  {
     Texture2D t = new Texture2D(1000, 1000);
     int num1 = t.width / 2;
     int num2 = t.height / 2;
@@ -202,7 +213,10 @@ public class Creature : Entity
     }
     Texture2D tex = new Texture2D((int) rect.width, (int) rect.height);
     tex.SetPixels32(colors);
-    File.WriteAllBytes("zSaveCharacter.png", tex.EncodeToPNG());
+    tex.Apply();
+    if (string.IsNullOrEmpty(file))
+      return;
+    File.WriteAllBytes(file, tex.EncodeToPNG());
   }
 
   private void paint(

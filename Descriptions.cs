@@ -97,7 +97,7 @@ public static class Descriptions
     },
     {
       "Storm",
-      "Storm Cloud\n(drains 20 health per cast)\nAllows you to cast Storm faster, increases the power of Thunder Shock and increases the maximum damage potential of Conductor Rod and flight lasts an extra turn.\nAt Level 5: Wind Shield has a 7 turn cooldown and flight lasts until you take damage.\nSpells Gained: Electrostatic Charge and Whistling Winds (level 1)."
+      "Storm Cloud\n(drains 20 health per cast)\nAllows you to cast Storm faster, increases the power of Thunder Shock and increases the maximum damage potential of Conductor Rod and flight lasts an extra turn.\nAt Level 5: Wind Shield has a 7 turn cooldown and flight lasts until you take damage.\nSpells Gained: Electrostatic Charge and Whistling Winds (level 5)."
     },
     {
       "Frost",
@@ -2555,7 +2555,7 @@ public static class Descriptions
     },
     {
       "Sands of Time",
-      "Targeted: Delayed Teleport\n{0}\nWill teleport you to the targeted location at the start of your next turn."
+      "Targeted: Delayed Teleport\n{0}\nWill teleport you to the targeted location at the start of your next turn. Also protects you from taking damage from falling into the water when your Arcane Gate would normally be on cooldown."
     },
     {
       "Summon Sand Mite",

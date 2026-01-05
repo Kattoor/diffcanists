@@ -36,16 +36,16 @@ label_71:
       zspellWaterDrop.validX = zspellWaterDrop.pX;
       zspellWaterDrop.validY = zspellWaterDrop.pY;
       zspellWaterDrop.steps = 1;
-      FixedInt x1 = zspellWaterDrop.velocity.x;
-      FixedInt y1 = zspellWaterDrop.velocity.y;
+      FixedInt x = zspellWaterDrop.velocity.x;
+      FixedInt y = zspellWaterDrop.velocity.y;
       FixedInt fixedInt3 = zspellWaterDrop.velocity.x;
       FixedInt fixedInt4 = zspellWaterDrop.velocity.y;
-      if (x1 > 1 || x1 < -1 || (y1 > 1 || y1 < -1))
+      if (x > 1 || x < -1 || (y > 1 || y < -1))
       {
-        if (FixedInt.Abs(x1) > FixedInt.Abs(y1))
-          zspellWaterDrop.steps = (int) FixedInt.Abs(x1) + 1;
+        if (FixedInt.Abs(x) > FixedInt.Abs(y))
+          zspellWaterDrop.steps = (int) FixedInt.Abs(x) + 1;
         else
-          zspellWaterDrop.steps = (int) FixedInt.Abs(y1) + 1;
+          zspellWaterDrop.steps = (int) FixedInt.Abs(y) + 1;
         fixedInt3 = zspellWaterDrop.velocity.x / zspellWaterDrop.steps;
         fixedInt4 = zspellWaterDrop.velocity.y / zspellWaterDrop.steps;
       }
@@ -70,22 +70,22 @@ label_71:
             int num3 = (int) (fixedInt4 + zspellWaterDrop.pY);
             if ((zspellWaterDrop.curDuration < 3 ? (!zspellWaterDrop.map.CheckPositionOnlyMap(num2 + zspellWaterDrop.zb[index2].x, num3 + zspellWaterDrop.zb[index2].y) ? 1 : 0) : (!zspellWaterDrop.map.SpellCheckPosition(num2 + zspellWaterDrop.zb[index2].x, num3 + zspellWaterDrop.zb[index2].y, zspellWaterDrop.toCollideCheck, Inert.mask_spell_movement) ? 1 : 0)) != 0)
             {
-              int x2 = num2 + zspellWaterDrop.zb[index2].x;
-              int y2 = num3 + zspellWaterDrop.zb[index2].y;
-              if (zspellWaterDrop.spellEnum == SpellEnum.Firecrackers || !zspellWaterDrop.map.CheckPositionOnlyMap(x2, y2))
+              int num4 = num2 + zspellWaterDrop.zb[index2].x;
+              int num5 = num3 + zspellWaterDrop.zb[index2].y;
+              if (zspellWaterDrop.spellEnum == SpellEnum.Firecrackers || !zspellWaterDrop.map.CheckPositionOnlyMap(num4, num5))
               {
                 if (zspellWaterDrop.timesBounced < zspellWaterDrop.Bounces)
                 {
                   ++zspellWaterDrop.timesBounced;
                   zspellWaterDrop.position = new MyLocation(zspellWaterDrop.validX, zspellWaterDrop.validY);
                   MyLocation zero = MyLocation.zero;
-                  int num4 = num2 + zspellWaterDrop.zb[index2].x;
-                  int num5 = num3 + zspellWaterDrop.zb[index2].y;
+                  int num6 = num2 + zspellWaterDrop.zb[index2].x;
+                  int num7 = num3 + zspellWaterDrop.zb[index2].y;
                   for (int index3 = -2; index3 <= 2; ++index3)
                   {
                     for (int index4 = -2; index4 <= 2; ++index4)
                     {
-                      if (zspellWaterDrop.map.SpellCheckPosition(num4 + index3, num5 + index4, zspellWaterDrop.toCollideCheck, Inert.mask_movement_NoEffector))
+                      if (zspellWaterDrop.map.SpellCheckPosition(num6 + index3, num7 + index4, zspellWaterDrop.toCollideCheck, Inert.mask_movement_NoEffector))
                       {
                         zero.x += index3;
                         zero.y += index4;
@@ -96,7 +96,7 @@ label_71:
                   if (zspellWaterDrop.destroyTerrainFirstBounce && zspellWaterDrop.curDestroyTerrainBounces > 0)
                   {
                     --zspellWaterDrop.curDestroyTerrainBounces;
-                    zspellWaterDrop.map.ServerBitBlt((int) zspellWaterDrop.explosionCutout, x2, y2, true, true);
+                    zspellWaterDrop.map.ServerBitBlt((int) zspellWaterDrop.explosionCutout, num4, num5, true, true);
                     zspellWaterDrop.MoveSurroundings(zspellWaterDrop.EXORADIUS + 5);
                     if (MyLocation.Distance(MyLocation.zero, zspellWaterDrop.velocity) > 40)
                       flag = true;
@@ -110,7 +110,7 @@ label_71:
                     zspellWaterDrop.velocity = zspellWaterDrop.velocity * zspellWaterDrop.elasticity;
                   }
                   if (zspellWaterDrop.game.isClient && !zspellWaterDrop.game.resyncing && (Object) zspellWaterDrop.toSummon != (Object) null)
-                    ZComponent.Instantiate<GameObject>(zspellWaterDrop.toSummon, new Vector3((float) x2, (float) y2), Quaternion.identity, zspellWaterDrop.game.GetMapTransform());
+                    ZComponent.Instantiate<GameObject>(zspellWaterDrop.toSummon, new Vector3((float) num4, (float) num5), Quaternion.identity, zspellWaterDrop.game.GetMapTransform());
                   if (zspellWaterDrop.ApplyExplosionForce(zspellWaterDrop.position, Inert.mask_Phantom, true, (ISpellBridge) null, (ZCreature) null))
                   {
                     zspellWaterDrop.StopAndDie();
@@ -133,7 +133,7 @@ label_71:
                 {
                   zspellWaterDrop.velocity.y = (FixedInt) 0;
                   zspellWaterDrop.velocity.x = (FixedInt) 0;
-                  zspellWaterDrop.position = new MyLocation(zspellWaterDrop.validX, zspellWaterDrop.validY);
+                  zspellWaterDrop.position = new MyLocation(num4, num5);
                   zspellWaterDrop.moving = (IEnumerator<float>) null;
                   zspellWaterDrop.isMoving = false;
                   zspellWaterDrop.OnDeath(true);
@@ -145,10 +145,10 @@ label_71:
               {
                 zspellWaterDrop.velocity.y = (FixedInt) 0;
                 zspellWaterDrop.velocity.x = (FixedInt) 0;
-                zspellWaterDrop.position = new MyLocation(zspellWaterDrop.validX, zspellWaterDrop.validY);
+                zspellWaterDrop.position = new MyLocation(num4, num5);
                 zspellWaterDrop.moving = (IEnumerator<float>) null;
                 zspellWaterDrop.isMoving = false;
-                zspellWaterDrop.map.ServerBitBlt((int) zspellWaterDrop.explosionCutout, x2, y2, true, true);
+                zspellWaterDrop.map.ServerBitBlt((int) zspellWaterDrop.explosionCutout, num4, num5, true, true);
                 zspellWaterDrop.OnDeath(true);
                 zspellWaterDrop.OnExplosionGeneric();
                 yield break;

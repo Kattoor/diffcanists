@@ -156,6 +156,7 @@ public class HUD : UIBehaviour
   public UIOnHover buttonSprint;
   public UIOnHover buttonAlt;
   public UIOnHover buttonPing;
+  public GameObject buttonIOSPause;
   [Header("Spectator Meter")]
   public GameObject specMeter;
   public GameObject specUI;
@@ -298,6 +299,7 @@ public class HUD : UIBehaviour
 
   protected override void Awake()
   {
+    this.buttonIOSPause.SetActive(false);
     HUD.UseTouchControls = Global.GetPrefBool("prefControls", HUD.UseTouchControls);
     Inert.Init(this.inert);
     ClientResources.Init(this.clientResources);
@@ -699,7 +701,7 @@ public class HUD : UIBehaviour
           this.ClickOverheadEmoji();
         if ((hardInput.GetKeyDown("mapping") || this.pingOnNextClick > -1 && MyInput.GetMouseButtonDown(0)) && (double) this.lastMapPing < (double) Time.realtimeSinceStartup)
         {
-          this.lastMapPing = (Client.game.isSpectator ? 1f : 0.1f) + Time.realtimeSinceStartup;
+          this.lastMapPing = (!Client.game.isSpectator || Client.game.isReplay ? 0.1f : 1f) + Time.realtimeSinceStartup;
           if (this.buttonPing.gameObject.activeSelf)
             this.buttonPing.AlwaysOn = false;
           Client.AsktoPing(this.pingOnNextClick <= -1 || this.pingToSend <= -1 ? 0 : this.pingToSend, (Vector2) Camera.main.ScreenToWorldPoint(Input.mousePosition));
@@ -707,7 +709,7 @@ public class HUD : UIBehaviour
         }
         else if (hardInput.GetKeyDown("mapping1") && (double) this.lastMapPing < (double) Time.realtimeSinceStartup)
         {
-          this.lastMapPing = (Client.game.isSpectator ? 1f : 0.1f) + Time.realtimeSinceStartup;
+          this.lastMapPing = (!Client.game.isSpectator || Client.game.isReplay ? 0.1f : 1f) + Time.realtimeSinceStartup;
           if (this.buttonPing.gameObject.activeSelf)
             this.buttonPing.AlwaysOn = false;
           Client.AsktoPing(1, (Vector2) Camera.main.ScreenToWorldPoint(Input.mousePosition));
@@ -715,7 +717,7 @@ public class HUD : UIBehaviour
         }
         else if (hardInput.GetKeyDown("mapping2") && (double) this.lastMapPing < (double) Time.realtimeSinceStartup)
         {
-          this.lastMapPing = (Client.game.isSpectator ? 1f : 0.1f) + Time.realtimeSinceStartup;
+          this.lastMapPing = (!Client.game.isSpectator || Client.game.isReplay ? 0.1f : 1f) + Time.realtimeSinceStartup;
           if (this.buttonPing.gameObject.activeSelf)
             this.buttonPing.AlwaysOn = false;
           Client.AsktoPing(2, (Vector2) Camera.main.ScreenToWorldPoint(Input.mousePosition));
@@ -723,7 +725,7 @@ public class HUD : UIBehaviour
         }
         else if (hardInput.GetKeyDown("mapping3") && (double) this.lastMapPing < (double) Time.realtimeSinceStartup)
         {
-          this.lastMapPing = (Client.game.isSpectator ? 1f : 0.1f) + Time.realtimeSinceStartup;
+          this.lastMapPing = (!Client.game.isSpectator || Client.game.isReplay ? 0.1f : 1f) + Time.realtimeSinceStartup;
           if (this.buttonPing.gameObject.activeSelf)
             this.buttonPing.AlwaysOn = false;
           Client.AsktoPing(3, (Vector2) Camera.main.ScreenToWorldPoint(Input.mousePosition));
@@ -731,7 +733,7 @@ public class HUD : UIBehaviour
         }
         else if (hardInput.GetKeyDown("mapping4") && (double) this.lastMapPing < (double) Time.realtimeSinceStartup)
         {
-          this.lastMapPing = (Client.game.isSpectator ? 1f : 0.1f) + Time.realtimeSinceStartup;
+          this.lastMapPing = (!Client.game.isSpectator || Client.game.isReplay ? 0.1f : 1f) + Time.realtimeSinceStartup;
           if (this.buttonPing.gameObject.activeSelf)
             this.buttonPing.AlwaysOn = false;
           Client.AsktoPing(4, (Vector2) Camera.main.ScreenToWorldPoint(Input.mousePosition));

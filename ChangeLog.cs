@@ -10,6 +10,12 @@ public static class ChangeLog
   {
     new ChangeLog.PatchNotes()
     {
+      version = "8.7",
+      date = "December 31, 2025",
+      notes = "Additions:\r\n- 16 New Spell Skins\r\n- 66 New outfit pieces\r\n- Ping commands can be rebound\r\n- In-game statue for the costume contest winner (will be rotated out as new winners are selected in future select contests - has a chance to appear instead of the developer statue)\r\n\r\nBalance Updates:\r\n- Myth does not have water walking unless dwarf had waterwalking\r\n- Gravity Well will reset the duration of its effect instead of applying multiple instances\r\n\r\nBug Fixes:\r\n- Can Teleport from the water if you sink yourself on your turn with a turn ending spell and have Sands of Time in your book\r\n- Undead Apparition spell validation logic\r\n- Prickly Barrier's collision area fixed\r\n- Retribution is not counted twice for Consume Soul\r\n- Becoming a lich will not hide your familiar/elemental on the player panel\r\n- Wyrm can move while flying (from presents)\r\n- Damage calculation for water droplets uses the correct position (where they exploded instead of where they were the frame before)\r\n- Sands of Time description updated\r\n        \r\n        \r\n        "
+    },
+    new ChangeLog.PatchNotes()
+    {
       version = "8.6",
       date = "September 22, 2025",
       notes = "Bug Fixes:\r\n- Monolith & Pyramid properly turn into sand\r\n- Sacrificial Altar will not give multiple uses back when things like dwarf mine into it\r\n- Summon Titan shows the correct summoning range when using full Druidism\r\n- Teammates can cast Herd Mentality without their game crashing\r\n- Stone Familiar description modified slightly to be more clear\r\n- Sandbag won't decrease your spells cast for that tower (which could cause things like full Stone damage resistance to reapply)\r\n- First Turn Bubble does not take effect in the Sandbox\r\n- In Replays the Illusion familiar will properly give allies health\r\n- Random Spells + OG Spells will not give alt books\r\n        \r\n        \r\n        "

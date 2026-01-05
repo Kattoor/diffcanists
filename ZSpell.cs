@@ -1272,6 +1272,18 @@ label_58:
     this.OnDeath(true);
   }
 
+  public void StopAndDie(int theX, int theY)
+  {
+    this.validX = (FixedInt) theX;
+    this.validY = (FixedInt) theY;
+    this.velocity.y = (FixedInt) 0;
+    this.velocity.x = (FixedInt) 0;
+    this.position = new MyLocation(this.validX, this.validY);
+    this.moving = (IEnumerator<float>) null;
+    this.isMoving = false;
+    this.OnDeath(true);
+  }
+
   public SpellType GetSpellType
   {
     get
@@ -2704,12 +2716,39 @@ label_7:
     MyLocation pos,
     FixedInt rot_z,
     FixedInt power,
-    bool destroyable)
+    bool destroyable,
+    bool unique = false)
   {
     if (destroyable && ZEffector.InSanctuary(c.game.world, c.position))
     {
       ZEffector.SpawnVineExplosion(c.transform.position);
       return (ZEffector) null;
+    }
+    if (unique)
+    {
+      Effector component = theSpell.toSummon.GetComponent<Effector>();
+      if (destroyable)
+      {
+        foreach (ZEffector destroyableEffector in c.destroyableEffectors)
+        {
+          if (destroyableEffector.type == component.type)
+          {
+            destroyableEffector.SetTurnsAlive(0);
+            return destroyableEffector;
+          }
+        }
+      }
+      else
+      {
+        foreach (ZEffector effector in c.effectors)
+        {
+          if (effector.type == component.type)
+          {
+            effector.SetTurnsAlive(0);
+            return effector;
+          }
+        }
+      }
     }
     if (theSpell.spellEnum == SpellEnum.Retribution)
       c.retribution = 50;
@@ -5091,7 +5130,10 @@ label_27:
     MyLocation power = (target - zero).normalized * (FixedInt) theSpell.speedMax;
     if (power.y > -20)
       power.y = (FixedInt) -20;
-    ZSpell.BaseFire(theSpell, c, zero, Quaternion.identity, power, true, false, true);
+    ZSpell zspell = ZSpell.BaseFire(theSpell, c, zero, Quaternion.identity, power, true, false, true);
+    if (!((ZComponent) zspell != (object) null) || !((UnityEngine.Object) zspell.transform != (UnityEngine.Object) null))
+      return;
+    zspell.transform.localScale = way > 0 ? new Vector3(1f, 1f, 1f) : new Vector3(-1f, 1f, 1f);
   }
 
   public static IEnumerator<float> IEOceansFury(Spell theSpell, ZCreature c)
@@ -5494,7 +5536,13 @@ label_27:
     for (int i = 0; i < 3; ++i)
     {
       MyLocation power = Inert.Velocity(rot_z + c.game.RandomFixedInt(-5, 5), (FixedInt) theSpell.speedMax);
-      ZSpell.BaseFireTarget(theSpell, c, pos, Inert.RotationOfVelocity(power.ToSinglePrecision()), power, (FixedInt) theSpell.speedMax, target, true, false);
+      ZSpell zspell = ZSpell.BaseFireTarget(theSpell, c, pos, Inert.RotationOfVelocity(power.ToSinglePrecision()), power, (FixedInt) theSpell.speedMax, target, true, false);
+      if (c.game.isClient && (UnityEngine.Object) c.clientObj.activeStoreObject != (UnityEngine.Object) null && ((UnityEngine.Object) c.clientObj.activeStoreObject.spellSprite != (UnityEngine.Object) null && (UnityEngine.Object) zspell.gameObject != (UnityEngine.Object) null))
+      {
+        zspell.gameObject.GetComponent<SpriteRenderer>().sprite = c.clientObj.activeStoreObject.spellSprite;
+        if ((UnityEngine.Object) c.clientObj.activeStoreObject.matOther != (UnityEngine.Object) null)
+          zspell.gameObject.GetComponent<ParticleSystemRenderer>().material = c.clientObj.activeStoreObject.matOther;
+      }
       for (int e = 0; e < 5; ++e)
         yield return 0.0f;
     }
@@ -6930,7 +6978,7 @@ label_27:
       {
         c.map.ServerBitBlt((int) kablam.explosionCutout, coords.x, coords.y, true, true);
         if ((ZComponent) coords.hit != (object) null && coords.hit.flying)
-          coords.hit.ApplyDamage(SpellEnum.Conductor_Rod, DamageType.Lightning, 20, c, c.game.turn, (ISpellBridge) null, false);
+          coords.hit.ApplyDamage(SpellEnum.Conductor_Rod, DamageType.Shock, 20, c, c.game.turn, (ISpellBridge) null, false);
         else
           ZSpell.BaseFire(Inert.Instance.LightningStrike, c, coords.ToMyLocation(), Quaternion.identity, Inert.Velocity((FixedInt) c.game.RandomInt(0, 360), 8), true, true, true);
         if (c.game.isClient && !c.game.resyncing)
@@ -8983,7 +9031,7 @@ label_37:
         ZSpell.FireTower(theSpell, c, pos, rot_z, power);
         break;
       case SpellEnum.Arcane_Energiser:
-        ZSpell.FireEffector(theSpell, c, pos, rot_z, power, false);
+        ZSpell.FireEffector(theSpell, c, pos, rot_z, power, false, false);
         break;
       case SpellEnum.Arcane_Gate:
         ZSpell.FireTeleport(theSpell, c, pos, rot_z, power, target);
@@ -9032,7 +9080,7 @@ label_37:
         ZSpell.FireFireball(theSpell, c, pos, rot_z, power);
         break;
       case SpellEnum.Flame_Shield:
-        ZSpell.FireEffector(theSpell, c, pos, rot_z, power, true);
+        ZSpell.FireEffector(theSpell, c, pos, rot_z, power, true, false);
         break;
       case SpellEnum.Flame_Wall:
         ZSpell.FireFlameWall(theSpell, c, target, (FixedInt) 0, (FixedInt) 0, true);
@@ -9118,7 +9166,7 @@ label_37:
         ZEffector.RechargeElectrostaticCharges(c.game);
         break;
       case SpellEnum.Wind_Shield:
-        ZSpell.FireEffector(theSpell, c, pos, rot_z, power, true);
+        ZSpell.FireEffector(theSpell, c, pos, rot_z, power, true, false);
         break;
       case SpellEnum.Hurricane:
       case SpellEnum.Spirit_Hurricane:
@@ -9518,7 +9566,7 @@ label_37:
         ZSpell.FireGeneric(theSpell, c, pos, rot_z, power);
         break;
       case SpellEnum.Social_Distancing:
-        ZSpell.FireEffector(theSpell, c, pos, rot_z, power, true);
+        ZSpell.FireEffector(theSpell, c, pos, rot_z, power, true, false);
         break;
       case SpellEnum.Frost_Leap:
         MyLocation position1 = c.position;
@@ -10039,7 +10087,7 @@ label_37:
         gameObject.GetComponent<ColorLerp>()?.Kill();
         break;
       case SpellEnum.Retribution:
-        ZSpell.FireEffector(theSpell, c, pos, rot_z, power, true);
+        ZSpell.FireEffector(theSpell, c, pos, rot_z, power, true, false);
         break;
       case SpellEnum.Herd_Mentality:
       case SpellEnum.Pack_Leader:
@@ -10235,7 +10283,7 @@ label_37:
           ZSpell.FireTeleport(theSpell, c, pos, rot_z, power, target);
           break;
         }
-        ZEffector zeffector3 = ZSpell.FireEffector(theSpell, c, c.position, rot_z, power, false);
+        ZEffector zeffector3 = ZSpell.FireEffector(theSpell, c, c.position, rot_z, power, false, false);
         if (!((ZComponent) zeffector3 != (object) null))
           break;
         c._sandsOfTime = new MyLocation?(target);

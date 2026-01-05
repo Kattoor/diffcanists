@@ -27,6 +27,11 @@ public class ConfigurePlayer : MonoBehaviour
     }
   }
 
+  public static bool isTwoHanded(byte rightHand)
+  {
+    return rightHand == (byte) 223;
+  }
+
   public SpriteRenderer Get(Outfit o)
   {
     switch (o)
@@ -58,6 +63,8 @@ public class ConfigurePlayer : MonoBehaviour
 
   public static void EquipAll(UIPlayerCharacter x, string name, SettingsPlayer settingsPlayer)
   {
+    if (ConfigurePlayer.isTwoHanded(settingsPlayer.indexRightHand))
+      settingsPlayer.indexLeftHand = (byte) 74;
     ClanOutfit clanOutfit = ClientResources.Instance.GetClanOutfit(Client.GetAccount(name, false).clan);
     if (settingsPlayer.custom == (byte) 0)
     {
@@ -86,6 +93,8 @@ public class ConfigurePlayer : MonoBehaviour
 
   public void EquipAll(string name, SettingsPlayer settingsPlayer)
   {
+    if (ConfigurePlayer.isTwoHanded(settingsPlayer.indexRightHand))
+      settingsPlayer.indexLeftHand = (byte) 74;
     ClanOutfit clanOutfit = ClientResources.Instance.GetClanOutfit(Client.GetAccount(name, false).clan);
     if (settingsPlayer.custom == (byte) 0)
     {
@@ -138,6 +147,8 @@ public class ConfigurePlayer : MonoBehaviour
     Color[] colors,
     bool destroy = true)
   {
+    if (ConfigurePlayer.isTwoHanded(settingsPlayer.indexRightHand))
+      settingsPlayer.indexLeftHand = (byte) 74;
     ClanOutfit clanOutfit = ClientResources.Instance.GetClanOutfit(Client.GetAccount(name, false).clan);
     settingsPlayer.indexLeftFoot = settingsPlayer.FootIndex();
     settingsPlayer.indexRightFoot = settingsPlayer.indexLeftFoot;
@@ -231,6 +242,8 @@ public class ConfigurePlayer : MonoBehaviour
 
   public static void EquipAll(string name, UIPlayerCharacter p, SettingsPlayer settingsPlayer)
   {
+    if (ConfigurePlayer.isTwoHanded(settingsPlayer.indexRightHand))
+      settingsPlayer.indexLeftHand = (byte) 74;
     ClanOutfit clanOutfit = ClientResources.Instance.GetClanOutfit(Client.GetAccount(name, false).clan);
     settingsPlayer.indexLeftFoot = settingsPlayer.FootIndex();
     settingsPlayer.indexRightFoot = settingsPlayer.indexLeftFoot;

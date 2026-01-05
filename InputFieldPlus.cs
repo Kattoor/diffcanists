@@ -264,14 +264,17 @@ public class InputFieldPlus : MonoBehaviour
         if (!this.caretText.gameObject.activeInHierarchy)
           this.caretText.gameObject.SetActive(this.caretVisible);
         this.caretText.text = "<color=#00000000>" + this.inputText.text.Substring(0, this.caretPos) + "</color>" + this.caretString2;
-        goto label_30;
+        goto label_32;
       }
 label_12:
       if (Input.anyKeyDown && Input.GetKey(KeyCode.LeftControl))
       {
         if (Input.GetKeyDown(KeyCode.V))
         {
-          this.inputText.text += Global.systemCopyBuffer;
+          string input = Global.systemCopyBuffer;
+          if (input.StartsWith("[Quickchat]"))
+            input = Quickchat.GetEmojiFromQuckchatCopy(input);
+          this.inputText.text += input;
           char[] charArray = this.inputText.text.ToCharArray();
           for (int index = 0; index < charArray.Length; ++index)
           {
@@ -279,7 +282,7 @@ label_12:
               charArray[index] = ' ';
           }
           string str = new string(charArray);
-          if (str.Length > this.maxChars)
+          if (str.Length > this.maxChars && (UnityEngine.Object) HUD.instance == (UnityEngine.Object) null || !HUD.instance.game.isSandbox)
             str = str.Substring(0, this.maxChars);
           this.inputText.text = str;
           this.caretPos = this.inputText.text.Length;
@@ -307,7 +310,7 @@ label_12:
         this.caretText.gameObject.SetActive(this.caretVisible);
         this.curBlinkTime = 0.0f;
       }
-label_30:
+label_32:
       if (!((UnityEngine.Object) this.txtDefault != (UnityEngine.Object) null))
         return;
       if (this.caretPos == 0)
@@ -459,7 +462,10 @@ label_30:
       case KeyCode.V:
         if (flag3)
         {
-          this.inputText.text += Global.systemCopyBuffer;
+          string input = Global.systemCopyBuffer;
+          if (input.StartsWith("[Quickchat]"))
+            input = Quickchat.GetEmojiFromQuckchatCopy(input);
+          this.inputText.text += input;
           char[] charArray = this.inputText.text.ToCharArray();
           for (int index = 0; index < charArray.Length; ++index)
           {

@@ -286,6 +286,8 @@ public class ZGame
     bool flag = (this.AllowMinionMovement || !c.isPawn) && this.AllowMovement;
     if (!flag || c.type != CreatureType.Wyrm)
       return flag;
+    if (c.flying)
+      return true;
     List<Coords> outlineArray = MapGenerator.getOutlineArray(c.radius);
     int x = (int) c.position.x;
     int y = (int) c.position.y;
@@ -4170,12 +4172,12 @@ label_46:
                               }
                               if (!creature.inWater)
                               {
-                                if (creature.phantom && !spellSlot.isPresent && (spell.bookOf != BookOf.Arcane && spell.bookOf != BookOf.Illusion) && (spell.spellEnum != SpellEnum.Spirit_Link && spell.spellEnum != SpellEnum.Spirit_Walk))
+                                if (creature.phantom && !spellSlot.isPresent && (!creature.isPawn && spell.bookOf != BookOf.Arcane) && (spell.bookOf != BookOf.Illusion && spell.spellEnum != SpellEnum.Spirit_Link && spell.spellEnum != SpellEnum.Spirit_Walk))
                                 {
                                   this.SendResyncMsg(p, "spell unavailable when phantom", true, (Action) null);
                                   return;
                                 }
-                                if (creature.race == CreatureRace.Undead && !creature.pawn)
+                                if (creature.race == CreatureRace.Undead && (!creature.pawn || spell.type == CastType.Tower))
                                 {
                                   if (spell.bookOf != BookOf.Arcane && spell.bookOf != BookOf.Underdark && !spellSlot.isPresent || spell.type == CastType.Tower)
                                   {
@@ -4183,9 +4185,17 @@ label_46:
                                     return;
                                   }
                                 }
-                                else if (creature.shiningPower)
+                                else if (creature.shiningPower && (!creature.pawn || spell.type == CastType.Tower))
                                 {
                                   if (spell.bookOf != BookOf.Arcane && spell.bookOf != BookOf.OverLight && !spellSlot.isPresent)
+                                  {
+                                    this.SendResyncMsg(p, "spell unavailable when an angel", true, (Action) null);
+                                    return;
+                                  }
+                                }
+                                else if (creature.race == CreatureRace.Bear && (!creature.pawn || spell.type == CastType.Tower))
+                                {
+                                  if (spell.bookOf != BookOf.Arcane && spell.bookOf != BookOf.Druidism && !spellSlot.isPresent)
                                   {
                                     this.SendResyncMsg(p, "spell unavailable when an angel", true, (Action) null);
                                     return;
@@ -4902,7 +4912,7 @@ label_185:
                 break;
               case 155:
                 Quickchat.Data data2 = Quickchat.Data.Deserialize(myBinaryReader);
-                string command = Quickchat.TryGetCommand(data2.id, data2.options);
+                string command = Quickchat.TryGetCommand(data2.id, data2.options, false);
                 if (command == null)
                   break;
                 ChatBox.Instance.NewChatMsg(Quickchat.GetDestination(data2.destination) + "<sprite name=\"Emoji2_1352\"> " + data2.name, command, (Color) ((UnityEngine.Object) UnratedMenu.instance != (UnityEngine.Object) null ? ColorScheme.GetColor(Global.ColorGameText) : ColorScheme.GetColor(data2.destination)), data2.name, data2.destination, ContentType.STRING, (object) null);

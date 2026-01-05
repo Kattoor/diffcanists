@@ -558,7 +558,7 @@ public class ZTower : ZComponent
           }
         }
         else if (hitBySpell == SpellEnum.Gravity_Well && spellRef != null)
-          ZSpell.FireEffector(spellRef.GetBaseSpell, this.creature, this.position, (FixedInt) 0, (FixedInt) 0, true);
+          ZSpell.FireEffector(spellRef.GetBaseSpell, this.creature, this.position, (FixedInt) 0, (FixedInt) 0, true, true);
         if (this.creature.shield > 0 && dt != DamageType.IgnoreShield && (dt != DamageType.Percentage50 && hitBySpell != SpellEnum.Blood_Craze))
         {
           this.creature.HealBloodBank(enemy, Mathf.Min(this.creature.shield, damage), dt);

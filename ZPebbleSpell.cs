@@ -21,16 +21,16 @@ label_53:
       zpebbleSpell.validX = zpebbleSpell.pX;
       zpebbleSpell.validY = zpebbleSpell.pY;
       zpebbleSpell.steps = 1;
-      FixedInt x1 = zpebbleSpell.velocity.x;
-      FixedInt y1 = zpebbleSpell.velocity.y;
+      FixedInt x = zpebbleSpell.velocity.x;
+      FixedInt y = zpebbleSpell.velocity.y;
       FixedInt fixedInt3 = zpebbleSpell.velocity.x;
       FixedInt fixedInt4 = zpebbleSpell.velocity.y;
-      if (x1 > 1 || x1 < -1 || (y1 > 1 || y1 < -1))
+      if (x > 1 || x < -1 || (y > 1 || y < -1))
       {
-        if (FixedInt.Abs(x1) > FixedInt.Abs(y1))
-          zpebbleSpell.steps = (int) FixedInt.Abs(x1) + 1;
+        if (FixedInt.Abs(x) > FixedInt.Abs(y))
+          zpebbleSpell.steps = (int) FixedInt.Abs(x) + 1;
         else
-          zpebbleSpell.steps = (int) FixedInt.Abs(y1) + 1;
+          zpebbleSpell.steps = (int) FixedInt.Abs(y) + 1;
         fixedInt3 = zpebbleSpell.velocity.x / zpebbleSpell.steps;
         fixedInt4 = zpebbleSpell.velocity.y / zpebbleSpell.steps;
       }
@@ -47,9 +47,9 @@ label_53:
           int index2 = (index1 + num1) % zpebbleSpell.zb.Count;
           if (!zpebbleSpell.map.SpellCheckPosition(pX + zpebbleSpell.zb[index2].x, pY + zpebbleSpell.zb[index2].y, zpebbleSpell.toCollideCheck, Inert.mask_spell_movement))
           {
-            int x2 = pX + zpebbleSpell.zb[index2].x;
-            int y2 = pY + zpebbleSpell.zb[index2].y;
-            if (!zpebbleSpell.map.CheckPositionOnlyMap(x2, y2))
+            int num2 = pX + zpebbleSpell.zb[index2].x;
+            int num3 = pY + zpebbleSpell.zb[index2].y;
+            if (!zpebbleSpell.map.CheckPositionOnlyMap(num2, num3))
             {
               if (zpebbleSpell.game.isClient && !zpebbleSpell.game.resyncing)
                 AudioManager.PlayNapalm(AudioManager.instance.spellBounce);
@@ -58,13 +58,13 @@ label_53:
                 ++zpebbleSpell.timesBounced;
                 zpebbleSpell.position = new MyLocation(zpebbleSpell.validX, zpebbleSpell.validY);
                 MyLocation zero = MyLocation.zero;
-                int num2 = pX + zpebbleSpell.zb[index2].x;
-                int num3 = pY + zpebbleSpell.zb[index2].y;
+                int num4 = pX + zpebbleSpell.zb[index2].x;
+                int num5 = pY + zpebbleSpell.zb[index2].y;
                 for (int index3 = -2; index3 <= 2; ++index3)
                 {
                   for (int index4 = -2; index4 <= 2; ++index4)
                   {
-                    if (zpebbleSpell.map.SpellCheckPosition(num2 + index3, num3 + index4, zpebbleSpell.toCollideCheck, Inert.mask_movement_NoEffector))
+                    if (zpebbleSpell.map.SpellCheckPosition(num4 + index3, num5 + index4, zpebbleSpell.toCollideCheck, Inert.mask_movement_NoEffector))
                     {
                       zero.x += index3;
                       zero.y += index4;
@@ -74,12 +74,12 @@ label_53:
                 zero.Normalize();
                 MyLocation.Reflect(zpebbleSpell.velocity, ref zero, out zpebbleSpell.velocity);
                 zpebbleSpell.velocity = zpebbleSpell.velocity * zpebbleSpell.elasticity;
-                zpebbleSpell.map.ServerBitBlt((int) zpebbleSpell.explosionCutout, x2, y2, true, true);
+                zpebbleSpell.map.ServerBitBlt((int) zpebbleSpell.explosionCutout, num2, num3, true, true);
                 FixedInt explisiveForce = zpebbleSpell.explisiveForce;
                 zpebbleSpell.explisiveForce = (FixedInt) 2;
                 if (zpebbleSpell.ApplyExplosionForce(zpebbleSpell.position, 0, true, (ISpellBridge) null, (ZCreature) null))
                 {
-                  zpebbleSpell.StopAndDie();
+                  zpebbleSpell.StopAndDie(num2, num3);
                   yield break;
                 }
                 else
@@ -109,14 +109,14 @@ label_53:
               }
               else
               {
-                zpebbleSpell.StopAndDie();
+                zpebbleSpell.StopAndDie(num2, num3);
                 yield break;
               }
             }
             else
             {
-              zpebbleSpell.map.ServerBitBlt((int) zpebbleSpell.explosionCutout, x2, y2, true, true);
-              zpebbleSpell.StopAndDie();
+              zpebbleSpell.map.ServerBitBlt((int) zpebbleSpell.explosionCutout, num2, num3, true, true);
+              zpebbleSpell.StopAndDie(num2, num3);
               yield break;
             }
           }

@@ -583,6 +583,7 @@ public class ZCreatureTree : ZCreature
   {
     if (this.isDead)
       return 0;
+    Debug.Log((object) damage);
     switch (dt)
     {
       case DamageType.Heal:

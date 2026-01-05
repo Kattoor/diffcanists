@@ -1738,6 +1738,8 @@ public class ZCreature : ZEntity
       zcreature.health = zcreature.maxHealth / 4;
       if (zcreature.health > 37)
         zcreature.health = 37;
+      if (this.waterWalking)
+        zcreature.waterWalking = true;
       zcreature.UpdateHealthTxt();
       if (this.superStunned)
         zcreature.superStunned = true;
@@ -2520,7 +2522,7 @@ label_51:
           }
         }
         else if (hitBySpell == SpellEnum.Gravity_Well && spellRef != null)
-          ZSpell.FireEffector(spellRef.GetBaseSpell, this, this.position, (FixedInt) 0, (FixedInt) 0, true);
+          ZSpell.FireEffector(spellRef.GetBaseSpell, this, this.position, (FixedInt) 0, (FixedInt) 0, true, true);
         if (this.retribution > 0 && (ZComponent) enemy != (object) null && (enemy.parent.team != this.parent.team && !isLoop) && hitBySpell != SpellEnum.Retribution)
         {
           int damage1 = damage / 2;

@@ -716,7 +716,10 @@ public class ZEffector : ZComponent
       else if (this.type == EffectorType.Sands_of_Time)
       {
         if (!ZComponent.IsNull((ZComponent) this.whoSummoned))
+        {
+          this.whoSummoned._sandsOfTime = new MyLocation?();
           ZSpell.FireTeleport(Inert.GetSpell(SpellEnum.Sands_of_Time), this.whoSummoned, this.whoSummoned.position, (FixedInt) 0, (FixedInt) 0, this.target);
+        }
       }
       else if (this.type == EffectorType.Apparition)
       {
@@ -3182,7 +3185,6 @@ label_59:
     }
     if (c.retribution > 0)
     {
-      ++num;
       if (!countOnly)
         c.retribution = 0;
       if ((UnityEngine.Object) c.transform != (UnityEngine.Object) null)

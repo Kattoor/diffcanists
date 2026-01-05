@@ -462,17 +462,14 @@ public class ClickSpell : MonoBehaviour
         this.spellButtons[i].error = num2;
       maxedSummons = (uint) num2 > 0U;
     }
-    if (Player.Instance.selected.phantom)
+    if (Player.Instance.selected.phantom && !spell1.isPresent && (!Player.Instance.selected.isPawn && spell2.bookOf != BookOf.Arcane) && (spell2.bookOf != BookOf.Illusion && spell2.spellEnum != SpellEnum.Spirit_Link && spell2.spellEnum != SpellEnum.Spirit_Walk))
     {
-      if (spell2.bookOf != BookOf.Arcane && spell2.bookOf != BookOf.Illusion && (!spell1.isPresent && spell2.spellEnum != SpellEnum.Spirit_Link) && spell2.spellEnum != SpellEnum.Spirit_Walk)
-      {
-        this.spellButtons[i].error = 104;
-        maxedSummons = true;
-        uses = 0;
-        num1 = 0;
-      }
+      this.spellButtons[i].error = 104;
+      maxedSummons = true;
+      uses = 0;
+      num1 = 0;
     }
-    else if (Player.Instance.selected.race == CreatureRace.Undead && !Player.Instance.selected.pawn)
+    else if (Player.Instance.selected.race == CreatureRace.Undead && (!Player.Instance.selected.pawn || spell2.type == CastType.Tower))
     {
       if (spell2.bookOf != BookOf.Arcane && spell2.bookOf != BookOf.Underdark && !spell1.isPresent || spell2.type == CastType.Tower)
       {
@@ -482,7 +479,7 @@ public class ClickSpell : MonoBehaviour
         num1 = 0;
       }
     }
-    else if (Player.Instance.selected.shiningPower)
+    else if (Player.Instance.selected.shiningPower && (!Player.Instance.selected.pawn || spell2.type == CastType.Tower))
     {
       if (spell2.bookOf != BookOf.Arcane && spell2.bookOf != BookOf.OverLight && !spell1.isPresent || spell2.type == CastType.Tower)
       {
@@ -492,7 +489,7 @@ public class ClickSpell : MonoBehaviour
         num1 = 0;
       }
     }
-    else if (Player.Instance.selected.race == CreatureRace.Bear && !Player.Instance.selected.pawn && (spell2.bookOf != BookOf.Arcane && spell2.bookOf != BookOf.Druidism && !spell1.isPresent || spell2.type == CastType.Tower))
+    else if (Player.Instance.selected.race == CreatureRace.Bear && (!Player.Instance.selected.pawn || spell2.type == CastType.Tower) && (spell2.bookOf != BookOf.Arcane && spell2.bookOf != BookOf.Druidism && !spell1.isPresent || spell2.type == CastType.Tower))
     {
       this.spellButtons[i].error = spell2.type == CastType.Tower ? 124 : 122;
       maxedSummons = true;

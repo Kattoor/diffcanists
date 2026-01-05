@@ -552,6 +552,9 @@ public class ChatBox : UIBehaviour
         return;
       HUD.instance.buttonHideChat.anchoredPosition = v ? new Vector2(6f, (float) ((double) transform.sizeDelta.y + (double) transform.anchoredPosition.y + 6.0)) : new Vector2(6f, 6f);
       HUD.instance.buttonChatEaseOfAccess.SetActive(!v);
+      if (v)
+        return;
+      HUD.instance.buttonHideChat.GetComponent<SafeAreaFitter>().UpdatePosition();
     }
     else
     {
@@ -562,6 +565,9 @@ public class ChatBox : UIBehaviour
       HUD.instance.buttonHideChat.anchoredPosition = v ? new Vector2(6f, (float) ((double) transform.sizeDelta.y + (double) transform.anchoredPosition.y + 6.0)) : new Vector2(6f, 6f);
       HUD.instance.buttonChatEaseOfAccess.SetActive(!v);
       HUD.instance.ValidateFromChatBox();
+      if (v)
+        return;
+      HUD.instance.buttonHideChat.GetComponent<SafeAreaFitter>().UpdatePosition();
     }
   }
 

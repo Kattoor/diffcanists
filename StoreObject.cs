@@ -37,6 +37,10 @@ public class StoreObject : MonoBehaviour
   [Header("Spell Sprite")]
   public Sprite spellSprite;
   public Sprite altSpellSprite;
+  [Header("Additional")]
+  public GameObject other;
+  public Material matOther;
+  public AudioClip clipOther;
 
   public static SpellEnum RealEnum(SpellEnum s)
   {
@@ -199,6 +203,12 @@ public class StoreObject : MonoBehaviour
       if ((UnityEngine.Object) sprite != (UnityEngine.Object) null)
       {
         UnityEngine.Object.Instantiate<GameObject>(this.obj, sprite.transform.position, Quaternion.identity, sprite.transform).transform.localScale = new Vector3(1f, 1f, 1f);
+        if (c.serverObj.spellEnum == SpellEnum.Summon_Dark_Knight)
+        {
+          SpinningAxe componentInChildren = c.transform.GetComponentInChildren<SpinningAxe>(true);
+          if ((UnityEngine.Object) componentInChildren != (UnityEngine.Object) null)
+            UnityEngine.Object.Instantiate<GameObject>(this.obj, componentInChildren.transform.position, Quaternion.identity, componentInChildren.transform).transform.localScale = new Vector3(1f, 1f, 1f);
+        }
         return true;
       }
     }
@@ -210,14 +220,28 @@ public class StoreObject : MonoBehaviour
     if (this.animatedSprites.Length != 0)
     {
       AnimateDragon component1 = c.GetComponent<AnimateDragon>();
+      SpriteRenderer component2 = c.GetComponent<SpriteRenderer>();
       if ((UnityEngine.Object) component1 != (UnityEngine.Object) null)
       {
         component1.sprites = this.animatedSprites;
         if (this.attackAnimatedSprites.Length != 0)
           component1.attackSprites = this.attackAnimatedSprites;
       }
+      else
+      {
+        AnimateSpritesheet component3 = c.GetComponent<AnimateSpritesheet>();
+        if ((UnityEngine.Object) component3 != (UnityEngine.Object) null)
+        {
+          component3.walkFrames = this.animatedSprites;
+          component3.jumpFrames = this.attackAnimatedSprites;
+          component3.idleFrame = this.spellSprite;
+          if ((UnityEngine.Object) component2 != (UnityEngine.Object) null)
+            component2.sprite = component3.idleFrame;
+          this.AttachedObjects(c);
+          return true;
+        }
+      }
       component1.choose = component1.sprites;
-      SpriteRenderer component2 = c.GetComponent<SpriteRenderer>();
       if ((UnityEngine.Object) component2 != (UnityEngine.Object) null)
         component2.sprite = component1.sprites[0];
       this.AttachedObjects(c);

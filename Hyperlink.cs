@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 public class Hyperlink : MonoBehaviour, IPointerClickHandler, IEventSystemHandler, IPointerEnterHandler, IPointerExitHandler
 {
   private int linkIndex = -1;
-  private Color32 oldColors = (Color32) Color.blue;
+  private Color32 oldColors = (Color32) new Color(120f, 100f, (float) byte.MaxValue, (float) byte.MaxValue);
   public TMP_Text pTextMeshPro;
   private bool showdTooltip;
 
@@ -39,7 +39,7 @@ public class Hyperlink : MonoBehaviour, IPointerClickHandler, IEventSystemHandle
     yield return (object) new WaitForEndOfFrame();
     yield return (object) new WaitForEndOfFrame();
     for (int linkIndex = 0; linkIndex < this.pTextMeshPro.textInfo.linkInfo.Length; ++linkIndex)
-      this.SetLinkToColor(linkIndex, (Color32) Color.blue);
+      this.SetLinkToColor(linkIndex, this.oldColors);
   }
 
   public IEnumerator MouseMove()
@@ -61,7 +61,7 @@ public class Hyperlink : MonoBehaviour, IPointerClickHandler, IEventSystemHandle
   {
     this.StopAllCoroutines();
     if (this.linkIndex != -1)
-      this.SetLinkToColor(this.linkIndex, (Color32) Color.blue);
+      this.SetLinkToColor(this.linkIndex, this.oldColors);
     this.linkIndex = -1;
     MyToolTip.Close();
   }
@@ -70,7 +70,7 @@ public class Hyperlink : MonoBehaviour, IPointerClickHandler, IEventSystemHandle
   {
     int intersectingLink = TMP_TextUtilities.FindIntersectingLink(this.pTextMeshPro, Input.mousePosition, (Camera) null);
     if (this.linkIndex != -1 && intersectingLink != this.linkIndex)
-      this.SetLinkToColor(this.linkIndex, (Color32) Color.blue);
+      this.SetLinkToColor(this.linkIndex, this.oldColors);
     if (intersectingLink != -1 && this.linkIndex != intersectingLink)
     {
       this.SetLinkToColor(intersectingLink, (Color32) Color.white);
@@ -88,7 +88,7 @@ public class Hyperlink : MonoBehaviour, IPointerClickHandler, IEventSystemHandle
   private void SetLinkToColor(int linkIndex, Color32 color)
   {
     TMP_LinkInfo tmpLinkInfo = this.pTextMeshPro.textInfo.linkInfo[linkIndex];
-    Color32 blue = (Color32) Color.blue;
+    Color32 oldColors = this.oldColors;
     for (int index = 0; index < tmpLinkInfo.linkTextLength; ++index)
     {
       TMP_CharacterInfo tmpCharacterInfo = this.pTextMeshPro.textInfo.characterInfo[tmpLinkInfo.linkTextfirstCharacterIndex + index];

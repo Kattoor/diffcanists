@@ -33,7 +33,7 @@ public class ZPerson
   public ZPerson.Awards awards = new ZPerson.Awards();
   public ZGame game;
   public byte id;
-  public bool yourTurn;
+  private bool _yourTurn;
   public bool ready;
   public bool canStart;
   public int startingSpells;
@@ -94,6 +94,19 @@ public class ZPerson
     get
     {
       return this.game.map;
+    }
+  }
+
+  public bool yourTurn
+  {
+    get
+    {
+      return this._yourTurn;
+    }
+    set
+    {
+      this._yourTurn = value;
+      Debug.Log((object) value);
     }
   }
 

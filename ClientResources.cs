@@ -634,13 +634,33 @@ public class ClientResources : MonoBehaviour
     ZPerson p,
     Vector3? offset = null,
     bool delete = true,
-    float animSpeed = 0.0f)
+    float animSpeed = 0.0f,
+    int order = 0)
   {
     GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(Inert.Instance._characterRightHand[(int) s.indexRightHand].archObject, c.rightArm.transform.position + (offset.HasValue ? offset.Value : Vector3.zero), Quaternion.identity, c.rightArm.transform);
     AnimateRepeat component = gameObject.GetComponent<AnimateRepeat>();
     ClientResources.ChangeSprites(delete ? c.rightArm : (SpriteRenderer) null, component, Inert.Instance._characterRightHand[(int) s.indexRightHand].animatedSprites.ToArray(), s, Outfit.RightHand);
     component.deleteOnDestroy = true;
-    component.GetSpriteRenderer.sortingOrder = c.rightArm.sortingOrder;
+    component.GetSpriteRenderer.sortingOrder = c.rightArm.sortingOrder + order;
+    if ((double) animSpeed != 0.0)
+      component.UpdateTimeToFinish(animSpeed);
+    p.archMageStaffs.Add(gameObject);
+  }
+
+  internal static void DefaultArchObjectLeftArm(
+    SettingsPlayer s,
+    ZCreature c,
+    ZPerson p,
+    Vector3? offset = null,
+    bool delete = true,
+    float animSpeed = 0.0f,
+    int order = 0)
+  {
+    GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(Inert.Instance._characterLeftHand[(int) s.indexLeftHand].archObject, c.leftArm.transform.position + (offset.HasValue ? offset.Value : Vector3.zero), Quaternion.identity, c.leftArm.transform);
+    AnimateRepeat component = gameObject.GetComponent<AnimateRepeat>();
+    ClientResources.ChangeSprites(delete ? c.leftArm : (SpriteRenderer) null, component, Inert.Instance._characterLeftHand[(int) s.indexLeftHand].animatedSprites.ToArray(), s, Outfit.LeftHand);
+    component.deleteOnDestroy = true;
+    component.GetSpriteRenderer.sortingOrder = c.leftArm.sortingOrder + order;
     if ((double) animSpeed != 0.0)
       component.UpdateTimeToFinish(animSpeed);
     p.archMageStaffs.Add(gameObject);
@@ -989,11 +1009,23 @@ public class ClientResources : MonoBehaviour
         p.archMageStaffs.Add(gameObject);
       }
       else if (s.indexRightHand == (byte) 213)
-        ClientResources.DefaultArchObjectRightArm(s, c, p, new Vector3?(), true, 0.0f);
+        ClientResources.DefaultArchObjectRightArm(s, c, p, new Vector3?(), true, 0.0f, 0);
       else if (s.indexRightHand == (byte) 214)
-        ClientResources.DefaultArchObjectRightArm(s, c, p, new Vector3?(), true, 0.0f);
+        ClientResources.DefaultArchObjectRightArm(s, c, p, new Vector3?(), true, 0.0f, 0);
       else if (s.indexRightHand == (byte) 215)
-        ClientResources.DefaultArchObjectRightArm(s, c, p, new Vector3?(), false, 1f);
+        ClientResources.DefaultArchObjectRightArm(s, c, p, new Vector3?(), false, 1f, 0);
+      else if ((int) s.indexRightHand < Inert.Instance._characterRightHand.Count && (UnityEngine.Object) Inert.Instance._characterRightHand[(int) s.indexRightHand].archObject != (UnityEngine.Object) null)
+      {
+        SettingsPlayer s1 = s;
+        ZCreature c1 = c;
+        ZPerson p1 = p;
+        bool delete = Inert.Instance._characterRightHand[(int) s.indexRightHand].delete;
+        float animSpeed = Inert.Instance._characterRightHand[(int) s.indexRightHand].animSpeed;
+        Vector3? offset = new Vector3?();
+        int num1 = delete ? 1 : 0;
+        double num2 = (double) animSpeed;
+        ClientResources.DefaultArchObjectRightArm(s1, c1, p1, offset, num1 != 0, (float) num2, 0);
+      }
     }
     if (s.indexHead == (byte) 110)
     {
@@ -1155,6 +1187,18 @@ public class ClientResources : MonoBehaviour
       component.UpdateTimeToFinish(6f);
       component.deleteOnDestroy = true;
       p.archMageStaffs.Add(gameObject);
+    }
+    else if ((int) s.indexLeftHand < Inert.Instance._characterLeftHand.Count && (UnityEngine.Object) Inert.Instance._characterLeftHand[(int) s.indexLeftHand].archObject != (UnityEngine.Object) null)
+    {
+      SettingsPlayer s1 = s;
+      ZCreature c1 = c;
+      ZPerson p1 = p;
+      bool delete = Inert.Instance._characterLeftHand[(int) s.indexLeftHand].delete;
+      float animSpeed = Inert.Instance._characterLeftHand[(int) s.indexLeftHand].animSpeed;
+      Vector3? offset = new Vector3?();
+      int num1 = delete ? 1 : 0;
+      double num2 = (double) animSpeed;
+      ClientResources.DefaultArchObjectLeftArm(s1, c1, p1, offset, num1 != 0, (float) num2, 0);
     }
     if (s.indexBody == (byte) 187)
     {

@@ -7,6 +7,7 @@ using UnityEngine;
 [Serializable]
 public class OutfitData
 {
+  public float animSpeed = 1f;
   public bool isLocked = true;
   public bool hasMouth = true;
   public Achievement achievement = Achievement.None;
@@ -17,6 +18,7 @@ public class OutfitData
   public Outfit outfit;
   public Sprite sprite;
   public GameObject archObject;
+  public bool delete;
   public List<Sprite> animatedSprites;
   public int order;
   public int tournament;

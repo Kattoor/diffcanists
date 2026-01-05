@@ -15,6 +15,7 @@ public class KeyBindMenu : MonoBehaviour
   public UIOnHover toggleSkipWarning;
   public UIOnHover toggleDetower;
   public GameObject panelHotkeys;
+  public GameObject panelPings;
   [Header("Controller")]
   public GameObject controllerStuff;
   public TMP_Text txtInfo;
@@ -100,6 +101,13 @@ public class KeyBindMenu : MonoBehaviour
   public void ToggleHotkeys()
   {
     this.panelHotkeys.SetActive(!this.panelHotkeys.activeSelf);
+    this.panelPings.SetActive(false);
+  }
+
+  public void TogglePings()
+  {
+    this.panelHotkeys.SetActive(false);
+    this.panelPings.SetActive(!this.panelPings.activeSelf);
   }
 
   public void ToggleControls()

@@ -31,6 +31,8 @@ public class PanelPlayer : MonoBehaviour
   public Image imgElemental;
   public TMP_Text txtFamiliar;
   private bool disposable;
+  private bool hasFamiliar;
+  private bool hasElemental;
   private bool resigned;
   [NonSerialized]
   public bool left;
@@ -368,16 +370,24 @@ public class PanelPlayer : MonoBehaviour
       this.imgFamiliar.sprite = HUD.GetFullBookIcon(p.ActivateableFamiliar, p);
       this.txtFamiliar.text = p.familiarLevels[(int) p.ActivateableFamiliar].ToString();
       this.imgFamiliar.gameObject.SetActive(true);
+      this.hasFamiliar = true;
     }
     else
+    {
+      this.hasFamiliar = false;
       this.imgFamiliar.gameObject.SetActive(false);
+    }
     if (p.game.isElementals && p.familiarLevels[(int) p.ElementalFamiliar] > 0)
     {
       this.imgElemental.sprite = HUD.GetFullBookIcon(p.ElementalFamiliar, p);
       this.imgElemental.gameObject.SetActive(true);
+      this.hasElemental = true;
     }
     else
+    {
+      this.hasElemental = false;
       this.imgElemental.gameObject.SetActive(false);
+    }
     this.Resize();
   }
 
@@ -476,6 +486,8 @@ public class PanelPlayer : MonoBehaviour
     this.bgAll.enabled = true;
     this.nameText.enableWordWrapping = true;
     this.nameText.overflowMode = TextOverflowModes.Ellipsis;
+    this.imgFamiliar.gameObject.SetActive(this.hasFamiliar);
+    this.imgElemental.gameObject.SetActive(this.hasElemental);
     if (!this.newLayout)
       return;
     this.nameText.rectTransform.anchoredPosition = new Vector2(this.nameText.rectTransform.anchoredPosition.x, 10.5f);

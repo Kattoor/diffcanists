@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 public static class Quickchat
@@ -515,12 +517,12 @@ public static class Quickchat
         Client.SendChatMsg(memoryStream.ToArray(), 2f);
         if (destionation != ChatOrigination.Private)
           return;
-        string command = Quickchat.TryGetCommand(id, options);
+        string command = Quickchat.TryGetCommand(id, options, false);
         ChatBox.Instance.NewChatMsg("To <sprite name=\"Emoji2_1352\"> " + data.privateDM, command, (Color) ColorScheme.GetColor(Global.ColorSentPrivate), data.privateDM, ChatOrigination.System, ContentType.STRING, (object) null);
       }
       else
       {
-        string command = Quickchat.TryGetCommand(id, options);
+        string command = Quickchat.TryGetCommand(id, options, false);
         if (command == null)
           return;
         ChatBox.Instance.NewChatMsg("<sprite name=\"Emoji2_1352\"> " + command, (Color) ColorScheme.GetColor(Global.ColorSystem));
@@ -551,46 +553,55 @@ public static class Quickchat
     }
   }
 
-  public static string TryGetCommand(int id, int[] options)
+  public static string GetEmojiFromQuckchatCopy(string input)
+  {
+    int[] array = Regex.Matches(input, "\\d+").Cast<Match>().Select<Match, int>((Func<Match, int>) (m => int.Parse(m.Value))).ToArray<int>();
+    StringBuilderPlus stringBuilderPlus = new StringBuilderPlus();
+    foreach (int num in array)
+      stringBuilderPlus.Append("<sprite name=\"" + EmojiInfo.allEmoji.list[Mathf.Clamp(num, 0, EmojiInfo.allEmoji.list.Count - 1)].realName + "\">");
+    return stringBuilderPlus.ToString();
+  }
+
+  public static string TryGetCommand(int id, int[] options, bool allowCustom = false)
   {
     if (!Quickchat.GetByID(id))
       return (string) null;
     if (Quickchat.temp.options == null || Quickchat.temp.options.Length == 0)
       return Quickchat.temp.value ?? Quickchat.temp.name;
-    if (options.Length != Quickchat.temp.options.Length)
+    if (options.Length != Quickchat.temp.options.Length && !allowCustom)
       return (string) null;
     string[] strArray = new string[options.Length];
     try
     {
-      for (int index = 0; index < Quickchat.temp.options.Length; ++index)
+      for (int a = 0; a < options.Length; ++a)
       {
-        switch (Quickchat.temp.options[index])
+        switch (Quickchat.temp.options[Mathf.Min(a, Quickchat.temp.options.Length - 1)])
         {
           case Quickchat.Options.None:
             return (string) null;
           case Quickchat.Options.Map:
-            strArray[index] = Quickchat.Maps[Mathf.Clamp(options[index], 0, Quickchat.Maps.Count - 1)];
+            strArray[a] = Quickchat.Maps[Mathf.Clamp(options[a], 0, Quickchat.Maps.Count - 1)];
             break;
           case Quickchat.Options.Time:
-            strArray[index] = Quickchat.Times[Mathf.Clamp(options[index], 0, Quickchat.Times.Count - 1)];
+            strArray[a] = Quickchat.Times[Mathf.Clamp(options[a], 0, Quickchat.Times.Count - 1)];
             break;
           case Quickchat.Options.Style:
-            strArray[index] = Quickchat.Styles[Mathf.Clamp(options[index], 0, Quickchat.Styles.Count - 1)];
+            strArray[a] = Quickchat.Styles[Mathf.Clamp(options[a], 0, Quickchat.Styles.Count - 1)];
             break;
           case Quickchat.Options.PlayerCount:
-            strArray[index] = Quickchat.PlayerCounts[Mathf.Clamp(options[index], 0, Quickchat.PlayerCounts.Count - 1)];
+            strArray[a] = Quickchat.PlayerCounts[Mathf.Clamp(options[a], 0, Quickchat.PlayerCounts.Count - 1)];
             break;
           case Quickchat.Options.Ranked:
-            strArray[index] = Quickchat.Ranked[Mathf.Clamp(options[index], 0, Quickchat.Ranked.Count - 1)];
+            strArray[a] = Quickchat.Ranked[Mathf.Clamp(options[a], 0, Quickchat.Ranked.Count - 1)];
             break;
           case Quickchat.Options.Spell:
-            strArray[index] = Quickchat.Spell[Mathf.Clamp(options[index], 0, Quickchat.Spell.Count - 1)];
+            strArray[a] = Quickchat.Spell[Mathf.Clamp(options[a], 0, Quickchat.Spell.Count - 1)];
             break;
           case Quickchat.Options.Minion:
-            strArray[index] = Quickchat.Minion[Mathf.Clamp(options[index], 0, Quickchat.Minion.Count - 1)];
+            strArray[a] = Quickchat.Minion[Mathf.Clamp(options[a], 0, Quickchat.Minion.Count - 1)];
             break;
           case Quickchat.Options.Emoji:
-            strArray[index] = "<sprite name=\"" + EmojiInfo.allEmoji.list[Mathf.Clamp(options[index], 0, EmojiInfo.allEmoji.list.Count - 1)].realName + "\">";
+            strArray[a] = "<sprite name=\"" + EmojiInfo.allEmoji.list[Mathf.Clamp(options[a], 0, EmojiInfo.allEmoji.list.Count - 1)].realName + "\">";
             break;
           default:
             return (string) null;

@@ -938,7 +938,9 @@ public class SettingsPlayer
       return 9;
     if (this.indexBody == (byte) 152 || this.indexBody == (byte) 153)
       return 5;
-    return this.indexBody == (byte) 161 ? (byte) 10 : (byte) 0;
+    if (this.indexBody == (byte) 161)
+      return 10;
+    return this.indexBody == (byte) 198 ? (byte) 5 : (byte) 0;
   }
 
   public static bool HeadNoMouth(string name, SettingsPlayer sp)

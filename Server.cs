@@ -2045,8 +2045,8 @@ public class Server : MonoBehaviour
                               gg4.settings.description = str;
                               if (c.player.account.accountType.IsMuted() && !string.IsNullOrEmpty(str))
                                 gg4.settings.description = "";
-                              if (!string.IsNullOrEmpty(str))
-                                MyLog.MainLog("[Game Description] [" + c.name + "] " + str);
+                              if (!string.IsNullOrEmpty(gg4.settings.description))
+                                MyLog.MainLog("[Game Description] [" + c.name + "] " + gg4.settings.description);
                               Server.SendGameModeUpdate(gg4);
                               break;
                             }

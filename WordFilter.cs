@@ -149,6 +149,14 @@ public static class WordFilter
     }
   };
 
+  public static string ExtractTMPLink(string text)
+  {
+    if (string.IsNullOrEmpty(text))
+      return (string) null;
+    Match match = Regex.Match(text, "<link=\"(.*?)\">", RegexOptions.IgnoreCase);
+    return !match.Success ? (string) null : match.Groups[1].Value;
+  }
+
   internal static void RefreshWords()
   {
     WordFilter.wordFilter = new Regex(WordFilter.BadWords, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);

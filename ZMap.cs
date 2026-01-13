@@ -1385,6 +1385,13 @@ public class ZMap
               }
               else
               {
+                if ((ZComponent) creature != (object) null && creature1.flying && !creature.isMoving)
+                {
+                  FixedInt fixedInt = Mathd.Abs((FixedInt) 90 - Inert.AngleOfVectors(creature1.position, creature.position));
+                  int num = MyLocation.Distance(creature1.position, creature.position) - (creature1.radius + creature.radius);
+                  if (num < 0 && fixedInt < 12 - num)
+                    continue;
+                }
                 if (!collideWithThorns && (creature1.GetType() == typeof (ZCreatureThorn) || creature1.type == CreatureType.Map_Bottom))
                 {
                   this.world.listPool.ReturnList(list);
@@ -1703,21 +1710,24 @@ public class ZMap
     int num2 = y0 - tex.height / 2;
     int num3 = num1 + tex.width;
     int num4 = num2 + tex.height;
-    if (!allowOutOfBounds)
-    {
-      if (num1 < 0 || num2 < 0 || (num3 > this.Width || num4 > this.Height))
-        return false;
-    }
-    else if (num2 < 0 || num4 > this.Height)
-      return false;
     if (includeTerrain)
     {
       for (int y = num2; y < num4; ++y)
       {
         for (int x = num1; x < num3; ++x)
         {
-          if (pixels32[index].a != (byte) 0 && this.PixelNotAlpha(x, y, ceature, Inert.mask_movement_NoEffector, collideWithThorn))
-            return false;
+          if (pixels32[index].a != (byte) 0)
+          {
+            if (!allowOutOfBounds)
+            {
+              if (x < 0 || y < 0 || (x > this.Width || y > this.Height))
+                return false;
+            }
+            else if (y < 0 || y > this.Height)
+              return false;
+            if (this.PixelNotAlpha(x, y, ceature, Inert.mask_movement_NoEffector, collideWithThorn))
+              return false;
+          }
           ++index;
         }
       }
@@ -1728,8 +1738,18 @@ public class ZMap
       {
         for (int x = num1; x < num3; ++x)
         {
-          if (pixels32[index].a != (byte) 0 && this.PhysicsCollidePoint(ceature, x, y, Inert.mask_movement_NoEffector, collideWithThorn))
-            return false;
+          if (pixels32[index].a != (byte) 0)
+          {
+            if (!allowOutOfBounds)
+            {
+              if (x < 0 || y < 0 || (x > this.Width || y > this.Height))
+                return false;
+            }
+            else if (y < 0 || y > this.Height)
+              return false;
+            if (this.PhysicsCollidePoint(ceature, x, y, Inert.mask_movement_NoEffector, collideWithThorn))
+              return false;
+          }
           ++index;
         }
       }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityS.Mathematics;
 
 public class ZMyCollider : ZComponent
 {
@@ -538,21 +539,17 @@ public class ZMyCollider : ZComponent
             num2 = -num2;
           if (num2 / vertex1.LAB <= radius)
           {
-            MyLocation myLocation = new MyLocation(vertex1.X - p.x, vertex1.Y - p.y);
-            FixedInt dotD = vertex1.dotD;
-            FixedInt ret1;
-            MyLocation.Dot(myLocation, vertex1.d, out ret1);
-            ret1 *= 2;
-            FixedInt ret2;
-            MyLocation.Dot(myLocation, myLocation, out ret2);
-            ret2 -= radius * radius;
-            FixedInt ret3 = ret1 * ret1 - FixedInt.Create(4) * dotD * ret2;
-            if (ret3.BiggerThenOrEqualToZero())
+            quaternion quaternion = new quaternion((sfloat) (vertex1.X - p.x), (sfloat) (vertex1.Y - p.y));
+            sfloat dotD = vertex1.dotD;
+            sfloat sfloat1 = math.dot(quaternion, vertex1.d) * (sfloat) 2;
+            sfloat sfloat2 = math.dot(quaternion, quaternion) - (sfloat) (radius * radius);
+            sfloat x = sfloat1 * sfloat1 - (sfloat) 4 * dotD * sfloat2;
+            if (x >= (sfloat) 0)
             {
-              Mathd.Sqrt(ret3.RawValue, out ret3);
-              FixedInt fixedInt1 = (-ret1 - ret3) / (FixedInt.Create(2) * dotD);
-              FixedInt fixedInt2 = (-ret1 + ret3) / (FixedInt.Create(2) * dotD);
-              if (fixedInt1.BiggerThenOrEqualToZero() && fixedInt1.SmallerThenOrEqualToOne() || fixedInt2.BiggerThenOrEqualToZero() && fixedInt2.SmallerThenOrEqualToOne())
+              sfloat sfloat3 = math.sqrt(x);
+              sfloat sfloat4 = (-sfloat1 - sfloat3) / ((sfloat) 2 * dotD);
+              sfloat sfloat5 = (-sfloat1 + sfloat3) / ((sfloat) 2 * dotD);
+              if (sfloat4 >= (sfloat) 0 && sfloat4 <= (sfloat) 1 || sfloat5 >= (sfloat) 0 && sfloat5 <= (sfloat) 1)
                 return true;
             }
           }
@@ -603,26 +600,21 @@ public class ZMyCollider : ZComponent
     int num1 = (b.X - a.X) * (p.x - a.Y) - (p.x - a.X) * (b.Y - a.Y);
     if (num1 < 0)
       num1 = -num1;
-    int num2 = (int) Mathd.IntSqrt((long) ((b.X - a.X) * (b.X - a.X) + (b.Y - a.Y) * (b.Y - a.Y)));
+    int num2 = (int) math.sqrt((sfloat) ((b.X - a.X) * (b.X - a.X) + (b.Y - a.Y) * (b.Y - a.Y)));
     if (num1 / num2 >= radius)
       return false;
-    MyLocation myLocation1 = new MyLocation(b.X - a.X, b.Y - a.Y);
-    MyLocation myLocation2 = new MyLocation(a.X - p.x, a.Y - p.y);
-    FixedInt ret1;
-    MyLocation.Dot(myLocation1, myLocation1, out ret1);
-    FixedInt ret2;
-    MyLocation.Dot(myLocation2, myLocation1, out ret2);
-    ret2 *= 2;
-    FixedInt ret3;
-    MyLocation.Dot(myLocation2, myLocation2, out ret3);
-    FixedInt fixedInt1 = ret3 - radius * radius;
-    FixedInt ret4 = ret2 * ret2 - FixedInt.Create(4) * ret1 * fixedInt1;
-    if (ret4.BiggerThenOrEqualToZero())
+    quaternion quaternion1 = new quaternion((sfloat) (b.X - a.X), (sfloat) (b.Y - a.Y));
+    quaternion quaternion2 = new quaternion((sfloat) (a.X - p.x), (sfloat) (a.Y - p.y));
+    sfloat sfloat1 = math.dot(quaternion1, quaternion1);
+    sfloat sfloat2 = math.dot(quaternion2, quaternion1) * (sfloat) 2;
+    sfloat sfloat3 = math.dot(quaternion2, quaternion2) - (sfloat) (radius * radius);
+    sfloat x = sfloat2 * sfloat2 - (sfloat) 4 * sfloat1 * sfloat3;
+    if (x >= (sfloat) 0)
     {
-      Mathd.Sqrt(ret4.RawValue, out ret4);
-      FixedInt fixedInt2 = (-ret2 - ret4) / (FixedInt.Create(2) * ret1);
-      FixedInt fixedInt3 = (-ret2 + ret4) / (FixedInt.Create(2) * ret1);
-      if (fixedInt2.BiggerThenOrEqualToZero() && fixedInt2.SmallerThenOrEqualToOne() || fixedInt3.BiggerThenOrEqualToZero() && fixedInt3.SmallerThenOrEqualToOne())
+      sfloat sfloat4 = math.sqrt(x);
+      sfloat sfloat5 = (-sfloat2 - sfloat4) / ((sfloat) 2 * sfloat1);
+      sfloat sfloat6 = (-sfloat2 + sfloat4) / ((sfloat) 2 * sfloat1);
+      if (sfloat5 >= (sfloat) 0 && sfloat5 <= (sfloat) 1 || sfloat6 >= (sfloat) 0 && sfloat6 <= (sfloat) 1)
         return true;
     }
     return false;

@@ -10,10 +10,14 @@ public class ParticleBloodSyphon : MonoBehaviour
   public Vector3 velocity;
   public ParticleSystem p;
   public GameObject explosion;
+  public bool oneWay;
   private float cur;
 
   private void Start()
   {
+    if (!this.oneWay)
+      return;
+    Object.Instantiate<GameObject>(this.explosion, this.start, Quaternion.identity, this.transform.parent);
   }
 
   private void Update()
@@ -23,6 +27,13 @@ public class ParticleBloodSyphon : MonoBehaviour
       this.cur += Time.deltaTime * this.speed;
       if ((double) this.cur >= 1.0)
       {
+        if (this.oneWay)
+        {
+          this.p.Stop();
+          this.enabled = false;
+          Object.Destroy((Object) this.gameObject, 1f);
+          return;
+        }
         this.cur = 1f;
         this.goend = false;
         Object.Instantiate<GameObject>(this.explosion, this.end, Quaternion.identity, this.transform.parent);

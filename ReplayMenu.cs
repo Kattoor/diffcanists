@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ReplayMenu : Catalogue
 {
@@ -28,6 +29,7 @@ public class ReplayMenu : Catalogue
   public TMP_Text txt_name;
   public TMP_Text txt_GameOver;
   public GameObject panelGameOver;
+  public Toggle toggleAnnon;
   internal ButtonReplayFile selectedGameObject;
   public UIOnHover buttonDelete;
   public UIOnHover buttonRename;
@@ -144,7 +146,13 @@ public class ReplayMenu : Catalogue
                     bool[] flagArray = new bool[gf.players.Count];
                     for (int index2 = 0; index2 < gf.players.Count; ++index2)
                       flagArray[index2] = myBinaryReader.ReadBoolean();
-                    this.txt_GameOver.text = myBinaryReader.ReadString();
+                    string str = myBinaryReader.ReadString();
+                    if (Global.GetPrefBool("annon", false))
+                    {
+                      for (int index2 = 0; index2 < gf.players.Count; ++index2)
+                        str = str.Replace(gf.players[index2], "[name]");
+                    }
+                    this.txt_GameOver.text = str;
                     this.panelGameOver.SetActive(true);
                   }
                 }
@@ -199,7 +207,14 @@ public class ReplayMenu : Catalogue
 
   private void Start()
   {
+    this.toggleAnnon.SetIsOnWithoutNotify(Global.GetPrefBool("annon", false));
     this.Populate();
+  }
+
+  public void ToggleAnnon(bool v)
+  {
+    Global.SetPrefBool("annon", v);
+    Controller.Instance.ReopenMenu();
   }
 
   private void Populate()
@@ -343,6 +358,8 @@ public class ReplayMenu : Catalogue
         this.players = strArray[6];
         for (int index = 7; index < strArray.Length; ++index)
           this.players += strArray[index];
+        if (Global.GetPrefBool("annon", false))
+          this.players = "[players]";
         this.path = path;
       }
     }

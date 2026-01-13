@@ -1983,7 +1983,7 @@ label_16:
 
   public virtual void DoHeal(int damage, DamageType dt = DamageType.None, ZCreature enemy = null, bool fromDoHeal = false)
   {
-    if (this.isDead || this.health <= 0 && !this.isPawn)
+    if (this.isDead || this.health <= 0)
       return;
     if (this.halfHealing > 0 && !fromDoHeal && dt != DamageType.Heal)
       damage /= 2;
@@ -2203,7 +2203,12 @@ label_16:
 
   public bool CanCurseOfHaute()
   {
-    return this.isPawn && this.race != CreatureRace.Undead && (this.type != CreatureType.Golem && this.race != CreatureRace.Arcane) && this.race != CreatureRace.Soulbound;
+    return this.isPawn;
+  }
+
+  public bool CanCurseOfHauteAura()
+  {
+    return this.race == CreatureRace.Undead || this.type == CreatureType.Golem || (this.race == CreatureRace.Arcane || this.race == CreatureRace.Soulbound);
   }
 
   public virtual int ApplyDamage(
@@ -2523,6 +2528,17 @@ label_51:
         }
         else if (hitBySpell == SpellEnum.Gravity_Well && spellRef != null)
           ZSpell.FireEffector(spellRef.GetBaseSpell, this, this.position, (FixedInt) 0, (FixedInt) 0, true, true);
+        if (dt == DamageType.Sand)
+        {
+          if (this.curSandTurn != this.game.everIncreasingVariable)
+          {
+            this.curSandTurn = this.game.everIncreasingVariable;
+            this.curSandDamage = 0;
+          }
+          if (spellRef != null && spellRef.maxSandDamage <= this.curSandDamage)
+            return 0;
+          this.curSandDamage += damage;
+        }
         if (this.retribution > 0 && (ZComponent) enemy != (object) null && (enemy.parent.team != this.parent.team && !isLoop) && hitBySpell != SpellEnum.Retribution)
         {
           int damage1 = damage / 2;
@@ -2534,17 +2550,6 @@ label_51:
           if (this.retribution <= 0)
             this.RemoveDestroyableEffector(EffectorType.Retribution);
           enemy.ApplyDamage(SpellEnum.Retribution, DamageType.None, damage1, this, TurnCreated, (ISpellBridge) null, true);
-        }
-        if (dt == DamageType.Sand)
-        {
-          if (this.curSandTurn != this.game.everIncreasingVariable)
-          {
-            this.curSandTurn = this.game.everIncreasingVariable;
-            this.curSandDamage = 0;
-          }
-          if (spellRef != null && spellRef.maxSandDamage <= this.curSandDamage)
-            return 0;
-          this.curSandDamage += damage;
         }
         bool flag1 = this.shield > 0;
         if (this.shield > 0 && dt != DamageType.IgnoreShield && (dt != DamageType.Percentage50 && hitBySpell != SpellEnum.Blood_Craze))
@@ -2905,44 +2910,56 @@ label_4:
 
   public bool CheckToTunUndead(DamageType dt, ZCreature enemy)
   {
-    if (dt == DamageType.Light || dt == DamageType.SunderLight || (dt == DamageType.Light_Removed || this.isDead) || !this.isPawn || (!dt.IsDeath() && dt != DamageType.Death_Bomb && !((ZComponent) this.curse_of_haute != (object) null) || (this.race == CreatureRace.Undead || this.race == CreatureRace.Arcane || (this.race == CreatureRace.Soulbound || this.type == CreatureType.Golem))) || !((ZComponent) enemy != (object) null))
+    if (dt == DamageType.Light || dt == DamageType.SunderLight || dt == DamageType.Light_Removed)
       return false;
-    int? minionCount = enemy.parent?.GetMinionCount();
-    int num = 4 + this.parent.GetMaxMinions();
-    if (!(minionCount.GetValueOrDefault() < num & minionCount.HasValue))
-      return false;
-    int maxHealth = this.maxHealth;
-    if ((ZComponent) this.curse_of_haute != (object) null)
+    if (!this.isDead && this.isPawn && (dt.IsDeath() || dt == DamageType.Death_Bomb || (ZComponent) this.curse_of_haute != (object) null && !this.CanCurseOfHauteAura()) && (this.race != CreatureRace.Undead && this.race != CreatureRace.Arcane && (this.race != CreatureRace.Soulbound && this.type != CreatureType.Golem) && (ZComponent) enemy != (object) null))
     {
-      enemy = this.curse_of_haute;
+      int? minionCount = enemy.parent?.GetMinionCount();
+      int num = 4 + this.parent.GetMaxMinions();
+      if (minionCount.GetValueOrDefault() < num & minionCount.HasValue)
+      {
+        int maxHealth = this.maxHealth;
+        if ((ZComponent) this.curse_of_haute != (object) null)
+        {
+          enemy = this.curse_of_haute;
+          this.curse_of_haute = (ZCreature) null;
+        }
+        foreach (ZEffector effector in this.effectors)
+        {
+          if ((ZComponent) effector != (object) null && effector.type == EffectorType.Mind_Control)
+            effector.whoSummoned = (ZCreature) null;
+        }
+        this.SwitchTeams(enemy?.parent, false, true);
+        if (this.parent != null)
+        {
+          this.TurnUndead(true);
+        }
+        else
+        {
+          this.health = 0;
+          this.OnDeath(true);
+        }
+        this.health = maxHealth / 4;
+        if (this.health > 37)
+          this.health = 37;
+        else if (this.health < 1)
+          this.health = 1;
+        this.UpdateHealthTxt();
+        return true;
+      }
+    }
+    if (!this.isDead && (ZComponent) this.curse_of_haute != (object) null && this.CanCurseOfHauteAura())
+    {
+      ZSpell.FireSpectralTombstone(Inert.GetSpell(SpellEnum.Tombstone_Curse), this.curse_of_haute, this.position + new MyLocation(0, 7));
       this.curse_of_haute = (ZCreature) null;
     }
-    foreach (ZEffector effector in this.effectors)
-    {
-      if ((ZComponent) effector != (object) null && effector.type == EffectorType.Mind_Control)
-        effector.whoSummoned = (ZCreature) null;
-    }
-    this.SwitchTeams(enemy?.parent, false);
-    if (this.parent != null)
-    {
-      this.TurnUndead(true);
-    }
-    else
-    {
-      this.health = 0;
-      this.OnDeath(true);
-    }
-    this.health = maxHealth / 4;
-    if (this.health > 37)
-      this.health = 37;
-    else if (this.health < 1)
-      this.health = 1;
-    this.UpdateHealthTxt();
-    return true;
+    return false;
   }
 
-  public void SwitchTeams(ZPerson newParent, bool syncSpells = false)
+  public void SwitchTeams(ZPerson newParent, bool syncSpells = false, bool removeMindControl = true)
   {
+    if (removeMindControl)
+      this.mindController = (ZCreature) null;
     if (newParent == null || newParent == this.parent)
       return;
     ZPerson parent = this.parent;
@@ -4637,9 +4654,9 @@ label_22:
       if (zcreature.game.serverState.busy == ServerState.Busy.No)
         zcreature.game.serverState.busy = ServerState.Busy.Moving;
       yield return 0.0f;
-      int size = zcreature.radius;
       if (zcreature.zb == null)
         zcreature.zb = MapGenerator.getOutlineArray(zcreature.radius);
+      int size = zcreature.radius;
       if ((ZComponent) zcreature.mount != (object) null)
         zcreature.Demount(false);
       while (!zcreature.isDead)
@@ -4690,12 +4707,13 @@ label_9:
             int num2 = (int) (fixedInt3 + zcreature.pX);
             int num3 = (int) (fixedInt4 + zcreature.pY);
             int num4 = ((FixedInt.Create(360) - (Inert.AngleOfVelocity(zcreature.velocity) - FixedInt.Create(90))) * FixedInt.ThreeSixtyBy1 * zcreature.zb.Count - size).ToInt();
+            int num5 = size * 2;
             if (num4 < 0)
               num4 += zcreature.zb.Count;
             int mask = Inert.mask_entity_movement;
             if (zcreature.isPhantom)
               mask = 35328;
-            for (int index1 = 0; index1 < size * 2; ++index1)
+            for (int index1 = 0; index1 < num5; ++index1)
             {
               int index2 = (index1 + num4) % zcreature.zb.Count;
               int x2 = num2 + zcreature.zb[index2].x;

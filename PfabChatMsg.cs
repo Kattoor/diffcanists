@@ -121,6 +121,8 @@ public class PfabChatMsg : MonoBehaviour, IPointerClickHandler, IEventSystemHand
         Controller.ShowPopup(Controller.Instance.MenuAchievements).GetComponent<AchievementsMenu>().openedWith = (Achievement) this.t.obj;
         break;
       default:
+        if (this.CheckAppeal())
+          break;
         MyContextMenu.Show(this.nameOfPlayer, this.t.msg);
         break;
     }
@@ -134,25 +136,42 @@ public class PfabChatMsg : MonoBehaviour, IPointerClickHandler, IEventSystemHand
   public void OnPointerClick(PointerEventData eventData)
   {
     if (eventData.button == PointerEventData.InputButton.Right || Input.touchSupported && (double) Time.realtimeSinceStartup - (double) this.clickTime > 0.5)
-    {
       this.RightClick();
+    else if (eventData.button == PointerEventData.InputButton.Left && eventData.clickCount == 2)
+    {
+      this.LeftClick();
     }
     else
     {
-      if (eventData.button != PointerEventData.InputButton.Left || eventData.clickCount != 2)
+      if (eventData.button != PointerEventData.InputButton.Left)
         return;
-      this.LeftClick();
+      this.CheckAppeal();
     }
   }
 
   private void LeftClick()
   {
-    if (string.IsNullOrEmpty(this.nameOfPlayer) || string.Equals(this.nameOfPlayer, Client.Name, StringComparison.OrdinalIgnoreCase) || !Client._accounts.ContainsKey(this.nameOfPlayer))
-      return;
-    if ((UnityEngine.Object) HUD.instance == (UnityEngine.Object) null || Spectator.isConnected)
-      ChatBox.Instance.InitPrivate(ColorScheme.GetColor(Global.ColorSentPrivate), this.nameOfPlayer);
+    if (!string.IsNullOrEmpty(this.nameOfPlayer) && !string.Equals(this.nameOfPlayer, Client.Name, StringComparison.OrdinalIgnoreCase))
+    {
+      if (!Client._accounts.ContainsKey(this.nameOfPlayer))
+        return;
+      if ((UnityEngine.Object) HUD.instance == (UnityEngine.Object) null || Spectator.isConnected)
+        ChatBox.Instance.InitPrivate(ColorScheme.GetColor(Global.ColorSentPrivate), this.nameOfPlayer);
+      else
+        HUD.instance.InitPrivateChat(this.nameOfPlayer);
+    }
     else
-      HUD.instance.InitPrivateChat(this.nameOfPlayer);
+      this.CheckAppeal();
+  }
+
+  private bool CheckAppeal()
+  {
+    if (this.t == null || this.t.origination != ChatOrigination.System || !this.t.msg.Contains("Expires in:"))
+      return false;
+    MyContextMenu myContextMenu = MyContextMenu.Show();
+    myContextMenu.AddItem("Appeal", (Action) (() => Global.OpenURL(WordFilter.ExtractTMPLink(WordFilter.linkreplacement["#appealform"]))), MyContextMenu.ColorGreen);
+    myContextMenu.Rebuild(false);
+    return true;
   }
 
   private void RightClick()

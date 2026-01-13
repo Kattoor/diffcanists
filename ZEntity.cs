@@ -65,6 +65,14 @@ public class ZEntity : ZComponent
     }
   }
 
+  public MyLocation? supposedPosition
+  {
+    get
+    {
+      return this.isMoving ? new MyLocation?(new MyLocation(this.pX, this.pY)) : new MyLocation?();
+    }
+  }
+
   public MyLocation GetPositionAI
   {
     get

@@ -63,6 +63,11 @@ public class SpellSlot
     ++this.MaxUses;
   }
 
+  public bool WillEndTurn(ZCreature c)
+  {
+    return (this.spell.spellEnum != SpellEnum.Herd_Mentality || c.familiarLevelDruidism == 0) && this.EndsTurn;
+  }
+
   public void Fired(ZCreature c)
   {
     this.IncreaseUses();

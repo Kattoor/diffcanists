@@ -692,10 +692,10 @@ public class ZEffector : ZComponent
     {
       if (this.type == EffectorType.Mind_Control)
       {
-        if (!ZComponent.IsNull((ZComponent) this.whoSummoned) && !this.whoSummoned.isDead && (!ZComponent.IsNull((ZComponent) this.infector) && !this.infector.isDead))
+        if (!ZComponent.IsNull((ZComponent) this.whoSummoned) && !this.whoSummoned.isDead && (!ZComponent.IsNull((ZComponent) this.infector) && !this.infector.isDead) && (ZComponent) this.infector.mindController != (object) null)
         {
           this.infector.mindController = (ZCreature) null;
-          this.infector.SwitchTeams(this.whoSummoned.parent, false);
+          this.infector.SwitchTeams(this.whoSummoned.parent, false, true);
           if (this.variable != 1)
           {
             this.infector.game.NextTurn(this.infector);

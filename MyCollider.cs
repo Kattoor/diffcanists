@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityS.Mathematics;
 
 public class MyCollider : MonoBehaviour
 {
@@ -153,9 +154,9 @@ public class MyCollider : MonoBehaviour
     {
       MyCollider.Vertex vertex1 = this.polygon[index2];
       MyCollider.Vertex vertex2 = this.polygon[index1];
-      vertex1.LAB = (int) Mathd.IntSqrt((long) ((vertex2.X - vertex1.X) * (vertex2.X - vertex1.X) + (vertex2.Y - vertex1.Y) * (vertex2.Y - vertex1.Y)));
-      vertex1.d = new MyLocation(vertex2.X - vertex1.X, vertex2.Y - vertex1.Y);
-      MyLocation.Dot(vertex1.d, vertex1.d, out vertex1.dotD);
+      vertex1.LAB = (int) math.sqrt((sfloat) ((vertex2.X - vertex1.X) * (vertex2.X - vertex1.X) + (vertex2.Y - vertex1.Y) * (vertex2.Y - vertex1.Y)));
+      vertex1.d = new quaternion((sfloat) (vertex2.X - vertex1.X), (sfloat) (vertex2.Y - vertex1.Y));
+      vertex1.dotD = math.dot(vertex1.d, vertex1.d);
       index1 = index2;
     }
   }
@@ -184,8 +185,8 @@ public class MyCollider : MonoBehaviour
     public FixedInt fX;
     public FixedInt fY;
     public int LAB;
-    public MyLocation d;
-    public FixedInt dotD;
+    public quaternion d;
+    public sfloat dotD;
 
     public Vertex(int x, int y)
     {
@@ -193,6 +194,11 @@ public class MyCollider : MonoBehaviour
       this.Y = y;
       this.fX = (FixedInt) this.X;
       this.fY = (FixedInt) this.Y;
+    }
+
+    public override string ToString()
+    {
+      return "{X=" + this.X.ToString() + ",Y=" + this.Y.ToString() + "}";
     }
   }
 

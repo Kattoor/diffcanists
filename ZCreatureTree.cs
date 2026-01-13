@@ -583,7 +583,6 @@ public class ZCreatureTree : ZCreature
   {
     if (this.isDead)
       return 0;
-    Debug.Log((object) damage);
     switch (dt)
     {
       case DamageType.Heal:
@@ -614,7 +613,7 @@ public class ZCreatureTree : ZCreature
           zmyCollider.creature.collider.gameObjectLayer = 8;
           if ((ZComponent) enemy != (object) null && zmyCollider.creature.team != enemy.team && enemy.parent.controlled.Count > 0)
           {
-            zmyCollider.creature.SwitchTeams(enemy.parent, true);
+            zmyCollider.creature.SwitchTeams(enemy.parent, true, true);
             zmyCollider.creature.CreatureMoveSurroundings();
           }
         }
@@ -632,8 +631,9 @@ public class ZCreatureTree : ZCreature
     }
     if (dt == DamageType.Drain && (ZComponent) enemy != (object) null && !this.baseTree.isStructure)
     {
+      int damage1 = this.game.AllowExpansion ? Mathf.Min(this.health, Mathf.Min(enemy.health, damage)) : Mathf.Min(enemy.health, damage);
       damage = Mathf.Min(damage, enemy.health);
-      enemy.DoHeal(damage, dt, enemy, false);
+      enemy.DoHeal(damage1, dt, enemy, false);
       if (enemy.health > Mathf.Max(enemy.maxHealth, 250))
         enemy.health = Mathf.Max(enemy.maxHealth, 250);
       enemy.UpdateHealthTxt();

@@ -360,7 +360,7 @@ public class ZTower : ZComponent
         }
         break;
     }
-    if (this.type == TowerType.Stone || !this.game.isElementals)
+    if (this.IsResistant())
     {
       if (this.type == TowerType.Stone && this.game.AllowExpansion)
         damage -= 5;
@@ -411,7 +411,7 @@ public class ZTower : ZComponent
       }
       else if (dt == DamageType.Heal || dt == DamageType.Heal20)
       {
-        if (this.type == TowerType.Stone || !this.game.isElementals)
+        if (this.IsResistant())
         {
           if (this.type == TowerType.Stone && this.game.AllowExpansion)
             damage -= 5;
@@ -495,7 +495,7 @@ public class ZTower : ZComponent
               return;
             break;
         }
-        if ((this.type == TowerType.Stone || !this.game.isElementals) && dt != DamageType.Percentage50)
+        if (this.IsResistant() && dt != DamageType.Percentage50)
         {
           if (this.type == TowerType.Stone && this.game.AllowExpansion)
           {

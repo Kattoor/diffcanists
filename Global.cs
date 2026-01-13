@@ -172,6 +172,7 @@ public static class Global
   public const byte MsgQuickChat = 155;
   public const byte MsgTest = 156;
   public const byte MsgEmoji = 157;
+  public const byte MsgCreatureHealthInstant = 184;
   public const byte MsgSandsOfTime = 185;
   public const byte MsgBanStage = 186;
   public const byte MsgTowerHealth = 187;

@@ -1787,7 +1787,7 @@ public static class Descriptions
     },
     {
       "Calling Bell",
-      "Ball:\n{0}\nTeleports the target to a random Recall Device on the map. If there is no Recall Device, the Calling Bell will do nothing."
+      "Ball: (no area of effect)\n{0}\nTeleports the target to a random Recall Device on the map. If there is no Recall Device, the Calling Bell will do nothing."
     },
     {
       "Clock Tower",
@@ -1811,7 +1811,7 @@ public static class Descriptions
     },
     {
       "Redo",
-      "Arena:\n(1 use only for all players combined)\nSend your foes flying through the eddies of time and space with this powerful spell, which resets all (Your team only if you have the Time Boost familiar active) Arcanists' spellbooks to how they were at the start of the game. Time for the fun to begin again!"
+      "Arena:\n(1 use only for all players affected)\nSend your foes flying through the eddies of time and space with this powerful spell, which resets all (Your team only if you have the Time Boost familiar active) Arcanists' spells uses and cooldowns. Time for the fun to begin again!"
     },
     {
       "Flame Dragon Breath",
@@ -2347,7 +2347,7 @@ public static class Descriptions
     },
     {
       "Summon Boar",
-      "Minion: 40 health\n{0}\nCharges at the closest enemy and then lunges towards that enemy dealing 15 damage on impact."
+      "Minion: 50 health\n{0}\nCharges at the closest enemy and then lunges towards that enemy dealing 15 damage on impact."
     },
     {
       "Summon Tiger",
@@ -2595,7 +2595,7 @@ public static class Descriptions
     },
     {
       "Consume Soul",
-      "Targeted: 30 damage\n{0}\nDrain the soul of a target, healing for the damage dealt. For each dispellable effect the target has, the damage is increased by 15."
+      "Ball: 30 damage (no area of effect)\n{0}\nDrain the soul of a target, healing for the damage dealt. For each dispellable effect the target has, the damage is increased by 15 and for each dispellable effect the caster has, the damage is reduced by 15 (minimum of 30 damage dealt)"
     },
     {
       "Plague Hive",
@@ -2611,7 +2611,7 @@ public static class Descriptions
     },
     {
       "Catacombs of the Dead",
-      "Tower: 75 hitpoints\n{0}\nThe first time you cast this tower you'll gain 4 uses of the spell Passage Ways."
+      "Tower: 75 hitpoints\n{0}\nThe first time you cast this tower you'll gain 2 uses of the spell Passage Ways."
     },
     {
       "Conjure Reaper",
@@ -2627,7 +2627,7 @@ public static class Descriptions
     },
     {
       "Curse of Haute",
-      "Arena: \n{0}\nAll minions in play that can become undead come under the influence of a vile curse of undeath for when they die they'll be yours."
+      "Arena: \n{0}\nAll minions in play come under the influence of a vile curse of undeath for when they die they'll be yours. If they are unable to become undead, they still instead spawn a spectral tombstone when they die."
     },
     {
       "Sacrificial Altar",
@@ -2635,7 +2635,7 @@ public static class Descriptions
     },
     {
       "Cleave",
-      "Melee: 75 damage\n{0}\nAttacks 3 times for 25 damage each. For each unit this kills it will attack an additional time for that attack sequence."
+      "Melee: 75 damage\n{0}\nAttacks 3 times for 25 damage each. For each allied spectral tombstone it will attack an additional time."
     },
     {
       "Reap",
@@ -2643,11 +2643,11 @@ public static class Descriptions
     },
     {
       "Passage Ways",
-      "Targeted: does not end your turn\n{0}\nTeleport a target friendly minion to an area beside you."
+      "Targeted: does not end your turn\n{0}\nTeleport a target friendly minion to an area beside you. Can only be cast while in Catacombs of the Dead."
     },
     {
       "Death's Doorway",
-      "Targeted:\n{0}\nTeleport to a tombstone destroying the tombstone in the process."
+      "Targeted: does not end your turn\n{0}\nTeleport to a tombstone destroying the tombstone in the process."
     },
     {
       "Call of the Dead",

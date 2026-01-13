@@ -462,7 +462,7 @@ public class ClickSpell : MonoBehaviour
         this.spellButtons[i].error = num2;
       maxedSummons = (uint) num2 > 0U;
     }
-    if (Player.Instance.selected.phantom && !spell1.isPresent && (!Player.Instance.selected.isPawn && spell2.bookOf != BookOf.Arcane) && (spell2.bookOf != BookOf.Illusion && spell2.spellEnum != SpellEnum.Spirit_Link && spell2.spellEnum != SpellEnum.Spirit_Walk))
+    if (Player.Instance.selected.phantom && !spell1.isPresent && (spell2.bookOf != BookOf.Arcane && spell2.bookOf != BookOf.Illusion) && (spell2.spellEnum != SpellEnum.Spirit_Link && spell2.spellEnum != SpellEnum.Spirit_Walk))
     {
       this.spellButtons[i].error = 104;
       maxedSummons = true;
@@ -617,6 +617,8 @@ public class ClickSpell : MonoBehaviour
         return "Can only be cast while in a tower";
       case 140:
         return "Cannot tower while in Angel form";
+      case 141:
+        return "Must be in Catacombs of the Dead";
       default:
         return "";
     }
@@ -626,6 +628,8 @@ public class ClickSpell : MonoBehaviour
   {
     if (c.inWater)
       return 0;
+    if (s == SpellEnum.Passage_Ways)
+      return !((ZComponent) c.tower != (object) null) || c.tower.type != TowerType.Necromancy ? 141 : 0;
     if (c.collider.gameObjectLayer == 21 && (s == SpellEnum.Arcane_Gate || s == SpellEnum.Santas_Magic || (s == SpellEnum.Blink || s == SpellEnum.The_ol_swaparoo) || s == SpellEnum.Sands_of_Time))
       return 135;
     if (c.type == CreatureType.Gargoyle && (!c.canMove && s != SpellEnum.Stone_Form || s == SpellEnum.Stone_Form && c.race == CreatureRace.Undead && c.canMove))
@@ -666,11 +670,11 @@ public class ClickSpell : MonoBehaviour
       {
         ZCreature zcreature = c.game.CurrentCreature();
         if ((zcreature != null ? (!zcreature.HasSpell(s) ? 1 : 0) : 0) == 0)
-          goto label_44;
+          goto label_48;
       }
       return !c.pawn ? 9 : 115;
     }
-label_44:
+label_48:
     switch (s)
     {
       case SpellEnum.Dark_Defences:

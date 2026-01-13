@@ -105,7 +105,7 @@ namespace Junk
 
     internal static BufferedImage getDeveloper()
     {
-      return Random.Range(0, 10) < 5 ? Resources.developer : Resources.developer2;
+      return Server.random.Next(0, 10) < 5 ? Resources.developer : Resources.developer2;
     }
 
     internal static BufferedImage getDeveloper2()

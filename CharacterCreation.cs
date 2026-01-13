@@ -588,24 +588,29 @@ public class CharacterCreation : Catalogue
 
   public void SelectRandomize()
   {
-    System.Random r = new System.Random();
-    this.settingsPlayer.indexBody = (byte) Inert.Instance._characterBody.Random(Client.MyAccount);
-    this.settingsPlayer.indexHead = (byte) Inert.Instance._characterHeads.Random(Client.MyAccount);
-    this.settingsPlayer.indexLeftHand = (byte) Inert.Instance._characterLeftHand.Random(Client.MyAccount);
-    this.settingsPlayer.indexRightHand = (byte) Inert.Instance._characterRightHand.Random(Client.MyAccount);
-    this.settingsPlayer.indexHat = (byte) Inert.Instance._characterHats.Random(Client.MyAccount);
-    this.settingsPlayer.indexBeard = (byte) Inert.Instance._characterBeards.Random(Client.MyAccount);
-    this.settingsPlayer.indexBeard2 = (byte) Inert.Instance._characterBeards.Random(Client.MyAccount);
-    this.settingsPlayer.indexBeard3 = (byte) Inert.Instance._characterBeards.Random(Client.MyAccount);
-    this.settingsPlayer.coloring.Set(Outfit.None, ColorType.Red, RandomExtensions.RandomColor(r));
-    this.settingsPlayer.coloring.Set(Outfit.None, ColorType.Green, RandomExtensions.RandomColor(r));
-    this.settingsPlayer.coloring.Set(Outfit.None, ColorType.Blue, RandomExtensions.RandomColor(r));
-    this.settingsPlayer.coloring.Set(Outfit.None, ColorType.Gray, RandomExtensions.RandomColor(r));
+    CharacterCreation.Randomize(this.settingsPlayer);
     this.settingsPlayer.VerifyOutfit(Client.cosmetics, (Account) null);
     this.UpdateColors();
     this.EquipAll();
     this.Changed();
     this.FindEquipped();
+  }
+
+  public static void Randomize(SettingsPlayer settingsPlayer)
+  {
+    System.Random r = new System.Random();
+    settingsPlayer.indexBody = (byte) Inert.Instance._characterBody.Random(Client.MyAccount);
+    settingsPlayer.indexHead = (byte) Inert.Instance._characterHeads.Random(Client.MyAccount);
+    settingsPlayer.indexLeftHand = (byte) Inert.Instance._characterLeftHand.Random(Client.MyAccount);
+    settingsPlayer.indexRightHand = (byte) Inert.Instance._characterRightHand.Random(Client.MyAccount);
+    settingsPlayer.indexHat = (byte) Inert.Instance._characterHats.Random(Client.MyAccount);
+    settingsPlayer.indexBeard = (byte) Inert.Instance._characterBeards.Random(Client.MyAccount);
+    settingsPlayer.indexBeard2 = (byte) Inert.Instance._characterBeards.Random(Client.MyAccount);
+    settingsPlayer.indexBeard3 = (byte) Inert.Instance._characterBeards.Random(Client.MyAccount);
+    settingsPlayer.coloring.Set(Outfit.None, ColorType.Red, RandomExtensions.RandomColor(r));
+    settingsPlayer.coloring.Set(Outfit.None, ColorType.Green, RandomExtensions.RandomColor(r));
+    settingsPlayer.coloring.Set(Outfit.None, ColorType.Blue, RandomExtensions.RandomColor(r));
+    settingsPlayer.coloring.Set(Outfit.None, ColorType.Gray, RandomExtensions.RandomColor(r));
   }
 
   public void UpdateColors()

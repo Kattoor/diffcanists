@@ -146,7 +146,7 @@ namespace Educative
       }
       set
       {
-        this.creature.SwitchTeams(value.person, false);
+        this.creature.SwitchTeams(value.person, false, true);
       }
     }
 

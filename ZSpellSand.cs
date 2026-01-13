@@ -191,6 +191,7 @@ label_31:
     map.BitBltDelay(color, x - 1, y);
     map.BitBltDelay(color, x + 1, y);
     map.BitBltDelay(color, x, y + 1);
+    ZSpell.RemoveItemsOnSand(map.game, x, y);
   }
 
   public static void Blit(ZMap map, MyLocation position, Color32 color, ZCreature parent)

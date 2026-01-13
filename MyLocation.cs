@@ -334,6 +334,17 @@ public struct MyLocation
     return ret.ToInt();
   }
 
+  public static int Distance(MyLocation a, MyLocation b, MyLocation? c)
+  {
+    FixedInt ret1;
+    Mathd.Sqrt(((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y)).RawValue, out ret1);
+    if (!c.HasValue)
+      return ret1.ToInt();
+    FixedInt ret2;
+    Mathd.Sqrt(((c.Value.x - b.x) * (c.Value.x - b.x) + (c.Value.y - b.y) * (c.Value.y - b.y)).RawValue, out ret2);
+    return Mathf.Min(ret2.ToInt(), ret1.ToInt());
+  }
+
   public static int DistanceDirty(MyLocation a, MyLocation b)
   {
     int num1 = (int) Mathd.Abs(a.x - b.x);

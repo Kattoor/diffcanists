@@ -52,6 +52,7 @@ public class ZPerson
   internal IEnumerator<float> resyncIE;
   internal bool clientResyncing;
   public bool isFake;
+  public bool redoUsed;
   public bool host;
   public PanelPlayer panelPlayer;
   public List<ZFamiliar> familiars;
@@ -106,7 +107,6 @@ public class ZPerson
     set
     {
       this._yourTurn = value;
-      Debug.Log((object) value);
     }
   }
 

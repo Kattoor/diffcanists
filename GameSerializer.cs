@@ -36,6 +36,7 @@ public static class GameSerializer
     writer.Write(x.didResign);
     writer.Write(x.didLeave);
     writer.Write(x.MinionMaster);
+    writer.Write(x.redoUsed);
     writer.Write(x.BombMaster);
     writer.Write(JsonConvert.SerializeObject((object) x.spellsCast));
     for (int index = 0; index < x.familiarLevels.Length; ++index)
@@ -135,6 +136,7 @@ public static class GameSerializer
     x.didResign = reader.ReadBoolean();
     x.didLeave = reader.ReadBoolean();
     x.MinionMaster = reader.ReadBoolean();
+    x.redoUsed = reader.ReadBoolean();
     x.BombMaster = reader.ReadBoolean();
     x.spellsCast = JsonConvert.DeserializeObject<Dictionary<SpellEnum, SpellsCast>>(reader.ReadString());
     if (x.id < (byte) 26)

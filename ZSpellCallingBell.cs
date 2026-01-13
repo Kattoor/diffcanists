@@ -11,7 +11,7 @@ public class ZSpellCallingBell : ZSpell
     zspellCallingBell.zb = MapGenerator.getOutlineArray(zspellCallingBell.radius);
     if (gotoStatic)
       yield return 0.0f;
-label_47:
+label_53:
     while (!zspellCallingBell.isDead)
     {
       zspellCallingBell.pX = zspellCallingBell.position.x;
@@ -40,7 +40,7 @@ label_47:
         {
           zspellCallingBell.position = new MyLocation(zspellCallingBell.validX, zspellCallingBell.validY);
           yield return 0.0f;
-          goto label_47;
+          goto label_53;
         }
         else
         {
@@ -66,6 +66,30 @@ label_47:
                   ZComponent.Instantiate<GameObject>(zspellCallingBell.explosion, new Vector3((float) x3, (float) y2), Quaternion.identity, zspellCallingBell.game.GetMapTransform());
                 ZComponent.Destroy<GameObject>(zspellCallingBell.gameObject);
                 yield break;
+              }
+              else if (zspellCallingBell.spellEnum == SpellEnum.Consume_Soul)
+              {
+                zspellCallingBell.isDead = true;
+                zspellCallingBell.isNull = true;
+                ZComponent.Destroy<GameObject>(zspellCallingBell.gameObject);
+                ZCreature c = zspellCallingBell.parent.map.PhysicsCollideCreature(zspellCallingBell.toCollideCheck, x3, y2, Inert.mask_Phantom);
+                bool flag = (ZComponent) c != (object) null && c.type != CreatureType.Tree && c.race != CreatureRace.Effector;
+                if ((ZComponent) c == (object) zspellCallingBell.parent || !flag)
+                {
+                  yield break;
+                }
+                else
+                {
+                  ParticleBloodSyphon particleBloodSyphon = ZComponent.Instantiate<ParticleBloodSyphon>(ClientResources.Instance.consumeSoul, c.transform.position, Quaternion.identity, zspellCallingBell.parent.game.GetMapTransform());
+                  particleBloodSyphon.end = zspellCallingBell.parent.transform.position;
+                  particleBloodSyphon.start = (Vector3) c.position.ToSinglePrecision();
+                  particleBloodSyphon.velocity = particleBloodSyphon.end - particleBloodSyphon.start;
+                  int num4 = ZEffector.EffectSanctuary(zspellCallingBell.game, c, true) - ZEffector.EffectSanctuary(zspellCallingBell.game, zspellCallingBell.parent, true);
+                  if (num4 < 0)
+                    num4 = 0;
+                  c.ApplyDamage(zspellCallingBell.spellEnum, zspellCallingBell.damageType, 30 + num4 * 15, zspellCallingBell.parent, zspellCallingBell.parent.game.turn, (ISpellBridge) zspellCallingBell, false);
+                  yield break;
+                }
               }
               else
               {

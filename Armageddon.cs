@@ -93,7 +93,9 @@ public static class Armageddon
             p.AddArmaWarning(-35, 0);
             MyLocation pos1 = new MyLocation(x, p.game.RandomInt(0, p.map.Height));
             int num = x > p.map.Width / 2 ? p.game.RandomInt(90, 180) : p.game.RandomInt(-90, 90);
-            if (theSpell.type == CastType.TargetOnly)
+            if (theSpell.spellEnum == SpellEnum.Redo)
+              ZSpell.FireRedo(theSpell, p.first(), true, false);
+            else if (theSpell.type == CastType.TargetOnly)
             {
               p.first().SetScale(x > p.map.Width / 2 ? -1f : 1f);
               if (theSpell.spellEnum == SpellEnum.Curse_of_Disabling || theSpell.spellEnum == SpellEnum.Curse_of_Loneliness)
